@@ -8,18 +8,20 @@ Leia integralmente [PROJECT_BRIEF.md](PROJECT_BRIEF.md) antes de trabalhar. Esse
 
 - O repositório começou apenas com um README contendo o nome do projeto.
 - Esta entrega adiciona documentação; não implementa funcionalidades do mod.
-- Fase 0 pendente: o Smart Government ainda não foi estudado nesta entrega.
+- Fase 0 em andamento: Smart Government estudado no commit `95b20870816b9ceabcaf0b7b9371a66c85dd8bf1`; 26 testes de regressão passaram.
+- Leia [RESEARCH.md](RESEARCH.md) para evidências, arquitetura proposta e capacidades pendentes.
+- Leia [COMPATIBILITY.md](COMPATIBILITY.md), [MANUAL_RUNTIME_TEST.md](MANUAL_RUNTIME_TEST.md) e [LOCAL_CODEX.md](LOCAL_CODEX.md) para continuar no CachyOS.
 - Instalação do jogo, versão efetiva, saves e arquivos dos mods ainda não foram inspecionados.
 - Compatibilidade, métricas acessíveis, efeitos de script e automação não foram comprovados.
 - Não há testes automatizados, build ou testes dentro do jogo disponíveis neste repositório.
 
 ## Próxima etapa: Fase 0
 
-1. Estudar o repositório Smart Government e os documentos e sistemas listados na especificação.
+1. Retomar os resultados do estudo do Smart Government em `RESEARCH.md`; não repetir a pesquisa já registrada sem necessidade.
 2. Identificar os caminhos reais da instalação Linux do jogo, saves e mods. Não presumir caminhos padrão, Steam ou necessidade de Wine.
 3. Examinar Economy Advisor e os demais mods mencionados, com base nos arquivos reais.
 4. Mapear dados e ações como executáveis, observáveis, parciais ou não suportados, registrando evidências e limitações.
-5. Produzir `docs/RESEARCH.md` com diagnóstico técnico e arquitetura proposta e documentar a compatibilidade.
+5. Completar `docs/RESEARCH.md` e `docs/COMPATIBILITY.md` com os arquivos reais; ambos já contêm pesquisa parcial.
 6. Apresentar as conclusões antes de iniciar a implementação.
 
 Se os arquivos necessários não estiverem disponíveis, registrar a pesquisa parcial e o bloqueio; não declarar a fase concluída.
