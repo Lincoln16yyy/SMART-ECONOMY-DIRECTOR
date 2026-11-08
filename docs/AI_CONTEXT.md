@@ -1,41 +1,32 @@
-# Contexto para agentes de IA
+# Contexto de continuidade
 
-## Fonte dos requisitos
+O usuário solicitou seguir `Texto colado.txt` e ir publicando no GitHub
+`Lincoln16yyy/SMART-ECONOMY-DIRECTOR`. O conteúdo original está preservado
+integralmente em PROJECT_BRIEF.md. Leia-o antes de trabalhar.
 
-Leia integralmente [PROJECT_BRIEF.md](PROJECT_BRIEF.md) antes de trabalhar. Esse documento preserva o texto fornecido pelo jogador e define o escopo, as fases, os critérios de qualidade e os testes desejados.
+Fase atual: 0, pesquisa inicial documentada, ainda aberta. Não existe mod
+instalável. Não iniciar implementação antes de fechar a pesquisa e apresentar
+conclusões, conforme o briefing. Não copiar economia de mods por suposição.
 
-## Estado verificado
+RESEARCH.md contém fontes e lacunas; ARCHITECTURE.md descreve propostas, não
+funções concluídas. COMPATIBILITY.md diferencia instalação, habilitação no
+launcher e automação ativa no país. SOURCE_INVENTORY.json registra commit da
+referência, hash do briefing e exemplos com linhas para reproduzir buscas.
 
-- O repositório começou apenas com um README contendo o nome do projeto.
-- Esta entrega adiciona documentação; não implementa funcionalidades do mod.
-- Fase 0 em andamento: Smart Government estudado no commit `95b20870816b9ceabcaf0b7b9371a66c85dd8bf1`; 26 testes de regressão passaram.
-- Leia [RESEARCH.md](RESEARCH.md) para evidências, arquitetura proposta e capacidades pendentes.
-- Leia [COMPATIBILITY.md](COMPATIBILITY.md), [MANUAL_RUNTIME_TEST.md](MANUAL_RUNTIME_TEST.md) e [LOCAL_CODEX.md](LOCAL_CODEX.md) para continuar no CachyOS.
-- Instalação do jogo, versão efetiva, saves e arquivos dos mods ainda não foram inspecionados.
-- Compatibilidade, métricas acessíveis, efeitos de script e automação não foram comprovados.
-- Não há testes automatizados, build ou testes dentro do jogo disponíveis neste repositório.
+O ambiente real é Linux com instalação Windows via Hydra/Wine. Não alterar
+instalação, saves ou load order na pesquisa. O Economy Advisor correto é
+3778129206, já possui construção e PMs. Kuromi não aparece habilitado; ARoAI sim.
+Não usar o nome OGAS como sinônimo do Advisor.
 
-## Próxima etapa: Fase 0
+Próximos passos: fechar matriz por indicador e GUI, estado das flags no save,
+fila privada por edifício/estado, auditoria de overrides e Kuromi. Só depois
+preparar Fase 1 de diagnóstico. Usar prefixo próprio `sed_`, português real,
+fallback inglês e ações vinculadas a candidatos estáveis.
 
-1. Retomar os resultados do estudo do Smart Government em `RESEARCH.md`; não repetir a pesquisa já registrada sem necessidade.
-2. Identificar os caminhos reais da instalação Linux do jogo, saves e mods. Não presumir caminhos padrão, Steam ou necessidade de Wine.
-3. Examinar Economy Advisor e os demais mods mencionados, com base nos arquivos reais.
-4. Mapear dados e ações como executáveis, observáveis, parciais ou não suportados, registrando evidências e limitações.
-5. Completar `docs/RESEARCH.md` e `docs/COMPATIBILITY.md` com os arquivos reais; ambos já contêm pesquisa parcial.
-6. Apresentar as conclusões antes de iniciar a implementação.
+Não houve teste de runtime, campanha, desempenho ou compatibilidade do Director.
+Validação documental não comprova script aceito pela engine.
 
-Se os arquivos necessários não estiverem disponíveis, registrar a pesquisa parcial e o bloqueio; não declarar a fase concluída.
-
-## Regras essenciais
-
-- Usar identificadores próprios com prefixo `sed_`; preservar a independência do Smart Government (`sg_`).
-- Não inventar APIs, métricas, efeitos, integrações ou resultados de testes.
-- Evitar disputa da fila de construção e dos métodos de produção com outros mods.
-- Preservar o controle do jogador sobre guerras e decisões políticas e diplomáticas importantes.
-- Trabalhar em fases pequenas e atualizar este contexto e o registro de fases com evidências.
-- Antes de cada fase, explicar objetivo, plano, arquivos previstos e riscos; depois, registrar resultados, testes e pendências.
-- Não publicar saves, arquivos proprietários do jogo, credenciais ou dados pessoais no GitHub.
-
-## Ambiente de desenvolvimento
-
-Usar o checkout existente na tarefa em nuvem; não criar worktrees sem pedido explícito do jogador. Nesta etapa documental, não há dependências adicionais ou serviços a iniciar.
+A etapa anterior na nuvem executou 26 testes da referência com sucesso; o
+validador não localizou o jogo naquele executor. O registro histórico foi
+preservado em PHASE_LOG.md e RESEARCH_CLOUD.md. LOCAL_CODEX.md mantém as
+instruções de transição originais; seus caminhos já foram confirmados aqui.

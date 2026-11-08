@@ -1,38 +1,51 @@
-# Plano de validação dentro do jogo
+# Plano de testes de campanha — execução pendente
 
-**Planejado; nenhum cenário executado.** Ainda não há mod instalável do Director. Este roteiro define evidências a coletar quando as fases correspondentes forem implementadas.
+Este roteiro será usado quando existir uma versão executável. Hoje todos os
+cenários do Director estão **não executados**. Nenhum resultado foi simulado.
 
 ## Preparação
 
-Confirmar versão/build efetiva, caminhos reais de jogo e dados do usuário, versões dos mods, ordem e opções ativas. Fazer cópia do save e backup da configuração antes de alterá-la; não substituir a campanha original. Identificar o log da sessão nova para não atribuir erros antigos ao mod.
+Registrar versão/build, commit do Director, DLCs, mods, ordem e opções de cada
+automação. Com o jogo fechado, fazer backup do load order e usar cópia de save,
+nunca o único arquivo da campanha. Não sobrescrever a cópia de teste do Smart
+Government; preparar uma cópia própria do Haiti para o Director.
 
-## Fase 0 e 1: leitura e ciclo de vida
+Executar primeiro vanilla + Director; depois adicionar os mods e, por fim,
+testar o conjunto completo. Comparar logs antes/depois, guardando os novos
+erros com arquivo e linha. Nenhum botão pode ser aprovado só por aparecer.
 
-Comparar cada indicador com a interface nativa na mesma data, país, estado, mercado e unidade. Registrar fonte e divergência. Validar ausentes explicitamente; nenhum ausente pode aparecer como zero.
+## Ciclo de vida e interface
 
-Abrir JE, atualizar, avançar um mês, desativar e reativar. Verificar data, ausência de JE duplicada, limpeza do estado e ausência de reativação inesperada. Conferir localização pt-BR/inglês, textos longos e logs. Medir tempo das avaliações em país pequeno e grande.
+Verificar ativação por decisão, save existente, nova campanha, pulso mensal,
+atualização manual, data, valores contra as telas do jogo, persistência após
+recarregar e ausência de JE duplicada. Desativar, avançar meses e confirmar
+que não reativa sozinho; reativar e testar limpeza/migração de variáveis.
+Conferir português e fallback inglês, tooltip, ignorar/restaurar e estado vazio.
 
-## Fases 2 e 3: prioridades e execução
+No Manual, confirmar ausência de ação econômica; no Assistido, ação só após
+aprovação e revalidação; no Automático futuro, somente domínios autorizados.
+Reordenar recomendações antes de clicar para verificar identidade do candidato.
 
-| Cenário | Comportamento a demonstrar |
+## Cenários econômicos
+
+| Cenário | Verificação e evidência exigida |
 | --- | --- |
-| Haiti, orçamento limitado | Prioridades viáveis; considerar trabalhadores, insumos e infraestrutura; permitir esperar |
-| País rico | Investir com justificativa, evitar excesso e concentração injustificada |
-| Crise fiscal | Suspender expansão inadequada e explicar recuperação proposta |
-| Escassez de insumos | Considerar a cadeia; não expandir indústria inviável |
-| Filas pública e privada existentes | Não duplicar projetos; reconhecer andamento e conclusão |
-| Alteração entre recomendar e aprovar | Revalidar ação/estado/custos; rejeitar ação antiga inviável |
-| Outro mod executor ativo | Coexistência comprovada ou bloqueio da execução do Director |
-| Desativação e save/reload | Não repetir ação pendente nem reativar automaticamente |
+| Haiti pequeno | Emprego, orçamento, infraestrutura e insumos permitem as prioridades? Registrar motivos e candidatos rejeitados |
+| País rico | Investimento aproveita capacidade sem expandir setor saturado? Comparar fila e custos recorrentes |
+| Crise fiscal | Bloquear novas expansões inviáveis sem prometer cancelar custos já contratados; verificar reserva/dívida |
+| Escassez | Distinguir preço alto de falta de insumo; impedir indústria dependente de abastecimento inexistente |
+| Sem oportunidade | Até zero recomendações; fila vazia permitida; nenhum candidato artificial |
+| Fila privada e pública | Mesmo edifício/estado em ambas, obra em andamento, primeira construção e cancelamento; nenhum pedido duplicado |
+| Mods de PM | Mudança externa após análise invalida candidato e atualiza mão de obra/insumos; ausência de troca de volta pelo Director |
+| Campanha longa | Amostras mensais e comparação em 1, 5, 10, 20 e 30 anos, com controle sem Director quando viável |
 
-Testar separadamente manual, assistido e automático quando existirem. Nenhuma guerra ou decisão diplomática importante pode ser iniciada pelo Director.
+Registrar PIB, PIB per capita, padrão de vida, emprego, alfabetização,
+infraestrutura, saldo, reservas, dívida, preços, produção e diversificação;
+valor indisponível deve constar como indisponível. Guardar fila, ações,
+modo e opções dos outros mods em cada marco. Crescimento do PIB isolado não
+aprova o cenário. Medir tempo de atualização e tamanho do histórico/save.
 
-## Fases 4 e 5: convivência e campanha longa
-
-Rodar baseline sem execução do Director, combinações relevantes e conjunto completo de mods. Registrar opções e fatores externos. Comparar campanhas de 10, 20 e 30 anos conforme viabilidade: PIB, PIB per capita, padrão de vida, emprego, alfabetização, infraestrutura, saldo, reservas, dívida, preços, produção, filas e diversidade industrial. Medir desempenho e estabilidade também.
-
-Uma comparação isolada não prova causalidade. PIB maior não basta para aprovar o sistema.
-
-## Registro de resultados
-
-Cada execução deve ter commit do Director, versão/build do jogo, mods/opções, cópia de save usada, datas da campanha, ação, esperado, observado, métricas antes/depois, logs relevantes e resultado (passou, falhou, bloqueado ou não executado). Não marcar um cenário como aprovado com apenas carregamento inicial ou validação estática.
+Encerrar restaurando o load order de teste e preservando evidências separadas.
+Testes automatizados futuros devem cobrir pontuação, restrições fiscais,
+deduplicação, atualização, estados vazios, schema, localização e integridade GUI;
+eles complementam esse roteiro, sem substituir os cliques na engine.

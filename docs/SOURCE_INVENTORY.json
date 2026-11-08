@@ -1,0 +1,1565 @@
+{
+  "date": "2026-11-08",
+  "game_version": "1.15.0",
+  "smart_government_commit": "95b20870816b9ceabcaf0b7b9371a66c85dd8bf1",
+  "evidence_level": "static source inspection; no Director runtime test",
+  "sources": [
+    {
+      "label": "vanilla",
+      "root": "/home/lincoln-ii/Games/Victoria 3/game",
+      "examples": {
+        "average_sol": [
+          {
+            "path": "common/achievements/base_achievements.txt",
+            "line": 271
+          },
+          {
+            "path": "common/achievements/ip1_voice_of_the_people_achievements.txt",
+            "line": 17
+          },
+          {
+            "path": "common/ai_strategies/03_political_strategies.txt",
+            "line": 1995
+          },
+          {
+            "path": "common/decrees/00_decree.txt",
+            "line": 236
+          }
+        ],
+        "gdp": [
+          {
+            "path": "common/achievements/rp1_colossus_of_the_south_achievements.txt",
+            "line": 115
+          },
+          {
+            "path": "common/achievements/rp1_colossus_of_the_south_achievements.txt",
+            "line": 115
+          },
+          {
+            "path": "common/ai_strategies/00_default_strategy.txt",
+            "line": 1793
+          },
+          {
+            "path": "common/ai_strategies/00_default_strategy.txt",
+            "line": 2021
+          }
+        ],
+        "has_technology_researched": [
+          {
+            "path": "common/ai_ship_categories/00_ai_ship_categories.txt",
+            "line": 6
+          },
+          {
+            "path": "common/ai_ship_categories/00_ai_ship_categories.txt",
+            "line": 15
+          },
+          {
+            "path": "common/ai_ship_categories/00_ai_ship_categories.txt",
+            "line": 24
+          },
+          {
+            "path": "common/ai_strategies/00_default_strategy.txt",
+            "line": 870
+          }
+        ],
+        "gold_reserves": [
+          {
+            "path": "common/alert_types/00_alert_types.txt",
+            "line": 875
+          },
+          {
+            "path": "common/decisions/antarctica_expedition_decision.txt",
+            "line": 44
+          },
+          {
+            "path": "common/decisions/canal_decisions.txt",
+            "line": 166
+          },
+          {
+            "path": "common/decisions/canal_decisions.txt",
+            "line": 172
+          }
+        ],
+        "net_fixed_income": [
+          {
+            "path": "common/alert_types/00_alert_types.txt",
+            "line": 876
+          },
+          {
+            "path": "common/decisions/antarctica_expedition_decision.txt",
+            "line": 43
+          },
+          {
+            "path": "common/decisions/canal_decisions.txt",
+            "line": 171
+          },
+          {
+            "path": "common/decisions/canal_decisions.txt",
+            "line": 359
+          }
+        ],
+        "market_goods_buy_orders": [
+          {
+            "path": "common/alert_types/00_alert_types.txt",
+            "line": 993
+          },
+          {
+            "path": "common/alert_types/00_alert_types.txt",
+            "line": 1009
+          },
+          {
+            "path": "common/journal_entries/02_coffee_and_milk.txt",
+            "line": 101
+          },
+          {
+            "path": "common/journal_entries/02_coffee_and_milk.txt",
+            "line": 105
+          }
+        ],
+        "occupancy": [
+          {
+            "path": "common/buildings/07_government.txt",
+            "line": 13
+          },
+          {
+            "path": "common/buildings/11_private_infrastructure.txt",
+            "line": 311
+          },
+          {
+            "path": "common/company_types/00_companies_africa.txt",
+            "line": 184
+          },
+          {
+            "path": "common/company_types/00_companies_americas.txt",
+            "line": 805
+          }
+        ],
+        "building_has_goods_shortage": [
+          {
+            "path": "common/buildings/08_monuments.txt",
+            "line": 1083
+          },
+          {
+            "path": "common/journal_entries/00_sick_man.txt",
+            "line": 526
+          },
+          {
+            "path": "common/journal_entries/03_russia.txt",
+            "line": 1547
+          },
+          {
+            "path": "common/scripted_buttons/08_tsarpoints_buttons.txt",
+            "line": 782
+          }
+        ],
+        "state_goods_pricier": [
+          {
+            "path": "common/buildings/11_private_infrastructure.txt",
+            "line": 319
+          },
+          {
+            "path": "common/journal_entries/00_tutorial.txt",
+            "line": 766
+          },
+          {
+            "path": "common/journal_entries/00_tutorial.txt",
+            "line": 795
+          },
+          {
+            "path": "common/objective_subgoals/00_subgoals_tutorial.txt",
+            "line": 832
+          }
+        ],
+        "infrastructure_delta": [
+          {
+            "path": "common/buildings/11_private_infrastructure.txt",
+            "line": 323
+          },
+          {
+            "path": "common/trigger_localization/00_trigger_localization.txt",
+            "line": 1615
+          }
+        ],
+        "scaled_debt": [
+          {
+            "path": "common/decisions/india_decisions.txt",
+            "line": 503
+          },
+          {
+            "path": "common/decisions/india_decisions.txt",
+            "line": 506
+          },
+          {
+            "path": "common/diplomatic_actions/30_fund_lobby.txt",
+            "line": 250
+          },
+          {
+            "path": "common/diplomatic_actions/30_fund_lobby.txt",
+            "line": 295
+          }
+        ],
+        "start_building_construction": [
+          {
+            "path": "common/effect_localization/00_state_region_effects_loc.txt",
+            "line": 28
+          }
+        ],
+        "activate_production_method": [
+          {
+            "path": "common/effect_localization/00_state_region_effects_loc.txt",
+            "line": 71
+          },
+          {
+            "path": "common/history/conscription/00_conscription_center.txt",
+            "line": 17
+          },
+          {
+            "path": "common/history/conscription/00_conscription_center.txt",
+            "line": 36
+          },
+          {
+            "path": "common/history/military_formations/00_military_formations_europe.txt",
+            "line": 992
+          }
+        ],
+        "on_monthly_pulse": [
+          {
+            "path": "common/journal_entries/00_abolish_monarchy.txt",
+            "line": 11
+          },
+          {
+            "path": "common/journal_entries/00_acw_entries.txt",
+            "line": 60
+          },
+          {
+            "path": "common/journal_entries/00_acw_entries.txt",
+            "line": 141
+          },
+          {
+            "path": "common/journal_entries/00_acw_entries.txt",
+            "line": 427
+          }
+        ],
+        "weekly_profit": [
+          {
+            "path": "common/journal_entries/00_opium.txt",
+            "line": 40
+          },
+          {
+            "path": "common/journal_entries/00_player_objectives_economic_dominance.txt",
+            "line": 21
+          },
+          {
+            "path": "common/journal_entries/00_player_objectives_economic_dominance.txt",
+            "line": 273
+          },
+          {
+            "path": "common/journal_entries/00_player_objectives_economic_dominance.txt",
+            "line": 291
+          }
+        ],
+        "market_goods_sell_orders": [
+          {
+            "path": "common/journal_entries/04_india_non_cooperation.txt",
+            "line": 47
+          },
+          {
+            "path": "common/journal_entries/04_india_non_cooperation.txt",
+            "line": 69
+          },
+          {
+            "path": "common/journal_entries/04_india_non_cooperation.txt",
+            "line": 86
+          },
+          {
+            "path": "common/script_values/00_gfx_route_graphics_values.txt",
+            "line": 49
+          }
+        ],
+        "net_total_income": [
+          {
+            "path": "common/journal_entries/06_portugal_politics.txt",
+            "line": 414
+          },
+          {
+            "path": "common/scripted_progress_bars/00_austrian_progress_bars.txt",
+            "line": 107
+          },
+          {
+            "path": "common/trigger_localization/00_trigger_localization.txt",
+            "line": 2755
+          }
+        ],
+        "has_failed_hires": [
+          {
+            "path": "common/objective_subgoals/00_subgoals_tutorial.txt",
+            "line": 794
+          },
+          {
+            "path": "common/objective_subgoals/00_subgoals_tutorial.txt",
+            "line": 804
+          },
+          {
+            "path": "common/trigger_localization/00_trigger_localization.txt",
+            "line": 1693
+          }
+        ],
+        "credit": [
+          {
+            "path": "common/script_values/war_support_values.txt",
+            "line": 156
+          },
+          {
+            "path": "common/script_values/war_support_values.txt",
+            "line": 159
+          },
+          {
+            "path": "common/script_values/war_support_values.txt",
+            "line": 170
+          },
+          {
+            "path": "common/script_values/war_support_values.txt",
+            "line": 173
+          }
+        ],
+        "principal": [
+          {
+            "path": "common/script_values/war_support_values.txt",
+            "line": 158
+          },
+          {
+            "path": "common/script_values/war_support_values.txt",
+            "line": 169
+          },
+          {
+            "path": "common/script_values/war_support_values.txt",
+            "line": 172
+          },
+          {
+            "path": "common/treaty_articles/04_take_on_debt.txt",
+            "line": 148
+          }
+        ],
+        "fixed_expenses": [
+          {
+            "path": "common/trigger_localization/00_trigger_localization.txt",
+            "line": 2719
+          }
+        ],
+        "state_goods_delta": [
+          {
+            "path": "common/trigger_localization/00_trigger_localization.txt",
+            "line": 3200
+          }
+        ]
+      }
+    },
+    {
+      "label": "smart_government",
+      "root": "/home/lincoln-ii/Victoria3_mod",
+      "examples": {
+        "on_monthly_pulse": [
+          {
+            "path": "common/journal_entries/sg_journal_entries.txt",
+            "line": 46
+          }
+        ],
+        "net_total_income": [
+          {
+            "path": "common/script_values/sg_law_scores.txt",
+            "line": 590
+          },
+          {
+            "path": "common/script_values/sg_law_scores.txt",
+            "line": 1657
+          },
+          {
+            "path": "common/script_values/sg_law_scores.txt",
+            "line": 3210
+          },
+          {
+            "path": "common/script_values/sg_law_scores.txt",
+            "line": 4769
+          }
+        ],
+        "average_sol": [
+          {
+            "path": "common/script_values/sg_law_scores.txt",
+            "line": 1560
+          },
+          {
+            "path": "common/script_values/sg_law_scores.txt",
+            "line": 1658
+          },
+          {
+            "path": "common/script_values/sg_law_scores.txt",
+            "line": 1755
+          },
+          {
+            "path": "common/script_values/sg_law_scores.txt",
+            "line": 3211
+          }
+        ],
+        "has_technology_researched": [
+          {
+            "path": "common/scripted_triggers/sg_law_availability.txt",
+            "line": 14
+          },
+          {
+            "path": "common/scripted_triggers/sg_law_availability.txt",
+            "line": 33
+          },
+          {
+            "path": "common/scripted_triggers/sg_law_availability.txt",
+            "line": 55
+          },
+          {
+            "path": "common/scripted_triggers/sg_law_availability.txt",
+            "line": 66
+          }
+        ]
+      }
+    },
+    {
+      "label": "3278770055_Controllable_Private_Construction",
+      "root": "/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/mod/3278770055_Controllable_Private_Construction",
+      "examples": {
+        "occupancy": [
+          {
+            "path": "common/scripted_triggers/zw_cpc_triggers_2.txt",
+            "line": 19
+          },
+          {
+            "path": "common/scripted_triggers/zw_cpc_triggers_2.txt",
+            "line": 33
+          },
+          {
+            "path": "common/scripted_triggers/zw_cpc_triggers_auto_expand.txt",
+            "line": 3
+          },
+          {
+            "path": "common/scripted_triggers/zw_cpc_triggers_auto_expand.txt",
+            "line": 15
+          }
+        ],
+        "weekly_profit": [
+          {
+            "path": "common/scripted_triggers/zw_cpc_triggers_2.txt",
+            "line": 21
+          },
+          {
+            "path": "common/scripted_triggers/zw_cpc_triggers_2.txt",
+            "line": 38
+          },
+          {
+            "path": "common/scripted_triggers/zw_cpc_triggers_2.txt",
+            "line": 44
+          },
+          {
+            "path": "common/scripted_triggers/zw_cpc_triggers_auto_expand.txt",
+            "line": 4
+          }
+        ],
+        "building_has_goods_shortage": [
+          {
+            "path": "common/scripted_triggers/zw_cpc_triggers_2.txt",
+            "line": 43
+          }
+        ]
+      }
+    },
+    {
+      "label": "3279201462_Auto-Recruit_One-Click_Recruit_Commanders",
+      "root": "/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/mod/3279201462_Auto-Recruit_One-Click_Recruit_Commanders",
+      "examples": {}
+    },
+    {
+      "label": "3344726320_Auto-Apply_Automation_PMs",
+      "root": "/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/mod/3344726320_Auto-Apply_Automation_PMs",
+      "examples": {
+        "on_monthly_pulse": [
+          {
+            "path": "common/journal_entries/zw_aaap_je.txt",
+            "line": 26
+          }
+        ],
+        "zw_trigger_aaap_state_workforce_low": [
+          {
+            "path": "common/journal_entries/zw_aaap_je.txt",
+            "line": 46
+          },
+          {
+            "path": "common/journal_entries/zw_aaap_je.txt",
+            "line": 74
+          },
+          {
+            "path": "common/journal_entries/zw_aaap_je.txt",
+            "line": 87
+          },
+          {
+            "path": "common/scripted_triggers/zw_aaap_triggers_other.txt",
+            "line": 1
+          }
+        ],
+        "state_goods_pricier": [
+          {
+            "path": "common/journal_entries/zw_aaap_je.txt",
+            "line": 50
+          },
+          {
+            "path": "common/journal_entries/zw_aaap_je.txt",
+            "line": 59
+          },
+          {
+            "path": "common/journal_entries/zw_aaap_je.txt",
+            "line": 71
+          },
+          {
+            "path": "common/journal_entries/zw_aaap_je.txt",
+            "line": 73
+          }
+        ],
+        "activate_production_method": [
+          {
+            "path": "common/scripted_effects/zw_aaap_effects.txt",
+            "line": 30
+          },
+          {
+            "path": "common/scripted_effects/zw_aaap_effects.txt",
+            "line": 70
+          },
+          {
+            "path": "common/scripted_effects/zw_aaap_effects.txt",
+            "line": 97
+          },
+          {
+            "path": "common/scripted_effects/zw_aaap_effects.txt",
+            "line": 149
+          }
+        ]
+      }
+    },
+    {
+      "label": "3353797125_Auto-Apply_PMs",
+      "root": "/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/mod/3353797125_Auto-Apply_PMs",
+      "examples": {
+        "on_monthly_pulse": [
+          {
+            "path": "common/journal_entries/zw_aap_je.txt",
+            "line": 84
+          }
+        ],
+        "state_goods_pricier": [
+          {
+            "path": "common/scripted_effects/zw_aap_effects_01_building_arms_industry.txt",
+            "line": 26
+          },
+          {
+            "path": "common/scripted_effects/zw_aap_effects_01_building_arms_industry.txt",
+            "line": 27
+          },
+          {
+            "path": "common/scripted_effects/zw_aap_effects_01_building_arms_industry.txt",
+            "line": 41
+          },
+          {
+            "path": "common/scripted_effects/zw_aap_effects_01_building_arms_industry.txt",
+            "line": 42
+          }
+        ],
+        "activate_production_method": [
+          {
+            "path": "common/scripted_effects/zw_aap_effects_01_building_arms_industry.txt",
+            "line": 151
+          },
+          {
+            "path": "common/scripted_effects/zw_aap_effects_01_building_arms_industry.txt",
+            "line": 185
+          },
+          {
+            "path": "common/scripted_effects/zw_aap_effects_01_building_arms_industry.txt",
+            "line": 213
+          },
+          {
+            "path": "common/scripted_effects/zw_aap_effects_01_building_artillery_foundries.txt",
+            "line": 153
+          }
+        ]
+      }
+    },
+    {
+      "label": "3357811223_Supply_Chain_Semi-Auto_Builder",
+      "root": "/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/mod/3357811223_Supply_Chain_Semi-Auto_Builder",
+      "examples": {
+        "on_monthly_pulse": [
+          {
+            "path": "common/journal_entries/zw_scsab_je.txt",
+            "line": 84
+          }
+        ],
+        "net_fixed_income": [
+          {
+            "path": "common/script_values/zw_scsab_values.txt",
+            "line": 38
+          },
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_1_construction_sector.txt",
+            "line": 20
+          }
+        ],
+        "has_technology_researched": [
+          {
+            "path": "common/script_values/zw_scsab_values.txt",
+            "line": 46
+          },
+          {
+            "path": "common/script_values/zw_scsab_values.txt",
+            "line": 77
+          },
+          {
+            "path": "common/script_values/zw_scsab_values.txt",
+            "line": 103
+          },
+          {
+            "path": "common/scripted_effects/zw_ip_effects_build_consumer_sc.txt",
+            "line": 48
+          }
+        ],
+        "start_building_construction": [
+          {
+            "path": "common/scripted_effects/zw_ip_effects_build_consumer_sc.txt",
+            "line": 50
+          },
+          {
+            "path": "common/scripted_effects/zw_ip_effects_build_consumer_sc.txt",
+            "line": 59
+          },
+          {
+            "path": "common/scripted_effects/zw_ip_effects_build_consumer_sc.txt",
+            "line": 67
+          },
+          {
+            "path": "common/scripted_effects/zw_ip_effects_build_consumer_sc.txt",
+            "line": 75
+          }
+        ],
+        "infrastructure_delta": [
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_3_railway.txt",
+            "line": 12
+          },
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_3_railway.txt",
+            "line": 29
+          },
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_3_railway.txt",
+            "line": 44
+          },
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_3_railway.txt",
+            "line": 70
+          }
+        ],
+        "state_goods_pricier": [
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_3_railway.txt",
+            "line": 14
+          },
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_3_railway.txt",
+            "line": 31
+          },
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_4_power_plant.txt",
+            "line": 11
+          },
+          {
+            "path": "common/scripted_triggers/zw_ip_triggers.txt",
+            "line": 429
+          }
+        ],
+        "building_has_goods_shortage": [
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_3_railway.txt",
+            "line": 15
+          },
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_4_power_plant.txt",
+            "line": 20
+          },
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_5_supply_chains.txt",
+            "line": 50
+          }
+        ],
+        "occupancy": [
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_3_railway.txt",
+            "line": 19
+          },
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_4_power_plant.txt",
+            "line": 14
+          },
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_5_supply_chains.txt",
+            "line": 20
+          }
+        ],
+        "weekly_profit": [
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_3_railway.txt",
+            "line": 23
+          },
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_4_power_plant.txt",
+            "line": 18
+          },
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_5_supply_chains.txt",
+            "line": 21
+          },
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_5_supply_chains.txt",
+            "line": 37
+          }
+        ],
+        "state_goods_delta": [
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_3_railway.txt",
+            "line": 61
+          },
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_4_power_plant.txt",
+            "line": 33
+          },
+          {
+            "path": "common/scripted_effects/zw_scsab_effects_4_power_plant.txt",
+            "line": 48
+          }
+        ]
+      }
+    },
+    {
+      "label": "3432933121_Auto-Diplomacy_And_Advanced_Subject_Management",
+      "root": "/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/mod/3432933121_Auto-Diplomacy_And_Advanced_Subject_Management",
+      "examples": {
+        "has_technology_researched": [
+          {
+            "path": "common/diplomatic_actions/zw_adnasm_da_subject.txt",
+            "line": 34
+          },
+          {
+            "path": "common/diplomatic_actions/zw_adnasm_da_subject.txt",
+            "line": 1971
+          },
+          {
+            "path": "common/scripted_triggers/zw_adnasm_triggers_force_law.txt",
+            "line": 41
+          },
+          {
+            "path": "common/scripted_triggers/zw_adnasm_triggers_force_law.txt",
+            "line": 86
+          }
+        ],
+        "on_monthly_pulse": [
+          {
+            "path": "common/journal_entries/zw_adnasm_je.txt",
+            "line": 30
+          }
+        ],
+        "scaled_debt": [
+          {
+            "path": "common/scripted_effects/zw_adnasm_effects_subjects.txt",
+            "line": 5
+          },
+          {
+            "path": "common/scripted_effects/zw_adnasm_effects_subjects.txt",
+            "line": 26
+          },
+          {
+            "path": "common/scripted_effects/zw_adnasm_effects_subjects.txt",
+            "line": 58
+          }
+        ]
+      }
+    },
+    {
+      "label": "3278371002_Private_Investments_Only_Expand_Existing_Buildings",
+      "root": "/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/mod/3278371002_Private_Investments_Only_Expand_Existing_Buildings",
+      "examples": {}
+    },
+    {
+      "label": "2934542706_Government_Administration_Auto_Expand",
+      "root": "/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/mod/2934542706_Government_Administration_Auto_Expand",
+      "examples": {
+        "occupancy": [
+          {
+            "path": "common/buildings/z0z_government.txt",
+            "line": 12
+          }
+        ],
+        "building_has_goods_shortage": [
+          {
+            "path": "common/buildings/z0z_government.txt",
+            "line": 16
+          }
+        ]
+      }
+    },
+    {
+      "label": "3778129206_Economy_Advisor",
+      "root": "/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/mod/3778129206_Economy_Advisor",
+      "examples": {
+        "gdp": [
+          {
+            "path": "common/glossary/advisor_glossary.txt",
+            "line": 6
+          },
+          {
+            "path": "common/glossary/advisor_glossary.txt",
+            "line": 11
+          },
+          {
+            "path": "common/glossary/advisor_glossary.txt",
+            "line": 16
+          },
+          {
+            "path": "common/glossary/advisor_glossary.txt",
+            "line": 21
+          }
+        ],
+        "occupancy": [
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 6
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 30
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 75
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 216
+          }
+        ],
+        "has_failed_hires": [
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 30
+          },
+          {
+            "path": "common/script_values/advisor_generated_candidate_values.txt",
+            "line": 2303
+          },
+          {
+            "path": "common/script_values/advisor_generated_candidate_values.txt",
+            "line": 2581
+          },
+          {
+            "path": "common/script_values/advisor_generated_candidate_values.txt",
+            "line": 2791
+          }
+        ],
+        "building_has_goods_shortage": [
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 75
+          },
+          {
+            "path": "common/script_values/advisor_generated_candidate_values.txt",
+            "line": 15004
+          },
+          {
+            "path": "common/script_values/advisor_generated_candidate_values.txt",
+            "line": 15005
+          },
+          {
+            "path": "common/script_values/advisor_generated_candidate_values.txt",
+            "line": 15006
+          }
+        ],
+        "weekly_profit": [
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 77
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 185
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 199
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 306
+          }
+        ],
+        "infrastructure_delta": [
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 351
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 361
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 365
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 393
+          }
+        ],
+        "num_queued_private_constructions": [
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 404
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 454
+          }
+        ],
+        "num_queued_government_constructions": [
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 427
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 453
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 458
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1535
+          }
+        ],
+        "has_technology_researched": [
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1071
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1072
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1073
+          },
+          {
+            "path": "common/scripted_effects/advisor_economy_health_effects.txt",
+            "line": 264
+          }
+        ],
+        "net_fixed_income": [
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1411
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1415
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1453
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1493
+          }
+        ],
+        "net_total_income": [
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1415
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1502
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1554
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1563
+          }
+        ],
+        "fixed_expenses": [
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1420
+          }
+        ],
+        "gold_reserves": [
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1426
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1477
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1480
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1520
+          }
+        ],
+        "credit": [
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1447
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1556
+          },
+          {
+            "path": "common/scripted_effects/advisor_economy_health_effects.txt",
+            "line": 12
+          }
+        ],
+        "principal": [
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1450
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1475
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1482
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1492
+          }
+        ],
+        "market_goods_buy_orders": [
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1607
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1609
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1644
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1710
+          }
+        ],
+        "market_goods_sell_orders": [
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1608
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1609
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1643
+          },
+          {
+            "path": "common/script_values/advisor_core_values.txt",
+            "line": 1645
+          }
+        ],
+        "average_sol": [
+          {
+            "path": "common/script_values/advisor_generated_candidate_values.txt",
+            "line": 1947
+          },
+          {
+            "path": "common/scripted_effects/advisor_economy_health_effects.txt",
+            "line": 14
+          },
+          {
+            "path": "common/scripted_effects/advisor_economy_health_effects.txt",
+            "line": 287
+          }
+        ],
+        "start_building_construction": [
+          {
+            "path": "common/scripted_effects/advisor_automation_effects.txt",
+            "line": 385
+          },
+          {
+            "path": "common/scripted_effects/advisor_generated_dispatchers.txt",
+            "line": 8
+          },
+          {
+            "path": "common/scripted_effects/advisor_generated_dispatchers.txt",
+            "line": 13
+          },
+          {
+            "path": "common/scripted_effects/advisor_generated_dispatchers.txt",
+            "line": 18
+          }
+        ],
+        "scaled_debt": [
+          {
+            "path": "common/scripted_effects/advisor_economy_health_effects.txt",
+            "line": 13
+          }
+        ],
+        "activate_production_method": [
+          {
+            "path": "common/scripted_effects/advisor_generated_candidate_effects.txt",
+            "line": 5318
+          },
+          {
+            "path": "common/scripted_effects/advisor_generated_candidate_effects.txt",
+            "line": 5319
+          },
+          {
+            "path": "common/scripted_effects/advisor_generated_candidate_effects.txt",
+            "line": 5320
+          },
+          {
+            "path": "common/scripted_effects/advisor_generated_dispatchers.txt",
+            "line": 276
+          }
+        ]
+      }
+    },
+    {
+      "label": "ARoAI-1.3.5",
+      "root": "/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/mod/ARoAI-1.3.5",
+      "examples": {
+        "scaled_debt": [
+          {
+            "path": "common/script_values/aroai_budgeting_values.txt",
+            "line": 4
+          },
+          {
+            "path": "common/script_values/aroai_budgeting_values.txt",
+            "line": 10
+          },
+          {
+            "path": "common/script_values/aroai_budgeting_values.txt",
+            "line": 291
+          },
+          {
+            "path": "common/script_values/aroai_budgeting_values.txt",
+            "line": 316
+          }
+        ],
+        "gold_reserves": [
+          {
+            "path": "common/script_values/aroai_budgeting_values.txt",
+            "line": 6
+          },
+          {
+            "path": "common/script_values/aroai_budgeting_values.txt",
+            "line": 472
+          },
+          {
+            "path": "common/script_values/aroai_budgeting_values.txt",
+            "line": 483
+          },
+          {
+            "path": "common/script_values/aroai_budgeting_values.txt",
+            "line": 485
+          }
+        ],
+        "credit": [
+          {
+            "path": "common/script_values/aroai_budgeting_values.txt",
+            "line": 11
+          },
+          {
+            "path": "common/script_values/aroai_budgeting_values.txt",
+            "line": 17
+          }
+        ],
+        "market_goods_buy_orders": [
+          {
+            "path": "common/script_values/aroai_evaluation_values.txt",
+            "line": 10
+          },
+          {
+            "path": "common/script_values/aroai_evaluation_values.txt",
+            "line": 26
+          },
+          {
+            "path": "common/script_values/aroai_evaluation_values.txt",
+            "line": 28
+          },
+          {
+            "path": "common/script_values/aroai_evaluation_values.txt",
+            "line": 44
+          }
+        ],
+        "market_goods_sell_orders": [
+          {
+            "path": "common/script_values/aroai_evaluation_values.txt",
+            "line": 17
+          },
+          {
+            "path": "common/script_values/aroai_evaluation_values.txt",
+            "line": 26
+          },
+          {
+            "path": "common/script_values/aroai_evaluation_values.txt",
+            "line": 29
+          },
+          {
+            "path": "common/script_values/aroai_evaluation_values.txt",
+            "line": 43
+          }
+        ],
+        "has_technology_researched": [
+          {
+            "path": "common/script_values/aroai_evaluation_values.txt",
+            "line": 841
+          },
+          {
+            "path": "common/script_values/aroai_evaluation_values.txt",
+            "line": 847
+          },
+          {
+            "path": "common/script_values/aroai_evaluation_values.txt",
+            "line": 853
+          },
+          {
+            "path": "common/script_values/aroai_evaluation_values.txt",
+            "line": 874
+          }
+        ],
+        "gdp": [
+          {
+            "path": "common/script_values/aroai_preparation_values.txt",
+            "line": 284
+          },
+          {
+            "path": "common/script_values/aroai_preparation_values.txt",
+            "line": 323
+          },
+          {
+            "path": "common/script_values/aroai_preparation_values.txt",
+            "line": 325
+          },
+          {
+            "path": "common/script_values/aroai_preparation_values.txt",
+            "line": 333
+          }
+        ],
+        "occupancy": [
+          {
+            "path": "common/script_values/aroai_preparation_values.txt",
+            "line": 381
+          },
+          {
+            "path": "common/script_values/aroai_preparation_values.txt",
+            "line": 671
+          },
+          {
+            "path": "common/scripted_effects/aroai_construction_effects.txt",
+            "line": 176
+          },
+          {
+            "path": "common/scripted_effects/aroai_preparation_effects.txt",
+            "line": 867
+          }
+        ],
+        "weekly_profit": [
+          {
+            "path": "common/script_values/aroai_preparation_values.txt",
+            "line": 782
+          },
+          {
+            "path": "common/scripted_effects/aroai_preparation_effects.txt",
+            "line": 1059
+          },
+          {
+            "path": "common/scripted_effects/aroai_weekly_loop_effects.txt",
+            "line": 233
+          },
+          {
+            "path": "common/scripted_effects/aroai_weekly_loop_effects.txt",
+            "line": 260
+          }
+        ],
+        "start_building_construction": [
+          {
+            "path": "common/scripted_effects/aroai_construction_effects.txt",
+            "line": 414
+          },
+          {
+            "path": "common/scripted_effects/aroai_static_data_effects.txt",
+            "line": 1812
+          },
+          {
+            "path": "common/scripted_effects/aroai_static_data_effects.txt",
+            "line": 1843
+          },
+          {
+            "path": "common/scripted_effects/aroai_static_data_effects.txt",
+            "line": 1874
+          }
+        ],
+        "building_has_goods_shortage": [
+          {
+            "path": "common/scripted_effects/aroai_preparation_effects.txt",
+            "line": 1598
+          },
+          {
+            "path": "common/scripted_triggers/aroai_evaluation_triggers.txt",
+            "line": 60
+          },
+          {
+            "path": "common/scripted_triggers/aroai_preparation_triggers.txt",
+            "line": 113
+          }
+        ]
+      }
+    },
+    {
+      "label": "3770300244_OGAS_for_CWE",
+      "root": "/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/mod/3770300244_OGAS_for_CWE",
+      "examples": {
+        "on_monthly_pulse": [
+          {
+            "path": "common/journal_entries/cnm_pm_manager.txt",
+            "line": 30
+          }
+        ],
+        "market_goods_sell_orders": [
+          {
+            "path": "common/script_values/AUTO_goods_origin.txt",
+            "line": 93
+          },
+          {
+            "path": "common/script_values/AUTO_goods_origin.txt",
+            "line": 205
+          },
+          {
+            "path": "common/script_values/AUTO_goods_origin.txt",
+            "line": 317
+          },
+          {
+            "path": "common/script_values/AUTO_goods_origin.txt",
+            "line": 429
+          }
+        ],
+        "market_goods_buy_orders": [
+          {
+            "path": "common/script_values/AUTO_goods_origin.txt",
+            "line": 103
+          },
+          {
+            "path": "common/script_values/AUTO_goods_origin.txt",
+            "line": 215
+          },
+          {
+            "path": "common/script_values/AUTO_goods_origin.txt",
+            "line": 327
+          },
+          {
+            "path": "common/script_values/AUTO_goods_origin.txt",
+            "line": 439
+          }
+        ],
+        "has_technology_researched": [
+          {
+            "path": "common/script_values/cnm_auto_railway_manager_script_values.txt",
+            "line": 22
+          },
+          {
+            "path": "common/script_values/cnm_auto_railway_manager_script_values.txt",
+            "line": 30
+          },
+          {
+            "path": "common/script_values/cnm_auto_railway_manager_script_values.txt",
+            "line": 38
+          },
+          {
+            "path": "common/script_values/cnm_auto_railway_manager_script_values.txt",
+            "line": 63
+          }
+        ],
+        "infrastructure_delta": [
+          {
+            "path": "common/script_values/cnm_auto_railway_manager_script_values.txt",
+            "line": 149
+          },
+          {
+            "path": "common/scripted_effects/cnm_auto_railway_manager.txt",
+            "line": 5
+          }
+        ],
+        "weekly_profit": [
+          {
+            "path": "common/script_values/cnm_construct_script_values.txt",
+            "line": 2
+          },
+          {
+            "path": "common/script_values/cnm_construct_script_values.txt",
+            "line": 68
+          },
+          {
+            "path": "common/scripted_triggers/cnm_OGAS_scripted_triggers.txt",
+            "line": 47
+          }
+        ],
+        "occupancy": [
+          {
+            "path": "common/script_values/cnm_construct_script_values.txt",
+            "line": 26
+          },
+          {
+            "path": "common/script_values/cnm_construct_script_values.txt",
+            "line": 57
+          },
+          {
+            "path": "common/scripted_effects/AUTO_PM_balance.txt",
+            "line": 5
+          },
+          {
+            "path": "common/scripted_effects/AUTO_PM_balance.txt",
+            "line": 172
+          }
+        ],
+        "start_building_construction": [
+          {
+            "path": "common/scripted_effects/AUTO_OGAS_construct.txt",
+            "line": 9
+          },
+          {
+            "path": "common/scripted_effects/AUTO_OGAS_construct.txt",
+            "line": 17
+          },
+          {
+            "path": "common/scripted_effects/AUTO_OGAS_construct.txt",
+            "line": 25
+          },
+          {
+            "path": "common/scripted_effects/AUTO_OGAS_construct.txt",
+            "line": 33
+          }
+        ],
+        "activate_production_method": [
+          {
+            "path": "common/scripted_effects/AUTO_PM_balance.txt",
+            "line": 164
+          },
+          {
+            "path": "common/scripted_effects/AUTO_PM_balance.txt",
+            "line": 331
+          },
+          {
+            "path": "common/scripted_effects/AUTO_PM_balance.txt",
+            "line": 498
+          },
+          {
+            "path": "common/scripted_effects/AUTO_PM_balance.txt",
+            "line": 665
+          }
+        ],
+        "net_total_income": [
+          {
+            "path": "common/scripted_effects/cnm_auto_construction_sector_manager.txt",
+            "line": 4
+          }
+        ]
+      }
+    },
+    {
+      "label": "Smart Government Advisor",
+      "root": "/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/mod/Smart Government Advisor",
+      "examples": {
+        "on_monthly_pulse": [
+          {
+            "path": "common/journal_entries/sg_journal_entries.txt",
+            "line": 46
+          }
+        ],
+        "net_total_income": [
+          {
+            "path": "common/script_values/sg_law_scores.txt",
+            "line": 590
+          },
+          {
+            "path": "common/script_values/sg_law_scores.txt",
+            "line": 1657
+          },
+          {
+            "path": "common/script_values/sg_law_scores.txt",
+            "line": 3210
+          },
+          {
+            "path": "common/script_values/sg_law_scores.txt",
+            "line": 4769
+          }
+        ],
+        "average_sol": [
+          {
+            "path": "common/script_values/sg_law_scores.txt",
+            "line": 1560
+          },
+          {
+            "path": "common/script_values/sg_law_scores.txt",
+            "line": 1658
+          },
+          {
+            "path": "common/script_values/sg_law_scores.txt",
+            "line": 1755
+          },
+          {
+            "path": "common/script_values/sg_law_scores.txt",
+            "line": 3211
+          }
+        ],
+        "has_technology_researched": [
+          {
+            "path": "common/scripted_triggers/sg_law_availability.txt",
+            "line": 14
+          },
+          {
+            "path": "common/scripted_triggers/sg_law_availability.txt",
+            "line": 33
+          },
+          {
+            "path": "common/scripted_triggers/sg_law_availability.txt",
+            "line": 55
+          },
+          {
+            "path": "common/scripted_triggers/sg_law_availability.txt",
+            "line": 66
+          }
+        ]
+      }
+    }
+  ],
+  "brief_sha256": "0a5dd341b50e721d9169cfd99e9fea73c4265c7873e0155ee31634461f9aff5e"
+}

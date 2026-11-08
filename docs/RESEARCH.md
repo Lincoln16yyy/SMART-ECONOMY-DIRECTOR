@@ -1,123 +1,138 @@
-# Fase 0 — Pesquisa e diagnóstico parcial
+# Fase 0 — pesquisa técnica
 
-Data: 2026-11-08. **Fase aberta; implementação não iniciada.**
+Data: 2026-11-08. Resultado: pesquisa estática inicial, com lacunas explícitas.
+Este documento apresenta o diagnóstico e a arquitetura antes da implementação.
+Não certifica compatibilidade nem funcionamento dentro de uma campanha.
 
-## Resultado técnico
+## Fontes e ambiente encontrados
 
-O Smart Government oferece uma base arquitetural para apresentação, ciclo de vida e avaliação mensal. Seu código não comprova acesso completo à economia nem execução de construções. Antes de implementar o Director, é necessário examinar a instalação real 1.15 e os mods do jogador.
+- Referência: https://github.com/Lincoln16yyy/Smart-Government-Victoria-3-1.15
+  e checkout local `/home/lincoln-ii/Victoria3_mod`. O commit inspecionado está
+  registrado em `SOURCE_INVENTORY.json`; alterações locais podem existir.
+- Instalação: `/home/lincoln-ii/Games/Victoria 3`. O arquivo
+  `launcher/launcher-settings.json` informa `rawVersion: 1.15.0`; o log local
+  `logs/system.log:1` registra `release/1.15.0 : 6338547985`.
+- Dados de usuário: `~/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3`.
+  Os caminhos Windows em `content_load.json` pertencem a esse prefixo Wine.
+- Mods instalados foram examinados na subpasta `mod` desses dados, e não apenas
+  pelos ZIPs em Downloads. Saves Haiti e uma cópia `haiti_1836_06_30_SG_TEST.v3`
+  existem. Nenhum save ou arquivo da instalação foi modificado.
+- `SOURCE_INVENTORY.json` registra exemplos por identificador, arquivo e linha,
+  separados entre vanilla e mods. Uma ocorrência em mod é evidência de uso,
+  não prova de aceitação pelo motor. Não contém código proprietário do jogo.
 
-O checkout de referência foi estudado no commit `95b20870816b9ceabcaf0b7b9371a66c85dd8bf1`. As conclusões abaixo distinguem código observado, relatos do projeto anterior e hipóteses de arquitetura. Nenhuma ação econômica foi executada no jogo nesta pesquisa.
+## Smart Government: padrões aproveitáveis
 
-## Ambiente e fontes
+Foram consultados README, AI_CONTEXT, PHASE_LOG e MANUAL_RUNTIME_TEST, além do
+ciclo de vida, Journal Entry, on-actions e organização dos geradores/testes.
 
-- Repositório do Director: inicialmente apenas documentação.
-- Referência clonada separadamente em `/workspace/Smart-Government-Victoria-3-1.15`, sem alterar arquivos rastreados.
-- Busca por Victoria/Economy Advisor em `/workspace`, `/home/agent`, `/opt`, `/mnt` e `/media`: não encontrou instalação ou mods, além do próprio checkout de referência e nomes irrelevantes de bibliotecas Python.
-- `/home/lincoln-ii` não existe neste executor. Os caminhos dessa máquina descritos no projeto anterior são pistas para uma sessão local, não caminhos válidos na nuvem.
-- `docs/AI_CONTEXT.md` da referência relata Victoria 3 `1.15.0 (Ivan-Chai)` e Economy Advisor workshop `3778129206`. Isso não confirma a versão atualmente instalada pelo jogador nem a identidade de uma cópia nova.
-- Não foi inspecionado `content_load.json`, save, executável, log ou fonte do Economy Advisor nesta entrega.
+O sistema usa dados reais de leis, IDs numéricos estáveis e scripts gerados.
+Calcula benefício, risco, apoio político e viabilidade; compara o mérito com a
+lei vigente antes de formar um ranking global de até três opções. Os textos
+explicam componentes e riscos. O botão inicia a promulgação normal; não aprova
+a lei instantaneamente. Esse modelo político não deve ser copiado para economia.
 
-Documentos lidos: README, AI_CONTEXT, PHASE_LOG e MANUAL_RUNTIME_TEST. Código estudado: diretórios `common/`, geradores de leis e GUI, parser, instalação, validação, testes, localização e metadados. O checkout também contém artefatos de pesquisa tecnológica, inclusive `.common/scripted_guis/sg_research_sguis.txt`; sua presença não demonstra integração ou funcionamento. O Director não vai assumir controle de pesquisa com base nesses arquivos.
+`sg_on_actions.txt` acrescenta dispatchers com `on_actions = { ... }`.
+`sg_journal_entries.txt` associa um widget ao `custom_widget_container_3`, usa
+`activation_description` e executa atualização mensal. `sg_effects.txt` guarda
+schema, data de atualização e habilitação, evita Journal Entries duplicadas,
+limpa o estado ao desativar e conserva o schema para impedir reativação automática.
+Ignorar/restaurar opera por ID; ações devem acompanhar o candidato, não uma
+posição mutável da lista. Contadores de ranking tornam o diagnóstico auditável.
 
-## Padrões comprovados no código da referência
+Os geradores `build_law_data.py` e `build_gui.py`, o parser `pdx_parse.py`, os
+testes em `tests/test_advisor_generation.py`, o validador, as duas localizações,
+o descriptor e o instalador fornecem referências de organização. A documentação
+registra falhas reais da engine: BOM, define com namespace, nomes de listas e
+propriedades GUI inválidas. Portanto, validação textual não substitui runtime.
+Não foram executados novamente os testes do Smart Government nesta pesquisa.
 
-| Área | Evidência | Consequência para o Director |
+## Economy Advisor: sobreposição comprovada nos arquivos
+
+Instalado como `3778129206_Economy_Advisor`, versão declarada 1.0.0,
+`supported_version="1.15.*"`. Há decisões, três Journal Entries, scripted GUIs,
+scripts gerados, análise econômica, orçamento, construção e avaliação de PMs.
+
+- `common/on_actions/advisor_on_actions.txt`: monitoração mensal exige
+  `advisor_enabled`; a construção exige `advisor_auto_construction_enabled`.
+  Os comentários e eventos separam a construção para o dia 8 e PMs para o dia 15,
+  evitando concentrar os cálculos pesados no início do mês.
+- `advisor_automation_effects.txt:385` usa
+  `start_building_construction = $BUILDING$`. Portanto, executa construções.
+- `advisor_core_values.txt:404–458` considera quantidade de projetos privados e
+  governamentais, alocação privada e espaço de construção. O modelo também
+  considera contratação, infraestrutura e efeito de preços após construção.
+- `advisor_core_values.txt:1408–1448` usa `net_fixed_income`, `net_total_income`,
+  `fixed_expenses`, reservas, crédito e custo de juros. Tem planos distintos de
+  orçamento; a reserva de doze semanas é uma política desse mod, não regra universal.
+- Os scripts de PM avaliam lucro, mão de obra, qualificações, insumos,
+  infraestrutura e cooldown. `advisor_tax_capacity_effects.txt:471–479`
+  contém aplicação real de PM administrativo.
+- `advisor_lifecycle_effects.txt` remove flags de automação ao limpar o estado.
+  Instalar o mod não demonstra que sua construção/PMs estejam ligados no save.
+
+O mod está na lista habilitada do launcher. Ainda falta ler o estado de país
+de uma cópia de save e confirmar na interface quais opções estão ativas.
+Não existe contrato de integração documentado encontrado nesta inspeção.
+Não chamar efeitos internos nem escrever suas variáveis como se fossem API.
+
+## Capacidades e métricas
+
+Legenda: **observável** indica leitura encontrada nos scripts; **executável**
+indica mecanismo de ação encontrado; **parcial** indica modelo ou acesso
+incompleto; **não suportado identificado** significa ausência de mecanismo
+confiável nesta pesquisa, sem afirmar impossibilidade absoluta do motor.
+
+Para exibição, valores numéricos lidos em script poderão ser transferidos a
+variáveis `sed_` e formatados no widget, seguindo o padrão do Smart Government.
+Isso é uma proposta; cada binding do novo widget precisa de teste de runtime.
+
+| Métrica ou ação | Fonte real identificada | Classe e limitações |
 | --- | --- | --- |
-| Inicialização | `common/on_actions/sg_on_actions.txt` usa despachantes aditivos, país jogador e marcador de esquema | Separar inicialização de atualização; nunca reativar após desativação deliberada |
-| Journal Entry | `common/journal_entries/sg_journal_entries.txt` liga widget, avaliação, desativação e pulso mensal | Uma JE própria; confirmar os mesmos mecanismos na instalação alvo |
-| Estado | `common/scripted_effects/sg_effects.txt` mantém esquema e limpa ranking, datas e ignoradas | `sed_` próprio, migração explícita e inventário de variáveis |
-| Identidade | `data/law_ids.json` mantém IDs estáveis; ações geradas vinculadas à lei | Recomendação futura deve identificar ação, edifício e estado, não apenas posição no ranking |
-| Revalidação | `sg_law_actions.txt` revalida disponibilidade antes de `start_enactment`, depois recalcula | Uma aprovação antiga não autoriza executar uma oportunidade já inválida |
-| Ranking | `sg_law_rank.txt` inicializa sentinelas e contadores; mérito deve superar a lei atual | Aceitar zero recomendações e explicar filtros; não importar pesos de política para economia |
-| Pontuação | `tools/build_law_data.py` deriva componentes de modificadores e ajustes situacionais | Mostrar componentes e fontes; validar pesos econômicos separadamente |
-| Interface | `tools/build_gui.py` usa SGUI de visibilidade por candidato | Evitar cliques que mudam de alvo após recálculo; custo de muitos ramos exige medição |
-| Idioma | `localization/braz_por` e `english`, arquivos com BOM | Português brasileiro e fallback inglês; validar chaves e codificação |
-| Instalação | `descriptor.mod`, descritor externo e `.metadata/metadata.json` | Projetar instalação local portátil; não depender do Workshop |
-| Diagnóstico | contadores por filtro, data da avaliação e logs condicionais | Diferenciar falta de dados, inviabilidade, ignoradas e ausência de oportunidade |
+| Saldo total / operacional | Advisor: `net_total_income`, `net_fixed_income` | Observável em país; conferir unidade semanal na tela |
+| Reservas | Vanilla `war_support_values.txt`: `gold_reserves`, `gold_reserves_limit` | Observável; reserva não é receita recorrente |
+| Dívida / crédito | Advisor health: `principal`, `credit`, `scaled_debt` | Observável; proteger divisões com limite zero |
+| Juros | Advisor budget: modificadores de taxa | Parcial: taxa calculada não é toda a decomposição da despesa observada |
+| Receita/despesa detalhada, tributos e gastos militar/administrativo | Tela de orçamento; `fixed_expenses` no Advisor | Parcial: total fixo encontrado; falta mapear cada rubrica script/GUI |
+| Gastos públicos de construção | Advisor: diferença entre saldo operacional e total | Parcial; inclui interpretação de transferências, validar contra orçamento |
+| PIB | Vanilla `ip5_je_values.txt`: `gdp` | Observável; crescimento exige amostras datadas |
+| PIB per capita | Vanilla `country_gdp_per_capita` | Observável como script value vanilla; conferir população e unidade |
+| Padrão de vida | Advisor health: `average_sol` | Observável; média pode ocultar pobreza de grupos |
+| Preços / oferta / demanda | Vanilla usa `market_goods_buy_orders`; mods usam `sg:goods`, `state_goods_pricier`, `state_goods_delta` | Parcial: escopo local e mercado distintos; confirmar venda e preço por bem |
+| Importação/exportação e dependência externa | Scripts `advisor_generated_export_*`; mercado do jogo | Parcial: falta separar produção nacional e circulação em mercado compartilhado |
+| Escassez de insumos | `building_has_goods_shortage` nos mods | Observável no edifício; preço alto sozinho não prova escassez |
+| Lucro / utilização / PM atual | `weekly_profit`, `occupancy`, `has_active_production_method` | Observável; lucro não equivale ao benefício nacional |
+| Produção setorial / capacidade / insumos futuros | Buildings, PMs e modificadores vanilla; perfis gerados do Advisor | Parcial: requer catálogo próprio e cálculo com throughput e emprego |
+| Mão de obra / desemprego / qualificações / salários | Triggers de workforce e valores de avaliação do Advisor | Parcial: falta validar separadamente cada primitiva e escopo |
+| Alfabetização / educação / migração / população regional | Sistemas vanilla e interface | Parcial: mapeamento script e GUI ainda pendente por indicador |
+| Infraestrutura | `infrastructure_delta`, `infrastructure_usage`; Supply Chain ferroviário | Observável por estado; fila pode consumir a margem futura |
+| Capacidade de construção | Advisor: `modifier:country_construction_add` | Observável; considerar parcela privada e limite por projeto |
+| Fila pública / privada | Advisor: `num_queued_government_constructions`, `num_queued_private_constructions` | Parcial: totais não bastam para deduplicar estado + tipo + níveis |
+| Tecnologia disponível | `has_technology_researched` nos scripts | Observável; Director não controlará pesquisa nesta etapa |
+| Construir normalmente | `start_building_construction` em estado | Executável em scripts existentes; precisa validar custo/fila na 1.15 para o Director |
+| Trocar PM | `activate_production_method`, com `can_activate_production_method` | Executável; deixar aos controladores de PM no ecossistema |
+| Histórico / avaliação de resultados | Variáveis persistentes e amostras mensais | Parcial; correlação observada não prova causalidade da construção |
+| Aprendizado de máquina / previsão econômica exata | Nenhuma implementação confiável encontrada em script | Não suportado identificado; usar avaliação transparente de resultados |
+| Coordenação atômica entre mods | Nenhum protocolo encontrado | Não suportado identificado; exigir um único executor configurado |
 
-A referência relata erros reais com `autoresize` em widget, `HasVariable` na GUI, defines sem namespace e listas de grupos de interesse. Esses relatos justificam verificações preventivas, mas não substituem carregar o novo mod no jogo. Há trechos antigos no AI_CONTEXT que ainda citam alternativas corrigidas depois; priorizar o código do commit e o histórico mais recente.
+## Conclusão técnica e pendências
 
-## Capacidades e evidência disponível
+É viável propor um diagnóstico em Journal Entry e um planejador com ranking
+explicável. Há mecanismos de execução, mas coexistência segura depende da fila
+completa e de escolher quem executa. Replicar o construtor/PM do Advisor agora
+duplicaria funções já existentes. A arquitetura proposta está em ARCHITECTURE.md.
 
-Classificações finais exigidas pelo briefing: executável, observável, parcial ou não suportado. **Pendente** abaixo significa que não existe evidência suficiente para atribuir uma dessas classificações; não significa que a engine não suporte o recurso.
+A Fase 0 permanece aberta até: mapear as primitivas pendentes acima; verificar
+flags das automações no save Haiti; auditar todos os caminhos relevantes de PMs
+e construção; examinar Kuromi no ZIP; comparar identificadores e overrides;
+validar como consultar fila por estado/tipo, incluindo projetos privados; medir
+custo das consultas; conferir bindings GUI na instalação 1.15. Não há autorização
+técnica para tratar essas lacunas como dados iguais a zero. A Fase 1 só começa
+após esse fechamento e apresentação das conclusões.
 
-| Recurso | Estado nesta pesquisa | Evidência / verificação necessária |
-| --- | --- | --- |
-| Ativar, desativar, ignorar, restaurar e atualizar JE | Parcial: implementação de referência observada | Código e testes estáticos; repetir interações em campanha para o Director |
-| Atualização mensal | Parcial: padrão de referência observado | JE e on-actions; medir custo e confirmar um ciclo por mês |
-| Saldo e risco fiscal | Parcial: uso em condições da referência | `net_total_income` e `weeks_until_bankruptcy` em `dynamic_benefit`/`dynamic_risk`; validar semântica, unidades, escopo e leitura numérica |
-| Padrão de vida e alfabetização | Parcial: uso em condições da referência | `average_sol`, `average_expected_sol`, `literacy_rate`; validar consulta e exibição na instalação |
-| Pressão burocrática | Parcial: condição da referência | `approaching_bureaucracy_shortage`; não equivale a valor monetário de despesa |
-| Reservas, dívida, juros e composição das despesas | Pendente | Localizar funções/valores reais; distinguir saldo semanal de estoque e de limite de crédito |
-| Preços, ordens de compra/venda, escassez e comércio | Pendente | Investigar mercado nacional/local, unidades e contexto do bem; distinguir preço alto de escassez efetiva |
-| Produção, rentabilidade, utilização e salários | Pendente | Determinar leitura por edifício, estado e país; não inferir lucro futuro do preço atual |
-| Emprego, desemprego, camponeses, qualificações e migração | Pendente | Distinguir categorias e mobilidade; trabalhador disponível não é contratação garantida |
-| Infraestrutura, acesso ao mercado, portos e ferrovias | Pendente | Mapear valores regionais e efeitos concretos na versão alvo |
-| PIB, PIB per capita e crescimento | Pendente | Confirmar valores e agregações; crescimento requer histórico comparável |
-| Fila pública, privada e construção em andamento | Pendente crítico | Identificar leitura, dono e identidade dos projetos antes de permitir automação |
-| Adicionar/priorizar/cancelar construção | Pendente crítico | Efeito real, escopo, limites e coexistência; não usar `start_enactment` como prova de ação econômica |
-| Consultar e alterar PMs | Pendente | Inspecionar grupos, métodos e mods de PM; preferir coexistência sem escrita |
-| Tecnologia desbloqueada e restrições de edifícios | Pendente | Ler definições e requisitos efetivos; não assumir controle da pesquisa |
-| Histórico e adaptação durante campanha | Pendente | Confirmar persistência e custo de amostras; descrever associação, não causalidade ou previsão garantida |
+## Pesquisa anterior preservada
 
-## Arquitetura proposta, ainda não implementada
-
-1. **Catálogo de capacidades:** cada métrica registra fonte, versão, escopo, unidade, disponibilidade, limitações e teste de confirmação. Ausência de valor é desconhecido, nunca zero.
-2. **Diagnóstico:** avaliação mensal e manual gera estado fiscal/produtivo com motivos e data. Métricas insuficientes produzem diagnóstico incompleto; não classificam automaticamente a economia como saudável.
-3. **Objetivos:** curto/médio/longo prazo e objetivo escolhido pelo jogador. Prioridades não assumem política, guerra ou diplomacia.
-4. **Elegibilidade:** filtrar oportunidade por tecnologia, recursos, mão de obra, insumos, infraestrutura, finanças e projetos existentes antes de pontuar. Campo crítico desconhecido bloqueia execução.
-5. **Planejamento:** decompor necessidade, benefício e risco; comparar com a opção de esperar. Não fixar fórmula ou limiares antes de conhecer unidades e dados acessíveis. Calibrar com cenários e registrar versões dos pesos.
-6. **Apresentação:** até três recomendações, identidade estável, estado alvo, motivos, restrições, componentes e confiança baseada em dados disponíveis. Custos/previsões só aparecem quando calculáveis.
-7. **Execução futura:** revalidar modo, identidade, dados atuais, fila e proteções imediatamente antes de agir. Bloquear se outro controlador disputa a fila. Registrar ação pendente e reconciliar com o mundo antes de repetir; cooldown sozinho não comprova conclusão.
-8. **Observação posterior:** comparar amostras com mesma unidade e contexto de mercado; registrar mudanças de PM, guerra e comércio como fatores concorrentes. Não prometer aprendizado preditivo sem dados adequados.
-
-Organização prevista: `common/` para ciclo de vida, valores, triggers, GUIs e efeitos `sed_`; `gui/journal_entry_widgets/` para JE; `localization/` para idiomas; `data/` para catálogo e IDs; `tools/` para geração/validação; `tests/` para regras e fixtures; `docs/` para evidência. São destinos planejados, não arquivos fictícios já criados.
-
-Fase 1 terá apenas diagnóstico. Modos assistido e automático só poderão executar ações após a Fase 3; a interface não deve oferecer botões sem implementação real. Propor início manual na primeira versão é uma medida de projeto, sujeita à validação da arquitetura.
-
-## Proteções de projeto a demonstrar
-
-- Sem leitura confiável das filas pública e privada, nenhuma execução automática de construção.
-- Nenhuma capacidade econômica suposta a partir do nome de um mod.
-- Um controlador por domínio; nenhuma escrita em variáveis `sg_` ou de outros mods.
-- Estado fiscal deve considerar despesas recorrentes e escala do país; percentuais e janelas ainda precisam de calibração.
-- Desativar remove estado operacional `sed_`, preservando somente marcadores necessários e documentados; não cancela construções já iniciadas sem decisão explícita.
-- Desempenho: começar pelo país jogador, evitar varredura diária global, limitar candidatos e medir antes/depois em país pequeno e grande. Frequência mensal é referência, não garantia de custo aceitável.
-
-## Validação executada
-
-No checkout da referência, sem gerar novamente os dados:
-
-```bash
-python3 -m unittest discover -s tests -v
-# 26 testes executados, 26 passaram.
-python3 tools/validate.py
-# Exit 1: Could not find Victoria 3 automatically.
-```
-
-Os 26 testes verificam artefatos e regras do Smart Government. Não são testes econômicos do Director nem confirmação da engine. A validação dependente dos arquivos originais ficou bloqueada por instalação ausente. Não houve teste de GUI, campanha, compatibilidade ou economia.
-
-## Critério para encerrar a Fase 0
-
-- [x] Estudar documentos e implementação do Smart Government em revisão fixa.
-- [x] Propor separação arquitetural e registrar riscos.
-- [x] Criar matriz inicial de compatibilidade com lacunas explícitas.
-- [ ] Confirmar instalação, versão, caminhos e lista efetiva de mods.
-- [ ] Inspecionar Economy Advisor e demais mods instalados.
-- [ ] Preencher capacidades com fontes reais 1.15, unidades, escopos e limites.
-- [ ] Demonstrar dados mínimos da Fase 1 e definir testes de leitura/exibição.
-- [ ] Apresentar diagnóstico consolidado antes de implementar o mod.
-
-Próxima ação: continuar em uma sessão local do Codex no computador do jogador ou disponibilizar privadamente os arquivos necessários. Não publicar arquivos proprietários do jogo ou saves neste repositório.
-
-## Fontes fixadas
-
-- [Contexto e mecanismos relatados](https://github.com/Lincoln16yyy/Smart-Government-Victoria-3-1.15/blob/95b20870816b9ceabcaf0b7b9371a66c85dd8bf1/docs/AI_CONTEXT.md)
-- [Histórico e correções de runtime](https://github.com/Lincoln16yyy/Smart-Government-Victoria-3-1.15/blob/95b20870816b9ceabcaf0b7b9371a66c85dd8bf1/docs/PHASE_LOG.md)
-- [Procedimento manual](https://github.com/Lincoln16yyy/Smart-Government-Victoria-3-1.15/blob/95b20870816b9ceabcaf0b7b9371a66c85dd8bf1/docs/MANUAL_RUNTIME_TEST.md)
-- [Ciclo de vida](https://github.com/Lincoln16yyy/Smart-Government-Victoria-3-1.15/blob/95b20870816b9ceabcaf0b7b9371a66c85dd8bf1/common/scripted_effects/sg_effects.txt)
-- [JE](https://github.com/Lincoln16yyy/Smart-Government-Victoria-3-1.15/blob/95b20870816b9ceabcaf0b7b9371a66c85dd8bf1/common/journal_entries/sg_journal_entries.txt)
-- [Gerador e sinais econômicos](https://github.com/Lincoln16yyy/Smart-Government-Victoria-3-1.15/blob/95b20870816b9ceabcaf0b7b9371a66c85dd8bf1/tools/build_law_data.py)
-- [GUI](https://github.com/Lincoln16yyy/Smart-Government-Victoria-3-1.15/blob/95b20870816b9ceabcaf0b7b9371a66c85dd8bf1/tools/build_gui.py)
-- [Validação](https://github.com/Lincoln16yyy/Smart-Government-Victoria-3-1.15/blob/95b20870816b9ceabcaf0b7b9371a66c85dd8bf1/tools/validate.py)
-- [Testes executados](https://github.com/Lincoln16yyy/Smart-Government-Victoria-3-1.15/blob/95b20870816b9ceabcaf0b7b9371a66c85dd8bf1/tests/test_advisor_generation.py)
+[Pesquisa na nuvem](RESEARCH_CLOUD.md) conserva as fontes fixadas e os resultados
+prévios: 26 testes da referência aprovados; validador bloqueado pela ausência do
+jogo naquele executor. Os caminhos e mods agora encontrados atualizam esse
+diagnóstico. Esses testes não foram repetidos na presente sessão local.

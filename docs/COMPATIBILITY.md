@@ -1,26 +1,36 @@
-# Compatibilidade — matriz inicial
+# Compatibilidade — inventário inicial
 
-Estado: investigação parcial em 2026-11-08. Nenhum teste de convivência foi executado. Nomes e funções esperadas dos mods vêm do briefing do jogador; somente o código do Smart Government foi inspecionado.
+Data: 2026-11-08. Habilitado significa listado em `content_load.json`, não
+automação comprovadamente ativa em campanha. Nenhuma combinação foi testada
+com o Director, que ainda não tem código executável.
 
-| Mod | Controle comprovado ou ainda a investigar | Risco a verificar | Estratégia proposta |
-| --- | --- | --- | --- |
-| Smart Government | Código inspecionado: recomenda leis; inicia promulgação por ação do jogador; ciclo mensal e namespace `sg_` | Mudança de lei altera premissas econômicas; custo combinado dos ciclos | `sed_` independente; recalcular sem alterar leis ou variáveis do Government |
-| Economy Advisor | Arquivos ausentes; referência anterior identifica workshop `3778129206` | Duplicação de diagnóstico, construção e eventual controle econômico | Inspecionar opções realmente ativas, efeitos e fila antes de escolher quem executa |
-| Supply Chain Semi-Auto Builder | Construção/cadeias informadas pelo jogador; implementação não inspecionada | Projetos duplicados e disputa da fila | Enquanto coexistência não for comprovada, Director sem escrita na fila |
-| Auto-Apply PMs | Aplicação de PMs informada; implementação não inspecionada | Mudança de insumos e rentabilidade após avaliação | Não implementar troca própria; revalidar condições após mudança |
-| Auto-Apply Automation PMs | Automação de PMs informada; implementação não inspecionada | Desemprego, nova demanda de insumos e alteração de contratação | Investigar critérios e frequência; manter execução própria desabilitada |
-| Auto-Diplomacy and Advanced Subject Management | Diplomacia/súditos informados; implementação não inspecionada | Alterações de mercado e comércio invalidam planos | Ler efeitos disponíveis, sem assumir diplomacia |
-| Auto-Recruit & One-Click Recruit Commanders | Automação militar informada; implementação não inspecionada | Custos e demanda militar tornam investimento inviável | Revalidar capacidade fiscal sem financiar expansão militar por iniciativa do Director |
-| Kuromi's AI | Escopo desconhecido | Possível alteração de IA, economia, preços ou on-actions | Examinar arquivos e configuração; não presumir controle do país jogador |
+| Mod | Evidência local / responsabilidade | Conflito e coexistência proposta |
+| --- | --- | --- |
+| Smart Government | Habilitado; recomenda leis com prefixo `sg_` | Manter `sed_` independente; não modificar leis ou suas variáveis |
+| Economy Advisor | Habilitado; orçamento, construção, análise, PMs e ações econômicas | Sobreposição alta; escolher um construtor e um controlador por domínio de PM; sem API identificada |
+| Supply Chain Semi-Auto Builder | Habilitado; `zw_scsab_je.txt:84–115` agenda setores, administração, ferrovias, energia e expansão | Disputa a fila; evitar execução simultânea no mesmo domínio |
+| Auto-Apply PMs | Habilitado; efeitos `zw_aap_*` usam preços locais, opções e `activate_production_method` | Director não altera PMs; pode observar efeitos. Não assumir que todos os caminhos avaliam emprego/lucro |
+| Auto-Apply Automation PMs | Habilitado; JE mensal usa `zw_trigger_aaap_state_workforce_low`, transporte e flags de automação | Considera escassez de mão de obra e preços em caminhos examinados; algumas verificações estão comentadas. Não há garantia de segurança uniforme |
+| Auto-Diplomacy and Advanced Subject Management | Habilitado; decisões, ações diplomáticas, efeitos de relações/súditos e leis | Auditoria inicial de estrutura; acompanhar efeitos fiscais sem controlar diplomacia |
+| Auto-Recruit & One-Click Recruit Commanders | Habilitado; decisões, JE, efeitos de recrutamento | Auditoria inicial de estrutura; reservar capacidade fiscal sem iniciar expansão militar |
+| Kuromi's AI | ZIP em Downloads, ausente da lista habilitada e da pasta ativa encontrada | Conteúdo e efeito sobre jogador ainda pendentes; não confundir com ARoAI |
+| ARoAI 1.3.5 | Habilitado; scripts próprios de construção, orçamento, PMs e condições `is_player` | Amplia a auditoria necessária; não concluir que só afeta IA pelo nome |
+| Controllable Private Construction | Habilitado; redefine buildings, decretos e triggers de expansão | Ler definições efetivas; catálogo vanilla isolado pode estar incorreto |
+| Government Administration Auto Expand | Habilitado; arquivo `common/buildings/z0z_government.txt` | Pode ampliar administração; coordenar com Advisor e Supply Chain |
+| Private Investments Only Expand Existing Buildings | Instalado, ausente da lista habilitada | Altera buildings quando ligado; não pressupor regras de investimento vanilla |
+| OGAS for CWE | Instalado, ausente da lista habilitada | Não é o Economy Advisor; nenhuma dependência proposta |
 
-## Inspeção necessária por mod
+No Supply Chain, a rotina ferroviária ordena estados por infraestrutura,
+verifica ocupação e construção existente em certos caminhos, e executa
+`start_building_construction`. Há agenda mensal e opções configuráveis; não é
+apenas um botão que recomenda cadeias. A implementação completa ainda precisa
+ser auditada para cobertura da fila privada e construções inéditas.
 
-Registrar versão/ID, origem, hash dos arquivos relevantes, diretórios sobrescritos, dependências, load order e opções efetivamente habilitadas. Mapear JE, decisões, eventos, on-actions, SGUIs, triggers, effects, values, PMs, variáveis, frequência de avaliação e todas as escritas em construção e economia.
+No Auto-Apply Automation, a JE filtra estados por mão de obra, mas há ramos
+de PM com requisitos comentados em `zw_aaap_effects.txt`. Isso impede afirmar
+que todo upgrade verifica insumos e lucratividade. O Director deve reavaliar
+seus indicadores depois dessas mudanças, sem tentar revertê-las em disputa.
 
-Comparar caminhos e identificadores para colisões; arquivo com nome diferente não comprova ausência de conflito comportamental. Examinar escopos e efeito final. Prefixos diferentes não impedem dois mods de enfileirarem o mesmo prédio.
-
-## Limites de integração
-
-Nenhuma API de integração foi identificada. Não chamar efeitos externos nem escrever variáveis de outro mod sem contrato real e teste. Coexistência sem comunicação pode exigir que apenas um mod execute ações por domínio, deixando o Director no diagnóstico/assistido. Detecção de mod e leitura de fila também dependem de mecanismos comprovados; não prometer detecção automática.
-
-Testar baseline, cada par relevante e conjunto completo em cópias de save. Registrar versões, ordem, opções, data inicial/final, fila pública/privada e logs. Se ocorrer duplicação, interromper a execução do Director e investigar antes de reativar. Ver o [plano de testes](MANUAL_RUNTIME_TEST.md).
+Integração segura proposta: coexistência por responsabilidade configurada e
+leitura independente dos dados do jogo. Pendente: diff de identificadores,
+overrides efetivos, ordem de carregamento e testes combinados em cópias de saves.
