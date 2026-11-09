@@ -607,3 +607,30 @@ não foi conferida na engine e nenhuma campanha foi iniciada.
 
 0.4.0 instalada sem jogo em execução. Backup: `mod_0.3.9_20261109_102912_254983`.
 Arquivos conferidos byte a byte com o gerador; load order preservado byte a byte.
+
+
+## Preferências por recomendação 0.4.1
+
+Implementado o controle de ignorar/restaurar previsto no briefing. Usa somente
+variáveis estaduais, escopos e botões já presentes no mod; não acrescenta
+primitiva de jogo. Cada um dos dez tipos de ação tem marca própria por estado,
+consultada no filtro compartilhado entre lista, aprovação e revisão automática.
+O clique revalida elegibilidade, país jogador e ativação antes de gravar a
+escolha e atualizar a leitura. As escolhas valem em todos os modos e persistem
+nas atualizações. Restaurar limpa todas as escolhas nos estados atuais do país
+e recalcula, preservando as obras pendentes. Desativar limpa também as escolhas.
+
+Botões novos em cada cartão e controle no topo, com aviso enquanto houver
+escolhas ignoradas. Alturas de cartões/linhas aumentadas para o novo botão.
+As contagens de rejeição incluem ignorados como primeiro motivo; os demais
+motivos permanecem disjuntos. Não é rejeição de um bem no país inteiro.
+
+61 testes passaram, incluindo os dez tipos nos três modos, revalidação de
+ativação/jogador, bloqueio de execução, restauração sem construir, preservação
+de pendências, separação de tipos/estados e escolha automática de outro estado.
+Testes existentes de limpeza incluem todas as novas variáveis. Save/reload,
+layout real e novos cliques ainda precisam de confirmação na engine.
+
+Geração, validação estática contra o jogo, pacote e diff passaram.
+Instalada sem jogo em execução; backup `mod_0.4.0_20261109_103945_594880`.
+Arquivos comparados com o gerador e load order preservado byte a byte.

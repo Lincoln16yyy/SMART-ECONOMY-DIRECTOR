@@ -3,7 +3,7 @@ from pathlib import Path
 import unittest
 import zipfile
 
-from tools.build_mod import ROOT, STATE_VARIABLES, SUPPLY_DIAGNOSTICS, SUPPLY_TARGETS, country_variables, outputs, runtime_variables
+from tools.build_mod import ROOT, ACTION_NAMES, STATE_VARIABLES, SUPPLY_DIAGNOSTICS, SUPPLY_TARGETS, country_variables, outputs, runtime_variables
 from tools.package_mod import package
 from tools.pdx_script import parse, child
 from tools.validate import validate
@@ -185,7 +185,7 @@ class DiagnosisTests(unittest.TestCase):
                     producer['production_methods'] = [item['methods'][0]]
                     return state(buildings=[producer])
 
-                targets = [producer_state() for _ in range(8)]
+                targets = [producer_state() for _ in range(9)]
                 targets[0]['buildings'][0]['level_after_queued_constructions'] = 2
                 # Also fails incorporation; only the preceding queue reason counts.
                 targets[0]['is_incorporated'] = False
@@ -200,9 +200,11 @@ class DiagnosisTests(unittest.TestCase):
                 targets[5]['buildings'][0]['production_methods'] = []
                 targets[5]['can_construct_building'] = False
                 targets[6]['can_construct_building'] = False
+                targets[8]['variables']['sed_' + good + '_ignored'] = True
+                targets[8]['is_incorporated'] = False
                 c.states = targets + [state()]  # States without this producer are excluded.
                 c.run('sed_refresh_supply_candidates')
-                self.assertEqual(c.variables['sed_' + good + '_producer_states'], 8)
+                self.assertEqual(c.variables['sed_' + good + '_producer_states'], 9)
                 for reason in SUPPLY_DIAGNOSTICS[1:]:
                     self.assertEqual(c.variables['sed_' + good + '_' + reason], 1, reason)
                 self.assertEqual(c.variable_lists['sed_' + good + '_candidates'], [targets[7]])
@@ -225,6 +227,88 @@ class DiagnosisTests(unittest.TestCase):
             c.variable_lists.clear()
         c.run('sed_disable_country')
         self.assertFalse(c.condition(shown, c.country_scope()))
+
+    def test_ignore_and_restore_all_action_types_in_every_mode(self):
+        for name in ACTION_NAMES:
+            for mode in ('manual', 'assisted', 'automatic'):
+                with self.subTest(action=name, mode=mode):
+                    c = self.country(num_queued_government_constructions=3,
+                                     construction_queue_num_queued_government_levels=0)
+                    c.run('sed_set_mode_' + mode)
+                    if name == 'railway':
+                        producer = railway()
+                    elif name == 'construction':
+                        producer = construction_sector()
+                    else:
+                        item = next(item for item in SUPPLY_TARGETS if item['good'] == name)
+                        producer = building(item['building'])
+                        producer['production_methods'] = [item['methods'][0]]
+                        c.market_goods[name] = {'market_goods_has_goods_shortage': True}
+                    target = state(-2 if name == 'railway' else 0, buildings=[producer])
+                    c.states = [target]
+                    c.run('sed_refresh_diagnostics')
+                    gui = self.definitions['sed_ignore_' + name + '_sgui']
+                    self.assertTrue(c.condition(child(gui, 'is_valid'), target))
+                    c.execute(child(gui, 'effect'), target)
+                    self.assertIn('sed_' + name + '_ignored', target['variables'])
+                    self.assertNotIn('sed_' + name + '_candidates', c.variable_lists)
+                    c.run('sed_refresh_diagnostics')
+                    c.run('sed_monthly_update')
+                    c.run('sed_run_' + name + '_approval', target)
+                    self.assertEqual(c.constructions, [])
+                    if mode == 'automatic':
+                        c.run('sed_auto_apply_monthly')
+                        self.assertEqual(c.constructions, [])
+                    self.assertFalse(c.condition(child(gui, 'is_valid'), target))
+                    restore = self.definitions['sed_restore_ignored_sgui']
+                    self.assertTrue(c.condition(child(restore, 'is_shown'), c.country_scope()))
+                    c.execute(child(restore, 'effect'), c.country_scope())
+                    self.assertNotIn('sed_' + name + '_ignored', target['variables'])
+                    self.assertEqual(c.variable_lists['sed_' + name + '_candidates'], [target])
+                    self.assertEqual(c.constructions, [])
+                    self.assertFalse(c.condition(child(restore, 'is_shown'), c.country_scope()))
+
+    def test_ignored_preferences_are_specific_and_restore_preserves_queued_work(self):
+        c = self.country()
+        target = state(-2, buildings=[railway(), construction_sector()])
+        other = state(-3, buildings=[railway(queued_levels=1)])
+        other['variables']['sed_railway_request_pending'] = True
+        c.states = [target, other]
+        c.run('sed_ignore_railway', target)
+        self.assertFalse(c.condition(self.definitions['sed_railway_candidate_eligible'], target))
+        self.assertTrue(c.condition(self.definitions['sed_construction_candidate_eligible'], target))
+        self.assertNotIn('sed_railway_ignored', other['variables'])
+        c.run('sed_restore_ignored')
+        self.assertIn('sed_railway_request_pending', other['variables'])
+        self.assertEqual(other['buildings'][0]['level_after_queued_constructions'], 2)
+        self.assertEqual(c.constructions, [])
+
+    def test_ignore_and_restore_effects_revalidate_player_and_activation(self):
+        for readings, disable in [({'is_player': False}, False), ({}, True)]:
+            c = self.country(**readings)
+            target = state(-2, buildings=[railway()])
+            c.states = [target]
+            if disable:
+                c.run('sed_disable_country')
+            c.run('sed_ignore_railway', target)
+            self.assertNotIn('sed_railway_ignored', target['variables'])
+            target['variables']['sed_railway_ignored'] = True
+            c.run('sed_restore_ignored')
+            self.assertIn('sed_railway_ignored', target['variables'])
+            self.assertEqual(c.constructions, [])
+
+    def test_auto_uses_another_state_after_preferred_railway_is_ignored(self):
+        c = self.country(construction_queue_num_queued_government_levels=0)
+        preferred = state(-10, buildings=[railway()])
+        alternative = state(-2, buildings=[railway()])
+        c.states = [preferred, alternative]
+        c.run('sed_ignore_railway', preferred)
+        self.assertEqual(c.variables['sed_railway_ignored_states'], 1)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(len(c.constructions), 1)
+        self.assertIs(c.constructions[0]['state'], alternative)
+        self.assertIn('sed_railway_ignored', preferred['variables'])
 
     def test_activation_collects_real_supplied_readings(self):
         c = self.country(gdp=12345, total_population=500, average_sol=13.25)

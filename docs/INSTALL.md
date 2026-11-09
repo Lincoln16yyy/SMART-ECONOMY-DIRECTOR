@@ -1,6 +1,6 @@
-# Instalação e uso — versão 0.4.0
+# Instalação e uso — versão 0.4.1
 
-Requer Victoria 3 1.15.x. A versão 0.4.0 mantém o diagnóstico e os protótipos
+Requer Victoria 3 1.15.x. A versão 0.4.1 mantém o diagnóstico e os protótipos
 de expansão ferroviária e de capacidade de construção. Acrescenta recomendações
 e botões de aprovação para expandir produtores locais de madeira, ferro,
 carvão, cereais, tecido, ferramentas, mantimentos e roupas quando o mercado
@@ -23,7 +23,7 @@ python3 tools/validate.py --game "/caminho/Victoria 3/game"
 python3 tools/package_mod.py
 ```
 
-O resultado fica em `dist/smart-economy-director-0.4.0.zip`. O pacote contém
+O resultado fica em `dist/smart-economy-director-0.4.1.zip`. O pacote contém
 somente os arquivos carregáveis; não inclui saves, fontes do jogo, pesquisa,
 testes ou outro mod. A geração é determinística e não modifica a instalação.
 
@@ -106,8 +106,15 @@ a confirmação dentro da engine, incluindo salvar/recarregar e o ciclo do
 diário, continua no roteiro [MANUAL_RUNTIME_TEST.md](MANUAL_RUNTIME_TEST.md).
 
 
-Na 0.4.0, uma escassez sem candidato mostra os estados com produtor e sua
+Desde a 0.4.0, uma escassez sem candidato mostra os estados com produtor e sua
 rejeição principal na última leitura: expansão pendente/enfileirada, estado
 não incorporado, nível zero/ocupação abaixo de 80%, falha de contratação,
 falta de insumos, método sem produção confirmada ou construção não permitida.
 As regras de aprovação permanecem iguais. Atualize o diagnóstico após instalar.
+
+
+Em um cartão elegível, **Ignorar esta expansão neste estado** remove apenas
+aquele tipo de expansão naquele estado das recomendações e da automação.
+No topo, **Restaurar recomendações ignoradas** remove todas as escolhas atuais
+e atualiza a análise. Ignorar vale nos três modos e não cancela obras;
+restaurar não aprova obras. Desativar o Director limpa essas preferências.

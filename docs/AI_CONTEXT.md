@@ -4,7 +4,19 @@ O usuário solicitou seguir `Texto colado.txt` e ir publicando no GitHub
 `Lincoln16yyy/SMART-ECONOMY-DIRECTOR`. O conteúdo original está preservado
 integralmente em PROJECT_BRIEF.md. Leia-o antes de trabalhar.
 
-Fase atual: diagnóstico de rejeição de produtores locais 0.4.0.
+Fase atual: ignorar e restaurar recomendações 0.4.1.
+Instalada; backup `mod_0.4.0_20261109_103945_594880`; load order preservado. Cada cartão elegível tem
+botão para ignorar apenas o tipo de expansão no estado. A variável estadual
+permanece nas leituras e modos, bloqueia lista, aprovação e seleção automática.
+O topo oferece restauração de todas as escolhas nos estados atuais do país,
+com aviso enquanto existir escolha. Desativar limpa tudo. Obras enfileiradas
+não são canceladas e restaurar não enfileira obras. Marcadores de pendência
+continuam separados. Motivos de rejeição agora incluem escolhas ignoradas.
+Os 61 testes passam; validação estática e conferência na engine seguem sendo
+coisas distintas. Confirmar os novos botões, recarga com escolhas e layout no
+jogo normal; não iniciar testes gráficos prolongados.
+
+Estado anterior de referência: Fase atual: diagnóstico de rejeição de produtores locais 0.4.0.
 Instalada localmente; backup `mod_0.3.9_20261109_102912_254983`; load order preservado. Quando um bem
 está escasso e não há candidato, mostra quantidade de estados com produtor e
 sete motivos principais disjuntos, da última leitura. Cada produtor estadual

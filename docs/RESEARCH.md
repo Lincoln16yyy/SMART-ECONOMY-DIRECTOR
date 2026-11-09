@@ -215,3 +215,13 @@ nem por trabalhador. O primeiro motivo impede dupla contagem. Métodos fora da
 lista verificada são classificados sem produção confirmada; isso não afirma
 que um método de outro mod não produz o bem. Leituras não demonstram viabilidade
 econômica do nível novo, disponibilidade de trabalhadores ou retorno.
+
+
+### Preferências de recomendações 0.4.1
+
+Usa os mesmos `set_variable`, `remove_variable`, `every_scope_state`, `owner`,
+`has_variable` e `any_scope_state` já empregados na execução e seleção atual.
+A preferência fica no estado, com namespace `sed_<ação>_ignored`. Não é uma
+ordem de cancelamento nem uma restrição a construtores externos. A restauração
+e a limpeza alcançam estados atualmente pertencentes ao país; transferência
+de território não tem migração de preferências entre países implementada.

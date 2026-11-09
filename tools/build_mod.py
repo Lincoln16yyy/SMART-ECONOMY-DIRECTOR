@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.4.0'
+VERSION = '0.4.1'
 SUPPLY_TARGETS = [
     {'good': 'wood', 'building': 'building_logging_camp', 'methods': ['pm_electric_saw_mills', 'pm_saw_mills', 'pm_simple_forestry'], 'label_pt': 'madeira', 'label_en': 'wood', 'building_pt': 'acampamento madeireiro', 'building_en': 'logging camp'},
     {'good': 'iron', 'building': 'building_iron_mine', 'methods': ['pm_atmospheric_engine_pump_building_iron_mine', 'pm_condensing_engine_pump_building_iron_mine', 'pm_diesel_pump_building_iron_mine', 'pm_dynamite_building_iron_mine', 'pm_nitroglycerin_building_iron_mine', 'pm_picks_and_shovels_building_iron_mine'], 'label_pt': 'ferro', 'label_en': 'iron', 'building_pt': 'mina de ferro', 'building_en': 'iron mine'},
@@ -17,11 +17,13 @@ SUPPLY_TARGETS = [
     {'good': 'groceries', 'building': 'building_food_industry', 'methods': ['pm_bakery', 'pm_baking_powder', 'pm_cannery', 'pm_cannery_fish', 'pm_sweeteners', 'pm_vacuum_canning', 'pm_vacuum_canning_principle_3'], 'label_pt': 'mantimentos', 'label_en': 'groceries', 'building_pt': 'indústria alimentícia', 'building_en': 'food industry'},
     {'good': 'clothes', 'building': 'building_textile_mill', 'methods': ['pm_dye_workshops', 'pm_electric_sewing_machines', 'pm_handsewn_clothes', 'pm_sewing_machines'], 'label_pt': 'roupas', 'label_en': 'clothes', 'building_pt': 'fábrica têxtil', 'building_en': 'textile mill'},
 ]
-SUPPLY_DIAGNOSTICS = ('producer_states', 'pending_states', 'unincorporated_states',
+ACTION_NAMES = ('railway', 'construction') + tuple(item['good'] for item in SUPPLY_TARGETS)
+IGNORED_VARIABLES = [f'sed_{name}_ignored' for name in ACTION_NAMES]
+SUPPLY_DIAGNOSTICS = ('producer_states', 'ignored_states', 'pending_states', 'unincorporated_states',
                       'understaffed_states', 'hiring_states', 'input_states',
                       'method_states', 'permission_states')
 STATE_VARIABLES = ['sed_railway_request_pending', 'sed_construction_request_pending'] + [
-    f"sed_{item['good']}_request_pending" for item in SUPPLY_TARGETS]
+    f"sed_{item['good']}_request_pending" for item in SUPPLY_TARGETS] + IGNORED_VARIABLES
 EXTRA_VARIABLES = '''sed_last_year sed_last_month sed_month_key sed_in_default
 sed_gdp_per_capita sed_per_capita_available sed_debt_share sed_debt_share_available
 sed_reserve_weeks sed_reserve_weeks_available sed_states sed_infrastructure_short_states
@@ -29,6 +31,7 @@ sed_low_access_states sed_shortage_buildings sed_understaffed_buildings
 sed_hiring_failure_buildings sed_anchor_month sed_anchor_gdp sed_previous_month
 sed_previous_gdp sed_growth sed_growth_months sed_growth_available
 sed_railway_action_status sed_construction_action_status
+sed_railway_ignored_states sed_construction_ignored_states
 sed_railway_deficit_states sed_railway_no_railway_states
 sed_railway_not_ready_states sed_railway_blocked_states
 sed_construction_sector_states sed_construction_not_ready_states
@@ -67,6 +70,7 @@ sed_refresh_supply_candidates = {''']
         building = item['building']
         methods = ' '.join(f'has_active_production_method = {method}' for method in item['methods'])
         reasons = [
+            ('ignored_states', f'has_variable = sed_{good}_ignored'),
             ('pending_states', f'OR = {{ has_variable = sed_{good}_request_pending b:{building} = {{ level_after_queued_constructions > level }} }}'),
             ('unincorporated_states', 'NOT = { is_incorporated = yes }'),
             ('understaffed_states', f'b:{building} = {{ OR = {{ level <= 0 occupancy < 0.8 }} }}'),
@@ -186,6 +190,34 @@ sed_refresh_supply_candidates = {''']
     return '\n'.join(result).rstrip() + '\n'
 
 
+def preference_effects():
+    result = []
+    for name in ACTION_NAMES:
+        result.append(f"""sed_ignore_{name} = {{
+ if = {{
+  limit = {{ owner = {{ is_player = yes has_variable = sed_enabled }} sed_{name}_candidate_eligible = yes }}
+  set_variable = {{ name = sed_{name}_ignored value = yes }}
+  owner = {{ sed_refresh_diagnostics = yes }}
+ }}
+}}
+""")
+    cleanup = '\n'.join('  remove_variable = ' + name for name in IGNORED_VARIABLES)
+    result.append('sed_restore_ignored = {\n if = {\n  limit = { is_player = yes has_variable = sed_enabled }\n  every_scope_state = {\n'
+                  + cleanup + '\n  }\n  sed_refresh_diagnostics = yes\n }\n}\n')
+    return '\n'.join(result)
+
+
+def ignore_button(name):
+    return f"""button = {{
+ size = {{ 360 30 }} using = select_button_sound using = tooltip_se
+ text = "sed_ignore_recommendation" tooltip = "sed_ignore_recommendation_tt"
+ visible = "[GetScriptedGui('sed_ignore_{name}_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_ignore_{name}_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_ignore_{name}_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
+}}
+"""
+
+
 def textbox(key, visibility=None, heading=False):
     shown = f'\n visible = "[{sgui(visibility, "IsShown")}]"' if visibility else ''
     return f'''textbox = {{{shown}
@@ -252,6 +284,8 @@ def widget():
     body += textbox('sed_auto_status_unconfirmed', 'sed_auto_status_unconfirmed_visible_sgui')
     body += 'flowcontainer = { direction = horizontal spacing = 8\n'
     body += button('sed_refresh', 'sed_refresh_sgui') + button('sed_disable', 'sed_disable_sgui') + '}\n'
+    body += button('sed_restore_ignored', 'sed_restore_ignored_sgui')
+    body += textbox('sed_ignored_notice', 'sed_restore_ignored_sgui')
     body += button('sed_use_manual', 'sed_manual_updates_sgui')
     body += button('sed_use_monthly', 'sed_monthly_updates_sgui')
     body += textbox('sed_last_refresh')
@@ -290,7 +324,7 @@ def widget():
  visible = "[GetScriptedGui('sed_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_railway_candidates')]"
  addcolumn = 500
- addrow = 166
+ addrow = 206
  item = { sed_railway_candidate_item = {} }
 }
 '''
@@ -305,7 +339,7 @@ def widget():
  visible = "[GetScriptedGui('sed_construction_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_construction_candidates')]"
  addcolumn = 500
- addrow = 166
+ addrow = 206
  item = { sed_construction_candidate_item = {} }
 }
 '''
@@ -319,7 +353,7 @@ def widget():
  visible = "[GetScriptedGui('sed_{good}_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_{good}_candidates')]"
  addcolumn = 500
- addrow = 220
+ addrow = 260
  item = {{ sed_{good}_candidate_item = {{}} }}
 }}
 '''
@@ -335,7 +369,7 @@ def widget():
   spacing = 4
   widget = {
    datacontext = "[Scope.GetState]"
-   size = { 500 160 }
+   size = { 500 200 }
    background = { using = dark_area }
    flowcontainer = {
     position = { 8 4 }
@@ -429,7 +463,7 @@ def widget():
   spacing = 4
   widget = {
    datacontext = "[Scope.GetState]"
-   size = { 500 160 }
+   size = { 500 200 }
    background = { using = dark_area }
    flowcontainer = {
     position = { 8 4 }
@@ -529,6 +563,9 @@ def widget():
  }
 }
 '''
+    for name in ('railway', 'construction'):
+        anchor = f"     onclick = \"[GetScriptedGui('sed_approve_{name}_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]\"\n    }}"
+        item_type = item_type.replace(anchor, anchor + '\n' + ignore_button(name), 1)
     head, tail = item_type.rsplit('\n}\n', 1)
     item_type = head + '\n' + supply_item_types() + '}\n' + tail
     return '# Generated by tools/build_mod.py.\n' + item_type + '\nflowcontainer = {\n name = "sed_diagnostics_widget"\n minimumsize = { 500 -1 }\n maximumsize = { 500 -1 }\n direction = vertical\n spacing = 6\n ignoreinvisible = yes\n' + body + '}\n'
@@ -543,7 +580,7 @@ def supply_item_types():
   spacing = 4
   widget = {{
    datacontext = "[Scope.GetState]"
-   size = {{ 500 214 }}
+   size = {{ 500 254 }}
    background = {{ using = dark_area }}
    flowcontainer = {{
     position = {{ 8 4 }}
@@ -552,6 +589,7 @@ def supply_item_types():
     textbox = {{ autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_{good}_candidate_title" }}
     textbox = {{ autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_{good}_candidate_reason" }}
     button = {{ size = {{ 360 30 }} using = select_button_sound using = tooltip_se text = "sed_{good}_approve" tooltip = "sed_{good}_approve_tt" visible = "[GetScriptedGui('sed_approve_{good}_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_{good}_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_{good}_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }}
+    {ignore_button(good)}
     textbox = {{ visible = "[GetScriptedGui('sed_{good}_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_blocked_private" }}
     textbox = {{ visible = "[GetScriptedGui('sed_{good}_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_blocked_default" }}
     textbox = {{ visible = "[GetScriptedGui('sed_{good}_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_stale" }}
@@ -679,6 +717,7 @@ sed_refresh_railway_candidates = {
  clear_variable_list = sed_railway_candidates
  # Counts use one primary reason per state so the breakdown adds up to the
  # deficit total instead of counting the same state under several filters.
+ set_variable = { name = sed_railway_ignored_states value = 0 }
  set_variable = { name = sed_railway_deficit_states value = 0 }
  set_variable = { name = sed_railway_no_railway_states value = 0 }
  set_variable = { name = sed_railway_not_ready_states value = 0 }
@@ -698,6 +737,10 @@ sed_refresh_railway_candidates = {
    limit = { infrastructure_delta < 0 }
    root = { change_variable = { name = sed_railway_deficit_states add = 1 } }
    if = {
+    limit = { has_variable = sed_railway_ignored }
+    root = { change_variable = { name = sed_railway_ignored_states add = 1 } }
+   }
+   else_if = {
     limit = { NOT = { has_building = building_railway } }
     root = { change_variable = { name = sed_railway_no_railway_states add = 1 } }
    }
@@ -763,6 +806,7 @@ sed_refresh_construction_candidates = {
  clear_variable_list = sed_construction_candidates
  # Same primary-reason cascade as the railway counts. Only states that already
  # have a construction sector enter this denominator.
+ set_variable = { name = sed_construction_ignored_states value = 0 }
  set_variable = { name = sed_construction_sector_states value = 0 }
  set_variable = { name = sed_construction_not_ready_states value = 0 }
  set_variable = { name = sed_construction_blocked_states value = 0 }
@@ -781,6 +825,10 @@ sed_refresh_construction_candidates = {
    limit = { has_building = building_construction_sector }
    root = { change_variable = { name = sed_construction_sector_states add = 1 } }
    if = {
+    limit = { has_variable = sed_construction_ignored }
+    root = { change_variable = { name = sed_construction_ignored_states add = 1 } }
+   }
+   else_if = {
     limit = {
      b:building_construction_sector = {
       OR = {
@@ -888,6 +936,7 @@ sed_update_growth = {
     script = script.replace(
         '  remove_variable = sed_construction_request_pending\n }\n # The schema marker',
         '  remove_variable = sed_construction_request_pending\n' + supply_state_cleanup
+        + '\n' + '\n'.join('  remove_variable = ' + name for name in IGNORED_VARIABLES)
         + '\n }\n # The schema marker', 1)
     script = script.replace(
         '    set_variable = { name = sed_railway_action_status value = 1 }',
@@ -899,7 +948,7 @@ sed_update_growth = {
             f'    set_variable = {{ name = sed_{good}_action_status value = 1 }}',
             f'    set_variable = {{ name = sed_{good}_action_status value = 1 }}\n'
             '    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }')
-    return script + supply_effects()
+    return script + supply_effects() + preference_effects()
 
 
 def scripted_guis():
@@ -948,6 +997,22 @@ sed_mode_{mode}_visible_sgui = {{ scope = country is_shown = {{ has_variable = s
  effect = {{ if = {{ limit = {{ owner = {{ has_variable = sed_mode_assisted }} sed_{good}_approval_valid = yes }} sed_run_{good}_approval = yes }} }}
 }}
 '''
+    for name in ACTION_NAMES:
+        result += f"""sed_ignore_{name}_sgui = {{
+ scope = state
+ is_shown = {{ owner = {{ is_player = yes has_variable = sed_enabled }} sed_{name}_candidate_eligible = yes }}
+ is_valid = {{ owner = {{ is_player = yes has_variable = sed_enabled }} sed_{name}_candidate_eligible = yes }}
+ effect = {{ sed_ignore_{name} = yes }}
+}}
+"""
+    ignored_conditions = ' '.join('has_variable = ' + name for name in IGNORED_VARIABLES)
+    result += f"""sed_restore_ignored_sgui = {{
+ scope = country
+ is_shown = {{ is_player = yes has_variable = sed_enabled any_scope_state = {{ OR = {{ {ignored_conditions} }} }} }}
+ is_valid = {{ is_player = yes has_variable = sed_enabled any_scope_state = {{ OR = {{ {ignored_conditions} }} }} }}
+ effect = {{ sed_restore_ignored = yes }}
+}}
+"""
     # Hard blockers appear in order. A negative budget is a caution, not a
     # blocker. Pending actions and stale cards each have their own message.
     blocked = {
@@ -1055,6 +1120,7 @@ def scripted_triggers():
 sed_railway_candidate_eligible = {
  is_incorporated = yes
  infrastructure_delta < 0
+ NOT = { has_variable = sed_railway_ignored }
  NOT = { has_variable = sed_railway_request_pending }
  has_building = building_railway
  b:building_railway = {
@@ -1080,6 +1146,7 @@ sed_railway_approval_valid = {
 # State scope. A staffed construction sector in a populous incorporated state.
 sed_construction_candidate_eligible = {
  is_incorporated = yes
+ NOT = { has_variable = sed_construction_ignored }
  NOT = { has_variable = sed_construction_request_pending }
  has_building = building_construction_sector
  b:building_construction_sector = {
@@ -1113,6 +1180,7 @@ def supply_triggers():
         result.append(f'''# State scope: expand an operating local producer only while its market good is scarce.
 sed_{good}_candidate_eligible = {{
  is_incorporated = yes
+ NOT = {{ has_variable = sed_{good}_ignored }}
  NOT = {{ has_variable = sed_{good}_request_pending }}
  owner = {{ market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }} }}
  has_building = {building}
@@ -1160,6 +1228,11 @@ def localization(language):
     pt = language == 'braz_por'
     v = value
     pairs = {
+        'sed_ignore_recommendation': ('Ignorar esta expansão neste estado', 'Ignore this expansion in this state'),
+        'sed_ignore_recommendation_tt': ('Retira esta expansão das recomendações e da automação neste estado até restaurar. Não cancela obras. A escolha vale nos três modos.', 'Removes this expansion from recommendations and automation in this state until restored. Does not cancel construction. Applies in all three modes.'),
+        'sed_restore_ignored': ('Restaurar recomendações ignoradas', 'Restore ignored recommendations'),
+        'sed_restore_ignored_tt': ('Remove todas as escolhas de ignorar nos estados atuais do país e atualiza a análise. Não enfileira obras.', 'Clears all ignore choices in the country’s current states and refreshes analysis. Does not queue construction.'),
+        'sed_ignored_notice': ('Há expansões ignoradas por sua escolha. Elas não serão recomendadas nem executadas automaticamente até restaurar. Desativar o Director limpa essas escolhas.', 'Some expansions are ignored by your choice. They will not be recommended or executed automatically until restored. Disabling the Director clears these choices.'),
         'je_sed_diagnostics': ('Smart Economy Director', 'Smart Economy Director'),
         'je_sed_diagnostics_reason': ('Indicadores econômicos do país, atualizados sob solicitação ou todo mês.', 'National economic indicators, refreshed on request or monthly.'),
         'sed_activation_tt': ('Ative o Director pela decisão Ativar Smart Economy Director.', 'Use the Enable Smart Economy Director decision.'),
@@ -1271,6 +1344,7 @@ def localization(language):
             f"Last reading — states with a {building_en}: " + v(good + '_producer_states', '0')
             + '. Each rejected state is counted under its first applicable reason.')
         labels = [
+            ('ignored_states', 'ignorado por você', 'ignored by you'),
             ('pending_states', 'expansão pendente ou enfileirada', 'pending or queued expansion'),
             ('unincorporated_states', 'estado não incorporado', 'unincorporated state'),
             ('understaffed_states', 'nível zero ou ocupação abaixo de 80%', 'zero level or occupancy below 80%'),
@@ -1289,6 +1363,10 @@ def localization(language):
         pairs[f'sed_{good}_approve_tt'] = ('Requer modo Assistido, país fora de inadimplência e fila privada vazia. A escassez e o prédio são revalidados no clique. Saldo semanal negativo gera alerta, mas não bloqueia. Usa a fila normal do jogo.', 'Requires Assisted mode, no default, and an empty private queue. The shortage and building are rechecked on click. A negative balance raises a caution but does not block. Uses the normal game queue.')
         pairs[f'sed_{good}_action_success'] = (f'Pedido de expansão de {building_pt} adicionado à fila pública. Confira custo e prazo na fila do jogo.', f'{building_en.title()} expansion added to the government queue. Review cost and timing in the game queue.')
         pairs[f'sed_{good}_action_failed'] = ('A engine não confirmou a inclusão na fila. Nenhuma nova tentativa será automática.', 'The engine did not confirm the queue addition. No automatic retry will occur.')
+    for name in ('railway', 'construction'):
+        key = f'sed_{name}_breakdown'
+        pairs[key] = (pairs[key][0] + ' Ignorados por você: ' + v(name + '_ignored_states', '0') + '.',
+                      pairs[key][1] + ' Ignored by you: ' + v(name + '_ignored_states', '0') + '.')
     for metric in METRICS:
         unit = metric['unit']
         fmt = {'money': 'K', 'money_week': 'K', 'count': '0', 'decimal': '1', 'ratio': '%1'}[unit]

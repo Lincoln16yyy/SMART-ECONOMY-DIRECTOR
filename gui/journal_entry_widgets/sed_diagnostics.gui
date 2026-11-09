@@ -5,7 +5,7 @@ types sed_diagnostics_types {
   spacing = 4
   widget = {
    datacontext = "[Scope.GetState]"
-   size = { 500 160 }
+   size = { 500 200 }
    background = { using = dark_area }
    flowcontainer = {
     position = { 8 4 }
@@ -37,6 +37,14 @@ types sed_diagnostics_types {
      enabled = "[GetScriptedGui('sed_approve_railway_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
      onclick = "[GetScriptedGui('sed_approve_railway_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
     }
+button = {
+ size = { 360 30 } using = select_button_sound using = tooltip_se
+ text = "sed_ignore_recommendation" tooltip = "sed_ignore_recommendation_tt"
+ visible = "[GetScriptedGui('sed_ignore_railway_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_ignore_railway_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_ignore_railway_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
+}
+
     textbox = {
      visible = "[GetScriptedGui('sed_railway_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
      autoresize = yes
@@ -99,7 +107,7 @@ types sed_diagnostics_types {
   spacing = 4
   widget = {
    datacontext = "[Scope.GetState]"
-   size = { 500 160 }
+   size = { 500 200 }
    background = { using = dark_area }
    flowcontainer = {
     position = { 8 4 }
@@ -131,6 +139,14 @@ types sed_diagnostics_types {
      enabled = "[GetScriptedGui('sed_approve_construction_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
      onclick = "[GetScriptedGui('sed_approve_construction_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
     }
+button = {
+ size = { 360 30 } using = select_button_sound using = tooltip_se
+ text = "sed_ignore_recommendation" tooltip = "sed_ignore_recommendation_tt"
+ visible = "[GetScriptedGui('sed_ignore_construction_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_ignore_construction_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_ignore_construction_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
+}
+
     textbox = {
      visible = "[GetScriptedGui('sed_construction_blocked_queue_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
      autoresize = yes
@@ -202,7 +218,7 @@ types sed_diagnostics_types {
   spacing = 4
   widget = {
    datacontext = "[Scope.GetState]"
-   size = { 500 214 }
+   size = { 500 254 }
    background = { using = dark_area }
    flowcontainer = {
     position = { 8 4 }
@@ -211,6 +227,14 @@ types sed_diagnostics_types {
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_wood_candidate_title" }
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_wood_candidate_reason" }
     button = { size = { 360 30 } using = select_button_sound using = tooltip_se text = "sed_wood_approve" tooltip = "sed_wood_approve_tt" visible = "[GetScriptedGui('sed_approve_wood_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_wood_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_wood_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }
+    button = {
+ size = { 360 30 } using = select_button_sound using = tooltip_se
+ text = "sed_ignore_recommendation" tooltip = "sed_ignore_recommendation_tt"
+ visible = "[GetScriptedGui('sed_ignore_wood_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_ignore_wood_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_ignore_wood_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
+}
+
     textbox = { visible = "[GetScriptedGui('sed_wood_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_private" }
     textbox = { visible = "[GetScriptedGui('sed_wood_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_default" }
     textbox = { visible = "[GetScriptedGui('sed_wood_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_stale" }
@@ -225,7 +249,7 @@ types sed_diagnostics_types {
   spacing = 4
   widget = {
    datacontext = "[Scope.GetState]"
-   size = { 500 214 }
+   size = { 500 254 }
    background = { using = dark_area }
    flowcontainer = {
     position = { 8 4 }
@@ -234,6 +258,14 @@ types sed_diagnostics_types {
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_iron_candidate_title" }
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_iron_candidate_reason" }
     button = { size = { 360 30 } using = select_button_sound using = tooltip_se text = "sed_iron_approve" tooltip = "sed_iron_approve_tt" visible = "[GetScriptedGui('sed_approve_iron_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_iron_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_iron_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }
+    button = {
+ size = { 360 30 } using = select_button_sound using = tooltip_se
+ text = "sed_ignore_recommendation" tooltip = "sed_ignore_recommendation_tt"
+ visible = "[GetScriptedGui('sed_ignore_iron_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_ignore_iron_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_ignore_iron_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
+}
+
     textbox = { visible = "[GetScriptedGui('sed_iron_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_private" }
     textbox = { visible = "[GetScriptedGui('sed_iron_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_default" }
     textbox = { visible = "[GetScriptedGui('sed_iron_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_stale" }
@@ -248,7 +280,7 @@ types sed_diagnostics_types {
   spacing = 4
   widget = {
    datacontext = "[Scope.GetState]"
-   size = { 500 214 }
+   size = { 500 254 }
    background = { using = dark_area }
    flowcontainer = {
     position = { 8 4 }
@@ -257,6 +289,14 @@ types sed_diagnostics_types {
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_coal_candidate_title" }
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_coal_candidate_reason" }
     button = { size = { 360 30 } using = select_button_sound using = tooltip_se text = "sed_coal_approve" tooltip = "sed_coal_approve_tt" visible = "[GetScriptedGui('sed_approve_coal_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_coal_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_coal_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }
+    button = {
+ size = { 360 30 } using = select_button_sound using = tooltip_se
+ text = "sed_ignore_recommendation" tooltip = "sed_ignore_recommendation_tt"
+ visible = "[GetScriptedGui('sed_ignore_coal_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_ignore_coal_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_ignore_coal_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
+}
+
     textbox = { visible = "[GetScriptedGui('sed_coal_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_private" }
     textbox = { visible = "[GetScriptedGui('sed_coal_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_default" }
     textbox = { visible = "[GetScriptedGui('sed_coal_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_stale" }
@@ -271,7 +311,7 @@ types sed_diagnostics_types {
   spacing = 4
   widget = {
    datacontext = "[Scope.GetState]"
-   size = { 500 214 }
+   size = { 500 254 }
    background = { using = dark_area }
    flowcontainer = {
     position = { 8 4 }
@@ -280,6 +320,14 @@ types sed_diagnostics_types {
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_grain_candidate_title" }
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_grain_candidate_reason" }
     button = { size = { 360 30 } using = select_button_sound using = tooltip_se text = "sed_grain_approve" tooltip = "sed_grain_approve_tt" visible = "[GetScriptedGui('sed_approve_grain_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_grain_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_grain_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }
+    button = {
+ size = { 360 30 } using = select_button_sound using = tooltip_se
+ text = "sed_ignore_recommendation" tooltip = "sed_ignore_recommendation_tt"
+ visible = "[GetScriptedGui('sed_ignore_grain_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_ignore_grain_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_ignore_grain_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
+}
+
     textbox = { visible = "[GetScriptedGui('sed_grain_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_private" }
     textbox = { visible = "[GetScriptedGui('sed_grain_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_default" }
     textbox = { visible = "[GetScriptedGui('sed_grain_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_stale" }
@@ -294,7 +342,7 @@ types sed_diagnostics_types {
   spacing = 4
   widget = {
    datacontext = "[Scope.GetState]"
-   size = { 500 214 }
+   size = { 500 254 }
    background = { using = dark_area }
    flowcontainer = {
     position = { 8 4 }
@@ -303,6 +351,14 @@ types sed_diagnostics_types {
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_fabric_candidate_title" }
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_fabric_candidate_reason" }
     button = { size = { 360 30 } using = select_button_sound using = tooltip_se text = "sed_fabric_approve" tooltip = "sed_fabric_approve_tt" visible = "[GetScriptedGui('sed_approve_fabric_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_fabric_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_fabric_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }
+    button = {
+ size = { 360 30 } using = select_button_sound using = tooltip_se
+ text = "sed_ignore_recommendation" tooltip = "sed_ignore_recommendation_tt"
+ visible = "[GetScriptedGui('sed_ignore_fabric_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_ignore_fabric_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_ignore_fabric_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
+}
+
     textbox = { visible = "[GetScriptedGui('sed_fabric_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_private" }
     textbox = { visible = "[GetScriptedGui('sed_fabric_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_default" }
     textbox = { visible = "[GetScriptedGui('sed_fabric_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_stale" }
@@ -317,7 +373,7 @@ types sed_diagnostics_types {
   spacing = 4
   widget = {
    datacontext = "[Scope.GetState]"
-   size = { 500 214 }
+   size = { 500 254 }
    background = { using = dark_area }
    flowcontainer = {
     position = { 8 4 }
@@ -326,6 +382,14 @@ types sed_diagnostics_types {
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_tools_candidate_title" }
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_tools_candidate_reason" }
     button = { size = { 360 30 } using = select_button_sound using = tooltip_se text = "sed_tools_approve" tooltip = "sed_tools_approve_tt" visible = "[GetScriptedGui('sed_approve_tools_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_tools_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_tools_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }
+    button = {
+ size = { 360 30 } using = select_button_sound using = tooltip_se
+ text = "sed_ignore_recommendation" tooltip = "sed_ignore_recommendation_tt"
+ visible = "[GetScriptedGui('sed_ignore_tools_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_ignore_tools_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_ignore_tools_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
+}
+
     textbox = { visible = "[GetScriptedGui('sed_tools_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_private" }
     textbox = { visible = "[GetScriptedGui('sed_tools_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_default" }
     textbox = { visible = "[GetScriptedGui('sed_tools_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_stale" }
@@ -340,7 +404,7 @@ types sed_diagnostics_types {
   spacing = 4
   widget = {
    datacontext = "[Scope.GetState]"
-   size = { 500 214 }
+   size = { 500 254 }
    background = { using = dark_area }
    flowcontainer = {
     position = { 8 4 }
@@ -349,6 +413,14 @@ types sed_diagnostics_types {
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_groceries_candidate_title" }
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_groceries_candidate_reason" }
     button = { size = { 360 30 } using = select_button_sound using = tooltip_se text = "sed_groceries_approve" tooltip = "sed_groceries_approve_tt" visible = "[GetScriptedGui('sed_approve_groceries_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_groceries_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_groceries_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }
+    button = {
+ size = { 360 30 } using = select_button_sound using = tooltip_se
+ text = "sed_ignore_recommendation" tooltip = "sed_ignore_recommendation_tt"
+ visible = "[GetScriptedGui('sed_ignore_groceries_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_ignore_groceries_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_ignore_groceries_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
+}
+
     textbox = { visible = "[GetScriptedGui('sed_groceries_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_private" }
     textbox = { visible = "[GetScriptedGui('sed_groceries_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_default" }
     textbox = { visible = "[GetScriptedGui('sed_groceries_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_stale" }
@@ -363,7 +435,7 @@ types sed_diagnostics_types {
   spacing = 4
   widget = {
    datacontext = "[Scope.GetState]"
-   size = { 500 214 }
+   size = { 500 254 }
    background = { using = dark_area }
    flowcontainer = {
     position = { 8 4 }
@@ -372,6 +444,14 @@ types sed_diagnostics_types {
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_clothes_candidate_title" }
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_clothes_candidate_reason" }
     button = { size = { 360 30 } using = select_button_sound using = tooltip_se text = "sed_clothes_approve" tooltip = "sed_clothes_approve_tt" visible = "[GetScriptedGui('sed_approve_clothes_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_clothes_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_clothes_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }
+    button = {
+ size = { 360 30 } using = select_button_sound using = tooltip_se
+ text = "sed_ignore_recommendation" tooltip = "sed_ignore_recommendation_tt"
+ visible = "[GetScriptedGui('sed_ignore_clothes_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_ignore_clothes_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_ignore_clothes_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
+}
+
     textbox = { visible = "[GetScriptedGui('sed_clothes_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_private" }
     textbox = { visible = "[GetScriptedGui('sed_clothes_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_default" }
     textbox = { visible = "[GetScriptedGui('sed_clothes_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_stale" }
@@ -580,6 +660,26 @@ button = {
  enabled = "[GetScriptedGui('sed_disable_sgui').IsValid(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  onclick = "[GetScriptedGui('sed_disable_sgui').Execute(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 }
+}
+button = {
+ size = { 244 32 }
+ using = select_button_sound
+ using = tooltip_se
+ text = "sed_restore_ignored"
+ tooltip = "sed_restore_ignored_tt"
+ visible = "[GetScriptedGui('sed_restore_ignored_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_restore_ignored_sgui').IsValid(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_restore_ignored_sgui').Execute(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_restore_ignored_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_ignored_notice"
 }
 button = {
  size = { 244 32 }
@@ -964,7 +1064,7 @@ fixedgridbox = {
  visible = "[GetScriptedGui('sed_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_railway_candidates')]"
  addcolumn = 500
- addrow = 166
+ addrow = 206
  item = { sed_railway_candidate_item = {} }
 }
 textbox = {
@@ -1039,7 +1139,7 @@ fixedgridbox = {
  visible = "[GetScriptedGui('sed_construction_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_construction_candidates')]"
  addcolumn = 500
- addrow = 166
+ addrow = 206
  item = { sed_construction_candidate_item = {} }
 }
 textbox = {
@@ -1094,7 +1194,7 @@ fixedgridbox = {
  visible = "[GetScriptedGui('sed_wood_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_wood_candidates')]"
  addcolumn = 500
- addrow = 220
+ addrow = 260
  item = { sed_wood_candidate_item = {} }
 }
 textbox = {
@@ -1161,7 +1261,7 @@ fixedgridbox = {
  visible = "[GetScriptedGui('sed_iron_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_iron_candidates')]"
  addcolumn = 500
- addrow = 220
+ addrow = 260
  item = { sed_iron_candidate_item = {} }
 }
 textbox = {
@@ -1228,7 +1328,7 @@ fixedgridbox = {
  visible = "[GetScriptedGui('sed_coal_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_coal_candidates')]"
  addcolumn = 500
- addrow = 220
+ addrow = 260
  item = { sed_coal_candidate_item = {} }
 }
 textbox = {
@@ -1295,7 +1395,7 @@ fixedgridbox = {
  visible = "[GetScriptedGui('sed_grain_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_grain_candidates')]"
  addcolumn = 500
- addrow = 220
+ addrow = 260
  item = { sed_grain_candidate_item = {} }
 }
 textbox = {
@@ -1362,7 +1462,7 @@ fixedgridbox = {
  visible = "[GetScriptedGui('sed_fabric_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_fabric_candidates')]"
  addcolumn = 500
- addrow = 220
+ addrow = 260
  item = { sed_fabric_candidate_item = {} }
 }
 textbox = {
@@ -1429,7 +1529,7 @@ fixedgridbox = {
  visible = "[GetScriptedGui('sed_tools_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_tools_candidates')]"
  addcolumn = 500
- addrow = 220
+ addrow = 260
  item = { sed_tools_candidate_item = {} }
 }
 textbox = {
@@ -1496,7 +1596,7 @@ fixedgridbox = {
  visible = "[GetScriptedGui('sed_groceries_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_groceries_candidates')]"
  addcolumn = 500
- addrow = 220
+ addrow = 260
  item = { sed_groceries_candidate_item = {} }
 }
 textbox = {
@@ -1563,7 +1663,7 @@ fixedgridbox = {
  visible = "[GetScriptedGui('sed_clothes_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_clothes_candidates')]"
  addcolumn = 500
- addrow = 220
+ addrow = 260
  item = { sed_clothes_candidate_item = {} }
 }
 textbox = {

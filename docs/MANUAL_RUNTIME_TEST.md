@@ -292,3 +292,19 @@ proposta. Conferir incorporação, ocupação, falha de contratação, insumos, 
 ativo e fila no painel do produtor. Atualizar após mudanças: contadores devem
 ser recalculados. Com candidato elegível ou escassez resolvida, o detalhamento
 fica oculto. Desativar e reativar não deve reter contagens da leitura anterior.
+
+
+## Ignorar e restaurar 0.4.1
+
+Em cópia de save, abrir candidato elegível e clicar em Ignorar: o cartão deve
+sumir após a leitura e o aviso/restauração deve aparecer no topo. Atualizar e
+trocar de modo não deve trazer a expansão de volta. Conferir outro estado e
+outro tipo de produtor no mesmo estado: a preferência não deve bloqueá-los.
+No Automático, a revisão não pode selecionar a expansão ignorada.
+
+Salvar/recarregar antes de restaurar: a escolha deve permanecer. Restaurar no
+topo: candidato só volta se ainda elegível, nenhuma obra é adicionada pelo
+botão e expansões já pendentes permanecem na fila. Desativar/reativar deve
+limpar as preferências. Conferir altura dos cartões, tooltips e novo motivo
+"ignorado por você" nos diagnósticos vazios. Esse fluxo ainda não foi testado
+na engine; os testes locais executam os scripts gerados em harness.
