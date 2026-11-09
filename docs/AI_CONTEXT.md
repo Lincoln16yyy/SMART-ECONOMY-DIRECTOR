@@ -1,5 +1,22 @@
 # Contexto de continuidade
 
+## Proteção de infraestrutura — 0.5.4
+
+Produtores dos oito bens atendidos e setores de construção exigem saldo atual
+de infraestrutura maior ou igual a zero. A aprovação revalida essa condição;
+um cartão antigo não autoriza expansão se o estado entrar em déficit.
+Ferrovias mantêm a elegibilidade em déficit para tratar esse gargalo.
+Cartões mostram o saldo ao vivo e o bloqueio, e os detalhes contam rejeições
+por infraestrutura separadamente, respeitando a prioridade dos demais motivos.
+
+84 testes automatizados aprovados: incluem invalidação de cartões antigos,
+limite zero, exceção ferroviária, escolha de outro estado pelo Automático e
+contadores sem dupla contagem. Validação estática contra os arquivos locais
+1.15.0 aprovada. Isso não verifica execução na engine, save/reload ou campanha.
+A guarda considera déficit atual, sem projetar consumo do próximo nível nem
+reservar capacidade para projetos concorrentes. Reconciliação completa das
+filas e planejamento fiscal incremental continuam pendentes.
+
 ## Continuação — limite mensal persistente de tentativas 0.5.3
 
 Instalada sem jogo em execução; backup `mod_0.5.2_20261109_121259_782337`;
@@ -341,3 +358,5 @@ A etapa anterior na nuvem executou 26 testes da referência com sucesso; o
 validador não localizou o jogo naquele executor. O registro histórico foi
 preservado em PHASE_LOG.md e RESEARCH_CLOUD.md. LOCAL_CODEX.md mantém as
 instruções de transição originais; seus caminhos já foram confirmados aqui.
+
+Instalação local 0.5.4: jogo fechado, backup `mod_0.5.3_20261109_122756_131472`, 13 arquivos conferidos com o pacote; configuração de carregamento preservada.

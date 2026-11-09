@@ -163,3 +163,20 @@ Histórico será limitado, com amostras datadas de indicadores e resultado das
 ações. Comparar antes/depois sem atribuir automaticamente a evolução ao Director.
 Uma futura integração com Nation Controller exigirá contrato versionado;
 nenhum controlador nacional será implementado agora.
+
+## Proteção de infraestrutura — 0.5.4
+
+Produtores dos oito bens atendidos e setores de construção exigem saldo atual
+de infraestrutura maior ou igual a zero. A aprovação revalida essa condição;
+um cartão antigo não autoriza expansão se o estado entrar em déficit.
+Ferrovias mantêm a elegibilidade em déficit para tratar esse gargalo.
+Cartões mostram o saldo ao vivo e o bloqueio, e os detalhes contam rejeições
+por infraestrutura separadamente, respeitando a prioridade dos demais motivos.
+
+84 testes automatizados aprovados: incluem invalidação de cartões antigos,
+limite zero, exceção ferroviária, escolha de outro estado pelo Automático e
+contadores sem dupla contagem. Validação estática contra os arquivos locais
+1.15.0 aprovada. Isso não verifica execução na engine, save/reload ou campanha.
+A guarda considera déficit atual, sem projetar consumo do próximo nível nem
+reservar capacidade para projetos concorrentes. Reconciliação completa das
+filas e planejamento fiscal incremental continuam pendentes.
