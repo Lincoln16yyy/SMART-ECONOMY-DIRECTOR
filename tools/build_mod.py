@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.5.1'
+VERSION = '0.5.2'
 SUPPLY_TARGETS = [
     {'good': 'wood', 'building': 'building_logging_camp', 'methods': ['pm_electric_saw_mills', 'pm_saw_mills', 'pm_simple_forestry'], 'label_pt': 'madeira', 'label_en': 'wood', 'building_pt': 'acampamento madeireiro', 'building_en': 'logging camp'},
     {'good': 'iron', 'building': 'building_iron_mine', 'methods': ['pm_atmospheric_engine_pump_building_iron_mine', 'pm_condensing_engine_pump_building_iron_mine', 'pm_diesel_pump_building_iron_mine', 'pm_dynamite_building_iron_mine', 'pm_nitroglycerin_building_iron_mine', 'pm_picks_and_shovels_building_iron_mine'], 'label_pt': 'ferro', 'label_en': 'iron', 'building_pt': 'mina de ferro', 'building_en': 'iron mine'},
@@ -40,6 +40,7 @@ sed_queue_levels_before'''.split() + [
     'sed_supply_action_status',
     'sed_mode_manual', 'sed_mode_assisted', 'sed_mode_automatic',
     'sed_auto_action_status', 'sed_auto_event_pending', 'sed_details_visible',
+    'sed_auto_review_status', 'sed_auto_review_year', 'sed_auto_review_month',
     *[f"sed_{item['good']}_action_status" for item in SUPPLY_TARGETS],
     *[f"sed_{item['good']}_{reason}" for item in SUPPLY_TARGETS
       for reason in SUPPLY_DIAGNOSTICS],
@@ -185,6 +186,10 @@ sed_refresh_supply_candidates = {''']
  else_if = { limit = { is_construction_paused = yes } set_variable = { name = sed_auto_action_status value = 12 } }
  else_if = { limit = { OR = { has_variable = advisor_auto_construction_enabled has_variable = zw_var_expand_building has_variable = aroai_autobuild } } set_variable = { name = sed_auto_action_status value = 13 } }
  else = { set_variable = { name = sed_auto_action_status value = 14 } }
+ # Preserve the result independently from mode controls and diagnostic refreshes.
+ set_variable = { name = sed_auto_review_status value = var:sed_auto_action_status }
+ set_variable = { name = sed_auto_review_year value = year }
+ set_variable = { name = sed_auto_review_month value = { value = month add = 1 } }
 }
 ''')
     return '\n'.join(result).rstrip() + '\n'
@@ -300,6 +305,11 @@ def widget():
     body += '}\n'
     for mode in ('manual', 'assisted', 'automatic'):
         body += textbox(f'sed_mode_{mode}_status', f'sed_mode_{mode}_visible_sgui')
+    for state in ('pending', 'idle', 'unrecorded'):
+        body += textbox(f'sed_auto_{state}', f'sed_auto_{state}_visible_sgui')
+    for blocker in ('default', 'queue', 'paused', 'competing', 'clear'):
+        body += textbox(f'sed_auto_current_{blocker}', f'sed_auto_current_{blocker}_visible_sgui')
+    body += textbox('sed_auto_last_review', 'sed_auto_last_review_visible_sgui')
     for status in ('success', 'no_action', 'default', 'queue', 'paused', 'competing', 'safety', 'unconfirmed'):
         body += textbox(f'sed_auto_status_{status}', f'sed_auto_status_{status}_visible_sgui')
     body += 'flowcontainer = { direction = horizontal spacing = 12\n'
@@ -890,15 +900,33 @@ sed_{name}_refresh_card_sgui = {{
                    f' is_shown = {{ has_variable = sed_enabled var:sed_{good}_action_status = 1 }}\n}}\n')
         result += (f'sed_{good}_action_failed_visible_sgui = {{\n scope = country\n'
                    f' is_shown = {{ has_variable = sed_enabled var:sed_{good}_action_status = 2 }}\n}}\n')
-    result += '''sed_auto_status_success_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 1 } }
-sed_auto_status_no_action_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 2 } }
-sed_auto_status_default_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 10 } }
-sed_auto_status_queue_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 11 } }
-sed_auto_status_paused_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 12 } }
-sed_auto_status_competing_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 13 } }
-sed_auto_status_safety_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 14 } }
-sed_auto_status_unconfirmed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 15 } }
+    result += '''sed_auto_status_success_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 1 } }
+sed_auto_status_no_action_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 2 } }
+sed_auto_status_default_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 10 } }
+sed_auto_status_queue_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 11 } }
+sed_auto_status_paused_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 12 } }
+sed_auto_status_competing_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 13 } }
+sed_auto_status_safety_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 14 } }
+sed_auto_status_unconfirmed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 15 } }
 '''
+    base = 'is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic'
+    for name, condition in {
+        'pending': 'has_variable = sed_auto_event_pending',
+        'idle': 'NOT = { has_variable = sed_auto_event_pending }',
+        'unrecorded': 'NOT = { has_variable = sed_auto_review_status }',
+    }.items():
+        result += f'sed_auto_{name}_visible_sgui = {{ scope = country is_shown = {{ {base} {condition} }} }}\n'
+    result += 'sed_auto_last_review_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status has_variable = sed_auto_review_year has_variable = sed_auto_review_month } }\n'
+    previous = ''
+    for name, condition in [
+        ('default', 'in_default = yes'),
+        ('queue', 'OR = { construction_queue_num_queued_government_levels > 0 construction_queue_num_queued_private_levels > 0 }'),
+        ('paused', 'is_construction_paused = yes'),
+        ('competing', 'OR = { has_variable = advisor_auto_construction_enabled has_variable = zw_var_expand_building has_variable = aroai_autobuild }'),
+    ]:
+        result += f'sed_auto_current_{name}_visible_sgui = {{ scope = country is_shown = {{ {base} {previous} {condition} }} }}\n'
+        previous += f' NOT = {{ {condition} }}'
+    result += f'sed_auto_current_clear_visible_sgui = {{ scope = country is_shown = {{ {base} sed_auto_executor_safe = yes }} }}\n'
     result += 'sed_details_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_details_visible } }\n'
     return '# Generated by tools/build_mod.py.\n' + result
 
@@ -1051,7 +1079,7 @@ def localization(language):
         'sed_auto_status_safety': ('A revisão automática foi suspensa por uma condição de segurança não classificada. Nenhuma obra foi enfileirada.', 'The automatic review was suspended by an unclassified safety condition. No construction was queued.'),
         'sed_auto_status_unconfirmed': ('A revisão automática selecionou uma expansão, mas não confirmou a inclusão na fila pública. Confira a fila do jogo. Esta revisão não tentou outra expansão.', 'The automatic review selected an expansion but did not confirm its addition to the government queue. Check the game queue. This review did not attempt another expansion.'),
         'sed_refresh': ('Atualizar diagnóstico', 'Refresh diagnosis'),
-        'sed_refresh_tt': ('Lê novamente os indicadores deste país.', 'Read this country’s indicators again.'),
+        'sed_refresh_tt': ('Lê novamente os indicadores. Não executa a revisão automática nem aprova obras.', 'Reads indicators again. Does not execute the automatic review or approve construction.'),
         'sed_disable': ('Desativar', 'Disable'),
         'sed_disable_tt': ('Limpa as leituras e o histórico do Director e encerra o diagnóstico.', 'Clear the Director’s readings and history and close the diagnosis.'),
         'sed_use_manual': ('Atualizar sob solicitação', 'Refresh on request'),
@@ -1153,6 +1181,15 @@ def localization(language):
         pairs[f'sed_{good}_action_failed'] = ('A engine não confirmou a inclusão na fila. Nenhuma nova tentativa será automática.', 'The engine did not confirm the queue addition. No automatic retry will occur.')
     pairs.update({
         'sed_title': ('Economia e construções', 'Economy and construction'),
+        'sed_auto_pending': ('Revisão agendada: atraso de 23 dias a partir do agendamento.', 'Review scheduled: a 23-day delay from scheduling.'),
+        'sed_auto_idle': ('Próxima revisão: aguardando o pulso mensal.', 'Next review: waiting for the monthly pulse.'),
+        'sed_auto_unrecorded': ('Última revisão: ainda não registrada nesta versão.', 'Last review: not recorded in this version yet.'),
+        'sed_auto_last_review': ('Última revisão automática: ' + v('auto_review_month', '0') + '/' + v('auto_review_year', '0') + '. Resultado:', 'Last automatic review: ' + v('auto_review_month', '0') + '/' + v('auto_review_year', '0') + '. Result:'),
+        'sed_auto_current_default': ('Agora: país em inadimplência. A execução automática está bloqueada.', 'Now: the country is in default. Automatic execution is blocked.'),
+        'sed_auto_current_queue': ('Agora: filas ocupadas. O Automático aguarda.', 'Now: queues occupied. Automatic mode waits.'),
+        'sed_auto_current_paused': ('Agora: a construção está pausada. A execução automática está bloqueada.', 'Now: construction is paused. Automatic execution is blocked.'),
+        'sed_auto_current_competing': ('Agora: outro construtor conhecido foi detectado. A execução automática está bloqueada.', 'Now: another known builder was detected. Automatic execution is blocked.'),
+        'sed_auto_current_clear': ('Agora: sem trava operacional conhecida. Falta avaliar candidatos.', 'Now: no known operational blocker. Candidates still need evaluation.'),
         'sed_approval_ready': ('Aprovação disponível: +1 nível público.', 'Approval available: +1 government level.'),
         'sed_switch_assisted': ('Passar para Assistido', 'Switch to Assisted'),
         'sed_switch_assisted_tt': ('Muda o país para o modo Assistido, sem aprovar obras. A próxima revisão automática não construirá enquanto este modo estiver ativo.', 'Changes the country to Assisted without approving construction. The next automatic review will not build while this mode remains active.'),

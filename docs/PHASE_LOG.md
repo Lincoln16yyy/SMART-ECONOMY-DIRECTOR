@@ -776,3 +776,34 @@ nem pedido outro teste ao jogador.
 
 Instalada 0.5.1 sem jogo em execução; backup `mod_0.5.0_20261109_114658_276092`.
 Os 13 outputs do ZIP/instalação conferem com o gerador, load order inalterado.
+
+
+## Captura legível e painel temporal do Automático 0.5.2
+
+O jogador enviou captura do Director: botões nativos com fundo/borda, textos
+ampliados, modos, Abrir fila e Mostrar indicadores visíveis. Leitura 7/1839,
+saldo £15.3K, reservas £2.36M, projetos públicos 45/privados 2, sem déficit de
+infraestrutura. Confirma renderização da UI 0.5.x compatível com as alterações
+0.5.1, não cliques, inclusão de obra ou execução do novo painel.
+
+Implementado painel que distingue evento pendente/espera pelo pulso, primeiro
+bloqueio operacional atual e último resultado datado. A última revisão grava
+status/mês/ano ao terminar; modo/diagnóstico não apagam esse arquivo. O código
+antigo sed_auto_action_status mantém seus valores para execução; a UI histórica
+usa arquivo separado. Desativação limpa os três campos novos. Não migra data
+fictícia para resultado antigo; mostra ausência de registro nesta versão.
+
+As mensagens atuais são exclusivas por prioridade: default, filas, construção
+pausada, construtor conhecido; sem essas guardas, informa que faltam avaliar os
+candidatos. Não amplia cobertura das flags de terceiros nem modifica a política
+fiscal ou a reconciliação de projetos. Agendamento continua days=23 relativo.
+
+77 testes aprovados, com quatro novos de painel/histórico: agenda antes da
+primeira execução, consulta sem revisão, motivo live exclusivo, arquivo
+preservado por modos/refresh, virada de ano, limpeza e evento registrando novo
+resultado. Validação estática contra jogo, geração e pacote passaram. Nenhum
+jogo foi iniciado; passagem de tempo e textos novos continuam sem prova na
+engine. Não foi cobrado teste adicional do jogador.
+
+Instalada 0.5.2 sem jogo em execução; backup `mod_0.5.1_20261109_115813_269189`.
+13 outputs conferidos byte a byte com ZIP/gerador; load order preservado.
