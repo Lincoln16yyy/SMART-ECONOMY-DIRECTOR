@@ -398,3 +398,11 @@ botão de aprovar. A linha “Botão bloqueado: há níveis na fila privada” d
 confirmada nesta captura). A troca de candidato entre leituras reflete a
 recomputação a cada atualização (condições correntes de elegibilidade),
 não um erro. Próximo passo: instalar o ZIP 0.3.2 no perfil e reconfirmar.
+
+## Instalação local da 0.3.2
+
+O descritor instalado no perfil ainda era **0.3.0** — nem 0.3.1 nem 0.3.2
+havia sido instalada no prefixo (o ZIP da 0.3.2 foi extraído agora, com
+backup da 0.3.0 em `sed_backups/`). O `content_load.json` não foi alterado
+e o mod permanece habilitado. Próxima sessão: abrir o jogo e conferir a
+linha de motivo do botão bloqueado e o clique de aprovação.
