@@ -461,3 +461,14 @@ projetos. A nova regra permite aprovar uma oportunidade elegível mesmo com
 saldo negativo, mas não inventa uma oportunidade. A próxima ação para cobrir
 esse caso depende de identificar uma necessidade específica do mercado e uma
 resposta produtiva compatível com emprego e insumos.
+
+Continuação da pesquisa: no Economy Advisor instalado, o perfil gerado
+consulta escassez nacional por bem com `market = { mg:<good> ?= {
+market_goods_has_goods_shortage = yes } }` e escassez local com
+`state = { sg:<good> ?= { state_goods_has_local_goods_shortage = yes } }`;
+também compara sell orders, buy orders e demanda futura de métodos de produção
+(`advisor_generated_profiles.txt:21264–21270`). Atualizei RESEARCH.md com essa
+evidência e seus limites. Ela permite observar um bem específico, mas ainda
+não identifica qual prédio produtor é seguro ampliar; o catálogo local preserva
+camadas e não resolve merge nem método ativo. Nenhum novo botão foi criado por
+palpite a partir da contagem agregada de prédios com falta de insumos.

@@ -123,7 +123,9 @@ Isso é uma proposta; cada binding do novo widget precisa de teste de runtime.
 | Padrão de vida | Advisor health: `average_sol` | Observável; média pode ocultar pobreza de grupos |
 | Preços / oferta / demanda | Vanilla usa `market_goods_buy_orders`; mods usam `sg:goods`, `state_goods_pricier`, `state_goods_delta` | Parcial: escopo local e mercado distintos; confirmar venda e preço por bem |
 | Importação/exportação e dependência externa | Scripts `advisor_generated_export_*`; mercado do jogo | Parcial: falta separar produção nacional e circulação em mercado compartilhado |
-| Escassez de insumos | `building_has_goods_shortage` nos mods | Observável no edifício; preço alto sozinho não prova escassez |
+| Escassez nacional por bem | Economy Advisor `advisor_generated_profiles.txt:21264–21270` consulta `market = { mg:iron ?= { market_goods_has_goods_shortage = yes } }` | Mostra o padrão de leitura de escassez no mercado por bem; uso pelo mod não certifica o runtime do Director |
+| Escassez local por bem | O mesmo perfil consulta `state = { sg:iron ?= { state_goods_has_local_goods_shortage = yes } }` | Separada da escassez geral do mercado; ainda não identificamos por script qual prédio deve aumentar a oferta |
+| Escassez em edifícios | `building_has_goods_shortage` nos mods | Observável por edifício; preço alto sozinho não prova escassez e a flag não nomeia o insumo |
 | Lucro / utilização / PM atual | `weekly_profit`, `occupancy`, `has_active_production_method` | Observável; lucro não equivale ao benefício nacional |
 | Produção setorial / capacidade / insumos futuros | Buildings, PMs e modificadores vanilla; perfis gerados do Advisor | Parcial: requer catálogo próprio e cálculo com throughput e emprego |
 | Mão de obra / desemprego / qualificações / salários | Triggers de workforce e valores de avaliação do Advisor | Parcial: falta validar separadamente cada primitiva e escopo |
@@ -139,6 +141,25 @@ Isso é uma proposta; cada binding do novo widget precisa de teste de runtime.
 | Coordenação atômica entre mods | Nenhum protocolo encontrado | Não suportado identificado; exigir um único executor configurado |
 
 ## Conclusão técnica e pendências
+
+### Pesquisa de mercado por bem para a próxima ação
+
+Na continuação da 0.3.4, foi conferido no código instalado do Economy Advisor
+um padrão de consulta de shortage para bens específicos: escopo `market` com
+`mg:<good>.market_goods_has_goods_shortage`, e escopo estadual `sg:<good>` com
+`state_goods_has_local_goods_shortage` (`advisor_generated_profiles.txt`, linhas
+21264–21270, versão local 1.0.0). O Advisor também compara sell orders, buy
+orders e demanda de PM pendente. Isso mostra como uma recomendação futura pode
+explicar o bem que está em falta; não é uma API de integração do Advisor e não
+prova a aceitação dessas consultas pelo motor nesta campanha.
+
+O índice local de buildings/PMs contém possíveis bens de saída e camadas de
+definição, mas não resolve `INJECT`/`REPLACE`, nem identifica sozinho o PM ativo
+no save. Para propor um prédio produtor, o próximo passo é cruzar uma escassez
+por bem com uma fonte local operante e elegível, registrar sobreposições e
+validar mão de obra, insumos, fila pública/privada e custo antes de criar um
+botão. A contagem agregada “edifícios com falta de insumos” não basta para
+escolher o alvo.
 
 É viável propor um diagnóstico em Journal Entry e um planejador com ranking
 explicável. Há mecanismos de execução, mas coexistência segura depende da fila
