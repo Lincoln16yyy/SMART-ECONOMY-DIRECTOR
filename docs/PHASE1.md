@@ -1,5 +1,10 @@
 # Fase 1 — diagnóstico econômico 0.1.0
 
+Este documento conserva o recorte histórico de métricas/Fase 1. Estado atual e
+limites de validação em [AUDIT_2026-11-09.md](AUDIT_2026-11-09.md). Os testes
+automatizados não encerram comparação de todas as leituras com a engine.
+
+
 Implementação iniciada em 2026-11-08 por pedido explícito do jogador.
 As lacunas da pesquisa sobre automação, fila detalhada e coexistência permanecem
 documentadas. Elas não foram convertidas em permissões de executar ações.

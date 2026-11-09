@@ -1,5 +1,43 @@
 # Contexto de continuidade
 
+## Orientação atual após auditoria — 2026-11-09
+
+Leia [AUDIT_2026-11-09.md](AUDIT_2026-11-09.md) antes de continuar. Código auditado:
+`ccf5c2ba325203faad9d704a1f139e21b8ce3261`, main, 0.4.1. Não houve alteração de
+funcionalidade na auditoria. 61 testes do Director passaram agora; 26 da
+referência passaram separadamente e seu validador tem 178 erros. A instalação
+corresponde aos 13 outputs; isso não é comprovação de execução econômica.
+
+Fase 0 parcial, diagnóstico parcialmente verificado, planejamento nacional
+não implementado e executor experimental. Próximo bloco: contrato de fila,
+reconciliação e opções dos outros executores, antes de novos tipos de obra ou
+ranking. Sem leitura confiável dos projetos relevantes, não certificar
+construção automática como segura. Não iniciar jogo oculto prolongado nem
+alterar a campanha para obter candidatos.
+
+Aprovação manual atual não exige pausa nem saldo positivo; exige Assistido,
+elegibilidade, fora de default e fila privada vazia. Automático existe opt-in,
+com guardas limitadas e sem teste de inclusão bem-sucedida na engine. Ignorar/
+restaurar e diagnósticos 0.4.0/0.4.1 estão implementados e testados no harness,
+mas sem cliques ou save/reload comprovados. As capturas de junho/1839 confirmam
+texto do modo e bloqueio por fila ocupada, sem identificar commit da sessão.
+
+GitHub main consultada pelo conector: `9366277…`; os dois commits de recursos
+0.4.0/0.4.1 estavam locais no início da auditoria. Fetch/push por Git no shell
+falham por DNS; o conector consegue ler. Não reescrever histórico para contornar.
+Relatório/JSON publicados pelo conector no PR em rascunho #1:
+https://github.com/Lincoln16yyy/SMART-ECONOMY-DIRECTOR/pull/1
+A branch de auditoria usa a main remota 0.3.9 e não inclui os recursos locais
+0.4.x; não confundir essa publicação documental com envio do código.
+
+## Registros anteriores — consultar sua data e versão
+
+Os resumos abaixo são históricos. Números de testes, exigência de pausa,
+“sem modos” e próximos passos antigos não substituem a orientação da auditoria.
+Referências a comportamento de pendências descrevem o script/harness, salvo
+quando um teste de engine estiver explicitamente registrado.
+
+
 O usuário solicitou seguir `Texto colado.txt` e ir publicando no GitHub
 `Lincoln16yyy/SMART-ECONOMY-DIRECTOR`. O conteúdo original está preservado
 integralmente em PROJECT_BRIEF.md. Leia-o antes de trabalhar.

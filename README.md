@@ -1,5 +1,12 @@
 # Smart Economy Director — Victoria 3 1.15
 
+**Auditoria de 09/11/2026:** [checklist detalhado e próximos passos](docs/AUDIT_2026-11-09.md).
+Há diagnóstico e protótipos locais de execução; o planejamento estratégico
+nacional ainda não foi implementado. A Fase 0 continua parcial. Os 61 testes
+locais e a validação estática passaram, mas construção bem-sucedida,
+reconciliação de projetos e save/reload ainda não foram comprovados na engine.
+A automação não está certificada como segura para campanha sem supervisão.
+
 Versão de desenvolvimento **0.4.1 — modos Manual, Assistido e Automático com
 controle de recomendações ignoradas**. O mod tem diário próprio, leituras manuais ou
 mensais, recomendações limitadas de infraestrutura e capacidade de construção,

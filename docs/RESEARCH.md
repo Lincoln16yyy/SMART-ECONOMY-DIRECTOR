@@ -1,5 +1,13 @@
 # Fase 0 — pesquisa técnica
 
+Atualização de auditoria (2026-11-09): a implementação chegou à 0.4.1, mas a
+pesquisa crítica da Fase 0 não está completa. Os parágrafos de introdução
+referem-se à entrega inicial 0.1.0. A [auditoria atual](AUDIT_2026-11-09.md)
+separa código, fonte estática e prova de engine. Prioridade: fila por projeto,
+opções por país e dados econômicos incrementais; não ampliar executor antes
+de resolver essas dependências. Não foi programado recurso nesta auditoria.
+
+
 Data: 2026-11-08. Resultado: pesquisa estática inicial, com lacunas explícitas.
 Este documento apresenta o diagnóstico e a arquitetura antes da implementação.
 Não certifica compatibilidade nem funcionamento dentro de uma campanha.

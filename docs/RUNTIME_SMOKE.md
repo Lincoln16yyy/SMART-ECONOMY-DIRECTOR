@@ -1,5 +1,11 @@
 # Inicialização na engine — 0.1.0
 
+Registro histórico: a continuação no topo ocorreu depois da primeira execução
+descrita nas seções inferiores. Para o estado atual, consulte a
+[auditoria de 09/11/2026](AUDIT_2026-11-09.md); nenhuma nova sessão de jogo foi
+realizada durante a auditoria e estes resultados não certificam a 0.4.1.
+
+
 **Atualização da continuação:** o uso de Gamescope headless com DXVK nativo
 permitiu entrar numa campanha nova da França. Foram confirmados a decisão de
 ativação, criação e abertura do diário, atualização manual, alteração da agenda
@@ -67,7 +73,7 @@ Os registros locais dessa execução ficam em
 `/tmp/sed-runtime-ds73tnj_/logs`. Esses arquivos temporários não são necessários
 para instalar o mod e podem desaparecer ao reiniciar a máquina.
 
-## Limite da evidência
+## Limite da primeira execução — antes da continuação descrita no topo
 
 **Confirmado:** descoberta do mod, correspondência de versão, inicialização
 até o menu e ausência de erros próprios de carregamento identificados na

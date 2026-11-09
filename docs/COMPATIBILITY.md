@@ -1,4 +1,16 @@
-# Compatibilidade — inventário inicial
+# Compatibilidade — estado auditado e inventário histórico
+
+Atualização de 2026-11-09, código 0.4.1: há onze mods listados, incluindo o
+Director. A lista e a instalação foram reinspecionadas; opções efetivas no país
+continuam desconhecidas. Ver [auditoria, seção 7](AUDIT_2026-11-09.md#7-ecossistema-de-mods).
+Há executor mensal opt-in no código, mas sem inclusão real comprovada e sem
+reconciliação completa. Aprovações individuais não exigem pausa desde 0.3.6.
+As três flags de concorrência não cobrem todos os controles do Supply Chain
+nem autoexpansão administrativa. Co-renderização não prova coexistência segura.
+
+O inventário abaixo preserva a pesquisa inicial de 08/11; versão declarada
+não equivale a compatibilidade verificada na engine.
+
 
 Data: 2026-11-08. Habilitado significa listado em `content_load.json`, não
 automação comprovadamente ativa em campanha. A interface e o estado vazio da
@@ -34,13 +46,13 @@ Government Advisor apenas como recomendador de leis. Isso não autoriza o
 Director a iniciar promulgações nem a escrever variáveis de outros mods.
 
 Como Economy Advisor e Supply Chain Semi-Auto Builder estão habilitados, a
-construção é um domínio disputado. Os botões atuais exigem pausa, país fora de
+construção é um domínio disputado. Os botões atuais exigem modo Assistido, país fora de
 inadimplência e fila privada vazia; saldo semanal negativo aparece como alerta,
 mas não bloqueia aprovação manual. A ferrovia valida
 o estado e o nível no clique, e o setor de construção revalida a fila pública
 mínima e o edifício. Ambos usam o efeito normal e conferem o contador público.
-Isso não foi validado na engine da campanha. Nenhuma automação mensal de
-construção está habilitada. As opções por país dos outros construtores ainda
+Isso não foi validado na engine da campanha. Existe automação mensal opt-in no código atual; a escolha efetiva no país
+e sua execução bem-sucedida não foram verificadas nesta auditoria. As opções por país dos outros construtores ainda
 não foram confirmadas; as ações precisam de teste com o conjunto de mods e flags
 registrados antes de serem tratadas como seguras para uso prolongado.
 

@@ -1,5 +1,10 @@
 # Métricas: fonte, escopo e apresentação
 
+Este documento conserva o recorte histórico de métricas/Fase 1. Estado atual e
+limites de validação em [AUDIT_2026-11-09.md](AUDIT_2026-11-09.md). Os testes
+automatizados não encerram comparação de todas as leituras com a engine.
+
+
 Pesquisa estática de 2026-11-08. A versão 0.3.0 mantém o núcleo de leituras
 introduzido em `data/metrics.json` e derivações/contagens descritas em PHASE1.md.
 O jogador confirmou a tela e as leituras principais da 0.1.0 em campanha; o

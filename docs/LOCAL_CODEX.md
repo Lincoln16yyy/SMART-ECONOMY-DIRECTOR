@@ -1,5 +1,13 @@
 # Continuar no computador local — CachyOS
 
+**Documento histórico de transição da nuvem.** Os caminhos abaixo foram
+confirmados localmente depois desta instrução. Para continuar hoje, use
+[AUDIT_2026-11-09.md](AUDIT_2026-11-09.md), especialmente o mapa de diretórios e
+o próximo bloco de pesquisa. O código atual é 0.4.1, com limitações de fila e
+validação de execução; não está mais no estado “sem implementação”. As
+instruções antigas abaixo foram preservadas como registro.
+
+
 A sessão na nuvem não acessa automaticamente os discos do computador. O Codex CLI abre uma sessão local separada, capaz de trabalhar com os arquivos que você autorizar. Login não transfere esta conversa; o contexto está versionado neste repositório.
 
 ## Instalar e abrir

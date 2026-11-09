@@ -1,5 +1,12 @@
 # Arquitetura por fases
 
+Estado autoritativo em 09/11/2026: [auditoria](AUDIT_2026-11-09.md). O fluxo
+estratégico desta proposta não está integralmente implementado: faltam objetivos,
+ranking nacional, proteção fiscal incremental e reconciliação por projeto.
+Atualmente existem filtros locais e executor experimental com modos. Ignorar/
+restaurar foi acrescentado na 0.4.1, sem validação de cliques/persistência na engine.
+
+
 A Fase 1 de diagnóstico foi confirmada em campanha na 0.1.0; ver
 [PHASE1.md](PHASE1.md). A 0.2.0 começou a Fase 2 com até três candidatos
 ferroviários e uma aprovação individual que enfileira uma expansão elegível. A
@@ -15,7 +22,8 @@ nacional completo e compatibilidade ampliada continuam por implementar.
 
 ## Responsabilidade
 
-O Director estabelece objetivos e prioridades nacionais. As ações em modo
+O objetivo proposto é o Director estabelecer objetivos e prioridades nacionais;
+essa camada estratégica ainda não foi implementada. As ações em modo
 Assistido exigem clique individual; o modo Automático pode enfileirar no máximo
 um nível por revisão mensal. Usa namespace `sed_`, funciona sozinho
 e não dependerá do Smart Government ou de identificadores internos de outro mod.
@@ -92,8 +100,7 @@ Um cooldown isolado não evita duplicação de projetos privados ou de outros mo
 Se essa consulta não for confiável, a construção automática permanecerá bloqueada.
 
 Na 0.2.0, o primeiro recorte considera apenas ferrovias já existentes e
-operantes em estados incorporados com infraestrutura abaixo de zero. Exige jogo
-pausado, ausência de inadimplência e fila privada vazia; confere o nível
+operantes em estados incorporados com infraestrutura abaixo de zero. Na implementação atual exige modo Assistido, ausência de inadimplência e fila privada vazia; confere o nível
 ferroviário já enfileirado e a elegibilidade normal do jogo no clique. Saldo
 semanal negativo gera um alerta junto ao candidato, mas não bloqueia a aprovação.
 Mesmo com essas travas, custo e retorno não são previstos. O
@@ -127,8 +134,8 @@ mods; o modo permanece protótipo. O Director não escreve flags de terceiros.
 
 ## Modos, ciclo e histórico
 
-- Manual: diagnóstico e recomendações sob solicitação ou mensal; ação somente
-  após o clique individual em uma recomendação.
+- Manual: diagnóstico e recomendações sob solicitação ou mensal; nenhuma
+  aprovação ou execução econômica. Aprovação por clique pertence ao Assistido.
 - Assistido: análise periódica e aprovação individual de candidatos revalidados.
 - Automático: apenas ações comprovadas, com limites, registro e suspensão em crise.
 

@@ -1,4 +1,12 @@
-# Plano de teste da campanha — modos e ações 0.3.6 pendentes
+# Plano de teste da campanha — versão 0.4.1 auditada
+
+Estado atual: [auditoria de 09/11/2026](AUDIT_2026-11-09.md). Os roteiros abaixo
+não são resultados executados. Não iniciar novas funcionalidades até fechar
+fila/reconciliação/opções do país. Usar cópia dedicada e registrar build, commit,
+mods e opções. Uma tentativa simulada não confirma inclusão no jogo.
+As capturas de junho/1839 confirmam modo Automático e texto de filas ocupadas;
+ignorar/restaurar e detalhamento novo não foram conferidos na engine.
+
 
 O jogador confirmou em campanha a interface e as leituras principais da 0.1.0,
 a renderização das seções ferroviária e de capacidade de construção vazias na
@@ -146,8 +154,7 @@ não estima custo, prazo ou retorno.
 ## Checklist do motivo do botão bloqueado 0.3.4
 
 Quando um candidato está listado, mas o botão de aprovar está
-bloqueado, uma linha sob o botão nomeia a primeira guarda que falha: jogo
-rodando, fila pública abaixo de três projetos (apenas construção), fila
+bloqueado, uma linha sob o botão nomeia a primeira guarda que falha: fila pública abaixo de três projetos (apenas construção), fila
 privada não vazia ou inadimplência. O saldo semanal negativo não bloqueia mais
 a aprovação: aparece como alerta para revisar o custo na fila. O jogador
 clicou com fila privada de 2 projetos e apenas o tooltip com cadeado
