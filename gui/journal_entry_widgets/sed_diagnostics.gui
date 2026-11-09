@@ -439,14 +439,24 @@ textbox = {
  text = "sed_recommendations_intro"
 }
 textbox = {
- visible = "[GetScriptedGui('sed_no_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ visible = "[GetScriptedGui('sed_no_infrastructure_opportunity_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes
  multiline = yes
  align = left|nobaseline
  using = fontsize_small
  minimumsize = { 500 -1 }
  maximumsize = { 500 -1 }
- text = "sed_recommendation_empty"
+ text = "sed_no_infrastructure_opportunity"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_no_railway_candidate_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_no_railway_candidate"
 }
 fixedgridbox = {
  visible = "[GetScriptedGui('sed_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"

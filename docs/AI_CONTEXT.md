@@ -4,14 +4,14 @@ O usuário solicitou seguir `Texto colado.txt` e ir publicando no GitHub
 `Lincoln16yyy/SMART-ECONOMY-DIRECTOR`. O conteúdo original está preservado
 integralmente em PROJECT_BRIEF.md. Leia-o antes de trabalhar.
 
-Fase atual: protótipo da Fase 2 em 0.2.0. A interface da 0.1.0 foi conferida
-pelo jogador em campanha; a 0.2.0 acrescenta até três recomendações de expansão
-ferroviária e um botão para aprovar uma por vez. O uso do botão e a coexistência
-com mods ainda não foram validados em campanha. Não há automação periódica.
-O pacote local de 0.1.0 e a instalação anterior podem estar desatualizados até
-que o pacote 0.2.0 seja gerado e instalado.
+Fase atual: protótipo da Fase 2 em 0.2.1. O jogador confirmou em campanha a
+interface, os indicadores e a seção vazia de oportunidades. A 0.2.0 acrescentou
+até três recomendações ferroviárias e um botão para aprovar uma por vez; a
+0.2.1 explica se não há déficit de infraestrutura ou se há déficit sem
+candidato elegível. A execução do botão e a coexistência com mods ainda não
+foram validadas. Não há automação periódica. A 0.2.1 está instalada localmente.
 
-Atualização mais recente: a continuação conseguiu entrar na França com
+Atualização histórica: a continuação conseguiu entrar na França com
 Gamescope headless/DXVK e confirmou ativação por decisão, abertura/rolagem do
 diário, atualização manual, agenda sob solicitação e congelamento das leituras
 ao avançar de janeiro para fevereiro. PIB, SoL e alfabetização corresponderam
@@ -80,8 +80,8 @@ Vinte e quatro testes pertencem à versão 0.1.0; não foram atualizados nem
 executados para o executor 0.2.0. O interpretador restrito não confirma
 primitivas de fila, listas dinâmicas nem GUI na engine.
 
-Próximos passos: atualizar o mod local e pedir ao jogador uma conferência breve
-do botão ferroviário, em cópia de save, com o jogo pausado. Registrar se o
+Próximos passos: pedir ao jogador uma conferência breve do botão ferroviário,
+em cópia de save, com o jogo pausado. Registrar se o
 estado aparece, se as travas desabilitam o botão e se a fila pública ganha um
 único nível. Não iniciar testes gráficos ocultos prolongados. Depois verificar
 desativação, recarga e coexistência antes de ampliar os tipos de ação.

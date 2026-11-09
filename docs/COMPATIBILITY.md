@@ -1,8 +1,9 @@
 # Compatibilidade — inventário inicial
 
 Data: 2026-11-08. Habilitado significa listado em `content_load.json`, não
-automação comprovadamente ativa em campanha. A interface de diagnóstico 0.1.0
-foi confirmada pelo jogador. A ação ferroviária aprovada da 0.2.0 ainda não foi
+automação comprovadamente ativa em campanha. A interface e o estado vazio da
+seção de oportunidades foram confirmados pelo jogador. A ação ferroviária
+aprovada da 0.2.1 ainda não foi
 conferida em campanha nem com os outros mods ativos.
 
 | Mod | Evidência local / responsabilidade | Conflito e coexistência proposta |

@@ -1,6 +1,6 @@
-# Instalação e uso — versão 0.2.0
+# Instalação e uso — versão 0.2.1
 
-Requer Victoria 3 1.15.x. A versão 0.2.0 mantém o diagnóstico e acrescenta um
+Requer Victoria 3 1.15.x. A versão 0.2.1 mantém o diagnóstico e acrescenta um
 protótipo de recomendação ferroviária com aprovação individual. Não executa
 ações econômicas automaticamente nem altera métodos de produção. Não depende
 do Steam Workshop.
@@ -16,7 +16,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O resultado fica em `dist/smart-economy-director-0.2.0.zip`. O pacote contém
+O resultado fica em `dist/smart-economy-director-0.2.1.zip`. O pacote contém
 somente os arquivos carregáveis; não inclui saves, fontes do jogo, pesquisa,
 testes ou outro mod. A geração é determinística e não modifica a instalação.
 

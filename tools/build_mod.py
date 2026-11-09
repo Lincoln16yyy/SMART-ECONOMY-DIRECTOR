@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.2.0'
+VERSION = '0.2.1'
 STATE_VARIABLES = ['sed_railway_request_pending']
 EXTRA_VARIABLES = '''sed_last_year sed_last_month sed_month_key sed_in_default
 sed_gdp_per_capita sed_per_capita_available sed_debt_share sed_debt_share_available
@@ -94,7 +94,8 @@ def widget():
     body += textbox('sed_state_readings') + textbox('sed_employment_readings')
     body += textbox('sed_recommendations_title', heading=True)
     body += textbox('sed_recommendations_intro')
-    body += textbox('sed_recommendation_empty', 'sed_no_recommendations_visible_sgui')
+    body += textbox('sed_no_infrastructure_opportunity', 'sed_no_infrastructure_opportunity_visible_sgui')
+    body += textbox('sed_no_railway_candidate', 'sed_no_railway_candidate_visible_sgui')
     body += '''fixedgridbox = {
  visible = "[GetScriptedGui('sed_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_railway_candidates')]"
@@ -359,6 +360,8 @@ def scripted_guis():
         'no_growth': 'var:sed_growth_available = 0',
         'recommendations': 'has_variable_list = sed_railway_candidates',
         'no_recommendations': 'NOT = { has_variable_list = sed_railway_candidates }',
+        'no_infrastructure_opportunity': 'NOT = { has_variable_list = sed_railway_candidates } var:sed_infrastructure_short_states = 0',
+        'no_railway_candidate': 'NOT = { has_variable_list = sed_railway_candidates } var:sed_infrastructure_short_states > 0',
         'action_success': 'var:sed_railway_action_status = 1',
         'action_failed': 'var:sed_railway_action_status = 2',
     }
@@ -447,7 +450,8 @@ def localization(language):
         'sed_limitations_title': ('Como interpretar', 'How to interpret'),
         'sed_recommendations_title': ('Oportunidades de infraestrutura', 'Infrastructure opportunities'),
         'sed_recommendations_intro': ('Protótipo: até três ferrovias operantes em estados incorporados com infraestrutura negativa. A análise não calcula custo nem retorno; aprove uma ação por vez e confira o orçamento.', 'Prototype: up to three operating railways in incorporated states with negative infrastructure. The analysis does not calculate cost or return; approve one action at a time and review the budget.'),
-        'sed_recommendation_empty': ('Nenhuma expansão ferroviária atende aos filtros agora. Isso não significa que o país não tenha outras necessidades econômicas.', 'No railway expansion currently meets the filters. This does not mean the country has no other economic needs.'),
+        'sed_no_infrastructure_opportunity': ('Sem déficit atual de infraestrutura nos estados do país. O Director não recomenda expandir ferrovias agora.', 'No current infrastructure deficit in the country’s states. The Director does not recommend railway expansion now.'),
+        'sed_no_railway_candidate': ('Há déficit de infraestrutura, mas nenhuma ferrovia passou pelos filtros de operação, contratação, insumos e fila.', 'Infrastructure deficits exist, but no railway passed the operation, hiring, input, and queue filters.'),
         'sed_railway_candidate_title': ('#bold [State.GetName]#! — saldo de infraestrutura: #v [State.GetInfrastructureBalance|0+=]#!', '#bold [State.GetName]#! — infrastructure balance: #v [State.GetInfrastructureBalance|0+=]#!'),
         'sed_railway_candidate_reason': ('A ferrovia está empregada, sem falta de insumos nem expansão já enfileirada. Um nível público pode aliviar o gargalo; o efeito e o custo futuros não são previstos.', 'The railway is staffed, has no input shortage, and has no queued expansion. One government level may relieve the bottleneck; future impact and cost are not forecast.'),
         'sed_approve_railway': ('Aprovar: enfileirar 1 nível público', 'Approve: queue 1 government level'),

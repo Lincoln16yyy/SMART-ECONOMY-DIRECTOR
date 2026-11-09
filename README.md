@@ -1,6 +1,6 @@
 # Smart Economy Director — Victoria 3 1.15
 
-Versão de desenvolvimento **0.2.0 — diagnóstico e primeira ação aprovada**. O
+Versão de desenvolvimento **0.2.1 — diagnóstico e primeira ação aprovada**. O
 mod tem diário próprio, leituras manuais ou mensais, recomendações limitadas de
 infraestrutura e um botão para aprovar a expansão de uma ferrovia elegível.
 Não há execução econômica automática.
@@ -10,15 +10,16 @@ capacidade de construção, filas e sinais de infraestrutura, abastecimento e
 contratação. Os dados correspondem à última leitura indicada no painel.
 O crescimento do PIB requer amostras em meses distintos.
 
-**Estado: a interface 0.1.0 foi confirmada em campanha. A ação ferroviária
-0.2.0 ainda precisa ser conferida no jogo normal.** Compatibilidade ampliada
+**Estado: a interface e o estado vazio das oportunidades foram confirmados em
+campanha. A execução do botão ferroviário ainda precisa ser conferida no jogo
+normal.** Compatibilidade ampliada
 continua pendente.
 Não é uma versão de automação econômica pronta para deixar uma campanha sozinha.
 
 ## Instalação e uso
 
 Consulte [instalação e geração do ZIP](docs/INSTALL.md). O pacote gerado em
-`dist/smart-economy-director-0.2.0.zip` contém a pasta do mod e o descritor
+`dist/smart-economy-director-0.2.1.zip` contém a pasta do mod e o descritor
 externo. Ative no launcher e use a decisão **Ativar Smart Economy Director**.
 Nenhum outro mod é obrigatório; nenhuma ativação econômica é automática.
 

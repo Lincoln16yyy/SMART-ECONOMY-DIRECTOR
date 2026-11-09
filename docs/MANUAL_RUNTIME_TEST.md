@@ -1,7 +1,8 @@
-# Plano de testes de campanha — validação da ação 0.2.0 pendente
+# Plano de testes de campanha — validação da ação 0.2.1 pendente
 
-O jogador confirmou em campanha a interface e as leituras principais da 0.1.0.
-A ação econômica da 0.2.0 e a convivência com o conjunto de mods continuam
+O jogador confirmou em campanha a interface e as leituras principais da 0.1.0,
+e na 0.2.0 confirmou a renderização da seção ferroviária vazia. A ação econômica
+da 0.2.1 e a convivência com o conjunto de mods continuam
 **não testadas em campanha**. Os testes automatizados e tentativas de
 inicialização constam em PHASE1.md; nenhum resultado da nova ação foi simulado.
 
@@ -59,7 +60,7 @@ revalidação. Não existe modo automático; recomendações não aprovadas não
 alterar a fila. Reordenar as recomendações antes de clicar para verificar que
 o botão continua ligado ao estado mostrado.
 
-## Checklist da ação ferroviária 0.2.0
+## Checklist da ação ferroviária 0.2.1
 
 Use uma cópia do save. Para aparecer uma oportunidade, o país precisa ter saldo
 semanal de script não negativo e estar fora de inadimplência; o jogo precisa
@@ -70,7 +71,7 @@ infraestrutura negativa e sem expansão ferroviária já enfileirada.
 
 | Ação | Resultado a conferir |
 | --- | --- |
-| Abrir a seção de oportunidades | Até três estados ordenados pelo maior déficit observado; sem candidato, o mod explica que esse protótipo não encontrou uma expansão ferroviária elegível |
+| Abrir a seção de oportunidades | Até três estados ordenados pelo maior déficit observado; sem candidato e sem déficit, explica que não há oportunidade de infraestrutura; com déficit mas sem candidato, explica que os filtros ferroviários rejeitaram os estados |
 | Tentar aprovar com o jogo rodando | Botão desabilitado; nenhuma ação ocorre |
 | Pausar, criar fila privada ou entrar em inadimplência / saldo negativo | Botão desabilitado ao consultar de novo a elegibilidade |
 | Reordenar fila pública/privada antes do clique | Uma expansão pública para o estado mostrado, ou botão desabilitado se a ferrovia já estiver na fila |

@@ -205,3 +205,20 @@ de tipos. A 0.2.0 foi instalada no perfil local; a cópia anterior foi salva em
 da lista de mods foram preservadas. Próxima verificação: o jogador abrirá o
 jogo normal e confirmará renderização da lista, tooltip e comportamento do
 botão na campanha. Compatibilidade da ação e do datamodel permanece pendente.
+
+## Fase 2 — Explicação do estado sem recomendações 0.2.1
+
+O jogador mostrou a seção de oportunidades em campanha com zero estados em
+déficit de infraestrutura. A interface já estava correta ao não sugerir uma
+obra; o texto genérico não explicava qual filtro havia esvaziado a lista.
+Atualizei a interface para distinguir “sem déficit de infraestrutura” de
+“há déficit, mas nenhuma ferrovia passou pelos filtros”. Isso não altera os
+critérios nem executa ações.
+
+A validação da geração e do pacote é estática; botão, nova localização e fluxo
+de execução ainda precisam de conferência no jogo. Não foram executados testes
+unitários nem sessão gráfica oculta.
+
+Pacote 0.2.1 instalado no perfil local após backup de 0.2.0 em
+`sed_backups/mod_0.2.0_20261108_231349_643103`. As 11 entradas preexistentes
+foram preservadas e o mod permaneceu habilitado.

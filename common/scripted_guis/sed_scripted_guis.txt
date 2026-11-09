@@ -93,6 +93,14 @@ sed_no_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled NOT = { has_variable_list = sed_railway_candidates } }
 }
+sed_no_infrastructure_opportunity_visible_sgui = {
+ scope = country
+ is_shown = { has_variable = sed_enabled NOT = { has_variable_list = sed_railway_candidates } var:sed_infrastructure_short_states = 0 }
+}
+sed_no_railway_candidate_visible_sgui = {
+ scope = country
+ is_shown = { has_variable = sed_enabled NOT = { has_variable_list = sed_railway_candidates } var:sed_infrastructure_short_states > 0 }
+}
 sed_action_success_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_railway_action_status = 1 }
