@@ -66,6 +66,22 @@ scripts gerados, análise econômica, orçamento, construção e avaliação de 
   evitando concentrar os cálculos pesados no início do mês.
 - `advisor_automation_effects.txt:385` usa
   `start_building_construction = $BUILDING$`. Portanto, executa construções.
+- A chamada ocorre em escopo de estado no efeito
+  `advisor_auto_construction_start_rule_building` (`advisor_automation_effects.txt:382–390`).
+  A rotina mede `construction_queue_num_queued_government_levels` antes e
+  depois e só conta o projeto se a fila pública crescer (`:378–400`). Isso é
+  uma referência de mecanismo e confirmação, não uma API pública a chamar.
+- O mesmo mod filtra `can_construct_building = building_*` e, quando o prédio
+  já existe, impede duplicar níveis consultando
+  `level_after_queued_constructions > level` (`advisor_automation_effects.txt:131–140`).
+  Esses exemplos não demonstram que todo prédio novo, regra injetada ou alvo
+  privado seja tratado corretamente.
+- A localização vanilla de triggers declara comparadores de
+  `construction_queue_num_queued_government_levels` e
+  `construction_queue_num_queued_private_levels`
+  (`common/trigger_localization/00_trigger_localization.txt:4028–4088`). Há,
+  portanto, uma forma de testar nível de fila pública e privada em triggers;
+  esta inspeção não encontrou leitura numérica privada em script ativo.
 - `advisor_core_values.txt:404–458` considera quantidade de projetos privados e
   governamentais, alocação privada e espaço de construção. O modelo também
   considera contratação, infraestrutura e efeito de preços após construção.
@@ -116,7 +132,7 @@ Isso é uma proposta; cada binding do novo widget precisa de teste de runtime.
 | Capacidade de construção | Advisor: `modifier:country_construction_add` | Observável; considerar parcela privada e limite por projeto |
 | Fila pública / privada | Advisor: `num_queued_government_constructions`, `num_queued_private_constructions` | Parcial: totais não bastam para deduplicar estado + tipo + níveis |
 | Tecnologia disponível | `has_technology_researched` nos scripts | Observável; Director não controlará pesquisa nesta etapa |
-| Construir normalmente | `start_building_construction` em estado | Executável em scripts existentes; precisa validar custo/fila na 1.15 para o Director |
+| Construir normalmente | `start_building_construction` em escopo de estado; `can_construct_building`; contagem pública antes/depois | Mecanismo confirmado no Advisor 1.0.0. Para o Director, ainda falta validar chamada em clique, alvo persistente/recalculado, prédio inédito, regras efetivas de mods, fila privada e combinação com outros construtores |
 | Trocar PM | `activate_production_method`, com `can_activate_production_method` | Executável; deixar aos controladores de PM no ecossistema |
 | Histórico / avaliação de resultados | Variáveis persistentes e amostras mensais | Parcial; correlação observada não prova causalidade da construção |
 | Aprendizado de máquina / previsão econômica exata | Nenhuma implementação confiável encontrada em script | Não suportado identificado; usar avaliação transparente de resultados |
@@ -137,11 +153,15 @@ A ferramenta e o JSON permitem reproduzir a inspeção sem modificar os fontes.
 A Fase 0 permanece aberta: o estado das automações por país não foi decodificado
 do save binário; a cobertura da fila privada e de primeira construção requer
 teste no motor; faltam fontes diretas de script para algumas métricas, além de
-medição de desempenho. As leituras e bindings do núcleo de diagnóstico foram
-identificados em fontes, mas ainda não comparados em campanha. Não tratar
-essas lacunas como dados iguais a zero. A implementação do diagnóstico começou
-por nova instrução explícita do jogador, usando apenas o núcleo de leituras
-identificado. As demais métricas continuam indisponíveis ou em pesquisa.
+medição de desempenho. Os identificadores de fila em níveis existem como
+triggers vanilla, mas sua leitura útil e sua identidade por estado/edifício
+precisam de validação antes de proteger uma execução do Director. O mecanismo
+de construção do Advisor serve como referência, não como integração nem prova
+de coexistência segura. As leituras e bindings do núcleo de diagnóstico foram
+identificados em fontes e conferidos em campanha pelo jogador. Não tratar
+lacunas restantes como dados iguais a zero. A implementação começou por nova
+instrução explícita do jogador, usando apenas o núcleo de leituras identificado.
+As demais métricas continuam indisponíveis ou em pesquisa.
 
 ## Pesquisa anterior preservada
 

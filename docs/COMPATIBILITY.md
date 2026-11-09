@@ -21,6 +21,23 @@ estática rejeita ações econômicas e escrita em variáveis de terceiros.
 | Private Investments Only Expand Existing Buildings | Instalado, ausente da lista habilitada | Altera buildings quando ligado; não pressupor regras de investimento vanilla |
 | OGAS for CWE | Instalado, ausente da lista habilitada | Não é o Economy Advisor; nenhuma dependência proposta |
 
+## Controles de execução pedidos pelo jogador
+
+O Director deverá mostrar ações econômicas recomendadas com controles de
+aprovação que executem a ação real do jogo. O jogador quer manter o Smart
+Government Advisor apenas como recomendador de leis. Isso não autoriza o
+Director a iniciar promulgações nem a escrever variáveis de outros mods.
+
+Como Economy Advisor e Supply Chain Semi-Auto Builder estão habilitados, a
+construção é um domínio disputado. A primeira implementação deve preferir uma
+ação individual aprovada na tela, revalidar país, estado, tipo, elegibilidade e
+fila imediatamente antes de chamar o efeito normal do jogo, e confirmar o
+resultado na fila. Nenhuma automação mensal de construção deve ser habilitada
+por padrão. Se o alvo ou as filas não puderem ser identificados com segurança,
+o controle precisa explicar por que está indisponível. A implementação deve
+ser testada com as opções de automação dos outros mods explicitamente
+registradas; hoje seu estado ativo por país ainda não foi confirmado.
+
 No Supply Chain, a rotina ferroviária ordena estados por infraestrutura,
 verifica ocupação e construção existente em certos caminhos, e executa
 `start_building_construction`. Há agenda mensal e opções configuráveis; não é

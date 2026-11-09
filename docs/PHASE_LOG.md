@@ -158,3 +158,13 @@ econômicas é objetivo deste projeto, não apenas recomendações visuais. A 0.
 continua sendo só diagnóstico: não prometer que já executa recomendações. Fila,
 compatibilidade, dados e segurança continuam pré-requisitos antes de cada tipo
 de executor e antes de qualquer modo automático.
+
+Na continuação, foi inspecionado o caminho real de construção: o Economy
+Advisor usa `start_building_construction` em escopo de estado, verifica a fila
+pública em níveis antes/depois e filtra edifícios existentes com
+`level_after_queued_constructions`. A instalação também declara triggers de
+níveis em filas públicas e privadas. Isso confirma peças do motor, não uma
+integração segura; identidade de projeto privado, prédios inéditos, clique e
+coexistência continuam pendentes. A captura do jogador confirma a interface na
+campanha normal. A pesquisa e a arquitetura agora registram botões de aprovação
+econômica como requisito, sem dar ao Director controle de leis.

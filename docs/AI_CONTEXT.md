@@ -7,7 +7,8 @@ integralmente em PROJECT_BRIEF.md. Leia-o antes de trabalhar.
 Fase atual: 1, implementação inicial 0.1.0 de diagnóstico, por pedido explícito
 do jogador para começar a construção do mod. As lacunas da Fase 0 continuam
 registradas e bloqueiam automação econômica, não a entrega de diagnóstico.
-Existe pacote instalável gerado em `dist/`, com validação de campanha pendente.
+Existe pacote instalável gerado em `dist/`; a interface já foi conferida pelo
+jogador em campanha, enquanto limpeza, recarga e compatibilidade seguem pendentes.
 Não copiar economia de mods por suposição.
 
 Atualização mais recente: a continuação conseguiu entrar na França com
@@ -24,9 +25,9 @@ A versão 0.1.0 foi então instalada em `mod/Smart Economy Director` no prefixo
 Wine já identificado e adicionada ao final de `content_load.json`, preservando
 as dez entradas anteriores. Backup:
 `sed_backups/content_load_20261108_222107_956307.json`, nos dados do usuário.
-O jogador foi orientado a abrir o jogo normal e verificar J → Decisões →
-Ativar Smart Economy Director. Aguardar sua observação para corrigir problemas
-reais de interface/instalação. Isso não valida a convivência em campanha.
+O jogador enviou captura do jogo normal com o diário aberto e os indicadores
+visíveis em 27/02/1846; a instalação, ativação e renderização estão confirmadas.
+Ainda faltam limpeza/desativação, save/reload e teste dos demais mods em conjunto.
 
 Observação do jogador em 2026-11-08: o diário e os indicadores apareceram na
 campanha. Direção de produto confirmada: este projeto deve permitir executar,
@@ -70,11 +71,10 @@ Vinte e quatro testes passaram: nove de auditoria e quinze de diagnóstico,
 validação e pacote. O interpretador restrito dos testes executa os scripts,
 mas não confirma nomes de primitivas, listas ou GUI na engine.
 
-Próximos passos: validar a interface e os números em cópia de campanha conforme
-MANUAL_RUNTIME_TEST.md; ver a evidência de inicialização em PHASE1.md. Para
-planejamento/execução futuros, confirmar flags por país, cobertura da fila
-privada/primeira construção, catálogo efetivo dos mods e desempenho. Não
-apresentar a Fase 1 como validada em campanha antes desses testes interativos.
+Próximos passos: usar MANUAL_RUNTIME_TEST.md para desativação/reativação e
+save/reload; continuar a pesquisa da fila/ownership e catálogo efetivo antes de
+planejar os primeiros candidatos econômicos. O jogador confirmou a interface
+no jogo normal. Não apresentar a execução de recomendações como implementada.
 
 Houve teste de inicialização isolado em Xvfb/Wine, descrito em RUNTIME_SMOKE.md:
 o mod foi reconhecido e chegou ao menu sem erros próprios na execução limpa.

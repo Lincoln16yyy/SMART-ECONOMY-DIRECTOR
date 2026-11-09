@@ -23,6 +23,13 @@ O jogador conserva decisões políticas, diplomáticas e militares importantes.
    antiga não autoriza construir quando as condições já mudaram.
 7. Registrar a intenção e observar conclusão, contratação e efeitos posteriores.
 
+Uma recomendação econômica deverá ter um botão de aprovação que execute uma
+ação real e identificada. No clique, o Director recalcula elegibilidade e
+conflitos; aprovação antiga não deve executar um alvo diferente depois que a
+lista mudar. Esse controle é independente dos botões de atualização da 0.1.0.
+Leis permanecem fora do executor econômico: o jogador prefere que o Smart
+Government Advisor só recomende promulgações.
+
 ## Módulos e arquivos previstos
 
 | Camada | Arquivos previstos | Responsabilidade |
@@ -72,9 +79,10 @@ Um cooldown isolado não evita duplicação de projetos privados ou de outros mo
 Se essa consulta não for confiável, a construção automática permanecerá bloqueada.
 
 O modo automático futuro só habilitará domínios cujo executor seja o Director.
-Quando outro mod construir, o Director apresentará estratégia e verificará os
-resultados. Essa cooperação é configuração do jogador, não API inventada.
-O Director não escreverá flags de terceiros nem tentará desligá-los silenciosamente.
+Uma aprovação manual não habilita sozinha ações periódicas. Quando outro mod
+construir, o Director apresentará estratégia e verificará os resultados. Essa
+cooperação é configuração do jogador, não API inventada. O Director não
+escreverá flags de terceiros nem tentará desligá-los silenciosamente.
 
 ## Modos, ciclo e histórico
 
