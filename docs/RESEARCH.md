@@ -161,6 +161,16 @@ validar mão de obra, insumos, fila pública/privada e custo antes de criar um
 botão. A contagem agregada “edifícios com falta de insumos” não basta para
 escolher o alvo.
 
+O extrator foi corrigido para ler atribuições de modificadores cujo operador é
+`=`. O relatório local agora inclui `possible_producers_by_good`, com as camadas
+de prédio, grupo de métodos e método de produção que podem gerar cada bem. Na
+instalação examinada, o índice cobre 52 bens; isso confirma a ligação entre
+definições, mas não demonstra que um método esteja ativo, que o prédio possa ser
+construído naquele país ou que sua expansão seja lucrativa. O JSON local fica
+fora do Git porque inclui dados de mods habilitados. O próximo botão produtivo
+depende de ler a escassez de um bem específico e encontrar um produtor local
+elegível; o contador agregado da tela do Haiti não fornece esse alvo.
+
 É viável propor um diagnóstico em Journal Entry e um planejador com ranking
 explicável. Há mecanismos de execução, mas coexistência segura depende da fila
 completa e de escolher quem executa. Replicar o construtor/PM do Advisor agora

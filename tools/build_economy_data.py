@@ -73,7 +73,7 @@ def extract(category, entry):
             if isinstance(values, list):
                 modifier_sets[scale] = {
                     item.key: item.value for item in values
-                    if item.op is None and isinstance(item.value, str)
+                    if item.op == '=' and isinstance(item.value, str)
                     and item.key.startswith(('goods_input_', 'goods_output_', 'building_employment_'))
                 }
     return {
@@ -168,13 +168,48 @@ def build(game, user_dir):
             'Keeps source layers; does not reproduce the engine merge or final load order semantics.',
             'INJECT and REPLACE are reported as operations, not applied to definitions.',
             'Extracted fields are a planning aid; they do not prove building eligibility, costs, or profitability.',
+            'possible_producers_by_good joins definition layers to show possibilities; it does not resolve active PMs or engine merge semantics.',
             'Local report may contain third-party mod data; do not publish it without reviewing its license.',
         ],
         'enabled_mods': enabled_mods,
         'definitions': catalog,
+        'possible_producers_by_good': possible_output_index(definitions),
         'collisions': collisions,
         'parse_issues': issues,
     }
+
+
+def possible_output_index(definitions):
+    """Index definition-layer producer possibilities without resolving merges."""
+    producers = defaultdict(list)
+    buildings = definitions['buildings']
+    groups = definitions['production_method_groups']
+    methods = definitions['production_methods']
+    for building_id, building_layers in sorted(buildings.items()):
+        for building_layer in building_layers:
+            for group_id in building_layer['fields'].get('production_method_groups', []):
+                for group_layer in groups.get(group_id, []):
+                    for method_id in group_layer['fields'].get('production_methods', []):
+                        for method_layer in methods.get(method_id, []):
+                            goods = set()
+                            for modifiers in method_layer['fields'].get('building_modifiers', {}).values():
+                                for key in modifiers:
+                                    if key.startswith('goods_output_') and key.endswith('_add'):
+                                        goods.add(key[len('goods_output_'):-len('_add')])
+                            for good in sorted(goods):
+                                producers[good].append({
+                                    'building_id': building_id,
+                                    'building_source': building_layer['source'],
+                                    'building_operation': building_layer['operation'],
+                                    'pmg_id': group_id,
+                                    'pmg_source': group_layer['source'],
+                                    'pmg_operation': group_layer['operation'],
+                                    'production_method_id': method_id,
+                                    'production_method_source': method_layer['source'],
+                                    'production_method_operation': method_layer['operation'],
+                                })
+    return dict(sorted(producers.items()))
+
 
 
 def main():
