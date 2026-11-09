@@ -446,6 +446,86 @@ class DiagnosisTests(unittest.TestCase):
                 self.assertNotIn('sed_gdp', c.variables)
                 self.assertEqual(c.constructions, [])
 
+    def auto_panel_shown(self, c, suffix):
+        return c.condition(child(self.definitions[f'sed_auto_{suffix}_visible_sgui'],
+                                 'is_shown'), c.country_scope())
+
+    def test_auto_panel_explains_pending_review_before_any_execution(self):
+        c = self.country()
+        c.run('sed_set_mode_automatic')
+        self.assertTrue(self.auto_panel_shown(c, 'pending'))
+        self.assertTrue(self.auto_panel_shown(c, 'unrecorded'))
+        self.assertTrue(self.auto_panel_shown(c, 'current_queue'))
+        self.assertFalse(self.auto_panel_shown(c, 'idle'))
+        self.assertFalse(self.auto_panel_shown(c, 'last_review'))
+        c.run('sed_refresh_diagnostics')
+        self.assertNotIn('sed_auto_review_status', c.variables)
+        self.assertEqual(c.scheduled_events, [('sed_pulse.1', 23)])
+        self.assertEqual(c.constructions, [])
+
+    def test_auto_review_record_survives_refresh_and_mode_changes_but_cleans_on_disable(self):
+        c = self.country(year=1840, month=11)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_auto_review_status'], 11)
+        self.assertEqual((c.variables['sed_auto_review_year'], c.variables['sed_auto_review_month']), (1840, 12))
+        c.run('sed_set_mode_manual')
+        self.assertEqual(c.variables['sed_auto_action_status'], 0)
+        self.assertTrue(self.auto_panel_shown(c, 'status_queue'))
+        self.assertTrue(self.auto_panel_shown(c, 'last_review'))
+        self.assertFalse(self.auto_panel_shown(c, 'current_queue'))
+        c.readings.update(year=1841, month=0)
+        c.run('sed_refresh_diagnostics')
+        self.assertEqual((c.variables['sed_auto_review_year'], c.variables['sed_auto_review_month']), (1840, 12))
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual((c.variables['sed_auto_review_year'], c.variables['sed_auto_review_month']), (1841, 1))
+        c.run('sed_disable_country')
+        for name in ('status', 'year', 'month'):
+            self.assertNotIn('sed_auto_review_' + name, c.variables)
+        self.assertFalse(self.auto_panel_shown(c, 'last_review'))
+
+    def test_auto_current_blockers_are_live_exclusive_and_do_not_rewrite_history(self):
+        c = self.country()
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')  # Queue occupied at the recorded review.
+        c.readings.update(in_default=True, is_construction_paused=True)
+        c.variables['advisor_auto_construction_enabled'] = True
+        def only(expected):
+            for name in ('default', 'queue', 'paused', 'competing', 'clear'):
+                self.assertEqual(self.auto_panel_shown(c, 'current_' + name), name == expected)
+            self.assertEqual(c.variables['sed_auto_review_status'], 11)
+            self.assertEqual(c.constructions, [])
+        only('default')
+        c.readings['in_default'] = False
+        only('queue')
+        c.readings['construction_queue_num_queued_government_levels'] = 0
+        only('paused')
+        c.readings['is_construction_paused'] = False
+        only('competing')
+        del c.variables['advisor_auto_construction_enabled']
+        only('clear')
+        self.assertTrue(self.auto_panel_shown(c, 'status_queue'))  # Dated historical result.
+
+    def test_legacy_status_does_not_invent_review_date_and_event_records_new_result(self):
+        c = self.country()
+        c.variables['sed_auto_action_status'] = 11  # Existing save from the previous version.
+        c.run('sed_set_mode_automatic')
+        self.assertTrue(self.auto_panel_shown(c, 'unrecorded'))
+        self.assertFalse(self.auto_panel_shown(c, 'last_review'))
+        self.assertFalse(self.auto_panel_shown(c, 'status_queue'))
+        event = next(entry.value for entry in parse(
+            outputs()['events/sed_events.txt'].decode('utf-8-sig')) if entry.key == 'sed_pulse.1')
+        c.execute(child(event, 'immediate'), c.country_scope())
+        self.assertTrue(self.auto_panel_shown(c, 'last_review'))
+        self.assertTrue(self.auto_panel_shown(c, 'status_queue'))
+        self.assertTrue(self.auto_panel_shown(c, 'idle'))
+        self.assertFalse(self.auto_panel_shown(c, 'unrecorded'))
+        self.assertFalse(self.auto_panel_shown(c, 'pending'))
+        self.assertEqual(c.constructions, [])
+        c.run('sed_monthly_update')
+        self.assertTrue(self.auto_panel_shown(c, 'pending'))
+
     def test_activation_collects_real_supplied_readings(self):
         c = self.country(gdp=12345, total_population=500, average_sol=13.25)
         self.assertEqual(c.variables['sed_gdp'], 12345)

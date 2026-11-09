@@ -1,5 +1,28 @@
 # Contexto de continuidade
 
+## Continuação — status temporal do Automático 0.5.2
+
+Instalada sem jogo em execução; backup `mod_0.5.1_20261109_115813_269189`;
+13 outputs conferidos e load order preservado.
+
+Captura enviada pelo jogador confirma renderização legível dos botões nativos,
+modos, resumo e botão Abrir fila, compatível com a UI 0.5.x. Leitura 7/1839,
+saldo £15.3K, reservas £2.36M, projetos públicos/privados 45/2 e ausência de
+déficit de infraestrutura. Isso não comprova clique de aprovação nem abertura
+da fila, só apresentação. Não exigir nova rodada de testes agora.
+
+0.5.2 separa revisão agendada/aguardando pulso, bloqueios atuais (leitura live)
+e último resultado registrado com mês/ano. Arquivo do resultado usa variáveis
+próprias, não é apagado por trocar modo/atualizar diagnóstico. Desativar limpa.
+Saves antigos sem data/arquivo mostram que ainda não há registro nesta versão,
+sem inventar uma data. Não há mudança no agendamento, guardas ou execução.
+
+77 testes passam (73 anteriores + quatro do painel). Início com evento
+pendente, consulta sem executar, exclusividade dos bloqueios, histórico versus
+condição atual, troca de modo, virada do ano, limpeza e gravação pelo evento
+cobertos no harness. Novos textos e passagem de tempo ainda não testados na
+engine. A captura confirma a melhoria visual anterior, sem fechar a Fase 0.
+
 ## Continuação — cartões acionáveis 0.5.1
 
 Instalada sem jogo em execução; backup `mod_0.5.0_20261109_114658_276092`,

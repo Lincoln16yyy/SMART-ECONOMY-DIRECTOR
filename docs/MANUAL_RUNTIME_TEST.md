@@ -1,4 +1,4 @@
-# Plano de teste da campanha — interface 0.5.1
+# Plano de teste da campanha — interface 0.5.2
 
 Estado atual: [auditoria de 09/11/2026](AUDIT_2026-11-09.md). Os roteiros abaixo
 não são resultados executados. Não iniciar novas funcionalidades até fechar
@@ -339,3 +339,14 @@ Um cartão desatualizado oferece atualização; ela recalcula a lista e não
 constrói. Um cartão pendente não deve tratar a troca de modo ou atualização
 como aprovação de outra expansão. Abrir fila de construção deve abrir a janela
 nativa sem modificar a fila. Esses testes visuais ainda não foram executados.
+
+
+## Painel Automático 0.5.2 — roteiro futuro
+
+Antes da primeira revisão, conferir agendamento e ausência de registro, sem
+uma data inventada. Com filas ocupadas, o motivo atual deve aparecer mesmo
+sem nova revisão. Após o evento, conferir mês/ano e resultado. Alterar a fila
+e consultar o painel: motivo atual muda, resultado datado anterior permanece.
+Trocar modo e atualizar diagnóstico não devem apagar esse resultado nem
+executar uma obra. Desativar limpa o arquivo. Passagem de tempo/save-reload
+continuam pendentes de teste na engine; não foram simulados como aprovados.

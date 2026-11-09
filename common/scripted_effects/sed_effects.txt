@@ -83,6 +83,9 @@ sed_disable_country = {
  remove_variable = sed_auto_action_status
  remove_variable = sed_auto_event_pending
  remove_variable = sed_details_visible
+ remove_variable = sed_auto_review_status
+ remove_variable = sed_auto_review_year
+ remove_variable = sed_auto_review_month
  remove_variable = sed_wood_action_status
  remove_variable = sed_iron_action_status
  remove_variable = sed_coal_action_status
@@ -1333,6 +1336,10 @@ sed_auto_apply_monthly = {
  else_if = { limit = { is_construction_paused = yes } set_variable = { name = sed_auto_action_status value = 12 } }
  else_if = { limit = { OR = { has_variable = advisor_auto_construction_enabled has_variable = zw_var_expand_building has_variable = aroai_autobuild } } set_variable = { name = sed_auto_action_status value = 13 } }
  else = { set_variable = { name = sed_auto_action_status value = 14 } }
+ # Preserve the result independently from mode controls and diagnostic refreshes.
+ set_variable = { name = sed_auto_review_status value = var:sed_auto_action_status }
+ set_variable = { name = sed_auto_review_year value = year }
+ set_variable = { name = sed_auto_review_month value = { value = month add = 1 } }
 }
 sed_ignore_railway = {
  if = {
