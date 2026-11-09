@@ -233,3 +233,13 @@ A preferência fica no estado, com namespace `sed_<ação>_ignored`. Não é uma
 ordem de cancelamento nem uma restrição a construtores externos. A restauração
 e a limpeza alcançam estados atualmente pertencentes ao país; transferência
 de território não tem migração de preferências entre países implementada.
+
+
+### Continuação: contrato de fila e limites da GUI
+
+[QUEUE_CONTRACT.md](QUEUE_CONTRACT.md) fixa as novas referências da interface
+nativa 1.15.0 e das rotinas do Advisor/Supply Chain. As listas paginadas de
+projetos têm prédio, estado, investidor, tipo de financiamento e progresso na
+GUI; não foi identificado iterador equivalente em scripted effect neste
+recorte. A prova dentro da engine permanece pendente. A pesquisa não ampliou
+as ações do Director nem alterou opções dos outros mods.

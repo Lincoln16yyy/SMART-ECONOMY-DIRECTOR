@@ -45,6 +45,10 @@ externo. Ative no launcher e use a decisão **Ativar Smart Economy Director**.
 O modo inicial é Assistido; a automação só começa se o jogador selecionar
 Automático no diário.
 
+O GitHub Actions publica o artefato **smart-economy-director**, com ZIP interno
+`smart-economy-director.zip`; os descritores informam a versão. A geração local
+sem `--output` mantém o nome versionado.
+
 ## Desenvolvimento e verificação
 
 ```bash
