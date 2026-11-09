@@ -1,4 +1,9 @@
-# Arquitetura proposta — sem implementação
+# Arquitetura por fases
+
+A Fase 1 de diagnóstico está implementada em 0.1.0; ver
+[PHASE1.md](PHASE1.md). Os módulos de planejamento e execução abaixo continuam
+propostos. A implementação iniciou por solicitação explícita do jogador,
+preservando as lacunas de pesquisa como bloqueios para futuras ações automáticas.
 
 ## Responsabilidade
 
@@ -32,7 +37,10 @@ O jogador conserva decisões políticas, diplomáticas e militares importantes.
 | Localização | `localization/braz_por/`, `localization/english/` | Português escrito de fato e fallback inglês; UTF-8 BOM |
 | Verificação | `tests/`, `tools/validate.py` | Cenários e referências cruzadas; runtime separado |
 
-Esses caminhos são propostas; não foram criados arquivos vazios para simulá-los.
+Os caminhos de catálogo e planejamento são propostas; não há arquivos vazios
+para simulá-los. O diagnóstico atual usa `data/metrics.json`, o gerador
+`tools/build_mod.py` e `common/scripted_effects/sed_effects.txt`, sem camada de
+script values desnecessária para apenas copiar as leituras identificadas.
 `tools/audit_environment.py` já existe como ferramenta de pesquisa, sem scripts
 de jogo. A auditoria encontrou PMs redefinidos pelo ARoAI e regras de construção
 injetadas pelo Controllable Private Construction. O catálogo futuro precisa
@@ -73,6 +81,10 @@ O Director não escreverá flags de terceiros nem tentará desligá-los silencio
 - Manual: diagnóstico/recomendações sob solicitação, nenhuma ação econômica.
 - Assistido: análise periódica e aprovação individual de candidatos revalidados.
 - Automático: apenas ações comprovadas, com limites, registro e suspensão em crise.
+
+Esses são os futuros modos de execução. A versão 0.1.0 oferece somente agenda
+de leitura mensal ou sob solicitação; não usa esses nomes para sugerir modos
+de execução que ainda não existem.
 
 A atualização deverá ter um único responsável para evitar execução em dobro
 entre Journal Entry e on-action. Rotinas pesadas serão espaçadas e medidas;

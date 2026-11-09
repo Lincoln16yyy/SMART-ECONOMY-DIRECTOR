@@ -1,7 +1,30 @@
 # Plano de testes de campanha — execução pendente
 
-Este roteiro será usado quando existir uma versão executável. Hoje todos os
-cenários do Director estão **não executados**. Nenhum resultado foi simulado.
+Há uma primeira implementação executável, versão 0.1.0, somente de diagnóstico.
+As interações e cenários em campanha continuam **não executados**. Os testes
+automatizados e tentativas de inicialização constam em PHASE1.md; não são
+resultados de campanha. Nenhum resultado foi simulado.
+
+## Checklist específico da versão 0.1.0
+
+| Ação | Resultado a conferir dentro do jogo |
+| --- | --- |
+| Carregar save novo/existente sem ativar | Nenhum diagnóstico ou automação aparece sozinho |
+| Decisão Ativar Smart Economy Director | Uma única Journal Entry aparece com leitura inicial e mês/ano |
+| Abrir o diário | Textos em português, sem chaves cruas ou números cortados; scroll permite ler todos os controles e indicadores |
+| Comparar saldo, reservas, dívida e crédito | Valores correspondem ao país e data; estoque e fluxo semanal não estão confundidos |
+| Comparar população, PIB, SoL e alfabetização | Conferir abrangência do indicador, principalmente população incorporada versus total |
+| Comparar filas e infraestrutura | Projetos não são tratados como níveis; estados pertencem ao país jogador |
+| Atualizar repetidamente no mesmo mês | Leituras mudam conforme o jogo, mas não surge uma falsa variação mensal de PIB |
+| Avançar um mês | Uma atualização, sem duplicar diário; crescimento usa a primeira amostra-base do mês anterior registrado |
+| Atualizar sob solicitação e avançar meses | Última leitura e indicadores ficam congelados até clicar em atualizar |
+| Atualizar todo mês | Leitura imediata; leituras mensais voltam a acontecer |
+| Desativar e avançar meses | Diário encerra e não volta sozinho; variáveis operacionais removidas, só schema retido |
+| Reativar | Leituras novas; crescimento volta a indisponível até haver outra amostra mensal |
+| Salvar e recarregar | Ativação, agenda e amostras pertencem ao país e permanecem coerentes |
+
+Caso o diário esteja inacessível por um problema de interface, a decisão
+**Desativar Smart Economy Director** continua sendo a saída de limpeza.
 
 ## Preparação
 

@@ -1,39 +1,57 @@
 # Smart Economy Director — Victoria 3 1.15
 
-Projeto de um planejador econômico nacional para Victoria 3: diagnóstico,
-estratégia de desenvolvimento e execução controlada de ações comprovadamente
-suportadas pelo jogo. Prefixo reservado: `sed_`.
+Primeira versão **0.1.0 — diagnóstico econômico**. O mod tem scripts, interface
+própria de diário, ativação opcional e leituras manuais ou mensais. Construção
+automática e recomendações de investimento pertencem a fases posteriores.
 
-**Estado atual: Fase 0, pesquisa técnica inicial documentada. Ainda não há mod
-instalável, Journal Entry ou automação implementada.** A instalação local 1.15.0
-e os scripts dos mods foram inspecionados; os testes de campanha estão pendentes.
+O painel mostra finanças, PIB, população, padrão de vida, alfabetização,
+capacidade de construção, filas e sinais de infraestrutura, abastecimento e
+contratação. Os dados correspondem à última leitura indicada no painel.
+O crescimento do PIB requer amostras em meses distintos.
 
-O Economy Advisor já executa construção e mudanças de métodos de produção.
-O Director deve acrescentar estratégia nacional sem disputar essas automações.
-Nenhuma integração direta com outros mods foi comprovada.
+**Estado: implementação da Fase 1 disponível para testes. A confirmação da
+interface e dos indicadores dentro de uma campanha ainda está pendente.**
+Não é uma versão de automação econômica pronta para deixar uma campanha sozinha.
 
+## Instalação e uso
+
+Consulte [instalação e geração do ZIP](docs/INSTALL.md). O pacote gerado em
+`dist/smart-economy-director-0.1.0.zip` contém a pasta do mod e o descritor
+externo. Ative no launcher e use a decisão **Ativar Smart Economy Director**.
+Nenhum outro mod é obrigatório; nenhuma ativação econômica é automática.
+
+## Desenvolvimento e verificação
+
+```bash
+python3 tools/build_mod.py
+python3 tools/build_mod.py --check
+python3 tools/validate.py --game "/caminho/Victoria 3/game"
+python3 -m unittest discover -s tests -v
+python3 tools/package_mod.py
+```
+
+Requer Python 3.10+ e somente a biblioteca padrão. Os scripts usam o prefixo
+`sed_`, português brasileiro e fallback inglês. Não sobrescrevem arquivos
+originais nem escrevem em variáveis de terceiros. Testes estáticos não
+substituem a validação no motor do jogo.
+
+## Documentação
+
+- [Entrega, arquitetura implementada e limites da Fase 1](docs/PHASE1.md)
 - [Requisitos originais completos](docs/PROJECT_BRIEF.md)
-- [Pesquisa e limitações técnicas](docs/RESEARCH.md)
-- [Arquitetura proposta](docs/ARCHITECTURE.md)
+- [Pesquisa técnica](docs/RESEARCH.md)
+- [Arquitetura por fases](docs/ARCHITECTURE.md)
 - [Compatibilidade](docs/COMPATIBILITY.md)
+- [Métricas e fontes](docs/METRICS.md)
+- [Auditoria local de mods e saves](docs/LOCAL_AUDIT.md)
+- [Relatório estruturado da auditoria](docs/ENVIRONMENT_AUDIT.json)
+- [Inventário inicial de fontes](docs/SOURCE_INVENTORY.json)
 - [Contexto para continuidade](docs/AI_CONTEXT.md)
 - [Registro de fases](docs/PHASE_LOG.md)
-- [Procedimento de testes de campanha](docs/MANUAL_RUNTIME_TEST.md)
-- [Inventário de evidências locais](docs/SOURCE_INVENTORY.json)
-- [Auditoria local de mods e saves](docs/LOCAL_AUDIT.md)
-- [Métricas, escopos e funções de interface](docs/METRICS.md)
-- [Relatório reproduzível da auditoria](docs/ENVIRONMENT_AUDIT.json)
-
-O desenvolvimento seguirá as fases do documento original. A próxima entrega é
-concluir as verificações pendentes da pesquisa; depois, implementar apenas o
-diagnóstico econômico, sem ações automáticas.
+- [Testes de campanha e da interface](docs/MANUAL_RUNTIME_TEST.md)
+- [Resultado do teste de inicialização na engine](docs/RUNTIME_SMOKE.md)
 
 A [pesquisa anterior na nuvem](docs/RESEARCH_CLOUD.md) e as
-[instruções de continuidade local](docs/LOCAL_CODEX.md) também foram preservadas.
-
-A auditoria local encontrou definições de produção do ARoAI diferentes do jogo
-1.15 e requisitos de construção introduzidos por outros mods. O save Haiti é
-binário: opções ativas ainda exigem leitura estruturada ou conferência no jogo.
-Os nove testes da ferramenta de pesquisa passaram. Há também 26 testes de leis
-aprovados na referência, mas seu validador completo aponta 178 erros no módulo
-de pesquisa tecnológica; isso não constitui validação do Director.
+[instruções de continuidade local](docs/LOCAL_CODEX.md) foram preservadas.
+As funções de construção e PMs do Economy Advisor e dos demais mods continuam
+sob responsabilidade deles; a versão atual do Director apenas lê indicadores.

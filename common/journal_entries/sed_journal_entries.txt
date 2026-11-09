@@ -1,0 +1,21 @@
+﻿je_sed_diagnostics = {
+ icon = "gfx/interface/icons/generic_icons/gdp.dds"
+ group = je_group_internal_affairs
+ activation_description = { custom_tooltip = sed_activation_tt }
+ widget = {
+  gui = "gui/journal_entry_widgets/sed_diagnostics.gui"
+  name = "sed_diagnostics_widget"
+  container = "custom_widget_container_3"
+ }
+ is_shown_when_inactive = { is_player = yes has_variable = sed_enabled }
+ possible = { is_player = yes has_variable = sed_enabled }
+ disable_evaluation = { NOT = { has_variable = sed_enabled } }
+ can_deactivate = yes
+ should_be_pinned_by_default_uninvolved_or_context = yes
+ outcome = {
+  flags = { hidden invalid_outcome }
+  conclusion_desc = "sed_disabled_desc"
+  trigger = { NOT = { has_variable = sed_enabled } }
+ }
+ # Recurring reads belong ONLY to the country dispatcher, never to a second JE pulse.
+}

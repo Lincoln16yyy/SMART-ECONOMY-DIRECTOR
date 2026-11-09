@@ -86,3 +86,39 @@ idêntico byte a byte. Sintaxe Python, JSON, links locais, briefing original e
 Não testado: opções efetivas por país, resolução de merge no jogo, primeira
 construção/fila privada, bindings do Director, desempenho e campanhas. Fase 0
 continua aberta; nenhuma Journal Entry ou ação econômica foi implementada.
+
+## 2026-11-08 — Construção autorizada: diagnóstico 0.1.0
+
+O jogador pediu explicitamente começar a construção do mod. A entrega ficou
+restrita à Fase 1 de diagnóstico; as pendências da pesquisa sobre automação
+foram mantidas como limites para fases posteriores.
+
+Objetivo e riscos foram apresentados antes da implementação. Foram criados:
+registro de métricas, gerador, cinco arquivos de scripts próprios, widget,
+duas localizações, metadados e descritores, validador, empacotador e testes.
+O workflow de GitHub Actions verifica a geração, valida e testa, e produz ZIP
+como artefato, sem precisar dos arquivos proprietários do jogo.
+
+Implementado: ativar/desativar, leitura sob solicitação ou mensal por um único
+dispatcher, treze indicadores nacionais, razões com denominadores protegidos,
+contagens de gargalos por estado/edifício e crescimento de PIB com âncoras de
+meses distintos. A limpeza conserva só o schema. Não há ações econômicas,
+ranking de investimentos, modos de execução ou dependência de outro mod.
+
+Validação: **24 testes passaram** (nove de auditoria e quinze da implementação,
+regras, validador e pacote). A geração atualizada, sintaxe, localização, BOM,
+limites de efeitos, referências e presença do ícone na instalação local foram
+verificados. O ZIP de 11 arquivos foi reproduzido byte a byte. Links da
+documentação, briefing original e whitespace foram conferidos.
+
+Runtime: a engine 1.15.0 reconheceu o mod e chegou ao menu numa execução isolada
+com dados em `/tmp`, sem erros próprios identificados na inicialização limpa.
+Um aviso inicial do marcador de schema foi corrigido. A cópia antiga do Haiti
+não abriu porque exige uma regra do Auto-Diplomacy ausente no teste standalone.
+O teste de nova campanha chegou à seleção da França e transição de início;
+renderização em 1–2 FPS impediu concluir a interação com o diário.
+Detalhes: RUNTIME_SMOKE.md.
+
+Status: implementação inicial empacotada para testes; validação funcional da
+Fase 1 permanece aberta. Pendentes: decisão/diário na campanha, comparação de
+indicadores, agenda, limpeza na engine, salvar/recarregar e ecossistema completo.

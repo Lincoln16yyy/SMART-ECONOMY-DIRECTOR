@@ -1,0 +1,25 @@
+name: Validate diagnostics mod
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  static-and-behavior:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python3 tools/build_mod.py --check
+      - run: python3 tools/validate.py
+      - run: python3 -m unittest discover -s tests -v
+      - run: python3 tools/package_mod.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: smart-economy-director-0.1.0
+          path: dist/smart-economy-director-0.1.0.zip

@@ -1,8 +1,9 @@
 # Compatibilidade — inventário inicial
 
 Data: 2026-11-08. Habilitado significa listado em `content_load.json`, não
-automação comprovadamente ativa em campanha. Nenhuma combinação foi testada
-com o Director, que ainda não tem código executável.
+automação comprovadamente ativa em campanha. O Director 0.1.0 agora tem código
+de diagnóstico, mas nenhuma combinação foi testada em campanha. Sua validação
+estática rejeita ações econômicas e escrita em variáveis de terceiros.
 
 | Mod | Evidência local / responsabilidade | Conflito e coexistência proposta |
 | --- | --- | --- |

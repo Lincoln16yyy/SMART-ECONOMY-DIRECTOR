@@ -1,0 +1,16 @@
+{
+  "name": "Smart Economy Director",
+  "id": "sed.smart_economy_director",
+  "version": "0.1.0",
+  "supported_game_version": "1.15.*",
+  "short_description": "National economic diagnostics. No economic actions in this version.",
+  "tags": [
+    "Economy",
+    "Utilities",
+    "UI"
+  ],
+  "relationships": [],
+  "game_custom_data": {
+    "multiplayer_synchronized": true
+  }
+}

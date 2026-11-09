@@ -1,0 +1,6 @@
+﻿# Additive dispatcher; enabling is always an explicit player decision.
+on_monthly_pulse_country = { on_actions = { sed_monthly_dispatcher } }
+sed_monthly_dispatcher = {
+ trigger = { is_player = yes has_variable = sed_enabled }
+ effect = { sed_monthly_update = yes }
+}

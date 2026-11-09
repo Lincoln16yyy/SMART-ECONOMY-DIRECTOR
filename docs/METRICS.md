@@ -1,6 +1,8 @@
 # Métricas: fonte, escopo e apresentação
 
-Pesquisa estática de 2026-11-08. **Nenhum binding novo foi testado no Director.**
+Pesquisa estática de 2026-11-08. A versão 0.1.0 implementa o núcleo de leituras
+em `data/metrics.json` e derivações/contagens descritas em PHASE1.md.
+**Nenhum binding novo foi confirmado numa campanha do Director.**
 Uma função na GUI não comprova que seu valor possa ser lido por um scripted
 effect. Uma primitiva usada por outro mod não prova que o motor a tenha aceitado.
 

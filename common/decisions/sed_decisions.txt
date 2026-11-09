@@ -1,0 +1,12 @@
+﻿sed_enable = {
+ is_shown = { is_player = yes NOT = { has_variable = sed_enabled } }
+ possible = { is_player = yes NOT = { has_variable = sed_enabled } }
+ when_taken = { hidden_effect = { sed_enable_country = yes } }
+ ai_chance = { value = 0 }
+}
+sed_disable_decision = {
+ is_shown = { is_player = yes has_variable = sed_enabled }
+ possible = { is_player = yes has_variable = sed_enabled }
+ when_taken = { sed_disable_country = yes }
+ ai_chance = { value = 0 }
+}

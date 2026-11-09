@@ -4,6 +4,11 @@ Data: 2026-11-08. Resultado: pesquisa estática inicial, com lacunas explícitas
 Este documento apresenta o diagnóstico e a arquitetura antes da implementação.
 Não certifica compatibilidade nem funcionamento dentro de uma campanha.
 
+Atualização: após esse diagnóstico, o jogador solicitou começar a construção
+do mod. Foi implementado o diagnóstico 0.1.0 descrito em [PHASE1.md](PHASE1.md),
+sem ações econômicas. As pendências abaixo continuam válidas para planejar
+e executar ações; não foram declaradas resolvidas por começar a implementação.
+
 ## Fontes e ambiente encontrados
 
 - Referência: https://github.com/Lincoln16yyy/Smart-Government-Victoria-3-1.15
@@ -134,8 +139,9 @@ do save binário; a cobertura da fila privada e de primeira construção requer
 teste no motor; faltam fontes diretas de script para algumas métricas, além de
 medição de desempenho. As leituras e bindings do núcleo de diagnóstico foram
 identificados em fontes, mas ainda não comparados em campanha. Não tratar
-essas lacunas como dados iguais a zero. A Fase 1 só começa após fechar o
-diagnóstico técnico necessário e apresentar suas conclusões.
+essas lacunas como dados iguais a zero. A implementação do diagnóstico começou
+por nova instrução explícita do jogador, usando apenas o núcleo de leituras
+identificado. As demais métricas continuam indisponíveis ou em pesquisa.
 
 ## Pesquisa anterior preservada
 

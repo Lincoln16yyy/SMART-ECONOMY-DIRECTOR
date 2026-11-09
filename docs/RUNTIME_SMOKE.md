@@ -1,0 +1,63 @@
+# Inicialização na engine — 0.1.0
+
+Data: 2026-11-08. Executável local: Victoria 3 1.15.0,
+build `6338547985dbc271523e149f362a6fd93dc62975`.
+
+## Isolamento do teste
+
+O jogo foi iniciado em tela virtual Xvfb, pelo Wine, com `-debug_mode` e
+`-userdir` apontando para dados temporários em `/tmp`. Essa opção foi confirmada
+pelos arquivos e logs criados no destino temporário. O `content_load.json`
+temporário habilitou apenas o Director diretamente do checkout.
+
+Nenhum mod foi instalado na pasta habitual e nenhum save original ou load order
+habitual foi alterado. Uma cópia do Haiti e uma cópia de cache gráfico foram
+usadas somente em `/tmp`. Não foram publicadas no repositório.
+
+## Resultados observados
+
+1. A primeira tentativa parou em erros do compilador de shaders do Wine, antes
+   de chegar à leitura completa dos scripts. Foi usada a DLL de compilação
+   já fornecida pelo jogo, por override de processo `d3dcompiler_47=n`.
+   Não foi baixado ou instalado um compilador diferente.
+2. Com o compilador nativo e cache gráfico temporário, a engine chegou ao
+   menu principal. O log reconheceu `Smart Economy Director` com ID
+   `sed.smart_economy_director` e correspondência com Victoria 3 1.15.0.
+3. A leitura inicial apontou um aviso de `sed_schema_version` definido sem
+   leitura. O enable passou a consultar a existência do marcador antes de
+   criá-lo. A correção foi regenerada, testada e verificada numa inicialização
+   limpa; o aviso não voltou nessa inicialização.
+4. Na inicialização limpa, não foram encontrados erros de scripts,
+   localização ou GUI atribuídos aos arquivos do Director no `error.log`.
+   Existem erros do conteúdo base, incluindo localização de tooltips de bens,
+   monumentos, escape de texto em português e conquistas. Eles não foram
+   removidos ou atribuídos ao Director.
+5. A cópia `sed_haiti_test.v3` não carregou com apenas o Director: a engine
+   recusou a regra `zw_rule_adnasm_advanced_subject_management_on`, gravada
+   pelo ecossistema anterior e ausente nesse conjunto de teste. Isso exige
+   repetir com as dependências originais; não comprova falha ou compatibilidade
+   do Director com aquele save.
+6. Foi aberta a seleção de objetivo Sandbox e selecionada a França em uma
+   campanha nova. O início avançou para a transição de mapa. A tela virtual
+   apresentou aproximadamente 1–2 FPS e não permitiu concluir de forma
+   confiável a abertura da Journal Entry. O teste foi encerrado pelo processo
+   de teste, preservando os dados do usuário.
+
+Os registros locais dessa execução ficam em
+`/tmp/sed-runtime-ds73tnj_/logs`. Esses arquivos temporários não são necessários
+para instalar o mod e podem desaparecer ao reiniciar a máquina.
+
+## Limite da evidência
+
+**Confirmado:** descoberta do mod, correspondência de versão, inicialização
+até o menu e ausência de erros próprios de carregamento identificados na
+execução limpa. Os 24 testes automatizados e a validação estática também passam.
+
+**Não confirmado:** ativação por decisão numa campanha, renderização do widget,
+correspondência dos números com as telas, atualização mensal, limpeza observada
+na engine, salvar/recarregar e coexistência com os demais mods. O interpretador
+dos testes cobre as regras dos scripts, mas não substitui essas interações.
+
+A versão 0.1.0 deve ser apresentada como implementação inicial para testes,
+sem declarar encerrada a validação funcional da Fase 1. Próximo roteiro:
+[MANUAL_RUNTIME_TEST.md](MANUAL_RUNTIME_TEST.md).

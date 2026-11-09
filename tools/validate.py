@@ -1,0 +1,156 @@
+"""Validate generated files, references and the diagnostics-only action boundary."""
+
+import argparse
+import json
+import os
+from pathlib import Path
+import re
+
+try:
+    from .build_mod import ROOT, outputs, runtime_variables
+    from .pdx_script import parse, walk, child
+except ImportError:
+    from build_mod import ROOT, outputs, runtime_variables
+    from pdx_script import parse, walk, child
+
+
+def validate(root=ROOT, game=None):
+    errors = []
+    trees = {}
+    expected = outputs()
+    for name, data in expected.items():
+        path = root / name
+        if not path.is_file():
+            errors.append('Missing file: ' + name)
+        elif path.read_bytes() != data:
+            errors.append('Generated file differs: ' + name)
+    for folder, pattern in [('common', '*.txt'), ('gui', '*.gui')]:
+        for path in (root / folder).rglob(pattern):
+            relative = path.relative_to(root).as_posix()
+            if relative not in expected:
+                errors.append('Unexpected game file: ' + relative)
+            if not path.read_bytes().startswith(b'\xef\xbb\xbf'):
+                errors.append('Missing UTF-8 BOM: ' + relative)
+            try:
+                trees[relative] = parse(path.read_text(encoding='utf-8-sig'))
+            except ValueError as error:
+                errors.append(relative + ': ' + str(error))
+    custom = {}
+    for name, tree in trees.items():
+        if not name.startswith('common/'):
+            continue
+        for entry in tree:
+            if entry.key == 'on_monthly_pulse_country' and '/on_actions/' in name:
+                continue
+            if not entry.key.startswith(('sed_', 'je_sed_')):
+                errors.append('Foreign top-level ID: ' + entry.key)
+            if entry.key in custom:
+                errors.append('Duplicate custom definition: ' + entry.key)
+            custom[entry.key] = entry.value
+    allowed_effects = {'if', 'else_if', 'else', 'limit', 'set_variable', 'remove_variable',
+                       'change_variable', 'root', 'every_scope_state', 'every_scope_building',
+                       'add_journal_entry'}
+
+    def check_effects(entries):
+        for entry in entries:
+            if entry.key.startswith('sed_'):
+                if entry.key not in custom:
+                    errors.append('Undefined effect: ' + entry.key)
+            elif entry.key not in allowed_effects:
+                errors.append('Unexpected effect in diagnostics: ' + entry.key)
+            if entry.key == 'remove_variable':
+                if not str(entry.value).startswith('sed_'):
+                    errors.append('Foreign variable removed: ' + str(entry.value))
+            elif entry.key in ('set_variable', 'change_variable'):
+                if not child(entry.value, 'name').startswith('sed_'):
+                    errors.append('Foreign variable written')
+            elif entry.key in ('if', 'else_if', 'else', 'root', 'every_scope_state', 'every_scope_building'):
+                check_effects([e for e in entry.value if e.key != 'limit'])
+    for name, tree in trees.items():
+        if '/scripted_effects/' in name:
+            for entry in tree:
+                check_effects(entry.value)
+        for entry in walk(tree):
+            if entry.key == 'effect' and isinstance(entry.value, list):
+                check_effects(entry.value)
+            if entry.key.startswith('sed_') and entry.value == 'yes' and entry.key not in custom:
+                errors.append('Undefined scripted call: ' + entry.key)
+    all_text = '\n'.join(p.read_text(encoding='utf-8-sig') for p in (root / 'common').rglob('*.txt'))
+    for mutation in ('start_building_construction', 'activate_production_method', 'start_enactment',
+                     'add_treasury', 'set_tax_level', 'declare_war', 'add_modifier'):
+        if re.search(r'\b' + mutation + r'\s*=', all_text):
+            errors.append('Economic/political mutation is not allowed in Phase 1: ' + mutation)
+    cleaned = {entry.value for entry in walk(custom.get('sed_disable_country', []))
+               if entry.key == 'remove_variable'}
+    assigned = {child(entry.value, 'name') for tree in trees.values() for entry in walk(tree)
+                if entry.key == 'set_variable'}
+    if assigned - cleaned != {'sed_schema_version'}:
+        errors.append('Cleanup must retain only the schema marker: ' + str(sorted(assigned - cleaned)))
+    if set(runtime_variables()) != cleaned:
+        errors.append('Runtime variable registry differs from cleanup')
+    keys = {}
+    for language in ('braz_por', 'english'):
+        path = root / f'localization/{language}/sed_l_{language}.yml'
+        if not path.exists():
+            continue
+        if not path.read_bytes().startswith(b'\xef\xbb\xbf'):
+            errors.append('Missing localization BOM: ' + language)
+        text = path.read_text(encoding='utf-8-sig')
+        if not text.startswith('l_' + language + ':'):
+            errors.append('Wrong localization header: ' + language)
+        found = re.findall(r'^ (\w+):0 "', text, re.M)
+        if len(found) != len(set(found)):
+            errors.append('Duplicate localization key: ' + language)
+        keys[language] = set(found)
+        for variable in re.findall(r"Var\('(sed_\w+)'\)", text):
+            if variable not in assigned:
+                errors.append('Uninitialized displayed variable: ' + variable)
+    if keys.get('braz_por') != keys.get('english'):
+        errors.append('Localization key sets differ')
+    gui = root / 'gui/journal_entry_widgets/sed_diagnostics.gui'
+    if gui.exists():
+        text = gui.read_text(encoding='utf-8-sig')
+        for key in re.findall(r'(?:text|tooltip)\s*=\s*"(sed_\w+)"', text):
+            if key not in keys.get('english', set()):
+                errors.append('Missing GUI localization: ' + key)
+        for name in re.findall(r"GetScriptedGui\('([^']+)'\)", text):
+            if name not in custom:
+                errors.append('Missing SGUI: ' + name)
+        if 'HasVariable(' in text:
+            errors.append('HasVariable is not a valid GUI data function')
+        for entry in walk(trees.get('gui/journal_entry_widgets/sed_diagnostics.gui', [])):
+            if entry.key == 'widget' and any(e.key == 'autoresize' for e in entry.value):
+                errors.append('autoresize is only allowed on textboxes')
+    journal = custom.get('je_sed_diagnostics', [])
+    if any(e.key == 'on_monthly_pulse' for e in journal):
+        errors.append('Duplicate update owner: Journal Entry must not refresh monthly')
+    for key in ('je_sed_diagnostics', 'je_sed_diagnostics_reason', 'sed_enable', 'sed_enable_desc',
+                'sed_disable_decision', 'sed_disable_decision_desc', 'sed_activation_tt', 'sed_disabled_desc'):
+        if key not in keys.get('english', set()):
+            errors.append('Missing game localization: ' + key)
+    if game:
+        game = Path(game)
+        if not (game / 'common').is_dir():
+            errors.append('Invalid game directory: ' + str(game))
+        if not (game / 'gfx/interface/icons/generic_icons/gdp.dds').is_file():
+            errors.append('Missing GDP icon in game installation')
+        for path in (root / 'common').rglob('*.txt'):
+            if (game / path.relative_to(root)).exists():
+                errors.append('Overrides vanilla file: ' + str(path.relative_to(root)))
+    return errors
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--game', type=Path, default=os.environ.get('VICTORIA3_GAME'))
+    args = parser.parse_args()
+    errors = validate(game=args.game)
+    if errors:
+        raise SystemExit('\n'.join(errors))
+    print('Static validation passed. Engine loading and in-game actions still require runtime tests.')
+    if not args.game:
+        print('Game asset checks skipped: pass --game or VICTORIA3_GAME.')
+
+
+if __name__ == '__main__':
+    main()

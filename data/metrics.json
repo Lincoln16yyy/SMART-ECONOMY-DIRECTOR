@@ -1,0 +1,15 @@
+[
+  {"id":"balance","expression":"net_total_income","unit":"money_week","pt":"Saldo semanal","en":"Weekly balance","source":"Economy Advisor/advisor_economy_health_effects.txt"},
+  {"id":"operating_balance","expression":"net_fixed_income","unit":"money_week","pt":"Saldo sem itens temporários","en":"Balance without temporary items","source":"Economy Advisor/advisor_core_values.txt"},
+  {"id":"fixed_expenses","expression":"fixed_expenses","unit":"money_week","pt":"Despesas fixas semanais","en":"Weekly fixed expenses","source":"Economy Advisor/advisor_core_values.txt"},
+  {"id":"gold","expression":"gold_reserves","unit":"money","pt":"Reservas de ouro","en":"Gold reserves","source":"vanilla/common/script_values/war_support_values.txt"},
+  {"id":"debt","expression":"principal","unit":"money","pt":"Dívida","en":"Debt","source":"Economy Advisor/advisor_economy_health_effects.txt"},
+  {"id":"credit","expression":"credit","unit":"money","pt":"Limite de crédito","en":"Credit limit","source":"Economy Advisor/advisor_economy_health_effects.txt"},
+  {"id":"gdp","expression":"gdp","unit":"money","pt":"PIB anualizado","en":"Annualized GDP","source":"vanilla/common/script_values/ip5_je_values.txt"},
+  {"id":"population","expression":"total_population","unit":"count","pt":"População total","en":"Total population","source":"vanilla/common/script_values/ip5_je_values.txt"},
+  {"id":"sol","expression":"average_sol","unit":"decimal","pt":"Padrão de vida médio","en":"Average standard of living","source":"Economy Advisor/advisor_economy_health_effects.txt"},
+  {"id":"literacy","expression":"literacy_rate","unit":"ratio","pt":"Alfabetização","en":"Literacy","source":"vanilla/common/journal_entries/00_sick_man.txt"},
+  {"id":"construction","expression":"modifier:country_construction_add","unit":"decimal","pt":"Capacidade total de construção","en":"Total construction capacity","source":"Economy Advisor/advisor_core_values.txt"},
+  {"id":"public_projects","expression":"num_queued_government_constructions","unit":"count","pt":"Projetos na fila pública","en":"Government queue projects","source":"Economy Advisor/advisor_core_values.txt"},
+  {"id":"private_projects","expression":"num_queued_private_constructions","unit":"count","pt":"Projetos na fila privada","en":"Private queue projects","source":"Economy Advisor/advisor_core_values.txt"}
+]
