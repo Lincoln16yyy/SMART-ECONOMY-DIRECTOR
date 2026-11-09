@@ -1,6 +1,6 @@
-# Instalação e uso — versão 0.4.1
+# Instalação e uso — versão 0.5.0
 
-Requer Victoria 3 1.15.x. A versão 0.4.1 mantém o diagnóstico e os protótipos
+Requer Victoria 3 1.15.x. A versão 0.5.0 mantém o diagnóstico e os protótipos
 de expansão ferroviária e de capacidade de construção. Acrescenta recomendações
 e botões de aprovação para expandir produtores locais de madeira, ferro,
 carvão, cereais, tecido, ferramentas, mantimentos e roupas quando o mercado
@@ -23,7 +23,7 @@ python3 tools/validate.py --game "/caminho/Victoria 3/game"
 python3 tools/package_mod.py
 ```
 
-O resultado fica em `dist/smart-economy-director-0.4.1.zip`. O pacote contém
+O resultado fica em `dist/smart-economy-director-0.5.0.zip`. O pacote contém
 somente os arquivos carregáveis; não inclui saves, fontes do jogo, pesquisa,
 testes ou outro mod. A geração é determinística e não modifica a instalação.
 
@@ -118,3 +118,10 @@ aquele tipo de expansão naquele estado das recomendações e da automação.
 No topo, **Restaurar recomendações ignoradas** remove todas as escolhas atuais
 e atualiza a análise. Ignorar vale nos três modos e não cancela obras;
 restaurar não aprova obras. Desativar o Director limpa essas preferências.
+
+
+Interface 0.5.0: fonte principal 20, títulos 26 e botões nativos de 52 pixels,
+com fundo/borda. As recomendações vêm primeiro e os indicadores completos
+podem ser abertos com Mostrar indicadores e detalhes. As listas de cartões
+crescem com o conteúdo em vez de usar uma altura de linha fixa. Os critérios
+econômicos, modos e travas de aprovação permanecem iguais.

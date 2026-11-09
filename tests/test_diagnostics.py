@@ -5,7 +5,7 @@ import zipfile
 
 from tools.build_mod import ROOT, ACTION_NAMES, STATE_VARIABLES, SUPPLY_DIAGNOSTICS, SUPPLY_TARGETS, country_variables, outputs, runtime_variables
 from tools.package_mod import package
-from tools.pdx_script import parse, child
+from tools.pdx_script import parse, child, walk
 from tools.validate import validate
 from script_harness import Country, building, construction_sector, railway, state
 
@@ -309,6 +309,53 @@ class DiagnosisTests(unittest.TestCase):
         self.assertEqual(len(c.constructions), 1)
         self.assertIs(c.constructions[0]['state'], alternative)
         self.assertIn('sed_railway_ignored', preferred['variables'])
+
+    def test_details_controls_expand_and_collapse_without_running_economic_actions(self):
+        c = self.country()
+        shown = child(self.definitions['sed_details_visible_sgui'], 'is_shown')
+        show = self.definitions['sed_show_details_sgui']
+        hide = self.definitions['sed_hide_details_sgui']
+        self.assertFalse(c.condition(shown, c.country_scope()))
+        self.assertTrue(c.condition(child(show, 'is_valid'), c.country_scope()))
+        c.execute(child(show, 'effect'), c.country_scope())
+        self.assertTrue(c.condition(shown, c.country_scope()))
+        self.assertFalse(c.condition(child(show, 'is_shown'), c.country_scope()))
+        self.assertTrue(c.condition(child(hide, 'is_valid'), c.country_scope()))
+        c.execute(child(hide, 'effect'), c.country_scope())
+        self.assertFalse(c.condition(shown, c.country_scope()))
+        self.assertEqual(c.constructions, [])
+        c.run('sed_disable_country')
+        self.assertFalse(c.condition(child(show, 'is_shown'), c.country_scope()))
+
+    def test_controls_have_native_button_chrome_and_legible_text(self):
+        tree = parse(outputs()['gui/journal_entry_widgets/sed_diagnostics.gui'].decode('utf-8-sig'))
+        buttons = [entry.value for entry in walk(tree) if entry.key == 'button']
+        self.assertGreaterEqual(len(buttons), 30)
+        for block in buttons:
+            styles = [entry.value for entry in block if entry.key == 'using']
+            self.assertIn('default_button', styles)
+            self.assertIn('fontsize_large', styles)
+            dimensions = [int(entry.key) for entry in child(block, 'size')]
+            self.assertGreaterEqual(dimensions[1], 48)
+            self.assertLessEqual(dimensions[0], 500)
+            self.assertTrue(child(block, 'onclick'))
+        for entry in walk(tree):
+            if entry.key == 'textbox':
+                styles = [value.value for value in entry.value if value.key == 'using']
+                self.assertTrue({'fontsize_large', 'fontsize_xxl'} & set(styles))
+                self.assertEqual(child(entry.value, 'multiline'), 'yes')
+                self.assertEqual(child(entry.value, 'minimumsize'), child(entry.value, 'maximumsize'))
+
+    def test_recommendation_cards_grow_with_content_and_precede_diagnostics(self):
+        text = outputs()['gui/journal_entry_widgets/sed_diagnostics.gui'].decode('utf-8-sig')
+        tree = parse(text)
+        # The former fixed row height clipped enlarged text and status messages.
+        self.assertFalse(any(entry.key in ('fixedgridbox', 'addrow') for entry in walk(tree)))
+        self.assertEqual(sum(entry.key == 'datamodel' for entry in walk(tree)), len(ACTION_NAMES))
+        self.assertLess(text.index('text = "sed_recommendations_title"'),
+                        text.index('text = "sed_metric_operating_balance"'))
+        self.assertEqual(sum(entry.key == 'text' and entry.value == 'sed_supply_no_candidate'
+                             for entry in walk(tree)), len(SUPPLY_TARGETS))
 
     def test_activation_collects_real_supplied_readings(self):
         c = self.country(gdp=12345, total_population=500, average_sol=13.25)
