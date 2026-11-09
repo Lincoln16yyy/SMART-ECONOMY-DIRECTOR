@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.5.3'
+VERSION = '0.5.4'
 SUPPLY_TARGETS = [
     {'good': 'wood', 'building': 'building_logging_camp', 'methods': ['pm_electric_saw_mills', 'pm_saw_mills', 'pm_simple_forestry'], 'label_pt': 'madeira', 'label_en': 'wood', 'building_pt': 'acampamento madeireiro', 'building_en': 'logging camp'},
     {'good': 'iron', 'building': 'building_iron_mine', 'methods': ['pm_atmospheric_engine_pump_building_iron_mine', 'pm_condensing_engine_pump_building_iron_mine', 'pm_diesel_pump_building_iron_mine', 'pm_dynamite_building_iron_mine', 'pm_nitroglycerin_building_iron_mine', 'pm_picks_and_shovels_building_iron_mine'], 'label_pt': 'ferro', 'label_en': 'iron', 'building_pt': 'mina de ferro', 'building_en': 'iron mine'},
@@ -22,7 +22,7 @@ ACTION_NAMES = ('railway', 'construction') + tuple(item['good'] for item in SUPP
 IGNORED_VARIABLES = [f'sed_{name}_ignored' for name in ACTION_NAMES]
 SUPPLY_DIAGNOSTICS = ('producer_states', 'ignored_states', 'pending_states', 'unincorporated_states',
                       'understaffed_states', 'hiring_states', 'input_states',
-                      'method_states', 'permission_states')
+                      'method_states', 'permission_states', 'infrastructure_states')
 STATE_VARIABLES = ['sed_railway_request_pending', 'sed_construction_request_pending'] + [
     f"sed_{item['good']}_request_pending" for item in SUPPLY_TARGETS] + IGNORED_VARIABLES
 EXTRA_VARIABLES = '''sed_last_year sed_last_month sed_month_key sed_in_default
@@ -36,7 +36,7 @@ sed_railway_ignored_states sed_construction_ignored_states
 sed_railway_deficit_states sed_railway_no_railway_states
 sed_railway_not_ready_states sed_railway_blocked_states
 sed_construction_sector_states sed_construction_not_ready_states
-sed_construction_blocked_states
+sed_construction_blocked_states sed_construction_infrastructure_states
 sed_queue_levels_before'''.split() + [
     'sed_supply_action_status',
     'sed_mode_manual', 'sed_mode_assisted', 'sed_mode_automatic',
@@ -88,6 +88,7 @@ sed_refresh_supply_candidates = {''']
             ('input_states', f'b:{building} = {{ building_has_goods_shortage = yes }}'),
             ('method_states', f'b:{building} = {{ NOT = {{ OR = {{ {methods} }} }} }}'),
             ('permission_states', f'NOT = {{ can_construct_building = {building} }}'),
+            ('infrastructure_states', 'infrastructure_delta < 0'),
         ]
         reset = '\n'.join(f' set_variable = {{ name = sed_{good}_{reason} value = 0 }}'
                           for reason in SUPPLY_DIAGNOSTICS)
@@ -275,6 +276,9 @@ def candidate_item(name):
     prefix = 'sed_supply' if supply else f'sed_{name}'
     content = textbox(f'sed_{name}_candidate_title', heading=True, width=468)
     content += textbox(f'sed_{name}_candidate_reason', width=468)
+    if name != 'railway':
+        content += textbox('sed_candidate_infrastructure', width=468)
+        content += textbox('sed_expansion_infrastructure_blocked', f'sed_{name}_infrastructure_blocked_sgui', width=468, state=True)
     content += textbox('sed_approval_ready', f'sed_{name}_ready_sgui', width=468, state=True)
     content += textbox('sed_mode_approval_blocked', f'sed_{name}_switch_assisted_sgui', width=468, state=True)
     content += button('sed_switch_assisted', f'sed_{name}_switch_assisted_sgui', width=468, state=True)
@@ -596,6 +600,7 @@ sed_refresh_construction_candidates = {
  # Same primary-reason cascade as the railway counts. Only states that already
  # have a construction sector enter this denominator.
  set_variable = { name = sed_construction_ignored_states value = 0 }
+ set_variable = { name = sed_construction_infrastructure_states value = 0 }
  set_variable = { name = sed_construction_sector_states value = 0 }
  set_variable = { name = sed_construction_not_ready_states value = 0 }
  set_variable = { name = sed_construction_blocked_states value = 0 }
@@ -639,6 +644,10 @@ sed_refresh_construction_candidates = {
      }
     }
     root = { change_variable = { name = sed_construction_blocked_states add = 1 } }
+   }
+   else_if = {
+    limit = { infrastructure_delta < 0 }
+    root = { change_variable = { name = sed_construction_infrastructure_states add = 1 } }
    }
   }
  }
@@ -784,6 +793,17 @@ sed_mode_{mode}_visible_sgui = {{ scope = country is_shown = {{ has_variable = s
  effect = {{ if = {{ limit = {{ owner = {{ has_variable = sed_mode_assisted }} sed_{good}_approval_valid = yes }} sed_run_{good}_approval = yes }} }}
 }}
 '''
+    infrastructure_types = {'construction': 'building_construction_sector',
+                            **{item['good']: item['building'] for item in SUPPLY_TARGETS}}
+    for name, building in infrastructure_types.items():
+        result += f"""sed_{name}_infrastructure_blocked_sgui = {{
+ scope = state
+ is_shown = {{ owner = {{ is_player = yes has_variable = sed_enabled }}
+  has_building = {building} infrastructure_delta < 0
+  NOT = {{ has_variable = sed_{name}_request_pending }}
+  NOT = {{ has_variable = sed_{name}_ignored }} }}
+}}
+"""
     for name in ACTION_NAMES:
         owner = 'owner = { is_player = yes has_variable = sed_enabled }'
         switch = (owner + f' sed_{name}_candidate_eligible = yes '
@@ -978,6 +998,7 @@ sed_railway_approval_valid = {
 # State scope. A staffed construction sector in a populous incorporated state.
 sed_construction_candidate_eligible = {
  is_incorporated = yes
+ infrastructure_delta >= 0
  NOT = { has_variable = sed_construction_ignored }
  NOT = { has_variable = sed_construction_request_pending }
  has_building = building_construction_sector
@@ -1013,6 +1034,7 @@ def supply_triggers():
         result.append(f'''# State scope: expand an operating local producer only while its market good is scarce.
 sed_{good}_candidate_eligible = {{
  is_incorporated = yes
+ infrastructure_delta >= 0
  NOT = {{ has_variable = sed_{good}_ignored }}
  NOT = {{ has_variable = sed_{good}_request_pending }}
  owner = {{ market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }} }}
@@ -1192,6 +1214,7 @@ def localization(language):
             ('input_states', 'falta de insumos', 'input shortage'),
             ('method_states', 'método ativo sem produção confirmada do bem', 'active method without confirmed output of this good'),
             ('permission_states', 'construção não permitida', 'construction not allowed'),
+            ('infrastructure_states', 'déficit de infraestrutura', 'infrastructure deficit'),
         ]
         pairs[f'sed_{good}_rejection_details'] = tuple(
             '; '.join(label[language_index] + ': ' + v(good + '_' + label[0], '0')
@@ -1216,6 +1239,8 @@ def localization(language):
         'sed_auto_current_paused': ('Agora: a construção está pausada. A execução automática está bloqueada.', 'Now: construction is paused. Automatic execution is blocked.'),
         'sed_auto_current_competing': ('Agora: outro construtor conhecido foi detectado. A execução automática está bloqueada.', 'Now: another known builder was detected. Automatic execution is blocked.'),
         'sed_auto_current_clear': ('Agora: sem trava operacional conhecida. Falta avaliar candidatos.', 'Now: no known operational blocker. Candidates still need evaluation.'),
+        'sed_candidate_infrastructure': ('Saldo atual de infraestrutura: [State.GetInfrastructureBalance|1+=]', 'Current infrastructure balance: [State.GetInfrastructureBalance|1+=]'),
+        'sed_expansion_infrastructure_blocked': ('Infraestrutura em déficit. Resolva o gargalo antes de expandir neste estado.', 'Infrastructure is in deficit. Resolve the bottleneck before expanding in this state.'),
         'sed_approval_ready': ('Aprovação disponível: +1 nível público.', 'Approval available: +1 government level.'),
         'sed_switch_assisted': ('Passar para Assistido', 'Switch to Assisted'),
         'sed_switch_assisted_tt': ('Muda o país para o modo Assistido, sem aprovar obras. A próxima revisão automática não construirá enquanto este modo estiver ativo.', 'Changes the country to Assisted without approving construction. The next automatic review will not build while this mode remains active.'),
@@ -1253,6 +1278,9 @@ def localization(language):
         key = f'sed_{name}_breakdown'
         pairs[key] = (pairs[key][0] + ' Ignorados por você: ' + v(name + '_ignored_states', '0') + '.',
                       pairs[key][1] + ' Ignored by you: ' + v(name + '_ignored_states', '0') + '.')
+        if name == 'construction':
+            pairs[key] = (pairs[key][0] + ' Déficit de infraestrutura: ' + v('construction_infrastructure_states', '0') + '.',
+                          pairs[key][1] + ' Infrastructure deficit: ' + v('construction_infrastructure_states', '0') + '.')
     for metric in METRICS:
         unit = metric['unit']
         fmt = {'money': 'K', 'money_week': 'K', 'count': '0', 'decimal': '1', 'ratio': '%1'}[unit]

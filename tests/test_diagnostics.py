@@ -105,7 +105,7 @@ class DiagnosisTests(unittest.TestCase):
             with self.subTest(action=action):
                 c = self.country(is_game_paused=False, net_total_income=-100,
                                  num_queued_government_constructions=3)
-                target = state(-2, buildings=[factory()])
+                target = state(-2 if action == 'railway' else 0, buildings=[factory()])
                 c.run('sed_run_' + action + '_approval', target)
                 self.assertEqual(len(c.constructions), 1)
 
@@ -186,7 +186,7 @@ class DiagnosisTests(unittest.TestCase):
                     producer['production_methods'] = [item['methods'][0]]
                     return state(buildings=[producer])
 
-                targets = [producer_state() for _ in range(9)]
+                targets = [producer_state() for _ in range(10)]
                 targets[0]['buildings'][0]['level_after_queued_constructions'] = 2
                 # Also fails incorporation; only the preceding queue reason counts.
                 targets[0]['is_incorporated'] = False
@@ -203,9 +203,10 @@ class DiagnosisTests(unittest.TestCase):
                 targets[6]['can_construct_building'] = False
                 targets[8]['variables']['sed_' + good + '_ignored'] = True
                 targets[8]['is_incorporated'] = False
+                targets[9]['infrastructure_delta'] = -2
                 c.states = targets + [state()]  # States without this producer are excluded.
                 c.run('sed_refresh_supply_candidates')
-                self.assertEqual(c.variables['sed_' + good + '_producer_states'], 9)
+                self.assertEqual(c.variables['sed_' + good + '_producer_states'], 10)
                 for reason in SUPPLY_DIAGNOSTICS[1:]:
                     self.assertEqual(c.variables['sed_' + good + '_' + reason], 1, reason)
                 self.assertEqual(c.variable_lists['sed_' + good + '_candidates'], [targets[7]])
@@ -270,15 +271,18 @@ class DiagnosisTests(unittest.TestCase):
                     self.assertFalse(c.condition(child(restore, 'is_shown'), c.country_scope()))
 
     def test_ignored_preferences_are_specific_and_restore_preserves_queued_work(self):
-        c = self.country()
-        target = state(-2, buildings=[railway(), construction_sector()])
+        c = self.country(num_queued_government_constructions=3)
+        wood = building('building_logging_camp')
+        wood['production_methods'] = ['pm_simple_forestry']
+        c.market_goods['wood'] = {'market_goods_has_goods_shortage': True}
+        target = state(0, buildings=[wood, construction_sector()])
         other = state(-3, buildings=[railway(queued_levels=1)])
         other['variables']['sed_railway_request_pending'] = True
         c.states = [target, other]
-        c.run('sed_ignore_railway', target)
-        self.assertFalse(c.condition(self.definitions['sed_railway_candidate_eligible'], target))
-        self.assertTrue(c.condition(self.definitions['sed_construction_candidate_eligible'], target))
-        self.assertNotIn('sed_railway_ignored', other['variables'])
+        c.run('sed_ignore_construction', target)
+        self.assertFalse(c.condition(self.definitions['sed_construction_candidate_eligible'], target))
+        self.assertTrue(c.condition(self.definitions['sed_wood_candidate_eligible'], target))
+        self.assertNotIn('sed_construction_ignored', other['variables'])
         c.run('sed_restore_ignored')
         self.assertIn('sed_railway_request_pending', other['variables'])
         self.assertEqual(other['buildings'][0]['level_after_queued_constructions'], 2)
@@ -613,6 +617,72 @@ class DiagnosisTests(unittest.TestCase):
             errors = validate(root=root)
             self.assertTrue(any('monthly safety marker' in error for error in errors))
 
+    def test_producer_and_sector_infrastructure_guard_revalidates_old_cards(self):
+        for name in ACTION_NAMES[1:]:
+            with self.subTest(action=name):
+                c, target, producer = self.card_fixture(name)
+                c.run('sed_refresh_diagnostics')
+                self.assertIn(target, c.variable_lists[f'sed_{name}_candidates'])
+                target['infrastructure_delta'] = -1
+                gui = self.definitions[f'sed_approve_{name}_sgui']
+                self.assertFalse(c.condition(child(gui, 'is_valid'), target))
+                notice = self.definitions[f'sed_{name}_infrastructure_blocked_sgui']
+                self.assertTrue(c.condition(child(notice, 'is_shown'), target))
+                c.execute(child(gui, 'effect'), target)
+                self.assertEqual(c.constructions, [])
+                c.run('sed_refresh_diagnostics')
+                self.assertNotIn(f'sed_{name}_candidates', c.variable_lists)
+                self.assertEqual(c.variables[f'sed_{name}_infrastructure_states'], 1)
+                target['infrastructure_delta'] = 0
+                self.assertTrue(c.condition(child(gui, 'is_valid'), target))
+                self.assertFalse(c.condition(child(notice, 'is_shown'), target))
+                c.execute(child(gui, 'effect'), target)
+                self.assertEqual(len(c.constructions), 1)
+        # A negative balance still permits the railway action intended to relieve it.
+        c, target, producer = self.card_fixture('railway')
+        c.readings['construction_queue_num_queued_government_levels'] = 0
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.constructions, [{'building': 'building_railway', 'state': target}])
+
+    def test_auto_supply_skips_infrastructure_deficit_without_consuming_month(self):
+        for item in SUPPLY_TARGETS:
+            name = item['good']
+            with self.subTest(action=name):
+                c, target, producer = self.card_fixture(name)
+                c.readings['construction_queue_num_queued_government_levels'] = 0
+                target['infrastructure_delta'] = -2
+                c.run('sed_set_mode_automatic')
+                c.run('sed_auto_apply_monthly')
+                self.assertEqual(c.constructions, [])
+                self.assertEqual(c.variables['sed_auto_action_status'], 2)
+                self.assertNotIn('sed_auto_last_attempt_month', c.variables)
+                healthy = state(0, buildings=[producer.copy()])
+                c.states.append(healthy)
+                c.run('sed_auto_apply_monthly')
+                self.assertEqual(c.constructions, [{'building': item['building'], 'state': healthy}])
+                self.assertNotIn(f'sed_{name}_request_pending', target['variables'])
+
+    def test_construction_infrastructure_rejections_are_disjoint_and_reset(self):
+        c = self.country(num_queued_government_constructions=3)
+        ignored = state(-4, buildings=[construction_sector()])
+        ignored['variables']['sed_construction_ignored'] = True
+        eligible = state(0, buildings=[construction_sector()])
+        c.states = [ignored, eligible,
+                    state(-1, buildings=[construction_sector()]),
+                    state(-2, buildings=[construction_sector(failed_hires=True)]),
+                    state(-3, incorporated=False, buildings=[construction_sector()])]
+        c.run('sed_refresh_construction_candidates')
+        self.assertEqual(c.variables['sed_construction_sector_states'], 5)
+        reasons = ('ignored', 'not_ready', 'blocked', 'infrastructure')
+        for reason in reasons:
+            self.assertEqual(c.variables[f'sed_construction_{reason}_states'], 1, reason)
+        self.assertEqual(c.variable_lists['sed_construction_candidates'], [eligible])
+        c.states = []
+        c.run('sed_refresh_construction_candidates')
+        self.assertEqual(c.variables['sed_construction_infrastructure_states'], 0)
+        self.assertNotIn('sed_construction_candidates', c.variable_lists)
+
     def test_activation_collects_real_supplied_readings(self):
         c = self.country(gdp=12345, total_population=500, average_sol=13.25)
         self.assertEqual(c.variables['sed_gdp'], 12345)
@@ -900,16 +970,16 @@ class DiagnosisTests(unittest.TestCase):
     def test_construction_candidate_requires_staffed_sector_and_free_queue(self):
         c = self.country()
         cases = {
-            'eligible': (state(-2, buildings=[construction_sector()]), True),
-            'pending': (state(-2, buildings=[construction_sector()]), False),
-            'no_sector': (state(-2), False),
-            'unincorporated': (state(-2, incorporated=False,
+            'eligible': (state(0, buildings=[construction_sector()]), True),
+            'pending': (state(0, buildings=[construction_sector()]), False),
+            'no_sector': (state(0), False),
+            'unincorporated': (state(0, incorporated=False,
                                     buildings=[construction_sector()]), False),
-            'understaffed': (state(-2, buildings=[construction_sector(occupancy=0.89)]), False),
-            'failed_hires': (state(-2, buildings=[construction_sector(failed_hires=True)]), False),
-            'goods_shortage': (state(-2, buildings=[construction_sector(shortage=True)]), False),
-            'queued_expansion': (state(-2, buildings=[construction_sector(queued_levels=1)]), False),
-            'cannot_construct': (state(-2, can_construct=False,
+            'understaffed': (state(0, buildings=[construction_sector(occupancy=0.89)]), False),
+            'failed_hires': (state(0, buildings=[construction_sector(failed_hires=True)]), False),
+            'goods_shortage': (state(0, buildings=[construction_sector(shortage=True)]), False),
+            'queued_expansion': (state(0, buildings=[construction_sector(queued_levels=1)]), False),
+            'cannot_construct': (state(0, can_construct=False,
                                        buildings=[construction_sector()]), False),
         }
         for name, (target, expected) in cases.items():
@@ -921,9 +991,9 @@ class DiagnosisTests(unittest.TestCase):
                     expected)
 
     def test_construction_refresh_requires_queue_and_picks_most_populous_state(self):
-        states = [state(-1, population=500, buildings=[construction_sector()]),
-                  state(-1, population=5000, buildings=[construction_sector()]),
-                  state(-1, population=2000, buildings=[construction_sector()])]
+        states = [state(0, population=500, buildings=[construction_sector()]),
+                  state(0, population=5000, buildings=[construction_sector()]),
+                  state(0, population=2000, buildings=[construction_sector()])]
         c = self.country()
         c.states = states
         c.run('sed_refresh_construction_candidates')
@@ -934,10 +1004,10 @@ class DiagnosisTests(unittest.TestCase):
 
     def test_construction_rejection_counts_use_one_primary_reason(self):
         states = [state(0),
-                  state(-1, buildings=[construction_sector(occupancy=0.5)]),
-                  state(-2, incorporated=False, buildings=[construction_sector()]),
-                  state(-3, can_construct=False, buildings=[construction_sector()]),
-                  state(-4, buildings=[construction_sector()])]
+                  state(0, buildings=[construction_sector(occupancy=0.5)]),
+                  state(0, incorporated=False, buildings=[construction_sector()]),
+                  state(0, can_construct=False, buildings=[construction_sector()]),
+                  state(0, buildings=[construction_sector()])]
         c = self.country(num_queued_government_constructions=3)
         c.states = states
         c.run('sed_refresh_construction_candidates')
@@ -952,17 +1022,17 @@ class DiagnosisTests(unittest.TestCase):
 
     def test_construction_rejection_counts_reset_between_readings(self):
         c = self.country(num_queued_government_constructions=3)
-        c.states = [state(-1), state(-2, buildings=[construction_sector(occupancy=0.5)])]
+        c.states = [state(0), state(0, buildings=[construction_sector(occupancy=0.5)])]
         c.run('sed_refresh_construction_candidates')
         self.assertEqual(c.variables['sed_construction_sector_states'], 1)
         self.assertEqual(c.variables['sed_construction_not_ready_states'], 1)
-        c.states = [state(-1)]
+        c.states = [state(0)]
         c.run('sed_refresh_construction_candidates')
         self.assertEqual(c.variables['sed_construction_sector_states'], 0)
         self.assertEqual(c.variables['sed_construction_not_ready_states'], 0)
 
     def test_construction_pending_clears_when_queue_resolves(self):
-        target = state(-2, buildings=[construction_sector(queued_levels=1)])
+        target = state(0, buildings=[construction_sector(queued_levels=1)])
         target['variables']['sed_construction_request_pending'] = True
         c = self.country(num_queued_government_constructions=3)
         c.states = [target]
@@ -976,7 +1046,7 @@ class DiagnosisTests(unittest.TestCase):
 
     def test_construction_approval_revalidates_queue_and_budget_guards(self):
         c = self.country(num_queued_government_constructions=3)
-        target = state(-2, buildings=[construction_sector()])
+        target = state(0, buildings=[construction_sector()])
 
         def valid():
             return c.condition(c.definitions['sed_construction_approval_valid'], target)
@@ -1006,7 +1076,7 @@ class DiagnosisTests(unittest.TestCase):
     def test_blocked_buttons_name_the_first_failing_guard(self):
         for action, factory in [
                 ('railway', lambda: state(-2, buildings=[railway()])),
-                ('construction', lambda: state(-2, buildings=[construction_sector()]))]:
+                ('construction', lambda: state(0, buildings=[construction_sector()]))]:
             with self.subTest(action=action):
                 c = self.country(num_queued_government_constructions=3)
                 target = factory()
@@ -1052,7 +1122,7 @@ class DiagnosisTests(unittest.TestCase):
 
     def test_approved_construction_sector_queues_one_level_and_marks_request(self):
         c = self.country(num_queued_government_constructions=3)
-        target = state(-2, buildings=[construction_sector()])
+        target = state(0, buildings=[construction_sector()])
         c.states = [target]
         c.run('sed_refresh_construction_candidates')
         c.run('sed_run_construction_approval', target)
@@ -1065,7 +1135,7 @@ class DiagnosisTests(unittest.TestCase):
     def test_failed_construction_queue_insertion_is_reported_without_retry(self):
         c = self.country(num_queued_government_constructions=3)
         c.construction_accepted = False
-        target = state(-2, buildings=[construction_sector()])
+        target = state(0, buildings=[construction_sector()])
         c.states = [target]
         c.run('sed_run_construction_approval', target)
         self.assertEqual(len(c.constructions), 1)

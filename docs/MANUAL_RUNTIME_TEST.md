@@ -363,3 +363,13 @@ mensal deve liberar avaliação de outro candidato. Conferir save/reload com a
 marca presente; esse caminho não foi verificado na engine. Inclusão recusada
 também consome o mês; revisão sem candidato não consome. Não presumir uma
 história de tentativas anterior à instalação da 0.5.3.
+
+## Casos pendentes — infraestrutura 0.5.4
+
+Em cópia de save: comparar saldo do cartão com interface nativa; gerar cartão
+de produtor/setor com saldo não negativo, criar déficit antes de aprovar e
+confirmar bloqueio sem inclusão. Atualizar deve remover candidato e contar
+o motivo. Saldo exatamente zero permanece permitido; isso não garante margem
+para o próximo nível. Verificar ferrovia em déficit e seleção automática de
+outro produtor em estado elegível. Estes casos ainda não foram executados
+na engine nesta revisão.

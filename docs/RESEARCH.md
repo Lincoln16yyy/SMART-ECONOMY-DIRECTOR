@@ -243,3 +243,13 @@ projetos têm prédio, estado, investidor, tipo de financiamento e progresso na
 GUI; não foi identificado iterador equivalente em scripted effect neste
 recorte. A prova dentro da engine permanece pendente. A pesquisa não ampliou
 as ações do Director nem alterou opções dos outros mods.
+
+## Infraestrutura de expansões — investigação 0.5.4
+
+Arquivos locais Victoria 3 1.15.0: `common/building_groups/00_building_groups.txt`
+registra consumo por nível em bg_construction (2), bg_mining (2),
+bg_agriculture (1), bg_plantations (1) e bg_light_industry (1.5).
+`common/buildings/13_construction.txt` vincula o setor a bg_construction.
+Esses valores motivam a guarda de déficit atual; não foram transformados em
+previsão de custo efetivo. Mods, modificadores e projetos podem mudar a margem.
+Validação estática e 84 testes sintéticos não comprovam execução na engine.

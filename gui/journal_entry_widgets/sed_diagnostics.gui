@@ -130,6 +130,19 @@ textbox = {
  text = "sed_construction_candidate_reason"
 }
 textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_candidate_infrastructure"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_construction_infrastructure_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_expansion_infrastructure_blocked"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_construction_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -247,6 +260,19 @@ textbox = {
  text = "sed_wood_candidate_reason"
 }
 textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_candidate_infrastructure"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_wood_infrastructure_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_expansion_infrastructure_blocked"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_wood_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -355,6 +381,19 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_iron_candidate_reason"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_candidate_infrastructure"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_iron_infrastructure_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_expansion_infrastructure_blocked"
 }
 textbox = {
  visible = "[GetScriptedGui('sed_iron_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
@@ -467,6 +506,19 @@ textbox = {
  text = "sed_coal_candidate_reason"
 }
 textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_candidate_infrastructure"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_coal_infrastructure_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_expansion_infrastructure_blocked"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_coal_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -575,6 +627,19 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_grain_candidate_reason"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_candidate_infrastructure"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_grain_infrastructure_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_expansion_infrastructure_blocked"
 }
 textbox = {
  visible = "[GetScriptedGui('sed_grain_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
@@ -687,6 +752,19 @@ textbox = {
  text = "sed_fabric_candidate_reason"
 }
 textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_candidate_infrastructure"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_fabric_infrastructure_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_expansion_infrastructure_blocked"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_fabric_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -795,6 +873,19 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_tools_candidate_reason"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_candidate_infrastructure"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_tools_infrastructure_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_expansion_infrastructure_blocked"
 }
 textbox = {
  visible = "[GetScriptedGui('sed_tools_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
@@ -907,6 +998,19 @@ textbox = {
  text = "sed_groceries_candidate_reason"
 }
 textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_candidate_infrastructure"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_groceries_infrastructure_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_expansion_infrastructure_blocked"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_groceries_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -1015,6 +1119,19 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_clothes_candidate_reason"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_candidate_infrastructure"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_clothes_infrastructure_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_expansion_infrastructure_blocked"
 }
 textbox = {
  visible = "[GetScriptedGui('sed_clothes_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"

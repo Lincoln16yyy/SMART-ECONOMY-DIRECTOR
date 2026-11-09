@@ -29,6 +29,7 @@ sed_railway_approval_valid = {
 # State scope. A staffed construction sector in a populous incorporated state.
 sed_construction_candidate_eligible = {
  is_incorporated = yes
+ infrastructure_delta >= 0
  NOT = { has_variable = sed_construction_ignored }
  NOT = { has_variable = sed_construction_request_pending }
  has_building = building_construction_sector
@@ -56,6 +57,7 @@ sed_construction_approval_valid = {
 # State scope: expand an operating local producer only while its market good is scarce.
 sed_wood_candidate_eligible = {
  is_incorporated = yes
+ infrastructure_delta >= 0
  NOT = { has_variable = sed_wood_ignored }
  NOT = { has_variable = sed_wood_request_pending }
  owner = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } }
@@ -88,6 +90,7 @@ sed_wood_approval_valid = {
 # State scope: expand an operating local producer only while its market good is scarce.
 sed_iron_candidate_eligible = {
  is_incorporated = yes
+ infrastructure_delta >= 0
  NOT = { has_variable = sed_iron_ignored }
  NOT = { has_variable = sed_iron_request_pending }
  owner = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
@@ -123,6 +126,7 @@ sed_iron_approval_valid = {
 # State scope: expand an operating local producer only while its market good is scarce.
 sed_coal_candidate_eligible = {
  is_incorporated = yes
+ infrastructure_delta >= 0
  NOT = { has_variable = sed_coal_ignored }
  NOT = { has_variable = sed_coal_request_pending }
  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
@@ -158,6 +162,7 @@ sed_coal_approval_valid = {
 # State scope: expand an operating local producer only while its market good is scarce.
 sed_grain_candidate_eligible = {
  is_incorporated = yes
+ infrastructure_delta >= 0
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_request_pending }
  owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
@@ -190,6 +195,7 @@ sed_grain_approval_valid = {
 # State scope: expand an operating local producer only while its market good is scarce.
 sed_fabric_candidate_eligible = {
  is_incorporated = yes
+ infrastructure_delta >= 0
  NOT = { has_variable = sed_fabric_ignored }
  NOT = { has_variable = sed_fabric_request_pending }
  owner = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
@@ -223,6 +229,7 @@ sed_fabric_approval_valid = {
 # State scope: expand an operating local producer only while its market good is scarce.
 sed_tools_candidate_eligible = {
  is_incorporated = yes
+ infrastructure_delta >= 0
  NOT = { has_variable = sed_tools_ignored }
  NOT = { has_variable = sed_tools_request_pending }
  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
@@ -256,6 +263,7 @@ sed_tools_approval_valid = {
 # State scope: expand an operating local producer only while its market good is scarce.
 sed_groceries_candidate_eligible = {
  is_incorporated = yes
+ infrastructure_delta >= 0
  NOT = { has_variable = sed_groceries_ignored }
  NOT = { has_variable = sed_groceries_request_pending }
  owner = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } }
@@ -292,6 +300,7 @@ sed_groceries_approval_valid = {
 # State scope: expand an operating local producer only while its market good is scarce.
 sed_clothes_candidate_eligible = {
  is_incorporated = yes
+ infrastructure_delta >= 0
  NOT = { has_variable = sed_clothes_ignored }
  NOT = { has_variable = sed_clothes_request_pending }
  owner = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } }
