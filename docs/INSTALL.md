@@ -1,10 +1,11 @@
-# Instalação e uso — versão 0.3.0
+# Instalação e uso — versão 0.3.1
 
-Requer Victoria 3 1.15.x. A versão 0.3.0 mantém o diagnóstico e acrescenta dois
-protótipos de ação com aprovação individual: expansão ferroviária e ampliação de
-um setor de construção quando a fila pública está sobrecarregada. Não executa
-ações econômicas automaticamente nem altera métodos de produção. Não depende
-do Steam Workshop.
+Requer Victoria 3 1.15.x. A versão 0.3.1 mantém o diagnóstico e os dois
+protótipos de ação com aprovação individual — expansão ferroviária e ampliação
+de um setor de construção quando a fila pública está sobrecarregada — e
+acrescenta a decomposição dos motivos de rejeição quando não há candidato. Não
+executa ações econômicas automaticamente nem altera métodos de produção. Não
+depende do Steam Workshop.
 
 ## Gerar o pacote
 
@@ -17,7 +18,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O resultado fica em `dist/smart-economy-director-0.3.0.zip`. O pacote contém
+O resultado fica em `dist/smart-economy-director-0.3.1.zip`. O pacote contém
 somente os arquivos carregáveis; não inclui saves, fontes do jogo, pesquisa,
 testes ou outro mod. A geração é determinística e não modifica a instalação.
 
@@ -60,6 +61,11 @@ scripts antigos remanescentes.
    travas em [MANUAL_RUNTIME_TEST.md](MANUAL_RUNTIME_TEST.md).
 7. Use **Desativar** no diário ou a decisão de desativação para limpar leituras
    e histórico. Para voltar, use a decisão de ativação.
+
+Quando não houver candidato, a seção mostra uma linha de motivos com contagens
+por estado: sem ferrovia/setor, edifício não operante ou bloqueio por
+incorporação/permissão. Cada estado entra em um único motivo principal, então as
+contagens somam o total examinado.
 
 O Director é opcional: não se ativa sozinho em campanha nova ou save existente.
 As opções de atualização controlam a frequência das leituras. Aprovar uma

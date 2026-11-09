@@ -1,10 +1,11 @@
 # Smart Economy Director — Victoria 3 1.15
 
-Versão de desenvolvimento **0.3.0 — diagnóstico e duas ações aprovadas**. O mod
-tem diário próprio, leituras manuais ou mensais, recomendações limitadas de
-infraestrutura e capacidade de construção, e botões para aprovar a expansão de
-uma ferrovia elegível ou de um setor de construção operante. Não há execução
-econômica automática.
+Versão de desenvolvimento **0.3.1 — diagnóstico, duas ações aprovadas e motivos de
+rejeição**. O mod tem diário próprio, leituras manuais ou mensais, recomendações
+limitadas de infraestrutura e capacidade de construção, e botões para aprovar a
+expansão de uma ferrovia elegível ou de um setor de construção operante. Quando
+não há candidato, o painel decompõe os estados por motivo principal. Não há
+execução econômica automática.
 
 O painel mostra finanças, PIB, população, padrão de vida, alfabetização,
 capacidade de construção, filas e sinais de infraestrutura, abastecimento e
@@ -13,15 +14,16 @@ O crescimento do PIB requer amostras em meses distintos.
 
 **Estado: a interface, os indicadores, o estado vazio das oportunidades e a
 renderização das seções ferroviária e de capacidade de construção foram
-confirmados em campanha. A execução dos botões ferroviário e do setor de
-construção ainda precisa ser conferida no jogo normal.** Compatibilidade
-ampliada continua pendente. Não é uma versão de automação econômica pronta para
-deixar uma campanha sozinha.
+confirmados em campanha na 0.3.0. A execução dos botões ferroviário e do setor de
+construção ainda precisa ser conferida no jogo normal, e a decomposição de
+motivos da 0.3.1 ainda não foi vista no jogo.** Compatibilidade ampliada
+continua pendente. Não é uma versão de automação econômica pronta para deixar
+uma campanha sozinha.
 
 ## Instalação e uso
 
 Consulte [instalação e geração do ZIP](docs/INSTALL.md). O pacote gerado em
-`dist/smart-economy-director-0.3.0.zip` contém a pasta do mod e o descritor
+`dist/smart-economy-director-0.3.1.zip` contém a pasta do mod e o descritor
 externo. Ative no launcher e use a decisão **Ativar Smart Economy Director**.
 Nenhum outro mod é obrigatório; nenhuma ativação econômica é automática.
 

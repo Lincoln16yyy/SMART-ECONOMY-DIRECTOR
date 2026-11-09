@@ -107,6 +107,10 @@ sed_no_railway_candidate_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled NOT = { has_variable_list = sed_railway_candidates } var:sed_infrastructure_short_states > 0 }
 }
+sed_railway_breakdown_visible_sgui = {
+ scope = country
+ is_shown = { has_variable = sed_enabled NOT = { has_variable_list = sed_railway_candidates } var:sed_infrastructure_short_states > 0 }
+}
 sed_construction_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_construction_candidates }
@@ -116,6 +120,10 @@ sed_no_construction_queue_visible_sgui = {
  is_shown = { has_variable = sed_enabled NOT = { has_variable_list = sed_construction_candidates } num_queued_government_constructions < 3 }
 }
 sed_no_construction_candidate_visible_sgui = {
+ scope = country
+ is_shown = { has_variable = sed_enabled NOT = { has_variable_list = sed_construction_candidates } num_queued_government_constructions >= 3 }
+}
+sed_construction_breakdown_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled NOT = { has_variable_list = sed_construction_candidates } num_queued_government_constructions >= 3 }
 }

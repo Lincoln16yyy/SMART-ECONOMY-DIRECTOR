@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.3.0'
+VERSION = '0.3.1'
 STATE_VARIABLES = ['sed_railway_request_pending', 'sed_construction_request_pending']
 EXTRA_VARIABLES = '''sed_last_year sed_last_month sed_month_key sed_in_default
 sed_gdp_per_capita sed_per_capita_available sed_debt_share sed_debt_share_available
@@ -15,6 +15,10 @@ sed_low_access_states sed_shortage_buildings sed_understaffed_buildings
 sed_hiring_failure_buildings sed_anchor_month sed_anchor_gdp sed_previous_month
 sed_previous_gdp sed_growth sed_growth_months sed_growth_available
 sed_railway_action_status sed_construction_action_status
+sed_railway_deficit_states sed_railway_no_railway_states
+sed_railway_not_ready_states sed_railway_blocked_states
+sed_construction_sector_states sed_construction_not_ready_states
+sed_construction_blocked_states
 sed_queue_levels_before'''.split()
 
 
@@ -97,6 +101,7 @@ def widget():
     body += textbox('sed_recommendations_intro')
     body += textbox('sed_no_infrastructure_opportunity', 'sed_no_infrastructure_opportunity_visible_sgui')
     body += textbox('sed_no_railway_candidate', 'sed_no_railway_candidate_visible_sgui')
+    body += textbox('sed_railway_breakdown', 'sed_railway_breakdown_visible_sgui')
     body += '''fixedgridbox = {
  visible = "[GetScriptedGui('sed_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_railway_candidates')]"
@@ -111,6 +116,7 @@ def widget():
     body += textbox('sed_construction_intro')
     body += textbox('sed_no_construction_queue', 'sed_no_construction_queue_visible_sgui')
     body += textbox('sed_no_construction_candidate', 'sed_no_construction_candidate_visible_sgui')
+    body += textbox('sed_construction_breakdown', 'sed_construction_breakdown_visible_sgui')
     body += '''fixedgridbox = {
  visible = "[GetScriptedGui('sed_construction_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_construction_candidates')]"
@@ -314,6 +320,12 @@ sed_refresh_diagnostics = {
 
 sed_refresh_railway_candidates = {
  clear_variable_list = sed_railway_candidates
+ # Counts use one primary reason per state so the breakdown adds up to the
+ # deficit total instead of counting the same state under several filters.
+ set_variable = { name = sed_railway_deficit_states value = 0 }
+ set_variable = { name = sed_railway_no_railway_states value = 0 }
+ set_variable = { name = sed_railway_not_ready_states value = 0 }
+ set_variable = { name = sed_railway_blocked_states value = 0 }
  every_scope_state = {
   if = {
    limit = {
@@ -324,6 +336,37 @@ sed_refresh_railway_candidates = {
     }
    }
    remove_variable = sed_railway_request_pending
+  }
+  if = {
+   limit = { infrastructure_delta < 0 }
+   root = { change_variable = { name = sed_railway_deficit_states add = 1 } }
+   if = {
+    limit = { NOT = { has_building = building_railway } }
+    root = { change_variable = { name = sed_railway_no_railway_states add = 1 } }
+   }
+   else_if = {
+    limit = {
+     b:building_railway = {
+      OR = {
+       level <= 0
+       occupancy < 0.8
+       has_failed_hires = yes
+       building_has_goods_shortage = yes
+       level_after_queued_constructions > level
+      }
+     }
+    }
+    root = { change_variable = { name = sed_railway_not_ready_states add = 1 } }
+   }
+   else_if = {
+    limit = {
+     OR = {
+      NOT = { is_incorporated = yes }
+      NOT = { can_construct_building = building_railway }
+     }
+    }
+    root = { change_variable = { name = sed_railway_blocked_states add = 1 } }
+   }
   }
  }
  if = {
@@ -361,6 +404,11 @@ sed_run_railway_approval = {
 
 sed_refresh_construction_candidates = {
  clear_variable_list = sed_construction_candidates
+ # Same primary-reason cascade as the railway counts. Only states that already
+ # have a construction sector enter this denominator.
+ set_variable = { name = sed_construction_sector_states value = 0 }
+ set_variable = { name = sed_construction_not_ready_states value = 0 }
+ set_variable = { name = sed_construction_blocked_states value = 0 }
  every_scope_state = {
   if = {
    limit = {
@@ -371,6 +419,33 @@ sed_refresh_construction_candidates = {
     }
    }
    remove_variable = sed_construction_request_pending
+  }
+  if = {
+   limit = { has_building = building_construction_sector }
+   root = { change_variable = { name = sed_construction_sector_states add = 1 } }
+   if = {
+    limit = {
+     b:building_construction_sector = {
+      OR = {
+       level <= 0
+       occupancy < 0.9
+       has_failed_hires = yes
+       building_has_goods_shortage = yes
+       level_after_queued_constructions > level
+      }
+     }
+    }
+    root = { change_variable = { name = sed_construction_not_ready_states add = 1 } }
+   }
+   else_if = {
+    limit = {
+     OR = {
+      NOT = { is_incorporated = yes }
+      NOT = { can_construct_building = building_construction_sector }
+     }
+    }
+    root = { change_variable = { name = sed_construction_blocked_states add = 1 } }
+   }
   }
  }
  if = {
@@ -480,9 +555,11 @@ sed_approve_construction_sgui = {
         'no_recommendations': 'NOT = { has_variable_list = sed_railway_candidates }',
         'no_infrastructure_opportunity': 'NOT = { has_variable_list = sed_railway_candidates } var:sed_infrastructure_short_states = 0',
         'no_railway_candidate': 'NOT = { has_variable_list = sed_railway_candidates } var:sed_infrastructure_short_states > 0',
+        'railway_breakdown': 'NOT = { has_variable_list = sed_railway_candidates } var:sed_infrastructure_short_states > 0',
         'construction_recommendations': 'has_variable_list = sed_construction_candidates',
         'no_construction_queue': 'NOT = { has_variable_list = sed_construction_candidates } num_queued_government_constructions < 3',
         'no_construction_candidate': 'NOT = { has_variable_list = sed_construction_candidates } num_queued_government_constructions >= 3',
+        'construction_breakdown': 'NOT = { has_variable_list = sed_construction_candidates } num_queued_government_constructions >= 3',
         'action_success': 'var:sed_railway_action_status = 1',
         'action_failed': 'var:sed_railway_action_status = 2',
         'construction_action_success': 'var:sed_construction_action_status = 1',
@@ -603,6 +680,7 @@ def localization(language):
         'sed_recommendations_intro': ('Protótipo: até três ferrovias operantes em estados incorporados com infraestrutura negativa. A análise não calcula custo nem retorno; aprove uma ação por vez e confira o orçamento.', 'Prototype: up to three operating railways in incorporated states with negative infrastructure. The analysis does not calculate cost or return; approve one action at a time and review the budget.'),
         'sed_no_infrastructure_opportunity': ('Sem déficit atual de infraestrutura nos estados do país. O Director não recomenda expandir ferrovias agora.', 'No current infrastructure deficit in the country’s states. The Director does not recommend railway expansion now.'),
         'sed_no_railway_candidate': ('Há déficit de infraestrutura, mas nenhuma ferrovia passou pelos filtros de operação, contratação, insumos e fila.', 'Infrastructure deficits exist, but no railway passed the operation, hiring, input, and queue filters.'),
+        'sed_railway_breakdown': (f'Estados com déficit de infraestrutura: {v("railway_deficit_states", "0")} · Sem ferrovia: {v("railway_no_railway_states", "0")} · Ferrovia não operante: {v("railway_not_ready_states", "0")} · Bloqueados por incorporação ou permissão: {v("railway_blocked_states", "0")}. Cada estado é contado por um motivo principal.', f'States with an infrastructure deficit: {v("railway_deficit_states", "0")} · No railway: {v("railway_no_railway_states", "0")} · Railway not operating: {v("railway_not_ready_states", "0")} · Blocked by incorporation or permission: {v("railway_blocked_states", "0")}. Each state is counted under one primary reason.'),
         'sed_railway_candidate_title': ('#bold [State.GetName]#! — saldo de infraestrutura: #v [State.GetInfrastructureBalance|0+=]#!', '#bold [State.GetName]#! — infrastructure balance: #v [State.GetInfrastructureBalance|0+=]#!'),
         'sed_railway_candidate_reason': ('A ferrovia está empregada, sem falta de insumos nem expansão já enfileirada. Um nível público pode aliviar o gargalo; o efeito e o custo futuros não são previstos.', 'The railway is staffed, has no input shortage, and has no queued expansion. One government level may relieve the bottleneck; future impact and cost are not forecast.'),
         'sed_approve_railway': ('Aprovar: enfileirar 1 nível público', 'Approve: queue 1 government level'),
@@ -613,6 +691,7 @@ def localization(language):
         'sed_construction_intro': ('Protótipo: um setor de construção existente e empregado em estado incorporado, quando a fila pública tem pelo menos três projetos. A análise não calcula custo nem retorno; aprove uma ação por vez e confira o orçamento.', 'Prototype: one existing, staffed construction sector in an incorporated state when the government queue has at least three projects. The analysis does not calculate cost or return; approve one action at a time and review the budget.'),
         'sed_no_construction_queue': ('A fila pública tem menos de três projetos. O Director não recomenda ampliar a capacidade de construção agora.', 'The government queue has fewer than three projects. The Director does not recommend expanding construction capacity now.'),
         'sed_no_construction_candidate': ('Há fila pública suficiente, mas nenhum setor de construção passou pelos filtros de operação, contratação, insumos e fila.', 'The government queue is long enough, but no construction sector passed the operation, hiring, input, and queue filters.'),
+        'sed_construction_breakdown': (f'Estados com setor de construção: {v("construction_sector_states", "0")} · Setor não operante: {v("construction_not_ready_states", "0")} · Bloqueados por incorporação ou permissão: {v("construction_blocked_states", "0")}. Cada estado é contado por um motivo principal.', f'States with a construction sector: {v("construction_sector_states", "0")} · Sector not operating: {v("construction_not_ready_states", "0")} · Blocked by incorporation or permission: {v("construction_blocked_states", "0")}. Each state is counted under one primary reason.'),
         'sed_construction_candidate_title': ('#bold [State.GetName]#! — setor de construção', '#bold [State.GetName]#! — construction sector'),
         'sed_construction_candidate_reason': ('O setor está empregado, sem falta de insumos nem expansão já enfileirada. Um nível público pode aumentar a capacidade; o efeito, o custo e o prazo futuros não são previstos.', 'The sector is staffed, has no input shortage, and has no queued expansion. One government level may raise capacity; future impact, cost, and timing are not forecast.'),
         'sed_approve_construction': ('Aprovar: enfileirar 1 nível do setor', 'Approve: queue 1 construction sector level'),

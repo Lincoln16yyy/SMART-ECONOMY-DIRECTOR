@@ -54,6 +54,13 @@ sed_disable_country = {
  remove_variable = sed_growth_available
  remove_variable = sed_railway_action_status
  remove_variable = sed_construction_action_status
+ remove_variable = sed_railway_deficit_states
+ remove_variable = sed_railway_no_railway_states
+ remove_variable = sed_railway_not_ready_states
+ remove_variable = sed_railway_blocked_states
+ remove_variable = sed_construction_sector_states
+ remove_variable = sed_construction_not_ready_states
+ remove_variable = sed_construction_blocked_states
  remove_variable = sed_queue_levels_before
  clear_variable_list = sed_railway_candidates
  clear_variable_list = sed_construction_candidates
@@ -167,6 +174,12 @@ sed_refresh_diagnostics = {
 
 sed_refresh_railway_candidates = {
  clear_variable_list = sed_railway_candidates
+ # Counts use one primary reason per state so the breakdown adds up to the
+ # deficit total instead of counting the same state under several filters.
+ set_variable = { name = sed_railway_deficit_states value = 0 }
+ set_variable = { name = sed_railway_no_railway_states value = 0 }
+ set_variable = { name = sed_railway_not_ready_states value = 0 }
+ set_variable = { name = sed_railway_blocked_states value = 0 }
  every_scope_state = {
   if = {
    limit = {
@@ -177,6 +190,37 @@ sed_refresh_railway_candidates = {
     }
    }
    remove_variable = sed_railway_request_pending
+  }
+  if = {
+   limit = { infrastructure_delta < 0 }
+   root = { change_variable = { name = sed_railway_deficit_states add = 1 } }
+   if = {
+    limit = { NOT = { has_building = building_railway } }
+    root = { change_variable = { name = sed_railway_no_railway_states add = 1 } }
+   }
+   else_if = {
+    limit = {
+     b:building_railway = {
+      OR = {
+       level <= 0
+       occupancy < 0.8
+       has_failed_hires = yes
+       building_has_goods_shortage = yes
+       level_after_queued_constructions > level
+      }
+     }
+    }
+    root = { change_variable = { name = sed_railway_not_ready_states add = 1 } }
+   }
+   else_if = {
+    limit = {
+     OR = {
+      NOT = { is_incorporated = yes }
+      NOT = { can_construct_building = building_railway }
+     }
+    }
+    root = { change_variable = { name = sed_railway_blocked_states add = 1 } }
+   }
   }
  }
  if = {
@@ -214,6 +258,11 @@ sed_run_railway_approval = {
 
 sed_refresh_construction_candidates = {
  clear_variable_list = sed_construction_candidates
+ # Same primary-reason cascade as the railway counts. Only states that already
+ # have a construction sector enter this denominator.
+ set_variable = { name = sed_construction_sector_states value = 0 }
+ set_variable = { name = sed_construction_not_ready_states value = 0 }
+ set_variable = { name = sed_construction_blocked_states value = 0 }
  every_scope_state = {
   if = {
    limit = {
@@ -224,6 +273,33 @@ sed_refresh_construction_candidates = {
     }
    }
    remove_variable = sed_construction_request_pending
+  }
+  if = {
+   limit = { has_building = building_construction_sector }
+   root = { change_variable = { name = sed_construction_sector_states add = 1 } }
+   if = {
+    limit = {
+     b:building_construction_sector = {
+      OR = {
+       level <= 0
+       occupancy < 0.9
+       has_failed_hires = yes
+       building_has_goods_shortage = yes
+       level_after_queued_constructions > level
+      }
+     }
+    }
+    root = { change_variable = { name = sed_construction_not_ready_states add = 1 } }
+   }
+   else_if = {
+    limit = {
+     OR = {
+      NOT = { is_incorporated = yes }
+      NOT = { can_construct_building = building_construction_sector }
+     }
+    }
+    root = { change_variable = { name = sed_construction_blocked_states add = 1 } }
+   }
   }
  }
  if = {

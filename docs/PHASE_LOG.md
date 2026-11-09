@@ -289,3 +289,25 @@ corretamente a ausência de candidatos ferroviários e de capacidade de
 construção. Nenhum botão de aprovação foi exibido ou clicado, portanto a
 execução das duas ações continua sem confirmação na engine. A suíte permanece
 com 40 testes aprovados e os artefatos instalados conferem com a geração.
+
+## Fase 2 — Motivos de rejeição por estado 0.3.1
+
+Quando não há candidato, o painel passa a decompor os estados por um único
+motivo principal, em vez de apenas dizer que nenhum passou pelos filtros. Na
+seção ferroviária, o total de estados com déficit de infraestrutura é dividido
+em sem ferrovia, ferrovia não operante (nível, ocupação, contratação, insumos
+ou expansão já enfileirada) e bloqueados por incorporação ou permissão de
+construção. Na seção de capacidade de construção, o total de estados com
+setor é dividido em setor não operante e bloqueados. As categorias são
+disjuntas e as contagens somam o denominador exibido.
+
+Os contadores são zerados a cada leitura e só aparecem quando há déficit/fila
+suficiente sem candidatos; a nova linha some assim que surge um candidato. A
+decomposição descreve os filtros atuais, não custos ou retornos. O pacote
+0.3.1 foi gerado, validado estaticamente e a suíte passou com 45 testes
+(nove de auditoria e 36 da implementação).
+
+Não testado: renderização da linha de motivos e execução dos dois botões na
+engine, desativação, recarga e coexistência com outros construtores. O
+próximo passo é a conferência breve do jogador em cópia de save, com o jogo
+pausado.

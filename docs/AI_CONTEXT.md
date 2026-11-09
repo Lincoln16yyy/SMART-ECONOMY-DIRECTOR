@@ -4,19 +4,20 @@ O usuário solicitou seguir `Texto colado.txt` e ir publicando no GitHub
 `Lincoln16yyy/SMART-ECONOMY-DIRECTOR`. O conteúdo original está preservado
 integralmente em PROJECT_BRIEF.md. Leia-o antes de trabalhar.
 
-Fase atual: protótipo da Fase 2 em 0.3.0. O jogador confirmou em campanha a
+Fase atual: protótipo da Fase 2 em 0.3.1. O jogador confirmou em campanha a
 interface, os indicadores e a seção vazia de oportunidades. A 0.2.0 acrescentou
 até três recomendações ferroviárias e um botão para aprovar uma por vez; a
 0.2.1 explica se não há déficit de infraestrutura ou se há déficit sem
 candidato elegível. A 0.3.0 acrescenta uma ação de capacidade de construção:
 quando a fila pública tem pelo menos três projetos, mostra no máximo um setor
 de construção operante no estado mais populoso e permite enfileirar um nível
-após revalidação. A execução dos botões e a coexistência com mods ainda não
-foram validadas. Não há automação periódica. A 0.3.0 está instalada localmente;
-a suíte cobre os dois fluxos com 40 testes. Em 2026-11-08, o jogador enviou uma
-captura da 0.3.0 em campanha: a seção de capacidade de construção renderizou e
-mostrou o estado vazio correto com fila pública em 0; nenhum botão de ação foi
-exercitado nessa captura.
+após revalidação. A 0.3.1 acrescenta a decomposição dos motivos de rejeição por
+estado quando não há candidato. A execução dos botões e a coexistência com mods
+ainda não foram validadas. Não há automação periódica. A versão 0.3.1 está
+instalada localmente e a suíte cobre os dois fluxos com 45 testes. Em
+2026-11-08, o jogador enviou uma captura da 0.3.0 em campanha: a seção de
+capacidade de construção renderizou e mostrou o estado vazio correto com fila
+pública em 0; nenhum botão de ação foi exercitado nessa captura.
 
 Atualização histórica: a continuação conseguiu entrar na França com
 Gamescope headless/DXVK e confirmou ativação por decisão, abertura/rolagem do
@@ -83,18 +84,19 @@ econômica. O histórico mantém duas amostras-base mensais de PIB e leitura atu
 Comandos de desenvolvimento permanecem: `python3 tools/build_mod.py --check`,
 `python3 tools/validate.py --game "/caminho/Victoria 3/game"`,
 `python3 -m unittest discover -s tests -v`, `python3 tools/package_mod.py`.
-**40 testes passam** (nove de auditoria e 31 da implementação). O
+**45 testes passam** (nove de auditoria e 36 da implementação). O
 interpretador de testes modela escopos de país/estado/edifício, listas,
 ordenação e construção simulada, cobrindo filtros, ranking, mensagens de estado
-vazio, travas, confirmação/rejeição de fila e limpeza dos dois fluxos. Ele não
-confirma primitivas, datamodel nem GUI na engine.
+vazio, contagens disjuntas de rejeição, travas, confirmação/rejeição de fila e
+limpeza dos dois fluxos. Ele não confirma primitivas, datamodel nem GUI na
+engine.
 
-Próximos passos: pedir ao jogador uma conferência breve dos dois botões, em
-cópia de save, com o jogo pausado. Registrar se os estados aparecem, se as
-travas desabilitam os botões e se a fila pública ganha um único nível em cada
-tipo. Não iniciar testes gráficos ocultos prolongados. Depois verificar
-desativação, recarga e coexistência antes de ampliar os tipos de ação. O
-comportamento real das pendências é: a marca permanece enquanto a expansão está
+Próximos passos: pedir ao jogador uma conferência breve dos dois botões e da
+linha de motivos, em cópia de save, com o jogo pausado. Registrar se os estados
+aparecem, se as travas desabilitam os botões e se a fila pública ganha um único
+nível em cada tipo. Não iniciar testes gráficos ocultos prolongados. Depois
+verificar desativação, recarga e coexistência antes de ampliar os tipos de ação.
+O comportamento real das pendências é: a marca permanece enquanto a expansão está
 enfileirada e some quando ela é concluída ou cancelada.
 
 Houve teste de inicialização isolado em Xvfb/Wine, descrito em RUNTIME_SMOKE.md:

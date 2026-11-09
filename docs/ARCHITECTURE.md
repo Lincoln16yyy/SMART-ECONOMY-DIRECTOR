@@ -4,8 +4,9 @@ A Fase 1 de diagnóstico foi confirmada em campanha na 0.1.0; ver
 [PHASE1.md](PHASE1.md). A 0.2.0 começou a Fase 2 com até três candidatos
 ferroviários e uma aprovação individual que enfileira uma expansão elegível. A
 0.3.0 acrescenta uma segunda ação aprovada para ampliar um setor de construção
-quando a fila pública tem pelo menos três projetos. Ranking nacional completo,
-outros tipos de ação e automação periódica continuam por implementar.
+quando a fila pública tem pelo menos três projetos; a 0.3.1 explica os motivos de
+rejeição quando não há candidato. Ranking nacional completo, outros tipos de ação
+e automação periódica continuam por implementar.
 
 ## Responsabilidade
 
@@ -99,6 +100,16 @@ populoso. A aprovação repete as travas fiscais e de fila, enfileira um único
 nível e confere o mesmo contador público. O recorte não calcula custo, prazo nem
 garante que o novo nível será contratado; a localização no estado mais populoso
 não é uma projeção de retorno.
+
+Na 0.3.1, quando nenhum candidato passa pelos filtros, o painel decompõe os
+estados por motivo principal. Para ferrovias, o total de estados com
+infraestrutura negativa é dividido em sem ferrovia, ferrovia não operante
+(nível, ocupação, insumos, contratação ou expansão já enfileirada) e bloqueados
+por incorporação ou permissão de construção. Para capacidade de construção, o
+total de estados com setor é dividido em setor não operante e bloqueados. As
+categorias são exclusivas: cada estado entra em um único motivo, e as contagens
+somam o denominador exibido. A decomposição descreve filtros atuais, não uma
+previsão de custo ou retorno.
 
 O modo automático futuro só habilitará domínios cujo executor seja o Director.
 Uma aprovação manual não habilita sozinha ações periódicas. Quando outro mod

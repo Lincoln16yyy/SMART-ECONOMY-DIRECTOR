@@ -177,6 +177,37 @@ class DiagnosisTests(unittest.TestCase):
         self.assertEqual(c.variable_lists['sed_railway_candidates'],
                          [states[1], states[3], states[2]])
 
+    def test_railway_rejection_counts_use_one_primary_reason(self):
+        states = [state(1, buildings=[railway()]),
+                  state(-1),
+                  state(-2, buildings=[railway(occupancy=0.5)]),
+                  state(-3, incorporated=False, buildings=[railway()]),
+                  state(-4, can_construct=False, buildings=[railway()]),
+                  state(-5, buildings=[railway()])]
+        c = self.country()
+        c.states = states
+        c.run('sed_refresh_railway_candidates')
+        self.assertEqual(c.variables['sed_railway_deficit_states'], 5)
+        self.assertEqual(c.variables['sed_railway_no_railway_states'], 1)
+        self.assertEqual(c.variables['sed_railway_not_ready_states'], 1)
+        self.assertEqual(c.variables['sed_railway_blocked_states'], 2)
+        self.assertEqual(c.variable_lists['sed_railway_candidates'], [states[-1]])
+        self.assertEqual(
+            c.variables['sed_railway_deficit_states'],
+            c.variables['sed_railway_no_railway_states']
+            + c.variables['sed_railway_not_ready_states']
+            + c.variables['sed_railway_blocked_states'] + 1)
+
+    def test_railway_rejection_counts_reset_between_readings(self):
+        c = self.country()
+        c.states = [state(-1), state(-2, buildings=[railway(occupancy=0.5)])]
+        c.run('sed_refresh_railway_candidates')
+        self.assertEqual(c.variables['sed_railway_deficit_states'], 2)
+        c.states = [state(-1)]
+        c.run('sed_refresh_railway_candidates')
+        self.assertEqual(c.variables['sed_railway_deficit_states'], 1)
+        self.assertEqual(c.variables['sed_railway_not_ready_states'], 0)
+
     def test_pending_request_stays_while_queued_and_clears_when_resolved(self):
         target = state(-2, buildings=[railway(queued_levels=1)])
         target['variables']['sed_railway_request_pending'] = True
@@ -201,17 +232,21 @@ class DiagnosisTests(unittest.TestCase):
 
         no_deficit = 'sed_no_infrastructure_opportunity_visible_sgui'
         filtered = 'sed_no_railway_candidate_visible_sgui'
+        breakdown = 'sed_railway_breakdown_visible_sgui'
         recommendations = 'sed_recommendations_visible_sgui'
         c.variables['sed_infrastructure_short_states'] = 0
         self.assertTrue(shown(no_deficit))
         self.assertFalse(shown(filtered))
+        self.assertFalse(shown(breakdown))
         self.assertFalse(shown(recommendations))
         c.variables['sed_infrastructure_short_states'] = 2
         self.assertFalse(shown(no_deficit))
         self.assertTrue(shown(filtered))
+        self.assertTrue(shown(breakdown))
         c.variable_lists['sed_railway_candidates'] = [state()]
         self.assertFalse(shown(no_deficit))
         self.assertFalse(shown(filtered))
+        self.assertFalse(shown(breakdown))
         self.assertTrue(shown(recommendations))
 
     def test_railway_approval_revalidates_every_guard(self):
@@ -315,6 +350,35 @@ class DiagnosisTests(unittest.TestCase):
         c.run('sed_refresh_construction_candidates')
         self.assertEqual(c.variable_lists['sed_construction_candidates'], [states[1]])
 
+    def test_construction_rejection_counts_use_one_primary_reason(self):
+        states = [state(0),
+                  state(-1, buildings=[construction_sector(occupancy=0.5)]),
+                  state(-2, incorporated=False, buildings=[construction_sector()]),
+                  state(-3, can_construct=False, buildings=[construction_sector()]),
+                  state(-4, buildings=[construction_sector()])]
+        c = self.country(num_queued_government_constructions=3)
+        c.states = states
+        c.run('sed_refresh_construction_candidates')
+        self.assertEqual(c.variables['sed_construction_sector_states'], 4)
+        self.assertEqual(c.variables['sed_construction_not_ready_states'], 1)
+        self.assertEqual(c.variables['sed_construction_blocked_states'], 2)
+        self.assertEqual(c.variable_lists['sed_construction_candidates'], [states[-1]])
+        self.assertEqual(
+            c.variables['sed_construction_sector_states'],
+            c.variables['sed_construction_not_ready_states']
+            + c.variables['sed_construction_blocked_states'] + 1)
+
+    def test_construction_rejection_counts_reset_between_readings(self):
+        c = self.country(num_queued_government_constructions=3)
+        c.states = [state(-1), state(-2, buildings=[construction_sector(occupancy=0.5)])]
+        c.run('sed_refresh_construction_candidates')
+        self.assertEqual(c.variables['sed_construction_sector_states'], 1)
+        self.assertEqual(c.variables['sed_construction_not_ready_states'], 1)
+        c.states = [state(-1)]
+        c.run('sed_refresh_construction_candidates')
+        self.assertEqual(c.variables['sed_construction_sector_states'], 0)
+        self.assertEqual(c.variables['sed_construction_not_ready_states'], 0)
+
     def test_construction_pending_clears_when_queue_resolves(self):
         target = state(-2, buildings=[construction_sector(queued_levels=1)])
         target['variables']['sed_construction_request_pending'] = True
@@ -391,20 +455,24 @@ class DiagnosisTests(unittest.TestCase):
 
         short = 'sed_no_construction_queue_visible_sgui'
         filtered = 'sed_no_construction_candidate_visible_sgui'
+        breakdown = 'sed_construction_breakdown_visible_sgui'
         recommendations = 'sed_construction_recommendations_visible_sgui'
         c.readings['num_queued_government_constructions'] = 2
         self.assertTrue(shown(short))
         self.assertFalse(shown(filtered))
+        self.assertFalse(shown(breakdown))
         self.assertFalse(shown(recommendations))
         c.readings['num_queued_government_constructions'] = 3
         self.assertFalse(shown(short))
         self.assertTrue(shown(filtered))
+        self.assertTrue(shown(breakdown))
         c.variable_lists['sed_construction_candidates'] = [state()]
         self.assertFalse(shown(short))
         self.assertFalse(shown(filtered))
+        self.assertFalse(shown(breakdown))
         self.assertTrue(shown(recommendations))
 
-
+    def test_repository_passes_reference_and_action_boundary_checks(self):
         self.assertEqual(validate(), [])
 
     def test_validator_rejects_foreign_state_and_missing_localization(self):

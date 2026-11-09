@@ -498,6 +498,16 @@ textbox = {
  maximumsize = { 500 -1 }
  text = "sed_no_railway_candidate"
 }
+textbox = {
+ visible = "[GetScriptedGui('sed_railway_breakdown_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_railway_breakdown"
+}
 fixedgridbox = {
  visible = "[GetScriptedGui('sed_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_railway_candidates')]"
@@ -562,6 +572,16 @@ textbox = {
  minimumsize = { 500 -1 }
  maximumsize = { 500 -1 }
  text = "sed_no_construction_candidate"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_construction_breakdown_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_construction_breakdown"
 }
 fixedgridbox = {
  visible = "[GetScriptedGui('sed_construction_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
