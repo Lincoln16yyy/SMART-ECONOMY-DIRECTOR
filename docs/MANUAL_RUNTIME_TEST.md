@@ -216,7 +216,7 @@ sem expansão enfileirada e com um método ativo que produza positivamente o bem
 | Escassez com produtor elegível | Seção identifica bem e estado, mostra prédio e botão explícito |
 | Escassez sem produtor elegível | Mensagem explica por que não há recomendação; nenhum botão oculto ou automático |
 | Método ativo que consome o bem ou não o produz | O estado não entra na lista |
-| Tirar a pausa antes de clicar | Botão desabilitado e linha de motivo aparece |
+| Tirar a pausa antes de clicar | Em Assistido, botão continua disponível quando as demais guardas passam (desde 0.3.6) |
 | Enfileirar na fila privada ou entrar em inadimplência | Botão desabilitado com o motivo correspondente |
 | Manter saldo semanal negativo, com as demais guardas liberadas | Alerta financeiro aparece; botão continua habilitado |
 | Mudar a escassez ou estado do produtor depois da leitura | Cartão fica desatualizado e o clique não enfileira obra |
@@ -253,3 +253,16 @@ A 0.3.6 removeu a exigência de pausa dos botões individuais após a falsa
 mensagem observada na captura do Egito. A fila de construção pausada só bloqueia
 o executor automático. Fazer esses passos em uma cópia de save e parar se houver
 erro de script ou um clique duplicar construção.
+
+
+## Regressões de integridade 0.3.8
+
+- Com filas vazias e dois estados ferroviários elegíveis de déficits distintos,
+  comparar a primeira recomendação com o estado escolhido na revisão automática:
+  ambos devem priorizar o maior déficit.
+- No mesmo estado, manter uma expansão de produtor pendente e concluir/cancelar
+  uma expansão de setor de construção. Atualizar: a marca do produtor deve
+  persistir enquanto seu próprio nível permanece enfileirado.
+- Desativar: todas as marcas estaduais do Director devem ser removidas.
+
+Esses casos passaram no harness; a confirmação na engine permanece pendente.

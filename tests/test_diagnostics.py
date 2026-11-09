@@ -108,6 +108,28 @@ class DiagnosisTests(unittest.TestCase):
                 c.run('sed_run_' + action + '_approval', target)
                 self.assertEqual(len(c.constructions), 1)
 
+    def test_auto_railway_priority_matches_recommendation_order(self):
+        c = self.country(construction_queue_num_queued_government_levels=0)
+        c.run('sed_set_mode_automatic')
+        mild = state(-2, buildings=[railway()])
+        severe = state(-10, buildings=[railway()])
+        c.states = [mild, severe]
+        c.run('sed_refresh_railway_candidates')
+        self.assertIs(c.variable_lists['sed_railway_candidates'][0], severe)
+        c.run('sed_auto_apply_monthly')
+        self.assertIs(c.constructions[0]['state'], severe)
+
+    def test_construction_refresh_preserves_unrelated_supply_pending(self):
+        c = self.country()
+        producer = building('building_logging_camp', queued_levels=1)
+        target = state(buildings=[construction_sector(), producer])
+        target['variables'].update(sed_construction_request_pending=True,
+                                   sed_wood_request_pending=True)
+        c.states = [target]
+        c.run('sed_refresh_construction_candidates')
+        self.assertNotIn('sed_construction_request_pending', target['variables'])
+        self.assertIn('sed_wood_request_pending', target['variables'])
+
     def test_activation_collects_real_supplied_readings(self):
         c = self.country(gdp=12345, total_population=500, average_sol=13.25)
         self.assertEqual(c.variables['sed_gdp'], 12345)
@@ -205,8 +227,7 @@ class DiagnosisTests(unittest.TestCase):
         for name in country_variables():
             c.variables.setdefault(name, 123)
         pending = state()
-        pending['variables']['sed_railway_request_pending'] = 123
-        pending['variables']['sed_construction_request_pending'] = 123
+        pending['variables'].update({name: 123 for name in STATE_VARIABLES})
         c.states = [pending]
         c.variable_lists['sed_railway_candidates'] = [pending]
         c.variable_lists['sed_construction_candidates'] = [pending]

@@ -533,3 +533,23 @@ Resultado: **51 testes passaram**; artefatos gerados atuais, validação estáti
 sem caminho do jogo e `git diff --check` passaram. Não houve mudança nos
 arquivos carregáveis, reinstalação nem teste gráfico. A conferência da revisão
 mensal e dos botões na engine continua pendente.
+
+
+## Correções de execução 0.3.8
+
+Dois testes novos reproduziram defeitos do gerador: a revisão automática usava
+infraestrutura sem inverter o sinal, escolhendo déficit menor em vez da mesma
+prioridade da lista; e uma substituição textual inseria limpeza de todas as
+marcas de oferta também na resolução de um setor de construção. O sinal foi
+alinhado e a substituição limitada ao bloco de desativação. A suíte de limpeza
+agora preenche todas as marcas estaduais de oferta antes de desativar.
+
+Os 53 testes passaram após a correção. Os arquivos carregáveis foram regenerados
+como 0.3.8. A ordem entre tipos de ação permanece a mesma. A execução e a ordem
+real na engine ainda precisam de conferência; nenhuma campanha foi iniciada.
+
+Geração, validação estática contra o jogo local, empacotamento e
+`git diff --check` passaram. Instalação local verificada byte a byte com o
+gerador, sem jogo em execução. Backup: `mod_0.3.7_20261109_100657_248672`.
+O load order foi preservado byte a byte. O envio ao GitHub segue impedido por
+falha de resolução DNS de github.com.

@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.3.7'
+VERSION = '0.3.8'
 SUPPLY_TARGETS = [
     {'good': 'wood', 'building': 'building_logging_camp', 'methods': ['pm_electric_saw_mills', 'pm_saw_mills', 'pm_simple_forestry'], 'label_pt': 'madeira', 'label_en': 'wood', 'building_pt': 'acampamento madeireiro', 'building_en': 'logging camp'},
     {'good': 'iron', 'building': 'building_iron_mine', 'methods': ['pm_atmospheric_engine_pump_building_iron_mine', 'pm_condensing_engine_pump_building_iron_mine', 'pm_diesel_pump_building_iron_mine', 'pm_dynamite_building_iron_mine', 'pm_nitroglycerin_building_iron_mine', 'pm_picks_and_shovels_building_iron_mine'], 'label_pt': 'ferro', 'label_en': 'iron', 'building_pt': 'mina de ferro', 'building_en': 'iron mine'},
@@ -131,7 +131,7 @@ sed_refresh_supply_candidates = {''']
     for index, (name, eligibility) in enumerate(choices):
         start = 'if' if index == 0 else 'else_if'
         order = 'infrastructure_delta' if name == 'railway' else 'state_population'
-        direction = '' if name == 'railway' else ' multiply = -1'
+        direction = ' multiply = -1'
         result.append(f'''  {start} = {{
    limit = {{ any_scope_state = {{ {eligibility} = yes }} }}
    ordered_scope_state = {{
@@ -847,9 +847,12 @@ sed_update_growth = {
     script = script.replace(
         ' clear_variable_list = sed_construction_candidates',
         ' clear_variable_list = sed_construction_candidates\n' + supply_lists)
+    # Supply markers belong to their own queued buildings. Clear them all only
+    # when disabling, never when a construction-sector request resolves.
     script = script.replace(
-        '  remove_variable = sed_construction_request_pending',
-        '  remove_variable = sed_construction_request_pending\n' + supply_state_cleanup)
+        '  remove_variable = sed_construction_request_pending\n }\n # The schema marker',
+        '  remove_variable = sed_construction_request_pending\n' + supply_state_cleanup
+        + '\n }\n # The schema marker', 1)
     script = script.replace(
         '    set_variable = { name = sed_railway_action_status value = 1 }',
         '    set_variable = { name = sed_railway_action_status value = 1 }\n'

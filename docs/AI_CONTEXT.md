@@ -4,7 +4,13 @@ O usuário solicitou seguir `Texto colado.txt` e ir publicando no GitHub
 `Lincoln16yyy/SMART-ECONOMY-DIRECTOR`. O conteúdo original está preservado
 integralmente em PROJECT_BRIEF.md. Leia-o antes de trabalhar.
 
-Fase atual: refinamento da automação opt-in em 0.3.7. Depois que o jogador confirmou que os controles automáticos aparecem (captura do Egito, setembro de 1838), a dúvida restante é se o executor tenta agir e por que não enfileira. O status de revisão agora separa ausência de candidato elegível, inadimplência, filas ocupadas, construção pausada e automação concorrente. A captura mostra fila pública de 46 níveis e fila privada de 2, condições que intencionalmente bloqueiam o executor. Validação estática passou e a 0.3.7 foi instalada com backup da 0.3.6, preservando as 11 entradas do load order. Não iniciar jogo nem teste gráfico longo.
+Fase atual: correções de integridade da execução em 0.3.8. A prioridade
+ferroviária automática agora usa o mesmo sinal da lista de recomendações,
+priorizando o maior déficit de infraestrutura. Resolver uma expansão de setor
+de construção não apaga mais marcas de oferta de outros prédios no estado.
+Desativar continua limpando todas as marcas. Os dois defeitos foram reproduzidos
+por testes antes da correção; a suíte agora tem 53 testes aprovados.
+A 0.3.8 foi instalada com backup da 0.3.7 em `mod_0.3.7_20261109_100657_248672`, preservando o load order byte a byte. Ainda requer conferência na engine; não iniciar teste gráfico longo.
 
 Continuação em 2026-11-09: a suíte foi retomada e os **51 testes passaram**.
 O harness agora modela mercado/bens ausentes, métodos ativos, existência de
