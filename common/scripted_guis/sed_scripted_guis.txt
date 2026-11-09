@@ -68,10 +68,6 @@ sed_set_mode_automatic_sgui = {
  effect = { sed_set_mode_automatic = yes }
 }
 sed_mode_automatic_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_mode_automatic } }
-sed_mode_approval_blocked_sgui = {
- scope = state
- is_shown = { owner = { is_player = yes has_variable = sed_enabled NOT = { has_variable = sed_mode_assisted } } }
-}
 sed_approve_wood_sgui = {
  scope = state
  is_shown = { owner = { is_player = yes has_variable = sed_enabled } }
@@ -119,6 +115,166 @@ sed_approve_clothes_sgui = {
  is_shown = { owner = { is_player = yes has_variable = sed_enabled } }
  is_valid = { owner = { has_variable = sed_mode_assisted } sed_clothes_approval_valid = yes }
  effect = { if = { limit = { owner = { has_variable = sed_mode_assisted } sed_clothes_approval_valid = yes } sed_run_clothes_approval = yes } }
+}
+sed_railway_ready_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } owner = { has_variable = sed_mode_assisted } sed_railway_approval_valid = yes }
+}
+sed_railway_switch_assisted_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } sed_railway_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } sed_railway_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } sed_railway_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } } owner = { sed_set_mode_assisted = yes } } }
+}
+sed_railway_refresh_card_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_railway_candidate_eligible = yes } NOT = { has_variable = sed_railway_request_pending } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_railway_candidate_eligible = yes } NOT = { has_variable = sed_railway_request_pending } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_railway_candidate_eligible = yes } NOT = { has_variable = sed_railway_request_pending } } owner = { sed_refresh_diagnostics = yes } } }
+}
+sed_construction_ready_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } owner = { has_variable = sed_mode_assisted } sed_construction_approval_valid = yes }
+}
+sed_construction_switch_assisted_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } sed_construction_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } sed_construction_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } sed_construction_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } } owner = { sed_set_mode_assisted = yes } } }
+}
+sed_construction_refresh_card_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_construction_candidate_eligible = yes } NOT = { has_variable = sed_construction_request_pending } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_construction_candidate_eligible = yes } NOT = { has_variable = sed_construction_request_pending } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_construction_candidate_eligible = yes } NOT = { has_variable = sed_construction_request_pending } } owner = { sed_refresh_diagnostics = yes } } }
+}
+sed_wood_ready_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } owner = { has_variable = sed_mode_assisted } sed_wood_approval_valid = yes }
+}
+sed_wood_switch_assisted_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } sed_wood_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } sed_wood_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } sed_wood_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } } owner = { sed_set_mode_assisted = yes } } }
+}
+sed_wood_refresh_card_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_wood_candidate_eligible = yes } NOT = { has_variable = sed_wood_request_pending } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_wood_candidate_eligible = yes } NOT = { has_variable = sed_wood_request_pending } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_wood_candidate_eligible = yes } NOT = { has_variable = sed_wood_request_pending } } owner = { sed_refresh_diagnostics = yes } } }
+}
+sed_iron_ready_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } owner = { has_variable = sed_mode_assisted } sed_iron_approval_valid = yes }
+}
+sed_iron_switch_assisted_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } sed_iron_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } sed_iron_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } sed_iron_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } } owner = { sed_set_mode_assisted = yes } } }
+}
+sed_iron_refresh_card_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_iron_candidate_eligible = yes } NOT = { has_variable = sed_iron_request_pending } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_iron_candidate_eligible = yes } NOT = { has_variable = sed_iron_request_pending } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_iron_candidate_eligible = yes } NOT = { has_variable = sed_iron_request_pending } } owner = { sed_refresh_diagnostics = yes } } }
+}
+sed_coal_ready_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } owner = { has_variable = sed_mode_assisted } sed_coal_approval_valid = yes }
+}
+sed_coal_switch_assisted_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } sed_coal_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } sed_coal_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } sed_coal_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } } owner = { sed_set_mode_assisted = yes } } }
+}
+sed_coal_refresh_card_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_coal_candidate_eligible = yes } NOT = { has_variable = sed_coal_request_pending } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_coal_candidate_eligible = yes } NOT = { has_variable = sed_coal_request_pending } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_coal_candidate_eligible = yes } NOT = { has_variable = sed_coal_request_pending } } owner = { sed_refresh_diagnostics = yes } } }
+}
+sed_grain_ready_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } owner = { has_variable = sed_mode_assisted } sed_grain_approval_valid = yes }
+}
+sed_grain_switch_assisted_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } sed_grain_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } sed_grain_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } sed_grain_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } } owner = { sed_set_mode_assisted = yes } } }
+}
+sed_grain_refresh_card_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_grain_candidate_eligible = yes } NOT = { has_variable = sed_grain_request_pending } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_grain_candidate_eligible = yes } NOT = { has_variable = sed_grain_request_pending } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_grain_candidate_eligible = yes } NOT = { has_variable = sed_grain_request_pending } } owner = { sed_refresh_diagnostics = yes } } }
+}
+sed_fabric_ready_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } owner = { has_variable = sed_mode_assisted } sed_fabric_approval_valid = yes }
+}
+sed_fabric_switch_assisted_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } sed_fabric_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } sed_fabric_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } sed_fabric_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } } owner = { sed_set_mode_assisted = yes } } }
+}
+sed_fabric_refresh_card_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_fabric_candidate_eligible = yes } NOT = { has_variable = sed_fabric_request_pending } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_fabric_candidate_eligible = yes } NOT = { has_variable = sed_fabric_request_pending } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_fabric_candidate_eligible = yes } NOT = { has_variable = sed_fabric_request_pending } } owner = { sed_refresh_diagnostics = yes } } }
+}
+sed_tools_ready_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } owner = { has_variable = sed_mode_assisted } sed_tools_approval_valid = yes }
+}
+sed_tools_switch_assisted_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } sed_tools_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } sed_tools_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } sed_tools_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } } owner = { sed_set_mode_assisted = yes } } }
+}
+sed_tools_refresh_card_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_tools_candidate_eligible = yes } NOT = { has_variable = sed_tools_request_pending } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_tools_candidate_eligible = yes } NOT = { has_variable = sed_tools_request_pending } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_tools_candidate_eligible = yes } NOT = { has_variable = sed_tools_request_pending } } owner = { sed_refresh_diagnostics = yes } } }
+}
+sed_groceries_ready_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } owner = { has_variable = sed_mode_assisted } sed_groceries_approval_valid = yes }
+}
+sed_groceries_switch_assisted_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } sed_groceries_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } sed_groceries_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } sed_groceries_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } } owner = { sed_set_mode_assisted = yes } } }
+}
+sed_groceries_refresh_card_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_groceries_candidate_eligible = yes } NOT = { has_variable = sed_groceries_request_pending } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_groceries_candidate_eligible = yes } NOT = { has_variable = sed_groceries_request_pending } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_groceries_candidate_eligible = yes } NOT = { has_variable = sed_groceries_request_pending } } owner = { sed_refresh_diagnostics = yes } } }
+}
+sed_clothes_ready_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } owner = { has_variable = sed_mode_assisted } sed_clothes_approval_valid = yes }
+}
+sed_clothes_switch_assisted_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } sed_clothes_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } sed_clothes_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } sed_clothes_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } } owner = { sed_set_mode_assisted = yes } } }
+}
+sed_clothes_refresh_card_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_clothes_candidate_eligible = yes } NOT = { has_variable = sed_clothes_request_pending } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_clothes_candidate_eligible = yes } NOT = { has_variable = sed_clothes_request_pending } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_clothes_candidate_eligible = yes } NOT = { has_variable = sed_clothes_request_pending } } owner = { sed_refresh_diagnostics = yes } } }
 }
 sed_ignore_railway_sgui = {
  scope = state
@@ -188,23 +344,23 @@ sed_restore_ignored_sgui = {
 }
 sed_railway_blocked_private_sgui = {
  scope = state
- is_shown = { sed_railway_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels > 0 } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_railway_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels > 0 } }
 }
 sed_railway_blocked_default_sgui = {
  scope = state
- is_shown = { sed_railway_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_railway_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
 }
 sed_construction_blocked_queue_sgui = {
  scope = state
- is_shown = { sed_construction_candidate_eligible = yes owner = { num_queued_government_constructions < 3 } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_construction_candidate_eligible = yes owner = { num_queued_government_constructions < 3 } }
 }
 sed_construction_blocked_private_sgui = {
  scope = state
- is_shown = { sed_construction_candidate_eligible = yes owner = { num_queued_government_constructions >= 3 construction_queue_num_queued_private_levels > 0 } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_construction_candidate_eligible = yes owner = { num_queued_government_constructions >= 3 construction_queue_num_queued_private_levels > 0 } }
 }
 sed_construction_blocked_default_sgui = {
  scope = state
- is_shown = { sed_construction_candidate_eligible = yes owner = { num_queued_government_constructions >= 3 construction_queue_num_queued_private_levels = 0 in_default = yes } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_construction_candidate_eligible = yes owner = { num_queued_government_constructions >= 3 construction_queue_num_queued_private_levels = 0 in_default = yes } }
 }
 sed_railway_stale_sgui = {
  scope = state
@@ -232,11 +388,11 @@ sed_construction_finance_caution_sgui = {
 }
 sed_wood_blocked_private_sgui = {
  scope = state
- is_shown = { sed_wood_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels > 0 } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_wood_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels > 0 } }
 }
 sed_wood_blocked_default_sgui = {
  scope = state
- is_shown = { sed_wood_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_wood_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
 }
 sed_wood_stale_sgui = {
  scope = state
@@ -252,11 +408,11 @@ sed_wood_finance_caution_sgui = {
 }
 sed_iron_blocked_private_sgui = {
  scope = state
- is_shown = { sed_iron_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels > 0 } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_iron_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels > 0 } }
 }
 sed_iron_blocked_default_sgui = {
  scope = state
- is_shown = { sed_iron_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_iron_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
 }
 sed_iron_stale_sgui = {
  scope = state
@@ -272,11 +428,11 @@ sed_iron_finance_caution_sgui = {
 }
 sed_coal_blocked_private_sgui = {
  scope = state
- is_shown = { sed_coal_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels > 0 } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_coal_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels > 0 } }
 }
 sed_coal_blocked_default_sgui = {
  scope = state
- is_shown = { sed_coal_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_coal_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
 }
 sed_coal_stale_sgui = {
  scope = state
@@ -292,11 +448,11 @@ sed_coal_finance_caution_sgui = {
 }
 sed_grain_blocked_private_sgui = {
  scope = state
- is_shown = { sed_grain_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels > 0 } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_grain_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels > 0 } }
 }
 sed_grain_blocked_default_sgui = {
  scope = state
- is_shown = { sed_grain_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_grain_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
 }
 sed_grain_stale_sgui = {
  scope = state
@@ -312,11 +468,11 @@ sed_grain_finance_caution_sgui = {
 }
 sed_fabric_blocked_private_sgui = {
  scope = state
- is_shown = { sed_fabric_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels > 0 } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_fabric_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels > 0 } }
 }
 sed_fabric_blocked_default_sgui = {
  scope = state
- is_shown = { sed_fabric_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_fabric_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
 }
 sed_fabric_stale_sgui = {
  scope = state
@@ -332,11 +488,11 @@ sed_fabric_finance_caution_sgui = {
 }
 sed_tools_blocked_private_sgui = {
  scope = state
- is_shown = { sed_tools_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels > 0 } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_tools_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels > 0 } }
 }
 sed_tools_blocked_default_sgui = {
  scope = state
- is_shown = { sed_tools_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_tools_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
 }
 sed_tools_stale_sgui = {
  scope = state
@@ -352,11 +508,11 @@ sed_tools_finance_caution_sgui = {
 }
 sed_groceries_blocked_private_sgui = {
  scope = state
- is_shown = { sed_groceries_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels > 0 } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_groceries_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels > 0 } }
 }
 sed_groceries_blocked_default_sgui = {
  scope = state
- is_shown = { sed_groceries_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_groceries_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
 }
 sed_groceries_stale_sgui = {
  scope = state
@@ -372,11 +528,11 @@ sed_groceries_finance_caution_sgui = {
 }
 sed_clothes_blocked_private_sgui = {
  scope = state
- is_shown = { sed_clothes_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels > 0 } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_clothes_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels > 0 } }
 }
 sed_clothes_blocked_default_sgui = {
  scope = state
- is_shown = { sed_clothes_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_clothes_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
 }
 sed_clothes_stale_sgui = {
  scope = state

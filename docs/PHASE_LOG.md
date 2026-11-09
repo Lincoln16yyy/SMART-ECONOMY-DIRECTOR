@@ -749,3 +749,30 @@ nenhuma sessão gráfica foi iniciada.
 Instalada 0.5.0 sem jogo em execução; backup `mod_0.4.1_20261109_113054_750010`.
 ZIP/arquivos instalados comparados byte a byte ao gerador, 13 outputs.
 Load order preservado byte a byte. Não foi instalado o auxiliar de testes.
+
+
+## Cartões acionáveis e atalho da fila 0.5.1
+
+Acrescentados estado Aprovação disponível nos cartões elegíveis em Assistido,
+controle Passar para Assistido em outros modos e Atualizar recomendações nos
+cartões que perderam elegibilidade. A troca muda somente o modo e não aprova
+obra; atualização só relê e recalcula, com revalidação dentro do efeito.
+Mensagem de fila/default exige agora Assistido, evitando múltiplas orientações
+operacionais quando a aprovação individual está desativada pelo modo. Pending
+e stale continuam separados e não sugerem trocar modo como solução.
+
+Abrir fila de construção no topo usa a chamada nativa identificada em
+`game/gui/states_panel.gui:3809`, sem adicionar escrita em projetos. Fonte 20,
+títulos 26, controles de 52 pixels e altura natural dos cartões preservados.
+Guardas econômicas e critérios de construção não foram relaxados.
+
+73 testes aprovados (70 anteriores + três novos), incluindo dez tipos em
+Manual/Automático, troca sem construir, evento pendente respeitando Assistido,
+prontidão e motivos coerentes com modo/fila/default/pending, atualização stale
+sem construir e callback revalidado após mudança de condições/desativação.
+Atalho verificado estruturalmente contra a chamada vanilla, não executado na
+engine. Geração/validação estática/pacote executados; nenhum jogo foi iniciado
+nem pedido outro teste ao jogador.
+
+Instalada 0.5.1 sem jogo em execução; backup `mod_0.5.0_20261109_114658_276092`.
+Os 13 outputs do ZIP/instalação conferem com o gerador, load order inalterado.
