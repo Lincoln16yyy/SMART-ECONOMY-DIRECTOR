@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.5.2'
+VERSION = '0.5.3'
 SUPPLY_TARGETS = [
     {'good': 'wood', 'building': 'building_logging_camp', 'methods': ['pm_electric_saw_mills', 'pm_saw_mills', 'pm_simple_forestry'], 'label_pt': 'madeira', 'label_en': 'wood', 'building_pt': 'acampamento madeireiro', 'building_en': 'logging camp'},
     {'good': 'iron', 'building': 'building_iron_mine', 'methods': ['pm_atmospheric_engine_pump_building_iron_mine', 'pm_condensing_engine_pump_building_iron_mine', 'pm_diesel_pump_building_iron_mine', 'pm_dynamite_building_iron_mine', 'pm_nitroglycerin_building_iron_mine', 'pm_picks_and_shovels_building_iron_mine'], 'label_pt': 'ferro', 'label_en': 'iron', 'building_pt': 'mina de ferro', 'building_en': 'iron mine'},
@@ -17,6 +17,7 @@ SUPPLY_TARGETS = [
     {'good': 'groceries', 'building': 'building_food_industry', 'methods': ['pm_bakery', 'pm_baking_powder', 'pm_cannery', 'pm_cannery_fish', 'pm_sweeteners', 'pm_vacuum_canning', 'pm_vacuum_canning_principle_3'], 'label_pt': 'mantimentos', 'label_en': 'groceries', 'building_pt': 'indústria alimentícia', 'building_en': 'food industry'},
     {'good': 'clothes', 'building': 'building_textile_mill', 'methods': ['pm_dye_workshops', 'pm_electric_sewing_machines', 'pm_handsewn_clothes', 'pm_sewing_machines'], 'label_pt': 'roupas', 'label_en': 'clothes', 'building_pt': 'fábrica têxtil', 'building_en': 'textile mill'},
 ]
+PERSISTENT_VARIABLES = ['sed_schema_version', 'sed_auto_last_attempt_month']
 ACTION_NAMES = ('railway', 'construction') + tuple(item['good'] for item in SUPPLY_TARGETS)
 IGNORED_VARIABLES = [f'sed_{name}_ignored' for name in ACTION_NAMES]
 SUPPLY_DIAGNOSTICS = ('producer_states', 'ignored_states', 'pending_states', 'unincorporated_states',
@@ -62,6 +63,14 @@ def supply_effects():
  if = {
   limit = { NOT = { OR = { has_variable = sed_mode_manual has_variable = sed_mode_assisted has_variable = sed_mode_automatic } } }
   sed_set_mode_assisted = yes
+ }
+}
+
+# Country scope; the persistent marker is written before an automatic attempt.
+sed_record_auto_attempt = {
+ if = {
+  limit = { has_variable = sed_mode_automatic }
+  set_variable = { name = sed_auto_last_attempt_month value = { value = year multiply = 12 add = month } }
  }
 }
 
@@ -126,6 +135,7 @@ sed_refresh_supply_candidates = {''']
  if = {{
   limit = {{ sed_{good}_approval_valid = yes }}
   owner = {{ set_variable = {{ name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }} }}
+  owner = {{ sed_record_auto_attempt = yes }}
   start_building_construction = {building}
   owner = {{
    if = {{
@@ -182,6 +192,7 @@ sed_refresh_supply_candidates = {''']
   }}''')
     result.append(''' }
  else_if = { limit = { in_default = yes } set_variable = { name = sed_auto_action_status value = 10 } }
+ else_if = { limit = { sed_auto_month_limit_reached = yes } set_variable = { name = sed_auto_action_status value = 16 } }
  else_if = { limit = { OR = { construction_queue_num_queued_government_levels > 0 construction_queue_num_queued_private_levels > 0 } } set_variable = { name = sed_auto_action_status value = 11 } }
  else_if = { limit = { is_construction_paused = yes } set_variable = { name = sed_auto_action_status value = 12 } }
  else_if = { limit = { OR = { has_variable = advisor_auto_construction_enabled has_variable = zw_var_expand_building has_variable = aroai_autobuild } } set_variable = { name = sed_auto_action_status value = 13 } }
@@ -307,10 +318,10 @@ def widget():
         body += textbox(f'sed_mode_{mode}_status', f'sed_mode_{mode}_visible_sgui')
     for state in ('pending', 'idle', 'unrecorded'):
         body += textbox(f'sed_auto_{state}', f'sed_auto_{state}_visible_sgui')
-    for blocker in ('default', 'queue', 'paused', 'competing', 'clear'):
+    for blocker in ('default', 'month_limit', 'queue', 'paused', 'competing', 'clear'):
         body += textbox(f'sed_auto_current_{blocker}', f'sed_auto_current_{blocker}_visible_sgui')
     body += textbox('sed_auto_last_review', 'sed_auto_last_review_visible_sgui')
-    for status in ('success', 'no_action', 'default', 'queue', 'paused', 'competing', 'safety', 'unconfirmed'):
+    for status in ('success', 'no_action', 'default', 'queue', 'paused', 'competing', 'safety', 'unconfirmed', 'month_limit'):
         body += textbox(f'sed_auto_status_{status}', f'sed_auto_status_{status}_visible_sgui')
     body += 'flowcontainer = { direction = horizontal spacing = 12\n'
     body += button('sed_refresh', 'sed_refresh_sgui', width=244)
@@ -408,7 +419,7 @@ sed_disable_country = {
   remove_variable = sed_railway_request_pending
   remove_variable = sed_construction_request_pending
  }
- # The schema marker is the only retained variable. Re-enable uses a decision.
+ # Schema and automatic attempt month persist; disabling cannot reset the monthly cap.
 }
 
 sed_ensure_journal_entry = {
@@ -566,6 +577,7 @@ sed_run_railway_approval = {
   owner = {
    set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }
   }
+  owner = { sed_record_auto_attempt = yes }
   start_building_construction = building_railway
   owner = {
    if = {
@@ -654,6 +666,7 @@ sed_run_construction_approval = {
   owner = {
    set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }
   }
+  owner = { sed_record_auto_attempt = yes }
   start_building_construction = building_construction_sector
   owner = {
    if = {
@@ -711,10 +724,10 @@ sed_update_growth = {
     # Supply markers belong to their own queued buildings. Clear them all only
     # when disabling, never when a construction-sector request resolves.
     script = script.replace(
-        '  remove_variable = sed_construction_request_pending\n }\n # The schema marker',
+        '  remove_variable = sed_construction_request_pending\n }\n # Schema and automatic attempt month',
         '  remove_variable = sed_construction_request_pending\n' + supply_state_cleanup
         + '\n' + '\n'.join('  remove_variable = ' + name for name in IGNORED_VARIABLES)
-        + '\n }\n # The schema marker', 1)
+        + '\n }\n # Schema and automatic attempt month', 1)
     script = script.replace(
         '    set_variable = { name = sed_railway_action_status value = 1 }',
         '    set_variable = { name = sed_railway_action_status value = 1 }\n'
@@ -908,6 +921,7 @@ sed_auto_status_paused_visible_sgui = { scope = country is_shown = { has_variabl
 sed_auto_status_competing_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 13 } }
 sed_auto_status_safety_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 14 } }
 sed_auto_status_unconfirmed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 15 } }
+sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 16 } }
 '''
     base = 'is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic'
     for name, condition in {
@@ -920,6 +934,7 @@ sed_auto_status_unconfirmed_visible_sgui = { scope = country is_shown = { has_va
     previous = ''
     for name, condition in [
         ('default', 'in_default = yes'),
+        ('month_limit', 'sed_auto_month_limit_reached = yes'),
         ('queue', 'OR = { construction_queue_num_queued_government_levels > 0 construction_queue_num_queued_private_levels > 0 }'),
         ('paused', 'is_construction_paused = yes'),
         ('competing', 'OR = { has_variable = advisor_auto_construction_enabled has_variable = zw_var_expand_building has_variable = aroai_autobuild }'),
@@ -956,6 +971,7 @@ sed_railway_approval_valid = {
   has_variable = sed_enabled
   NOT = { in_default = yes }
   construction_queue_num_queued_private_levels = 0
+  OR = { NOT = { has_variable = sed_mode_automatic } NOT = { sed_auto_month_limit_reached = yes } }
  }
 }
 
@@ -983,6 +999,7 @@ sed_construction_approval_valid = {
   NOT = { in_default = yes }
   num_queued_government_constructions >= 3
   construction_queue_num_queued_private_levels = 0
+  OR = { NOT = { has_variable = sed_mode_automatic } NOT = { sed_auto_month_limit_reached = yes } }
  }
 }
 ''' + supply_triggers()
@@ -1020,11 +1037,18 @@ sed_{good}_approval_valid = {{
   has_variable = sed_enabled
   NOT = {{ in_default = yes }}
   construction_queue_num_queued_private_levels = 0
+  OR = {{ NOT = {{ has_variable = sed_mode_automatic }} NOT = {{ sed_auto_month_limit_reached = yes }} }}
  }}
 }}''')
     result.append('''# Country scope: prevent this executor from competing with known construction automations.
+sed_auto_month_limit_reached = {
+ has_variable = sed_auto_last_attempt_month
+ var:sed_auto_last_attempt_month = { value = year multiply = 12 add = month }
+}
+
 sed_auto_executor_safe = {
  has_variable = sed_mode_automatic
+ NOT = { sed_auto_month_limit_reached = yes }
  NOT = { in_default = yes }
  construction_queue_num_queued_government_levels = 0
  construction_queue_num_queued_private_levels = 0
@@ -1122,7 +1146,7 @@ def localization(language):
         'sed_railway_pending': ('Esta expansão já está na fila. Não aprove novamente; a marca será limpa numa leitura após concluir ou cancelar a obra.', 'This expansion is already queued. Do not approve again; the marker clears on a reading after completion or cancellation.'),
         'sed_railway_finance_caution': ('Alerta: o saldo semanal está negativo. A aprovação continua disponível; confira na fila o custo e o prazo antes de prosseguir.', 'Caution: the weekly balance is negative. Approval remains available; review the queue cost and timing before proceeding.'),
         'sed_railway_action_success': ('Pedido adicionado à fila pública. Confira os custos e o prazo na fila do jogo.', 'Request added to the government queue. Review cost and timing in the game queue.'),
-        'sed_railway_action_failed': ('A engine não confirmou a inclusão na fila. Nenhuma nova tentativa será automática.', 'The engine did not confirm the queue addition. No automatic retry will occur.'),
+        'sed_railway_action_failed': ('Inclusão não confirmada. Confira a fila antes de aprovar novamente.', 'Queue addition not confirmed. Inspect the queue before approving again.'),
         'sed_construction_title': ('Capacidade de construção', 'Construction capacity'),
         'sed_construction_intro': ('Protótipo: um setor de construção existente e empregado em estado incorporado, quando a fila pública tem pelo menos três projetos. A análise não calcula custo nem retorno; aprove uma ação por vez e confira o orçamento.', 'Prototype: one existing, staffed construction sector in an incorporated state when the government queue has at least three projects. The analysis does not calculate cost or return; approve one action at a time and review the budget.'),
         'sed_no_construction_queue': ('A fila pública tem menos de três projetos. O Director não recomenda ampliar a capacidade de construção agora.', 'The government queue has fewer than three projects. The Director does not recommend expanding construction capacity now.'),
@@ -1139,7 +1163,7 @@ def localization(language):
         'sed_construction_pending': ('Esta expansão já está na fila. Não aprove novamente; a marca será limpa numa leitura após concluir ou cancelar a obra.', 'This expansion is already queued. Do not approve again; the marker clears on a reading after completion or cancellation.'),
         'sed_construction_finance_caution': ('Alerta: o saldo semanal está negativo. A aprovação continua disponível; confira na fila o custo e o prazo antes de prosseguir.', 'Caution: the weekly balance is negative. Approval remains available; review the queue cost and timing before proceeding.'),
         'sed_construction_action_success': ('Pedido do setor de construção adicionado à fila pública. Confira os custos e o prazo na fila do jogo.', 'Construction sector request added to the government queue. Review cost and timing in the game queue.'),
-        'sed_construction_action_failed': ('A engine não confirmou a inclusão do setor de construção na fila. Nenhuma nova tentativa será automática.', 'The engine did not confirm the construction sector queue addition. No automatic retry will occur.'),
+        'sed_construction_action_failed': ('Inclusão do setor não confirmada. Confira a fila antes de aprovar novamente.', 'Construction sector queue addition not confirmed. Inspect the queue before approving again.'),
         'sed_supply_title': ('Oferta para escassez de mercado', 'Supply for market shortages'),
         'sed_supply_intro': ('Aparece quando o mercado registra escassez e há um produtor local operante. A recomendação não prevê preço, retorno ou custo; o botão apenas enfileira um nível público após sua aprovação.', 'Shown when a market good is scarce and an operating local producer exists. The recommendation does not forecast prices, returns, or cost; the button only queues one government level after your approval.'),
         'sed_supply_no_candidate': ('Há escassez no mercado, mas nenhum produtor local passou pelos filtros de operação, incorporação e fila. O Director não sugere construir um prédio novo nesta versão.', 'The market reports a shortage, but no local producer passed the operation, incorporation, and queue filters. This version does not recommend a new building.'),
@@ -1178,12 +1202,14 @@ def localization(language):
         pairs[f'sed_{good}_approve'] = (f'Aprovar: enfileirar 1 nível de {building_pt}', f'Approve: queue 1 {building_en} level')
         pairs[f'sed_{good}_approve_tt'] = ('Requer modo Assistido, país fora de inadimplência e fila privada vazia. A escassez e o prédio são revalidados no clique. Saldo semanal negativo gera alerta, mas não bloqueia. Usa a fila normal do jogo.', 'Requires Assisted mode, no default, and an empty private queue. The shortage and building are rechecked on click. A negative balance raises a caution but does not block. Uses the normal game queue.')
         pairs[f'sed_{good}_action_success'] = (f'Pedido de expansão de {building_pt} adicionado à fila pública. Confira custo e prazo na fila do jogo.', f'{building_en.title()} expansion added to the government queue. Review cost and timing in the game queue.')
-        pairs[f'sed_{good}_action_failed'] = ('A engine não confirmou a inclusão na fila. Nenhuma nova tentativa será automática.', 'The engine did not confirm the queue addition. No automatic retry will occur.')
+        pairs[f'sed_{good}_action_failed'] = ('Inclusão não confirmada. Confira a fila antes de aprovar novamente.', 'Queue addition not confirmed. Inspect the queue before approving again.')
     pairs.update({
         'sed_title': ('Economia e construções', 'Economy and construction'),
+        'sed_auto_status_month_limit': ('A revisão não tentou outra expansão: já houve uma tentativa automática neste mês.', 'The review did not attempt another expansion: an automatic attempt already occurred this month.'),
+        'sed_auto_current_month_limit': ('Agora: limite mensal atingido. Uma nova tentativa automática só pode ocorrer em outro mês; aprovação manual continua no Assistido.', 'Now: the monthly limit is reached. A new automatic attempt requires a different month; manual approval remains available in Assisted.'),
         'sed_auto_pending': ('Revisão agendada: atraso de 23 dias a partir do agendamento.', 'Review scheduled: a 23-day delay from scheduling.'),
         'sed_auto_idle': ('Próxima revisão: aguardando o pulso mensal.', 'Next review: waiting for the monthly pulse.'),
-        'sed_auto_unrecorded': ('Última revisão: ainda não registrada nesta versão.', 'Last review: not recorded in this version yet.'),
+        'sed_auto_unrecorded': ('Última revisão: sem registro nesta ativação.', 'Last review: no record in this activation.'),
         'sed_auto_last_review': ('Última revisão automática: ' + v('auto_review_month', '0') + '/' + v('auto_review_year', '0') + '. Resultado:', 'Last automatic review: ' + v('auto_review_month', '0') + '/' + v('auto_review_year', '0') + '. Result:'),
         'sed_auto_current_default': ('Agora: país em inadimplência. A execução automática está bloqueada.', 'Now: the country is in default. Automatic execution is blocked.'),
         'sed_auto_current_queue': ('Agora: filas ocupadas. O Automático aguarda.', 'Now: queues occupied. Automatic mode waits.'),
@@ -1206,7 +1232,7 @@ def localization(language):
         'sed_dashboard_queue': ('Projetos na fila — pública: ' + v('public_projects', '0') + '  |  privada: ' + v('private_projects', '0'), 'Queue projects — government: ' + v('public_projects', '0') + '  |  private: ' + v('private_projects', '0')),
         'sed_mode_manual_status': ('Manual: consulta e recomendações, sem executar obras.', 'Manual: readings and recommendations, without construction.'),
         'sed_mode_assisted_status': ('Assistido: você aprova uma expansão por botão.', 'Assisted: approve one expansion using its button.'),
-        'sed_mode_automatic_status': ('Automático: revisão mensal, com no máximo uma expansão por revisão.', 'Automatic: monthly review, with at most one expansion per review.'),
+        'sed_mode_automatic_status': ('Automático: até uma tentativa de expansão por mês.', 'Automatic: at most one expansion attempt per month.'),
         'sed_mode_approval_blocked': ('A aprovação individual requer o modo Assistido.', 'Individual approval requires Assisted mode.'),
         'sed_ignore_recommendation': ('Ignorar neste estado', 'Ignore in this state'),
         'sed_recommendations_intro': ('Expansões de ferrovias existentes quando falta infraestrutura. Aprovar adiciona um nível público.', 'Expand existing railways where infrastructure is insufficient. Approval adds one government level.'),

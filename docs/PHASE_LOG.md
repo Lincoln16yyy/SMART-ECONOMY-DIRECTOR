@@ -807,3 +807,38 @@ engine. Não foi cobrado teste adicional do jogador.
 
 Instalada 0.5.2 sem jogo em execução; backup `mod_0.5.1_20261109_115813_269189`.
 13 outputs conferidos byte a byte com ZIP/gerador; load order preservado.
+
+
+## Limite mensal persistente da execução automática 0.5.3
+
+A auditoria encontrou limite apenas por chamada de revisão. Criada a guarda
+sed_auto_month_limit_reached, comparando year×12+month atuais com o marcador
+sed_auto_last_attempt_month. Os efeitos registram a tentativa antes de chamar
+construção, somente em Automático. A validação é feita também no efeito mutante;
+chamadas repetidas ficam bloqueadas após a primeira, mesmo se a fila esvaziar.
+Não altera o conjunto de tipos do dispatcher: setor continua só manual.
+
+A política é conservadora: uma tentativa por mês, incluindo inclusão recusada
+ou não confirmada. Revisões sem candidato ou bloqueadas antes de tentar não
+consomem o limite. Assistido pode aprovar explicitamente sob suas guardas,
+sem consumir/apagar a marca automática. No mês seguinte, a comparação usa o
+calendário vivo; a data antiga do painel não mantém o bloqueio.
+
+Mudança intencional no contrato de limpeza: preserva schema e um único mês de
+segurança após desativar. Demais indicadores, preferências, histórico de revisão
+e pendências continuam sendo removidos. PERSISTENT_VARIABLES torna a exceção
+explícita; o validador rejeita a remoção da proteção e retenções não declaradas.
+Interface ganhou status 16 e motivo atual de limite, após default e antes das
+filas. Status antigos conservados. Registro não reconstrói todas as tentativas
+anteriores ao upgrade. Save/reload não foi testado na engine.
+
+81 testes aprovados (77 anteriores + quatro novos), com os dez efeitos,
+reativação, mudanças de modo, fila vazia, falha consumindo limite, aprovação
+manual permitida, virada de ano sem refresh e validador recusando limpeza da
+marca. Casos existentes de revisão bloqueada/sem candidato verificam que a
+marca não é criada. São testes de scripts no harness, não execução da engine.
+
+Geração, validação estática e pacote passaram. Instalada 0.5.3 sem jogo em
+execução; backup `mod_0.5.2_20261109_121259_782337`.
+13 outputs conferidos byte a byte; load order preservado. Não houve teste
+gráfico nem save/reload para essa proteção.
