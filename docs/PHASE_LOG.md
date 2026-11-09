@@ -142,3 +142,19 @@ mesma ordem; o Director foi acrescentado ao final. Backup da lista original:
 `sed_backups/content_load_20261108_222107_956307.json`. Saves não foram alterados.
 O jogador abrirá o jogo e procurará a decisão de ativação. Fase 1 permanece em
 validação, sem alegação de automação econômica ou compatibilidade completa.
+
+## 2026-11-08 — Confirmação do jogador e direção para execução econômica
+
+O jogador mostrou uma captura da campanha em 27 de fevereiro de 1846. O diário
+do Smart Economy Director está aberto, com leituras e seção de limitações; a
+instalação e a renderização da interface foram confirmadas no jogo normal.
+Na mesma mensagem, esclareceu que quer botões para ativar recomendações
+econômicas deste mod, conforme o escopo do briefing. O Smart Government Advisor
+deve continuar limitado a recomendar leis, pois o jogador prefere decidir leis
+separadamente.
+
+Implicação de produto: a aprovação individual e execução revalidada de ações
+econômicas é objetivo deste projeto, não apenas recomendações visuais. A 0.1.0
+continua sendo só diagnóstico: não prometer que já executa recomendações. Fila,
+compatibilidade, dados e segurança continuam pré-requisitos antes de cada tipo
+de executor e antes de qualquer modo automático.

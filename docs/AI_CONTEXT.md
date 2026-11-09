@@ -28,6 +28,17 @@ O jogador foi orientado a abrir o jogo normal e verificar J → Decisões →
 Ativar Smart Economy Director. Aguardar sua observação para corrigir problemas
 reais de interface/instalação. Isso não valida a convivência em campanha.
 
+Observação do jogador em 2026-11-08: o diário e os indicadores apareceram na
+campanha. Direção de produto confirmada: este projeto deve permitir executar,
+por botões, recomendações econômicas dentro do escopo do briefing. O jogador
+mantém o Smart Government Advisor separado e prefere que ele apenas recomende
+leis. Não confundir aprovação de ações econômicas do Director com alterar leis,
+nem tratar os botões de agenda/atualização da 0.1.0 como execução econômica.
+Planejamento e ações continuam por fases: cada ação precisa de escopo,
+viabilidade técnica, explicação, confirmação por clique e revalidação antes de
+executar; automação em segundo plano só entra depois das proteções e pesquisas
+previstas no briefing.
+
 RESEARCH.md contém fontes e lacunas; ARCHITECTURE.md descreve propostas, não
 funções concluídas. COMPATIBILITY.md diferencia instalação, habilitação no
 launcher e automação ativa no país. SOURCE_INVENTORY.json registra commit da
