@@ -1,0 +1,187 @@
+{
+  "date": "2026-11-09",
+  "audited_commit": "ccf5c2ba325203faad9d704a1f139e21b8ce3261",
+  "branch": "main",
+  "version": "0.4.1",
+  "origin_main_verified_via_github_connector": "936627756567dea0a9d8128fa8198a8f4c571bbd",
+  "local_ahead_at_start": [
+    "1191f69",
+    "ccf5c2b"
+  ],
+  "game_version": "1.15.0",
+  "game_build": "6338547985dbc271523e149f362a6fd93dc62975",
+  "tools": {
+    "python": "3.14.9",
+    "git": "2.56.0",
+    "wine": "11.21"
+  },
+  "checks": {
+    "director_tests": {
+      "passed": 61,
+      "failed": 0,
+      "skipped": 0,
+      "diagnostics": 52,
+      "source_audit": 9
+    },
+    "reference_tests": {
+      "passed": 26,
+      "failed": 0,
+      "skipped": 0
+    },
+    "reference_validator": {
+      "exit_code": 1,
+      "errors": 178
+    },
+    "generator_check": "passed",
+    "director_static_validation_with_local_game": "passed",
+    "package_repeated_sha256": "e27bb771a9b29239e4840c3e5073370636191b7b9772c8b472bdadacf287ce4b",
+    "package_files": 13,
+    "installed_matches_generator": true,
+    "installed_extra_files": [],
+    "missing_local_markdown_links": [],
+    "runtime_tests_this_audit": "not_run"
+  },
+  "environment": {
+    "enabled_count": 11,
+    "load_order_sha256": "aa6ecb885fc0e922bfa0bc9b499f414180a94573f3b9094cce12207b75574804",
+    "mods": [
+      {
+        "folder": "3278770055_Controllable_Private_Construction",
+        "found": true,
+        "metadata": {
+          "name": "Controllable Private Construction",
+          "version": "z.260512.1",
+          "supported_game_version": ""
+        },
+        "common_and_gui_file_count": 16,
+        "vanilla_id_overlap_count": 49
+      },
+      {
+        "folder": "3279201462_Auto-Recruit_One-Click_Recruit_Commanders",
+        "found": true,
+        "metadata": {
+          "name": "Auto-Recruit & One-Click Recruit Commanders",
+          "version": "z.260606.1",
+          "supported_game_version": ""
+        },
+        "common_and_gui_file_count": 8,
+        "vanilla_id_overlap_count": 0
+      },
+      {
+        "folder": "3344726320_Auto-Apply_Automation_PMs",
+        "found": true,
+        "metadata": {
+          "name": "Auto-Apply Automation PMs",
+          "version": "z.260514.1",
+          "supported_game_version": ""
+        },
+        "common_and_gui_file_count": 10,
+        "vanilla_id_overlap_count": 0
+      },
+      {
+        "folder": "3353797125_Auto-Apply_PMs",
+        "found": true,
+        "metadata": {
+          "name": "Auto-Apply PMs",
+          "version": "z.260514.1",
+          "supported_game_version": ""
+        },
+        "common_and_gui_file_count": 55,
+        "vanilla_id_overlap_count": 0
+      },
+      {
+        "folder": "3357811223_Supply_Chain_Semi-Auto_Builder",
+        "found": true,
+        "metadata": {
+          "name": "Supply Chain Semi-Auto Builder",
+          "version": "z.260702.1",
+          "supported_game_version": ""
+        },
+        "common_and_gui_file_count": 22,
+        "vanilla_id_overlap_count": 0
+      },
+      {
+        "folder": "3432933121_Auto-Diplomacy_And_Advanced_Subject_Management",
+        "found": true,
+        "metadata": {
+          "name": "Auto-Diplomacy And Advanced Subject Management",
+          "version": "z.251212.1",
+          "supported_game_version": ""
+        },
+        "common_and_gui_file_count": 14,
+        "vanilla_id_overlap_count": 0
+      },
+      {
+        "folder": "2934542706_Government_Administration_Auto_Expand",
+        "found": true,
+        "metadata": {
+          "name": "Government Administration Auto Expand",
+          "version": "",
+          "supported_game_version": ""
+        },
+        "common_and_gui_file_count": 2,
+        "vanilla_id_overlap_count": 2
+      },
+      {
+        "folder": "3778129206_Economy_Advisor",
+        "found": true,
+        "metadata": {
+          "name": "Economy Advisor",
+          "version": "1.0.0",
+          "supported_game_version": "1.15.*"
+        },
+        "common_and_gui_file_count": 32,
+        "vanilla_id_overlap_count": 1
+      },
+      {
+        "folder": "ARoAI-1.3.5",
+        "found": true,
+        "metadata": {
+          "name": "Anbeeld's Revision of AI",
+          "version": "",
+          "supported_game_version": ""
+        },
+        "common_and_gui_file_count": 34,
+        "vanilla_id_overlap_count": 21
+      },
+      {
+        "folder": "Smart Government Advisor",
+        "found": true,
+        "metadata": {
+          "name": "Smart Government Advisor",
+          "version": "1.0.0",
+          "supported_game_version": "1.15.*"
+        },
+        "common_and_gui_file_count": 12,
+        "vanilla_id_overlap_count": 2
+      },
+      {
+        "folder": "Smart Economy Director",
+        "found": true,
+        "metadata": {
+          "name": "Smart Economy Director",
+          "version": "0.4.1",
+          "supported_game_version": "1.15.*"
+        },
+        "common_and_gui_file_count": 7,
+        "vanilla_id_overlap_count": 1
+      }
+    ],
+    "parser_issues": 6,
+    "catalog_counts": {
+      "buildings": 122,
+      "production_methods": 450,
+      "production_method_groups": 203
+    },
+    "catalog_layered_ids": 67,
+    "catalog_parse_issues": 0
+  },
+  "limits": [
+    "Harness does not emulate engine or save/reload.",
+    "Game option values by country remain unverified.",
+    "Audit source parser excludes events from common/gui counts.",
+    "Catalog preserves layers without resolving engine merge.",
+    "Git fetch/push unavailable from shell due to DNS; GitHub connector can read.",
+    "No game source, save content, credentials or hardware details included."
+  ]
+}
