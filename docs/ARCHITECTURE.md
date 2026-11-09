@@ -34,7 +34,7 @@ Government Advisor só recomende promulgações.
 
 | Camada | Arquivos previstos | Responsabilidade |
 | --- | --- | --- |
-| Catálogo | `tools/build_economy_data.py`, `data/` | Extrair buildings, PMs, bens e custos da instalação informada por argumento |
+| Catálogo | `tools/build_economy_data.py`, `data/` | Indexar IDs, grupos, tecnologias e modificadores de buildings/PMs com proveniência e camadas; sem resolver o merge da engine |
 | Coleta | `common/script_values/sed_metrics.txt` | Somente primitivas verificadas; unidades e escopos documentados |
 | Diagnóstico | `common/scripted_effects/sed_diagnostics.txt` | Indicadores, disponibilidade, data e estado econômico |
 | Ciclo de vida | `common/on_actions/sed_on_actions.txt`, efeitos e decisões próprios | Ativação, migração e limpeza com marcador de schema |
@@ -53,6 +53,10 @@ de jogo. A auditoria encontrou PMs redefinidos pelo ARoAI e regras de construç�
 injetadas pelo Controllable Private Construction. O catálogo futuro precisa
 registrar origem e versão dos dados, detectar sobreposição e recusar projeção
 com catálogo incompatível. Ler só vanilla não reproduz o ecossistema ativo.
+`tools/build_economy_data.py` agora produz esse índice local para buildings,
+PMs e grupos de PM. Ele mantém cada definição em camada separada; não chama o
+relatório de “catálogo efetivo” enquanto as operações de merge não forem
+reproduzidas ou confirmadas no motor.
 
 ## Priorização e segurança
 

@@ -57,6 +57,15 @@ redefinições e nomes históricos do save. A ferramenta de pesquisa
 ARoAI redefine 18 PMs e pode construir para o jogador sob configuração.
 Não copiar modelos aproximados de mão de obra/salários do Advisor como medidas.
 
+Continuação Fase 2: `tools/build_economy_data.py` cria um índice local de
+building/PM/PMG com proveniência por camada, sem resolver merge. Foi gerado em
+`data/economy_catalog.local.json` (ignorado pelo Git): 122 buildings, 450 PMs,
+203 grupos, 67 IDs em mais de uma camada e 0 erros de parsing. As sobreposições
+incluem CPC em 48 buildings, Government Administration Auto Expand em um e
+ARoAI em 18 PMs; o arquivo local não é fonte efetiva para recomendações.
+Próximo: usar o relatório para escolher dados/candidatos cuja semântica final
+possa ser confirmada no jogo e expor incertezas.
+
 Fontes da implementação: `data/metrics.json` e `tools/build_mod.py`. Não editar
 à mão os arquivos gerados em common/gui/localization e descritores. O schema
 atual é 1, ativação sempre explícita por decisão. Só o dispatcher atualiza

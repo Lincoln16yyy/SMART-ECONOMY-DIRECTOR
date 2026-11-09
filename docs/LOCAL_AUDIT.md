@@ -118,6 +118,33 @@ antes/depois de despachar a construção. Uma tentativa só conta como sucesso
 se a fila crescer. O comentário de confirmação em campanha pertence ao autor
 do Advisor; essa sessão não repetiu a confirmação.
 
+## Catálogo econômico local
+
+`tools/build_economy_data.py` indexa definições de buildings, production
+methods e seus grupos no jogo e nos dez diretórios habilitados no load order.
+Na execução local desta continuação foram lidos 122 buildings, 450 PMs e 203
+grupos, com 67 IDs em mais de uma camada e nenhum erro de parsing. Entre os
+49 buildings sobrepostos, 48 recebem camadas de Controllable Private
+Construction e um de Government Administration Auto Expand; os 18 PMs são do
+ARoAI. Isso confirma a necessidade de dados por mod, mas não calcula o
+resultado do merge do motor.
+
+O relatório detalhado `data/economy_catalog.local.json` fica ignorado pelo Git,
+pois pode conter informações extraídas de mods de terceiros. Cada entrada
+guarda caminho, operação, hash da fonte e um subconjunto estruturado de campos.
+`INJECT` e `REPLACE` permanecem camadas a revisar, não são aplicados como se a
+ferramenta conhecesse a resolução da engine. Nenhuma recomendação ou previsão
+econômica deve chamar esse resultado de catálogo efetivo.
+
+Exemplo de geração local (sem adicionar a saída ao repositório):
+
+```bash
+python3 tools/build_economy_data.py \\
+  --game "/caminho/Victoria 3/game" \\
+  --user-dir "/caminho/Paradox Interactive/Victoria 3" \\
+  --output data/economy_catalog.local.json
+```
+
 ## Dados medidos e aproximações
 
 O fator de qualificações em `advisor_generated_profiles.txt:41` é calculado

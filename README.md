@@ -2,15 +2,16 @@
 
 Primeira versão **0.1.0 — diagnóstico econômico**. O mod tem scripts, interface
 própria de diário, ativação opcional e leituras manuais ou mensais. Construção
-automática e recomendações de investimento pertencem a fases posteriores.
+automática, recomendações econômicas e botões para aprová-las pertencem a fases
+posteriores.
 
 O painel mostra finanças, PIB, população, padrão de vida, alfabetização,
 capacidade de construção, filas e sinais de infraestrutura, abastecimento e
 contratação. Os dados correspondem à última leitura indicada no painel.
 O crescimento do PIB requer amostras em meses distintos.
 
-**Estado: implementação da Fase 1 disponível para testes. A confirmação da
-interface e dos indicadores dentro de uma campanha ainda está pendente.**
+**Estado: a interface e as leituras principais foram confirmadas em campanha.
+Compatibilidade ampliada e execução de recomendações ainda estão pendentes.**
 Não é uma versão de automação econômica pronta para deixar uma campanha sozinha.
 
 ## Instalação e uso

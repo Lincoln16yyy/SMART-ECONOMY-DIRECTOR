@@ -168,3 +168,19 @@ integração segura; identidade de projeto privado, prédios inéditos, clique e
 coexistência continuam pendentes. A captura do jogador confirma a interface na
 campanha normal. A pesquisa e a arquitetura agora registram botões de aprovação
 econômica como requisito, sem dar ao Director controle de leis.
+
+## Fase 2 — Índice local de buildings e métodos de produção
+
+Criado `tools/build_economy_data.py` para indexar IDs, grupos, tecnologias e
+modificadores reconhecidos de buildings/PMs, incluindo origem, ordem, operação
+e hash da definição. A ferramenta guarda as camadas; não aplica `INJECT` ou
+`REPLACE` nem declara conhecer o resultado final da engine. O relatório com
+conteúdo derivado dos mods permanece local e ignorado pelo Git.
+
+Execução na instalação indicada pelo jogador: 122 buildings, 450 PMs, 203
+grupos de PM, 67 IDs em camadas múltiplas e nenhum erro de parsing. Das
+definições sobrepostas, 48 buildings são de CPC, um de Government Administration
+Auto Expand e 18 PMs de ARoAI. `git diff --check` passou; os testes não foram
+executados. Próxima etapa: confrontar um candidato econômico com as definições
+efetivamente carregadas e as condições do save antes de criar sua recomendação
+e botão de aprovação.
