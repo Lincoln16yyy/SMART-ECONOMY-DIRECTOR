@@ -19,6 +19,30 @@ textbox = {
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_railway_candidate_reason"
 }
+textbox = {
+ visible = "[GetScriptedGui('sed_railway_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_approval_ready"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_railway_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_mode_approval_blocked"
+}
+button = {
+ using = default_button
+ using = fontsize_large
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_switch_assisted" tooltip = "sed_switch_assisted_tt"
+ visible = "[GetScriptedGui('sed_railway_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_railway_switch_assisted_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_railway_switch_assisted_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
+}
 button = {
  using = default_button
  using = fontsize_large
@@ -74,12 +98,15 @@ textbox = {
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_railway_finance_caution"
 }
-textbox = {
- visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
- autoresize = yes multiline = yes align = left|nobaseline
+button = {
+ using = default_button
  using = fontsize_large
- minimumsize = { 468 -1 } maximumsize = { 468 -1 }
- text = "sed_mode_approval_blocked"
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_refresh_card" tooltip = "sed_refresh_card_tt"
+ visible = "[GetScriptedGui('sed_railway_refresh_card_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_railway_refresh_card_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_railway_refresh_card_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
 }
  }
 }
@@ -101,6 +128,30 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_construction_candidate_reason"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_construction_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_approval_ready"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_construction_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_mode_approval_blocked"
+}
+button = {
+ using = default_button
+ using = fontsize_large
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_switch_assisted" tooltip = "sed_switch_assisted_tt"
+ visible = "[GetScriptedGui('sed_construction_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_construction_switch_assisted_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_construction_switch_assisted_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
 }
 button = {
  using = default_button
@@ -164,12 +215,15 @@ textbox = {
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_construction_finance_caution"
 }
-textbox = {
- visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
- autoresize = yes multiline = yes align = left|nobaseline
+button = {
+ using = default_button
  using = fontsize_large
- minimumsize = { 468 -1 } maximumsize = { 468 -1 }
- text = "sed_mode_approval_blocked"
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_refresh_card" tooltip = "sed_refresh_card_tt"
+ visible = "[GetScriptedGui('sed_construction_refresh_card_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_construction_refresh_card_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_construction_refresh_card_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
 }
  }
 }
@@ -191,6 +245,30 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_wood_candidate_reason"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_wood_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_approval_ready"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_wood_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_mode_approval_blocked"
+}
+button = {
+ using = default_button
+ using = fontsize_large
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_switch_assisted" tooltip = "sed_switch_assisted_tt"
+ visible = "[GetScriptedGui('sed_wood_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_wood_switch_assisted_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_wood_switch_assisted_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
 }
 button = {
  using = default_button
@@ -247,12 +325,15 @@ textbox = {
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_supply_finance_caution"
 }
-textbox = {
- visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
- autoresize = yes multiline = yes align = left|nobaseline
+button = {
+ using = default_button
  using = fontsize_large
- minimumsize = { 468 -1 } maximumsize = { 468 -1 }
- text = "sed_mode_approval_blocked"
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_refresh_card" tooltip = "sed_refresh_card_tt"
+ visible = "[GetScriptedGui('sed_wood_refresh_card_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_wood_refresh_card_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_wood_refresh_card_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
 }
  }
 }
@@ -274,6 +355,30 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_iron_candidate_reason"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_iron_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_approval_ready"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_iron_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_mode_approval_blocked"
+}
+button = {
+ using = default_button
+ using = fontsize_large
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_switch_assisted" tooltip = "sed_switch_assisted_tt"
+ visible = "[GetScriptedGui('sed_iron_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_iron_switch_assisted_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_iron_switch_assisted_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
 }
 button = {
  using = default_button
@@ -330,12 +435,15 @@ textbox = {
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_supply_finance_caution"
 }
-textbox = {
- visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
- autoresize = yes multiline = yes align = left|nobaseline
+button = {
+ using = default_button
  using = fontsize_large
- minimumsize = { 468 -1 } maximumsize = { 468 -1 }
- text = "sed_mode_approval_blocked"
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_refresh_card" tooltip = "sed_refresh_card_tt"
+ visible = "[GetScriptedGui('sed_iron_refresh_card_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_iron_refresh_card_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_iron_refresh_card_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
 }
  }
 }
@@ -357,6 +465,30 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_coal_candidate_reason"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_coal_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_approval_ready"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_coal_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_mode_approval_blocked"
+}
+button = {
+ using = default_button
+ using = fontsize_large
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_switch_assisted" tooltip = "sed_switch_assisted_tt"
+ visible = "[GetScriptedGui('sed_coal_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_coal_switch_assisted_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_coal_switch_assisted_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
 }
 button = {
  using = default_button
@@ -413,12 +545,15 @@ textbox = {
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_supply_finance_caution"
 }
-textbox = {
- visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
- autoresize = yes multiline = yes align = left|nobaseline
+button = {
+ using = default_button
  using = fontsize_large
- minimumsize = { 468 -1 } maximumsize = { 468 -1 }
- text = "sed_mode_approval_blocked"
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_refresh_card" tooltip = "sed_refresh_card_tt"
+ visible = "[GetScriptedGui('sed_coal_refresh_card_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_coal_refresh_card_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_coal_refresh_card_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
 }
  }
 }
@@ -440,6 +575,30 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_grain_candidate_reason"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_grain_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_approval_ready"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_grain_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_mode_approval_blocked"
+}
+button = {
+ using = default_button
+ using = fontsize_large
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_switch_assisted" tooltip = "sed_switch_assisted_tt"
+ visible = "[GetScriptedGui('sed_grain_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_grain_switch_assisted_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_grain_switch_assisted_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
 }
 button = {
  using = default_button
@@ -496,12 +655,15 @@ textbox = {
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_supply_finance_caution"
 }
-textbox = {
- visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
- autoresize = yes multiline = yes align = left|nobaseline
+button = {
+ using = default_button
  using = fontsize_large
- minimumsize = { 468 -1 } maximumsize = { 468 -1 }
- text = "sed_mode_approval_blocked"
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_refresh_card" tooltip = "sed_refresh_card_tt"
+ visible = "[GetScriptedGui('sed_grain_refresh_card_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_grain_refresh_card_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_grain_refresh_card_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
 }
  }
 }
@@ -523,6 +685,30 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_fabric_candidate_reason"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_fabric_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_approval_ready"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_fabric_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_mode_approval_blocked"
+}
+button = {
+ using = default_button
+ using = fontsize_large
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_switch_assisted" tooltip = "sed_switch_assisted_tt"
+ visible = "[GetScriptedGui('sed_fabric_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_fabric_switch_assisted_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_fabric_switch_assisted_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
 }
 button = {
  using = default_button
@@ -579,12 +765,15 @@ textbox = {
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_supply_finance_caution"
 }
-textbox = {
- visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
- autoresize = yes multiline = yes align = left|nobaseline
+button = {
+ using = default_button
  using = fontsize_large
- minimumsize = { 468 -1 } maximumsize = { 468 -1 }
- text = "sed_mode_approval_blocked"
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_refresh_card" tooltip = "sed_refresh_card_tt"
+ visible = "[GetScriptedGui('sed_fabric_refresh_card_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_fabric_refresh_card_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_fabric_refresh_card_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
 }
  }
 }
@@ -606,6 +795,30 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_tools_candidate_reason"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_tools_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_approval_ready"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_tools_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_mode_approval_blocked"
+}
+button = {
+ using = default_button
+ using = fontsize_large
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_switch_assisted" tooltip = "sed_switch_assisted_tt"
+ visible = "[GetScriptedGui('sed_tools_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_tools_switch_assisted_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_tools_switch_assisted_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
 }
 button = {
  using = default_button
@@ -662,12 +875,15 @@ textbox = {
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_supply_finance_caution"
 }
-textbox = {
- visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
- autoresize = yes multiline = yes align = left|nobaseline
+button = {
+ using = default_button
  using = fontsize_large
- minimumsize = { 468 -1 } maximumsize = { 468 -1 }
- text = "sed_mode_approval_blocked"
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_refresh_card" tooltip = "sed_refresh_card_tt"
+ visible = "[GetScriptedGui('sed_tools_refresh_card_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_tools_refresh_card_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_tools_refresh_card_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
 }
  }
 }
@@ -689,6 +905,30 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_groceries_candidate_reason"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_groceries_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_approval_ready"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_groceries_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_mode_approval_blocked"
+}
+button = {
+ using = default_button
+ using = fontsize_large
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_switch_assisted" tooltip = "sed_switch_assisted_tt"
+ visible = "[GetScriptedGui('sed_groceries_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_groceries_switch_assisted_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_groceries_switch_assisted_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
 }
 button = {
  using = default_button
@@ -745,12 +985,15 @@ textbox = {
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_supply_finance_caution"
 }
-textbox = {
- visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
- autoresize = yes multiline = yes align = left|nobaseline
+button = {
+ using = default_button
  using = fontsize_large
- minimumsize = { 468 -1 } maximumsize = { 468 -1 }
- text = "sed_mode_approval_blocked"
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_refresh_card" tooltip = "sed_refresh_card_tt"
+ visible = "[GetScriptedGui('sed_groceries_refresh_card_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_groceries_refresh_card_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_groceries_refresh_card_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
 }
  }
 }
@@ -772,6 +1015,30 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_clothes_candidate_reason"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_clothes_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_approval_ready"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_clothes_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_mode_approval_blocked"
+}
+button = {
+ using = default_button
+ using = fontsize_large
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_switch_assisted" tooltip = "sed_switch_assisted_tt"
+ visible = "[GetScriptedGui('sed_clothes_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_clothes_switch_assisted_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_clothes_switch_assisted_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
 }
 button = {
  using = default_button
@@ -828,12 +1095,15 @@ textbox = {
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_supply_finance_caution"
 }
-textbox = {
- visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
- autoresize = yes multiline = yes align = left|nobaseline
+button = {
+ using = default_button
  using = fontsize_large
- minimumsize = { 468 -1 } maximumsize = { 468 -1 }
- text = "sed_mode_approval_blocked"
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_refresh_card" tooltip = "sed_refresh_card_tt"
+ visible = "[GetScriptedGui('sed_clothes_refresh_card_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_clothes_refresh_card_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_clothes_refresh_card_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
 }
  }
 }
@@ -1021,6 +1291,16 @@ textbox = {
  using = fontsize_large
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_dashboard_queue"
+}
+button = {
+ using = default_button
+ using = fontsize_large
+ using = tooltip_se
+ size = { 500 52 }
+ text = "sed_open_queue" tooltip = "sed_open_queue_tt"
+ visible = "[GetScriptedGui('sed_refresh_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_refresh_sgui').IsValid(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ onclick = "[InformationPanelBar.OpenPanelTab('production_methods', 'construction_queues')]"
 }
 button = {
  using = default_button

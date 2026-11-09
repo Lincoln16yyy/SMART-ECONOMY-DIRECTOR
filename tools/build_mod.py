@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.5.0'
+VERSION = '0.5.1'
 SUPPLY_TARGETS = [
     {'good': 'wood', 'building': 'building_logging_camp', 'methods': ['pm_electric_saw_mills', 'pm_saw_mills', 'pm_simple_forestry'], 'label_pt': 'madeira', 'label_en': 'wood', 'building_pt': 'acampamento madeireiro', 'building_en': 'logging camp'},
     {'good': 'iron', 'building': 'building_iron_mine', 'methods': ['pm_atmospheric_engine_pump_building_iron_mine', 'pm_condensing_engine_pump_building_iron_mine', 'pm_diesel_pump_building_iron_mine', 'pm_dynamite_building_iron_mine', 'pm_nitroglycerin_building_iron_mine', 'pm_picks_and_shovels_building_iron_mine'], 'label_pt': 'ferro', 'label_en': 'iron', 'building_pt': 'mina de ferro', 'building_en': 'iron mine'},
@@ -226,9 +226,10 @@ def textbox(key, visibility=None, heading=False, width=500, state=False):
 """
 
 
-def button(key, action, width=500, state=False):
+def button(key, action, width=500, state=False, native_action=None):
     binding = lambda method: (f"GetScriptedGui('{action}').{method}(GuiScope.SetRoot(State.MakeScope).End)"
                               if state else sgui(action, method))
+    execute = native_action or binding('Execute')
     return f"""button = {{
  using = default_button
  using = fontsize_large
@@ -237,7 +238,7 @@ def button(key, action, width=500, state=False):
  text = "{key}" tooltip = "{key}_tt"
  visible = "[{binding('IsShown')}]"
  enabled = "[{binding('IsValid')}]"
- onclick = "[{binding('Execute')}]"
+ onclick = "[{execute}]"
 }}
 """
 
@@ -258,13 +259,16 @@ def candidate_item(name):
     prefix = 'sed_supply' if supply else f'sed_{name}'
     content = textbox(f'sed_{name}_candidate_title', heading=True, width=468)
     content += textbox(f'sed_{name}_candidate_reason', width=468)
+    content += textbox('sed_approval_ready', f'sed_{name}_ready_sgui', width=468, state=True)
+    content += textbox('sed_mode_approval_blocked', f'sed_{name}_switch_assisted_sgui', width=468, state=True)
+    content += button('sed_switch_assisted', f'sed_{name}_switch_assisted_sgui', width=468, state=True)
     content += button(approve, f'sed_approve_{name}_sgui', width=468, state=True)
     content += button('sed_ignore_recommendation', f'sed_ignore_{name}_sgui', width=468, state=True)
     for guard in (('queue', 'private', 'default') if name == 'construction' else ('private', 'default')):
         content += textbox(f'{prefix}_blocked_{guard}', f'sed_{name}_blocked_{guard}_sgui', width=468, state=True)
     for kind in ('stale', 'pending', 'finance_caution'):
         content += textbox(f'{prefix}_{kind}', f'sed_{name}_{kind}_sgui', width=468, state=True)
-    content += textbox('sed_mode_approval_blocked', 'sed_mode_approval_blocked_sgui', width=468, state=True)
+    content += button('sed_refresh_card', f'sed_{name}_refresh_card_sgui', width=468, state=True)
     return f""" type sed_{name}_candidate_item = flowcontainer {{
  datacontext = "[Scope.GetState]"
  direction = vertical spacing = 10 ignoreinvisible = yes
@@ -305,6 +309,7 @@ def widget():
     body += button('sed_use_monthly', 'sed_monthly_updates_sgui')
     body += textbox('sed_last_refresh')
     body += textbox('sed_dashboard_budget') + textbox('sed_dashboard_queue')
+    body += button('sed_open_queue', 'sed_refresh_sgui', native_action="InformationPanelBar.OpenPanelTab('production_methods', 'construction_queues')")
     body += button('sed_show_details', 'sed_show_details_sgui')
     body += button('sed_hide_details', 'sed_hide_details_sgui')
     body += button('sed_restore_ignored', 'sed_restore_ignored_sgui')
@@ -747,11 +752,6 @@ sed_approve_construction_sgui = {
 }}
 sed_mode_{mode}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_mode_{mode} }} }}
 '''
-    result += '''sed_mode_approval_blocked_sgui = {
- scope = state
- is_shown = { owner = { is_player = yes has_variable = sed_enabled NOT = { has_variable = sed_mode_assisted } } }
-}
-'''
     for item in SUPPLY_TARGETS:
         good = item['good']
         result += f'''sed_approve_{good}_sgui = {{
@@ -761,6 +761,29 @@ sed_mode_{mode}_visible_sgui = {{ scope = country is_shown = {{ has_variable = s
  effect = {{ if = {{ limit = {{ owner = {{ has_variable = sed_mode_assisted }} sed_{good}_approval_valid = yes }} sed_run_{good}_approval = yes }} }}
 }}
 '''
+    for name in ACTION_NAMES:
+        owner = 'owner = { is_player = yes has_variable = sed_enabled }'
+        switch = (owner + f' sed_{name}_candidate_eligible = yes '
+                  'owner = { NOT = { has_variable = sed_mode_assisted } }')
+        stale = (owner + f' NOT = {{ sed_{name}_candidate_eligible = yes }} '
+                 f'NOT = {{ has_variable = sed_{name}_request_pending }}')
+        result += f"""sed_{name}_ready_sgui = {{
+ scope = state
+ is_shown = {{ {owner} owner = {{ has_variable = sed_mode_assisted }} sed_{name}_approval_valid = yes }}
+}}
+sed_{name}_switch_assisted_sgui = {{
+ scope = state
+ is_shown = {{ {switch} }}
+ is_valid = {{ {switch} }}
+ effect = {{ if = {{ limit = {{ {switch} }} owner = {{ sed_set_mode_assisted = yes }} }} }}
+}}
+sed_{name}_refresh_card_sgui = {{
+ scope = state
+ is_shown = {{ {stale} }}
+ is_valid = {{ {stale} }}
+ effect = {{ if = {{ limit = {{ {stale} }} owner = {{ sed_refresh_diagnostics = yes }} }} }}
+}}
+"""
     for name in ACTION_NAMES:
         result += f"""sed_ignore_{name}_sgui = {{
  scope = state
@@ -793,7 +816,7 @@ sed_mode_{mode}_visible_sgui = {{ scope = country is_shown = {{ has_variable = s
     for action, guards in blocked.items():
         for guard, condition in guards.items():
             result += (f'sed_{action}_blocked_{guard}_sgui = {{\n scope = state\n'
-                       f' is_shown = {{ sed_{action}_candidate_eligible = yes {condition} }}\n}}\n')
+                       f' is_shown = {{ owner = {{ is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted }} sed_{action}_candidate_eligible = yes {condition} }}\n}}\n')
     for action in ('railway', 'construction'):
         result += (f'sed_{action}_stale_sgui = {{\n scope = state\n'
                    f' is_shown = {{ owner = {{ is_player = yes has_variable = sed_enabled }} '
@@ -813,7 +836,7 @@ sed_mode_{mode}_visible_sgui = {{ scope = country is_shown = {{ has_variable = s
         }
         for guard, condition in guards.items():
             result += (f'sed_{good}_blocked_{guard}_sgui = {{\n scope = state\n'
-                       f' is_shown = {{ sed_{good}_candidate_eligible = yes {condition} }}\n}}\n')
+                       f' is_shown = {{ owner = {{ is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted }} sed_{good}_candidate_eligible = yes {condition} }}\n}}\n')
         result += (f'sed_{good}_stale_sgui = {{\n scope = state\n'
                    f' is_shown = {{ owner = {{ is_player = yes has_variable = sed_enabled }} '
                    f'NOT = {{ sed_{good}_candidate_eligible = yes }} '
@@ -1130,6 +1153,13 @@ def localization(language):
         pairs[f'sed_{good}_action_failed'] = ('A engine não confirmou a inclusão na fila. Nenhuma nova tentativa será automática.', 'The engine did not confirm the queue addition. No automatic retry will occur.')
     pairs.update({
         'sed_title': ('Economia e construções', 'Economy and construction'),
+        'sed_approval_ready': ('Aprovação disponível: +1 nível público.', 'Approval available: +1 government level.'),
+        'sed_switch_assisted': ('Passar para Assistido', 'Switch to Assisted'),
+        'sed_switch_assisted_tt': ('Muda o país para o modo Assistido, sem aprovar obras. A próxima revisão automática não construirá enquanto este modo estiver ativo.', 'Changes the country to Assisted without approving construction. The next automatic review will not build while this mode remains active.'),
+        'sed_refresh_card': ('Atualizar recomendações', 'Refresh recommendations'),
+        'sed_refresh_card_tt': ('Relê as condições e recalcula os cartões. Não aprova obras; o cartão antigo pode desaparecer se deixou de ser elegível.', 'Reads conditions again and recalculates the cards. Does not approve construction; an old card may disappear if no longer eligible.'),
+        'sed_open_queue': ('Abrir fila de construção', 'Open construction queue'),
+        'sed_open_queue_tt': ('Abre a fila nativa do jogo para conferir os projetos públicos e privados.', 'Opens the native game queue to inspect government and private projects.'),
         'sed_show_details': ('Mostrar indicadores e detalhes', 'Show indicators and details'),
         'sed_show_details_tt': ('Abre indicadores, motivos detalhados e limites da análise abaixo das recomendações.', 'Shows indicators, detailed rejection reasons and analysis limits below recommendations.'),
         'sed_hide_details': ('Ocultar indicadores e detalhes', 'Hide indicators and details'),
@@ -1140,7 +1170,7 @@ def localization(language):
         'sed_mode_manual_status': ('Manual: consulta e recomendações, sem executar obras.', 'Manual: readings and recommendations, without construction.'),
         'sed_mode_assisted_status': ('Assistido: você aprova uma expansão por botão.', 'Assisted: approve one expansion using its button.'),
         'sed_mode_automatic_status': ('Automático: revisão mensal, com no máximo uma expansão por revisão.', 'Automatic: monthly review, with at most one expansion per review.'),
-        'sed_mode_approval_blocked': ('Para aprovar pelo botão, selecione Assistido no topo.', 'To approve with this button, select Assisted at the top.'),
+        'sed_mode_approval_blocked': ('A aprovação individual requer o modo Assistido.', 'Individual approval requires Assisted mode.'),
         'sed_ignore_recommendation': ('Ignorar neste estado', 'Ignore in this state'),
         'sed_recommendations_intro': ('Expansões de ferrovias existentes quando falta infraestrutura. Aprovar adiciona um nível público.', 'Expand existing railways where infrastructure is insufficient. Approval adds one government level.'),
         'sed_construction_intro': ('Expandir um setor existente quando há pelo menos três projetos públicos.', 'Expand an existing sector when at least three government projects are queued.'),

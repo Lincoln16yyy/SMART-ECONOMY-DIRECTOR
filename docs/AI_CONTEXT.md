@@ -1,5 +1,23 @@
 # Contexto de continuidade
 
+## Continuação — cartões acionáveis 0.5.1
+
+Instalada sem jogo em execução; backup `mod_0.5.0_20261109_114658_276092`,
+13 outputs conferidos e load order preservado byte a byte.
+
+O jogador pediu seguir construindo sem depender de testes seus agora. Mantida
+a interface legível: cartões exibem aprovação disponível, Passar para Assistido
+(sem construir) e Atualizar recomendações para cartão desatualizado. Guardas de
+fila/default só aparecem como bloqueio da aprovação individual no Assistido;
+fora dele, o cartão elegível oferece a troca de modo. Pendências/stale não
+mostram troca de modo como se ela fosse resolver a elegibilidade.
+
+Atalho Abrir fila de construção usa InformationPanelBar.OpenPanelTab com o
+mesmo alvo production_methods/construction_queues do vanilla states_panel.gui.
+Não é nova primitiva de construção. Os 73 testes passam (70 anteriores e três
+novos cobrindo dez ações). Fluxos e atalhos ainda sem prova visual na engine;
+sem teste oculto e sem solicitação de teste ao jogador nesta etapa.
+
 ## Direção atual do jogador e interface 0.5.0
 
 0.5.0 instalada sem jogo em execução; backup `mod_0.4.1_20261109_113054_750010`,

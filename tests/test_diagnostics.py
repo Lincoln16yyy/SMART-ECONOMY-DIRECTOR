@@ -331,6 +331,9 @@ class DiagnosisTests(unittest.TestCase):
         tree = parse(outputs()['gui/journal_entry_widgets/sed_diagnostics.gui'].decode('utf-8-sig'))
         buttons = [entry.value for entry in walk(tree) if entry.key == 'button']
         self.assertGreaterEqual(len(buttons), 30)
+        queue = next(block for block in buttons if child(block, 'text') == 'sed_open_queue')
+        self.assertEqual(child(queue, 'onclick'),
+                         "[InformationPanelBar.OpenPanelTab('production_methods', 'construction_queues')]")
         for block in buttons:
             styles = [entry.value for entry in block if entry.key == 'using']
             self.assertIn('default_button', styles)
@@ -356,6 +359,92 @@ class DiagnosisTests(unittest.TestCase):
                         text.index('text = "sed_metric_operating_balance"'))
         self.assertEqual(sum(entry.key == 'text' and entry.value == 'sed_supply_no_candidate'
                              for entry in walk(tree)), len(SUPPLY_TARGETS))
+
+    def card_fixture(self, name):
+        c = self.country(num_queued_government_constructions=3)
+        if name == 'railway':
+            producer = railway()
+        elif name == 'construction':
+            producer = construction_sector()
+        else:
+            item = next(item for item in SUPPLY_TARGETS if item['good'] == name)
+            producer = building(item['building'])
+            producer['production_methods'] = [item['methods'][0]]
+            c.market_goods[name] = {'market_goods_has_goods_shortage': True}
+        target = state(-2 if name == 'railway' else 0, buildings=[producer])
+        c.states = [target]
+        return c, target, producer
+
+    def test_card_mode_switch_does_not_approve_and_suppresses_pending_auto_event(self):
+        event = next(entry.value for entry in parse(
+            outputs()['events/sed_events.txt'].decode('utf-8-sig')) if entry.key == 'sed_pulse.1')
+        for name in ACTION_NAMES:
+            for mode in ('manual', 'automatic'):
+                with self.subTest(action=name, mode=mode):
+                    c, target, producer = self.card_fixture(name)
+                    c.run('sed_set_mode_' + mode)
+                    gui = self.definitions[f'sed_{name}_switch_assisted_sgui']
+                    self.assertTrue(c.condition(child(gui, 'is_valid'), target))
+                    c.execute(child(gui, 'effect'), target)
+                    self.assertIn('sed_mode_assisted', c.variables)
+                    self.assertNotIn('sed_mode_automatic', c.variables)
+                    self.assertNotIn('sed_mode_manual', c.variables)
+                    self.assertFalse(c.condition(child(gui, 'is_shown'), target))
+                    c.execute(child(event, 'immediate'), c.country_scope())
+                    self.assertEqual(c.constructions, [])
+                    self.assertNotIn(f'sed_{name}_request_pending', target['variables'])
+
+    def test_card_ready_and_blocking_states_follow_current_mode_and_guards(self):
+        for name in ACTION_NAMES:
+            with self.subTest(action=name):
+                c, target, producer = self.card_fixture(name)
+                shown = lambda suffix: c.condition(child(
+                    self.definitions[f'sed_{name}_{suffix}_sgui'], 'is_shown'), target)
+                self.assertTrue(shown('ready'))
+                self.assertFalse(shown('switch_assisted'))
+                self.assertFalse(shown('refresh_card'))
+                c.readings['construction_queue_num_queued_private_levels'] = 1
+                self.assertFalse(shown('ready'))
+                self.assertTrue(shown('blocked_private'))
+                c.readings.update(construction_queue_num_queued_private_levels=0, in_default=True)
+                self.assertTrue(shown('blocked_default'))
+                self.assertFalse(shown('ready'))
+                c.run('sed_set_mode_manual')
+                self.assertTrue(shown('switch_assisted'))
+                self.assertFalse(shown('blocked_private'))
+                self.assertFalse(shown('blocked_default'))
+                target['variables'][f'sed_{name}_request_pending'] = True
+                self.assertFalse(shown('switch_assisted'))
+                self.assertFalse(shown('ready'))
+                self.assertFalse(shown('refresh_card'))
+                self.assertTrue(shown('pending'))
+                c.run('sed_disable_country')
+                self.assertFalse(shown('switch_assisted'))
+                self.assertFalse(shown('ready'))
+
+    def test_stale_card_refresh_revalidates_and_never_approves(self):
+        for name in ACTION_NAMES:
+            with self.subTest(action=name):
+                c, target, producer = self.card_fixture(name)
+                c.run('sed_refresh_diagnostics')
+                gui = self.definitions[f'sed_{name}_refresh_card_sgui']
+                producer['occupancy'] = 0
+                self.assertTrue(c.condition(child(gui, 'is_valid'), target))
+                c.readings['gdp'] = 123
+                c.execute(child(gui, 'effect'), target)
+                self.assertEqual(c.variables['sed_gdp'], 123)
+                self.assertNotIn(f'sed_{name}_candidates', c.variable_lists)
+                self.assertEqual(c.constructions, [])
+                producer['occupancy'] = 1
+                c.readings['gdp'] = 456
+                self.assertFalse(c.condition(child(gui, 'is_valid'), target))
+                c.execute(child(gui, 'effect'), target)
+                self.assertEqual(c.variables['sed_gdp'], 123)  # Callback revalidated.
+                producer['occupancy'] = 0
+                c.run('sed_disable_country')
+                c.execute(child(gui, 'effect'), target)
+                self.assertNotIn('sed_gdp', c.variables)
+                self.assertEqual(c.constructions, [])
 
     def test_activation_collects_real_supplied_readings(self):
         c = self.country(gdp=12345, total_population=500, average_sol=13.25)

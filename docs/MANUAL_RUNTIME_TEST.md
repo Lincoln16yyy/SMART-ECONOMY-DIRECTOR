@@ -1,4 +1,4 @@
-# Plano de teste da campanha — interface 0.5.0
+# Plano de teste da campanha — interface 0.5.1
 
 Estado atual: [auditoria de 09/11/2026](AUDIT_2026-11-09.md). Os roteiros abaixo
 não são resultados executados. Não iniciar novas funcionalidades até fechar
@@ -325,3 +325,17 @@ controles 52 pixels; textos devem quebrar dentro do painel. Conferir cartão
 com motivo de bloqueio e alerta financeiro simultâneos sem sobreposição.
 Mostrar detalhes não deve executar obras; recolher não deve remover cartões.
 Critérios de aprovação e limitações da auditoria permanecem iguais.
+
+
+## Cartões acionáveis 0.5.1 — roteiro futuro
+
+Conferir que Passar para Assistido muda apenas o modo, mantendo o prédio e
+estado apresentados, sem adicionar obra. Somente o botão Aprovar deve iniciar
+a inclusão. Conferir mensagem disponível com guardas satisfeitas; fila privada
+e default devem retirar a disponibilidade. Em Manual/Automático, as mensagens
+devem orientar a troca de modo antes de apresentar guardas operacionais.
+
+Um cartão desatualizado oferece atualização; ela recalcula a lista e não
+constrói. Um cartão pendente não deve tratar a troca de modo ou atualização
+como aprovação de outra expansão. Abrir fila de construção deve abrir a janela
+nativa sem modificar a fila. Esses testes visuais ainda não foram executados.
