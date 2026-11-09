@@ -15,17 +15,17 @@ após revalidação. A 0.3.1 acrescenta a decomposição dos motivos de rejeiç�
 estado quando não há candidato; a 0.3.2 mostra sob o botão a primeira
 guarda que falha quando ele está bloqueado. A execução dos botões e a
 coexistência com mods ainda não foram validadas. Não há automação periódica.
-A versão 0.3.2 está
-instalada localmente e a suíte cobre os dois fluxos com 45 testes. Em
+A versão 0.3.2 está instalada localmente e a suíte cobre os dois fluxos com
+46 testes. Em
 2026-11-08, o jogador enviou capturas das seções vazias em campanha
 (0.3.0 e 0.3.1, Império Otomano, 1/1836): estados vazios corretos nas duas
 seções e, na 0.3.1, a linha de motivos corretamente oculta sem déficit/fila
 suficiente. Depois, o jogador confirmou atualização (inclusive sob
 solicitação) e desativação na engine: os botões clicáveis somem ao
-senhor de desativar. Em leitura posterior, a seção de construção
+ao desativar. Em leitura posterior, a seção de construção
 renderizou o candidato Baixo Egito com o botão de aprovar, e a variação
 mensal de PIB funcionou (6,4%). O jogador clicou no botão e nada
-haconteceu: o tooltip mostrava o botão Bloqueado, e a fila privada tinha
+aconteceu: o tooltip mostrava o botão Bloqueado, e a fila privada tinha
 2 projetos, satisfazendo corretamente a trava da fila privada. Para
 confirmar a aprovação, será preciso fila privada vazia. Execução com
 clique permitido, linha de motivos com déficit presente, recarga e
@@ -104,10 +104,11 @@ travas, confirmação/rejeição de fila e limpeza dos dois fluxos. Ele não
 confirma primitivas, datamodel nem GUI na engine.
 
 Próximos passos: pedir ao jogador uma conferência breve dos dois botões e da
-linha de motivos, em cópia de save, com o jogo pausado, seguindo o checklist
-da 0.3.1 em MANUAL_RUNTIME_TEST.md. Registrar se os estados aparecem, se as
-travas desabilitam os botões e se a fila pública ganha um úniconível em cada tipo. Na 0.3.2, conferir também a linha de motivo sob o
-botão bloqueado. Não iniciar testes gráficos ocultos prolongados. Depois
+linha de motivos, em cópia de save, com o jogo pausado, seguindo os checklists
+da 0.3.0–0.3.2 em MANUAL_RUNTIME_TEST.md. Registrar se os estados aparecem, se
+as travas desabilitam os botões e se a fila pública ganha um único nível em
+cada tipo. Conferir também a linha de motivo sob o botão bloqueado. Não iniciar
+testes gráficos ocultos prolongados. Depois
 verificar desativação, recarga e coexistência antes de ampliar os tipos de ação.
 O comportamento real das pendências é: a marca permanece enquanto a expansão
 está enfileirada e some quando ela é concluída ou cancelada.

@@ -406,3 +406,10 @@ havia sido instalada no prefixo (o ZIP da 0.3.2 foi extraído agora, com
 backup da 0.3.0 em `sed_backups/`). O `content_load.json` não foi alterado
 e o mod permanece habilitado. Próxima sessão: abrir o jogo e conferir a
 linha de motivo do botão bloqueado e o clique de aprovação.
+
+Atualização posterior: a leitura do perfil local confirma agora
+`version="0.3.2"` em `mod/Smart Economy Director/descriptor.mod`, e a entrada
+do mod continua habilitada entre as 11 entradas do load order. A captura sem a
+linha de motivo foi feita antes dessa atualização e não valida a renderização
+da 0.3.2. Ainda falta confirmar a linha e executar uma aprovação com as travas
+satisfeitas.
