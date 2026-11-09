@@ -18,8 +18,13 @@ instalada localmente e a suíte cobre os dois fluxos com 45 testes. Em
 2026-11-08, o jogador enviou capturas das seções vazias em campanha
 (0.3.0 e 0.3.1, Império Otomano, 1/1836): estados vazios corretos nas duas
 seções e, na 0.3.1, a linha de motivos corretamente oculta sem déficit/fila
-suficiente. Nenhum botão de ação foi exercitado e a linha de motivos ainda
-não foi vista com candidatos ausentes e déficit presente.
+suficiente. Depois, o jogador confirmou atualização (inclusive sob
+solicitação) e desativação na engine: os botões clicáveis somem ao
+senhor de desativar. Em leitura posterior, a seção de construção
+renderizou o candidato Baixo Egito com o botão de aprovar, e a variação
+mensal de PIB funcionou (6,4%). Nenhum clique de aprovação foi relatado:
+execução, travas de clique, linha de motivos com déficit presente, recarga
+e coexistência seguem pendentes.
 
 Atualização histórica: a continuação conseguiu entrar na França com
 Gamescope headless/DXVK e confirmou ativação por decisão, abertura/rolagem do

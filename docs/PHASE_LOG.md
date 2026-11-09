@@ -330,3 +330,26 @@ sem candidatos, condições que não existiam nesta leitura. Nenhum botão foi
 exibido ou clicado, portanto a execução das ações e a renderização da linha
 de motivos seguem não confirmadas na engine. Desativação, recarga e
 coexistência também permanecem pendentes.
+
+## Fase 2 — Atualização, desativação e candidato de construção em campanha
+
+O jogador relatou que a atualização funciona, inclusive sob solicitação
+(agenda não mensal), e que desativar faz os botões clicáveis (Atualizar,
+atualizar todo mês, Desativar) desaparecerem — o ciclo de vida confirmado na
+engine. Em nova leitura, o painel mostrou saldo de £22,3K, reservas de
+£381K, PIB de £5,76M com variação de 6,4% em um mês, capacidade de
+construção de 16,0, fila pública com 10 projetos, fila privada com 2, 17
+estados analisados, nenhum com infraestrutura negativa ou insumos em falta,
+31 edifícios com contratação incompleta e 93 falhas de contratação.
+
+Com a fila pública acima de três projetos, a seção de capacidade de
+construção passou a exibir um candidato: **Baixo Egito — setor de
+construção**, com o texto de motivo e o botão “Aprovar: enfileirar 1 nível
+do setor”. A seção ferroviária permaneceu no estado vazio correto, sem
+déficit de infraestrutura, e a linha de motivos não apareceu em nenhuma
+seção, como esperado.
+
+Não foi relatado o clique no botão de aprovação, portanto a inclusão do
+nível na fila pública, as travas de clique e a revalidação na engine
+seguem sem confirmação. Recarga e coexistência com outros construtores
+ainda permanecem pendentes.
