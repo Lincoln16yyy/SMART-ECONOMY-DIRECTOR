@@ -1,14 +1,15 @@
 # Arquitetura por fases
 
-A Fase 1 de diagnóstico está implementada em 0.1.0; ver
-[PHASE1.md](PHASE1.md). Os módulos de planejamento e execução abaixo continuam
-propostos. A implementação iniciou por solicitação explícita do jogador,
-preservando as lacunas de pesquisa como bloqueios para futuras ações automáticas.
+A Fase 1 de diagnóstico foi confirmada em campanha na 0.1.0; ver
+[PHASE1.md](PHASE1.md). A 0.2.0 começa a Fase 2 com até três candidatos
+ferroviários e uma aprovação individual que enfileira uma expansão elegível.
+Ranking nacional completo, outros tipos de ação e automação periódica continuam
+por implementar.
 
 ## Responsabilidade
 
-O Director estabelece objetivos e prioridades nacionais. A primeira entrega
-executável será somente diagnóstico. Usará namespace `sed_`, funcionará sozinho
+O Director estabelece objetivos e prioridades nacionais. O primeiro executor
+econômico é limitado a uma ação explícita por clique. Usa namespace `sed_`, funciona sozinho
 e não dependerá do Smart Government ou de identificadores internos de outro mod.
 O jogador conserva decisões políticas, diplomáticas e militares importantes.
 
@@ -40,7 +41,7 @@ Government Advisor só recomende promulgações.
 | Ciclo de vida | `common/on_actions/sed_on_actions.txt`, efeitos e decisões próprios | Ativação, migração e limpeza com marcador de schema |
 | Planejamento | Valores e efeitos `sed_` separados | Objetivos, filtros, ranking e motivos de rejeição |
 | Interface | Journal Entry, scripted GUIs e widget `sed_` | Situação, estratégia, três recomendações e ações efetivas |
-| Execução futura | Efeitos de ações `sed_` | Construção normal, proteções e confirmação da fila |
+| Execução inicial | `sed_run_railway_approval` | Uma expansão ferroviária pública, aprovada e revalidada; sem tentativa automática |
 | Localização | `localization/braz_por/`, `localization/english/` | Português escrito de fato e fallback inglês; UTF-8 BOM |
 | Verificação | `tests/`, `tools/validate.py` | Cenários e referências cruzadas; runtime separado |
 
@@ -82,6 +83,14 @@ intenção pendente e aguardar conclusão e estabilização antes de repetir.
 Um cooldown isolado não evita duplicação de projetos privados ou de outros mods.
 Se essa consulta não for confiável, a construção automática permanecerá bloqueada.
 
+Na 0.2.0, o primeiro recorte considera apenas ferrovias já existentes e
+operantes em estados incorporados com infraestrutura abaixo de zero. Exige jogo
+pausado, ausência de inadimplência, saldo semanal não negativo e fila privada
+vazia; confere o nível ferroviário já enfileirado e a elegibilidade normal do
+jogo no clique. Mesmo com essas travas, custo e retorno não são previstos. O
+pedido cria um único nível na fila pública e sua inclusão é conferida pelo
+contador de níveis públicos.
+
 O modo automático futuro só habilitará domínios cujo executor seja o Director.
 Uma aprovação manual não habilita sozinha ações periódicas. Quando outro mod
 construir, o Director apresentará estratégia e verificará os resultados. Essa
@@ -90,7 +99,8 @@ escreverá flags de terceiros nem tentará desligá-los silenciosamente.
 
 ## Modos, ciclo e histórico
 
-- Manual: diagnóstico/recomendações sob solicitação, nenhuma ação econômica.
+- Manual: diagnóstico e recomendações sob solicitação ou mensal; ação somente
+  após o clique individual em uma recomendação.
 - Assistido: análise periódica e aprovação individual de candidatos revalidados.
 - Automático: apenas ações comprovadas, com limites, registro e suspensão em crise.
 

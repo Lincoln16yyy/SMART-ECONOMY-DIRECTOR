@@ -57,6 +57,15 @@ def parse(text):
                     value = block(True)
                 else:
                     value = scalar(value)
+                    if cursor < len(tokens) and tokens[cursor] == '{':
+                        cursor += 1
+                        value = [Entry('type_name', None, value)] + block(True)
+            elif cursor + 1 < len(tokens) and tokens[cursor + 1] == '{':
+                # GUI declarations such as `types name { ... }` use an
+                # implicit named block instead of an equals sign.
+                value = [Entry('name', None, scalar(tokens[cursor]))]
+                cursor += 2
+                value.extend(block(True))
             result.append(Entry(scalar(key), op, value))
         if nested:
             raise ValueError('Unclosed block')

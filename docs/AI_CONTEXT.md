@@ -4,12 +4,12 @@ O usuário solicitou seguir `Texto colado.txt` e ir publicando no GitHub
 `Lincoln16yyy/SMART-ECONOMY-DIRECTOR`. O conteúdo original está preservado
 integralmente em PROJECT_BRIEF.md. Leia-o antes de trabalhar.
 
-Fase atual: 1, implementação inicial 0.1.0 de diagnóstico, por pedido explícito
-do jogador para começar a construção do mod. As lacunas da Fase 0 continuam
-registradas e bloqueiam automação econômica, não a entrega de diagnóstico.
-Existe pacote instalável gerado em `dist/`; a interface já foi conferida pelo
-jogador em campanha, enquanto limpeza, recarga e compatibilidade seguem pendentes.
-Não copiar economia de mods por suposição.
+Fase atual: protótipo da Fase 2 em 0.2.0. A interface da 0.1.0 foi conferida
+pelo jogador em campanha; a 0.2.0 acrescenta até três recomendações de expansão
+ferroviária e um botão para aprovar uma por vez. O uso do botão e a coexistência
+com mods ainda não foram validados em campanha. Não há automação periódica.
+O pacote local de 0.1.0 e a instalação anterior podem estar desatualizados até
+que o pacote 0.2.0 seja gerado e instalado.
 
 Atualização mais recente: a continuação conseguiu entrar na França com
 Gamescope headless/DXVK e confirmou ativação por decisão, abertura/rolagem do
@@ -73,17 +73,18 @@ mensalmente; a Journal Entry não tem segundo pulso. Desativar limpa tudo, menos
 schema. A agenda pode ser mensal ou sob solicitação; não há modos de execução
 econômica. O histórico mantém duas amostras-base mensais de PIB e leitura atual.
 
-Comandos: `python3 tools/build_mod.py --check`,
+Comandos de desenvolvimento permanecem: `python3 tools/build_mod.py --check`,
 `python3 tools/validate.py --game "/caminho/Victoria 3/game"`,
 `python3 -m unittest discover -s tests -v`, `python3 tools/package_mod.py`.
-Vinte e quatro testes passaram: nove de auditoria e quinze de diagnóstico,
-validação e pacote. O interpretador restrito dos testes executa os scripts,
-mas não confirma nomes de primitivas, listas ou GUI na engine.
+Vinte e quatro testes pertencem à versão 0.1.0; não foram atualizados nem
+executados para o executor 0.2.0. O interpretador restrito não confirma
+primitivas de fila, listas dinâmicas nem GUI na engine.
 
-Próximos passos: usar MANUAL_RUNTIME_TEST.md para desativação/reativação e
-save/reload; continuar a pesquisa da fila/ownership e catálogo efetivo antes de
-planejar os primeiros candidatos econômicos. O jogador confirmou a interface
-no jogo normal. Não apresentar a execução de recomendações como implementada.
+Próximos passos: atualizar o mod local e pedir ao jogador uma conferência breve
+do botão ferroviário, em cópia de save, com o jogo pausado. Registrar se o
+estado aparece, se as travas desabilitam o botão e se a fila pública ganha um
+único nível. Não iniciar testes gráficos ocultos prolongados. Depois verificar
+desativação, recarga e coexistência antes de ampliar os tipos de ação.
 
 Houve teste de inicialização isolado em Xvfb/Wine, descrito em RUNTIME_SMOKE.md:
 o mod foi reconhecido e chegou ao menu sem erros próprios na execução limpa.

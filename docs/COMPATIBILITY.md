@@ -1,9 +1,9 @@
 # Compatibilidade — inventário inicial
 
 Data: 2026-11-08. Habilitado significa listado em `content_load.json`, não
-automação comprovadamente ativa em campanha. O Director 0.1.0 agora tem código
-de diagnóstico, mas nenhuma combinação foi testada em campanha. Sua validação
-estática rejeita ações econômicas e escrita em variáveis de terceiros.
+automação comprovadamente ativa em campanha. A interface de diagnóstico 0.1.0
+foi confirmada pelo jogador. A ação ferroviária aprovada da 0.2.0 ainda não foi
+conferida em campanha nem com os outros mods ativos.
 
 | Mod | Evidência local / responsabilidade | Conflito e coexistência proposta |
 | --- | --- | --- |
@@ -23,20 +23,20 @@ estática rejeita ações econômicas e escrita em variáveis de terceiros.
 
 ## Controles de execução pedidos pelo jogador
 
-O Director deverá mostrar ações econômicas recomendadas com controles de
-aprovação que executem a ação real do jogo. O jogador quer manter o Smart
+O Director deve mostrar ações econômicas recomendadas com controles de
+aprovação que executem a ação real do jogo. A primeira versão desse fluxo está
+implementada para expandir ferrovias em estados elegíveis. O jogador quer manter o Smart
 Government Advisor apenas como recomendador de leis. Isso não autoriza o
 Director a iniciar promulgações nem a escrever variáveis de outros mods.
 
 Como Economy Advisor e Supply Chain Semi-Auto Builder estão habilitados, a
-construção é um domínio disputado. A primeira implementação deve preferir uma
-ação individual aprovada na tela, revalidar país, estado, tipo, elegibilidade e
-fila imediatamente antes de chamar o efeito normal do jogo, e confirmar o
-resultado na fila. Nenhuma automação mensal de construção deve ser habilitada
-por padrão. Se o alvo ou as filas não puderem ser identificados com segurança,
-o controle precisa explicar por que está indisponível. A implementação deve
-ser testada com as opções de automação dos outros mods explicitamente
-registradas; hoje seu estado ativo por país ainda não foi confirmado.
+construção é um domínio disputado. O botão atual exige pausa, saldo semanal não
+negativo, país fora de inadimplência e fila privada vazia; valida o estado e
+nível ferroviário no clique, usa o efeito normal e confere o contador público.
+Isso não foi validado na engine da campanha. Nenhuma automação mensal de
+construção está habilitada. As opções por país dos outros construtores ainda
+não foram confirmadas; a ação precisa de teste com o conjunto de mods e flags
+registrados antes de ser tratada como segura para uso prolongado.
 
 No Supply Chain, a rotina ferroviária ordena estados por infraestrutura,
 verifica ocupação e construção existente em certos caminhos, e executa

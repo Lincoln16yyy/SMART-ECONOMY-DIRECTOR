@@ -184,3 +184,24 @@ Auto Expand e 18 PMs de ARoAI. `git diff --check` passou; os testes não foram
 executados. Próxima etapa: confrontar um candidato econômico com as definições
 efetivamente carregadas e as condições do save antes de criar sua recomendação
 e botão de aprovação.
+
+## Fase 2 — Primeira ação aprovada: expansão ferroviária 0.2.0
+
+Implementado o primeiro fluxo vertical de recomendação e execução individual.
+O diário lista até três estados incorporados do jogador com infraestrutura
+negativa, ferrovia existente e ocupação de pelo menos 80%, sem falha de
+contratação, escassez ou expansão já enfileirada. O botão revalida o estado ao
+ser clicado e só fica habilitado com o jogo pausado, saldo semanal não negativo,
+sem default e fila privada vazia. Ele solicita um nível público de ferrovia;
+nenhuma ação ocorre sem clique, não há estimativa de retorno e não há repetição
+automática. A solicitação pendente fica marcada até o nível entrar na fila ou
+ser cancelado.
+
+Gerados e empacotados os arquivos da 0.2.0. Validação estática do pacote e
+`git diff --check` passaram; não foram executados testes unitários nem testes
+na engine para esta ação. O parser estrutural foi ampliado para declarações GUI
+de tipos. A 0.2.0 foi instalada no perfil local; a cópia anterior foi salva em
+`sed_backups/mod_0.1.0_20261108_230131_474104`, e as 11 entradas preexistentes
+da lista de mods foram preservadas. Próxima verificação: o jogador abrirá o
+jogo normal e confirmará renderização da lista, tooltip e comportamento do
+botão na campanha. Compatibilidade da ação e do datamodel permanece pendente.

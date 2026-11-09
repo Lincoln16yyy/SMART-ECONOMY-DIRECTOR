@@ -1,8 +1,9 @@
-# Instalação e uso — versão 0.1.0
+# Instalação e uso — versão 0.2.0
 
-Requer Victoria 3 1.15.x. Esta versão implementa somente diagnóstico econômico.
-Recomendações de investimento, construção automática e mudanças de PM não estão
-implementadas. Não há dependência de outro mod ou do Steam Workshop.
+Requer Victoria 3 1.15.x. A versão 0.2.0 mantém o diagnóstico e acrescenta um
+protótipo de recomendação ferroviária com aprovação individual. Não executa
+ações econômicas automaticamente nem altera métodos de produção. Não depende
+do Steam Workshop.
 
 ## Gerar o pacote
 
@@ -15,7 +16,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O resultado fica em `dist/smart-economy-director-0.1.0.zip`. O pacote contém
+O resultado fica em `dist/smart-economy-director-0.2.0.zip`. O pacote contém
 somente os arquivos carregáveis; não inclui saves, fontes do jogo, pesquisa,
 testes ou outro mod. A geração é determinística e não modifica a instalação.
 
@@ -52,12 +53,16 @@ scripts antigos remanescentes.
 4. Use **Atualizar diagnóstico** para uma nova leitura imediata.
 5. Use **Atualizar sob solicitação** para suspender as leituras mensais,
    ou **Atualizar todo mês** para retomá-las e atualizar imediatamente.
-6. Use **Desativar** no diário ou a decisão de desativação para limpar leituras
+6. Se houver recomendação ferroviária, confira o saldo, a fila pública e o
+   tooltip; pause o jogo e aprove apenas se desejar adicionar um nível público.
+   A ação não prevê custo nem retorno. Veja as travas em
+   [MANUAL_RUNTIME_TEST.md](MANUAL_RUNTIME_TEST.md).
+7. Use **Desativar** no diário ou a decisão de desativação para limpar leituras
    e histórico. Para voltar, use a decisão de ativação.
 
 O Director é opcional: não se ativa sozinho em campanha nova ou save existente.
-As opções de atualização controlam somente a frequência das leituras; não são
-os futuros modos de execução econômica Automático/Assistido/Manual.
+As opções de atualização controlam a frequência das leituras. Aprovar uma
+recomendação executa somente aquela ação; não habilita um modo automático.
 
 Todos os números do painel pertencem à última leitura, cuja data é mostrada.
 A variação do PIB exige leituras em meses distintos e uma base positiva.

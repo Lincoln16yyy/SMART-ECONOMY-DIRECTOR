@@ -23,6 +23,12 @@ sed_monthly_updates_sgui = {
  is_valid = { is_player = yes has_variable = sed_enabled NOT = { has_variable = sed_monthly_refresh } }
  effect = { set_variable = { name = sed_monthly_refresh value = yes } sed_refresh_diagnostics = yes }
 }
+sed_approve_railway_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } }
+ is_valid = { sed_railway_approval_valid = yes }
+ effect = { if = { limit = { sed_railway_approval_valid = yes } sed_run_railway_approval = yes } }
+}
 sed_monthly_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable = sed_monthly_refresh }
@@ -78,4 +84,20 @@ sed_growth_visible_sgui = {
 sed_no_growth_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_growth_available = 0 }
+}
+sed_recommendations_visible_sgui = {
+ scope = country
+ is_shown = { has_variable = sed_enabled has_variable_list = sed_railway_candidates }
+}
+sed_no_recommendations_visible_sgui = {
+ scope = country
+ is_shown = { has_variable = sed_enabled NOT = { has_variable_list = sed_railway_candidates } }
+}
+sed_action_success_visible_sgui = {
+ scope = country
+ is_shown = { has_variable = sed_enabled var:sed_railway_action_status = 1 }
+}
+sed_action_failed_visible_sgui = {
+ scope = country
+ is_shown = { has_variable = sed_enabled var:sed_railway_action_status = 2 }
 }

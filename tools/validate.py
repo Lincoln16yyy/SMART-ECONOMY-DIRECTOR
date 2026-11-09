@@ -1,4 +1,4 @@
-"""Validate generated files, references and the diagnostics-only action boundary."""
+"""Validate generated files, references and the approved-action boundary."""
 
 import argparse
 import json
@@ -48,8 +48,10 @@ def validate(root=ROOT, game=None):
                 errors.append('Duplicate custom definition: ' + entry.key)
             custom[entry.key] = entry.value
     allowed_effects = {'if', 'else_if', 'else', 'limit', 'set_variable', 'remove_variable',
-                       'change_variable', 'root', 'every_scope_state', 'every_scope_building',
-                       'add_journal_entry'}
+                       'change_variable', 'root', 'prev', 'owner', 'every_scope_state',
+                       'every_scope_building', 'ordered_scope_state', 'clear_variable_list',
+                       'add_to_variable_list', 'add_journal_entry', 'start_building_construction',
+                       'order_by', 'max', 'check_range_bounds'}
 
     def check_effects(entries):
         for entry in entries:
@@ -64,7 +66,8 @@ def validate(root=ROOT, game=None):
             elif entry.key in ('set_variable', 'change_variable'):
                 if not child(entry.value, 'name').startswith('sed_'):
                     errors.append('Foreign variable written')
-            elif entry.key in ('if', 'else_if', 'else', 'root', 'every_scope_state', 'every_scope_building'):
+            elif entry.key in ('if', 'else_if', 'else', 'root', 'prev', 'owner',
+                               'every_scope_state', 'every_scope_building', 'ordered_scope_state'):
                 check_effects([e for e in entry.value if e.key != 'limit'])
     for name, tree in trees.items():
         if '/scripted_effects/' in name:
@@ -76,10 +79,18 @@ def validate(root=ROOT, game=None):
             if entry.key.startswith('sed_') and entry.value == 'yes' and entry.key not in custom:
                 errors.append('Undefined scripted call: ' + entry.key)
     all_text = '\n'.join(p.read_text(encoding='utf-8-sig') for p in (root / 'common').rglob('*.txt'))
-    for mutation in ('start_building_construction', 'activate_production_method', 'start_enactment',
-                     'add_treasury', 'set_tax_level', 'declare_war', 'add_modifier'):
+    for mutation in ('activate_production_method', 'start_enactment', 'add_treasury',
+                     'set_tax_level', 'declare_war', 'add_modifier'):
         if re.search(r'\b' + mutation + r'\s*=', all_text):
-            errors.append('Economic/political mutation is not allowed in Phase 1: ' + mutation)
+            errors.append('Unexpected economic/political mutation: ' + mutation)
+    construction_calls = [(name, entry) for name, tree in trees.items() for entry in walk(tree)
+                          if entry.key == 'start_building_construction']
+    approved_construction = [entry for entry in walk(custom.get('sed_run_railway_approval', []))
+                             if entry.key == 'start_building_construction']
+    if (len(construction_calls) != 1 or len(approved_construction) != 1
+            or construction_calls[0][0] != 'common/scripted_effects/sed_effects.txt'
+            or approved_construction[0].value != 'building_railway'):
+        errors.append('Construction is allowed only as one approved railway level in sed_run_railway_approval')
     cleaned = {entry.value for entry in walk(custom.get('sed_disable_country', []))
                if entry.key == 'remove_variable'}
     assigned = {child(entry.value, 'name') for tree in trees.values() for entry in walk(tree)

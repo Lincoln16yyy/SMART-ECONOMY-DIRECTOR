@@ -1,23 +1,24 @@
 # Smart Economy Director — Victoria 3 1.15
 
-Primeira versão **0.1.0 — diagnóstico econômico**. O mod tem scripts, interface
-própria de diário, ativação opcional e leituras manuais ou mensais. Construção
-automática, recomendações econômicas e botões para aprová-las pertencem a fases
-posteriores.
+Versão de desenvolvimento **0.2.0 — diagnóstico e primeira ação aprovada**. O
+mod tem diário próprio, leituras manuais ou mensais, recomendações limitadas de
+infraestrutura e um botão para aprovar a expansão de uma ferrovia elegível.
+Não há execução econômica automática.
 
 O painel mostra finanças, PIB, população, padrão de vida, alfabetização,
 capacidade de construção, filas e sinais de infraestrutura, abastecimento e
 contratação. Os dados correspondem à última leitura indicada no painel.
 O crescimento do PIB requer amostras em meses distintos.
 
-**Estado: a interface e as leituras principais foram confirmadas em campanha.
-Compatibilidade ampliada e execução de recomendações ainda estão pendentes.**
+**Estado: a interface 0.1.0 foi confirmada em campanha. A ação ferroviária
+0.2.0 ainda precisa ser conferida no jogo normal.** Compatibilidade ampliada
+continua pendente.
 Não é uma versão de automação econômica pronta para deixar uma campanha sozinha.
 
 ## Instalação e uso
 
 Consulte [instalação e geração do ZIP](docs/INSTALL.md). O pacote gerado em
-`dist/smart-economy-director-0.1.0.zip` contém a pasta do mod e o descritor
+`dist/smart-economy-director-0.2.0.zip` contém a pasta do mod e o descritor
 externo. Ative no launcher e use a decisão **Ativar Smart Economy Director**.
 Nenhum outro mod é obrigatório; nenhuma ativação econômica é automática.
 
@@ -54,5 +55,6 @@ substituem a validação no motor do jogo.
 
 A [pesquisa anterior na nuvem](docs/RESEARCH_CLOUD.md) e as
 [instruções de continuidade local](docs/LOCAL_CODEX.md) foram preservadas.
-As funções de construção e PMs do Economy Advisor e dos demais mods continuam
-sob responsabilidade deles; a versão atual do Director apenas lê indicadores.
+PMs continuam sob responsabilidade dos outros mods. O botão ferroviário do
+Director só adiciona um nível público após aprovação e checagens atuais; não
+ativa um construtor periódico.

@@ -1,9 +1,9 @@
 {
   "name": "Smart Economy Director",
   "id": "sed.smart_economy_director",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "supported_game_version": "1.15.*",
-  "short_description": "National economic diagnostics. No economic actions in this version.",
+  "short_description": "Economic recommendations with individually approved construction actions.",
   "tags": [
     "Economy",
     "Utilities",
