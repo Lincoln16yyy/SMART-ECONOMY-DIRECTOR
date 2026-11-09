@@ -4,7 +4,7 @@ O usuário solicitou seguir `Texto colado.txt` e ir publicando no GitHub
 `Lincoln16yyy/SMART-ECONOMY-DIRECTOR`. O conteúdo original está preservado
 integralmente em PROJECT_BRIEF.md. Leia-o antes de trabalhar.
 
-Fase atual: base da automação opt-in em 0.3.6. O diário tem botões sempre visíveis para Manual, Assistido e Automático e status persistente; as ações individuais só são aprovadas em Assistido. Automático revisa mensalmente e enfileira no máximo um nível elegível, com travas para inadimplência, filas ocupadas, construção pausada e flags conhecidas de construtores concorrentes. A correção da 0.3.5 remove a exigência falsa de jogo pausado dos cliques individuais, conforme captura do Egito. Validação estática passou; nenhuma confirmação da engine para os novos controles/ações ainda. A versão 0.3.6 está empacotada e instalada no perfil local preservando load order; o jogador já pode testar. Não iniciar jogo nem teste gráfico longo sem pedido.
+Fase atual: refinamento da automação opt-in em 0.3.7. Depois que o jogador confirmou que os controles automáticos aparecem (captura do Egito, setembro de 1838), a dúvida restante é se o executor tenta agir e por que não enfileira. O status de revisão agora separa ausência de candidato elegível, inadimplência, filas ocupadas, construção pausada e automação concorrente. A captura mostra fila pública de 46 níveis e fila privada de 2, condições que intencionalmente bloqueiam o executor. Validação estática passou e a 0.3.7 foi instalada com backup da 0.3.6, preservando as 11 entradas do load order. Não iniciar jogo nem teste gráfico longo.
 
 Fase anterior: protótipo da Fase 2 em 0.3.4. O jogador confirmou em campanha a
 interface, os indicadores e a seção vazia de oportunidades. A 0.2.0 acrescentou

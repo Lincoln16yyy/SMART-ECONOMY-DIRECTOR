@@ -230,7 +230,7 @@ mercado, estado, filas, saldo, pausa e status de inadimplência. Esta fase não
 prevê custos, preços futuros, retorno ou emprego do novo nível; a expansão
 apenas acrescenta um nível à fila normal do jogo.
 
-## Modos e automação opt-in 0.3.6
+## Modos e automação opt-in 0.3.7
 
 | Ação | Resultado esperado |
 | --- | --- |
@@ -239,7 +239,11 @@ apenas acrescenta um nível à fila normal do jogo.
 | Clicar Assistido | Botões individuais podem ser aprovados; não é exigido pausar o jogo; confirmar que fila e estado são revalidados no clique |
 | Clicar Automático | Status e limite de uma ação mensal visíveis; nenhum nível é enfileirado imediatamente ao trocar modo |
 | Avançar até revisão automática | No máximo um nível entra na fila pública no mês; conferir qual candidato foi escolhido |
-| Filas ocupadas, inadimplência ou construção pausada | Revisão não enfileira ação e mostra status de bloqueio |
+| Fila ocupada | Revisão não enfileira e mostra que as filas pública/privada já estão ocupadas |
+| Inadimplência | Revisão não enfileira e mostra a suspensão fiscal |
+| Construção pausada | Revisão não enfileira e mostra a pausa da fila |
+| Automação concorrente conhecida | Revisão não enfileira e identifica outro construtor ativo |
+| Nenhum candidato elegível | Mostra status de ausência de candidato, sem confundir com trava operacional |
 | Outro construtor conhecido ativo | Automação do Director fica bloqueada; confirmar variáveis no save/mod ativo |
 | Voltar de Automático para Assistido/Manual | A próxima revisão não executa ação automática |
 | Save antigo sem variável de modo | Migra para Assistido, sem ligar Automático sozinho |

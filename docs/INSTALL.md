@@ -1,6 +1,6 @@
-# Instalação e uso — versão 0.3.6
+# Instalação e uso — versão 0.3.7
 
-Requer Victoria 3 1.15.x. A versão 0.3.6 mantém o diagnóstico e os protótipos
+Requer Victoria 3 1.15.x. A versão 0.3.7 mantém o diagnóstico e os protótipos
 de expansão ferroviária e de capacidade de construção. Acrescenta recomendações
 e botões de aprovação para expandir produtores locais de madeira, ferro,
 carvão, cereais, tecido, ferramentas, mantimentos e roupas quando o mercado
@@ -9,7 +9,8 @@ operante, usar método de produção ativo que gere o bem, não ter falta de ins
 e não ter expansão já na fila. A operação continua limitada a um nível por
 aprovação. Saldo semanal negativo gera um alerta, mas não impede aprovação. Os modos
 Manual, Assistido e Automático têm botões visíveis no topo do diário. Automático é
-opt-in e pode enfileirar no máximo um nível elegível por mês. Não altera métodos
+opt-in e pode enfileirar no máximo um nível elegível por mês. Após cada revisão,
+o diário informa se houve ação, faltou candidato ou uma trava bloqueou a fila. Não altera métodos
 de produção nem leis.
 
 ## Gerar o pacote
@@ -22,7 +23,7 @@ python3 tools/validate.py --game "/caminho/Victoria 3/game"
 python3 tools/package_mod.py
 ```
 
-O resultado fica em `dist/smart-economy-director-0.3.6.zip`. O pacote contém
+O resultado fica em `dist/smart-economy-director-0.3.7.zip`. O pacote contém
 somente os arquivos carregáveis; não inclui saves, fontes do jogo, pesquisa,
 testes ou outro mod. A geração é determinística e não modifica a instalação.
 

@@ -1,6 +1,6 @@
 # Smart Economy Director — Victoria 3 1.15
 
-Versão de desenvolvimento **0.3.6 — modos Manual, Assistido e Automático com
+Versão de desenvolvimento **0.3.7 — modos Manual, Assistido e Automático com
 controles sempre visíveis**. O mod tem diário próprio, leituras manuais ou
 mensais, recomendações limitadas de infraestrutura e capacidade de construção,
 além de produtores locais para oito bens em escassez. Os três modos aparecem em
@@ -10,11 +10,11 @@ máximo um nível quando as filas estão vazias, o país está fora de inadimpl�
 e não há uma das automações concorrentes detectadas ativa. Cada botão de ação
 permanece visível no cartão e é revalidado no clique. Quando
 não há candidato, o painel decompõe os estados por motivo principal; quando o
-botão de aprovação está bloqueado, o painel indica qual guarda falhou (fila privada, inadimplência, fila pública curta ou recomendação desatualizada).
+botão de aprovação está bloqueado, o painel indica a guarda que bloqueia a ação. O estado do Automático identifica fila ocupada, inadimplência, construção pausada, outro construtor conhecido ou ausência de candidato.
 Saldo semanal negativo aparece como alerta, sem bloquear a aprovação. O modo
 Automático pode agir apenas em ferrovias elegíveis e produtores existentes
 para madeira, ferro, carvão, cereais, tecido, ferramentas, mantimentos e roupas
-em escassez; não altera PMs nem leis. A 0.3.6 passou validação estática; modos,
+em escassez; não altera PMs nem leis. A 0.3.7 passou validação estática; modos,
 botões e execução agendada ainda precisam de confirmação na campanha antes de
 serem considerados validados na engine.
 
@@ -23,12 +23,12 @@ capacidade de construção, filas e sinais de infraestrutura, abastecimento e
 contratação. Os dados correspondem à última leitura indicada no painel.
 O crescimento do PIB requer amostras em meses distintos.
 
-**Estado: interface, indicadores, atualização sob solicitação, desativação e candidatos anteriores foram confirmados em campanha nas versões 0.3.0–0.3.5.** Os novos botões de modo, ações de oferta e automação mensal da 0.3.6 ainda precisam de confirmação na engine. Compatibilidade ampliada continua pendente; não é uma versão para deixar uma campanha sem supervisão.
+**Estado: interface, indicadores, atualização sob solicitação, desativação e candidatos anteriores foram confirmados em campanha nas versões 0.3.0–0.3.5.** Os novos botões de modo, ações de oferta e automação mensal da 0.3.7 ainda precisam de confirmação na engine. Compatibilidade ampliada continua pendente; não é uma versão para deixar uma campanha sem supervisão.
 
 ## Instalação e uso
 
 Consulte [instalação e geração do ZIP](docs/INSTALL.md). O pacote gerado em
-`dist/smart-economy-director-0.3.6.zip` contém a pasta do mod e o descritor
+`dist/smart-economy-director-0.3.7.zip` contém a pasta do mod e o descritor
 externo. Ative no launcher e use a decisão **Ativar Smart Economy Director**.
 O modo inicial é Assistido; a automação só começa se o jogador selecionar
 Automático no diário.

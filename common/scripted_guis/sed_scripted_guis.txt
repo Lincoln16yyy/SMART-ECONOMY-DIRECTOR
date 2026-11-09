@@ -582,4 +582,8 @@ sed_clothes_action_failed_visible_sgui = {
 }
 sed_auto_status_success_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 1 } }
 sed_auto_status_no_action_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 2 } }
-sed_auto_status_blocked_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 3 } }
+sed_auto_status_default_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 3 } }
+sed_auto_status_queue_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 4 } }
+sed_auto_status_paused_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 5 } }
+sed_auto_status_competing_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 6 } }
+sed_auto_status_safety_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 7 } }

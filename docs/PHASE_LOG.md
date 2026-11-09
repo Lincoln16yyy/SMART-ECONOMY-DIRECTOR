@@ -505,3 +505,9 @@ foi iniciado.
 A captura do Egito mostrou o jogo pausado enquanto a aprovação individual dizia que era necessário pausar. A 0.3.6 remove essa trava das aprovações manuais: o clique revalida a elegibilidade, o modo Assistido, as filas e inadimplência. Os cartões mantêm botão visível nos três modos, com explicação quando o modo não permite agir. Os três modos têm controles visíveis no topo do diário e mostram status persistente. Saves antigos sem modo migram para Assistido.
 
 Automático é opt-in. Uma revisão mensal pode enfileirar no máximo um nível ferroviário ou de um produtor local para um bem em escassez; requer filas vazias, ausência de inadimplência e construção não pausada, além de checar três flags conhecidas de construtores externos. A revisão agenda o evento no dia 23 para evitar parte dos construtores comuns do começo do mês. Não se presume compatibilidade completa com mods externos nem segurança para deixar a campanha sem supervisão. Validação estática contra a instalação 1.15 passou; ainda falta confirmar modos, clique e evento no jogo normal.
+
+## Fase 3 — motivo visível da revisão automática 0.3.7
+
+A captura do Egito (setembro de 1838) mostra o Director ativo e construção em andamento: fila pública com 46 níveis, fila privada com 2. A automação bloqueia corretamente nesses casos, mas o estado anterior era genérico e não ajudava a distinguir bloqueio de falha. A 0.3.7 atribui status diferentes a candidato ausente, inadimplência, fila ocupada, construção pausada e automação concorrente, e apresenta a razão no alto do diário.
+
+A mudança não relaxa as travas nem habilita novas ações. Geração, validação estática e pacote contra os arquivos do jogo passaram. A 0.3.7 ainda precisa ser instalada no perfil local e a nova linha de status confirmada na campanha após um ciclo mensal.

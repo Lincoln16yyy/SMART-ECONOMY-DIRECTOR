@@ -7,15 +7,17 @@ ferroviários e uma aprovação individual que enfileira uma expansão elegível
 quando a fila pública tem pelo menos três projetos; a 0.3.1 explica os motivos de
 rejeição quando não há candidato; a 0.3.2 mostra por que o botão de aprovação
 está bloqueado; a 0.3.3 explica quando um cartão visível deixou de ser elegível
-desde a última leitura; a 0.3.5 acrescenta expansão de produtores locais para oito bens em escassez.
-A 0.3.6 introduz modos visíveis Manual/Assistido/Automático e um executor
-mensal opt-in limitado a um nível. Ranking nacional completo e compatibilidade
-ampliada continuam por implementar.
+desde a última leitura; a 0.3.5 acrescenta expansão de produtores locais para
+oito bens em escassez. A 0.3.6 introduz modos visíveis Manual/Assistido/
+Automático e um executor mensal opt-in limitado a um nível. A 0.3.7 detalha o
+resultado de cada revisão automática e as travas que impedem execução. Ranking
+nacional completo e compatibilidade ampliada continuam por implementar.
 
 ## Responsabilidade
 
-O Director estabelece objetivos e prioridades nacionais. O primeiro executor
-econômico é limitado a uma ação explícita por clique. Usa namespace `sed_`, funciona sozinho
+O Director estabelece objetivos e prioridades nacionais. As ações em modo
+Assistido exigem clique individual; o modo Automático pode enfileirar no máximo
+um nível por revisão mensal. Usa namespace `sed_`, funciona sozinho
 e não dependerá do Smart Government ou de identificadores internos de outro mod.
 O jogador conserva decisões políticas, diplomáticas e militares importantes.
 

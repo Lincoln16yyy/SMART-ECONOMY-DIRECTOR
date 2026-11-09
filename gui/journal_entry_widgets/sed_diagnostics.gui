@@ -500,14 +500,54 @@ textbox = {
  text = "sed_auto_status_no_action"
 }
 textbox = {
- visible = "[GetScriptedGui('sed_auto_status_blocked_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ visible = "[GetScriptedGui('sed_auto_status_default_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes
  multiline = yes
  align = left|nobaseline
  using = fontsize_small
  minimumsize = { 500 -1 }
  maximumsize = { 500 -1 }
- text = "sed_auto_status_blocked"
+ text = "sed_auto_status_default"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_status_queue_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_auto_status_queue"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_status_paused_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_auto_status_paused"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_status_competing_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_auto_status_competing"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_status_safety_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_auto_status_safety"
 }
 flowcontainer = { direction = horizontal spacing = 8
 button = {
