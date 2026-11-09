@@ -386,3 +386,15 @@ Validação: **46 testes passam** (nove de auditoria e 37 da implementação),
 a geração está atualizada, validação estática e pacote
 `dist/smart-economy-director-0.3.2.zip` concluídos. Renderização da linha de
 motivo e execução dos botões na engine seguem pendentes.
+
+## Fase 2 — Captura posterior ainda sem a 0.3.2 (4 de abril de 1836)
+
+O jogador enviou nova captura do diário: leitura atualizada (PIB de £5,8M,
+variação de 0,4% em um mês, filas pública 10 e privada 2, 86 falhas de
+contratação) com o candidato **Médio Egito — setor de construção** e o
+botão de aprovar. A linha “Botão bloqueado: há níveis na fila privada” da
+0.3.2 **não apareceu** sob o botão, o que indica que o jogo ainda roda a
+0.3.1 (o pacote 0.3.2 foi gerado, mas a instalação no perfil não foi
+confirmada nesta captura). A troca de candidato entre leituras reflete a
+recomputação a cada atualização (condições correntes de elegibilidade),
+não um erro. Próximo passo: instalar o ZIP 0.3.2 no perfil e reconfirmar.
