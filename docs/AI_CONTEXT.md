@@ -15,9 +15,11 @@ após revalidação. A 0.3.1 acrescenta a decomposição dos motivos de rejeiç�
 estado quando não há candidato. A execução dos botões e a coexistência com mods
 ainda não foram validadas. Não há automação periódica. A versão 0.3.1 está
 instalada localmente e a suíte cobre os dois fluxos com 45 testes. Em
-2026-11-08, o jogador enviou uma captura da 0.3.0 em campanha: a seção de
-capacidade de construção renderizou e mostrou o estado vazio correto com fila
-pública em 0; nenhum botão de ação foi exercitado nessa captura.
+2026-11-08, o jogador enviou capturas das seções vazias em campanha
+(0.3.0 e 0.3.1, Império Otomano, 1/1836): estados vazios corretos nas duas
+seções e, na 0.3.1, a linha de motivos corretamente oculta sem déficit/fila
+suficiente. Nenhum botão de ação foi exercitado e a linha de motivos ainda
+não foi vista com candidatos ausentes e déficit presente.
 
 Atualização histórica: a continuação conseguiu entrar na França com
 Gamescope headless/DXVK e confirmou ativação por decisão, abertura/rolagem do

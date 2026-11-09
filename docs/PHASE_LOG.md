@@ -311,3 +311,22 @@ Não testado: renderização da linha de motivos e execução dos dois botões n
 engine, desativação, recarga e coexistência com outros construtores. O
 próximo passo é a conferência breve do jogador em cópia de save, com o jogo
 pausado.
+
+## Fase 2 — Confirmação em campanha da 0.3.1 (estados vazios)
+
+O jogador enviou captura do diário da 0.3.1 em campanha (Império Otomano,
+leitura de 1/1836): saldo semanal de script de £18,3K, reservas de £273K,
+PIB de £5,41M, alfabetização de 12,5%, capacidade de construção de 16,0,
+filas pública e privada em 0, 17 estados analisados, nenhum com
+infraestrutura negativa ou acesso ao mercado abaixo de 100%, nenhum edifício
+com insumos em falta, 22 com contratação incompleta e duas falhas de
+contratação.
+
+As duas seções exibem os estados vazios corretos: “Sem déficit atual de
+infraestrutura” na seção ferroviária e “fila pública tem menos de três
+projetos” na seção de capacidade de construção. A linha de motivos da 0.3.1
+não apareceu, como esperado: ela só é exibida com déficit/fila suficiente
+sem candidatos, condições que não existiam nesta leitura. Nenhum botão foi
+exibido ou clicado, portanto a execução das ações e a renderização da linha
+de motivos seguem não confirmadas na engine. Desativação, recarga e
+coexistência também permanecem pendentes.

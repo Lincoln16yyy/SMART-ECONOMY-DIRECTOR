@@ -12,13 +12,13 @@ capacidade de construção, filas e sinais de infraestrutura, abastecimento e
 contratação. Os dados correspondem à última leitura indicada no painel.
 O crescimento do PIB requer amostras em meses distintos.
 
-**Estado: a interface, os indicadores, o estado vazio das oportunidades e a
-renderização das seções ferroviária e de capacidade de construção foram
-confirmados em campanha na 0.3.0. A execução dos botões ferroviário e do setor de
-construção ainda precisa ser conferida no jogo normal, e a decomposição de
-motivos da 0.3.1 ainda não foi vista no jogo.** Compatibilidade ampliada
-continua pendente. Não é uma versão de automação econômica pronta para deixar
-uma campanha sozinha.
+**Estado: a interface, os indicadores, os estados vazios das seções e a
+ocultação correta da decomposição de motivos em leituras sem
+candidatos foram confirmados em campanha (0.3.0/0.3.1). A execução dos
+botões ferroviário e do setor de construção e a decomposição com déficit
+presente ainda precisam ser conferidas no jogo normal.** Compatibilidade
+ampliada continua pendente. Não é uma versão de automação econômica pronta
+para deixar uma campanha sozinha.
 
 ## Instalação e uso
 
