@@ -695,3 +695,25 @@ primitivas de script; identificado que as opções ferroviária, elétrica e de
 setores do Supply Chain independem de zw_var_expand_building. Matriz mínima
 para verificar filas/identidade/persistência preparada, com todos os casos
 explicitamente não executados. Não foi iniciado jogo ou alterado save/load order.
+
+
+## Continuação — auxiliar separado para medir a fila
+
+Implementado `tools/build_queue_probe.py` e seis testes. Gera o Smart Economy
+Queue Probe (test) 0.1.0, independente, com decisão/JE e leitura sob solicitação.
+Projetos e níveis nacionais separados; lista de dez tipos de edifício com
+estado, nível atual, nível após fila e diferença. Não agrega a diferença como
+se fosse cobertura de todos os projetos; ausência de linha não vira zero.
+
+O auxiliar só escreve namespace próprio sedqp_. Sem construir, alterar PM,
+cancelar/reordenar ou agendar eventos. Validador restrito protege o recorte de
+efeitos; pacote principal continua sem seus scripts. Workflow publica ZIP
+auxiliar separado. Manual em QUEUE_PROBE.md. Nenhuma instalação, save ou opção
+foi alterada, e nenhum jogo foi iniciado. Main runtime permanece 0.4.1.
+
+67 testes passaram: os 61 anteriores e seis do auxiliar, com amostras de
+projetos/níveis distintos, nível zero sintético, lista recalculada, diferença
+negativa, limpeza sem afetar Director/projetos, casos desativado/não jogador,
+rejeição de mutação e ZIP determinístico separado. A consulta is_building_type
+foi conferida no tutorial vanilla. Binding Building/lista, cobertura real de
+primeira construção e persistência continuam sem verificação na engine.

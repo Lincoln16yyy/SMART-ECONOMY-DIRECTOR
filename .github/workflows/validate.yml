@@ -24,3 +24,9 @@ jobs:
           name: smart-economy-director
           path: dist/smart-economy-director.zip
           if-no-files-found: error
+      - run: python3 tools/build_queue_probe.py --output dist/smart-economy-queue-probe.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: smart-economy-queue-probe
+          path: dist/smart-economy-queue-probe.zip
+          if-no-files-found: error

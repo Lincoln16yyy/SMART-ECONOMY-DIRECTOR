@@ -100,3 +100,12 @@ Depois da matriz, escolher explicitamente entre: reconciliação por projeto
 com dados comprovados; ou escopo conservador que suspenda execução quando a
 identidade/cobertura for desconhecida. O planejador global e novos tipos de
 construção continuam posteriores a essa decisão.
+
+
+## Instrumento preparado para a matriz
+
+O auxiliar opcional [QUEUE_PROBE.md](QUEUE_PROBE.md) implementa leituras manuais
+dos agregados e de nível atual/após fila por prédio, em mod separado. Isso
+permite preparar a comparação de script versus UI, mas não executa os casos
+da matriz e não fornece identidade de projeto. Os casos acima continuam não
+executados até haver observação da engine registrada com build/mods/opções.
