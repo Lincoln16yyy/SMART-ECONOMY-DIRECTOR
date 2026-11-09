@@ -272,3 +272,20 @@ A versão foi instalada no perfil local com backup da 0.2.1 em
 `content_load.json` foram preservadas e o Director permaneceu habilitado.
 Não houve execução na engine nem sessão gráfica; renderização, clique, contador
 público, recarga e coexistência com outros construtores continuam pendentes.
+
+## Fase 2 — Confirmação visual da 0.3.0 em campanha
+
+O jogador enviou uma captura do jogo normal com o diário da 0.3.0 aberto. A
+nova seção **Capacidade de construção** renderizou abaixo das oportunidades de
+infraestrutura, com o protótipo, o critério de três projetos e a mensagem de
+fila curta: “A fila pública tem menos de três projetos. O Director não recomenda
+ampliar a capacidade de construção agora.”
+
+A leitura mostrada era de 1/1836, com 17 estados analisados, nenhum estado com
+infraestrutura negativa ou acesso ao mercado abaixo de 100%, nenhum edifício com
+insumos em falta, 22 com contratação incompleta, duas falhas de contratação,
+capacidade de construção 10,0 e filas pública e privada em 0. Isso explica
+corretamente a ausência de candidatos ferroviários e de capacidade de
+construção. Nenhum botão de aprovação foi exibido ou clicado, portanto a
+execução das duas ações continua sem confirmação na engine. A suíte permanece
+com 40 testes aprovados e os artefatos instalados conferem com a geração.

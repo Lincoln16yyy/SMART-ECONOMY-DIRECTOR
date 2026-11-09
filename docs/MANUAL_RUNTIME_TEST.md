@@ -1,7 +1,8 @@
 # Plano de testes de campanha — validação das ações 0.3.0 pendente
 
 O jogador confirmou em campanha a interface e as leituras principais da 0.1.0,
-e na 0.2.0 confirmou a renderização da seção ferroviária vazia. As ações
+a renderização da seção ferroviária vazia na 0.2.0 e a seção de capacidade de
+construção vazia na 0.3.0. As ações
 ferroviária e de capacidade de construção da 0.3.0 e a convivência com o
 conjunto de mods continuam **não testadas em campanha**. A suíte automatizada
 atual executa os scripts gerados em um modelo restrito de país/estado/edifício e

@@ -2,9 +2,10 @@
 
 Data: 2026-11-08. Habilitado significa listado em `content_load.json`, não
 automação comprovadamente ativa em campanha. A interface e o estado vazio da
-seção de oportunidades foram confirmados pelo jogador. As ações ferroviária e de
-capacidade de construção da 0.3.0 ainda não foram conferidas em campanha nem
-com os outros mods ativos.
+seção de oportunidades foram confirmados pelo jogador, assim como a renderização
+da seção de capacidade de construção da 0.3.0 com fila pública vazia. As ações
+ferroviária e de capacidade de construção da 0.3.0 ainda não foram conferidas em
+campanha nem com os outros mods ativos.
 
 | Mod | Evidência local / responsabilidade | Conflito e coexistência proposta |
 | --- | --- | --- |

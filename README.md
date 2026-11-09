@@ -12,10 +12,11 @@ contratação. Os dados correspondem à última leitura indicada no painel.
 O crescimento do PIB requer amostras em meses distintos.
 
 **Estado: a interface, os indicadores, o estado vazio das oportunidades e a
-renderização da seção ferroviária foram confirmados em campanha. A execução dos
-botões ferroviário e do setor de construção ainda precisa ser conferida no jogo
-normal.** Compatibilidade ampliada continua pendente. Não é uma versão de
-automação econômica pronta para deixar uma campanha sozinha.
+renderização das seções ferroviária e de capacidade de construção foram
+confirmados em campanha. A execução dos botões ferroviário e do setor de
+construção ainda precisa ser conferida no jogo normal.** Compatibilidade
+ampliada continua pendente. Não é uma versão de automação econômica pronta para
+deixar uma campanha sozinha.
 
 ## Instalação e uso
 

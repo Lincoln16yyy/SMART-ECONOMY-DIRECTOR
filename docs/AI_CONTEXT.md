@@ -13,7 +13,10 @@ quando a fila pública tem pelo menos três projetos, mostra no máximo um setor
 de construção operante no estado mais populoso e permite enfileirar um nível
 após revalidação. A execução dos botões e a coexistência com mods ainda não
 foram validadas. Não há automação periódica. A 0.3.0 está instalada localmente;
-a suíte cobre os dois fluxos com 40 testes.
+a suíte cobre os dois fluxos com 40 testes. Em 2026-11-08, o jogador enviou uma
+captura da 0.3.0 em campanha: a seção de capacidade de construção renderizou e
+mostrou o estado vazio correto com fila pública em 0; nenhum botão de ação foi
+exercitado nessa captura.
 
 Atualização histórica: a continuação conseguiu entrar na França com
 Gamescope headless/DXVK e confirmou ativação por decisão, abertura/rolagem do
