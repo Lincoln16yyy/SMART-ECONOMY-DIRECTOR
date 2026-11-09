@@ -18,8 +18,9 @@ jobs:
       - run: python3 tools/build_mod.py --check
       - run: python3 tools/validate.py
       - run: python3 -m unittest discover -s tests -v
-      - run: python3 tools/package_mod.py
+      - run: python3 tools/package_mod.py --output dist/smart-economy-director.zip
       - uses: actions/upload-artifact@v4
         with:
-          name: smart-economy-director-0.1.0
-          path: dist/smart-economy-director-0.1.0.zip
+          name: smart-economy-director
+          path: dist/smart-economy-director.zip
+          if-no-files-found: error

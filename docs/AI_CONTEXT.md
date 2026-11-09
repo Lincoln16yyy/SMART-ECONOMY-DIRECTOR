@@ -1,5 +1,22 @@
 # Contexto de continuidade
 
+## Continuação — entrega CI e contrato de fila
+
+A etapa seguinte corrigiu `.github/workflows/validate.yml`: publica o pacote
+em caminho fixo `dist/smart-economy-director.zip`, sem versão duplicada, e
+falha se o artefato não existir. O pacote continua contendo a versão atual em
+seus descritores; CLI local sem --output mantém ZIP versionado. Sem mudança
+no runtime/instalação 0.4.1.
+
+Leia [QUEUE_CONTRACT.md](QUEUE_CONTRACT.md) para novas fontes da fila e a matriz
+mínima ainda não executada. UI nativa expõe projetos/investidor/progresso, mas
+isso não prova acesso por scripted effect. Supply Chain tem opções separadas
+de ferrovia/energia/setores/admin que a flag geral de cadeias não protege.
+61 testes e validação estática passaram; ZIP de CI conferido contra os 13
+outputs. Nenhum jogo foi iniciado. O jogador enviou a auditoria para main;
+o CI de `ada7c26` foi confirmado aprovado, sem inferir publicação de ZIP válido
+pelo path antigo (upload-artifact pode só emitir warning).
+
 ## Orientação atual após auditoria — 2026-11-09
 
 Leia [AUDIT_2026-11-09.md](AUDIT_2026-11-09.md) antes de continuar. Código auditado:

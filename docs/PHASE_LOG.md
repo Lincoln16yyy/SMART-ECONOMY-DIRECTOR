@@ -675,3 +675,23 @@ Somente relatório e JSON seguro foram publicados nesse PR, com base remota
 0.3.9 e referência explícita ao checkout local 0.4.1. Não foi feito merge nem
 alterada a main remota. As correções editoriais e os dois commits de recursos
 continuam locais; o transporte Git no terminal segue com erro de DNS.
+
+
+## Continuação — artefato CI atual e contrato de fila
+
+O CI de ada7c26 foi observado aprovado após o push do jogador. Seu workflow,
+porém, ainda procurava o ZIP 0.1.0. Corrigida a entrega para caminho fixo
+`dist/smart-economy-director.zip`, nome genérico de artefato e
+`if-no-files-found: error`. A versão permanece nos descritores do ZIP; a CLI
+local conserva seu default versionado. Nenhuma alteração no mod instalado.
+
+61 testes e validação estática com jogo local passaram. O comando exato de
+empacotamento do workflow foi executado; os 13 arquivos e seus bytes foram
+comparados aos outputs, e metadata/descritor confirmaram 0.4.1. O upload novo
+no GitHub ainda depende de execução do workflow após publicar esta mudança.
+
+Pesquisa adicional em QUEUE_CONTRACT.md: fontes GUI dos projetos separadas das
+primitivas de script; identificado que as opções ferroviária, elétrica e de
+setores do Supply Chain independem de zw_var_expand_building. Matriz mínima
+para verificar filas/identidade/persistência preparada, com todos os casos
+explicitamente não executados. Não foi iniciado jogo ou alterado save/load order.
