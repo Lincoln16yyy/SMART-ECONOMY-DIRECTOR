@@ -1108,6 +1108,26 @@ textbox = {
  text = "sed_supply_no_candidate"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_wood_no_candidates_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_wood_rejection_summary"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_wood_no_candidates_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_wood_rejection_details"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_wood_action_success_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes
  multiline = yes
@@ -1153,6 +1173,26 @@ textbox = {
  minimumsize = { 500 -1 }
  maximumsize = { 500 -1 }
  text = "sed_supply_no_candidate"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_iron_no_candidates_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_iron_rejection_summary"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_iron_no_candidates_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_iron_rejection_details"
 }
 textbox = {
  visible = "[GetScriptedGui('sed_iron_action_success_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
@@ -1202,6 +1242,26 @@ textbox = {
  text = "sed_supply_no_candidate"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_coal_no_candidates_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_coal_rejection_summary"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_coal_no_candidates_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_coal_rejection_details"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_coal_action_success_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes
  multiline = yes
@@ -1247,6 +1307,26 @@ textbox = {
  minimumsize = { 500 -1 }
  maximumsize = { 500 -1 }
  text = "sed_supply_no_candidate"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_grain_no_candidates_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_grain_rejection_summary"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_grain_no_candidates_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_grain_rejection_details"
 }
 textbox = {
  visible = "[GetScriptedGui('sed_grain_action_success_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
@@ -1296,6 +1376,26 @@ textbox = {
  text = "sed_supply_no_candidate"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_fabric_no_candidates_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_fabric_rejection_summary"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_fabric_no_candidates_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_fabric_rejection_details"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_fabric_action_success_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes
  multiline = yes
@@ -1341,6 +1441,26 @@ textbox = {
  minimumsize = { 500 -1 }
  maximumsize = { 500 -1 }
  text = "sed_supply_no_candidate"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_tools_no_candidates_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_tools_rejection_summary"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_tools_no_candidates_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_tools_rejection_details"
 }
 textbox = {
  visible = "[GetScriptedGui('sed_tools_action_success_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
@@ -1390,6 +1510,26 @@ textbox = {
  text = "sed_supply_no_candidate"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_groceries_no_candidates_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_groceries_rejection_summary"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_groceries_no_candidates_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_groceries_rejection_details"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_groceries_action_success_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes
  multiline = yes
@@ -1435,6 +1575,26 @@ textbox = {
  minimumsize = { 500 -1 }
  maximumsize = { 500 -1 }
  text = "sed_supply_no_candidate"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_clothes_no_candidates_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_clothes_rejection_summary"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_clothes_no_candidates_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_clothes_rejection_details"
 }
 textbox = {
  visible = "[GetScriptedGui('sed_clothes_action_success_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"

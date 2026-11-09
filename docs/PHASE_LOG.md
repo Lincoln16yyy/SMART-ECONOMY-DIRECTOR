@@ -578,3 +578,32 @@ atual. As chaves estão nos dois arquivos de localização atuais.
 
 Instalada a 0.3.9 sem jogo em execução, com backup `mod_0.3.8_20261109_100912_949247`.
 Arquivos conferidos byte a byte com o gerador; load order preservado byte a byte.
+
+
+## Diagnóstico de produtores rejeitados 0.4.0
+
+As capturas do Império Otomano, 13 e 18/06/1839, confirmam apresentação do modo
+Automático e da mensagem de revisão bloqueada por filas ocupadas. O diagnóstico
+registra 45 projetos públicos, dois privados, zero estados com infraestrutura
+negativa, dois setores de construção não operantes e escassez de ferro sem
+produtor elegível. A leitura sob solicitação era de 6/1839; a captura não prova
+que uma revisão ocorreu entre os dois dias nem que o executor incluiu obra.
+
+Foi acrescentada a decomposição dos produtores estaduais rejeitados para os
+oito bens. Só aparece na escassez sem candidato e identifica explicitamente
+a última leitura. Conta estados com o prédio, inclusive nível zero, e atribui
+um motivo principal pela ordem: pendente/enfileirado, não incorporado,
+nível/ocupação, contratação, insumos, método ativo, permissão. Estados sem o
+prédio não são produtores rejeitados. Zero produtores informa ausência de base
+produtiva, sem sugerir construção nova. As variáveis entram no registro de
+limpeza; são reiniciadas em cada atualização. Reutiliza exclusivamente
+primitivas dos filtros já pesquisados e não modifica ações ou travas.
+
+57 testes passaram, cobrindo os oito bens, rejeições múltiplas sem dupla
+contagem, produtor elegível excluído das rejeições, estado sem produtor,
+reinício dos contadores, visibilidade e limpeza completa. Geração, validação
+estática contra Victoria 3 local, pacote e diff sem erros. A nova renderização
+não foi conferida na engine e nenhuma campanha foi iniciada.
+
+0.4.0 instalada sem jogo em execução. Backup: `mod_0.3.9_20261109_102912_254983`.
+Arquivos conferidos byte a byte com o gerador; load order preservado byte a byte.

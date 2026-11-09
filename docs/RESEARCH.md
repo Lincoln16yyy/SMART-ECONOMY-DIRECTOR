@@ -202,3 +202,16 @@ As demais métricas continuam indisponíveis ou em pesquisa.
 prévios: 26 testes da referência aprovados; validador bloqueado pela ausência do
 jogo naquele executor. Os caminhos e mods agora encontrados atualizam esse
 diagnóstico. Esses testes não foram repetidos na presente sessão local.
+
+
+### Diagnóstico de oferta 0.4.0
+
+O detalhamento das rejeições reutiliza `has_building`, `has_variable`,
+`level_after_queued_constructions`, `level`, `occupancy`, `has_failed_hires`,
+`building_has_goods_shortage`, `has_active_production_method`,
+`is_incorporated` e `can_construct_building`, os mesmos filtros de oferta da
+0.3.5. É uma contagem por estado com o prédio associado, não por prédio mundial
+nem por trabalhador. O primeiro motivo impede dupla contagem. Métodos fora da
+lista verificada são classificados sem produção confirmada; isso não afirma
+que um método de outro mod não produz o bem. Leituras não demonstram viabilidade
+econômica do nível novo, disponibilidade de trabalhadores ou retorno.

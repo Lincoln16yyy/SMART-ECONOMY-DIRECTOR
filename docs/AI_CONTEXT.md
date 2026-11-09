@@ -4,15 +4,21 @@ O usuário solicitou seguir `Texto colado.txt` e ir publicando no GitHub
 `Lincoln16yyy/SMART-ECONOMY-DIRECTOR`. O conteúdo original está preservado
 integralmente em PROJECT_BRIEF.md. Leia-o antes de trabalhar.
 
-Fase atual: status de inclusão não confirmada na revisão automática 0.3.9.
-Instalada localmente com backup `mod_0.3.8_20261109_100912_949247`; load order preservado.
-Quando há candidato selecionado mas a fila não confirma a inclusão, o status
-agora é 15 e a interface o distingue de ausência de candidato (2). A revisão
-não tenta outro candidato após a tentativa; uma revisão mensal futura segue
-as regras normais. Status antigos mantêm seus valores. Os 55 testes passam,
-incluindo os nove tipos de ação automática com inserção recusada e o evento
-real gerado após troca de modo/desativação. Nenhuma campanha foi iniciada;
-confirmação de execução e renderização na engine permanece pendente.
+Fase atual: diagnóstico de rejeição de produtores locais 0.4.0.
+Instalada localmente; backup `mod_0.3.9_20261109_102912_254983`; load order preservado. Quando um bem
+está escasso e não há candidato, mostra quantidade de estados com produtor e
+sete motivos principais disjuntos, da última leitura. Cada produtor estadual
+entra no primeiro motivo aplicável: expansão pendente/enfileirada, incorporação,
+nível/ocupação, contratação, insumos, método ativo e permissão. Não acrescenta
+ações nem altera guardas. 57 testes passam, incluindo todos os bens, cascata,
+reset e visibilidade; validação estática contra o jogo local passou.
+As capturas enviadas pelo jogador mostram Império Otomano em 13 e 18/06/1839:
+modo Automático e mensagem de filas ocupadas renderizados; última leitura
+6/1839, 45 projetos públicos/2 privados, infraestrutura negativa zero, dois
+setores de construção não operantes e ferro escasso sem produtor elegível.
+Isso confirma apresentação do bloqueio, não inclusão de obra ou revisão neste
+dia específico. Modo sob solicitação estava selecionado. Não iniciar teste
+gráfico prolongado. Detalhamento novo e inclusão real seguem pendentes.
 
 Continuação em 2026-11-09: a suíte foi retomada e os **51 testes passaram**.
 O harness agora modela mercado/bens ausentes, métodos ativos, existência de

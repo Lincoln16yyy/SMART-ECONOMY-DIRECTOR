@@ -88,6 +88,70 @@ sed_disable_country = {
  remove_variable = sed_tools_action_status
  remove_variable = sed_groceries_action_status
  remove_variable = sed_clothes_action_status
+ remove_variable = sed_wood_producer_states
+ remove_variable = sed_wood_pending_states
+ remove_variable = sed_wood_unincorporated_states
+ remove_variable = sed_wood_understaffed_states
+ remove_variable = sed_wood_hiring_states
+ remove_variable = sed_wood_input_states
+ remove_variable = sed_wood_method_states
+ remove_variable = sed_wood_permission_states
+ remove_variable = sed_iron_producer_states
+ remove_variable = sed_iron_pending_states
+ remove_variable = sed_iron_unincorporated_states
+ remove_variable = sed_iron_understaffed_states
+ remove_variable = sed_iron_hiring_states
+ remove_variable = sed_iron_input_states
+ remove_variable = sed_iron_method_states
+ remove_variable = sed_iron_permission_states
+ remove_variable = sed_coal_producer_states
+ remove_variable = sed_coal_pending_states
+ remove_variable = sed_coal_unincorporated_states
+ remove_variable = sed_coal_understaffed_states
+ remove_variable = sed_coal_hiring_states
+ remove_variable = sed_coal_input_states
+ remove_variable = sed_coal_method_states
+ remove_variable = sed_coal_permission_states
+ remove_variable = sed_grain_producer_states
+ remove_variable = sed_grain_pending_states
+ remove_variable = sed_grain_unincorporated_states
+ remove_variable = sed_grain_understaffed_states
+ remove_variable = sed_grain_hiring_states
+ remove_variable = sed_grain_input_states
+ remove_variable = sed_grain_method_states
+ remove_variable = sed_grain_permission_states
+ remove_variable = sed_fabric_producer_states
+ remove_variable = sed_fabric_pending_states
+ remove_variable = sed_fabric_unincorporated_states
+ remove_variable = sed_fabric_understaffed_states
+ remove_variable = sed_fabric_hiring_states
+ remove_variable = sed_fabric_input_states
+ remove_variable = sed_fabric_method_states
+ remove_variable = sed_fabric_permission_states
+ remove_variable = sed_tools_producer_states
+ remove_variable = sed_tools_pending_states
+ remove_variable = sed_tools_unincorporated_states
+ remove_variable = sed_tools_understaffed_states
+ remove_variable = sed_tools_hiring_states
+ remove_variable = sed_tools_input_states
+ remove_variable = sed_tools_method_states
+ remove_variable = sed_tools_permission_states
+ remove_variable = sed_groceries_producer_states
+ remove_variable = sed_groceries_pending_states
+ remove_variable = sed_groceries_unincorporated_states
+ remove_variable = sed_groceries_understaffed_states
+ remove_variable = sed_groceries_hiring_states
+ remove_variable = sed_groceries_input_states
+ remove_variable = sed_groceries_method_states
+ remove_variable = sed_groceries_permission_states
+ remove_variable = sed_clothes_producer_states
+ remove_variable = sed_clothes_pending_states
+ remove_variable = sed_clothes_unincorporated_states
+ remove_variable = sed_clothes_understaffed_states
+ remove_variable = sed_clothes_hiring_states
+ remove_variable = sed_clothes_input_states
+ remove_variable = sed_clothes_method_states
+ remove_variable = sed_clothes_permission_states
  clear_variable_list = sed_railway_candidates
  clear_variable_list = sed_construction_candidates
  clear_variable_list = sed_wood_candidates
@@ -426,6 +490,14 @@ sed_ensure_mode_default = {
 }
 
 sed_refresh_supply_candidates = {
+ set_variable = { name = sed_wood_producer_states value = 0 }
+ set_variable = { name = sed_wood_pending_states value = 0 }
+ set_variable = { name = sed_wood_unincorporated_states value = 0 }
+ set_variable = { name = sed_wood_understaffed_states value = 0 }
+ set_variable = { name = sed_wood_hiring_states value = 0 }
+ set_variable = { name = sed_wood_input_states value = 0 }
+ set_variable = { name = sed_wood_method_states value = 0 }
+ set_variable = { name = sed_wood_permission_states value = 0 }
  clear_variable_list = sed_wood_candidates
  every_scope_state = {
   if = {
@@ -433,6 +505,38 @@ sed_refresh_supply_candidates = {
     OR = { NOT = { has_building = building_logging_camp } b:building_logging_camp = { level_after_queued_constructions <= level } }
    }
    remove_variable = sed_wood_request_pending
+  }
+  if = {
+   limit = { has_building = building_logging_camp }
+   root = { change_variable = { name = sed_wood_producer_states add = 1 } }
+   if = {
+    limit = { OR = { has_variable = sed_wood_request_pending b:building_logging_camp = { level_after_queued_constructions > level } } }
+    root = { change_variable = { name = sed_wood_pending_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { is_incorporated = yes } }
+    root = { change_variable = { name = sed_wood_unincorporated_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_logging_camp = { OR = { level <= 0 occupancy < 0.8 } } }
+    root = { change_variable = { name = sed_wood_understaffed_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_logging_camp = { has_failed_hires = yes } }
+    root = { change_variable = { name = sed_wood_hiring_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_logging_camp = { building_has_goods_shortage = yes } }
+    root = { change_variable = { name = sed_wood_input_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_logging_camp = { NOT = { OR = { has_active_production_method = pm_electric_saw_mills has_active_production_method = pm_saw_mills has_active_production_method = pm_simple_forestry } } } }
+    root = { change_variable = { name = sed_wood_method_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { can_construct_building = building_logging_camp } }
+    root = { change_variable = { name = sed_wood_permission_states add = 1 } }
+   }
   }
  }
  if = {
@@ -447,6 +551,14 @@ sed_refresh_supply_candidates = {
    root = { add_to_variable_list = { name = sed_wood_candidates target = prev } }
   }
  }
+ set_variable = { name = sed_iron_producer_states value = 0 }
+ set_variable = { name = sed_iron_pending_states value = 0 }
+ set_variable = { name = sed_iron_unincorporated_states value = 0 }
+ set_variable = { name = sed_iron_understaffed_states value = 0 }
+ set_variable = { name = sed_iron_hiring_states value = 0 }
+ set_variable = { name = sed_iron_input_states value = 0 }
+ set_variable = { name = sed_iron_method_states value = 0 }
+ set_variable = { name = sed_iron_permission_states value = 0 }
  clear_variable_list = sed_iron_candidates
  every_scope_state = {
   if = {
@@ -454,6 +566,38 @@ sed_refresh_supply_candidates = {
     OR = { NOT = { has_building = building_iron_mine } b:building_iron_mine = { level_after_queued_constructions <= level } }
    }
    remove_variable = sed_iron_request_pending
+  }
+  if = {
+   limit = { has_building = building_iron_mine }
+   root = { change_variable = { name = sed_iron_producer_states add = 1 } }
+   if = {
+    limit = { OR = { has_variable = sed_iron_request_pending b:building_iron_mine = { level_after_queued_constructions > level } } }
+    root = { change_variable = { name = sed_iron_pending_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { is_incorporated = yes } }
+    root = { change_variable = { name = sed_iron_unincorporated_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_iron_mine = { OR = { level <= 0 occupancy < 0.8 } } }
+    root = { change_variable = { name = sed_iron_understaffed_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_iron_mine = { has_failed_hires = yes } }
+    root = { change_variable = { name = sed_iron_hiring_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_iron_mine = { building_has_goods_shortage = yes } }
+    root = { change_variable = { name = sed_iron_input_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_iron_mine = { NOT = { OR = { has_active_production_method = pm_atmospheric_engine_pump_building_iron_mine has_active_production_method = pm_condensing_engine_pump_building_iron_mine has_active_production_method = pm_diesel_pump_building_iron_mine has_active_production_method = pm_dynamite_building_iron_mine has_active_production_method = pm_nitroglycerin_building_iron_mine has_active_production_method = pm_picks_and_shovels_building_iron_mine } } } }
+    root = { change_variable = { name = sed_iron_method_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { can_construct_building = building_iron_mine } }
+    root = { change_variable = { name = sed_iron_permission_states add = 1 } }
+   }
   }
  }
  if = {
@@ -468,6 +612,14 @@ sed_refresh_supply_candidates = {
    root = { add_to_variable_list = { name = sed_iron_candidates target = prev } }
   }
  }
+ set_variable = { name = sed_coal_producer_states value = 0 }
+ set_variable = { name = sed_coal_pending_states value = 0 }
+ set_variable = { name = sed_coal_unincorporated_states value = 0 }
+ set_variable = { name = sed_coal_understaffed_states value = 0 }
+ set_variable = { name = sed_coal_hiring_states value = 0 }
+ set_variable = { name = sed_coal_input_states value = 0 }
+ set_variable = { name = sed_coal_method_states value = 0 }
+ set_variable = { name = sed_coal_permission_states value = 0 }
  clear_variable_list = sed_coal_candidates
  every_scope_state = {
   if = {
@@ -475,6 +627,38 @@ sed_refresh_supply_candidates = {
     OR = { NOT = { has_building = building_coal_mine } b:building_coal_mine = { level_after_queued_constructions <= level } }
    }
    remove_variable = sed_coal_request_pending
+  }
+  if = {
+   limit = { has_building = building_coal_mine }
+   root = { change_variable = { name = sed_coal_producer_states add = 1 } }
+   if = {
+    limit = { OR = { has_variable = sed_coal_request_pending b:building_coal_mine = { level_after_queued_constructions > level } } }
+    root = { change_variable = { name = sed_coal_pending_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { is_incorporated = yes } }
+    root = { change_variable = { name = sed_coal_unincorporated_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_coal_mine = { OR = { level <= 0 occupancy < 0.8 } } }
+    root = { change_variable = { name = sed_coal_understaffed_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_coal_mine = { has_failed_hires = yes } }
+    root = { change_variable = { name = sed_coal_hiring_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_coal_mine = { building_has_goods_shortage = yes } }
+    root = { change_variable = { name = sed_coal_input_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_coal_mine = { NOT = { OR = { has_active_production_method = pm_atmospheric_engine_pump_building_coal_mine has_active_production_method = pm_condensing_engine_pump_building_coal_mine has_active_production_method = pm_diesel_pump_building_coal_mine has_active_production_method = pm_dynamite_building_coal_mine has_active_production_method = pm_nitroglycerin_building_coal_mine has_active_production_method = pm_picks_and_shovels_building_coal_mine } } } }
+    root = { change_variable = { name = sed_coal_method_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { can_construct_building = building_coal_mine } }
+    root = { change_variable = { name = sed_coal_permission_states add = 1 } }
+   }
   }
  }
  if = {
@@ -489,6 +673,14 @@ sed_refresh_supply_candidates = {
    root = { add_to_variable_list = { name = sed_coal_candidates target = prev } }
   }
  }
+ set_variable = { name = sed_grain_producer_states value = 0 }
+ set_variable = { name = sed_grain_pending_states value = 0 }
+ set_variable = { name = sed_grain_unincorporated_states value = 0 }
+ set_variable = { name = sed_grain_understaffed_states value = 0 }
+ set_variable = { name = sed_grain_hiring_states value = 0 }
+ set_variable = { name = sed_grain_input_states value = 0 }
+ set_variable = { name = sed_grain_method_states value = 0 }
+ set_variable = { name = sed_grain_permission_states value = 0 }
  clear_variable_list = sed_grain_candidates
  every_scope_state = {
   if = {
@@ -496,6 +688,38 @@ sed_refresh_supply_candidates = {
     OR = { NOT = { has_building = building_wheat_farm } b:building_wheat_farm = { level_after_queued_constructions <= level } }
    }
    remove_variable = sed_grain_request_pending
+  }
+  if = {
+   limit = { has_building = building_wheat_farm }
+   root = { change_variable = { name = sed_grain_producer_states add = 1 } }
+   if = {
+    limit = { OR = { has_variable = sed_grain_request_pending b:building_wheat_farm = { level_after_queued_constructions > level } } }
+    root = { change_variable = { name = sed_grain_pending_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { is_incorporated = yes } }
+    root = { change_variable = { name = sed_grain_unincorporated_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_wheat_farm = { OR = { level <= 0 occupancy < 0.8 } } }
+    root = { change_variable = { name = sed_grain_understaffed_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_wheat_farm = { has_failed_hires = yes } }
+    root = { change_variable = { name = sed_grain_hiring_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_wheat_farm = { building_has_goods_shortage = yes } }
+    root = { change_variable = { name = sed_grain_input_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_wheat_farm = { NOT = { OR = { has_active_production_method = pm_chemical_fertilizer has_active_production_method = pm_simple_farming has_active_production_method = pm_soil_enriching_farming } } } }
+    root = { change_variable = { name = sed_grain_method_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { can_construct_building = building_wheat_farm } }
+    root = { change_variable = { name = sed_grain_permission_states add = 1 } }
+   }
   }
  }
  if = {
@@ -510,6 +734,14 @@ sed_refresh_supply_candidates = {
    root = { add_to_variable_list = { name = sed_grain_candidates target = prev } }
   }
  }
+ set_variable = { name = sed_fabric_producer_states value = 0 }
+ set_variable = { name = sed_fabric_pending_states value = 0 }
+ set_variable = { name = sed_fabric_unincorporated_states value = 0 }
+ set_variable = { name = sed_fabric_understaffed_states value = 0 }
+ set_variable = { name = sed_fabric_hiring_states value = 0 }
+ set_variable = { name = sed_fabric_input_states value = 0 }
+ set_variable = { name = sed_fabric_method_states value = 0 }
+ set_variable = { name = sed_fabric_permission_states value = 0 }
  clear_variable_list = sed_fabric_candidates
  every_scope_state = {
   if = {
@@ -517,6 +749,38 @@ sed_refresh_supply_candidates = {
     OR = { NOT = { has_building = building_cotton_plantation } b:building_cotton_plantation = { level_after_queued_constructions <= level } }
    }
    remove_variable = sed_fabric_request_pending
+  }
+  if = {
+   limit = { has_building = building_cotton_plantation }
+   root = { change_variable = { name = sed_fabric_producer_states add = 1 } }
+   if = {
+    limit = { OR = { has_variable = sed_fabric_request_pending b:building_cotton_plantation = { level_after_queued_constructions > level } } }
+    root = { change_variable = { name = sed_fabric_pending_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { is_incorporated = yes } }
+    root = { change_variable = { name = sed_fabric_unincorporated_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_cotton_plantation = { OR = { level <= 0 occupancy < 0.8 } } }
+    root = { change_variable = { name = sed_fabric_understaffed_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_cotton_plantation = { has_failed_hires = yes } }
+    root = { change_variable = { name = sed_fabric_hiring_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_cotton_plantation = { building_has_goods_shortage = yes } }
+    root = { change_variable = { name = sed_fabric_input_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_cotton_plantation = { NOT = { OR = { has_active_production_method = automatic_irrigation_building_cotton_plantation has_active_production_method = default_building_cotton_plantation has_active_production_method = slave_exploitation_cotton has_active_production_method = worker_exploitation_cotton } } } }
+    root = { change_variable = { name = sed_fabric_method_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { can_construct_building = building_cotton_plantation } }
+    root = { change_variable = { name = sed_fabric_permission_states add = 1 } }
+   }
   }
  }
  if = {
@@ -531,6 +795,14 @@ sed_refresh_supply_candidates = {
    root = { add_to_variable_list = { name = sed_fabric_candidates target = prev } }
   }
  }
+ set_variable = { name = sed_tools_producer_states value = 0 }
+ set_variable = { name = sed_tools_pending_states value = 0 }
+ set_variable = { name = sed_tools_unincorporated_states value = 0 }
+ set_variable = { name = sed_tools_understaffed_states value = 0 }
+ set_variable = { name = sed_tools_hiring_states value = 0 }
+ set_variable = { name = sed_tools_input_states value = 0 }
+ set_variable = { name = sed_tools_method_states value = 0 }
+ set_variable = { name = sed_tools_permission_states value = 0 }
  clear_variable_list = sed_tools_candidates
  every_scope_state = {
   if = {
@@ -538,6 +810,38 @@ sed_refresh_supply_candidates = {
     OR = { NOT = { has_building = building_tooling_workshop } b:building_tooling_workshop = { level_after_queued_constructions <= level } }
    }
    remove_variable = sed_tools_request_pending
+  }
+  if = {
+   limit = { has_building = building_tooling_workshop }
+   root = { change_variable = { name = sed_tools_producer_states add = 1 } }
+   if = {
+    limit = { OR = { has_variable = sed_tools_request_pending b:building_tooling_workshop = { level_after_queued_constructions > level } } }
+    root = { change_variable = { name = sed_tools_pending_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { is_incorporated = yes } }
+    root = { change_variable = { name = sed_tools_unincorporated_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_tooling_workshop = { OR = { level <= 0 occupancy < 0.8 } } }
+    root = { change_variable = { name = sed_tools_understaffed_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_tooling_workshop = { has_failed_hires = yes } }
+    root = { change_variable = { name = sed_tools_hiring_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_tooling_workshop = { building_has_goods_shortage = yes } }
+    root = { change_variable = { name = sed_tools_input_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_tooling_workshop = { NOT = { OR = { has_active_production_method = pm_crude_tools has_active_production_method = pm_pig_iron has_active_production_method = pm_rubber_grips has_active_production_method = pm_steel } } } }
+    root = { change_variable = { name = sed_tools_method_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { can_construct_building = building_tooling_workshop } }
+    root = { change_variable = { name = sed_tools_permission_states add = 1 } }
+   }
   }
  }
  if = {
@@ -552,6 +856,14 @@ sed_refresh_supply_candidates = {
    root = { add_to_variable_list = { name = sed_tools_candidates target = prev } }
   }
  }
+ set_variable = { name = sed_groceries_producer_states value = 0 }
+ set_variable = { name = sed_groceries_pending_states value = 0 }
+ set_variable = { name = sed_groceries_unincorporated_states value = 0 }
+ set_variable = { name = sed_groceries_understaffed_states value = 0 }
+ set_variable = { name = sed_groceries_hiring_states value = 0 }
+ set_variable = { name = sed_groceries_input_states value = 0 }
+ set_variable = { name = sed_groceries_method_states value = 0 }
+ set_variable = { name = sed_groceries_permission_states value = 0 }
  clear_variable_list = sed_groceries_candidates
  every_scope_state = {
   if = {
@@ -559,6 +871,38 @@ sed_refresh_supply_candidates = {
     OR = { NOT = { has_building = building_food_industry } b:building_food_industry = { level_after_queued_constructions <= level } }
    }
    remove_variable = sed_groceries_request_pending
+  }
+  if = {
+   limit = { has_building = building_food_industry }
+   root = { change_variable = { name = sed_groceries_producer_states add = 1 } }
+   if = {
+    limit = { OR = { has_variable = sed_groceries_request_pending b:building_food_industry = { level_after_queued_constructions > level } } }
+    root = { change_variable = { name = sed_groceries_pending_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { is_incorporated = yes } }
+    root = { change_variable = { name = sed_groceries_unincorporated_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_food_industry = { OR = { level <= 0 occupancy < 0.8 } } }
+    root = { change_variable = { name = sed_groceries_understaffed_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_food_industry = { has_failed_hires = yes } }
+    root = { change_variable = { name = sed_groceries_hiring_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_food_industry = { building_has_goods_shortage = yes } }
+    root = { change_variable = { name = sed_groceries_input_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_food_industry = { NOT = { OR = { has_active_production_method = pm_bakery has_active_production_method = pm_baking_powder has_active_production_method = pm_cannery has_active_production_method = pm_cannery_fish has_active_production_method = pm_sweeteners has_active_production_method = pm_vacuum_canning has_active_production_method = pm_vacuum_canning_principle_3 } } } }
+    root = { change_variable = { name = sed_groceries_method_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { can_construct_building = building_food_industry } }
+    root = { change_variable = { name = sed_groceries_permission_states add = 1 } }
+   }
   }
  }
  if = {
@@ -573,6 +917,14 @@ sed_refresh_supply_candidates = {
    root = { add_to_variable_list = { name = sed_groceries_candidates target = prev } }
   }
  }
+ set_variable = { name = sed_clothes_producer_states value = 0 }
+ set_variable = { name = sed_clothes_pending_states value = 0 }
+ set_variable = { name = sed_clothes_unincorporated_states value = 0 }
+ set_variable = { name = sed_clothes_understaffed_states value = 0 }
+ set_variable = { name = sed_clothes_hiring_states value = 0 }
+ set_variable = { name = sed_clothes_input_states value = 0 }
+ set_variable = { name = sed_clothes_method_states value = 0 }
+ set_variable = { name = sed_clothes_permission_states value = 0 }
  clear_variable_list = sed_clothes_candidates
  every_scope_state = {
   if = {
@@ -580,6 +932,38 @@ sed_refresh_supply_candidates = {
     OR = { NOT = { has_building = building_textile_mill } b:building_textile_mill = { level_after_queued_constructions <= level } }
    }
    remove_variable = sed_clothes_request_pending
+  }
+  if = {
+   limit = { has_building = building_textile_mill }
+   root = { change_variable = { name = sed_clothes_producer_states add = 1 } }
+   if = {
+    limit = { OR = { has_variable = sed_clothes_request_pending b:building_textile_mill = { level_after_queued_constructions > level } } }
+    root = { change_variable = { name = sed_clothes_pending_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { is_incorporated = yes } }
+    root = { change_variable = { name = sed_clothes_unincorporated_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_textile_mill = { OR = { level <= 0 occupancy < 0.8 } } }
+    root = { change_variable = { name = sed_clothes_understaffed_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_textile_mill = { has_failed_hires = yes } }
+    root = { change_variable = { name = sed_clothes_hiring_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_textile_mill = { building_has_goods_shortage = yes } }
+    root = { change_variable = { name = sed_clothes_input_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_textile_mill = { NOT = { OR = { has_active_production_method = pm_dye_workshops has_active_production_method = pm_electric_sewing_machines has_active_production_method = pm_handsewn_clothes has_active_production_method = pm_sewing_machines } } } }
+    root = { change_variable = { name = sed_clothes_method_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { can_construct_building = building_textile_mill } }
+    root = { change_variable = { name = sed_clothes_permission_states add = 1 } }
+   }
   }
  }
  if = {

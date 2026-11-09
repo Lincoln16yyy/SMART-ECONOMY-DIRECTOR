@@ -280,3 +280,15 @@ Com evento já agendado, trocar para Manual/Assistido ou desativar antes de sua
 execução deve impedir a ação. Em Automático, a execução deve permitir agendar
 novamente no pulso mensal seguinte. Conferir também save/reload com evento
 pendente; persistência e passagem de tempo não são simuladas pelos testes.
+
+
+## Motivos dos produtores rejeitados 0.4.0
+
+Em uma escassez sem candidato, atualizar e conferir os estados com produtor e
+os sete motivos da última leitura. Se um estado falhar em mais de um filtro,
+conta apenas no primeiro motivo da ordem exibida. Estados sem o prédio não
+entram na contagem. Se o total de produtores for zero, nenhuma expansão é
+proposta. Conferir incorporação, ocupação, falha de contratação, insumos, método
+ativo e fila no painel do produtor. Atualizar após mudanças: contadores devem
+ser recalculados. Com candidato elegível ou escassez resolvida, o detalhamento
+fica oculto. Desativar e reativar não deve reter contagens da leitura anterior.

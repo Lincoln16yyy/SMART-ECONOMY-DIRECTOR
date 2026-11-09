@@ -3,7 +3,7 @@ from pathlib import Path
 import unittest
 import zipfile
 
-from tools.build_mod import ROOT, STATE_VARIABLES, SUPPLY_TARGETS, country_variables, outputs, runtime_variables
+from tools.build_mod import ROOT, STATE_VARIABLES, SUPPLY_DIAGNOSTICS, SUPPLY_TARGETS, country_variables, outputs, runtime_variables
 from tools.package_mod import package
 from tools.pdx_script import parse, child
 from tools.validate import validate
@@ -172,6 +172,59 @@ class DiagnosisTests(unittest.TestCase):
                 if mode != 'disabled':
                     c.run('sed_monthly_update')
                     self.assertEqual(len(c.scheduled_events), 2 if mode == 'automatic' else 1)
+
+    def test_supply_rejection_counts_are_disjoint_and_reset_for_every_good(self):
+        for item in SUPPLY_TARGETS:
+            good = item['good']
+            with self.subTest(good=good):
+                c = self.country()
+                c.market_goods[good] = {'market_goods_has_goods_shortage': True}
+
+                def producer_state():
+                    producer = building(item['building'])
+                    producer['production_methods'] = [item['methods'][0]]
+                    return state(buildings=[producer])
+
+                targets = [producer_state() for _ in range(8)]
+                targets[0]['buildings'][0]['level_after_queued_constructions'] = 2
+                # Also fails incorporation; only the preceding queue reason counts.
+                targets[0]['is_incorporated'] = False
+                targets[1]['is_incorporated'] = False
+                targets[1]['buildings'][0]['occupancy'] = 0.2
+                targets[2]['buildings'][0]['occupancy'] = 0.79
+                targets[2]['buildings'][0]['has_failed_hires'] = True
+                targets[3]['buildings'][0]['has_failed_hires'] = True
+                targets[3]['buildings'][0]['building_has_goods_shortage'] = True
+                targets[4]['buildings'][0]['building_has_goods_shortage'] = True
+                targets[4]['buildings'][0]['production_methods'] = []
+                targets[5]['buildings'][0]['production_methods'] = []
+                targets[5]['can_construct_building'] = False
+                targets[6]['can_construct_building'] = False
+                c.states = targets + [state()]  # States without this producer are excluded.
+                c.run('sed_refresh_supply_candidates')
+                self.assertEqual(c.variables['sed_' + good + '_producer_states'], 8)
+                for reason in SUPPLY_DIAGNOSTICS[1:]:
+                    self.assertEqual(c.variables['sed_' + good + '_' + reason], 1, reason)
+                self.assertEqual(c.variable_lists['sed_' + good + '_candidates'], [targets[7]])
+                c.states = []
+                c.run('sed_refresh_supply_candidates')
+                for reason in SUPPLY_DIAGNOSTICS:
+                    self.assertEqual(c.variables['sed_' + good + '_' + reason], 0, reason)
+                self.assertNotIn('sed_' + good + '_candidates', c.variable_lists)
+
+    def test_supply_empty_diagnostics_only_show_for_shortage_without_candidates(self):
+        c = self.country()
+        for item in SUPPLY_TARGETS:
+            good = item['good']
+            shown = child(self.definitions['sed_' + good + '_no_candidates_visible_sgui'], 'is_shown')
+            self.assertFalse(c.condition(shown, c.country_scope()))
+            c.market_goods[good] = {'market_goods_has_goods_shortage': True}
+            self.assertTrue(c.condition(shown, c.country_scope()))
+            c.variable_lists['sed_' + good + '_candidates'] = [state()]
+            self.assertFalse(c.condition(shown, c.country_scope()))
+            c.variable_lists.clear()
+        c.run('sed_disable_country')
+        self.assertFalse(c.condition(shown, c.country_scope()))
 
     def test_activation_collects_real_supplied_readings(self):
         c = self.country(gdp=12345, total_population=500, average_sol=13.25)
