@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.3.5'
+VERSION = '0.3.6'
 SUPPLY_TARGETS = [
     {'good': 'wood', 'building': 'building_logging_camp', 'methods': ['pm_electric_saw_mills', 'pm_saw_mills', 'pm_simple_forestry'], 'label_pt': 'madeira', 'label_en': 'wood', 'building_pt': 'acampamento madeireiro', 'building_en': 'logging camp'},
     {'good': 'iron', 'building': 'building_iron_mine', 'methods': ['pm_atmospheric_engine_pump_building_iron_mine', 'pm_condensing_engine_pump_building_iron_mine', 'pm_diesel_pump_building_iron_mine', 'pm_dynamite_building_iron_mine', 'pm_nitroglycerin_building_iron_mine', 'pm_picks_and_shovels_building_iron_mine'], 'label_pt': 'ferro', 'label_en': 'iron', 'building_pt': 'mina de ferro', 'building_en': 'iron mine'},
@@ -32,6 +32,8 @@ sed_construction_sector_states sed_construction_not_ready_states
 sed_construction_blocked_states
 sed_queue_levels_before'''.split() + [
     'sed_supply_action_status',
+    'sed_mode_manual', 'sed_mode_assisted', 'sed_mode_automatic',
+    'sed_auto_action_status', 'sed_auto_event_pending',
     *[f"sed_{item['good']}_action_status" for item in SUPPLY_TARGETS],
 ]
 
@@ -47,7 +49,14 @@ def country_variables():
 
 
 def supply_effects():
-    result = ['''sed_refresh_supply_candidates = {''']
+    result = ['''sed_ensure_mode_default = {
+ if = {
+  limit = { NOT = { OR = { has_variable = sed_mode_manual has_variable = sed_mode_assisted has_variable = sed_mode_automatic } } }
+  sed_set_mode_assisted = yes
+ }
+}
+
+sed_refresh_supply_candidates = {''']
     for item in SUPPLY_TARGETS:
         good = item['good']
         building = item['building']
@@ -86,6 +95,7 @@ def supply_effects():
    if = {{
     limit = {{ construction_queue_num_queued_government_levels > var:sed_queue_levels_before }}
     set_variable = {{ name = sed_{good}_action_status value = 1 }}
+    if = {{ limit = {{ has_variable = sed_mode_automatic }} set_variable = {{ name = sed_auto_action_status value = 1 }} }}
     prev = {{ set_variable = {{ name = sed_{good}_request_pending value = yes }} }}
    }}
    else = {{ set_variable = {{ name = sed_{good}_action_status value = 2 }} }}
@@ -93,7 +103,50 @@ def supply_effects():
   }}
  }}
 }}''')
-    return '\n'.join(result) + '\n'
+    mode_actions = []
+    for mode in ('manual', 'assisted', 'automatic'):
+        other_modes = [value for value in ('manual', 'assisted', 'automatic') if value != mode]
+        cleanup = '\n'.join(f' remove_variable = sed_mode_{value}' for value in other_modes)
+        mode_actions.append(f'''sed_set_mode_{mode} = {{
+ remove_variable = sed_mode_{mode}{cleanup}
+ set_variable = {{ name = sed_mode_{mode} value = yes }}
+ set_variable = {{ name = sed_auto_action_status value = 0 }}
+ if = {{ limit = {{ has_variable = sed_mode_automatic }} sed_schedule_auto_event = yes }}
+}}''')
+    result.extend(mode_actions)
+    result.append('''sed_schedule_auto_event = {
+ if = {
+  limit = { has_variable = sed_mode_automatic NOT = { has_variable = sed_auto_event_pending } }
+  set_variable = { name = sed_auto_event_pending value = yes }
+  trigger_event = { id = sed_pulse.1 days = 23 }
+ }
+}''')
+    result.append('''sed_auto_apply_monthly = {
+ set_variable = { name = sed_auto_action_status value = 2 }
+ if = {
+  limit = { sed_auto_executor_safe = yes }
+''')
+    choices = [('railway', 'sed_railway_candidate_eligible')]
+    choices.extend((item['good'], f"sed_{item['good']}_candidate_eligible") for item in SUPPLY_TARGETS)
+    for index, (name, eligibility) in enumerate(choices):
+        start = 'if' if index == 0 else 'else_if'
+        order = 'infrastructure_delta' if name == 'railway' else 'state_population'
+        direction = '' if name == 'railway' else ' multiply = -1'
+        result.append(f'''  {start} = {{
+   limit = {{ any_scope_state = {{ {eligibility} = yes }} }}
+   ordered_scope_state = {{
+    limit = {{ {eligibility} = yes }}
+    order_by = {{ value = {order}{direction} }}
+    max = 1
+    check_range_bounds = no
+    sed_run_{name}_approval = yes
+   }}
+  }}''')
+    result.append(''' }
+ else = { set_variable = { name = sed_auto_action_status value = 3 } }
+}
+''')
+    return '\n'.join(result).rstrip() + '\n'
 
 
 def textbox(key, visibility=None, heading=False):
@@ -128,8 +181,33 @@ def button(key, action):
 '''
 
 
+def mode_button(key, action):
+    return f'''button = {{
+ size = {{ 160 34 }}
+ using = select_button_sound
+ using = tooltip_se
+ text = "{key}"
+ tooltip = "{key}_tt"
+ visible = "[{sgui(action, 'IsShown')}]"
+ enabled = "[{sgui(action, 'IsValid')}]"
+ onclick = "[{sgui(action, 'Execute')}]"
+}}
+'''
+
+
 def widget():
     body = textbox('sed_title', heading=True) + textbox('sed_scope_note')
+    body += textbox('sed_mode_title', heading=True)
+    body += 'flowcontainer = { direction = horizontal spacing = 4\n'
+    body += mode_button('sed_mode_manual_button', 'sed_set_mode_manual_sgui')
+    body += mode_button('sed_mode_assisted_button', 'sed_set_mode_assisted_sgui')
+    body += mode_button('sed_mode_automatic_button', 'sed_set_mode_automatic_sgui')
+    body += '}\n'
+    for mode in ('manual', 'assisted', 'automatic'):
+        body += textbox(f'sed_mode_{mode}_status', f'sed_mode_{mode}_visible_sgui')
+    body += textbox('sed_auto_status_success', 'sed_auto_status_success_visible_sgui')
+    body += textbox('sed_auto_status_no_action', 'sed_auto_status_no_action_visible_sgui')
+    body += textbox('sed_auto_status_blocked', 'sed_auto_status_blocked_visible_sgui')
     body += 'flowcontainer = { direction = horizontal spacing = 8\n'
     body += button('sed_refresh', 'sed_refresh_sgui') + button('sed_disable', 'sed_disable_sgui') + '}\n'
     body += button('sed_use_manual', 'sed_manual_updates_sgui')
@@ -246,15 +324,6 @@ def widget():
      onclick = "[GetScriptedGui('sed_approve_railway_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
     }
     textbox = {
-     visible = "[GetScriptedGui('sed_railway_blocked_paused_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_railway_blocked_paused"
-    }
-    textbox = {
      visible = "[GetScriptedGui('sed_railway_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
      autoresize = yes
      multiline = yes
@@ -299,6 +368,15 @@ def widget():
      minimumsize = { 480 -1 }
      text = "sed_railway_finance_caution"
     }
+    textbox = {
+     visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_mode_approval_blocked"
+    }
    }
   }
  }
@@ -338,15 +416,6 @@ def widget():
      visible = "[GetScriptedGui('sed_approve_construction_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
      enabled = "[GetScriptedGui('sed_approve_construction_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
      onclick = "[GetScriptedGui('sed_approve_construction_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
-    }
-    textbox = {
-     visible = "[GetScriptedGui('sed_construction_blocked_paused_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_construction_blocked_paused"
     }
     textbox = {
      visible = "[GetScriptedGui('sed_construction_blocked_queue_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
@@ -402,6 +471,15 @@ def widget():
      minimumsize = { 480 -1 }
      text = "sed_construction_finance_caution"
     }
+    textbox = {
+     visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_mode_approval_blocked"
+    }
    }
   }
  }
@@ -430,12 +508,12 @@ def supply_item_types():
     textbox = {{ autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_{good}_candidate_title" }}
     textbox = {{ autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_{good}_candidate_reason" }}
     button = {{ size = {{ 360 30 }} using = select_button_sound using = tooltip_se text = "sed_{good}_approve" tooltip = "sed_{good}_approve_tt" visible = "[GetScriptedGui('sed_approve_{good}_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_{good}_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_{good}_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }}
-    textbox = {{ visible = "[GetScriptedGui('sed_{good}_blocked_paused_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_blocked_paused" }}
     textbox = {{ visible = "[GetScriptedGui('sed_{good}_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_blocked_private" }}
     textbox = {{ visible = "[GetScriptedGui('sed_{good}_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_blocked_default" }}
     textbox = {{ visible = "[GetScriptedGui('sed_{good}_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_stale" }}
     textbox = {{ visible = "[GetScriptedGui('sed_{good}_pending_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_pending" }}
     textbox = {{ visible = "[GetScriptedGui('sed_{good}_finance_caution_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_finance_caution" }}
+    textbox = {{ visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_mode_approval_blocked" }}
    }}
   }}
  }}''')
@@ -455,6 +533,10 @@ sed_enable_country = {
  set_variable = { name = sed_monthly_refresh value = yes }
  set_variable = { name = sed_railway_action_status value = 0 }
  set_variable = { name = sed_construction_action_status value = 0 }
+ if = {
+  limit = { NOT = { OR = { has_variable = sed_mode_manual has_variable = sed_mode_assisted has_variable = sed_mode_automatic } } }
+  sed_set_mode_assisted = yes
+ }
  sed_refresh_diagnostics = yes
  sed_ensure_journal_entry = yes
 }
@@ -489,12 +571,14 @@ sed_monthly_update = {
    limit = { has_variable = sed_monthly_refresh }
    sed_refresh_diagnostics = yes
   }
+  sed_schedule_auto_event = yes
  }
 }
 
 sed_refresh_diagnostics = {
  if = {
   limit = { is_player = yes has_variable = sed_enabled }
+  sed_ensure_mode_default = yes
 ''' + readings + '''
   set_variable = { name = sed_last_year value = year }
   # The game's month trigger is zero-based (vanilla ip4_custom_loc.txt).
@@ -751,13 +835,23 @@ sed_update_growth = {
         for item in SUPPLY_TARGETS)
     script = script.replace(
         ' set_variable = { name = sed_construction_action_status value = 0 }',
-        ' set_variable = { name = sed_construction_action_status value = 0 }' + supply_status)
+        ' set_variable = { name = sed_construction_action_status value = 0 }\n' + supply_status)
     script = script.replace(
         ' clear_variable_list = sed_construction_candidates',
         ' clear_variable_list = sed_construction_candidates\n' + supply_lists)
     script = script.replace(
         '  remove_variable = sed_construction_request_pending',
         '  remove_variable = sed_construction_request_pending\n' + supply_state_cleanup)
+    script = script.replace(
+        '    set_variable = { name = sed_railway_action_status value = 1 }',
+        '    set_variable = { name = sed_railway_action_status value = 1 }\n'
+        '    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }')
+    for item in SUPPLY_TARGETS:
+        good = item['good']
+        script = script.replace(
+            f'    set_variable = {{ name = sed_{good}_action_status value = 1 }}',
+            f'    set_variable = {{ name = sed_{good}_action_status value = 1 }}\n'
+            '    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }')
     return script + supply_effects()
 
 
@@ -774,14 +868,28 @@ def scripted_guis():
     result += '''sed_approve_railway_sgui = {
  scope = state
  is_shown = { owner = { is_player = yes has_variable = sed_enabled } }
- is_valid = { sed_railway_approval_valid = yes }
- effect = { if = { limit = { sed_railway_approval_valid = yes } sed_run_railway_approval = yes } }
+ is_valid = { owner = { has_variable = sed_mode_assisted } sed_railway_approval_valid = yes }
+ effect = { if = { limit = { owner = { has_variable = sed_mode_assisted } sed_railway_approval_valid = yes } sed_run_railway_approval = yes } }
 }
 sed_approve_construction_sgui = {
  scope = state
  is_shown = { owner = { is_player = yes has_variable = sed_enabled } }
- is_valid = { sed_construction_approval_valid = yes }
- effect = { if = { limit = { sed_construction_approval_valid = yes } sed_run_construction_approval = yes } }
+ is_valid = { owner = { has_variable = sed_mode_assisted } sed_construction_approval_valid = yes }
+ effect = { if = { limit = { owner = { has_variable = sed_mode_assisted } sed_construction_approval_valid = yes } sed_run_construction_approval = yes } }
+}
+'''
+    for mode in ('manual', 'assisted', 'automatic'):
+        result += f'''sed_set_mode_{mode}_sgui = {{
+ scope = country
+ is_shown = {{ is_player = yes has_variable = sed_enabled }}
+ is_valid = {{ is_player = yes has_variable = sed_enabled }}
+ effect = {{ sed_set_mode_{mode} = yes }}
+}}
+sed_mode_{mode}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_mode_{mode} }} }}
+'''
+    result += '''sed_mode_approval_blocked_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled NOT = { has_variable = sed_mode_assisted } } }
 }
 '''
     for item in SUPPLY_TARGETS:
@@ -789,23 +897,21 @@ sed_approve_construction_sgui = {
         result += f'''sed_approve_{good}_sgui = {{
  scope = state
  is_shown = {{ owner = {{ is_player = yes has_variable = sed_enabled }} }}
- is_valid = {{ sed_{good}_approval_valid = yes }}
- effect = {{ if = {{ limit = {{ sed_{good}_approval_valid = yes }} sed_run_{good}_approval = yes }} }}
+ is_valid = {{ owner = {{ has_variable = sed_mode_assisted }} sed_{good}_approval_valid = yes }}
+ effect = {{ if = {{ limit = {{ owner = {{ has_variable = sed_mode_assisted }} sed_{good}_approval_valid = yes }} sed_run_{good}_approval = yes }} }}
 }}
 '''
     # Hard blockers appear in order. A negative budget is a caution, not a
     # blocker. Pending actions and stale cards each have their own message.
     blocked = {
         'railway': {
-            'paused': 'NOT = { is_game_paused = yes }',
-            'private': 'is_game_paused = yes owner = { construction_queue_num_queued_private_levels > 0 }',
-            'default': 'is_game_paused = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes }',
+            'private': 'owner = { construction_queue_num_queued_private_levels > 0 }',
+            'default': 'owner = { construction_queue_num_queued_private_levels = 0 in_default = yes }',
         },
         'construction': {
-            'paused': 'NOT = { is_game_paused = yes }',
-            'queue': 'is_game_paused = yes owner = { num_queued_government_constructions < 3 }',
-            'private': 'is_game_paused = yes owner = { num_queued_government_constructions >= 3 construction_queue_num_queued_private_levels > 0 }',
-            'default': 'is_game_paused = yes owner = { num_queued_government_constructions >= 3 construction_queue_num_queued_private_levels = 0 in_default = yes }',
+            'queue': 'owner = { num_queued_government_constructions < 3 }',
+            'private': 'owner = { num_queued_government_constructions >= 3 construction_queue_num_queued_private_levels > 0 }',
+            'default': 'owner = { num_queued_government_constructions >= 3 construction_queue_num_queued_private_levels = 0 in_default = yes }',
         },
     }
     for action, guards in blocked.items():
@@ -826,9 +932,8 @@ sed_approve_construction_sgui = {
     for item in SUPPLY_TARGETS:
         good = item['good']
         guards = {
-            'paused': 'NOT = { is_game_paused = yes }',
-            'private': 'is_game_paused = yes owner = { construction_queue_num_queued_private_levels > 0 }',
-            'default': 'is_game_paused = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes }',
+            'private': 'owner = { construction_queue_num_queued_private_levels > 0 }',
+            'default': 'owner = { construction_queue_num_queued_private_levels = 0 in_default = yes }',
         }
         for guard, condition in guards.items():
             result += (f'sed_{good}_blocked_{guard}_sgui = {{\n scope = state\n'
@@ -886,6 +991,10 @@ sed_approve_construction_sgui = {
                    f' is_shown = {{ has_variable = sed_enabled var:sed_{good}_action_status = 1 }}\n}}\n')
         result += (f'sed_{good}_action_failed_visible_sgui = {{\n scope = country\n'
                    f' is_shown = {{ has_variable = sed_enabled var:sed_{good}_action_status = 2 }}\n}}\n')
+    result += '''sed_auto_status_success_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 1 } }
+sed_auto_status_no_action_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 2 } }
+sed_auto_status_blocked_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 3 } }
+'''
     return '# Generated by tools/build_mod.py.\n' + result
 
 
@@ -908,7 +1017,6 @@ sed_railway_candidate_eligible = {
 
 sed_railway_approval_valid = {
  sed_railway_candidate_eligible = yes
- is_game_paused = yes
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -934,7 +1042,6 @@ sed_construction_candidate_eligible = {
 
 sed_construction_approval_valid = {
  sed_construction_candidate_eligible = yes
- is_game_paused = yes
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -972,7 +1079,6 @@ sed_{good}_candidate_eligible = {{
 
 sed_{good}_approval_valid = {{
  sed_{good}_candidate_eligible = yes
- is_game_paused = yes
  owner = {{
   is_player = yes
   has_variable = sed_enabled
@@ -980,7 +1086,18 @@ sed_{good}_approval_valid = {{
   construction_queue_num_queued_private_levels = 0
  }}
 }}''')
-    return '\n'.join(result) + '\n'
+    result.append('''# Country scope: prevent this executor from competing with known construction automations.
+sed_auto_executor_safe = {
+ has_variable = sed_mode_automatic
+ NOT = { in_default = yes }
+ construction_queue_num_queued_government_levels = 0
+ construction_queue_num_queued_private_levels = 0
+ is_construction_paused = no
+ NOT = { has_variable = advisor_auto_construction_enabled }
+ NOT = { has_variable = zw_var_expand_building }
+ NOT = { has_variable = aroai_autobuild }
+}''')
+    return '\n'.join(result).rstrip() + '\n'
 
 
 def value(name, fmt='1'):
@@ -1000,7 +1117,21 @@ def localization(language):
         'sed_disable_decision': ('Desativar Smart Economy Director', 'Disable Smart Economy Director'),
         'sed_disable_decision_desc': ('Remove o diagnóstico e limpa seus indicadores e histórico. Para voltar, use a decisão de ativação.', 'Removes the diagnosis and clears its readings and history. Use the enable decision to return.'),
         'sed_title': ('Economia nacional — diagnóstico', 'National economy — diagnosis'),
-        'sed_scope_note': ('Diagnóstico e recomendações econômicas com aprovação individual. Nenhuma ação é executada automaticamente.', 'Economic diagnosis and recommendations with individual approval. No action runs automatically.'),
+        'sed_scope_note': ('Diagnóstico e recomendações. Assistido permite aprovação por botão; Automático pode enfileirar no máximo um nível por mês.', 'Economic diagnosis and recommendations. Assisted allows button approval; Automatic may queue at most one level per month.'),
+        'sed_mode_title': ('Modo de operação', 'Operating mode'),
+        'sed_mode_manual_button': ('Manual', 'Manual'),
+        'sed_mode_manual_button_tt': ('Somente diagnóstico e recomendações sob solicitação. Nenhuma construção é aprovada ou executada automaticamente.', 'Diagnosis and recommendations on request only. No construction is approved or executed automatically.'),
+        'sed_mode_assisted_button': ('Assistido', 'Assisted'),
+        'sed_mode_assisted_button_tt': ('Mostra botões visíveis para você aprovar individualmente cada nível recomendado. Nenhuma ação econômica automática.', 'Shows visible buttons so you can approve each recommended level individually. No automatic economic action.'),
+        'sed_mode_automatic_button': ('Automático', 'Automatic'),
+        'sed_mode_automatic_button_tt': ('Revisa uma vez por mês e pode enfileirar no máximo um nível se houver escassez ou déficit de infraestrutura, a fila pública e privada estiverem vazias, o país não estiver em inadimplência e nenhum dos construtores conhecidos estiver ativo. Você pode voltar a Assistido ou Manual a qualquer momento.', 'Reviews once a month and may queue at most one level if a shortage or infrastructure deficit exists, both queues are empty, the country is not in default, and no known construction automation is active. You can switch back to Assisted or Manual at any time.'),
+        'sed_mode_manual_status': ('Modo Manual ativo. O Director só atualiza diagnóstico e recomendações; os botões de ação ficam visíveis, mas desativados.', 'Manual mode is active. The Director only updates diagnosis and recommendations; action buttons remain visible but disabled.'),
+        'sed_mode_assisted_status': ('Modo Assistido ativo. Você decide pelo botão visível de cada recomendação; a condição do país e a fila são revalidadas no clique.', 'Assisted mode is active. You decide with the visible button on each recommendation; country conditions and queues are rechecked on click.'),
+        'sed_mode_automatic_status': ('Modo Automático ativo. Uma revisão mensal pode enfileirar no máximo um nível. A aprovação individual fica desativada enquanto este modo estiver ativo.', 'Automatic mode is active. A monthly review may queue at most one level. Individual approval is disabled while this mode is active.'),
+        'sed_mode_approval_blocked': ('Ação individual disponível no modo Assistido. Os botões continuam visíveis nos outros modos.', 'Individual actions are available in Assisted mode. Buttons remain visible in the other modes.'),
+        'sed_auto_status_success': ('A revisão automática adicionou um nível à fila pública. Confira o prédio e o prazo na fila do jogo.', 'The automatic review added one level to the government queue. Review the building and timing in the game queue.'),
+        'sed_auto_status_no_action': ('A revisão mensal terminou sem uma ação elegível. Nenhuma construção foi enfileirada.', 'The monthly review found no eligible action. No construction was queued.'),
+        'sed_auto_status_blocked': ('A revisão automática não executou: há obra em fila, inadimplência, construção pausada ou outro construtor automático conhecido ativo.', 'The automatic review did not run: a construction queue is occupied, the country is in default, construction is paused, or another known automatic builder is active.'),
         'sed_refresh': ('Atualizar diagnóstico', 'Refresh diagnosis'),
         'sed_refresh_tt': ('Lê novamente os indicadores deste país.', 'Read this country’s indicators again.'),
         'sed_disable': ('Desativar', 'Disable'),
@@ -1038,8 +1169,7 @@ def localization(language):
         'sed_railway_candidate_title': ('#bold [State.GetName]#! — saldo de infraestrutura: #v [State.GetInfrastructureBalance|0+=]#!', '#bold [State.GetName]#! — infrastructure balance: #v [State.GetInfrastructureBalance|0+=]#!'),
         'sed_railway_candidate_reason': ('A ferrovia está empregada, sem falta de insumos nem expansão já enfileirada. Um nível público pode aliviar o gargalo; o efeito e o custo futuros não são previstos.', 'The railway is staffed, has no input shortage, and has no queued expansion. One government level may relieve the bottleneck; future impact and cost are not forecast.'),
         'sed_approve_railway': ('Aprovar: enfileirar 1 nível público', 'Approve: queue 1 government level'),
-        'sed_approve_railway_tt': ('Requer jogo pausado, país fora de inadimplência e fila privada vazia; estado e filas são revalidados no clique. Saldo semanal negativo gera um alerta financeiro, mas não bloqueia a aprovação. Usa a fila normal do jogo.', 'Requires the game paused, no default, and an empty private queue; state and queues are rechecked on click. A negative weekly balance raises a financial caution but does not block approval. Uses the normal game queue.'),
-        'sed_railway_blocked_paused': ('Botão bloqueado: o jogo precisa estar pausado.', 'Button blocked: the game must be paused.'),
+        'sed_approve_railway_tt': ('Requer modo Assistido, país fora de inadimplência e fila privada vazia; estado e filas são revalidados no clique. Saldo semanal negativo gera um alerta financeiro, mas não bloqueia. Usa a fila normal do jogo.', 'Requires Assisted mode, no default, and an empty private queue; state and queues are rechecked on click. A negative weekly balance raises a caution but does not block. Uses the normal game queue.'),
         'sed_railway_blocked_private': ('Botão bloqueado: há níveis na fila privada.', 'Button blocked: the private queue has levels.'),
         'sed_railway_blocked_default': ('Botão bloqueado: o país está em inadimplência.', 'Button blocked: the country is in default.'),
         'sed_railway_stale': ('Esta recomendação mudou desde a última leitura. Nenhuma ação foi executada; atualize o diagnóstico para recalcular antes de aprovar.', 'This recommendation changed since the last reading. No action was executed; refresh the diagnosis before approving.'),
@@ -1055,8 +1185,7 @@ def localization(language):
         'sed_construction_candidate_title': ('#bold [State.GetName]#! — setor de construção', '#bold [State.GetName]#! — construction sector'),
         'sed_construction_candidate_reason': ('O setor está empregado, sem falta de insumos nem expansão já enfileirada. Um nível público pode aumentar a capacidade; o efeito, o custo e o prazo futuros não são previstos.', 'The sector is staffed, has no input shortage, and has no queued expansion. One government level may raise capacity; future impact, cost, and timing are not forecast.'),
         'sed_approve_construction': ('Aprovar: enfileirar 1 nível do setor', 'Approve: queue 1 construction sector level'),
-        'sed_approve_construction_tt': ('Requer jogo pausado, pelo menos três projetos na fila pública, país fora de inadimplência e fila privada vazia; estado e filas são revalidados no clique. Saldo semanal negativo gera um alerta financeiro, mas não bloqueia a aprovação. Usa a fila normal do jogo.', 'Requires the game paused, at least three government projects queued, no default, and an empty private queue; state and queues are rechecked on click. A negative weekly balance raises a financial caution but does not block approval. Uses the normal game queue.'),
-        'sed_construction_blocked_paused': ('Botão bloqueado: o jogo precisa estar pausado.', 'Button blocked: the game must be paused.'),
+        'sed_approve_construction_tt': ('Requer modo Assistido, pelo menos três projetos na fila pública, país fora de inadimplência e fila privada vazia; estado e filas são revalidados no clique. Saldo semanal negativo gera um alerta financeiro, mas não bloqueia. Usa a fila normal do jogo.', 'Requires Assisted mode, at least three government projects queued, no default, and an empty private queue; state and queues are rechecked on click. A negative weekly balance raises a caution but does not block. Uses the normal game queue.'),
         'sed_construction_blocked_queue': ('Botão bloqueado: a fila pública tem menos de três projetos.', 'Button blocked: the government queue has fewer than three projects.'),
         'sed_construction_blocked_private': ('Botão bloqueado: há níveis na fila privada.', 'Button blocked: the private queue has levels.'),
         'sed_construction_blocked_default': ('Botão bloqueado: o país está em inadimplência.', 'Button blocked: the country is in default.'),
@@ -1068,7 +1197,6 @@ def localization(language):
         'sed_supply_title': ('Oferta para escassez de mercado', 'Supply for market shortages'),
         'sed_supply_intro': ('Aparece quando o mercado registra escassez e há um produtor local operante. A recomendação não prevê preço, retorno ou custo; o botão apenas enfileira um nível público após sua aprovação.', 'Shown when a market good is scarce and an operating local producer exists. The recommendation does not forecast prices, returns, or cost; the button only queues one government level after your approval.'),
         'sed_supply_no_candidate': ('Há escassez no mercado, mas nenhum produtor local passou pelos filtros de operação, incorporação e fila. O Director não sugere construir um prédio novo nesta versão.', 'The market reports a shortage, but no local producer passed the operation, incorporation, and queue filters. This version does not recommend a new building.'),
-        'sed_supply_blocked_paused': ('Botão bloqueado: pause o jogo para aprovar.', 'Button blocked: pause the game to approve.'),
         'sed_supply_blocked_private': ('Botão bloqueado: esvazie a fila privada antes de usar a fila pública pelo Director.', 'Button blocked: clear the private queue before using the Director’s government queue.'),
         'sed_supply_blocked_default': ('Botão bloqueado: o país está em inadimplência.', 'Button blocked: the country is in default.'),
         'sed_supply_stale': ('A escassez ou as condições do prédio mudaram. Nenhuma ação foi executada; atualize o diagnóstico.', 'The shortage or building conditions changed. No action was executed; refresh the diagnosis.'),
@@ -1084,7 +1212,7 @@ def localization(language):
         pairs[f'sed_{good}_candidate_title'] = (f'#bold [State.GetName]#! — {building_pt} → {label_pt}', f'#bold [State.GetName]#! — {building_en} → {label_en}')
         pairs[f'sed_{good}_candidate_reason'] = (f'O mercado está em escassez de {label_pt}. Este produtor está operante, sem falta de insumos nem expansão já enfileirada. Um nível pode ampliar a oferta; efeito e custo não são previstos.', f'The market reports a shortage of {label_en}. This producer is operating, has no input shortage, and has no expansion queued. One level may increase supply; impact and cost are not forecast.')
         pairs[f'sed_{good}_approve'] = (f'Aprovar: enfileirar 1 nível de {building_pt}', f'Approve: queue 1 {building_en} level')
-        pairs[f'sed_{good}_approve_tt'] = ('Requer jogo pausado, país fora de inadimplência e fila privada vazia. A escassez e o prédio são revalidados no clique. Saldo semanal negativo gera alerta, mas não bloqueia. Usa a fila normal do jogo.', 'Requires the game paused, no default, and an empty private queue. The shortage and building are rechecked on click. A negative balance raises a caution but does not block. Uses the normal game queue.')
+        pairs[f'sed_{good}_approve_tt'] = ('Requer modo Assistido, país fora de inadimplência e fila privada vazia. A escassez e o prédio são revalidados no clique. Saldo semanal negativo gera alerta, mas não bloqueia. Usa a fila normal do jogo.', 'Requires Assisted mode, no default, and an empty private queue. The shortage and building are rechecked on click. A negative balance raises a caution but does not block. Uses the normal game queue.')
         pairs[f'sed_{good}_action_success'] = (f'Pedido de expansão de {building_pt} adicionado à fila pública. Confira custo e prazo na fila do jogo.', f'{building_en.title()} expansion added to the government queue. Review cost and timing in the game queue.')
         pairs[f'sed_{good}_action_failed'] = ('A engine não confirmou a inclusão na fila. Nenhuma nova tentativa será automática.', 'The engine did not confirm the queue addition. No automatic retry will occur.')
     for metric in METRICS:
@@ -1142,10 +1270,29 @@ sed_monthly_dispatcher = {
  effect = { sed_monthly_update = yes }
 }
 '''
+    events = '''namespace = sed_pulse
+
+# Run the Director's optional construction review after the other monthly builders.
+sed_pulse.1 = {
+ type = country_event
+ hidden = yes
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  remove_variable = sed_auto_event_pending
+  if = {
+   limit = { has_variable = sed_mode_automatic }
+   sed_refresh_railway_candidates = yes
+   sed_refresh_supply_candidates = yes
+   sed_auto_apply_monthly = yes
+  }
+ }
+}
+'''
     result = {
         'common/decisions/sed_decisions.txt': decisions,
         'common/journal_entries/sed_journal_entries.txt': journal,
         'common/on_actions/sed_on_actions.txt': on_actions,
+        'events/sed_events.txt': events,
         'common/scripted_effects/sed_effects.txt': effects(),
         'common/scripted_guis/sed_scripted_guis.txt': scripted_guis(),
         'common/scripted_triggers/sed_triggers.txt': scripted_triggers(),

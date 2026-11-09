@@ -1,4 +1,4 @@
-# Plano de testes de campanha — validação das ações 0.3.4 pendente
+# Plano de teste da campanha — modos e ações 0.3.6 pendentes
 
 O jogador confirmou em campanha a interface e as leituras principais da 0.1.0,
 a renderização das seções ferroviária e de capacidade de construção vazias na
@@ -60,16 +60,15 @@ que não reativa sozinho; reativar e testar limpeza/migração de variáveis.
 Conferir português e fallback inglês, tooltip, ignorar/restaurar e estado vazio.
 
 Na 0.2.0, confirmar que a ação ocorre só após aprovação individual e
-revalidação. Não existe modo automático; recomendações não aprovadas não devem
-alterar a fila. Reordenar as recomendações antes de clicar para verificar que
+revalidação. A partir de 0.3.6, conferir também os modos abaixo. Reordenar as recomendações antes de clicar para verificar que
 o botão continua ligado ao estado mostrado. A 0.3.0 mantém o mesmo contrato
 para as duas seções e para a nova ação de capacidade de construção.
 
 ## Checklist da ação ferroviária 0.2.1
 
 Use uma cópia do save. Para aparecer uma oportunidade, aplicam-se os filtros
-estaduais abaixo. O país deve estar fora de inadimplência, o jogo pausado e a
-fila privada vazia para aprovar. Saldo semanal negativo gera um alerta, mas não
+estaduais abaixo. O país deve estar fora de inadimplência e a fila privada vazia para aprovar;
+a pausa do jogo não é exigida. Saldo semanal negativo gera um alerta, mas não
 bloqueia a aprovação desde a 0.3.4. A
 recomendação requer uma ferrovia já construída, ocupação de pelo menos 80%, sem
 falha de contratação ou falta de insumos, num estado incorporado com
@@ -78,7 +77,7 @@ infraestrutura negativa e sem expansão ferroviária já enfileirada.
 | Ação | Resultado a conferir |
 | --- | --- |
 | Abrir a seção de oportunidades | Até três estados ordenados pelo maior déficit observado; sem candidato e sem déficit, explica que não há oportunidade de infraestrutura; com déficit mas sem candidato, explica que os filtros ferroviários rejeitaram os estados |
-| Tentar aprovar com o jogo rodando | Botão desabilitado; nenhuma ação ocorre |
+| Aprovar com jogo rodando e Assistido ativo | Revalidação segue normalmente; não há trava de pausa |
 | Pausar, criar fila privada ou entrar em inadimplência | Botão desabilitado ao consultar de novo a elegibilidade |
 | Manter saldo semanal negativo, com as outras travas liberadas | Alerta financeiro aparece e o botão continua clicável |
 | Reordenar fila pública/privada antes do clique | Uma expansão pública para o estado mostrado, ou botão desabilitado se a ferrovia já estiver na fila |
@@ -98,8 +97,8 @@ tipo de oportunidade não passou os filtros.
 A recomendação exige uma fila pública com pelo menos três projetos. O estado
 precisa ter um setor de construção já construído, ocupação de pelo menos 90%,
 sem falha de contratação ou falta de insumos, sem expansão já enfileirada e
-elegibilidade normal do jogo. O país deve estar pausado para aprovar, fora de
-inadimplência e com fila privada vazia. Saldo negativo gera apenas um alerta
+elegibilidade normal do jogo. Não é preciso pausar o jogo; o país deve estar fora de inadimplência e com
+fila privada vazia. Saldo negativo gera apenas um alerta
 desde a 0.3.4. Entre os
 setores elegíveis, o Director mostra o estado mais populoso.
 
@@ -107,7 +106,7 @@ setores elegíveis, o Director mostra o estado mais populoso.
 | --- | --- |
 | Abrir a seção com fila pública curta | Explica que há menos de três projetos e não recomenda ampliar capacidade |
 | Abrir a seção com fila pública de três ou mais projetos | Mostra no máximo um setor de construção, ou explica que nenhum passou pelos filtros |
-| Tentar aprovar com o jogo rodando | Botão desabilitado; nenhuma ação ocorre |
+| Aprovar com jogo rodando e Assistido ativo | Revalidação segue normalmente; não há trava de pausa |
 | Pausar, criar fila privada ou entrar em inadimplência | Botão desabilitado na revalidação |
 | Manter saldo semanal negativo com as outras travas liberadas | Alerta financeiro aparece e o botão continua clicável |
 | Reduzir a fila pública para menos de três projetos antes do clique | Botão desabilitado ou candidato recusado |
@@ -159,11 +158,11 @@ indicou o bloqueio, sem dizer qual trava falhava; a 0.3.2 deve mostrar
 | --- | --- |
 | Abrir o candidato com fila privada não vazia | Linha de motivo indica a fila privada |
 | Esvaziar a fila privada, pausar e reabrir/atualizar | Linha some e o botão fica clicável |
-| Testar com o jogo rodando | Linha indica que o jogo precisa estar pausado |
+| Testar com jogo rodando | Não deve aparecer bloqueio por falta de pausa |
 | Testar em inadimplência | Linha indica inadimplência |
 | Testar com saldo semanal negativo e demais travas liberadas | Alerta financeiro aparece, mas botão continua clicável |
 | Na construção, reduzir a fila pública para menos de três | Linha indica a fila pública |
-| Aprovar com fila privada vazia e jogo pausado | Nível entra na fila pública; aviso confirma; sem repetição automática |
+| Aprovar com fila privada vazia | Nível entra na fila pública; aviso confirma; sem repetição automática |
 
 Depois dessa conferência, os pontos restantes são desativação (já uma vez
 confirmada), save/recarregar e a convivência com os outros construtores
@@ -230,3 +229,23 @@ ferramentas, mantimentos e roupas), método de produção ativo, escassez no
 mercado, estado, filas, saldo, pausa e status de inadimplência. Esta fase não
 prevê custos, preços futuros, retorno ou emprego do novo nível; a expansão
 apenas acrescenta um nível à fila normal do jogo.
+
+## Modos e automação opt-in 0.3.6
+
+| Ação | Resultado esperado |
+| --- | --- |
+| Abrir diário ativado | Botões Manual, Assistido e Automático visíveis no topo; Assistido aparece como modo inicial em save sem escolha |
+| Clicar Manual | Status visível; botões individuais permanecem visíveis e indisponíveis |
+| Clicar Assistido | Botões individuais podem ser aprovados; não é exigido pausar o jogo; confirmar que fila e estado são revalidados no clique |
+| Clicar Automático | Status e limite de uma ação mensal visíveis; nenhum nível é enfileirado imediatamente ao trocar modo |
+| Avançar até revisão automática | No máximo um nível entra na fila pública no mês; conferir qual candidato foi escolhido |
+| Filas ocupadas, inadimplência ou construção pausada | Revisão não enfileira ação e mostra status de bloqueio |
+| Outro construtor conhecido ativo | Automação do Director fica bloqueada; confirmar variáveis no save/mod ativo |
+| Voltar de Automático para Assistido/Manual | A próxima revisão não executa ação automática |
+| Save antigo sem variável de modo | Migra para Assistido, sem ligar Automático sozinho |
+| Desativar com evento pendente | Evento não executa ação depois da desativação |
+
+A 0.3.6 removeu a exigência de pausa dos botões individuais após a falsa
+mensagem observada na captura do Egito. A fila de construção pausada só bloqueia
+o executor automático. Fazer esses passos em uma cópia de save e parar se houver
+erro de script ou um clique duplicar construção.

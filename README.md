@@ -1,43 +1,37 @@
 # Smart Economy Director — Victoria 3 1.15
 
-Versão de desenvolvimento **0.3.5 — recomendações produtivas para oito bens em
-escassez**. O mod tem diário próprio, leituras manuais ou mensais, recomendações
-limitadas de infraestrutura e capacidade de construção, além de botões para
-expandir produtores locais quando madeira, ferro, carvão, cereais, tecido,
-ferramentas, mantimentos ou roupas estão em escassez no mercado. A nova
-recomendação exige produtor incorporado e operante, método de produção ativo
-que gere o bem, ausência de falta de insumos e de expansão já enfileirada. Cada
-botão revalida as condições no clique e enfileira um nível público. Quando
+Versão de desenvolvimento **0.3.6 — modos Manual, Assistido e Automático com
+controles sempre visíveis**. O mod tem diário próprio, leituras manuais ou
+mensais, recomendações limitadas de infraestrutura e capacidade de construção,
+além de produtores locais para oito bens em escassez. Os três modos aparecem em
+botões no topo do diário. Manual só diagnostica; Assistido mostra botões para
+aprovar ações individuais; Automático revisa mensalmente e pode enfileirar no
+máximo um nível quando as filas estão vazias, o país está fora de inadimplência
+e não há uma das automações concorrentes detectadas ativa. Cada botão de ação
+permanece visível no cartão e é revalidado no clique. Quando
 não há candidato, o painel decompõe os estados por motivo principal; quando o
-botão de aprovação está bloqueado, o painel indica qual guarda falhou (pausa,
-fila privada, inadimplência, fila pública curta ou recomendação desatualizada).
-Saldo semanal negativo aparece como alerta, sem bloquear a aprovação. Não há
-execução econômica automática. A 0.3.5 passou validação estática; os novos
-botões precisam de confirmação na campanha antes de serem considerados
-validados na engine.
+botão de aprovação está bloqueado, o painel indica qual guarda falhou (fila privada, inadimplência, fila pública curta ou recomendação desatualizada).
+Saldo semanal negativo aparece como alerta, sem bloquear a aprovação. O modo
+Automático pode agir apenas em ferrovias elegíveis e produtores existentes
+para madeira, ferro, carvão, cereais, tecido, ferramentas, mantimentos e roupas
+em escassez; não altera PMs nem leis. A 0.3.6 passou validação estática; modos,
+botões e execução agendada ainda precisam de confirmação na campanha antes de
+serem considerados validados na engine.
 
 O painel mostra finanças, PIB, população, padrão de vida, alfabetização,
 capacidade de construção, filas e sinais de infraestrutura, abastecimento e
 contratação. Os dados correspondem à última leitura indicada no painel.
 O crescimento do PIB requer amostras em meses distintos.
 
-**Estado: a interface, os indicadores, os estados vazios das seções, a
-ocultação correta da decomposição de motivos, a atualização sob
-solicitação, a desativação e a renderização do candidato de construção
-foram confirmados em campanha (0.3.0/0.3.1). A execução dos botões
-ferroviário e do setor de construção, a decomposição com déficit
-presente e a linha de motivo do botão bloqueado da 0.3.2 ainda precisam
-ser conferidas no jogo normal.** Compatibilidade
-ampliada continua pendente. Não é uma versão de automação econômica pronta
-para deixar uma campanha sozinha. Alertas financeiros, estados pendentes de
-0.3.4 e novos botões de oferta 0.3.5 ainda precisam ser conferidos na engine.
+**Estado: interface, indicadores, atualização sob solicitação, desativação e candidatos anteriores foram confirmados em campanha nas versões 0.3.0–0.3.5.** Os novos botões de modo, ações de oferta e automação mensal da 0.3.6 ainda precisam de confirmação na engine. Compatibilidade ampliada continua pendente; não é uma versão para deixar uma campanha sem supervisão.
 
 ## Instalação e uso
 
 Consulte [instalação e geração do ZIP](docs/INSTALL.md). O pacote gerado em
-`dist/smart-economy-director-0.3.5.zip` contém a pasta do mod e o descritor
+`dist/smart-economy-director-0.3.6.zip` contém a pasta do mod e o descritor
 externo. Ative no launcher e use a decisão **Ativar Smart Economy Director**.
-Nenhum outro mod é obrigatório; nenhuma ativação econômica é automática.
+O modo inicial é Assistido; a automação só começa se o jogador selecionar
+Automático no diário.
 
 ## Desenvolvimento e verificação
 
@@ -45,7 +39,6 @@ Nenhum outro mod é obrigatório; nenhuma ativação econômica é automática.
 python3 tools/build_mod.py
 python3 tools/build_mod.py --check
 python3 tools/validate.py --game "/caminho/Victoria 3/game"
-python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
@@ -72,7 +65,9 @@ substituem a validação no motor do jogo.
 
 A [pesquisa anterior na nuvem](docs/RESEARCH_CLOUD.md) e as
 [instruções de continuidade local](docs/LOCAL_CODEX.md) foram preservadas.
-PMs continuam sob responsabilidade dos outros mods. Os botões do Director só
-adicionam um nível público após aprovação e checagens atuais; não ativam um
-construtor periódico. A recomendação do setor de construção exige fila pública
-com pelo menos três projetos e não promete contratação futura.
+PMs continuam sob responsabilidade dos outros mods. Os botões adicionam um
+nível público após checagens atuais. Em modo Automático, um evento mensal pode
+enfileirar no máximo um nível elegível e bloqueia com filas ocupadas,
+inadimplência, construção pausada ou flags conhecidas de outros construtores.
+A recomendação do setor de construção exige fila pública com pelo menos três
+projetos e não promete contratação futura.

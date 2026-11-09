@@ -499,3 +499,9 @@ do prédio e modificador de saída positivo para as oito combinações. A versã
 passo é instalar esta versão e pedir ao jogador para conferir uma escassez que
 gere candidato, as travas e a inclusão do nível na fila. Nenhum teste gráfico
 foi iniciado.
+
+## Fase 2 — modos de execução visíveis e automação opt-in 0.3.6
+
+A captura do Egito mostrou o jogo pausado enquanto a aprovação individual dizia que era necessário pausar. A 0.3.6 remove essa trava das aprovações manuais: o clique revalida a elegibilidade, o modo Assistido, as filas e inadimplência. Os cartões mantêm botão visível nos três modos, com explicação quando o modo não permite agir. Os três modos têm controles visíveis no topo do diário e mostram status persistente. Saves antigos sem modo migram para Assistido.
+
+Automático é opt-in. Uma revisão mensal pode enfileirar no máximo um nível ferroviário ou de um produtor local para um bem em escassez; requer filas vazias, ausência de inadimplência e construção não pausada, além de checar três flags conhecidas de construtores externos. A revisão agenda o evento no dia 23 para evitar parte dos construtores comuns do começo do mês. Não se presume compatibilidade completa com mods externos nem segurança para deixar a campanha sem supervisão. Validação estática contra a instalação 1.15 passou; ainda falta confirmar modos, clique e evento no jogo normal.

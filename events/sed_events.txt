@@ -1,0 +1,17 @@
+﻿namespace = sed_pulse
+
+# Run the Director's optional construction review after the other monthly builders.
+sed_pulse.1 = {
+ type = country_event
+ hidden = yes
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  remove_variable = sed_auto_event_pending
+  if = {
+   limit = { has_variable = sed_mode_automatic }
+   sed_refresh_railway_candidates = yes
+   sed_refresh_supply_candidates = yes
+   sed_auto_apply_monthly = yes
+  }
+ }
+}

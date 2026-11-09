@@ -16,7 +16,6 @@ sed_railway_candidate_eligible = {
 
 sed_railway_approval_valid = {
  sed_railway_candidate_eligible = yes
- is_game_paused = yes
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -42,7 +41,6 @@ sed_construction_candidate_eligible = {
 
 sed_construction_approval_valid = {
  sed_construction_candidate_eligible = yes
- is_game_paused = yes
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -74,7 +72,6 @@ sed_wood_candidate_eligible = {
 
 sed_wood_approval_valid = {
  sed_wood_candidate_eligible = yes
- is_game_paused = yes
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -108,7 +105,6 @@ sed_iron_candidate_eligible = {
 
 sed_iron_approval_valid = {
  sed_iron_candidate_eligible = yes
- is_game_paused = yes
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -142,7 +138,6 @@ sed_coal_candidate_eligible = {
 
 sed_coal_approval_valid = {
  sed_coal_candidate_eligible = yes
- is_game_paused = yes
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -173,7 +168,6 @@ sed_grain_candidate_eligible = {
 
 sed_grain_approval_valid = {
  sed_grain_candidate_eligible = yes
- is_game_paused = yes
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -205,7 +199,6 @@ sed_fabric_candidate_eligible = {
 
 sed_fabric_approval_valid = {
  sed_fabric_candidate_eligible = yes
- is_game_paused = yes
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -237,7 +230,6 @@ sed_tools_candidate_eligible = {
 
 sed_tools_approval_valid = {
  sed_tools_candidate_eligible = yes
- is_game_paused = yes
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -272,7 +264,6 @@ sed_groceries_candidate_eligible = {
 
 sed_groceries_approval_valid = {
  sed_groceries_candidate_eligible = yes
- is_game_paused = yes
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -304,11 +295,21 @@ sed_clothes_candidate_eligible = {
 
 sed_clothes_approval_valid = {
  sed_clothes_candidate_eligible = yes
- is_game_paused = yes
  owner = {
   is_player = yes
   has_variable = sed_enabled
   NOT = { in_default = yes }
   construction_queue_num_queued_private_levels = 0
  }
+}
+# Country scope: prevent this executor from competing with known construction automations.
+sed_auto_executor_safe = {
+ has_variable = sed_mode_automatic
+ NOT = { in_default = yes }
+ construction_queue_num_queued_government_levels = 0
+ construction_queue_num_queued_private_levels = 0
+ is_construction_paused = no
+ NOT = { has_variable = advisor_auto_construction_enabled }
+ NOT = { has_variable = zw_var_expand_building }
+ NOT = { has_variable = aroai_autobuild }
 }

@@ -38,15 +38,6 @@ types sed_diagnostics_types {
      onclick = "[GetScriptedGui('sed_approve_railway_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
     }
     textbox = {
-     visible = "[GetScriptedGui('sed_railway_blocked_paused_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_railway_blocked_paused"
-    }
-    textbox = {
      visible = "[GetScriptedGui('sed_railway_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
      autoresize = yes
      multiline = yes
@@ -91,6 +82,15 @@ types sed_diagnostics_types {
      minimumsize = { 480 -1 }
      text = "sed_railway_finance_caution"
     }
+    textbox = {
+     visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_mode_approval_blocked"
+    }
    }
   }
  }
@@ -130,15 +130,6 @@ types sed_diagnostics_types {
      visible = "[GetScriptedGui('sed_approve_construction_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
      enabled = "[GetScriptedGui('sed_approve_construction_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
      onclick = "[GetScriptedGui('sed_approve_construction_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
-    }
-    textbox = {
-     visible = "[GetScriptedGui('sed_construction_blocked_paused_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_construction_blocked_paused"
     }
     textbox = {
      visible = "[GetScriptedGui('sed_construction_blocked_queue_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
@@ -194,6 +185,15 @@ types sed_diagnostics_types {
      minimumsize = { 480 -1 }
      text = "sed_construction_finance_caution"
     }
+    textbox = {
+     visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_mode_approval_blocked"
+    }
    }
   }
  }
@@ -211,12 +211,12 @@ types sed_diagnostics_types {
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_wood_candidate_title" }
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_wood_candidate_reason" }
     button = { size = { 360 30 } using = select_button_sound using = tooltip_se text = "sed_wood_approve" tooltip = "sed_wood_approve_tt" visible = "[GetScriptedGui('sed_approve_wood_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_wood_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_wood_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }
-    textbox = { visible = "[GetScriptedGui('sed_wood_blocked_paused_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_paused" }
     textbox = { visible = "[GetScriptedGui('sed_wood_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_private" }
     textbox = { visible = "[GetScriptedGui('sed_wood_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_default" }
     textbox = { visible = "[GetScriptedGui('sed_wood_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_stale" }
     textbox = { visible = "[GetScriptedGui('sed_wood_pending_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_pending" }
     textbox = { visible = "[GetScriptedGui('sed_wood_finance_caution_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_finance_caution" }
+    textbox = { visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_mode_approval_blocked" }
    }
   }
  }
@@ -234,12 +234,12 @@ types sed_diagnostics_types {
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_iron_candidate_title" }
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_iron_candidate_reason" }
     button = { size = { 360 30 } using = select_button_sound using = tooltip_se text = "sed_iron_approve" tooltip = "sed_iron_approve_tt" visible = "[GetScriptedGui('sed_approve_iron_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_iron_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_iron_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }
-    textbox = { visible = "[GetScriptedGui('sed_iron_blocked_paused_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_paused" }
     textbox = { visible = "[GetScriptedGui('sed_iron_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_private" }
     textbox = { visible = "[GetScriptedGui('sed_iron_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_default" }
     textbox = { visible = "[GetScriptedGui('sed_iron_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_stale" }
     textbox = { visible = "[GetScriptedGui('sed_iron_pending_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_pending" }
     textbox = { visible = "[GetScriptedGui('sed_iron_finance_caution_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_finance_caution" }
+    textbox = { visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_mode_approval_blocked" }
    }
   }
  }
@@ -257,12 +257,12 @@ types sed_diagnostics_types {
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_coal_candidate_title" }
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_coal_candidate_reason" }
     button = { size = { 360 30 } using = select_button_sound using = tooltip_se text = "sed_coal_approve" tooltip = "sed_coal_approve_tt" visible = "[GetScriptedGui('sed_approve_coal_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_coal_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_coal_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }
-    textbox = { visible = "[GetScriptedGui('sed_coal_blocked_paused_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_paused" }
     textbox = { visible = "[GetScriptedGui('sed_coal_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_private" }
     textbox = { visible = "[GetScriptedGui('sed_coal_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_default" }
     textbox = { visible = "[GetScriptedGui('sed_coal_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_stale" }
     textbox = { visible = "[GetScriptedGui('sed_coal_pending_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_pending" }
     textbox = { visible = "[GetScriptedGui('sed_coal_finance_caution_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_finance_caution" }
+    textbox = { visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_mode_approval_blocked" }
    }
   }
  }
@@ -280,12 +280,12 @@ types sed_diagnostics_types {
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_grain_candidate_title" }
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_grain_candidate_reason" }
     button = { size = { 360 30 } using = select_button_sound using = tooltip_se text = "sed_grain_approve" tooltip = "sed_grain_approve_tt" visible = "[GetScriptedGui('sed_approve_grain_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_grain_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_grain_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }
-    textbox = { visible = "[GetScriptedGui('sed_grain_blocked_paused_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_paused" }
     textbox = { visible = "[GetScriptedGui('sed_grain_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_private" }
     textbox = { visible = "[GetScriptedGui('sed_grain_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_default" }
     textbox = { visible = "[GetScriptedGui('sed_grain_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_stale" }
     textbox = { visible = "[GetScriptedGui('sed_grain_pending_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_pending" }
     textbox = { visible = "[GetScriptedGui('sed_grain_finance_caution_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_finance_caution" }
+    textbox = { visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_mode_approval_blocked" }
    }
   }
  }
@@ -303,12 +303,12 @@ types sed_diagnostics_types {
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_fabric_candidate_title" }
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_fabric_candidate_reason" }
     button = { size = { 360 30 } using = select_button_sound using = tooltip_se text = "sed_fabric_approve" tooltip = "sed_fabric_approve_tt" visible = "[GetScriptedGui('sed_approve_fabric_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_fabric_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_fabric_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }
-    textbox = { visible = "[GetScriptedGui('sed_fabric_blocked_paused_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_paused" }
     textbox = { visible = "[GetScriptedGui('sed_fabric_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_private" }
     textbox = { visible = "[GetScriptedGui('sed_fabric_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_default" }
     textbox = { visible = "[GetScriptedGui('sed_fabric_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_stale" }
     textbox = { visible = "[GetScriptedGui('sed_fabric_pending_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_pending" }
     textbox = { visible = "[GetScriptedGui('sed_fabric_finance_caution_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_finance_caution" }
+    textbox = { visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_mode_approval_blocked" }
    }
   }
  }
@@ -326,12 +326,12 @@ types sed_diagnostics_types {
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_tools_candidate_title" }
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_tools_candidate_reason" }
     button = { size = { 360 30 } using = select_button_sound using = tooltip_se text = "sed_tools_approve" tooltip = "sed_tools_approve_tt" visible = "[GetScriptedGui('sed_approve_tools_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_tools_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_tools_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }
-    textbox = { visible = "[GetScriptedGui('sed_tools_blocked_paused_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_paused" }
     textbox = { visible = "[GetScriptedGui('sed_tools_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_private" }
     textbox = { visible = "[GetScriptedGui('sed_tools_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_default" }
     textbox = { visible = "[GetScriptedGui('sed_tools_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_stale" }
     textbox = { visible = "[GetScriptedGui('sed_tools_pending_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_pending" }
     textbox = { visible = "[GetScriptedGui('sed_tools_finance_caution_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_finance_caution" }
+    textbox = { visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_mode_approval_blocked" }
    }
   }
  }
@@ -349,12 +349,12 @@ types sed_diagnostics_types {
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_groceries_candidate_title" }
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_groceries_candidate_reason" }
     button = { size = { 360 30 } using = select_button_sound using = tooltip_se text = "sed_groceries_approve" tooltip = "sed_groceries_approve_tt" visible = "[GetScriptedGui('sed_approve_groceries_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_groceries_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_groceries_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }
-    textbox = { visible = "[GetScriptedGui('sed_groceries_blocked_paused_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_paused" }
     textbox = { visible = "[GetScriptedGui('sed_groceries_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_private" }
     textbox = { visible = "[GetScriptedGui('sed_groceries_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_default" }
     textbox = { visible = "[GetScriptedGui('sed_groceries_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_stale" }
     textbox = { visible = "[GetScriptedGui('sed_groceries_pending_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_pending" }
     textbox = { visible = "[GetScriptedGui('sed_groceries_finance_caution_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_finance_caution" }
+    textbox = { visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_mode_approval_blocked" }
    }
   }
  }
@@ -372,12 +372,12 @@ types sed_diagnostics_types {
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_clothes_candidate_title" }
     textbox = { autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_clothes_candidate_reason" }
     button = { size = { 360 30 } using = select_button_sound using = tooltip_se text = "sed_clothes_approve" tooltip = "sed_clothes_approve_tt" visible = "[GetScriptedGui('sed_approve_clothes_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_clothes_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_clothes_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }
-    textbox = { visible = "[GetScriptedGui('sed_clothes_blocked_paused_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_paused" }
     textbox = { visible = "[GetScriptedGui('sed_clothes_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_private" }
     textbox = { visible = "[GetScriptedGui('sed_clothes_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_blocked_default" }
     textbox = { visible = "[GetScriptedGui('sed_clothes_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_stale" }
     textbox = { visible = "[GetScriptedGui('sed_clothes_pending_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_pending" }
     textbox = { visible = "[GetScriptedGui('sed_clothes_finance_caution_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_supply_finance_caution" }
+    textbox = { visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = { 480 -1 } text = "sed_mode_approval_blocked" }
    }
   }
  }
@@ -407,6 +407,107 @@ textbox = {
  minimumsize = { 500 -1 }
  maximumsize = { 500 -1 }
  text = "sed_scope_note"
+}
+textbox = {
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_medium
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_mode_title"
+}
+flowcontainer = { direction = horizontal spacing = 4
+button = {
+ size = { 160 34 }
+ using = select_button_sound
+ using = tooltip_se
+ text = "sed_mode_manual_button"
+ tooltip = "sed_mode_manual_button_tt"
+ visible = "[GetScriptedGui('sed_set_mode_manual_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_set_mode_manual_sgui').IsValid(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_set_mode_manual_sgui').Execute(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+}
+button = {
+ size = { 160 34 }
+ using = select_button_sound
+ using = tooltip_se
+ text = "sed_mode_assisted_button"
+ tooltip = "sed_mode_assisted_button_tt"
+ visible = "[GetScriptedGui('sed_set_mode_assisted_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_set_mode_assisted_sgui').IsValid(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_set_mode_assisted_sgui').Execute(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+}
+button = {
+ size = { 160 34 }
+ using = select_button_sound
+ using = tooltip_se
+ text = "sed_mode_automatic_button"
+ tooltip = "sed_mode_automatic_button_tt"
+ visible = "[GetScriptedGui('sed_set_mode_automatic_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_set_mode_automatic_sgui').IsValid(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_set_mode_automatic_sgui').Execute(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+}
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_mode_manual_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_mode_manual_status"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_mode_assisted_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_mode_assisted_status"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_mode_automatic_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_mode_automatic_status"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_status_success_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_auto_status_success"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_status_no_action_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_auto_status_no_action"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_status_blocked_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_auto_status_blocked"
 }
 flowcontainer = { direction = horizontal spacing = 8
 button = {

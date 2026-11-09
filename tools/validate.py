@@ -24,7 +24,7 @@ def validate(root=ROOT, game=None):
             errors.append('Missing file: ' + name)
         elif path.read_bytes() != data:
             errors.append('Generated file differs: ' + name)
-    for folder, pattern in [('common', '*.txt'), ('gui', '*.gui')]:
+    for folder, pattern in [('common', '*.txt'), ('events', '*.txt'), ('gui', '*.gui')]:
         for path in (root / folder).rglob(pattern):
             relative = path.relative_to(root).as_posix()
             if relative not in expected:
@@ -51,7 +51,7 @@ def validate(root=ROOT, game=None):
                        'change_variable', 'root', 'prev', 'owner', 'every_scope_state',
                        'every_scope_building', 'ordered_scope_state', 'clear_variable_list',
                        'add_to_variable_list', 'add_journal_entry', 'start_building_construction',
-                       'order_by', 'max', 'check_range_bounds'}
+                       'trigger_event', 'order_by', 'max', 'check_range_bounds'}
 
     def check_effects(entries):
         for entry in entries:
@@ -75,6 +75,8 @@ def validate(root=ROOT, game=None):
                 check_effects(entry.value)
         for entry in walk(tree):
             if entry.key == 'effect' and isinstance(entry.value, list):
+                check_effects(entry.value)
+            if '/events/' in name and entry.key == 'immediate' and isinstance(entry.value, list):
                 check_effects(entry.value)
             if entry.key.startswith('sed_') and entry.value == 'yes' and entry.key not in custom:
                 errors.append('Undefined scripted call: ' + entry.key)

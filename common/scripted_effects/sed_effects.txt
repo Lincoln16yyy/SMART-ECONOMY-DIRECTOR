@@ -8,7 +8,8 @@ sed_enable_country = {
  set_variable = { name = sed_enabled value = yes }
  set_variable = { name = sed_monthly_refresh value = yes }
  set_variable = { name = sed_railway_action_status value = 0 }
- set_variable = { name = sed_construction_action_status value = 0 } set_variable = { name = sed_wood_action_status value = 0 }
+ set_variable = { name = sed_construction_action_status value = 0 }
+ set_variable = { name = sed_wood_action_status value = 0 }
  set_variable = { name = sed_iron_action_status value = 0 }
  set_variable = { name = sed_coal_action_status value = 0 }
  set_variable = { name = sed_grain_action_status value = 0 }
@@ -16,6 +17,10 @@ sed_enable_country = {
  set_variable = { name = sed_tools_action_status value = 0 }
  set_variable = { name = sed_groceries_action_status value = 0 }
  set_variable = { name = sed_clothes_action_status value = 0 }
+ if = {
+  limit = { NOT = { OR = { has_variable = sed_mode_manual has_variable = sed_mode_assisted has_variable = sed_mode_automatic } } }
+  sed_set_mode_assisted = yes
+ }
  sed_refresh_diagnostics = yes
  sed_ensure_journal_entry = yes
 }
@@ -70,6 +75,11 @@ sed_disable_country = {
  remove_variable = sed_construction_blocked_states
  remove_variable = sed_queue_levels_before
  remove_variable = sed_supply_action_status
+ remove_variable = sed_mode_manual
+ remove_variable = sed_mode_assisted
+ remove_variable = sed_mode_automatic
+ remove_variable = sed_auto_action_status
+ remove_variable = sed_auto_event_pending
  remove_variable = sed_wood_action_status
  remove_variable = sed_iron_action_status
  remove_variable = sed_coal_action_status
@@ -122,12 +132,14 @@ sed_monthly_update = {
    limit = { has_variable = sed_monthly_refresh }
    sed_refresh_diagnostics = yes
   }
+  sed_schedule_auto_event = yes
  }
 }
 
 sed_refresh_diagnostics = {
  if = {
   limit = { is_player = yes has_variable = sed_enabled }
+  sed_ensure_mode_default = yes
  # Economy Advisor/advisor_economy_health_effects.txt
  set_variable = { name = sed_balance value = net_total_income }
  # Economy Advisor/advisor_core_values.txt
@@ -281,6 +293,7 @@ sed_run_railway_approval = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_railway_action_status value = 1 }
+    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
     prev = { set_variable = { name = sed_railway_request_pending value = yes } }
    }
    else = { set_variable = { name = sed_railway_action_status value = 2 } }
@@ -413,6 +426,13 @@ sed_update_growth = {
   set_variable = { name = sed_growth_available value = 1 }
  }
 }
+sed_ensure_mode_default = {
+ if = {
+  limit = { NOT = { OR = { has_variable = sed_mode_manual has_variable = sed_mode_assisted has_variable = sed_mode_automatic } } }
+  sed_set_mode_assisted = yes
+ }
+}
+
 sed_refresh_supply_candidates = {
  clear_variable_list = sed_wood_candidates
  every_scope_state = {
@@ -592,6 +612,7 @@ sed_run_wood_approval = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_wood_action_status value = 1 }
+    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
     prev = { set_variable = { name = sed_wood_request_pending value = yes } }
    }
    else = { set_variable = { name = sed_wood_action_status value = 2 } }
@@ -608,6 +629,7 @@ sed_run_iron_approval = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_iron_action_status value = 1 }
+    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
     prev = { set_variable = { name = sed_iron_request_pending value = yes } }
    }
    else = { set_variable = { name = sed_iron_action_status value = 2 } }
@@ -624,6 +646,7 @@ sed_run_coal_approval = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_coal_action_status value = 1 }
+    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
     prev = { set_variable = { name = sed_coal_request_pending value = yes } }
    }
    else = { set_variable = { name = sed_coal_action_status value = 2 } }
@@ -640,6 +663,7 @@ sed_run_grain_approval = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_grain_action_status value = 1 }
+    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
     prev = { set_variable = { name = sed_grain_request_pending value = yes } }
    }
    else = { set_variable = { name = sed_grain_action_status value = 2 } }
@@ -656,6 +680,7 @@ sed_run_fabric_approval = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_fabric_action_status value = 1 }
+    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
     prev = { set_variable = { name = sed_fabric_request_pending value = yes } }
    }
    else = { set_variable = { name = sed_fabric_action_status value = 2 } }
@@ -672,6 +697,7 @@ sed_run_tools_approval = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_tools_action_status value = 1 }
+    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
     prev = { set_variable = { name = sed_tools_request_pending value = yes } }
    }
    else = { set_variable = { name = sed_tools_action_status value = 2 } }
@@ -688,6 +714,7 @@ sed_run_groceries_approval = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_groceries_action_status value = 1 }
+    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
     prev = { set_variable = { name = sed_groceries_request_pending value = yes } }
    }
    else = { set_variable = { name = sed_groceries_action_status value = 2 } }
@@ -704,10 +731,137 @@ sed_run_clothes_approval = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_clothes_action_status value = 1 }
+    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
     prev = { set_variable = { name = sed_clothes_request_pending value = yes } }
    }
    else = { set_variable = { name = sed_clothes_action_status value = 2 } }
    remove_variable = sed_queue_levels_before
   }
  }
+}
+sed_set_mode_manual = {
+ remove_variable = sed_mode_manual remove_variable = sed_mode_assisted
+ remove_variable = sed_mode_automatic
+ set_variable = { name = sed_mode_manual value = yes }
+ set_variable = { name = sed_auto_action_status value = 0 }
+ if = { limit = { has_variable = sed_mode_automatic } sed_schedule_auto_event = yes }
+}
+sed_set_mode_assisted = {
+ remove_variable = sed_mode_assisted remove_variable = sed_mode_manual
+ remove_variable = sed_mode_automatic
+ set_variable = { name = sed_mode_assisted value = yes }
+ set_variable = { name = sed_auto_action_status value = 0 }
+ if = { limit = { has_variable = sed_mode_automatic } sed_schedule_auto_event = yes }
+}
+sed_set_mode_automatic = {
+ remove_variable = sed_mode_automatic remove_variable = sed_mode_manual
+ remove_variable = sed_mode_assisted
+ set_variable = { name = sed_mode_automatic value = yes }
+ set_variable = { name = sed_auto_action_status value = 0 }
+ if = { limit = { has_variable = sed_mode_automatic } sed_schedule_auto_event = yes }
+}
+sed_schedule_auto_event = {
+ if = {
+  limit = { has_variable = sed_mode_automatic NOT = { has_variable = sed_auto_event_pending } }
+  set_variable = { name = sed_auto_event_pending value = yes }
+  trigger_event = { id = sed_pulse.1 days = 23 }
+ }
+}
+sed_auto_apply_monthly = {
+ set_variable = { name = sed_auto_action_status value = 2 }
+ if = {
+  limit = { sed_auto_executor_safe = yes }
+
+  if = {
+   limit = { any_scope_state = { sed_railway_candidate_eligible = yes } }
+   ordered_scope_state = {
+    limit = { sed_railway_candidate_eligible = yes }
+    order_by = { value = infrastructure_delta }
+    max = 1
+    check_range_bounds = no
+    sed_run_railway_approval = yes
+   }
+  }
+  else_if = {
+   limit = { any_scope_state = { sed_wood_candidate_eligible = yes } }
+   ordered_scope_state = {
+    limit = { sed_wood_candidate_eligible = yes }
+    order_by = { value = state_population multiply = -1 }
+    max = 1
+    check_range_bounds = no
+    sed_run_wood_approval = yes
+   }
+  }
+  else_if = {
+   limit = { any_scope_state = { sed_iron_candidate_eligible = yes } }
+   ordered_scope_state = {
+    limit = { sed_iron_candidate_eligible = yes }
+    order_by = { value = state_population multiply = -1 }
+    max = 1
+    check_range_bounds = no
+    sed_run_iron_approval = yes
+   }
+  }
+  else_if = {
+   limit = { any_scope_state = { sed_coal_candidate_eligible = yes } }
+   ordered_scope_state = {
+    limit = { sed_coal_candidate_eligible = yes }
+    order_by = { value = state_population multiply = -1 }
+    max = 1
+    check_range_bounds = no
+    sed_run_coal_approval = yes
+   }
+  }
+  else_if = {
+   limit = { any_scope_state = { sed_grain_candidate_eligible = yes } }
+   ordered_scope_state = {
+    limit = { sed_grain_candidate_eligible = yes }
+    order_by = { value = state_population multiply = -1 }
+    max = 1
+    check_range_bounds = no
+    sed_run_grain_approval = yes
+   }
+  }
+  else_if = {
+   limit = { any_scope_state = { sed_fabric_candidate_eligible = yes } }
+   ordered_scope_state = {
+    limit = { sed_fabric_candidate_eligible = yes }
+    order_by = { value = state_population multiply = -1 }
+    max = 1
+    check_range_bounds = no
+    sed_run_fabric_approval = yes
+   }
+  }
+  else_if = {
+   limit = { any_scope_state = { sed_tools_candidate_eligible = yes } }
+   ordered_scope_state = {
+    limit = { sed_tools_candidate_eligible = yes }
+    order_by = { value = state_population multiply = -1 }
+    max = 1
+    check_range_bounds = no
+    sed_run_tools_approval = yes
+   }
+  }
+  else_if = {
+   limit = { any_scope_state = { sed_groceries_candidate_eligible = yes } }
+   ordered_scope_state = {
+    limit = { sed_groceries_candidate_eligible = yes }
+    order_by = { value = state_population multiply = -1 }
+    max = 1
+    check_range_bounds = no
+    sed_run_groceries_approval = yes
+   }
+  }
+  else_if = {
+   limit = { any_scope_state = { sed_clothes_candidate_eligible = yes } }
+   ordered_scope_state = {
+    limit = { sed_clothes_candidate_eligible = yes }
+    order_by = { value = state_population multiply = -1 }
+    max = 1
+    check_range_bounds = no
+    sed_run_clothes_approval = yes
+   }
+  }
+ }
+ else = { set_variable = { name = sed_auto_action_status value = 3 } }
 }

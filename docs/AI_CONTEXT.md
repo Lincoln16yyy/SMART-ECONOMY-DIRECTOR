@@ -4,14 +4,7 @@ O usuário solicitou seguir `Texto colado.txt` e ir publicando no GitHub
 `Lincoln16yyy/SMART-ECONOMY-DIRECTOR`. O conteúdo original está preservado
 integralmente em PROJECT_BRIEF.md. Leia-o antes de trabalhar.
 
-Fase atual: protótipo da Fase 2 em 0.3.5. A versão acrescenta botões para
-expandir produtores locais de oito bens quando a escassez do mercado é
-identificada (madeira, ferro, carvão, cereais, tecido, ferramentas, mantimentos
-e roupas). Exige método ativo que gere o bem, produtor incorporado e operante,
-sem falta de insumos ou expansão enfileirada; revalida tudo no clique, pausa,
-inadimplência e fila privada. Saldo negativo é aviso. A validação estática
-passou; carregar e clicar nas novas ações ainda requer campanha do jogador.
-A 0.3.5 ainda não foi instalada no perfil local.
+Fase atual: base da automação opt-in em 0.3.6. O diário tem botões sempre visíveis para Manual, Assistido e Automático e status persistente; as ações individuais só são aprovadas em Assistido. Automático revisa mensalmente e enfileira no máximo um nível elegível, com travas para inadimplência, filas ocupadas, construção pausada e flags conhecidas de construtores concorrentes. A correção da 0.3.5 remove a exigência falsa de jogo pausado dos cliques individuais, conforme captura do Egito. Validação estática passou; nenhuma confirmação da engine para os novos controles/ações ainda. A versão 0.3.6 está empacotada e instalada no perfil local preservando load order; o jogador já pode testar. Não iniciar jogo nem teste gráfico longo sem pedido.
 
 Fase anterior: protótipo da Fase 2 em 0.3.4. O jogador confirmou em campanha a
 interface, os indicadores e a seção vazia de oportunidades. A 0.2.0 acrescentou

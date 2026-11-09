@@ -1,15 +1,16 @@
-# Instalação e uso — versão 0.3.5
+# Instalação e uso — versão 0.3.6
 
-Requer Victoria 3 1.15.x. A versão 0.3.5 mantém o diagnóstico e os protótipos
+Requer Victoria 3 1.15.x. A versão 0.3.6 mantém o diagnóstico e os protótipos
 de expansão ferroviária e de capacidade de construção. Acrescenta recomendações
 e botões de aprovação para expandir produtores locais de madeira, ferro,
 carvão, cereais, tecido, ferramentas, mantimentos e roupas quando o mercado
 registra escassez. O produtor precisa existir em estado incorporado, estar
 operante, usar método de produção ativo que gere o bem, não ter falta de insumos
 e não ter expansão já na fila. A operação continua limitada a um nível por
-aprovação. Saldo semanal negativo gera um alerta, mas não impede aprovação. Não
-executa ações econômicas automaticamente nem altera métodos de produção. Não
-depende do Steam Workshop.
+aprovação. Saldo semanal negativo gera um alerta, mas não impede aprovação. Os modos
+Manual, Assistido e Automático têm botões visíveis no topo do diário. Automático é
+opt-in e pode enfileirar no máximo um nível elegível por mês. Não altera métodos
+de produção nem leis.
 
 ## Gerar o pacote
 
@@ -21,7 +22,7 @@ python3 tools/validate.py --game "/caminho/Victoria 3/game"
 python3 tools/package_mod.py
 ```
 
-O resultado fica em `dist/smart-economy-director-0.3.5.zip`. O pacote contém
+O resultado fica em `dist/smart-economy-director-0.3.6.zip`. O pacote contém
 somente os arquivos carregáveis; não inclui saves, fontes do jogo, pesquisa,
 testes ou outro mod. A geração é determinística e não modifica a instalação.
 
@@ -59,8 +60,8 @@ scripts antigos remanescentes.
 5. Use **Atualizar sob solicitação** para suspender as leituras mensais,
    ou **Atualizar todo mês** para retomá-las e atualizar imediatamente.
 6. Se houver uma recomendação ferroviária, de capacidade de construção ou de
-   oferta, confira alvo e alerta financeiro; pause o jogo e aprove apenas se
-   desejar enfileirar um nível público. As ações não preveem custo nem retorno.
+   oferta, confira alvo e alerta financeiro; selecione Assistido e use o botão visível para
+   enfileirar um nível público. As ações não preveem custo nem retorno.
    Para a oferta, confirme no jogo a escassez do bem e o método ativo do
    produtor. Veja as travas em [MANUAL_RUNTIME_TEST.md](MANUAL_RUNTIME_TEST.md).
 7. Use **Desativar** no diário ou a decisão de desativação para limpar leituras
@@ -72,13 +73,14 @@ incorporação/permissão. Cada estado entra em um único motivo principal, ent�
 contagens somam o total examinado.
 
 Quando o botão de aprovar está desabilitado, uma linha indica a primeira
-guarda que falha (jogo rodando, fila privada não vazia, inadimplência ou
-saldo semanal negativo). O botão é seguro clicar quando nada aparece: a
+guarda que falha (fila privada não vazia, inadimplência, fila pública curta ou estado desatualizado). O botão é seguro clicar quando nada aparece: a
 revalidação do clique ainda impede a ação se alguma guarda falhar.
 
 O Director é opcional: não se ativa sozinho em campanha nova ou save existente.
-As opções de atualização controlam a frequência das leituras. Aprovar uma
-recomendação executa somente aquela ação; não habilita um modo automático.
+As opções de atualização controlam a frequência das leituras. Manual não aprova
+ações; Assistido exige clique individual; Automático exige seleção explícita e
+revalida filas, inadimplência, pausa da construção e flags conhecidas de outros
+construtores antes de agir.
 
 Todos os números do painel pertencem à última leitura, cuja data é mostrada.
 A variação do PIB exige leituras em meses distintos e uma base positiva.

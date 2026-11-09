@@ -7,9 +7,10 @@ ferroviários e uma aprovação individual que enfileira uma expansão elegível
 quando a fila pública tem pelo menos três projetos; a 0.3.1 explica os motivos de
 rejeição quando não há candidato; a 0.3.2 mostra por que o botão de aprovação
 está bloqueado; a 0.3.3 explica quando um cartão visível deixou de ser elegível
-desde a última leitura; e a 0.3.5 acrescenta expansão aprovada de produtores
-locais para oito bens em escassez. Ranking nacional completo, outros tipos de
-ação e automação periódica continuam por implementar.
+desde a última leitura; a 0.3.5 acrescenta expansão de produtores locais para oito bens em escassez.
+A 0.3.6 introduz modos visíveis Manual/Assistido/Automático e um executor
+mensal opt-in limitado a um nível. Ranking nacional completo e compatibilidade
+ampliada continuam por implementar.
 
 ## Responsabilidade
 
@@ -116,11 +117,11 @@ categorias são exclusivas: cada estado entra em um único motivo, e as contagen
 somam o denominador exibido. A decomposição descreve filtros atuais, não uma
 previsão de custo ou retorno.
 
-O modo automático futuro só habilitará domínios cujo executor seja o Director.
-Uma aprovação manual não habilita sozinha ações periódicas. Quando outro mod
-construir, o Director apresentará estratégia e verificará os resultados. Essa
-cooperação é configuração do jogador, não API inventada. O Director não
-escreverá flags de terceiros nem tentará desligá-los silenciosamente.
+Na 0.3.6, Automático é opt-in e pode enfileirar no máximo um nível mensal de
+ferrovia ou produtor local de bens em escassez. A rotina exige filas pública e
+privada vazias, país fora de inadimplência, construção não pausada e ausência
+de três flags de construtores conhecidos. A lista de flags não cobre todos os
+mods; o modo permanece protótipo. O Director não escreve flags de terceiros.
 
 ## Modos, ciclo e histórico
 
@@ -129,9 +130,10 @@ escreverá flags de terceiros nem tentará desligá-los silenciosamente.
 - Assistido: análise periódica e aprovação individual de candidatos revalidados.
 - Automático: apenas ações comprovadas, com limites, registro e suspensão em crise.
 
-Esses são os futuros modos de execução. A versão 0.1.0 oferece somente agenda
-de leitura mensal ou sob solicitação; não usa esses nomes para sugerir modos
-de execução que ainda não existem.
+A 0.3.6 implementa esses três modos: Manual suspende ações, Assistido habilita
+aprovação por botões individuais, e Automático agenda uma revisão mensal com
+limite de uma construção. O primeiro modo ao ativar um save sem escolha é
+Assistido; ativar Automático exige clique explícito.
 
 A atualização deverá ter um único responsável para evitar execução em dobro
 entre Journal Entry e on-action. Rotinas pesadas serão espaçadas e medidas;
