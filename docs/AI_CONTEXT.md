@@ -4,7 +4,16 @@ O usuário solicitou seguir `Texto colado.txt` e ir publicando no GitHub
 `Lincoln16yyy/SMART-ECONOMY-DIRECTOR`. O conteúdo original está preservado
 integralmente em PROJECT_BRIEF.md. Leia-o antes de trabalhar.
 
-Fase atual: protótipo da Fase 2 em 0.3.4. O jogador confirmou em campanha a
+Fase atual: protótipo da Fase 2 em 0.3.5. A versão acrescenta botões para
+expandir produtores locais de oito bens quando a escassez do mercado é
+identificada (madeira, ferro, carvão, cereais, tecido, ferramentas, mantimentos
+e roupas). Exige método ativo que gere o bem, produtor incorporado e operante,
+sem falta de insumos ou expansão enfileirada; revalida tudo no clique, pausa,
+inadimplência e fila privada. Saldo negativo é aviso. A validação estática
+passou; carregar e clicar nas novas ações ainda requer campanha do jogador.
+A 0.3.5 ainda não foi instalada no perfil local.
+
+Fase anterior: protótipo da Fase 2 em 0.3.4. O jogador confirmou em campanha a
 interface, os indicadores e a seção vazia de oportunidades. A 0.2.0 acrescentou
 até três recomendações ferroviárias e um botão para aprovar uma por vez; a
 0.2.1 explica se não há déficit de infraestrutura ou se há déficit sem

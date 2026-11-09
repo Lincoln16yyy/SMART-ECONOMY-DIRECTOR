@@ -6,8 +6,19 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.3.4'
-STATE_VARIABLES = ['sed_railway_request_pending', 'sed_construction_request_pending']
+VERSION = '0.3.5'
+SUPPLY_TARGETS = [
+    {'good': 'wood', 'building': 'building_logging_camp', 'methods': ['pm_electric_saw_mills', 'pm_saw_mills', 'pm_simple_forestry'], 'label_pt': 'madeira', 'label_en': 'wood', 'building_pt': 'acampamento madeireiro', 'building_en': 'logging camp'},
+    {'good': 'iron', 'building': 'building_iron_mine', 'methods': ['pm_atmospheric_engine_pump_building_iron_mine', 'pm_condensing_engine_pump_building_iron_mine', 'pm_diesel_pump_building_iron_mine', 'pm_dynamite_building_iron_mine', 'pm_nitroglycerin_building_iron_mine', 'pm_picks_and_shovels_building_iron_mine'], 'label_pt': 'ferro', 'label_en': 'iron', 'building_pt': 'mina de ferro', 'building_en': 'iron mine'},
+    {'good': 'coal', 'building': 'building_coal_mine', 'methods': ['pm_atmospheric_engine_pump_building_coal_mine', 'pm_condensing_engine_pump_building_coal_mine', 'pm_diesel_pump_building_coal_mine', 'pm_dynamite_building_coal_mine', 'pm_nitroglycerin_building_coal_mine', 'pm_picks_and_shovels_building_coal_mine'], 'label_pt': 'carvão', 'label_en': 'coal', 'building_pt': 'mina de carvão', 'building_en': 'coal mine'},
+    {'good': 'grain', 'building': 'building_wheat_farm', 'methods': ['pm_chemical_fertilizer', 'pm_simple_farming', 'pm_soil_enriching_farming'], 'label_pt': 'cereais', 'label_en': 'grain', 'building_pt': 'fazenda de trigo', 'building_en': 'wheat farm'},
+    {'good': 'fabric', 'building': 'building_cotton_plantation', 'methods': ['automatic_irrigation_building_cotton_plantation', 'default_building_cotton_plantation', 'slave_exploitation_cotton', 'worker_exploitation_cotton'], 'label_pt': 'tecido', 'label_en': 'fabric', 'building_pt': 'plantação de algodão', 'building_en': 'cotton plantation'},
+    {'good': 'tools', 'building': 'building_tooling_workshop', 'methods': ['pm_crude_tools', 'pm_pig_iron', 'pm_rubber_grips', 'pm_steel'], 'label_pt': 'ferramentas', 'label_en': 'tools', 'building_pt': 'oficina de ferramentas', 'building_en': 'tooling workshop'},
+    {'good': 'groceries', 'building': 'building_food_industry', 'methods': ['pm_bakery', 'pm_baking_powder', 'pm_cannery', 'pm_cannery_fish', 'pm_sweeteners', 'pm_vacuum_canning', 'pm_vacuum_canning_principle_3'], 'label_pt': 'mantimentos', 'label_en': 'groceries', 'building_pt': 'indústria alimentícia', 'building_en': 'food industry'},
+    {'good': 'clothes', 'building': 'building_textile_mill', 'methods': ['pm_dye_workshops', 'pm_electric_sewing_machines', 'pm_handsewn_clothes', 'pm_sewing_machines'], 'label_pt': 'roupas', 'label_en': 'clothes', 'building_pt': 'fábrica têxtil', 'building_en': 'textile mill'},
+]
+STATE_VARIABLES = ['sed_railway_request_pending', 'sed_construction_request_pending'] + [
+    f"sed_{item['good']}_request_pending" for item in SUPPLY_TARGETS]
 EXTRA_VARIABLES = '''sed_last_year sed_last_month sed_month_key sed_in_default
 sed_gdp_per_capita sed_per_capita_available sed_debt_share sed_debt_share_available
 sed_reserve_weeks sed_reserve_weeks_available sed_states sed_infrastructure_short_states
@@ -19,7 +30,10 @@ sed_railway_deficit_states sed_railway_no_railway_states
 sed_railway_not_ready_states sed_railway_blocked_states
 sed_construction_sector_states sed_construction_not_ready_states
 sed_construction_blocked_states
-sed_queue_levels_before'''.split()
+sed_queue_levels_before'''.split() + [
+    'sed_supply_action_status',
+    *[f"sed_{item['good']}_action_status" for item in SUPPLY_TARGETS],
+]
 
 
 def runtime_variables():
@@ -30,6 +44,56 @@ def runtime_variables():
 def country_variables():
     return ['sed_enabled', 'sed_monthly_refresh'] + [
         'sed_' + metric['id'] for metric in METRICS] + EXTRA_VARIABLES
+
+
+def supply_effects():
+    result = ['''sed_refresh_supply_candidates = {''']
+    for item in SUPPLY_TARGETS:
+        good = item['good']
+        building = item['building']
+        result.extend([
+            f' clear_variable_list = sed_{good}_candidates',
+            f''' every_scope_state = {{
+  if = {{
+   limit = {{ has_variable = sed_{good}_request_pending
+    OR = {{ NOT = {{ has_building = {building} }} b:{building} = {{ level_after_queued_constructions <= level }} }}
+   }}
+   remove_variable = sed_{good}_request_pending
+  }}
+ }}''',
+            f''' if = {{
+  limit = {{ is_player = yes has_variable = sed_enabled
+   market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }}
+  }}
+  ordered_scope_state = {{
+   limit = {{ sed_{good}_candidate_eligible = yes }}
+   order_by = {{ value = state_population multiply = -1 }}
+   max = 3
+   check_range_bounds = no
+   root = {{ add_to_variable_list = {{ name = sed_{good}_candidates target = prev }} }}
+  }}
+ }}''',
+        ])
+    result.append('}')
+    for item in SUPPLY_TARGETS:
+        good, building = item['good'], item['building']
+        result.append(f'''sed_run_{good}_approval = {{
+ if = {{
+  limit = {{ sed_{good}_approval_valid = yes }}
+  owner = {{ set_variable = {{ name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }} }}
+  start_building_construction = {building}
+  owner = {{
+   if = {{
+    limit = {{ construction_queue_num_queued_government_levels > var:sed_queue_levels_before }}
+    set_variable = {{ name = sed_{good}_action_status value = 1 }}
+    prev = {{ set_variable = {{ name = sed_{good}_request_pending value = yes }} }}
+   }}
+   else = {{ set_variable = {{ name = sed_{good}_action_status value = 2 }} }}
+   remove_variable = sed_queue_levels_before
+  }}
+ }}
+}}''')
+    return '\n'.join(result) + '\n'
 
 
 def textbox(key, visibility=None, heading=False):
@@ -127,6 +191,21 @@ def widget():
 '''
     body += textbox('sed_construction_action_success', 'sed_construction_action_success_visible_sgui')
     body += textbox('sed_construction_action_failed', 'sed_construction_action_failed_visible_sgui')
+    body += textbox('sed_supply_title', heading=True) + textbox('sed_supply_intro')
+    for item in SUPPLY_TARGETS:
+        good = item['good']
+        body += textbox(f'sed_{good}_section_title', f'sed_{good}_section_visible_sgui', heading=True)
+        body += f'''fixedgridbox = {{
+ visible = "[GetScriptedGui('sed_{good}_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_{good}_candidates')]"
+ addcolumn = 500
+ addrow = 220
+ item = {{ sed_{good}_candidate_item = {{}} }}
+}}
+'''
+        body += textbox('sed_supply_no_candidate', f'sed_{good}_no_candidates_visible_sgui')
+        body += textbox(f'sed_{good}_action_success', f'sed_{good}_action_success_visible_sgui')
+        body += textbox(f'sed_{good}_action_failed', f'sed_{good}_action_failed_visible_sgui')
     body += textbox('sed_limitations_title', heading=True) + textbox('sed_limitations')
     item_type = '''types sed_diagnostics_types {
  type sed_railway_candidate_item = flowcontainer {
@@ -328,12 +407,44 @@ def widget():
  }
 }
 '''
+    head, tail = item_type.rsplit('\n}\n', 1)
+    item_type = head + '\n' + supply_item_types() + '}\n' + tail
     return '# Generated by tools/build_mod.py.\n' + item_type + '\nflowcontainer = {\n name = "sed_diagnostics_widget"\n minimumsize = { 500 -1 }\n maximumsize = { 500 -1 }\n direction = vertical\n spacing = 6\n ignoreinvisible = yes\n' + body + '}\n'
+
+
+def supply_item_types():
+    result = []
+    for item in SUPPLY_TARGETS:
+        good = item['good']
+        result.append(f''' type sed_{good}_candidate_item = flowcontainer {{
+  direction = vertical
+  spacing = 4
+  widget = {{
+   datacontext = "[Scope.GetState]"
+   size = {{ 500 214 }}
+   background = {{ using = dark_area }}
+   flowcontainer = {{
+    position = {{ 8 4 }}
+    direction = vertical
+    spacing = 4
+    textbox = {{ autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_{good}_candidate_title" }}
+    textbox = {{ autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_{good}_candidate_reason" }}
+    button = {{ size = {{ 360 30 }} using = select_button_sound using = tooltip_se text = "sed_{good}_approve" tooltip = "sed_{good}_approve_tt" visible = "[GetScriptedGui('sed_approve_{good}_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_{good}_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_{good}_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }}
+    textbox = {{ visible = "[GetScriptedGui('sed_{good}_blocked_paused_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_blocked_paused" }}
+    textbox = {{ visible = "[GetScriptedGui('sed_{good}_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_blocked_private" }}
+    textbox = {{ visible = "[GetScriptedGui('sed_{good}_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_blocked_default" }}
+    textbox = {{ visible = "[GetScriptedGui('sed_{good}_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_stale" }}
+    textbox = {{ visible = "[GetScriptedGui('sed_{good}_pending_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_pending" }}
+    textbox = {{ visible = "[GetScriptedGui('sed_{good}_finance_caution_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_finance_caution" }}
+   }}
+  }}
+ }}''')
+    return '\n'.join(result) + '\n'
 
 
 def effects():
     readings = '\n'.join(f' # {m["source"]}\n set_variable = {{ name = sed_{m["id"]} value = {m["expression"]} }}' for m in METRICS)
-    return '''# Generated by tools/build_mod.py. Country scope except state-targeted actions.
+    script = '''# Generated by tools/build_mod.py. Country scope except state-targeted actions.
 # Explicit opt-in on both new campaigns and existing saves. Approved actions only.
 sed_enable_country = {
  if = {
@@ -432,6 +543,7 @@ sed_refresh_diagnostics = {
   sed_update_growth = yes
   sed_refresh_railway_candidates = yes
   sed_refresh_construction_candidates = yes
+  sed_refresh_supply_candidates = yes
  }
 }
 
@@ -628,6 +740,25 @@ sed_update_growth = {
  }
 }
 '''
+    supply_status = '\n'.join(
+        f" set_variable = {{ name = sed_{item['good']}_action_status value = 0 }}"
+        for item in SUPPLY_TARGETS)
+    supply_lists = '\n'.join(
+        f" clear_variable_list = sed_{item['good']}_candidates"
+        for item in SUPPLY_TARGETS)
+    supply_state_cleanup = '\n'.join(
+        f"  remove_variable = sed_{item['good']}_request_pending"
+        for item in SUPPLY_TARGETS)
+    script = script.replace(
+        ' set_variable = { name = sed_construction_action_status value = 0 }',
+        ' set_variable = { name = sed_construction_action_status value = 0 }' + supply_status)
+    script = script.replace(
+        ' clear_variable_list = sed_construction_candidates',
+        ' clear_variable_list = sed_construction_candidates\n' + supply_lists)
+    script = script.replace(
+        '  remove_variable = sed_construction_request_pending',
+        '  remove_variable = sed_construction_request_pending\n' + supply_state_cleanup)
+    return script + supply_effects()
 
 
 def scripted_guis():
@@ -652,6 +783,15 @@ sed_approve_construction_sgui = {
  is_valid = { sed_construction_approval_valid = yes }
  effect = { if = { limit = { sed_construction_approval_valid = yes } sed_run_construction_approval = yes } }
 }
+'''
+    for item in SUPPLY_TARGETS:
+        good = item['good']
+        result += f'''sed_approve_{good}_sgui = {{
+ scope = state
+ is_shown = {{ owner = {{ is_player = yes has_variable = sed_enabled }} }}
+ is_valid = {{ sed_{good}_approval_valid = yes }}
+ effect = {{ if = {{ limit = {{ sed_{good}_approval_valid = yes }} sed_run_{good}_approval = yes }} }}
+}}
 '''
     # Hard blockers appear in order. A negative budget is a caution, not a
     # blocker. Pending actions and stale cards each have their own message.
@@ -681,6 +821,26 @@ sed_approve_construction_sgui = {
                    f' is_shown = {{ owner = {{ is_player = yes has_variable = sed_enabled }} '
                    f'has_variable = sed_{action}_request_pending }}\n}}\n')
         result += (f'sed_{action}_finance_caution_sgui = {{\n scope = state\n'
+                   f' is_shown = {{ owner = {{ is_player = yes has_variable = sed_enabled '
+                   f'net_total_income < 0 }} }}\n}}\n')
+    for item in SUPPLY_TARGETS:
+        good = item['good']
+        guards = {
+            'paused': 'NOT = { is_game_paused = yes }',
+            'private': 'is_game_paused = yes owner = { construction_queue_num_queued_private_levels > 0 }',
+            'default': 'is_game_paused = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes }',
+        }
+        for guard, condition in guards.items():
+            result += (f'sed_{good}_blocked_{guard}_sgui = {{\n scope = state\n'
+                       f' is_shown = {{ sed_{good}_candidate_eligible = yes {condition} }}\n}}\n')
+        result += (f'sed_{good}_stale_sgui = {{\n scope = state\n'
+                   f' is_shown = {{ owner = {{ is_player = yes has_variable = sed_enabled }} '
+                   f'NOT = {{ sed_{good}_candidate_eligible = yes }} '
+                   f'NOT = {{ has_variable = sed_{good}_request_pending }} }}\n}}\n')
+        result += (f'sed_{good}_pending_sgui = {{\n scope = state\n'
+                   f' is_shown = {{ owner = {{ is_player = yes has_variable = sed_enabled }} '
+                   f'has_variable = sed_{good}_request_pending }}\n}}\n')
+        result += (f'sed_{good}_finance_caution_sgui = {{\n scope = state\n'
                    f' is_shown = {{ owner = {{ is_player = yes has_variable = sed_enabled '
                    f'net_total_income < 0 }} }}\n}}\n')
     conditions = {
@@ -714,6 +874,18 @@ sed_approve_construction_sgui = {
     }
     for name, condition in conditions.items():
         result += f'sed_{name}_visible_sgui = {{\n scope = country\n is_shown = {{ has_variable = sed_enabled {condition} }}\n}}\n'
+    for item in SUPPLY_TARGETS:
+        good = item['good']
+        result += (f'sed_{good}_recommendations_visible_sgui = {{\n scope = country\n'
+                   f' is_shown = {{ has_variable = sed_enabled has_variable_list = sed_{good}_candidates }}\n}}\n')
+        result += (f'sed_{good}_section_visible_sgui = {{\n scope = country\n'
+                   f' is_shown = {{ has_variable = sed_enabled market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }} }}\n}}\n')
+        result += (f'sed_{good}_no_candidates_visible_sgui = {{\n scope = country\n'
+                   f' is_shown = {{ has_variable = sed_enabled market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }} NOT = {{ has_variable_list = sed_{good}_candidates }} }}\n}}\n')
+        result += (f'sed_{good}_action_success_visible_sgui = {{\n scope = country\n'
+                   f' is_shown = {{ has_variable = sed_enabled var:sed_{good}_action_status = 1 }}\n}}\n')
+        result += (f'sed_{good}_action_failed_visible_sgui = {{\n scope = country\n'
+                   f' is_shown = {{ has_variable = sed_enabled var:sed_{good}_action_status = 2 }}\n}}\n')
     return '# Generated by tools/build_mod.py.\n' + result
 
 
@@ -771,7 +943,44 @@ sed_construction_approval_valid = {
   construction_queue_num_queued_private_levels = 0
  }
 }
-'''
+''' + supply_triggers()
+
+
+def supply_triggers():
+    result = []
+    for item in SUPPLY_TARGETS:
+        good, building = item['good'], item['building']
+        methods = '\n'.join(f'    has_active_production_method = {method}' for method in item['methods'])
+        result.append(f'''# State scope: expand an operating local producer only while its market good is scarce.
+sed_{good}_candidate_eligible = {{
+ is_incorporated = yes
+ NOT = {{ has_variable = sed_{good}_request_pending }}
+ owner = {{ market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }} }}
+ has_building = {building}
+ b:{building} = {{
+  level > 0
+  occupancy >= 0.8
+  has_failed_hires = no
+  building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  OR = {{
+{methods}
+  }}
+ }}
+ can_construct_building = {building}
+}}
+
+sed_{good}_approval_valid = {{
+ sed_{good}_candidate_eligible = yes
+ is_game_paused = yes
+ owner = {{
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = {{ in_default = yes }}
+  construction_queue_num_queued_private_levels = 0
+ }}
+}}''')
+    return '\n'.join(result) + '\n'
 
 
 def value(name, fmt='1'):
@@ -856,8 +1065,28 @@ def localization(language):
         'sed_construction_finance_caution': ('Alerta: o saldo semanal está negativo. A aprovação continua disponível; confira na fila o custo e o prazo antes de prosseguir.', 'Caution: the weekly balance is negative. Approval remains available; review the queue cost and timing before proceeding.'),
         'sed_construction_action_success': ('Pedido do setor de construção adicionado à fila pública. Confira os custos e o prazo na fila do jogo.', 'Construction sector request added to the government queue. Review cost and timing in the game queue.'),
         'sed_construction_action_failed': ('A engine não confirmou a inclusão do setor de construção na fila. Nenhuma nova tentativa será automática.', 'The engine did not confirm the construction sector queue addition. No automatic retry will occur.'),
-        'sed_limitations': ('Protótipos limitados a ferrovias operantes com infraestrutura negativa e a setores de construção operantes com fila pública de ao menos três projetos. Não estima custo, contratação futura ou retorno. A aprovação apenas adiciona um nível à fila pública; os custos e o tempo dependem do jogo. Qualificações, salários, desempregados e dependência externa ainda não são medidos diretamente. Edifícios com contratação incompleta não equivalem a desempregados. As filas mostram projetos, não níveis nem custos futuros. A alfabetização segue a abrangência do indicador do jogo. Variações de PIB podem refletir mudanças de fronteira e mercado. O setor de construção depende de trabalhadores e insumos disponíveis; a recomendação não garante que o novo nível será contratado.', 'Prototypes limited to operating railways in states with negative infrastructure and operating construction sectors when the government queue has at least three projects. They do not estimate cost, future hiring, or returns. Approval only adds one level to the government queue; costs and timing depend on the game. Qualifications, wages, unemployed workers and external dependence are not directly measured. Incompletely staffed buildings are not a count of unemployed workers. Queues show projects, not levels or future costs. Literacy follows the game indicator’s coverage. GDP changes may reflect borders and markets. Construction sectors depend on available workers and inputs; the recommendation does not guarantee that the new level will be staffed.'),
+        'sed_supply_title': ('Oferta para escassez de mercado', 'Supply for market shortages'),
+        'sed_supply_intro': ('Aparece quando o mercado registra escassez e há um produtor local operante. A recomendação não prevê preço, retorno ou custo; o botão apenas enfileira um nível público após sua aprovação.', 'Shown when a market good is scarce and an operating local producer exists. The recommendation does not forecast prices, returns, or cost; the button only queues one government level after your approval.'),
+        'sed_supply_no_candidate': ('Há escassez no mercado, mas nenhum produtor local passou pelos filtros de operação, incorporação e fila. O Director não sugere construir um prédio novo nesta versão.', 'The market reports a shortage, but no local producer passed the operation, incorporation, and queue filters. This version does not recommend a new building.'),
+        'sed_supply_blocked_paused': ('Botão bloqueado: pause o jogo para aprovar.', 'Button blocked: pause the game to approve.'),
+        'sed_supply_blocked_private': ('Botão bloqueado: esvazie a fila privada antes de usar a fila pública pelo Director.', 'Button blocked: clear the private queue before using the Director’s government queue.'),
+        'sed_supply_blocked_default': ('Botão bloqueado: o país está em inadimplência.', 'Button blocked: the country is in default.'),
+        'sed_supply_stale': ('A escassez ou as condições do prédio mudaram. Nenhuma ação foi executada; atualize o diagnóstico.', 'The shortage or building conditions changed. No action was executed; refresh the diagnosis.'),
+        'sed_supply_pending': ('Esta expansão já está na fila. Aguarde sua conclusão ou cancelamento antes de aprovar outra.', 'This expansion is already queued. Wait for it to complete or be cancelled before approving another.'),
+        'sed_supply_finance_caution': ('Alerta: o saldo semanal está negativo. A aprovação continua disponível; confira custo e prazo na fila do jogo.', 'Caution: the weekly balance is negative. Approval remains available; review cost and timing in the game queue.'),
+        'sed_limitations': ('Protótipos limitados a ferrovias operantes com infraestrutura negativa, setores de construção operantes com fila pública de ao menos três projetos e produtores locais para madeira, ferro, carvão, cereais, tecido, ferramentas, mantimentos e roupas quando o mercado mostra escassez. As recomendações de oferta não estimam custo, retorno ou contratação futura. Aprovar apenas adiciona um nível à fila pública; custos e tempo dependem do jogo. Saldo negativo é aviso, não bloqueio; inadimplência e fila privada ocupada bloqueiam a aprovação. Qualificações, salários, desempregados e dependência externa ainda não são medidos diretamente. Variações de PIB podem refletir mudanças de fronteira e mercado.', 'Prototypes are limited to operating railways with negative infrastructure, operating construction sectors when the government queue has at least three projects, and local producers for wood, iron, coal, grain, fabric, tools, groceries, and clothes when the market reports a shortage. Supply recommendations do not estimate cost, returns, or future hiring. Approval only adds one level to the government queue; costs and timing depend on the game. A negative balance is a caution, not a blocker; default and a nonempty private queue block approval. Qualifications, wages, unemployment, and external dependence are not directly measured. GDP changes may reflect border and market changes.'),
     }
+    for item in SUPPLY_TARGETS:
+        good = item['good']
+        label_pt, label_en = item['label_pt'], item['label_en']
+        building_pt, building_en = item['building_pt'], item['building_en']
+        pairs[f'sed_{good}_section_title'] = (f'Escassez no mercado: {label_pt}', f'Market shortage: {label_en}')
+        pairs[f'sed_{good}_candidate_title'] = (f'#bold [State.GetName]#! — {building_pt} → {label_pt}', f'#bold [State.GetName]#! — {building_en} → {label_en}')
+        pairs[f'sed_{good}_candidate_reason'] = (f'O mercado está em escassez de {label_pt}. Este produtor está operante, sem falta de insumos nem expansão já enfileirada. Um nível pode ampliar a oferta; efeito e custo não são previstos.', f'The market reports a shortage of {label_en}. This producer is operating, has no input shortage, and has no expansion queued. One level may increase supply; impact and cost are not forecast.')
+        pairs[f'sed_{good}_approve'] = (f'Aprovar: enfileirar 1 nível de {building_pt}', f'Approve: queue 1 {building_en} level')
+        pairs[f'sed_{good}_approve_tt'] = ('Requer jogo pausado, país fora de inadimplência e fila privada vazia. A escassez e o prédio são revalidados no clique. Saldo semanal negativo gera alerta, mas não bloqueia. Usa a fila normal do jogo.', 'Requires the game paused, no default, and an empty private queue. The shortage and building are rechecked on click. A negative balance raises a caution but does not block. Uses the normal game queue.')
+        pairs[f'sed_{good}_action_success'] = (f'Pedido de expansão de {building_pt} adicionado à fila pública. Confira custo e prazo na fila do jogo.', f'{building_en.title()} expansion added to the government queue. Review cost and timing in the game queue.')
+        pairs[f'sed_{good}_action_failed'] = ('A engine não confirmou a inclusão na fila. Nenhuma nova tentativa será automática.', 'The engine did not confirm the queue addition. No automatic retry will occur.')
     for metric in METRICS:
         unit = metric['unit']
         fmt = {'money': 'K', 'money_week': 'K', 'count': '0', 'decimal': '1', 'ratio': '%1'}[unit]

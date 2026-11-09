@@ -8,7 +8,14 @@ sed_enable_country = {
  set_variable = { name = sed_enabled value = yes }
  set_variable = { name = sed_monthly_refresh value = yes }
  set_variable = { name = sed_railway_action_status value = 0 }
- set_variable = { name = sed_construction_action_status value = 0 }
+ set_variable = { name = sed_construction_action_status value = 0 } set_variable = { name = sed_wood_action_status value = 0 }
+ set_variable = { name = sed_iron_action_status value = 0 }
+ set_variable = { name = sed_coal_action_status value = 0 }
+ set_variable = { name = sed_grain_action_status value = 0 }
+ set_variable = { name = sed_fabric_action_status value = 0 }
+ set_variable = { name = sed_tools_action_status value = 0 }
+ set_variable = { name = sed_groceries_action_status value = 0 }
+ set_variable = { name = sed_clothes_action_status value = 0 }
  sed_refresh_diagnostics = yes
  sed_ensure_journal_entry = yes
 }
@@ -62,11 +69,36 @@ sed_disable_country = {
  remove_variable = sed_construction_not_ready_states
  remove_variable = sed_construction_blocked_states
  remove_variable = sed_queue_levels_before
+ remove_variable = sed_supply_action_status
+ remove_variable = sed_wood_action_status
+ remove_variable = sed_iron_action_status
+ remove_variable = sed_coal_action_status
+ remove_variable = sed_grain_action_status
+ remove_variable = sed_fabric_action_status
+ remove_variable = sed_tools_action_status
+ remove_variable = sed_groceries_action_status
+ remove_variable = sed_clothes_action_status
  clear_variable_list = sed_railway_candidates
  clear_variable_list = sed_construction_candidates
+ clear_variable_list = sed_wood_candidates
+ clear_variable_list = sed_iron_candidates
+ clear_variable_list = sed_coal_candidates
+ clear_variable_list = sed_grain_candidates
+ clear_variable_list = sed_fabric_candidates
+ clear_variable_list = sed_tools_candidates
+ clear_variable_list = sed_groceries_candidates
+ clear_variable_list = sed_clothes_candidates
  every_scope_state = {
   remove_variable = sed_railway_request_pending
   remove_variable = sed_construction_request_pending
+  remove_variable = sed_wood_request_pending
+  remove_variable = sed_iron_request_pending
+  remove_variable = sed_coal_request_pending
+  remove_variable = sed_grain_request_pending
+  remove_variable = sed_fabric_request_pending
+  remove_variable = sed_tools_request_pending
+  remove_variable = sed_groceries_request_pending
+  remove_variable = sed_clothes_request_pending
  }
  # The schema marker is the only retained variable. Re-enable uses a decision.
 }
@@ -169,6 +201,7 @@ sed_refresh_diagnostics = {
   sed_update_growth = yes
   sed_refresh_railway_candidates = yes
   sed_refresh_construction_candidates = yes
+  sed_refresh_supply_candidates = yes
  }
 }
 
@@ -258,6 +291,14 @@ sed_run_railway_approval = {
 
 sed_refresh_construction_candidates = {
  clear_variable_list = sed_construction_candidates
+ clear_variable_list = sed_wood_candidates
+ clear_variable_list = sed_iron_candidates
+ clear_variable_list = sed_coal_candidates
+ clear_variable_list = sed_grain_candidates
+ clear_variable_list = sed_fabric_candidates
+ clear_variable_list = sed_tools_candidates
+ clear_variable_list = sed_groceries_candidates
+ clear_variable_list = sed_clothes_candidates
  # Same primary-reason cascade as the railway counts. Only states that already
  # have a construction sector enter this denominator.
  set_variable = { name = sed_construction_sector_states value = 0 }
@@ -273,6 +314,14 @@ sed_refresh_construction_candidates = {
     }
    }
    remove_variable = sed_construction_request_pending
+  remove_variable = sed_wood_request_pending
+  remove_variable = sed_iron_request_pending
+  remove_variable = sed_coal_request_pending
+  remove_variable = sed_grain_request_pending
+  remove_variable = sed_fabric_request_pending
+  remove_variable = sed_tools_request_pending
+  remove_variable = sed_groceries_request_pending
+  remove_variable = sed_clothes_request_pending
   }
   if = {
    limit = { has_building = building_construction_sector }
@@ -362,5 +411,303 @@ sed_update_growth = {
   set_variable = { name = sed_growth value = { value = var:sed_gdp divide = var:sed_previous_gdp subtract = 1 } }
   set_variable = { name = sed_growth_months value = { value = var:sed_month_key subtract = var:sed_previous_month } }
   set_variable = { name = sed_growth_available value = 1 }
+ }
+}
+sed_refresh_supply_candidates = {
+ clear_variable_list = sed_wood_candidates
+ every_scope_state = {
+  if = {
+   limit = { has_variable = sed_wood_request_pending
+    OR = { NOT = { has_building = building_logging_camp } b:building_logging_camp = { level_after_queued_constructions <= level } }
+   }
+   remove_variable = sed_wood_request_pending
+  }
+ }
+ if = {
+  limit = { is_player = yes has_variable = sed_enabled
+   market = { mg:wood ?= { market_goods_has_goods_shortage = yes } }
+  }
+  ordered_scope_state = {
+   limit = { sed_wood_candidate_eligible = yes }
+   order_by = { value = state_population multiply = -1 }
+   max = 3
+   check_range_bounds = no
+   root = { add_to_variable_list = { name = sed_wood_candidates target = prev } }
+  }
+ }
+ clear_variable_list = sed_iron_candidates
+ every_scope_state = {
+  if = {
+   limit = { has_variable = sed_iron_request_pending
+    OR = { NOT = { has_building = building_iron_mine } b:building_iron_mine = { level_after_queued_constructions <= level } }
+   }
+   remove_variable = sed_iron_request_pending
+  }
+ }
+ if = {
+  limit = { is_player = yes has_variable = sed_enabled
+   market = { mg:iron ?= { market_goods_has_goods_shortage = yes } }
+  }
+  ordered_scope_state = {
+   limit = { sed_iron_candidate_eligible = yes }
+   order_by = { value = state_population multiply = -1 }
+   max = 3
+   check_range_bounds = no
+   root = { add_to_variable_list = { name = sed_iron_candidates target = prev } }
+  }
+ }
+ clear_variable_list = sed_coal_candidates
+ every_scope_state = {
+  if = {
+   limit = { has_variable = sed_coal_request_pending
+    OR = { NOT = { has_building = building_coal_mine } b:building_coal_mine = { level_after_queued_constructions <= level } }
+   }
+   remove_variable = sed_coal_request_pending
+  }
+ }
+ if = {
+  limit = { is_player = yes has_variable = sed_enabled
+   market = { mg:coal ?= { market_goods_has_goods_shortage = yes } }
+  }
+  ordered_scope_state = {
+   limit = { sed_coal_candidate_eligible = yes }
+   order_by = { value = state_population multiply = -1 }
+   max = 3
+   check_range_bounds = no
+   root = { add_to_variable_list = { name = sed_coal_candidates target = prev } }
+  }
+ }
+ clear_variable_list = sed_grain_candidates
+ every_scope_state = {
+  if = {
+   limit = { has_variable = sed_grain_request_pending
+    OR = { NOT = { has_building = building_wheat_farm } b:building_wheat_farm = { level_after_queued_constructions <= level } }
+   }
+   remove_variable = sed_grain_request_pending
+  }
+ }
+ if = {
+  limit = { is_player = yes has_variable = sed_enabled
+   market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
+  }
+  ordered_scope_state = {
+   limit = { sed_grain_candidate_eligible = yes }
+   order_by = { value = state_population multiply = -1 }
+   max = 3
+   check_range_bounds = no
+   root = { add_to_variable_list = { name = sed_grain_candidates target = prev } }
+  }
+ }
+ clear_variable_list = sed_fabric_candidates
+ every_scope_state = {
+  if = {
+   limit = { has_variable = sed_fabric_request_pending
+    OR = { NOT = { has_building = building_cotton_plantation } b:building_cotton_plantation = { level_after_queued_constructions <= level } }
+   }
+   remove_variable = sed_fabric_request_pending
+  }
+ }
+ if = {
+  limit = { is_player = yes has_variable = sed_enabled
+   market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } }
+  }
+  ordered_scope_state = {
+   limit = { sed_fabric_candidate_eligible = yes }
+   order_by = { value = state_population multiply = -1 }
+   max = 3
+   check_range_bounds = no
+   root = { add_to_variable_list = { name = sed_fabric_candidates target = prev } }
+  }
+ }
+ clear_variable_list = sed_tools_candidates
+ every_scope_state = {
+  if = {
+   limit = { has_variable = sed_tools_request_pending
+    OR = { NOT = { has_building = building_tooling_workshop } b:building_tooling_workshop = { level_after_queued_constructions <= level } }
+   }
+   remove_variable = sed_tools_request_pending
+  }
+ }
+ if = {
+  limit = { is_player = yes has_variable = sed_enabled
+   market = { mg:tools ?= { market_goods_has_goods_shortage = yes } }
+  }
+  ordered_scope_state = {
+   limit = { sed_tools_candidate_eligible = yes }
+   order_by = { value = state_population multiply = -1 }
+   max = 3
+   check_range_bounds = no
+   root = { add_to_variable_list = { name = sed_tools_candidates target = prev } }
+  }
+ }
+ clear_variable_list = sed_groceries_candidates
+ every_scope_state = {
+  if = {
+   limit = { has_variable = sed_groceries_request_pending
+    OR = { NOT = { has_building = building_food_industry } b:building_food_industry = { level_after_queued_constructions <= level } }
+   }
+   remove_variable = sed_groceries_request_pending
+  }
+ }
+ if = {
+  limit = { is_player = yes has_variable = sed_enabled
+   market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } }
+  }
+  ordered_scope_state = {
+   limit = { sed_groceries_candidate_eligible = yes }
+   order_by = { value = state_population multiply = -1 }
+   max = 3
+   check_range_bounds = no
+   root = { add_to_variable_list = { name = sed_groceries_candidates target = prev } }
+  }
+ }
+ clear_variable_list = sed_clothes_candidates
+ every_scope_state = {
+  if = {
+   limit = { has_variable = sed_clothes_request_pending
+    OR = { NOT = { has_building = building_textile_mill } b:building_textile_mill = { level_after_queued_constructions <= level } }
+   }
+   remove_variable = sed_clothes_request_pending
+  }
+ }
+ if = {
+  limit = { is_player = yes has_variable = sed_enabled
+   market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } }
+  }
+  ordered_scope_state = {
+   limit = { sed_clothes_candidate_eligible = yes }
+   order_by = { value = state_population multiply = -1 }
+   max = 3
+   check_range_bounds = no
+   root = { add_to_variable_list = { name = sed_clothes_candidates target = prev } }
+  }
+ }
+}
+sed_run_wood_approval = {
+ if = {
+  limit = { sed_wood_approval_valid = yes }
+  owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
+  start_building_construction = building_logging_camp
+  owner = {
+   if = {
+    limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_wood_action_status value = 1 }
+    prev = { set_variable = { name = sed_wood_request_pending value = yes } }
+   }
+   else = { set_variable = { name = sed_wood_action_status value = 2 } }
+   remove_variable = sed_queue_levels_before
+  }
+ }
+}
+sed_run_iron_approval = {
+ if = {
+  limit = { sed_iron_approval_valid = yes }
+  owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
+  start_building_construction = building_iron_mine
+  owner = {
+   if = {
+    limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_iron_action_status value = 1 }
+    prev = { set_variable = { name = sed_iron_request_pending value = yes } }
+   }
+   else = { set_variable = { name = sed_iron_action_status value = 2 } }
+   remove_variable = sed_queue_levels_before
+  }
+ }
+}
+sed_run_coal_approval = {
+ if = {
+  limit = { sed_coal_approval_valid = yes }
+  owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
+  start_building_construction = building_coal_mine
+  owner = {
+   if = {
+    limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_coal_action_status value = 1 }
+    prev = { set_variable = { name = sed_coal_request_pending value = yes } }
+   }
+   else = { set_variable = { name = sed_coal_action_status value = 2 } }
+   remove_variable = sed_queue_levels_before
+  }
+ }
+}
+sed_run_grain_approval = {
+ if = {
+  limit = { sed_grain_approval_valid = yes }
+  owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
+  start_building_construction = building_wheat_farm
+  owner = {
+   if = {
+    limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_grain_action_status value = 1 }
+    prev = { set_variable = { name = sed_grain_request_pending value = yes } }
+   }
+   else = { set_variable = { name = sed_grain_action_status value = 2 } }
+   remove_variable = sed_queue_levels_before
+  }
+ }
+}
+sed_run_fabric_approval = {
+ if = {
+  limit = { sed_fabric_approval_valid = yes }
+  owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
+  start_building_construction = building_cotton_plantation
+  owner = {
+   if = {
+    limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_fabric_action_status value = 1 }
+    prev = { set_variable = { name = sed_fabric_request_pending value = yes } }
+   }
+   else = { set_variable = { name = sed_fabric_action_status value = 2 } }
+   remove_variable = sed_queue_levels_before
+  }
+ }
+}
+sed_run_tools_approval = {
+ if = {
+  limit = { sed_tools_approval_valid = yes }
+  owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
+  start_building_construction = building_tooling_workshop
+  owner = {
+   if = {
+    limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_tools_action_status value = 1 }
+    prev = { set_variable = { name = sed_tools_request_pending value = yes } }
+   }
+   else = { set_variable = { name = sed_tools_action_status value = 2 } }
+   remove_variable = sed_queue_levels_before
+  }
+ }
+}
+sed_run_groceries_approval = {
+ if = {
+  limit = { sed_groceries_approval_valid = yes }
+  owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
+  start_building_construction = building_food_industry
+  owner = {
+   if = {
+    limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_groceries_action_status value = 1 }
+    prev = { set_variable = { name = sed_groceries_request_pending value = yes } }
+   }
+   else = { set_variable = { name = sed_groceries_action_status value = 2 } }
+   remove_variable = sed_queue_levels_before
+  }
+ }
+}
+sed_run_clothes_approval = {
+ if = {
+  limit = { sed_clothes_approval_valid = yes }
+  owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
+  start_building_construction = building_textile_mill
+  owner = {
+   if = {
+    limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_clothes_action_status value = 1 }
+    prev = { set_variable = { name = sed_clothes_request_pending value = yes } }
+   }
+   else = { set_variable = { name = sed_clothes_action_status value = 2 } }
+   remove_variable = sed_queue_levels_before
+  }
  }
 }

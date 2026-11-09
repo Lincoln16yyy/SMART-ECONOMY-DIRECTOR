@@ -7,8 +7,9 @@ ferroviários e uma aprovação individual que enfileira uma expansão elegível
 quando a fila pública tem pelo menos três projetos; a 0.3.1 explica os motivos de
 rejeição quando não há candidato; a 0.3.2 mostra por que o botão de aprovação
 está bloqueado; a 0.3.3 explica quando um cartão visível deixou de ser elegível
-desde a última leitura. Ranking nacional completo, outros tipos de ação
-e automação periódica continuam por implementar.
+desde a última leitura; e a 0.3.5 acrescenta expansão aprovada de produtores
+locais para oito bens em escassez. Ranking nacional completo, outros tipos de
+ação e automação periódica continuam por implementar.
 
 ## Responsabilidade
 

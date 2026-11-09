@@ -1,11 +1,13 @@
-# Instalação e uso — versão 0.3.4
+# Instalação e uso — versão 0.3.5
 
-Requer Victoria 3 1.15.x. A versão 0.3.4 mantém o diagnóstico e os dois
-protótipos de ação com aprovação individual — expansão ferroviária e ampliação
-de um setor de construção quando a fila pública está sobrecarregada — e
-acrescenta a decomposição dos motivos de rejeição quando não há candidato e
-uma linha explicando por que o botão de aprovação está bloqueado. Saldo semanal
-negativo agora gera um alerta, mas não impede aprovação. Não
+Requer Victoria 3 1.15.x. A versão 0.3.5 mantém o diagnóstico e os protótipos
+de expansão ferroviária e de capacidade de construção. Acrescenta recomendações
+e botões de aprovação para expandir produtores locais de madeira, ferro,
+carvão, cereais, tecido, ferramentas, mantimentos e roupas quando o mercado
+registra escassez. O produtor precisa existir em estado incorporado, estar
+operante, usar método de produção ativo que gere o bem, não ter falta de insumos
+e não ter expansão já na fila. A operação continua limitada a um nível por
+aprovação. Saldo semanal negativo gera um alerta, mas não impede aprovação. Não
 executa ações econômicas automaticamente nem altera métodos de produção. Não
 depende do Steam Workshop.
 
@@ -16,11 +18,10 @@ Na raiz do repositório, com Python 3.10 ou superior:
 ```bash
 python3 tools/build_mod.py
 python3 tools/validate.py --game "/caminho/Victoria 3/game"
-python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O resultado fica em `dist/smart-economy-director-0.3.4.zip`. O pacote contém
+O resultado fica em `dist/smart-economy-director-0.3.5.zip`. O pacote contém
 somente os arquivos carregáveis; não inclui saves, fontes do jogo, pesquisa,
 testes ou outro mod. A geração é determinística e não modifica a instalação.
 
@@ -57,10 +58,11 @@ scripts antigos remanescentes.
 4. Use **Atualizar diagnóstico** para uma nova leitura imediata.
 5. Use **Atualizar sob solicitação** para suspender as leituras mensais,
    ou **Atualizar todo mês** para retomá-las e atualizar imediatamente.
-6. Se houver recomendação ferroviária ou de capacidade de construção, confira o
-   saldo, a fila pública e o tooltip; pause o jogo e aprove apenas se desejar
-   adicionar um nível público. As ações não preveem custo nem retorno. Veja as
-   travas em [MANUAL_RUNTIME_TEST.md](MANUAL_RUNTIME_TEST.md).
+6. Se houver uma recomendação ferroviária, de capacidade de construção ou de
+   oferta, confira alvo e alerta financeiro; pause o jogo e aprove apenas se
+   desejar enfileirar um nível público. As ações não preveem custo nem retorno.
+   Para a oferta, confirme no jogo a escassez do bem e o método ativo do
+   produtor. Veja as travas em [MANUAL_RUNTIME_TEST.md](MANUAL_RUNTIME_TEST.md).
 7. Use **Desativar** no diário ou a decisão de desativação para limpar leituras
    e histórico. Para voltar, use a decisão de ativação.
 

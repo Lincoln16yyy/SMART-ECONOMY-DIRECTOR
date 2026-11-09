@@ -472,3 +472,30 @@ evidência e seus limites. Ela permite observar um bem específico, mas ainda
 não identifica qual prédio produtor é seguro ampliar; o catálogo local preserva
 camadas e não resolve merge nem método ativo. Nenhum novo botão foi criado por
 palpite a partir da contagem agregada de prédios com falta de insumos.
+
+## Fase 2 — Oferta local para bens em escassez 0.3.5
+
+A partir do catálogo local, selecionei oito combinações vanilla de bem e prédio
+produtor: madeira/acampamento madeireiro, ferro/mina de ferro, carvão/mina de
+carvão, cereais/fazenda de trigo, tecido/plantação de algodão,
+ferramentas/oficina de ferramentas, mantimentos/indústria alimentícia e
+roupas/fábrica têxtil. Cada lista verifica que o método de produção ativo no
+prédio gera positivamente aquele bem; métodos que consomem o próprio bem foram
+excluídos.
+
+O candidato exige escassez do bem no mercado do país, produtor existente em
+estado incorporado, ocupação de ao menos 80%, sem falha de contratação, sem
+falta de insumos e sem nível já enfileirado. Mostra até três estados por bem.
+O clique exige jogo pausado, país fora de inadimplência e fila privada vazia,
+revalida mercado/prédio e enfileira apenas um nível público. Saldo negativo
+continua sendo aviso. Sem produtor elegível, a seção informa que a versão não
+propõe prédio novo. Custos, preço futuro, contratação e retorno ainda não são
+calculados.
+
+A ferramenta de catálogo confirmou vínculo do método com o grupo de produção
+do prédio e modificador de saída positivo para as oito combinações. A versão
+0.3.5 foi gerada, passou validação estática contra o jogo 1.15.0 e
+`git diff --check`. Isso não confirma execução dentro da engine. O próximo
+passo é instalar esta versão e pedir ao jogador para conferir uma escassez que
+gere candidato, as travas e a inclusão do nível na fila. Nenhum teste gráfico
+foi iniciado.

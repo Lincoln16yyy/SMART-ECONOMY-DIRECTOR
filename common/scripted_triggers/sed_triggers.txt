@@ -51,3 +51,264 @@ sed_construction_approval_valid = {
   construction_queue_num_queued_private_levels = 0
  }
 }
+# State scope: expand an operating local producer only while its market good is scarce.
+sed_wood_candidate_eligible = {
+ is_incorporated = yes
+ NOT = { has_variable = sed_wood_request_pending }
+ owner = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } }
+ has_building = building_logging_camp
+ b:building_logging_camp = {
+  level > 0
+  occupancy >= 0.8
+  has_failed_hires = no
+  building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  OR = {
+    has_active_production_method = pm_electric_saw_mills
+    has_active_production_method = pm_saw_mills
+    has_active_production_method = pm_simple_forestry
+  }
+ }
+ can_construct_building = building_logging_camp
+}
+
+sed_wood_approval_valid = {
+ sed_wood_candidate_eligible = yes
+ is_game_paused = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+ }
+}
+# State scope: expand an operating local producer only while its market good is scarce.
+sed_iron_candidate_eligible = {
+ is_incorporated = yes
+ NOT = { has_variable = sed_iron_request_pending }
+ owner = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
+ has_building = building_iron_mine
+ b:building_iron_mine = {
+  level > 0
+  occupancy >= 0.8
+  has_failed_hires = no
+  building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  OR = {
+    has_active_production_method = pm_atmospheric_engine_pump_building_iron_mine
+    has_active_production_method = pm_condensing_engine_pump_building_iron_mine
+    has_active_production_method = pm_diesel_pump_building_iron_mine
+    has_active_production_method = pm_dynamite_building_iron_mine
+    has_active_production_method = pm_nitroglycerin_building_iron_mine
+    has_active_production_method = pm_picks_and_shovels_building_iron_mine
+  }
+ }
+ can_construct_building = building_iron_mine
+}
+
+sed_iron_approval_valid = {
+ sed_iron_candidate_eligible = yes
+ is_game_paused = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+ }
+}
+# State scope: expand an operating local producer only while its market good is scarce.
+sed_coal_candidate_eligible = {
+ is_incorporated = yes
+ NOT = { has_variable = sed_coal_request_pending }
+ owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ has_building = building_coal_mine
+ b:building_coal_mine = {
+  level > 0
+  occupancy >= 0.8
+  has_failed_hires = no
+  building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  OR = {
+    has_active_production_method = pm_atmospheric_engine_pump_building_coal_mine
+    has_active_production_method = pm_condensing_engine_pump_building_coal_mine
+    has_active_production_method = pm_diesel_pump_building_coal_mine
+    has_active_production_method = pm_dynamite_building_coal_mine
+    has_active_production_method = pm_nitroglycerin_building_coal_mine
+    has_active_production_method = pm_picks_and_shovels_building_coal_mine
+  }
+ }
+ can_construct_building = building_coal_mine
+}
+
+sed_coal_approval_valid = {
+ sed_coal_candidate_eligible = yes
+ is_game_paused = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+ }
+}
+# State scope: expand an operating local producer only while its market good is scarce.
+sed_grain_candidate_eligible = {
+ is_incorporated = yes
+ NOT = { has_variable = sed_grain_request_pending }
+ owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
+ has_building = building_wheat_farm
+ b:building_wheat_farm = {
+  level > 0
+  occupancy >= 0.8
+  has_failed_hires = no
+  building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  OR = {
+    has_active_production_method = pm_chemical_fertilizer
+    has_active_production_method = pm_simple_farming
+    has_active_production_method = pm_soil_enriching_farming
+  }
+ }
+ can_construct_building = building_wheat_farm
+}
+
+sed_grain_approval_valid = {
+ sed_grain_candidate_eligible = yes
+ is_game_paused = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+ }
+}
+# State scope: expand an operating local producer only while its market good is scarce.
+sed_fabric_candidate_eligible = {
+ is_incorporated = yes
+ NOT = { has_variable = sed_fabric_request_pending }
+ owner = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
+ has_building = building_cotton_plantation
+ b:building_cotton_plantation = {
+  level > 0
+  occupancy >= 0.8
+  has_failed_hires = no
+  building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  OR = {
+    has_active_production_method = automatic_irrigation_building_cotton_plantation
+    has_active_production_method = default_building_cotton_plantation
+    has_active_production_method = slave_exploitation_cotton
+    has_active_production_method = worker_exploitation_cotton
+  }
+ }
+ can_construct_building = building_cotton_plantation
+}
+
+sed_fabric_approval_valid = {
+ sed_fabric_candidate_eligible = yes
+ is_game_paused = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+ }
+}
+# State scope: expand an operating local producer only while its market good is scarce.
+sed_tools_candidate_eligible = {
+ is_incorporated = yes
+ NOT = { has_variable = sed_tools_request_pending }
+ owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ has_building = building_tooling_workshop
+ b:building_tooling_workshop = {
+  level > 0
+  occupancy >= 0.8
+  has_failed_hires = no
+  building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  OR = {
+    has_active_production_method = pm_crude_tools
+    has_active_production_method = pm_pig_iron
+    has_active_production_method = pm_rubber_grips
+    has_active_production_method = pm_steel
+  }
+ }
+ can_construct_building = building_tooling_workshop
+}
+
+sed_tools_approval_valid = {
+ sed_tools_candidate_eligible = yes
+ is_game_paused = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+ }
+}
+# State scope: expand an operating local producer only while its market good is scarce.
+sed_groceries_candidate_eligible = {
+ is_incorporated = yes
+ NOT = { has_variable = sed_groceries_request_pending }
+ owner = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } }
+ has_building = building_food_industry
+ b:building_food_industry = {
+  level > 0
+  occupancy >= 0.8
+  has_failed_hires = no
+  building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  OR = {
+    has_active_production_method = pm_bakery
+    has_active_production_method = pm_baking_powder
+    has_active_production_method = pm_cannery
+    has_active_production_method = pm_cannery_fish
+    has_active_production_method = pm_sweeteners
+    has_active_production_method = pm_vacuum_canning
+    has_active_production_method = pm_vacuum_canning_principle_3
+  }
+ }
+ can_construct_building = building_food_industry
+}
+
+sed_groceries_approval_valid = {
+ sed_groceries_candidate_eligible = yes
+ is_game_paused = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+ }
+}
+# State scope: expand an operating local producer only while its market good is scarce.
+sed_clothes_candidate_eligible = {
+ is_incorporated = yes
+ NOT = { has_variable = sed_clothes_request_pending }
+ owner = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } }
+ has_building = building_textile_mill
+ b:building_textile_mill = {
+  level > 0
+  occupancy >= 0.8
+  has_failed_hires = no
+  building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  OR = {
+    has_active_production_method = pm_dye_workshops
+    has_active_production_method = pm_electric_sewing_machines
+    has_active_production_method = pm_handsewn_clothes
+    has_active_production_method = pm_sewing_machines
+  }
+ }
+ can_construct_building = building_textile_mill
+}
+
+sed_clothes_approval_valid = {
+ sed_clothes_candidate_eligible = yes
+ is_game_paused = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+ }
+}

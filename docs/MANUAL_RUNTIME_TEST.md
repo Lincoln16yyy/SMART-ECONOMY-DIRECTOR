@@ -201,3 +201,32 @@ Encerrar restaurando o load order de teste e preservando evidências separadas.
 Testes automatizados futuros devem cobrir pontuação, restrições fiscais,
 deduplicação, atualização, estados vazios, schema, localização e integridade GUI;
 eles complementam esse roteiro, sem substituir os cliques na engine.
+
+## Checklist de oferta por bem em escassez 0.3.5
+
+Use um save em que o mercado registre escassez de pelo menos um dos bens da
+lista. A leitura precisa mostrar a seção do bem mesmo se nenhum produtor local
+passar pelos filtros; nesse caso, deve explicar que nenhum candidato foi
+recomendado. A ação só considera prédio produtor já existente em estado
+incorporado, com ocupação ≥80%, sem falha de contratação, sem falta de insumos,
+sem expansão enfileirada e com um método ativo que produza positivamente o bem.
+
+| Ação | Resultado a conferir |
+| --- | --- |
+| Mercado sem escassez dos oito bens | Nenhuma seção de oferta aparece |
+| Escassez com produtor elegível | Seção identifica bem e estado, mostra prédio e botão explícito |
+| Escassez sem produtor elegível | Mensagem explica por que não há recomendação; nenhum botão oculto ou automático |
+| Método ativo que consome o bem ou não o produz | O estado não entra na lista |
+| Tirar a pausa antes de clicar | Botão desabilitado e linha de motivo aparece |
+| Enfileirar na fila privada ou entrar em inadimplência | Botão desabilitado com o motivo correspondente |
+| Manter saldo semanal negativo, com as demais guardas liberadas | Alerta financeiro aparece; botão continua habilitado |
+| Mudar a escassez ou estado do produtor depois da leitura | Cartão fica desatualizado e o clique não enfileira obra |
+| Aprovar com as guardas liberadas | Apenas um nível público do prédio indicado é adicionado; linha confirma a inclusão |
+| Atualizar após a aprovação | A mesma expansão permanece pendente e não pode ser duplicada |
+| Cancelar ou concluir e atualizar | O marcador pendente limpa; a recomendação só volta se ainda elegível e o bem continuar escasso |
+
+Conferir oito pares bem/prédio (madeira, ferro, carvão, cereais, tecido,
+ferramentas, mantimentos e roupas), método de produção ativo, escassez no
+mercado, estado, filas, saldo, pausa e status de inadimplência. Esta fase não
+prevê custos, preços futuros, retorno ou emprego do novo nível; a expansão
+apenas acrescenta um nível à fila normal do jogo.

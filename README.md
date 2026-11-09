@@ -1,14 +1,20 @@
 # Smart Economy Director — Victoria 3 1.15
 
-Versão de desenvolvimento **0.3.4 — diagnóstico, duas ações aprovadas e
-explicação de bloqueios**. O mod tem diário próprio, leituras manuais ou mensais, recomendações
-limitadas de infraestrutura e capacidade de construção, e botões para aprovar a
-expansão de uma ferrovia elegível ou de um setor de construção operante. Quando
+Versão de desenvolvimento **0.3.5 — recomendações produtivas para oito bens em
+escassez**. O mod tem diário próprio, leituras manuais ou mensais, recomendações
+limitadas de infraestrutura e capacidade de construção, além de botões para
+expandir produtores locais quando madeira, ferro, carvão, cereais, tecido,
+ferramentas, mantimentos ou roupas estão em escassez no mercado. A nova
+recomendação exige produtor incorporado e operante, método de produção ativo
+que gere o bem, ausência de falta de insumos e de expansão já enfileirada. Cada
+botão revalida as condições no clique e enfileira um nível público. Quando
 não há candidato, o painel decompõe os estados por motivo principal; quando o
 botão de aprovação está bloqueado, o painel indica qual guarda falhou (pausa,
 fila privada, inadimplência, fila pública curta ou recomendação desatualizada).
 Saldo semanal negativo aparece como alerta, sem bloquear a aprovação. Não há
-execução econômica automática.
+execução econômica automática. A 0.3.5 passou validação estática; os novos
+botões precisam de confirmação na campanha antes de serem considerados
+validados na engine.
 
 O painel mostra finanças, PIB, população, padrão de vida, alfabetização,
 capacidade de construção, filas e sinais de infraestrutura, abastecimento e
@@ -23,13 +29,13 @@ ferroviário e do setor de construção, a decomposição com déficit
 presente e a linha de motivo do botão bloqueado da 0.3.2 ainda precisam
 ser conferidas no jogo normal.** Compatibilidade
 ampliada continua pendente. Não é uma versão de automação econômica pronta
-para deixar uma campanha sozinha. Os alertas financeiros e estados pendentes de
-0.3.4 ainda precisam ser conferidos na engine.
+para deixar uma campanha sozinha. Alertas financeiros, estados pendentes de
+0.3.4 e novos botões de oferta 0.3.5 ainda precisam ser conferidos na engine.
 
 ## Instalação e uso
 
 Consulte [instalação e geração do ZIP](docs/INSTALL.md). O pacote gerado em
-`dist/smart-economy-director-0.3.4.zip` contém a pasta do mod e o descritor
+`dist/smart-economy-director-0.3.5.zip` contém a pasta do mod e o descritor
 externo. Ative no launcher e use a decisão **Ativar Smart Economy Director**.
 Nenhum outro mod é obrigatório; nenhuma ativação econômica é automática.
 

@@ -155,11 +155,12 @@ prova a aceitação dessas consultas pelo motor nesta campanha.
 
 O índice local de buildings/PMs contém possíveis bens de saída e camadas de
 definição, mas não resolve `INJECT`/`REPLACE`, nem identifica sozinho o PM ativo
-no save. Para propor um prédio produtor, o próximo passo é cruzar uma escassez
-por bem com uma fonte local operante e elegível, registrar sobreposições e
-validar mão de obra, insumos, fila pública/privada e custo antes de criar um
-botão. A contagem agregada “edifícios com falta de insumos” não basta para
-escolher o alvo.
+no save. A versão 0.3.5 usa a escassez por bem e o PM ativo do prédio para
+selecionar oito pares vanilla de produtor e bem. Exige estado incorporado,
+ocupação mínima, ausência de falha de contratação, falta de insumos ou expansão
+enfileirada, revalida no clique e usa a fila pública normal. Isso elimina o
+palpite a partir do contador agregado, mas não calcula preço/retorno nem
+contratação futura; a aprovação precisa ser conferida em campanha.
 
 O extrator foi corrigido para ler atribuições de modificadores cujo operador é
 `=`. O relatório local agora inclui `possible_producers_by_good`, com as camadas
@@ -167,9 +168,10 @@ de prédio, grupo de métodos e método de produção que podem gerar cada bem. 
 instalação examinada, o índice cobre 52 bens; isso confirma a ligação entre
 definições, mas não demonstra que um método esteja ativo, que o prédio possa ser
 construído naquele país ou que sua expansão seja lucrativa. O JSON local fica
-fora do Git porque inclui dados de mods habilitados. O próximo botão produtivo
-depende de ler a escassez de um bem específico e encontrar um produtor local
-elegível; o contador agregado da tela do Haiti não fornece esse alvo.
+fora do Git porque inclui dados de mods habilitados. A interface agora mostra
+cada escassez reconhecida e explica quando nenhum produtor local passa pelos
+filtros; o contador agregado da tela do Haiti continua insuficiente para
+identificar um bem específico.
 
 É viável propor um diagnóstico em Journal Entry e um planejador com ranking
 explicável. Há mecanismos de execução, mas coexistência segura depende da fila

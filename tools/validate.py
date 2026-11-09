@@ -87,6 +87,12 @@ def validate(root=ROOT, game=None):
                           if entry.key == 'start_building_construction']
     approved_actions = {'sed_run_railway_approval': 'building_railway',
                         'sed_run_construction_approval': 'building_construction_sector'}
+    try:
+        from .build_mod import SUPPLY_TARGETS
+    except ImportError:
+        from build_mod import SUPPLY_TARGETS
+    approved_actions.update({f"sed_run_{item['good']}_approval": item['building']
+                             for item in SUPPLY_TARGETS})
     construction_error = False
     for effect, building in approved_actions.items():
         approved_construction = [entry for entry in walk(custom.get(effect, []))
