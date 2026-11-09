@@ -7,8 +7,7 @@ locais e a validação estática passaram, mas construção bem-sucedida,
 reconciliação de projetos e save/reload ainda não foram comprovados na engine.
 A automação não está certificada como segura para campanha sem supervisão.
 
-Versão de desenvolvimento **0.4.1 — modos Manual, Assistido e Automático com
-controle de recomendações ignoradas**. O mod tem diário próprio, leituras manuais ou
+Versão de desenvolvimento **0.5.0 — interface legível e botões nativos**. O mod tem diário próprio, leituras manuais ou
 mensais, recomendações limitadas de infraestrutura e capacidade de construção,
 além de produtores locais para oito bens em escassez. Os três modos aparecem em
 botões no topo do diário. Manual só diagnostica; Assistido mostra botões para
@@ -21,9 +20,16 @@ botão de aprovação está bloqueado, o painel indica a guarda que bloqueia a a
 Saldo semanal negativo aparece como alerta, sem bloquear a aprovação. O modo
 Automático pode agir apenas em ferrovias elegíveis e produtores existentes
 para madeira, ferro, carvão, cereais, tecido, ferramentas, mantimentos e roupas
-em escassez; não altera PMs nem leis. A 0.4.1 passou validação estática; modos,
+em escassez; não altera PMs nem leis. A 0.5.0 passou validação estática; modos,
 botões e execução agendada ainda precisam de confirmação na campanha antes de
 serem considerados validados na engine.
+
+A interface 0.5.0 usa fonte de 20 pontos no corpo e 26 nos títulos, botões
+nativos de 52 pixels de altura com fundo/borda e cartões de altura variável.
+As recomendações vêm antes dos indicadores completos. **Mostrar indicadores
+e detalhes** abre as leituras e motivos extensos; **Ocultar** recolhe essa
+seção sem afetar recomendações ou execução. A nova renderização ainda não foi
+verificada na engine.
 
 Cada cartão elegível permite ignorar apenas aquele tipo de expansão naquele estado.
 A escolha bloqueia recomendações e execução nos três modos até usar
@@ -40,7 +46,7 @@ O crescimento do PIB requer amostras em meses distintos.
 ## Instalação e uso
 
 Consulte [instalação e geração do ZIP](docs/INSTALL.md). O pacote gerado em
-`dist/smart-economy-director-0.4.1.zip` contém a pasta do mod e o descritor
+`dist/smart-economy-director-0.5.0.zip` contém a pasta do mod e o descritor
 externo. Ative no launcher e use a decisão **Ativar Smart Economy Director**.
 O modo inicial é Assistido; a automação só começa se o jogador selecionar
 Automático no diário.

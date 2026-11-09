@@ -82,6 +82,7 @@ sed_disable_country = {
  remove_variable = sed_mode_automatic
  remove_variable = sed_auto_action_status
  remove_variable = sed_auto_event_pending
+ remove_variable = sed_details_visible
  remove_variable = sed_wood_action_status
  remove_variable = sed_iron_action_status
  remove_variable = sed_coal_action_status

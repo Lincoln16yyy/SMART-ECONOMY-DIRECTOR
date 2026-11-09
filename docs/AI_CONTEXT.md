@@ -1,5 +1,29 @@
 # Contexto de continuidade
 
+## Direção atual do jogador e interface 0.5.0
+
+0.5.0 instalada sem jogo em execução; backup `mod_0.4.1_20261109_113054_750010`,
+load order preservado byte a byte. Auxiliar de teste não instalado.
+
+O jogador não consegue testar enquanto botões não forem claramente visíveis
+e os textos forem minúsculos. Pediu continuar construindo até melhorar isso;
+não cobrar agora nova rodada de testes nem instalar auxiliar separado para ele.
+A prioridade passou para a interface principal do Director.
+
+Implementado 0.5.0: default_button da instalação nativa, texto principal 20,
+títulos 26, botões 52 pixels. Recomendações antes dos indicadores completos;
+controle Mostrar/Ocultar indicadores e detalhes, sem ação econômica. Cartões
+agora usam flowcontainer/datamodel com altura natural, texto limitado à largura
+e sem linhas fixas que cortam mensagens. Descrições repetidas encurtadas,
+tooltips e dados mantidos. Nenhuma mudança nos filtros de construção.
+
+70 testes passam (67 anteriores + três de controles/legibilidade/toggle).
+Fontes vanilla conferidas: gui/shared/buttons.gui default_button;
+gui/shared/defaults.gui fontsize_large=20 e fontsize_xxl=26;
+great_game_widgets.gui usa flowcontainer/datamodel; tsarpoints_widgets.gui usa
+background em flowcontainer. Validação estática não confirma renderização.
+Nenhum jogo foi iniciado para teste oculto prolongado.
+
 ## Continuação — auxiliar de inspeção de filas
 
 Criado `tools/build_queue_probe.py`: gera um mod auxiliar independente 0.1.0,

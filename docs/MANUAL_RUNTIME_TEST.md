@@ -1,4 +1,4 @@
-# Plano de teste da campanha — versão 0.4.1 auditada
+# Plano de teste da campanha — interface 0.5.0
 
 Estado atual: [auditoria de 09/11/2026](AUDIT_2026-11-09.md). Os roteiros abaixo
 não são resultados executados. Não iniciar novas funcionalidades até fechar
@@ -315,3 +315,13 @@ botão e expansões já pendentes permanecem na fila. Desativar/reativar deve
 limpar as preferências. Conferir altura dos cartões, tooltips e novo motivo
 "ignorado por você" nos diagnósticos vazios. Esse fluxo ainda não foi testado
 na engine; os testes locais executam os scripts gerados em harness.
+
+
+## Interface 0.5.0 — conferência futura, sem pedido de teste nesta entrega
+
+Quando o jogador estiver pronto, conferir fundo/borda e texto dos modos,
+Atualizar, Desativar, Mostrar/Ocultar e botões nos cartões. Corpo 20/títulos 26,
+controles 52 pixels; textos devem quebrar dentro do painel. Conferir cartão
+com motivo de bloqueio e alerta financeiro simultâneos sem sobreposição.
+Mostrar detalhes não deve executar obras; recolher não deve remover cartões.
+Critérios de aprovação e limitações da auditoria permanecem iguais.

@@ -717,3 +717,35 @@ negativa, limpeza sem afetar Director/projetos, casos desativado/não jogador,
 rejeição de mutação e ZIP determinístico separado. A consulta is_building_type
 foi conferida no tutorial vanilla. Binding Building/lista, cobertura real de
 primeira construção e persistência continuam sem verificação na engine.
+
+
+## Interface principal legível e controles visíveis 0.5.0
+
+O jogador esclareceu que só conseguirá testar quando houver botões visíveis e
+textos legíveis, e pediu continuar a construção. Esta etapa prioriza a UI do
+Director, sem depender do auxiliar de fila ou exigir uma rodada de testes sua.
+
+Confirmado nos fontes locais que os controles antigos usavam som/tooltip,
+sem template default_button que fornece textura/borda/estados. Corrigido em
+todos os 30 botões gerados. Corpo usa fontsize_large (20), títulos fontsize_xxl
+(26), controles 52 pixels. Modos cabem em uma linha de 500 pixels; ações e
+ignorar em cartões usam 468 pixels. Conteúdo textual tem mínimo/máximo de
+largura e multiline. Cartões/listas usam flowcontainer/datamodel de altura
+natural, padrão encontrado em widgets vanilla, eliminando linhas fixas que
+cortariam o texto ampliado. Background de container também existe no vanilla.
+
+Recomendações vêm antes dos indicadores detalhados, com resumo de saldo,
+reservas e filas no topo. Mostrar/Ocultar indicadores e detalhes só altera a
+preferência sed_details_visible; não constrói. Contadores extensos e limites
+ficam na visão detalhada. Mensagens curtas e tooltips preservam o escopo da
+aprovação. Filtros, ações e travas econômicas não foram relaxados.
+
+70 testes passaram: os 67 anteriores, mais controles nativos/altura/fonte,
+toggle sem ações econômicas e cartões sem altura de linha fixa, com
+recomendações antes dos detalhes. Geração, validação estática contra o jogo e
+pacote 0.5.0 passaram. Aparência e layout na engine ainda não confirmados;
+nenhuma sessão gráfica foi iniciada.
+
+Instalada 0.5.0 sem jogo em execução; backup `mod_0.4.1_20261109_113054_750010`.
+ZIP/arquivos instalados comparados byte a byte ao gerador, 13 outputs.
+Load order preservado byte a byte. Não foi instalado o auxiliar de testes.

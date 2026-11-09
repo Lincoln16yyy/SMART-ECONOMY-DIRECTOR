@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.4.1'
+VERSION = '0.5.0'
 SUPPLY_TARGETS = [
     {'good': 'wood', 'building': 'building_logging_camp', 'methods': ['pm_electric_saw_mills', 'pm_saw_mills', 'pm_simple_forestry'], 'label_pt': 'madeira', 'label_en': 'wood', 'building_pt': 'acampamento madeireiro', 'building_en': 'logging camp'},
     {'good': 'iron', 'building': 'building_iron_mine', 'methods': ['pm_atmospheric_engine_pump_building_iron_mine', 'pm_condensing_engine_pump_building_iron_mine', 'pm_diesel_pump_building_iron_mine', 'pm_dynamite_building_iron_mine', 'pm_nitroglycerin_building_iron_mine', 'pm_picks_and_shovels_building_iron_mine'], 'label_pt': 'ferro', 'label_en': 'iron', 'building_pt': 'mina de ferro', 'building_en': 'iron mine'},
@@ -39,7 +39,7 @@ sed_construction_blocked_states
 sed_queue_levels_before'''.split() + [
     'sed_supply_action_status',
     'sed_mode_manual', 'sed_mode_assisted', 'sed_mode_automatic',
-    'sed_auto_action_status', 'sed_auto_event_pending',
+    'sed_auto_action_status', 'sed_auto_event_pending', 'sed_details_visible',
     *[f"sed_{item['good']}_action_status" for item in SUPPLY_TARGETS],
     *[f"sed_{item['good']}_{reason}" for item in SUPPLY_TARGETS
       for reason in SUPPLY_DIAGNOSTICS],
@@ -207,399 +207,161 @@ def preference_effects():
     return '\n'.join(result)
 
 
-def ignore_button(name):
-    return f"""button = {{
- size = {{ 360 30 }} using = select_button_sound using = tooltip_se
- text = "sed_ignore_recommendation" tooltip = "sed_ignore_recommendation_tt"
- visible = "[GetScriptedGui('sed_ignore_{name}_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
- enabled = "[GetScriptedGui('sed_ignore_{name}_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
- onclick = "[GetScriptedGui('sed_ignore_{name}_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
-}}
-"""
-
-
-def textbox(key, visibility=None, heading=False):
-    shown = f'\n visible = "[{sgui(visibility, "IsShown")}]"' if visibility else ''
-    return f'''textbox = {{{shown}
- autoresize = yes
- multiline = yes
- align = left|nobaseline
- using = {'fontsize_medium' if heading else 'fontsize_small'}
- minimumsize = {{ 500 -1 }}
- maximumsize = {{ 500 -1 }}
- text = "{key}"
-}}
-'''
-
-
 def sgui(name, method):
     return f"GetScriptedGui('{name}').{method}(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)"
 
 
-def button(key, action):
-    return f'''button = {{
- size = {{ 244 32 }}
- using = select_button_sound
- using = tooltip_se
+def textbox(key, visibility=None, heading=False, width=500, state=False):
+    shown = ''
+    if visibility:
+        binding = (f"GetScriptedGui('{visibility}').IsShown(GuiScope.SetRoot(State.MakeScope).End)"
+                   if state else sgui(visibility, 'IsShown'))
+        shown = f' visible = "[{binding}]"\n'
+    return f"""textbox = {{
+{shown} autoresize = yes multiline = yes align = left|nobaseline
+ using = {'fontsize_xxl' if heading else 'fontsize_large'}
+ minimumsize = {{ {width} -1 }} maximumsize = {{ {width} -1 }}
  text = "{key}"
- tooltip = "{key}_tt"
- visible = "[{sgui(action, 'IsShown')}]"
- enabled = "[{sgui(action, 'IsValid')}]"
- onclick = "[{sgui(action, 'Execute')}]"
 }}
-'''
+"""
+
+
+def button(key, action, width=500, state=False):
+    binding = lambda method: (f"GetScriptedGui('{action}').{method}(GuiScope.SetRoot(State.MakeScope).End)"
+                              if state else sgui(action, method))
+    return f"""button = {{
+ using = default_button
+ using = fontsize_large
+ using = tooltip_se
+ size = {{ {width} 52 }}
+ text = "{key}" tooltip = "{key}_tt"
+ visible = "[{binding('IsShown')}]"
+ enabled = "[{binding('IsValid')}]"
+ onclick = "[{binding('Execute')}]"
+}}
+"""
 
 
 def mode_button(key, action):
-    return f'''button = {{
- size = {{ 160 34 }}
- using = select_button_sound
- using = tooltip_se
- text = "{key}"
- tooltip = "{key}_tt"
- visible = "[{sgui(action, 'IsShown')}]"
- enabled = "[{sgui(action, 'IsValid')}]"
- onclick = "[{sgui(action, 'Execute')}]"
+    return button(key, action, width=160)
+
+
+def details(content):
+    return ('flowcontainer = { direction = vertical spacing = 10 ignoreinvisible = yes\n'
+            + f' visible = "[{sgui("sed_details_visible_sgui", "IsShown")}]"\n'
+            + content + '}\n')
+
+
+def candidate_item(name):
+    supply = name not in ('railway', 'construction')
+    approve = f'sed_{name}_approve' if supply else f'sed_approve_{name}'
+    prefix = 'sed_supply' if supply else f'sed_{name}'
+    content = textbox(f'sed_{name}_candidate_title', heading=True, width=468)
+    content += textbox(f'sed_{name}_candidate_reason', width=468)
+    content += button(approve, f'sed_approve_{name}_sgui', width=468, state=True)
+    content += button('sed_ignore_recommendation', f'sed_ignore_{name}_sgui', width=468, state=True)
+    for guard in (('queue', 'private', 'default') if name == 'construction' else ('private', 'default')):
+        content += textbox(f'{prefix}_blocked_{guard}', f'sed_{name}_blocked_{guard}_sgui', width=468, state=True)
+    for kind in ('stale', 'pending', 'finance_caution'):
+        content += textbox(f'{prefix}_{kind}', f'sed_{name}_{kind}_sgui', width=468, state=True)
+    content += textbox('sed_mode_approval_blocked', 'sed_mode_approval_blocked_sgui', width=468, state=True)
+    return f""" type sed_{name}_candidate_item = flowcontainer {{
+ datacontext = "[Scope.GetState]"
+ direction = vertical spacing = 10 ignoreinvisible = yes
+ minimumsize = {{ 500 -1 }} maximumsize = {{ 500 -1 }}
+ background = {{ using = dark_area }}
+ flowcontainer = {{ direction = vertical spacing = 10 ignoreinvisible = yes
+  margin = {{ 16 12 }}
+{content} }}
 }}
-'''
+"""
+
+
+def candidate_list(name, visibility):
+    return f"""flowcontainer = {{
+ visible = "[{sgui(visibility, 'IsShown')}]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_{name}_candidates')]"
+ item = {{ sed_{name}_candidate_item = {{}} }}
+}}
+"""
 
 
 def widget():
-    body = textbox('sed_title', heading=True) + textbox('sed_scope_note')
+    body = textbox('sed_title', heading=True)
     body += textbox('sed_mode_title', heading=True)
-    body += 'flowcontainer = { direction = horizontal spacing = 4\n'
-    body += mode_button('sed_mode_manual_button', 'sed_set_mode_manual_sgui')
-    body += mode_button('sed_mode_assisted_button', 'sed_set_mode_assisted_sgui')
-    body += mode_button('sed_mode_automatic_button', 'sed_set_mode_automatic_sgui')
+    body += 'flowcontainer = { direction = horizontal spacing = 10\n'
+    for mode in ('manual', 'assisted', 'automatic'):
+        body += mode_button(f'sed_mode_{mode}_button', f'sed_set_mode_{mode}_sgui')
     body += '}\n'
     for mode in ('manual', 'assisted', 'automatic'):
         body += textbox(f'sed_mode_{mode}_status', f'sed_mode_{mode}_visible_sgui')
-    body += textbox('sed_auto_status_success', 'sed_auto_status_success_visible_sgui')
-    body += textbox('sed_auto_status_no_action', 'sed_auto_status_no_action_visible_sgui')
-    body += textbox('sed_auto_status_default', 'sed_auto_status_default_visible_sgui')
-    body += textbox('sed_auto_status_queue', 'sed_auto_status_queue_visible_sgui')
-    body += textbox('sed_auto_status_paused', 'sed_auto_status_paused_visible_sgui')
-    body += textbox('sed_auto_status_competing', 'sed_auto_status_competing_visible_sgui')
-    body += textbox('sed_auto_status_safety', 'sed_auto_status_safety_visible_sgui')
-    body += textbox('sed_auto_status_unconfirmed', 'sed_auto_status_unconfirmed_visible_sgui')
-    body += 'flowcontainer = { direction = horizontal spacing = 8\n'
-    body += button('sed_refresh', 'sed_refresh_sgui') + button('sed_disable', 'sed_disable_sgui') + '}\n'
-    body += button('sed_restore_ignored', 'sed_restore_ignored_sgui')
-    body += textbox('sed_ignored_notice', 'sed_restore_ignored_sgui')
+    for status in ('success', 'no_action', 'default', 'queue', 'paused', 'competing', 'safety', 'unconfirmed'):
+        body += textbox(f'sed_auto_status_{status}', f'sed_auto_status_{status}_visible_sgui')
+    body += 'flowcontainer = { direction = horizontal spacing = 12\n'
+    body += button('sed_refresh', 'sed_refresh_sgui', width=244)
+    body += button('sed_disable', 'sed_disable_sgui', width=244) + '}\n'
     body += button('sed_use_manual', 'sed_manual_updates_sgui')
     body += button('sed_use_monthly', 'sed_monthly_updates_sgui')
     body += textbox('sed_last_refresh')
-    body += textbox('sed_schedule_monthly', 'sed_monthly_visible_sgui')
-    body += textbox('sed_schedule_manual', 'sed_manual_visible_sgui')
+    body += textbox('sed_dashboard_budget') + textbox('sed_dashboard_queue')
+    body += button('sed_show_details', 'sed_show_details_sgui')
+    body += button('sed_hide_details', 'sed_hide_details_sgui')
+    body += button('sed_restore_ignored', 'sed_restore_ignored_sgui')
+    body += textbox('sed_ignored_notice', 'sed_restore_ignored_sgui')
     body += textbox('sed_default_warning', 'sed_default_visible_sgui')
-    body += textbox('sed_operating_warning', 'sed_operating_deficit_visible_sgui')
     body += textbox('sed_deficit_warning', 'sed_deficit_visible_sgui')
-    body += textbox('sed_nonnegative_note', 'sed_nonnegative_visible_sgui')
-    sections = [('sed_finance_title', ['balance', 'operating_balance', 'fixed_expenses', 'gold', 'debt', 'credit']),
-                ('sed_development_title', ['gdp', 'population', 'sol', 'literacy']),
-                ('sed_production_title', ['construction', 'public_projects', 'private_projects'])]
-    for title, metrics in sections:
-        body += textbox(title, heading=True)
-        for name in metrics:
-            body += textbox('sed_metric_' + name)
-        if title == 'sed_finance_title':
-            for key, condition in [('sed_debt_share_text', 'sed_debt_share_visible_sgui'),
-                                   ('sed_debt_share_unavailable', 'sed_no_debt_share_visible_sgui'),
-                                   ('sed_runway_text', 'sed_runway_visible_sgui'),
-                                   ('sed_runway_unavailable', 'sed_no_runway_visible_sgui')]:
-                body += textbox(key, condition)
-        if title == 'sed_development_title':
-            for key, condition in [('sed_per_capita_text', 'sed_per_capita_visible_sgui'),
-                                   ('sed_per_capita_unavailable', 'sed_no_per_capita_visible_sgui'),
-                                   ('sed_growth_text', 'sed_growth_visible_sgui'),
-                                   ('sed_growth_unavailable', 'sed_no_growth_visible_sgui')]:
-                body += textbox(key, condition)
-    body += textbox('sed_state_readings') + textbox('sed_employment_readings')
     body += textbox('sed_recommendations_title', heading=True)
     body += textbox('sed_recommendations_intro')
     body += textbox('sed_no_infrastructure_opportunity', 'sed_no_infrastructure_opportunity_visible_sgui')
     body += textbox('sed_no_railway_candidate', 'sed_no_railway_candidate_visible_sgui')
-    body += textbox('sed_railway_breakdown', 'sed_railway_breakdown_visible_sgui')
-    body += '''fixedgridbox = {
- visible = "[GetScriptedGui('sed_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
- datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_railway_candidates')]"
- addcolumn = 500
- addrow = 206
- item = { sed_railway_candidate_item = {} }
-}
-'''
+    body += details(textbox('sed_railway_breakdown', 'sed_railway_breakdown_visible_sgui'))
+    body += candidate_list('railway', 'sed_recommendations_visible_sgui')
     body += textbox('sed_railway_action_success', 'sed_action_success_visible_sgui')
     body += textbox('sed_railway_action_failed', 'sed_action_failed_visible_sgui')
-    body += textbox('sed_construction_title', heading=True)
-    body += textbox('sed_construction_intro')
+    body += textbox('sed_construction_title', heading=True) + textbox('sed_construction_intro')
     body += textbox('sed_no_construction_queue', 'sed_no_construction_queue_visible_sgui')
     body += textbox('sed_no_construction_candidate', 'sed_no_construction_candidate_visible_sgui')
-    body += textbox('sed_construction_breakdown', 'sed_construction_breakdown_visible_sgui')
-    body += '''fixedgridbox = {
- visible = "[GetScriptedGui('sed_construction_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
- datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_construction_candidates')]"
- addcolumn = 500
- addrow = 206
- item = { sed_construction_candidate_item = {} }
-}
-'''
+    body += details(textbox('sed_construction_breakdown', 'sed_construction_breakdown_visible_sgui'))
+    body += candidate_list('construction', 'sed_construction_recommendations_visible_sgui')
     body += textbox('sed_construction_action_success', 'sed_construction_action_success_visible_sgui')
     body += textbox('sed_construction_action_failed', 'sed_construction_action_failed_visible_sgui')
     body += textbox('sed_supply_title', heading=True) + textbox('sed_supply_intro')
     for item in SUPPLY_TARGETS:
         good = item['good']
         body += textbox(f'sed_{good}_section_title', f'sed_{good}_section_visible_sgui', heading=True)
-        body += f'''fixedgridbox = {{
- visible = "[GetScriptedGui('sed_{good}_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
- datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_{good}_candidates')]"
- addcolumn = 500
- addrow = 260
- item = {{ sed_{good}_candidate_item = {{}} }}
-}}
-'''
+        body += candidate_list(good, f'sed_{good}_recommendations_visible_sgui')
         body += textbox('sed_supply_no_candidate', f'sed_{good}_no_candidates_visible_sgui')
-        body += textbox(f'sed_{good}_rejection_summary', f'sed_{good}_no_candidates_visible_sgui')
-        body += textbox(f'sed_{good}_rejection_details', f'sed_{good}_no_candidates_visible_sgui')
+        body += details(textbox(f'sed_{good}_rejection_summary', f'sed_{good}_no_candidates_visible_sgui')
+                        + textbox(f'sed_{good}_rejection_details', f'sed_{good}_no_candidates_visible_sgui'))
         body += textbox(f'sed_{good}_action_success', f'sed_{good}_action_success_visible_sgui')
         body += textbox(f'sed_{good}_action_failed', f'sed_{good}_action_failed_visible_sgui')
-    body += textbox('sed_limitations_title', heading=True) + textbox('sed_limitations')
-    item_type = '''types sed_diagnostics_types {
- type sed_railway_candidate_item = flowcontainer {
-  direction = vertical
-  spacing = 4
-  widget = {
-   datacontext = "[Scope.GetState]"
-   size = { 500 200 }
-   background = { using = dark_area }
-   flowcontainer = {
-    position = { 8 4 }
-    direction = vertical
-    spacing = 4
-    textbox = {
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_railway_candidate_title"
-    }
-    textbox = {
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_railway_candidate_reason"
-    }
-    button = {
-     size = { 300 30 }
-     using = select_button_sound
-     using = tooltip_se
-     text = "sed_approve_railway"
-     tooltip = "sed_approve_railway_tt"
-     visible = "[GetScriptedGui('sed_approve_railway_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     enabled = "[GetScriptedGui('sed_approve_railway_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
-     onclick = "[GetScriptedGui('sed_approve_railway_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
-    }
-    textbox = {
-     visible = "[GetScriptedGui('sed_railway_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_railway_blocked_private"
-    }
-    textbox = {
-     visible = "[GetScriptedGui('sed_railway_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_railway_blocked_default"
-    }
-    textbox = {
-     visible = "[GetScriptedGui('sed_railway_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_railway_stale"
-    }
-    textbox = {
-     visible = "[GetScriptedGui('sed_railway_pending_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_railway_pending"
-    }
-    textbox = {
-     visible = "[GetScriptedGui('sed_railway_finance_caution_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_railway_finance_caution"
-    }
-    textbox = {
-     visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_mode_approval_blocked"
-    }
-   }
-  }
- }
- type sed_construction_candidate_item = flowcontainer {
-  direction = vertical
-  spacing = 4
-  widget = {
-   datacontext = "[Scope.GetState]"
-   size = { 500 200 }
-   background = { using = dark_area }
-   flowcontainer = {
-    position = { 8 4 }
-    direction = vertical
-    spacing = 4
-    textbox = {
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_construction_candidate_title"
-    }
-    textbox = {
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_construction_candidate_reason"
-    }
-    button = {
-     size = { 300 30 }
-     using = select_button_sound
-     using = tooltip_se
-     text = "sed_approve_construction"
-     tooltip = "sed_approve_construction_tt"
-     visible = "[GetScriptedGui('sed_approve_construction_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     enabled = "[GetScriptedGui('sed_approve_construction_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
-     onclick = "[GetScriptedGui('sed_approve_construction_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
-    }
-    textbox = {
-     visible = "[GetScriptedGui('sed_construction_blocked_queue_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_construction_blocked_queue"
-    }
-    textbox = {
-     visible = "[GetScriptedGui('sed_construction_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_construction_blocked_private"
-    }
-    textbox = {
-     visible = "[GetScriptedGui('sed_construction_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_construction_blocked_default"
-    }
-    textbox = {
-     visible = "[GetScriptedGui('sed_construction_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_construction_stale"
-    }
-    textbox = {
-     visible = "[GetScriptedGui('sed_construction_pending_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_construction_pending"
-    }
-    textbox = {
-     visible = "[GetScriptedGui('sed_construction_finance_caution_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_construction_finance_caution"
-    }
-    textbox = {
-     visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_mode_approval_blocked"
-    }
-   }
-  }
- }
-}
-'''
-    for name in ('railway', 'construction'):
-        anchor = f"     onclick = \"[GetScriptedGui('sed_approve_{name}_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]\"\n    }}"
-        item_type = item_type.replace(anchor, anchor + '\n' + ignore_button(name), 1)
-    head, tail = item_type.rsplit('\n}\n', 1)
-    item_type = head + '\n' + supply_item_types() + '}\n' + tail
-    return '# Generated by tools/build_mod.py.\n' + item_type + '\nflowcontainer = {\n name = "sed_diagnostics_widget"\n minimumsize = { 500 -1 }\n maximumsize = { 500 -1 }\n direction = vertical\n spacing = 6\n ignoreinvisible = yes\n' + body + '}\n'
-
-
-def supply_item_types():
-    result = []
-    for item in SUPPLY_TARGETS:
-        good = item['good']
-        result.append(f''' type sed_{good}_candidate_item = flowcontainer {{
-  direction = vertical
-  spacing = 4
-  widget = {{
-   datacontext = "[Scope.GetState]"
-   size = {{ 500 254 }}
-   background = {{ using = dark_area }}
-   flowcontainer = {{
-    position = {{ 8 4 }}
-    direction = vertical
-    spacing = 4
-    textbox = {{ autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_{good}_candidate_title" }}
-    textbox = {{ autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_{good}_candidate_reason" }}
-    button = {{ size = {{ 360 30 }} using = select_button_sound using = tooltip_se text = "sed_{good}_approve" tooltip = "sed_{good}_approve_tt" visible = "[GetScriptedGui('sed_approve_{good}_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" enabled = "[GetScriptedGui('sed_approve_{good}_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]" onclick = "[GetScriptedGui('sed_approve_{good}_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]" }}
-    {ignore_button(good)}
-    textbox = {{ visible = "[GetScriptedGui('sed_{good}_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_blocked_private" }}
-    textbox = {{ visible = "[GetScriptedGui('sed_{good}_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_blocked_default" }}
-    textbox = {{ visible = "[GetScriptedGui('sed_{good}_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_stale" }}
-    textbox = {{ visible = "[GetScriptedGui('sed_{good}_pending_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_pending" }}
-    textbox = {{ visible = "[GetScriptedGui('sed_{good}_finance_caution_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_supply_finance_caution" }}
-    textbox = {{ visible = "[GetScriptedGui('sed_mode_approval_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]" autoresize = yes multiline = yes align = left|nobaseline using = fontsize_small minimumsize = {{ 480 -1 }} text = "sed_mode_approval_blocked" }}
-   }}
-  }}
- }}''')
-    return '\n'.join(result) + '\n'
+    diagnostic = textbox('sed_details_title', heading=True)
+    for title, metrics in [('sed_finance_title', ['balance', 'operating_balance', 'fixed_expenses', 'gold', 'debt', 'credit']),
+                           ('sed_development_title', ['gdp', 'population', 'sol', 'literacy']),
+                           ('sed_production_title', ['construction', 'public_projects', 'private_projects'])]:
+        diagnostic += textbox(title, heading=True)
+        for metric in metrics:
+            diagnostic += textbox('sed_metric_' + metric)
+    for key, visibility in [('sed_operating_warning', 'sed_operating_deficit_visible_sgui'),
+                            ('sed_nonnegative_note', 'sed_nonnegative_visible_sgui'),
+                            ('sed_debt_share_text', 'sed_debt_share_visible_sgui'),
+                            ('sed_debt_share_unavailable', 'sed_no_debt_share_visible_sgui'),
+                            ('sed_runway_text', 'sed_runway_visible_sgui'),
+                            ('sed_runway_unavailable', 'sed_no_runway_visible_sgui'),
+                            ('sed_per_capita_text', 'sed_per_capita_visible_sgui'),
+                            ('sed_per_capita_unavailable', 'sed_no_per_capita_visible_sgui'),
+                            ('sed_growth_text', 'sed_growth_visible_sgui'),
+                            ('sed_growth_unavailable', 'sed_no_growth_visible_sgui')]:
+        diagnostic += textbox(key, visibility)
+    diagnostic += textbox('sed_state_readings') + textbox('sed_employment_readings')
+    diagnostic += textbox('sed_limitations_title', heading=True) + textbox('sed_limitations')
+    body += details(diagnostic)
+    types = ''.join(candidate_item(name) for name in ACTION_NAMES)
+    return ('# Generated by tools/build_mod.py.\ntypes sed_diagnostics_types {\n' + types + '}\n'
+            + 'flowcontainer = { name = "sed_diagnostics_widget"\n'
+            + ' minimumsize = { 500 -1 } maximumsize = { 500 -1 }\n'
+            + ' direction = vertical spacing = 12 ignoreinvisible = yes\n' + body + '}\n')
 
 
 def effects():
@@ -955,6 +717,8 @@ def scripted_guis():
     result = ''
     actions = {
         'refresh': ('has_variable = sed_enabled', 'sed_refresh_diagnostics = yes'),
+        'show_details': ('has_variable = sed_enabled NOT = { has_variable = sed_details_visible }', 'set_variable = { name = sed_details_visible value = yes }'),
+        'hide_details': ('has_variable = sed_enabled has_variable = sed_details_visible', 'remove_variable = sed_details_visible'),
         'disable': ('has_variable = sed_enabled', 'sed_disable_country = yes'),
         'manual_updates': ('has_variable = sed_enabled has_variable = sed_monthly_refresh', 'remove_variable = sed_monthly_refresh'),
         'monthly_updates': ('has_variable = sed_enabled NOT = { has_variable = sed_monthly_refresh }', 'set_variable = { name = sed_monthly_refresh value = yes } sed_refresh_diagnostics = yes'),
@@ -1112,6 +876,7 @@ sed_auto_status_competing_visible_sgui = { scope = country is_shown = { has_vari
 sed_auto_status_safety_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 14 } }
 sed_auto_status_unconfirmed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 15 } }
 '''
+    result += 'sed_details_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_details_visible } }\n'
     return '# Generated by tools/build_mod.py.\n' + result
 
 
@@ -1363,6 +1128,34 @@ def localization(language):
         pairs[f'sed_{good}_approve_tt'] = ('Requer modo Assistido, país fora de inadimplência e fila privada vazia. A escassez e o prédio são revalidados no clique. Saldo semanal negativo gera alerta, mas não bloqueia. Usa a fila normal do jogo.', 'Requires Assisted mode, no default, and an empty private queue. The shortage and building are rechecked on click. A negative balance raises a caution but does not block. Uses the normal game queue.')
         pairs[f'sed_{good}_action_success'] = (f'Pedido de expansão de {building_pt} adicionado à fila pública. Confira custo e prazo na fila do jogo.', f'{building_en.title()} expansion added to the government queue. Review cost and timing in the game queue.')
         pairs[f'sed_{good}_action_failed'] = ('A engine não confirmou a inclusão na fila. Nenhuma nova tentativa será automática.', 'The engine did not confirm the queue addition. No automatic retry will occur.')
+    pairs.update({
+        'sed_title': ('Economia e construções', 'Economy and construction'),
+        'sed_show_details': ('Mostrar indicadores e detalhes', 'Show indicators and details'),
+        'sed_show_details_tt': ('Abre indicadores, motivos detalhados e limites da análise abaixo das recomendações.', 'Shows indicators, detailed rejection reasons and analysis limits below recommendations.'),
+        'sed_hide_details': ('Ocultar indicadores e detalhes', 'Hide indicators and details'),
+        'sed_hide_details_tt': ('Recolhe os detalhes. As recomendações e os controles continuam disponíveis.', 'Collapses details. Recommendations and controls remain available.'),
+        'sed_details_title': ('Indicadores e detalhes', 'Indicators and details'),
+        'sed_dashboard_budget': ('Saldo: @money!' + v('balance', 'K') + '  |  Reservas: @money!' + v('gold', 'K'), 'Balance: @money!' + v('balance', 'K') + '  |  Reserves: @money!' + v('gold', 'K')),
+        'sed_dashboard_queue': ('Projetos na fila — pública: ' + v('public_projects', '0') + '  |  privada: ' + v('private_projects', '0'), 'Queue projects — government: ' + v('public_projects', '0') + '  |  private: ' + v('private_projects', '0')),
+        'sed_mode_manual_status': ('Manual: consulta e recomendações, sem executar obras.', 'Manual: readings and recommendations, without construction.'),
+        'sed_mode_assisted_status': ('Assistido: você aprova uma expansão por botão.', 'Assisted: approve one expansion using its button.'),
+        'sed_mode_automatic_status': ('Automático: revisão mensal, com no máximo uma expansão por revisão.', 'Automatic: monthly review, with at most one expansion per review.'),
+        'sed_mode_approval_blocked': ('Para aprovar pelo botão, selecione Assistido no topo.', 'To approve with this button, select Assisted at the top.'),
+        'sed_ignore_recommendation': ('Ignorar neste estado', 'Ignore in this state'),
+        'sed_recommendations_intro': ('Expansões de ferrovias existentes quando falta infraestrutura. Aprovar adiciona um nível público.', 'Expand existing railways where infrastructure is insufficient. Approval adds one government level.'),
+        'sed_construction_intro': ('Expandir um setor existente quando há pelo menos três projetos públicos.', 'Expand an existing sector when at least three government projects are queued.'),
+        'sed_supply_intro': ('Expandir um produtor existente para um bem em escassez. Custos e retorno não são estimados.', 'Expand an existing producer for a scarce good. Costs and returns are not estimated.'),
+        'sed_supply_no_candidate': ('Nenhum produtor elegível nesta leitura. Esta versão só expande prédios existentes.', 'No eligible producer in this reading. This version only expands existing buildings.'),
+    })
+    for name in ACTION_NAMES:
+        key = f'sed_{name}_approve' if name not in ('railway', 'construction') else f'sed_approve_{name}'
+        pairs[key] = ('Aprovar expansão: +1 nível', 'Approve expansion: +1 level')
+    pairs['sed_railway_candidate_reason'] = ('Ferrovia operante em estado com déficit de infraestrutura. Custo e retorno não estimados.', 'Operating railway in a state with an infrastructure deficit. Cost and return not estimated.')
+    pairs['sed_construction_candidate_reason'] = ('Setor operante e fila pública com demanda. Custo e contratação futura não estimados.', 'Operating sector with demand in the government queue. Cost and future hiring not estimated.')
+    for item in SUPPLY_TARGETS:
+        pairs[f"sed_{item['good']}_candidate_reason"] = (
+            f"Escassez de {item['label_pt']}; produtor operante, sem falta de insumos ou expansão enfileirada.",
+            f"Shortage of {item['label_en']}; operating producer, without input shortage or queued expansion.")
     for name in ('railway', 'construction'):
         key = f'sed_{name}_breakdown'
         pairs[key] = (pairs[key][0] + ' Ignorados por você: ' + v(name + '_ignored_states', '0') + '.',
