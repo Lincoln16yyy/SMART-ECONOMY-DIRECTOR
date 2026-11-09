@@ -423,6 +423,55 @@ class DiagnosisTests(unittest.TestCase):
         target['buildings'][0]['level_after_queued_constructions'] = 2
         self.assertFalse(valid())
 
+    def test_blocked_buttons_name_the_first_failing_guard(self):
+        for action, factory in [
+                ('railway', lambda: state(-2, buildings=[railway()])),
+                ('construction', lambda: state(-2, buildings=[construction_sector()]))]:
+            with self.subTest(action=action):
+                c = self.country(num_queued_government_constructions=3)
+                target = factory()
+                guards = ['paused', 'queue', 'private', 'default', 'balance']
+                if action == 'railway':
+                    guards.remove('queue')
+
+                def is_shown(name, target=target, c=c):
+                    block = next(entry.value for entry in self.definitions[name]
+                                 if entry.key == 'is_shown')
+                    return c.condition(block, target)
+
+                def assert_only(expected):
+                    for guard in guards:
+                        self.assertEqual(
+                            is_shown(f'sed_{action}_blocked_{guard}_sgui'),
+                            guard == expected, guard)
+
+                assert_only(None)
+                cases = {
+                    'paused': ('is_game_paused', False),
+                    'queue': ('num_queued_government_constructions', 2),
+                    'private': ('construction_queue_num_queued_private_levels', 1),
+                    'default': ('in_default', True),
+                    'balance': ('net_total_income', -1),
+                }
+                for guard in guards:
+                    with self.subTest(guard=guard):
+                        field, value = cases[guard]
+                        original = c.readings[field]
+                        c.readings[field] = value
+                        assert_only(guard)
+                        c.readings[field] = original
+                # Cascading: an earlier failing guard wins over later ones.
+                c.readings.update(
+                    is_game_paused=False,
+                    construction_queue_num_queued_private_levels=1)
+                assert_only('paused')
+                # Ineligible states name no guard.
+                ineligible = state(-2, buildings=[])
+                self.assertFalse(any(
+                    c.condition(next(entry.value for entry in self.definitions[name]
+                                     if entry.key == 'is_shown'), ineligible)
+                    for name in [f'sed_{action}_blocked_{g}_sgui' for g in guards]))
+
     def test_approved_construction_sector_queues_one_level_and_marks_request(self):
         c = self.country(num_queued_government_constructions=3)
         target = state(-2, buildings=[construction_sector()])

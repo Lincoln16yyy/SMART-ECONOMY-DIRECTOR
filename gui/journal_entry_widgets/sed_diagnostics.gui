@@ -5,7 +5,7 @@ types sed_diagnostics_types {
   spacing = 4
   widget = {
    datacontext = "[Scope.GetState]"
-   size = { 500 112 }
+   size = { 500 140 }
    background = { using = dark_area }
    flowcontainer = {
     position = { 8 4 }
@@ -37,6 +37,42 @@ types sed_diagnostics_types {
      enabled = "[GetScriptedGui('sed_approve_railway_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
      onclick = "[GetScriptedGui('sed_approve_railway_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
     }
+    textbox = {
+     visible = "[GetScriptedGui('sed_railway_blocked_paused_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_railway_blocked_paused"
+    }
+    textbox = {
+     visible = "[GetScriptedGui('sed_railway_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_railway_blocked_private"
+    }
+    textbox = {
+     visible = "[GetScriptedGui('sed_railway_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_railway_blocked_default"
+    }
+    textbox = {
+     visible = "[GetScriptedGui('sed_railway_blocked_balance_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_railway_blocked_balance"
+    }
    }
   }
  }
@@ -45,7 +81,7 @@ types sed_diagnostics_types {
   spacing = 4
   widget = {
    datacontext = "[Scope.GetState]"
-   size = { 500 112 }
+   size = { 500 140 }
    background = { using = dark_area }
    flowcontainer = {
     position = { 8 4 }
@@ -76,6 +112,51 @@ types sed_diagnostics_types {
      visible = "[GetScriptedGui('sed_approve_construction_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
      enabled = "[GetScriptedGui('sed_approve_construction_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
      onclick = "[GetScriptedGui('sed_approve_construction_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
+    }
+    textbox = {
+     visible = "[GetScriptedGui('sed_construction_blocked_paused_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_construction_blocked_paused"
+    }
+    textbox = {
+     visible = "[GetScriptedGui('sed_construction_blocked_queue_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_construction_blocked_queue"
+    }
+    textbox = {
+     visible = "[GetScriptedGui('sed_construction_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_construction_blocked_private"
+    }
+    textbox = {
+     visible = "[GetScriptedGui('sed_construction_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_construction_blocked_default"
+    }
+    textbox = {
+     visible = "[GetScriptedGui('sed_construction_blocked_balance_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_construction_blocked_balance"
     }
    }
   }
@@ -512,7 +593,7 @@ fixedgridbox = {
  visible = "[GetScriptedGui('sed_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_railway_candidates')]"
  addcolumn = 500
- addrow = 118
+ addrow = 146
  item = { sed_railway_candidate_item = {} }
 }
 textbox = {
@@ -587,7 +668,7 @@ fixedgridbox = {
  visible = "[GetScriptedGui('sed_construction_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_construction_candidates')]"
  addcolumn = 500
- addrow = 118
+ addrow = 146
  item = { sed_construction_candidate_item = {} }
 }
 textbox = {

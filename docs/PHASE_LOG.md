@@ -369,3 +369,20 @@ Para confirmar a aprovação na engine, o jogador precisará esvaziar a fila
 privada (ou usar uma cópia de save em que ela esteja vazia), com o jogo
 pausado, e então clicar. A inclusão do nível na fila pública, a
 revalidação no clique e o aviso de confirmação seguem sem confirmação.
+
+## Fase 2 — Linha de motivo do botão bloqueado 0.3.2
+
+O jogador fez um clique no botão de aprovação com a fila privada não vazia e
+nada aconteceu sem explicação; o tooltip mostrava o cadeado e listava todas
+as travas, mas não dizia qual falhava. A 0.3.2 mostra, sob o botão de
+aprovar, a primeira guarda que falha: jogo rodando, fila privada não vazia,
+inadimplência ou saldo semanal negativo (para a construção, também fila
+pública abaixo de três projetos antes dessas). Cada linha é um SGUI em
+escopo de estado avaliado na hora, com ordem em cascata, de modo que apenas
+um motivo aparece por vez. As travas em si não mudaram; o comando de
+aprovação continua revalidando no clique.
+
+Validação: **46 testes passam** (nove de auditoria e 37 da implementação),
+a geração está atualizada, validação estática e pacote
+`dist/smart-economy-director-0.3.2.zip` concluídos. Renderização da linha de
+motivo e execução dos botões na engine seguem pendentes.

@@ -5,7 +5,8 @@ A Fase 1 de diagnóstico foi confirmada em campanha na 0.1.0; ver
 ferroviários e uma aprovação individual que enfileira uma expansão elegível. A
 0.3.0 acrescenta uma segunda ação aprovada para ampliar um setor de construção
 quando a fila pública tem pelo menos três projetos; a 0.3.1 explica os motivos de
-rejeição quando não há candidato. Ranking nacional completo, outros tipos de ação
+rejeição quando não há candidato; a 0.3.2 mostra por que o botão de aprovação
+está bloqueado. Ranking nacional completo, outros tipos de ação
 e automação periódica continuam por implementar.
 
 ## Responsabilidade

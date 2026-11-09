@@ -35,6 +35,42 @@ sed_approve_construction_sgui = {
  is_valid = { sed_construction_approval_valid = yes }
  effect = { if = { limit = { sed_construction_approval_valid = yes } sed_run_construction_approval = yes } }
 }
+sed_railway_blocked_paused_sgui = {
+ scope = state
+ is_shown = { sed_railway_candidate_eligible = yes NOT = { is_game_paused = yes } }
+}
+sed_railway_blocked_private_sgui = {
+ scope = state
+ is_shown = { sed_railway_candidate_eligible = yes is_game_paused = yes owner = { construction_queue_num_queued_private_levels > 0 } }
+}
+sed_railway_blocked_default_sgui = {
+ scope = state
+ is_shown = { sed_railway_candidate_eligible = yes is_game_paused = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
+}
+sed_railway_blocked_balance_sgui = {
+ scope = state
+ is_shown = { sed_railway_candidate_eligible = yes is_game_paused = yes owner = { construction_queue_num_queued_private_levels = 0 NOT = { in_default = yes } net_total_income < 0 } }
+}
+sed_construction_blocked_paused_sgui = {
+ scope = state
+ is_shown = { sed_construction_candidate_eligible = yes NOT = { is_game_paused = yes } }
+}
+sed_construction_blocked_queue_sgui = {
+ scope = state
+ is_shown = { sed_construction_candidate_eligible = yes is_game_paused = yes owner = { num_queued_government_constructions < 3 } }
+}
+sed_construction_blocked_private_sgui = {
+ scope = state
+ is_shown = { sed_construction_candidate_eligible = yes is_game_paused = yes owner = { num_queued_government_constructions >= 3 construction_queue_num_queued_private_levels > 0 } }
+}
+sed_construction_blocked_default_sgui = {
+ scope = state
+ is_shown = { sed_construction_candidate_eligible = yes is_game_paused = yes owner = { num_queued_government_constructions >= 3 construction_queue_num_queued_private_levels = 0 in_default = yes } }
+}
+sed_construction_blocked_balance_sgui = {
+ scope = state
+ is_shown = { sed_construction_candidate_eligible = yes is_game_paused = yes owner = { num_queued_government_constructions >= 3 construction_queue_num_queued_private_levels = 0 NOT = { in_default = yes } net_total_income < 0 } }
+}
 sed_monthly_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable = sed_monthly_refresh }
