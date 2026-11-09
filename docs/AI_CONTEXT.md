@@ -18,13 +18,24 @@ instalação, saves ou load order na pesquisa. O Economy Advisor correto é
 3778129206, já possui construção e PMs. Kuromi não aparece habilitado; ARoAI sim.
 Não usar o nome OGAS como sinônimo do Advisor.
 
-Próximos passos: fechar matriz por indicador e GUI, estado das flags no save,
-fila privada por edifício/estado, auditoria de overrides e Kuromi. Só depois
-preparar Fase 1 de diagnóstico. Usar prefixo próprio `sed_`, português real,
-fallback inglês e ações vinculadas a candidatos estáveis.
+Continuação local: METRICS.md registra a matriz por indicador/GUI;
+LOCAL_AUDIT.md e ENVIRONMENT_AUDIT.json registram o exame do Kuromi 8.0,
+redefinições e nomes históricos do save. A ferramenta de pesquisa
+`tools/audit_environment.py` tem nove testes aprovados e não é código do mod.
+ARoAI redefine 18 PMs e pode construir para o jogador sob configuração.
+Não copiar modelos aproximados de mão de obra/salários do Advisor como medidas.
+
+Próximos passos: confirmar flags por país no save binário ou na interface,
+sem inferi-las de strings; validar fila privada/primeira construção na engine;
+fechar fontes pendentes de métricas e custo das consultas. Só depois preparar
+Fase 1 de diagnóstico. Usar `sed_`, português real, fallback inglês e ações
+vinculadas a candidatos estáveis.
 
 Não houve teste de runtime, campanha, desempenho ou compatibilidade do Director.
-Validação documental não comprova script aceito pela engine.
+Os 26 testes de leis da referência passaram localmente, mas seu validador
+completo encontrou 178 erros de pesquisa tecnológica. Não corrigir o outro
+projeto no escopo do Director. Validação documental não comprova script aceito
+pela engine.
 
 A etapa anterior na nuvem executou 26 testes da referência com sucesso; o
 validador não localizou o jogo naquele executor. O registro histórico foi

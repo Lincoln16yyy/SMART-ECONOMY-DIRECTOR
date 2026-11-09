@@ -14,6 +14,15 @@ Executar primeiro vanilla + Director; depois adicionar os mods e, por fim,
 testar o conjunto completo. Comparar logs antes/depois, guardando os novos
 erros com arquivo e linha. Nenhum botão pode ser aprovado só por aparecer.
 
+Registrar as flags efetivas no país: Economy Advisor (habilitação, construção,
+mão de obra e balanceamento de PM), opções do Supply Chain, Auto-Apply e a
+regra/flag de autobuild do ARoAI. O save Haiti encontrado é binário; a ocorrência
+do nome de uma variável não comprova seu valor nem seu dono. Conferir as opções
+na interface ou usar decodificação estruturada compatível.
+
+Comparar também porto básico e administração com as definições carregadas:
+ARoAI redefine PMs com dados diferentes da instalação vanilla 1.15.
+
 ## Ciclo de vida e interface
 
 Verificar ativação por decisão, save existente, nova campanha, pulso mensal,

@@ -33,6 +33,11 @@ O jogador conserva decisões políticas, diplomáticas e militares importantes.
 | Verificação | `tests/`, `tools/validate.py` | Cenários e referências cruzadas; runtime separado |
 
 Esses caminhos são propostas; não foram criados arquivos vazios para simulá-los.
+`tools/audit_environment.py` já existe como ferramenta de pesquisa, sem scripts
+de jogo. A auditoria encontrou PMs redefinidos pelo ARoAI e regras de construção
+injetadas pelo Controllable Private Construction. O catálogo futuro precisa
+registrar origem e versão dos dados, detectar sobreposição e recusar projeção
+com catálogo incompatível. Ler só vanilla não reproduz o ecossistema ativo.
 
 ## Priorização e segurança
 

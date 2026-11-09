@@ -53,3 +53,36 @@ testar. Não foram executados testes interativos ou alterados saves/load order.
 
 Fase 0 permanece aberta pelas lacunas listadas em RESEARCH.md. Fases 1–6 não
 iniciadas. Pesos econômicos, classificações e desempenho ainda não calibrados.
+
+## 2026-11-08 — Fase 0: auditoria reproduzível e fontes de indicadores
+
+Objetivo: aprofundar Kuromi, filas, opções do Haiti e alterações de definições,
+sem programar o mod ou modificar instalação, saves e ordem de carregamento.
+
+Arquivos: ferramenta `tools/audit_environment.py`, nove testes, `.gitignore`,
+ENVIRONMENT_AUDIT.json, LOCAL_AUDIT.md e METRICS.md; atualizados README,
+pesquisa, arquitetura, compatibilidade, contexto e roteiro manual.
+
+Resultados: dez mods listados encontrados; Kuromi 8.0 examinado no ZIP; 49
+entradas vanilla visadas pelo Controllable Private Construction; administração
+substituída pelo Auto Expand; 18 PMs redefinidos pelo ARoAI. A condição de
+autobuild do ARoAI permite jogador com regra e flag específicas. O Advisor
+considera níveis após fila, mas sua cobertura completa permanece sem teste.
+
+O save Haiti contém gamestate binário e nome histórico do Kuromi. As quatro
+strings do Advisor foram registradas como ocorrências, não flags ativas.
+Nenhum save foi publicado. A matriz distingue funções GUI de primitivas de
+script e aproximações de dados observados.
+
+Validação: nove testes da auditoria passaram; os 26 testes de leis do Smart
+Government passaram novamente. Seu validador completo executou com o jogo
+local e retornou 178 erros do módulo de pesquisa tecnológica, sem alterar a
+referência. O leitor da auditoria registrou seis arquivos vanilla de DNA não
+interpretados; não são conclusões sobre economia ou aceitação pela engine.
+A auditoria foi repetida com saída em `/tmp`; o relatório resultante foi
+idêntico byte a byte. Sintaxe Python, JSON, links locais, briefing original e
+`git diff --check` também foram verificados.
+
+Não testado: opções efetivas por país, resolução de merge no jogo, primeira
+construção/fila privada, bindings do Director, desempenho e campanhas. Fase 0
+continua aberta; nenhuma Journal Entry ou ação econômica foi implementada.

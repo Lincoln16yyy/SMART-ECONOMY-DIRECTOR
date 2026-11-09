@@ -1,0 +1,885 @@
+{
+  "schema": 1,
+  "game_version": "1.15.0",
+  "load_order_sha256": "9d6e051abcbcb392d8a7f51ddfd9bbac3dad5a02adf86da0087fd071af3a3aa0",
+  "limitations": [
+    "Static top-level block audit; no engine merge or load-order resolution.",
+    "Shared namespaces and INJECT entries are candidates for review, not proven conflicts.",
+    "Binary save marker occurrences do not establish value, ownership or activation.",
+    "No original source code or save contents included in this report."
+  ],
+  "enabled_folders_in_launcher_order": [
+    "3278770055_Controllable_Private_Construction",
+    "3279201462_Auto-Recruit_One-Click_Recruit_Commanders",
+    "3344726320_Auto-Apply_Automation_PMs",
+    "3353797125_Auto-Apply_PMs",
+    "3357811223_Supply_Chain_Semi-Auto_Builder",
+    "3432933121_Auto-Diplomacy_And_Advanced_Subject_Management",
+    "2934542706_Government_Administration_Auto_Expand",
+    "3778129206_Economy_Advisor",
+    "ARoAI-1.3.5",
+    "Smart Government Advisor"
+  ],
+  "mods": [
+    {
+      "folder": "3278770055_Controllable_Private_Construction",
+      "found": true,
+      "same_path_as_vanilla": [],
+      "entries_also_in_vanilla": [
+        {
+          "path": "common/buildings/zw_cpc_01_industry.txt",
+          "id": "building_food_industry",
+          "operation": "INJECT_OR_CREATE",
+          "line": 1,
+          "sha256": "9ed77b978b9d44e2f5ac5b44d5fa6e8bd077d8a46ad9ae7d513b6f35bde86e65"
+        },
+        {
+          "path": "common/buildings/zw_cpc_01_industry.txt",
+          "id": "building_textile_mill",
+          "operation": "INJECT_OR_CREATE",
+          "line": 17,
+          "sha256": "9ed77b978b9d44e2f5ac5b44d5fa6e8bd077d8a46ad9ae7d513b6f35bde86e65"
+        },
+        {
+          "path": "common/buildings/zw_cpc_01_industry.txt",
+          "id": "building_furniture_manufactory",
+          "operation": "INJECT_OR_CREATE",
+          "line": 33,
+          "sha256": "9ed77b978b9d44e2f5ac5b44d5fa6e8bd077d8a46ad9ae7d513b6f35bde86e65"
+        },
+        {
+          "path": "common/buildings/zw_cpc_01_industry.txt",
+          "id": "building_glassworks",
+          "operation": "INJECT_OR_CREATE",
+          "line": 49,
+          "sha256": "9ed77b978b9d44e2f5ac5b44d5fa6e8bd077d8a46ad9ae7d513b6f35bde86e65"
+        },
+        {
+          "path": "common/buildings/zw_cpc_01_industry.txt",
+          "id": "building_tooling_workshop",
+          "operation": "INJECT_OR_CREATE",
+          "line": 65,
+          "sha256": "9ed77b978b9d44e2f5ac5b44d5fa6e8bd077d8a46ad9ae7d513b6f35bde86e65"
+        },
+        {
+          "path": "common/buildings/zw_cpc_01_industry.txt",
+          "id": "building_paper_mill",
+          "operation": "INJECT_OR_CREATE",
+          "line": 81,
+          "sha256": "9ed77b978b9d44e2f5ac5b44d5fa6e8bd077d8a46ad9ae7d513b6f35bde86e65"
+        },
+        {
+          "path": "common/buildings/zw_cpc_01_industry.txt",
+          "id": "building_chemical_plant",
+          "operation": "INJECT_OR_CREATE",
+          "line": 97,
+          "sha256": "9ed77b978b9d44e2f5ac5b44d5fa6e8bd077d8a46ad9ae7d513b6f35bde86e65"
+        },
+        {
+          "path": "common/buildings/zw_cpc_01_industry.txt",
+          "id": "building_explosives_factory",
+          "operation": "INJECT_OR_CREATE",
+          "line": 113,
+          "sha256": "9ed77b978b9d44e2f5ac5b44d5fa6e8bd077d8a46ad9ae7d513b6f35bde86e65"
+        },
+        {
+          "path": "common/buildings/zw_cpc_01_industry.txt",
+          "id": "building_synthetics_plant",
+          "operation": "INJECT_OR_CREATE",
+          "line": 129,
+          "sha256": "9ed77b978b9d44e2f5ac5b44d5fa6e8bd077d8a46ad9ae7d513b6f35bde86e65"
+        },
+        {
+          "path": "common/buildings/zw_cpc_01_industry.txt",
+          "id": "building_steel_mill",
+          "operation": "INJECT_OR_CREATE",
+          "line": 145,
+          "sha256": "9ed77b978b9d44e2f5ac5b44d5fa6e8bd077d8a46ad9ae7d513b6f35bde86e65"
+        },
+        {
+          "path": "common/buildings/zw_cpc_01_industry.txt",
+          "id": "building_motor_industry",
+          "operation": "INJECT_OR_CREATE",
+          "line": 161,
+          "sha256": "9ed77b978b9d44e2f5ac5b44d5fa6e8bd077d8a46ad9ae7d513b6f35bde86e65"
+        },
+        {
+          "path": "common/buildings/zw_cpc_01_industry.txt",
+          "id": "building_shipyard",
+          "operation": "INJECT_OR_CREATE",
+          "line": 177,
+          "sha256": "9ed77b978b9d44e2f5ac5b44d5fa6e8bd077d8a46ad9ae7d513b6f35bde86e65"
+        },
+        {
+          "path": "common/buildings/zw_cpc_01_industry.txt",
+          "id": "building_automotive_industry",
+          "operation": "INJECT_OR_CREATE",
+          "line": 193,
+          "sha256": "9ed77b978b9d44e2f5ac5b44d5fa6e8bd077d8a46ad9ae7d513b6f35bde86e65"
+        },
+        {
+          "path": "common/buildings/zw_cpc_01_industry.txt",
+          "id": "building_electrics_industry",
+          "operation": "INJECT_OR_CREATE",
+          "line": 209,
+          "sha256": "9ed77b978b9d44e2f5ac5b44d5fa6e8bd077d8a46ad9ae7d513b6f35bde86e65"
+        },
+        {
+          "path": "common/buildings/zw_cpc_01_industry.txt",
+          "id": "building_arms_industry",
+          "operation": "INJECT_OR_CREATE",
+          "line": 225,
+          "sha256": "9ed77b978b9d44e2f5ac5b44d5fa6e8bd077d8a46ad9ae7d513b6f35bde86e65"
+        },
+        {
+          "path": "common/buildings/zw_cpc_01_industry.txt",
+          "id": "building_artillery_foundry",
+          "operation": "INJECT_OR_CREATE",
+          "line": 245,
+          "sha256": "9ed77b978b9d44e2f5ac5b44d5fa6e8bd077d8a46ad9ae7d513b6f35bde86e65"
+        },
+        {
+          "path": "common/buildings/zw_cpc_01_industry.txt",
+          "id": "building_munition_plant",
+          "operation": "INJECT_OR_CREATE",
+          "line": 265,
+          "sha256": "9ed77b978b9d44e2f5ac5b44d5fa6e8bd077d8a46ad9ae7d513b6f35bde86e65"
+        },
+        {
+          "path": "common/buildings/zw_cpc_02_agro.txt",
+          "id": "building_rye_farm",
+          "operation": "INJECT_OR_CREATE",
+          "line": 1,
+          "sha256": "721e9c6e42cd4c8e572719f2606e42d2f0ba1c2986a5fe0e100c1706b72e5dae"
+        },
+        {
+          "path": "common/buildings/zw_cpc_02_agro.txt",
+          "id": "building_wheat_farm",
+          "operation": "INJECT_OR_CREATE",
+          "line": 17,
+          "sha256": "721e9c6e42cd4c8e572719f2606e42d2f0ba1c2986a5fe0e100c1706b72e5dae"
+        },
+        {
+          "path": "common/buildings/zw_cpc_02_agro.txt",
+          "id": "building_rice_farm",
+          "operation": "INJECT_OR_CREATE",
+          "line": 33,
+          "sha256": "721e9c6e42cd4c8e572719f2606e42d2f0ba1c2986a5fe0e100c1706b72e5dae"
+        },
+        {
+          "path": "common/buildings/zw_cpc_02_agro.txt",
+          "id": "building_maize_farm",
+          "operation": "INJECT_OR_CREATE",
+          "line": 49,
+          "sha256": "721e9c6e42cd4c8e572719f2606e42d2f0ba1c2986a5fe0e100c1706b72e5dae"
+        },
+        {
+          "path": "common/buildings/zw_cpc_02_agro.txt",
+          "id": "building_millet_farm",
+          "operation": "INJECT_OR_CREATE",
+          "line": 65,
+          "sha256": "721e9c6e42cd4c8e572719f2606e42d2f0ba1c2986a5fe0e100c1706b72e5dae"
+        },
+        {
+          "path": "common/buildings/zw_cpc_02_agro.txt",
+          "id": "building_livestock_ranch",
+          "operation": "INJECT_OR_CREATE",
+          "line": 81,
+          "sha256": "721e9c6e42cd4c8e572719f2606e42d2f0ba1c2986a5fe0e100c1706b72e5dae"
+        },
+        {
+          "path": "common/buildings/zw_cpc_03_mines.txt",
+          "id": "building_coal_mine",
+          "operation": "INJECT_OR_CREATE",
+          "line": 1,
+          "sha256": "09c96f470fb7a87d3def3815713d2468370e5255eedec67020f0aa58f68398f3"
+        },
+        {
+          "path": "common/buildings/zw_cpc_03_mines.txt",
+          "id": "building_iron_mine",
+          "operation": "INJECT_OR_CREATE",
+          "line": 10,
+          "sha256": "09c96f470fb7a87d3def3815713d2468370e5255eedec67020f0aa58f68398f3"
+        },
+        {
+          "path": "common/buildings/zw_cpc_03_mines.txt",
+          "id": "building_lead_mine",
+          "operation": "INJECT_OR_CREATE",
+          "line": 19,
+          "sha256": "09c96f470fb7a87d3def3815713d2468370e5255eedec67020f0aa58f68398f3"
+        },
+        {
+          "path": "common/buildings/zw_cpc_03_mines.txt",
+          "id": "building_sulfur_mine",
+          "operation": "INJECT_OR_CREATE",
+          "line": 28,
+          "sha256": "09c96f470fb7a87d3def3815713d2468370e5255eedec67020f0aa58f68398f3"
+        },
+        {
+          "path": "common/buildings/zw_cpc_03_mines.txt",
+          "id": "building_gold_mine",
+          "operation": "INJECT_OR_CREATE",
+          "line": 37,
+          "sha256": "09c96f470fb7a87d3def3815713d2468370e5255eedec67020f0aa58f68398f3"
+        },
+        {
+          "path": "common/buildings/zw_cpc_04_plantations.txt",
+          "id": "building_coffee_plantation",
+          "operation": "INJECT_OR_CREATE",
+          "line": 1,
+          "sha256": "312a5037b26a7b429cf98c580a8f405c91dd56ef65ef16da9e78d33451852f7d"
+        },
+        {
+          "path": "common/buildings/zw_cpc_04_plantations.txt",
+          "id": "building_cotton_plantation",
+          "operation": "INJECT_OR_CREATE",
+          "line": 17,
+          "sha256": "312a5037b26a7b429cf98c580a8f405c91dd56ef65ef16da9e78d33451852f7d"
+        },
+        {
+          "path": "common/buildings/zw_cpc_04_plantations.txt",
+          "id": "building_dye_plantation",
+          "operation": "INJECT_OR_CREATE",
+          "line": 33,
+          "sha256": "312a5037b26a7b429cf98c580a8f405c91dd56ef65ef16da9e78d33451852f7d"
+        },
+        {
+          "path": "common/buildings/zw_cpc_04_plantations.txt",
+          "id": "building_opium_plantation",
+          "operation": "REPLACE",
+          "line": 50,
+          "sha256": "312a5037b26a7b429cf98c580a8f405c91dd56ef65ef16da9e78d33451852f7d"
+        },
+        {
+          "path": "common/buildings/zw_cpc_04_plantations.txt",
+          "id": "building_tea_plantation",
+          "operation": "INJECT_OR_CREATE",
+          "line": 99,
+          "sha256": "312a5037b26a7b429cf98c580a8f405c91dd56ef65ef16da9e78d33451852f7d"
+        },
+        {
+          "path": "common/buildings/zw_cpc_04_plantations.txt",
+          "id": "building_tobacco_plantation",
+          "operation": "INJECT_OR_CREATE",
+          "line": 115,
+          "sha256": "312a5037b26a7b429cf98c580a8f405c91dd56ef65ef16da9e78d33451852f7d"
+        },
+        {
+          "path": "common/buildings/zw_cpc_04_plantations.txt",
+          "id": "building_sugar_plantation",
+          "operation": "INJECT_OR_CREATE",
+          "line": 131,
+          "sha256": "312a5037b26a7b429cf98c580a8f405c91dd56ef65ef16da9e78d33451852f7d"
+        },
+        {
+          "path": "common/buildings/zw_cpc_04_plantations.txt",
+          "id": "building_banana_plantation",
+          "operation": "INJECT_OR_CREATE",
+          "line": 147,
+          "sha256": "312a5037b26a7b429cf98c580a8f405c91dd56ef65ef16da9e78d33451852f7d"
+        },
+        {
+          "path": "common/buildings/zw_cpc_04_plantations.txt",
+          "id": "building_silk_plantation",
+          "operation": "INJECT_OR_CREATE",
+          "line": 163,
+          "sha256": "312a5037b26a7b429cf98c580a8f405c91dd56ef65ef16da9e78d33451852f7d"
+        },
+        {
+          "path": "common/buildings/zw_cpc_04_plantations.txt",
+          "id": "building_vineyard",
+          "operation": "INJECT_OR_CREATE",
+          "line": 179,
+          "sha256": "312a5037b26a7b429cf98c580a8f405c91dd56ef65ef16da9e78d33451852f7d"
+        },
+        {
+          "path": "common/buildings/zw_cpc_06_urban_center.txt",
+          "id": "building_art_academy",
+          "operation": "INJECT_OR_CREATE",
+          "line": 1,
+          "sha256": "3ef7e7d252929d1234dcde5b4b58636c7f10fc22d8637e4e08a7fc96d2f838dc"
+        },
+        {
+          "path": "common/buildings/zw_cpc_06_urban_center.txt",
+          "id": "building_power_plant",
+          "operation": "INJECT_OR_CREATE",
+          "line": 17,
+          "sha256": "3ef7e7d252929d1234dcde5b4b58636c7f10fc22d8637e4e08a7fc96d2f838dc"
+        },
+        {
+          "path": "common/buildings/zw_cpc_09_misc_resource.txt",
+          "id": "building_logging_camp",
+          "operation": "INJECT_OR_CREATE",
+          "line": 1,
+          "sha256": "6f4a3083f5d8e10e26a555ef8197330b99b4920b706d78f1a9f90f8d99215b63"
+        },
+        {
+          "path": "common/buildings/zw_cpc_09_misc_resource.txt",
+          "id": "building_rubber_plantation",
+          "operation": "INJECT_OR_CREATE",
+          "line": 10,
+          "sha256": "6f4a3083f5d8e10e26a555ef8197330b99b4920b706d78f1a9f90f8d99215b63"
+        },
+        {
+          "path": "common/buildings/zw_cpc_09_misc_resource.txt",
+          "id": "building_fishing_wharf",
+          "operation": "INJECT_OR_CREATE",
+          "line": 19,
+          "sha256": "6f4a3083f5d8e10e26a555ef8197330b99b4920b706d78f1a9f90f8d99215b63"
+        },
+        {
+          "path": "common/buildings/zw_cpc_09_misc_resource.txt",
+          "id": "building_whaling_station",
+          "operation": "INJECT_OR_CREATE",
+          "line": 28,
+          "sha256": "6f4a3083f5d8e10e26a555ef8197330b99b4920b706d78f1a9f90f8d99215b63"
+        },
+        {
+          "path": "common/buildings/zw_cpc_09_misc_resource.txt",
+          "id": "building_oil_rig",
+          "operation": "INJECT_OR_CREATE",
+          "line": 38,
+          "sha256": "6f4a3083f5d8e10e26a555ef8197330b99b4920b706d78f1a9f90f8d99215b63"
+        },
+        {
+          "path": "common/buildings/zw_cpc_11_private_infrastructure.txt",
+          "id": "building_port",
+          "operation": "INJECT_OR_CREATE",
+          "line": 1,
+          "sha256": "c9b09cb272d875d0593993d699a84ac18d3c1f92877aa5feaa101181b0aebea7"
+        },
+        {
+          "path": "common/buildings/zw_cpc_11_private_infrastructure.txt",
+          "id": "building_railway",
+          "operation": "INJECT_OR_CREATE",
+          "line": 18,
+          "sha256": "c9b09cb272d875d0593993d699a84ac18d3c1f92877aa5feaa101181b0aebea7"
+        },
+        {
+          "path": "common/buildings/zw_cpc_11_private_infrastructure.txt",
+          "id": "building_trade_center",
+          "operation": "REPLACE",
+          "line": 35,
+          "sha256": "c9b09cb272d875d0593993d699a84ac18d3c1f92877aa5feaa101181b0aebea7"
+        },
+        {
+          "path": "common/scripted_triggers/zw_cpc_triggers_auto_expand.txt",
+          "id": "default_auto_expand_rule",
+          "operation": "REPLACE",
+          "line": 2,
+          "sha256": "b097556cc98faa526bcf8db3f2d561761684af16671b17428437c219e103a429"
+        }
+      ],
+      "file_count": 16,
+      "declared_metadata": {
+        "name": "Controllable Private Construction",
+        "version": "z.260512.1",
+        "supported_game_version": ""
+      }
+    },
+    {
+      "folder": "3279201462_Auto-Recruit_One-Click_Recruit_Commanders",
+      "found": true,
+      "same_path_as_vanilla": [],
+      "entries_also_in_vanilla": [],
+      "file_count": 8,
+      "declared_metadata": {
+        "name": "Auto-Recruit & One-Click Recruit Commanders",
+        "version": "z.260606.1",
+        "supported_game_version": ""
+      }
+    },
+    {
+      "folder": "3344726320_Auto-Apply_Automation_PMs",
+      "found": true,
+      "same_path_as_vanilla": [],
+      "entries_also_in_vanilla": [],
+      "file_count": 10,
+      "declared_metadata": {
+        "name": "Auto-Apply Automation PMs",
+        "version": "z.260514.1",
+        "supported_game_version": ""
+      }
+    },
+    {
+      "folder": "3353797125_Auto-Apply_PMs",
+      "found": true,
+      "same_path_as_vanilla": [],
+      "entries_also_in_vanilla": [],
+      "file_count": 55,
+      "declared_metadata": {
+        "name": "Auto-Apply PMs",
+        "version": "z.260514.1",
+        "supported_game_version": ""
+      }
+    },
+    {
+      "folder": "3357811223_Supply_Chain_Semi-Auto_Builder",
+      "found": true,
+      "same_path_as_vanilla": [],
+      "entries_also_in_vanilla": [],
+      "file_count": 22,
+      "declared_metadata": {
+        "name": "Supply Chain Semi-Auto Builder",
+        "version": "z.260702.1",
+        "supported_game_version": ""
+      }
+    },
+    {
+      "folder": "3432933121_Auto-Diplomacy_And_Advanced_Subject_Management",
+      "found": true,
+      "same_path_as_vanilla": [],
+      "entries_also_in_vanilla": [],
+      "file_count": 14,
+      "declared_metadata": {
+        "name": "Auto-Diplomacy And Advanced Subject Management",
+        "version": "z.251212.1",
+        "supported_game_version": ""
+      }
+    },
+    {
+      "folder": "2934542706_Government_Administration_Auto_Expand",
+      "found": true,
+      "same_path_as_vanilla": [],
+      "entries_also_in_vanilla": [
+        {
+          "path": "common/buildings/z0z_government.txt",
+          "id": "building_government_administration",
+          "operation": "REPLACE",
+          "line": 1,
+          "sha256": "44357766ee25328d792586f8bc1601a846e3af95bda106acdd3c58008d756111"
+        },
+        {
+          "path": "common/trigger_localization/z0z_gov_trigger_localization.txt",
+          "id": "tax_capacity_less_than",
+          "operation": "definition",
+          "line": 1,
+          "sha256": "affea5b5c1740049c9d5b24dc7c9a7e9879e8596b761cd6120115ac826404040"
+        }
+      ],
+      "file_count": 2,
+      "declared_metadata": {
+        "name": "Government Administration Auto Expand",
+        "version": "",
+        "supported_game_version": ""
+      }
+    },
+    {
+      "folder": "3778129206_Economy_Advisor",
+      "found": true,
+      "same_path_as_vanilla": [],
+      "entries_also_in_vanilla": [
+        {
+          "path": "common/on_actions/advisor_on_actions.txt",
+          "id": "on_monthly_pulse_country",
+          "operation": "definition",
+          "line": 2,
+          "sha256": "4e8476acd7f4c0a094601ebbe0bdefe7cd2bebf41f688b8d5b37526a383f866c"
+        }
+      ],
+      "file_count": 32,
+      "declared_metadata": {
+        "name": "Economy Advisor",
+        "version": "1.0.0",
+        "supported_game_version": "1.15.*"
+      }
+    },
+    {
+      "folder": "ARoAI-1.3.5",
+      "found": true,
+      "same_path_as_vanilla": [],
+      "entries_also_in_vanilla": [
+        {
+          "path": "common/defines/aroai_defines.txt",
+          "id": "NAI",
+          "operation": "definition",
+          "line": 1,
+          "sha256": "c738ae30b19d41f638a2a4868efd88caf0c41fb3e1ff3266caf097311fbc4e25"
+        },
+        {
+          "path": "common/history/global/aroai_global.txt",
+          "id": "GLOBAL",
+          "operation": "definition",
+          "line": 1,
+          "sha256": "7513b5dc3f93cfbbcfbdadfef5b7541a655d1c087e9e8517761647441851517b"
+        },
+        {
+          "path": "common/on_actions/aroai_on_actions.txt",
+          "id": "on_monthly_pulse_country",
+          "operation": "definition",
+          "line": 1,
+          "sha256": "5f94720c1e70bdf07ba70ad6ebc12f3ec34d87f40f2f69578794fe9770e19103"
+        },
+        {
+          "path": "common/production_methods/aroai_government.txt",
+          "id": "pm_anchorage",
+          "operation": "definition",
+          "line": 1,
+          "different_token_fields_from_vanilla": [
+            "ai_value",
+            "building_modifiers",
+            "country_modifiers",
+            "state_modifiers"
+          ],
+          "sha256": "16ba37138ce4e9c5e8e03d248191310ef78b8f9d9026ad60844f7556b150fe4f"
+        },
+        {
+          "path": "common/production_methods/aroai_government.txt",
+          "id": "pm_basic_port",
+          "operation": "definition",
+          "line": 29,
+          "different_token_fields_from_vanilla": [
+            "ai_value",
+            "building_modifiers",
+            "country_modifiers",
+            "state_modifiers"
+          ],
+          "sha256": "16ba37138ce4e9c5e8e03d248191310ef78b8f9d9026ad60844f7556b150fe4f"
+        },
+        {
+          "path": "common/production_methods/aroai_government.txt",
+          "id": "pm_industrial_port",
+          "operation": "definition",
+          "line": 57,
+          "different_token_fields_from_vanilla": [
+            "ai_value",
+            "building_modifiers",
+            "country_modifiers",
+            "state_modifiers"
+          ],
+          "sha256": "16ba37138ce4e9c5e8e03d248191310ef78b8f9d9026ad60844f7556b150fe4f"
+        },
+        {
+          "path": "common/production_methods/aroai_government.txt",
+          "id": "pm_modern_port",
+          "operation": "definition",
+          "line": 91,
+          "different_token_fields_from_vanilla": [
+            "ai_value",
+            "building_modifiers",
+            "country_modifiers",
+            "state_modifiers"
+          ],
+          "sha256": "16ba37138ce4e9c5e8e03d248191310ef78b8f9d9026ad60844f7556b150fe4f"
+        },
+        {
+          "path": "common/production_methods/aroai_government.txt",
+          "id": "pm_simple_organization",
+          "operation": "definition",
+          "line": 124,
+          "different_token_fields_from_vanilla": [
+            "ai_value",
+            "building_modifiers",
+            "country_modifiers",
+            "state_modifiers"
+          ],
+          "sha256": "16ba37138ce4e9c5e8e03d248191310ef78b8f9d9026ad60844f7556b150fe4f"
+        },
+        {
+          "path": "common/production_methods/aroai_government.txt",
+          "id": "pm_horizontal_drawer_cabinets",
+          "operation": "definition",
+          "line": 149,
+          "different_token_fields_from_vanilla": [
+            "ai_value",
+            "building_modifiers"
+          ],
+          "sha256": "16ba37138ce4e9c5e8e03d248191310ef78b8f9d9026ad60844f7556b150fe4f"
+        },
+        {
+          "path": "common/production_methods/aroai_government.txt",
+          "id": "pm_vertical_filing_cabinets",
+          "operation": "definition",
+          "line": 181,
+          "different_token_fields_from_vanilla": [
+            "ai_value",
+            "building_modifiers"
+          ],
+          "sha256": "16ba37138ce4e9c5e8e03d248191310ef78b8f9d9026ad60844f7556b150fe4f"
+        },
+        {
+          "path": "common/production_methods/aroai_government.txt",
+          "id": "pm_switch_boards",
+          "operation": "definition",
+          "line": 212,
+          "different_token_fields_from_vanilla": [
+            "ai_value",
+            "building_modifiers"
+          ],
+          "sha256": "16ba37138ce4e9c5e8e03d248191310ef78b8f9d9026ad60844f7556b150fe4f"
+        },
+        {
+          "path": "common/production_methods/aroai_government.txt",
+          "id": "pm_scholastic_education",
+          "operation": "definition",
+          "line": 245,
+          "different_token_fields_from_vanilla": [
+            "ai_value",
+            "building_modifiers",
+            "country_modifiers"
+          ],
+          "sha256": "16ba37138ce4e9c5e8e03d248191310ef78b8f9d9026ad60844f7556b150fe4f"
+        },
+        {
+          "path": "common/production_methods/aroai_government.txt",
+          "id": "pm_philosophy_department",
+          "operation": "definition",
+          "line": 274,
+          "different_token_fields_from_vanilla": [
+            "ai_value",
+            "building_modifiers",
+            "country_modifiers"
+          ],
+          "sha256": "16ba37138ce4e9c5e8e03d248191310ef78b8f9d9026ad60844f7556b150fe4f"
+        },
+        {
+          "path": "common/production_methods/aroai_government.txt",
+          "id": "pm_analytical_philosophy_department",
+          "operation": "definition",
+          "line": 307,
+          "different_token_fields_from_vanilla": [
+            "ai_value",
+            "building_modifiers",
+            "country_modifiers"
+          ],
+          "sha256": "16ba37138ce4e9c5e8e03d248191310ef78b8f9d9026ad60844f7556b150fe4f"
+        },
+        {
+          "path": "common/production_methods/aroai_industry.txt",
+          "id": "pm_forest_glass",
+          "operation": "definition",
+          "line": 1,
+          "different_token_fields_from_vanilla": [
+            "ai_value",
+            "building_modifiers"
+          ],
+          "sha256": "abe214056425605ef78666c96b229aded52225772d043e441d481879415fa10e"
+        },
+        {
+          "path": "common/production_methods/aroai_industry.txt",
+          "id": "pm_leaded_glass",
+          "operation": "definition",
+          "line": 21,
+          "different_token_fields_from_vanilla": [
+            "ai_value",
+            "building_modifiers",
+            "pollution_generation",
+            "state_modifiers"
+          ],
+          "sha256": "abe214056425605ef78666c96b229aded52225772d043e441d481879415fa10e"
+        },
+        {
+          "path": "common/production_methods/aroai_industry.txt",
+          "id": "pm_crystal_glass",
+          "operation": "definition",
+          "line": 48,
+          "different_token_fields_from_vanilla": [
+            "ai_value",
+            "building_modifiers",
+            "pollution_generation",
+            "state_modifiers"
+          ],
+          "sha256": "abe214056425605ef78666c96b229aded52225772d043e441d481879415fa10e"
+        },
+        {
+          "path": "common/production_methods/aroai_industry.txt",
+          "id": "pm_houseware_plastics",
+          "operation": "definition",
+          "line": 75,
+          "different_token_fields_from_vanilla": [
+            "ai_value",
+            "building_modifiers",
+            "pollution_generation",
+            "state_modifiers"
+          ],
+          "sha256": "abe214056425605ef78666c96b229aded52225772d043e441d481879415fa10e"
+        },
+        {
+          "path": "common/production_methods/aroai_urban_center.txt",
+          "id": "pm_no_street_lighting",
+          "operation": "definition",
+          "line": 1,
+          "different_token_fields_from_vanilla": [
+            "ai_value",
+            "city_lights_color_index"
+          ],
+          "sha256": "a412ae533146815009033a6bfc54210b627f40892d158c0ffd93df3658f3a002"
+        },
+        {
+          "path": "common/production_methods/aroai_urban_center.txt",
+          "id": "pm_gas_streetlights",
+          "operation": "definition",
+          "line": 7,
+          "different_token_fields_from_vanilla": [
+            "ai_value",
+            "building_modifiers",
+            "city_lights_color_index",
+            "state_modifiers"
+          ],
+          "sha256": "a412ae533146815009033a6bfc54210b627f40892d158c0ffd93df3658f3a002"
+        },
+        {
+          "path": "common/production_methods/aroai_urban_center.txt",
+          "id": "pm_electric_streetlights",
+          "operation": "definition",
+          "line": 28,
+          "different_token_fields_from_vanilla": [
+            "ai_value",
+            "building_modifiers",
+            "city_lights_color_index",
+            "required_input_goods",
+            "state_modifiers"
+          ],
+          "sha256": "a412ae533146815009033a6bfc54210b627f40892d158c0ffd93df3658f3a002"
+        }
+      ],
+      "file_count": 34,
+      "declared_metadata": {
+        "name": "Anbeeld's Revision of AI",
+        "version": "",
+        "supported_game_version": ""
+      }
+    },
+    {
+      "folder": "Smart Government Advisor",
+      "found": true,
+      "same_path_as_vanilla": [],
+      "entries_also_in_vanilla": [
+        {
+          "path": "common/on_actions/sg_on_actions.txt",
+          "id": "on_game_started_after_lobby",
+          "operation": "definition",
+          "line": 4,
+          "sha256": "83b63ced8897ac00d1b22f4537eca403db3e901698e5877d1569b673105cefb2"
+        },
+        {
+          "path": "common/on_actions/sg_on_actions.txt",
+          "id": "on_monthly_pulse_country",
+          "operation": "definition",
+          "line": 8,
+          "sha256": "83b63ced8897ac00d1b22f4537eca403db3e901698e5877d1569b673105cefb2"
+        }
+      ],
+      "file_count": 12,
+      "declared_metadata": {
+        "name": "Smart Government Advisor",
+        "version": "1.0.0",
+        "supported_game_version": "1.15.*"
+      }
+    }
+  ],
+  "shared_top_level_entries": [
+    {
+      "category": "on_actions",
+      "id": "on_monthly_pulse_country",
+      "providers": [
+        {
+          "mod": "3778129206_Economy_Advisor",
+          "path": "common/on_actions/advisor_on_actions.txt",
+          "id": "on_monthly_pulse_country",
+          "operation": "definition",
+          "line": 2
+        },
+        {
+          "mod": "ARoAI-1.3.5",
+          "path": "common/on_actions/aroai_on_actions.txt",
+          "id": "on_monthly_pulse_country",
+          "operation": "definition",
+          "line": 1
+        },
+        {
+          "mod": "Smart Government Advisor",
+          "path": "common/on_actions/sg_on_actions.txt",
+          "id": "on_monthly_pulse_country",
+          "operation": "definition",
+          "line": 8
+        }
+      ]
+    }
+  ],
+  "kuromi_archive": {
+    "archive": "3227982912_Kuromi__x27_s_AI.zip",
+    "metadata": {
+      "name": "Kuromi's AI",
+      "id": "kai.kuromi",
+      "version": "8.0",
+      "supported_game_version": "1.15.*",
+      "short_description": "A mod that improves AI's behavior.",
+      "tags": [],
+      "relationships": [],
+      "game_custom_data": {
+        "multiplayer_synchronized": true
+      }
+    },
+    "inspected_as_archive_only": true,
+    "entries_also_in_enabled_mods": [
+      {
+        "category": "buildings",
+        "path": "common/buildings/kai_buildings.txt",
+        "id": "building_government_administration",
+        "operation": "INJECT",
+        "line": 1,
+        "enabled_providers": [
+          "2934542706_Government_Administration_Auto_Expand"
+        ]
+      },
+      {
+        "category": "defines",
+        "path": "common/defines/kai_ai.txt",
+        "id": "NAI",
+        "operation": "definition",
+        "line": 1,
+        "enabled_providers": [
+          "ARoAI-1.3.5"
+        ]
+      }
+    ]
+  },
+  "saves": [
+    {
+      "file": "haiti_1836_06_30.v3",
+      "gamestate_sha256": "15b57211dd671a69285b0767767c06028bf16f7e34f32670f9c0156263781a3c",
+      "encoding": "binary",
+      "automation_state": "unverified_requires_country_scoped_decode",
+      "marker_occurrences_not_active_flags": {
+        "advisor_enabled": 1,
+        "advisor_auto_construction_enabled": 1,
+        "advisor_labor_auto_enabled": 1,
+        "advisor_pm_balance_enabled": 1
+      },
+      "kuromi_name_present_not_proof_of_current_load_order": true
+    }
+  ],
+  "parse_issues": [
+    {
+      "source": "vanilla",
+      "path": "common/dna_data/00_bal_gangadhar_tilak.txt",
+      "error": "Unbalanced opening brace"
+    },
+    {
+      "source": "vanilla",
+      "path": "common/dna_data/00_iwasaki_yataro.txt",
+      "error": "Unbalanced opening brace"
+    },
+    {
+      "source": "vanilla",
+      "path": "common/dna_data/00_mahatma_gandhi.txt",
+      "error": "Unbalanced opening brace"
+    },
+    {
+      "source": "vanilla",
+      "path": "common/dna_data/00_rani_lakshmibai.txt",
+      "error": "Unbalanced opening brace"
+    },
+    {
+      "source": "vanilla",
+      "path": "common/dna_data/00_sarojni_naidu.txt",
+      "error": "Unbalanced opening brace"
+    },
+    {
+      "source": "vanilla",
+      "path": "common/dna_data/00_zhou_xuexi.txt",
+      "error": "Unbalanced opening brace"
+    }
+  ]
+}

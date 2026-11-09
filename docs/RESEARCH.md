@@ -45,7 +45,9 @@ testes em `tests/test_advisor_generation.py`, o validador, as duas localizaçõe
 o descriptor e o instalador fornecem referências de organização. A documentação
 registra falhas reais da engine: BOM, define com namespace, nomes de listas e
 propriedades GUI inválidas. Portanto, validação textual não substitui runtime.
-Não foram executados novamente os testes do Smart Government nesta pesquisa.
+Na continuação local, os 26 testes de leis passaram novamente. O validador
+completo encontrou 178 erros no módulo de pesquisa tecnológica da referência;
+o resultado está detalhado em LOCAL_AUDIT.md. O Director não modifica esse mod.
 
 ## Economy Advisor: sobreposição comprovada nos arquivos
 
@@ -122,13 +124,18 @@ explicável. Há mecanismos de execução, mas coexistência segura depende da f
 completa e de escolher quem executa. Replicar o construtor/PM do Advisor agora
 duplicaria funções já existentes. A arquitetura proposta está em ARCHITECTURE.md.
 
-A Fase 0 permanece aberta até: mapear as primitivas pendentes acima; verificar
-flags das automações no save Haiti; auditar todos os caminhos relevantes de PMs
-e construção; examinar Kuromi no ZIP; comparar identificadores e overrides;
-validar como consultar fila por estado/tipo, incluindo projetos privados; medir
-custo das consultas; conferir bindings GUI na instalação 1.15. Não há autorização
-técnica para tratar essas lacunas como dados iguais a zero. A Fase 1 só começa
-após esse fechamento e apresentação das conclusões.
+A continuação produziu [LOCAL_AUDIT.md](LOCAL_AUDIT.md), incluindo Kuromi,
+redefinições por ID e leitura da fila usada pelo Advisor, e uma
+[matriz por indicador](METRICS.md) com fontes de GUI encontradas na instalação.
+A ferramenta e o JSON permitem reproduzir a inspeção sem modificar os fontes.
+
+A Fase 0 permanece aberta: o estado das automações por país não foi decodificado
+do save binário; a cobertura da fila privada e de primeira construção requer
+teste no motor; faltam fontes diretas de script para algumas métricas, além de
+medição de desempenho. As leituras e bindings do núcleo de diagnóstico foram
+identificados em fontes, mas ainda não comparados em campanha. Não tratar
+essas lacunas como dados iguais a zero. A Fase 1 só começa após fechar o
+diagnóstico técnico necessário e apresentar suas conclusões.
 
 ## Pesquisa anterior preservada
 

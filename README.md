@@ -20,6 +20,9 @@ Nenhuma integração direta com outros mods foi comprovada.
 - [Registro de fases](docs/PHASE_LOG.md)
 - [Procedimento de testes de campanha](docs/MANUAL_RUNTIME_TEST.md)
 - [Inventário de evidências locais](docs/SOURCE_INVENTORY.json)
+- [Auditoria local de mods e saves](docs/LOCAL_AUDIT.md)
+- [Métricas, escopos e funções de interface](docs/METRICS.md)
+- [Relatório reproduzível da auditoria](docs/ENVIRONMENT_AUDIT.json)
 
 O desenvolvimento seguirá as fases do documento original. A próxima entrega é
 concluir as verificações pendentes da pesquisa; depois, implementar apenas o
@@ -27,3 +30,10 @@ diagnóstico econômico, sem ações automáticas.
 
 A [pesquisa anterior na nuvem](docs/RESEARCH_CLOUD.md) e as
 [instruções de continuidade local](docs/LOCAL_CODEX.md) também foram preservadas.
+
+A auditoria local encontrou definições de produção do ARoAI diferentes do jogo
+1.15 e requisitos de construção introduzidos por outros mods. O save Haiti é
+binário: opções ativas ainda exigem leitura estruturada ou conferência no jogo.
+Os nove testes da ferramenta de pesquisa passaram. Há também 26 testes de leis
+aprovados na referência, mas seu validador completo aponta 178 erros no módulo
+de pesquisa tecnológica; isso não constitui validação do Director.

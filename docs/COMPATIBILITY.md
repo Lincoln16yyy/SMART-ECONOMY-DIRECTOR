@@ -13,8 +13,8 @@ com o Director, que ainda não tem código executável.
 | Auto-Apply Automation PMs | Habilitado; JE mensal usa `zw_trigger_aaap_state_workforce_low`, transporte e flags de automação | Considera escassez de mão de obra e preços em caminhos examinados; algumas verificações estão comentadas. Não há garantia de segurança uniforme |
 | Auto-Diplomacy and Advanced Subject Management | Habilitado; decisões, ações diplomáticas, efeitos de relações/súditos e leis | Auditoria inicial de estrutura; acompanhar efeitos fiscais sem controlar diplomacia |
 | Auto-Recruit & One-Click Recruit Commanders | Habilitado; decisões, JE, efeitos de recrutamento | Auditoria inicial de estrutura; reservar capacidade fiscal sem iniciar expansão militar |
-| Kuromi's AI | ZIP em Downloads, ausente da lista habilitada e da pasta ativa encontrada | Conteúdo e efeito sobre jogador ainda pendentes; não confundir com ARoAI |
-| ARoAI 1.3.5 | Habilitado; scripts próprios de construção, orçamento, PMs e condições `is_player` | Amplia a auditoria necessária; não concluir que só afeta IA pelo nome |
+| Kuromi's AI | ZIP examinado: versão 8.0, declara 1.15.*; ausente da lista atual, nome presente no save Haiti antigo | Injeções de buildings e pesos de IA; não foi encontrado construtor independente do jogador. Reativação exige rever administração e defines |
+| ARoAI 1.3.5 | Habilitado; 18 PMs vanilla redefinidos, inclusive dados econômicos; autobuild para jogador condicionado a regra e variável | Catálogo vanilla fixo pode divergir; confirmar `aroai_autobuild` no país antes de permitir outro construtor |
 | Controllable Private Construction | Habilitado; redefine buildings, decretos e triggers de expansão | Ler definições efetivas; catálogo vanilla isolado pode estar incorreto |
 | Government Administration Auto Expand | Habilitado; arquivo `common/buildings/z0z_government.txt` | Pode ampliar administração; coordenar com Advisor e Supply Chain |
 | Private Investments Only Expand Existing Buildings | Instalado, ausente da lista habilitada | Altera buildings quando ligado; não pressupor regras de investimento vanilla |
@@ -32,5 +32,9 @@ que todo upgrade verifica insumos e lucratividade. O Director deve reavaliar
 seus indicadores depois dessas mudanças, sem tentar revertê-las em disputa.
 
 Integração segura proposta: coexistência por responsabilidade configurada e
-leitura independente dos dados do jogo. Pendente: diff de identificadores,
-overrides efetivos, ordem de carregamento e testes combinados em cópias de saves.
+leitura independente dos dados do jogo. A comparação estática de identificadores
+e operações de injeção está em [LOCAL_AUDIT.md](LOCAL_AUDIT.md), com
+[resultado estruturado](ENVIRONMENT_AUDIT.json). Um caminho diferente do vanilla
+não impede redefinição por ID. A auditoria não simula a resolução final da engine.
+Continuam pendentes opções ativas no país, definições efetivamente carregadas
+e testes combinados em cópias de saves.
