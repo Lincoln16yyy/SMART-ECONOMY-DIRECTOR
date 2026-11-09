@@ -1,4 +1,4 @@
-# Plano de testes de campanha — validação das ações 0.3.1 pendente
+# Plano de testes de campanha — validação das ações 0.3.2 pendente
 
 O jogador confirmou em campanha a interface e as leituras principais da 0.1.0,
 a renderização das seções ferroviária e de capacidade de construção vazias na
@@ -123,7 +123,9 @@ infraestrutura é dividido em sem ferrovia, ferrovia não operante e bloqueados
 por incorporação ou permissão; na capacidade de construção, o total de
 estados com setor é dividido em setor não operante e bloqueados. Cada estado
 entra em um único motivo, e as contagens somam o total exibido. Os contadores
-são zerados a cada leitura.
+são zerados a cada leitura. A atualização, a agenda sob solicitação, a
+desativação e a apresentação do candidato de construção foram confirmadas
+em campanha; a linha de motivos visível e o clique de aprovação ainda não.
 
 | Ação | Resultado a conferir |
 | --- | --- |
@@ -136,6 +138,29 @@ são zerados a cada leitura.
 Registrar totais e parcelas de cada seção, data da leitura e se a linha
 sumiu quando surgiu candidato. A decomposição descreve os filtros atuais;
 não estima custo, prazo ou retorno.
+
+## Checklist do motivo do botão bloqueado 0.3.2
+
+Quando um candidato está listado, mas o botão de aprovar está
+bloqueado, uma linha sob o botão nomeia a primeira guarda que falha: jogo
+rodando, fila pública abaixo de três projetos (apenas construção), fila
+privada não vazia, inadimplência ou saldo semanal negativo. O jogador
+clicou com fila privada de 2 projetos e apenas o tooltip com cadeado
+indicou o bloqueio, sem dizer qual trava falhava; a 0.3.2 deve mostrar
+“Botão bloqueado: há níveis na fila privada” nesse cenário.
+
+| Ação | Resultado a conferir |
+| --- | --- |
+| Abrir o candidato com fila privada não vazia | Linha de motivo indica a fila privada |
+| Esvaziar a fila privada, pausar e reabrir/atualizar | Linha some e o botão fica clicável |
+| Testar com o jogo rodando | Linha indica que o jogo precisa estar pausado |
+| Testar em inadimplência ou saldo negativo | Linha indica inadimplência ou saldo, nessa ordem |
+| Na construção, reduzir a fila pública para menos de três | Linha indica a fila pública |
+| Aprovar com fila privada vazia e jogo pausado | Nível entra na fila pública; aviso confirma; sem repetição automática |
+
+Depois dessa conferência, os pontos restantes são desativação (já uma vez
+confirmada), save/recarregar e a convivência com os outros construtores
+antes de ampliar os tipos de ação.
 
 ## Cenários econômicos
 
