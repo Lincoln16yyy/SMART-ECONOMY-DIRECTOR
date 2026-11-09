@@ -71,6 +71,14 @@ sed_construction_blocked_balance_sgui = {
  scope = state
  is_shown = { sed_construction_candidate_eligible = yes is_game_paused = yes owner = { num_queued_government_constructions >= 3 construction_queue_num_queued_private_levels = 0 NOT = { in_default = yes } net_total_income < 0 } }
 }
+sed_railway_stale_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_railway_candidate_eligible = yes } }
+}
+sed_construction_stale_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_construction_candidate_eligible = yes } }
+}
 sed_monthly_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable = sed_monthly_refresh }

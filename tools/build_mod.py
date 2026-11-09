@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.3.2'
+VERSION = '0.3.3'
 STATE_VARIABLES = ['sed_railway_request_pending', 'sed_construction_request_pending']
 EXTRA_VARIABLES = '''sed_last_year sed_last_month sed_month_key sed_in_default
 sed_gdp_per_capita sed_per_capita_available sed_debt_share sed_debt_share_available
@@ -106,7 +106,7 @@ def widget():
  visible = "[GetScriptedGui('sed_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_railway_candidates')]"
  addcolumn = 500
- addrow = 146
+ addrow = 166
  item = { sed_railway_candidate_item = {} }
 }
 '''
@@ -121,7 +121,7 @@ def widget():
  visible = "[GetScriptedGui('sed_construction_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_construction_candidates')]"
  addcolumn = 500
- addrow = 146
+ addrow = 166
  item = { sed_construction_candidate_item = {} }
 }
 '''
@@ -134,7 +134,7 @@ def widget():
   spacing = 4
   widget = {
    datacontext = "[Scope.GetState]"
-   size = { 500 140 }
+   size = { 500 160 }
    background = { using = dark_area }
    flowcontainer = {
     position = { 8 4 }
@@ -202,6 +202,15 @@ def widget():
      minimumsize = { 480 -1 }
      text = "sed_railway_blocked_balance"
     }
+    textbox = {
+     visible = "[GetScriptedGui('sed_railway_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_railway_stale"
+    }
    }
   }
  }
@@ -210,7 +219,7 @@ def widget():
   spacing = 4
   widget = {
    datacontext = "[Scope.GetState]"
-   size = { 500 140 }
+   size = { 500 160 }
    background = { using = dark_area }
    flowcontainer = {
     position = { 8 4 }
@@ -286,6 +295,15 @@ def widget():
      using = fontsize_small
      minimumsize = { 480 -1 }
      text = "sed_construction_blocked_balance"
+    }
+    textbox = {
+     visible = "[GetScriptedGui('sed_construction_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_construction_stale"
     }
    }
   }
@@ -638,6 +656,10 @@ sed_approve_construction_sgui = {
         for guard, condition in guards.items():
             result += (f'sed_{action}_blocked_{guard}_sgui = {{\n scope = state\n'
                        f' is_shown = {{ sed_{action}_candidate_eligible = yes {condition} }}\n}}\n')
+    for action in ('railway', 'construction'):
+        result += (f'sed_{action}_stale_sgui = {{\n scope = state\n'
+                   f' is_shown = {{ owner = {{ is_player = yes has_variable = sed_enabled }} '
+                   f'NOT = {{ sed_{action}_candidate_eligible = yes }} }}\n}}\n')
     conditions = {
         'monthly': 'has_variable = sed_monthly_refresh',
         'manual': 'NOT = { has_variable = sed_monthly_refresh }',
@@ -791,6 +813,7 @@ def localization(language):
         'sed_railway_blocked_private': ('Botão bloqueado: há níveis na fila privada.', 'Button blocked: the private queue has levels.'),
         'sed_railway_blocked_default': ('Botão bloqueado: o país está em inadimplência.', 'Button blocked: the country is in default.'),
         'sed_railway_blocked_balance': ('Botão bloqueado: saldo semanal negativo.', 'Button blocked: negative weekly balance.'),
+        'sed_railway_stale': ('Recomendação desatualizada ou já enfileirada. Atualize o diagnóstico para recalcular; nenhuma ação será executada enquanto os filtros não forem atendidos.', 'This recommendation is stale or already queued. Refresh the diagnosis to recalculate; no action runs unless the filters pass.'),
         'sed_railway_action_success': ('Pedido adicionado à fila pública. Confira os custos e o prazo na fila do jogo.', 'Request added to the government queue. Review cost and timing in the game queue.'),
         'sed_railway_action_failed': ('A engine não confirmou a inclusão na fila. Nenhuma nova tentativa será automática.', 'The engine did not confirm the queue addition. No automatic retry will occur.'),
         'sed_construction_title': ('Capacidade de construção', 'Construction capacity'),
@@ -807,6 +830,7 @@ def localization(language):
         'sed_construction_blocked_private': ('Botão bloqueado: há níveis na fila privada.', 'Button blocked: the private queue has levels.'),
         'sed_construction_blocked_default': ('Botão bloqueado: o país está em inadimplência.', 'Button blocked: the country is in default.'),
         'sed_construction_blocked_balance': ('Botão bloqueado: saldo semanal negativo.', 'Button blocked: negative weekly balance.'),
+        'sed_construction_stale': ('Recomendação desatualizada ou já enfileirada. Atualize o diagnóstico para recalcular; nenhuma ação será executada enquanto os filtros não forem atendidos.', 'This recommendation is stale or already queued. Refresh the diagnosis to recalculate; no action runs unless the filters pass.'),
         'sed_construction_action_success': ('Pedido do setor de construção adicionado à fila pública. Confira os custos e o prazo na fila do jogo.', 'Construction sector request added to the government queue. Review cost and timing in the game queue.'),
         'sed_construction_action_failed': ('A engine não confirmou a inclusão do setor de construção na fila. Nenhuma nova tentativa será automática.', 'The engine did not confirm the construction sector queue addition. No automatic retry will occur.'),
         'sed_limitations': ('Protótipos limitados a ferrovias operantes com infraestrutura negativa e a setores de construção operantes com fila pública de ao menos três projetos. Não estima custo, contratação futura ou retorno. A aprovação apenas adiciona um nível à fila pública; os custos e o tempo dependem do jogo. Qualificações, salários, desempregados e dependência externa ainda não são medidos diretamente. Edifícios com contratação incompleta não equivalem a desempregados. As filas mostram projetos, não níveis nem custos futuros. A alfabetização segue a abrangência do indicador do jogo. Variações de PIB podem refletir mudanças de fronteira e mercado. O setor de construção depende de trabalhadores e insumos disponíveis; a recomendação não garante que o novo nível será contratado.', 'Prototypes limited to operating railways in states with negative infrastructure and operating construction sectors when the government queue has at least three projects. They do not estimate cost, future hiring, or returns. Approval only adds one level to the government queue; costs and timing depend on the game. Qualifications, wages, unemployed workers and external dependence are not directly measured. Incompletely staffed buildings are not a count of unemployed workers. Queues show projects, not levels or future costs. Literacy follows the game indicator’s coverage. GDP changes may reflect borders and markets. Construction sectors depend on available workers and inputs; the recommendation does not guarantee that the new level will be staffed.'),

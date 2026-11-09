@@ -4,7 +4,7 @@ O usuário solicitou seguir `Texto colado.txt` e ir publicando no GitHub
 `Lincoln16yyy/SMART-ECONOMY-DIRECTOR`. O conteúdo original está preservado
 integralmente em PROJECT_BRIEF.md. Leia-o antes de trabalhar.
 
-Fase atual: protótipo da Fase 2 em 0.3.2. O jogador confirmou em campanha a
+Fase atual: protótipo da Fase 2 em 0.3.3. O jogador confirmou em campanha a
 interface, os indicadores e a seção vazia de oportunidades. A 0.2.0 acrescentou
 até três recomendações ferroviárias e um botão para aprovar uma por vez; a
 0.2.1 explica se não há déficit de infraestrutura ou se há déficit sem
@@ -13,10 +13,12 @@ quando a fila pública tem pelo menos três projetos, mostra no máximo um setor
 de construção operante no estado mais populoso e permite enfileirar um nível
 após revalidação. A 0.3.1 acrescenta a decomposição dos motivos de rejeição por
 estado quando não há candidato; a 0.3.2 mostra sob o botão a primeira
-guarda que falha quando ele está bloqueado. A execução dos botões e a
-coexistência com mods ainda não foram validadas. Não há automação periódica.
-A versão 0.3.2 está instalada localmente e a suíte cobre os dois fluxos com
-46 testes. Em
+guarda que falha quando ele está bloqueado; a 0.3.3 explica quando um cartão
+antigo deixou de passar os filtros ou já foi enfileirado. A execução dos botões e
+a coexistência com mods ainda não foram validadas. Não há automação periódica.
+A versão 0.3.3 está instalada localmente. A suíte reportou 46 testes para os
+dois fluxos existentes; ela não cobre ainda o texto de recomendação
+desatualizada, e não foi executada nesta alteração. Em
 2026-11-08, o jogador enviou capturas das seções vazias em campanha
 (0.3.0 e 0.3.1, Império Otomano, 1/1836): estados vazios corretos nas duas
 seções e, na 0.3.1, a linha de motivos corretamente oculta sem déficit/fila
@@ -103,9 +105,9 @@ vazio, contagens disjuntas de rejeição, linhas de motivo do botão bloqueado,
 travas, confirmação/rejeição de fila e limpeza dos dois fluxos. Ele não
 confirma primitivas, datamodel nem GUI na engine.
 
-Próximos passos: pedir ao jogador uma conferência breve dos dois botões e da
-linha de motivos, em cópia de save, com o jogo pausado, seguindo os checklists
-da 0.3.0–0.3.2 em MANUAL_RUNTIME_TEST.md. Registrar se os estados aparecem, se
+Próximos passos: pedir ao jogador uma conferência breve dos dois botões e das
+linhas explicativas, em cópia de save, com o jogo pausado, seguindo os checklists
+da 0.3.0–0.3.3 em MANUAL_RUNTIME_TEST.md. Registrar se os estados aparecem, se
 as travas desabilitam os botões e se a fila pública ganha um único nível em
 cada tipo. Conferir também a linha de motivo sob o botão bloqueado. Não iniciar
 testes gráficos ocultos prolongados. Depois

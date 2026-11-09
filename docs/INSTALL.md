@@ -1,6 +1,6 @@
-# Instalação e uso — versão 0.3.2
+# Instalação e uso — versão 0.3.3
 
-Requer Victoria 3 1.15.x. A versão 0.3.2 mantém o diagnóstico e os dois
+Requer Victoria 3 1.15.x. A versão 0.3.3 mantém o diagnóstico e os dois
 protótipos de ação com aprovação individual — expansão ferroviária e ampliação
 de um setor de construção quando a fila pública está sobrecarregada — e
 acrescenta a decomposição dos motivos de rejeição quando não há candidato e
@@ -19,7 +19,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O resultado fica em `dist/smart-economy-director-0.3.2.zip`. O pacote contém
+O resultado fica em `dist/smart-economy-director-0.3.3.zip`. O pacote contém
 somente os arquivos carregáveis; não inclui saves, fontes do jogo, pesquisa,
 testes ou outro mod. A geração é determinística e não modifica a instalação.
 

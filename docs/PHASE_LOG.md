@@ -413,3 +413,20 @@ do mod continua habilitada entre as 11 entradas do load order. A captura sem a
 linha de motivo foi feita antes dessa atualização e não valida a renderização
 da 0.3.2. Ainda falta confirmar a linha e executar uma aprovação com as travas
 satisfeitas.
+
+## Fase 2 — Estado de recomendação desatualizada 0.3.3
+
+Na revisão dos novos fluxos, identifiquei um estado silencioso possível: o
+cartão fica na lista calculada na última leitura, mas o botão é revalidado ao
+vivo. Depois de uma condição mudar — inclusive após enfileirar a própria ação —
+o botão pode ficar desabilitado sem uma das mensagens das travas financeiras.
+A 0.3.3 acrescenta uma mensagem de cartão desatualizado para as duas ações,
+orientando nova leitura. A validação de clique permanece como autoridade e
+nenhuma ação é executada pelo cartão obsoleto.
+
+Geração e validação estática do pacote passaram; testes unitários e verificação
+na engine não foram executados nesta alteração. A 0.3.3 foi instalada no perfil
+local após backup da 0.3.2 em
+`sed_backups/mod_0.3.2_20261109_002500_858490`; o mod segue habilitado e as 11
+entradas anteriores foram preservadas. A mensagem precisa ser conferida numa
+campanha.

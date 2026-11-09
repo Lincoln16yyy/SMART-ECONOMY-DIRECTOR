@@ -1,12 +1,12 @@
 # Smart Economy Director — Victoria 3 1.15
 
-Versão de desenvolvimento **0.3.2 — diagnóstico, duas ações aprovadas, motivos de
-rejeição e motivo do botão bloqueado**. O mod tem diário próprio, leituras manuais ou mensais, recomendações
+Versão de desenvolvimento **0.3.3 — diagnóstico, duas ações aprovadas e
+explicação de bloqueios**. O mod tem diário próprio, leituras manuais ou mensais, recomendações
 limitadas de infraestrutura e capacidade de construção, e botões para aprovar a
 expansão de uma ferrovia elegível ou de um setor de construção operante. Quando
 não há candidato, o painel decompõe os estados por motivo principal; quando o
 botão de aprovação está bloqueado, o painel indica qual guarda falhou (pausa,
-fila privada, inadimplência ou saldo). Não há
+fila privada, inadimplência, saldo ou recomendação desatualizada). Não há
 execução econômica automática.
 
 O painel mostra finanças, PIB, população, padrão de vida, alfabetização,
@@ -22,12 +22,13 @@ ferroviário e do setor de construção, a decomposição com déficit
 presente e a linha de motivo do botão bloqueado da 0.3.2 ainda precisam
 ser conferidas no jogo normal.** Compatibilidade
 ampliada continua pendente. Não é uma versão de automação econômica pronta
-para deixar uma campanha sozinha.
+para deixar uma campanha sozinha. A nova mensagem de recomendação desatualizada
+ainda precisa ser conferida na engine.
 
 ## Instalação e uso
 
 Consulte [instalação e geração do ZIP](docs/INSTALL.md). O pacote gerado em
-`dist/smart-economy-director-0.3.2.zip` contém a pasta do mod e o descritor
+`dist/smart-economy-director-0.3.3.zip` contém a pasta do mod e o descritor
 externo. Ative no launcher e use a decisão **Ativar Smart Economy Director**.
 Nenhum outro mod é obrigatório; nenhuma ativação econômica é automática.
 

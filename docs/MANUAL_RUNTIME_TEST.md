@@ -1,9 +1,10 @@
-# Plano de testes de campanha — validação das ações 0.3.2 pendente
+# Plano de testes de campanha — validação das ações 0.3.3 pendente
 
 O jogador confirmou em campanha a interface e as leituras principais da 0.1.0,
 a renderização das seções ferroviária e de capacidade de construção vazias na
-0.3.0. As ações ferroviária e de capacidade de construção, a decomposição de
-motivos da 0.3.1 e a convivência com o conjunto de mods continuam **não
+0.3.0. A 0.3.1 teve os estados vazios conferidos; o candidato e a trava da fila
+privada também apareceram em campanha. A aprovação, as linhas de motivo das
+versões 0.3.2–0.3.3 e a convivência com o conjunto de mods continuam **não
 testadas em campanha**. A suíte automatizada atual executa os scripts gerados
 em um modelo restrito de país/estado/edifício e cobre filtros, ranking, travas,
 contagens disjuntas de rejeição, confirmação/rejeição da fila e limpeza; ela
@@ -139,7 +140,7 @@ Registrar totais e parcelas de cada seção, data da leitura e se a linha
 sumiu quando surgiu candidato. A decomposição descreve os filtros atuais;
 não estima custo, prazo ou retorno.
 
-## Checklist do motivo do botão bloqueado 0.3.2
+## Checklist do motivo do botão bloqueado 0.3.3
 
 Quando um candidato está listado, mas o botão de aprovar está
 bloqueado, uma linha sob o botão nomeia a primeira guarda que falha: jogo
@@ -161,6 +162,14 @@ indicou o bloqueio, sem dizer qual trava falhava; a 0.3.2 deve mostrar
 Depois dessa conferência, os pontos restantes são desativação (já uma vez
 confirmada), save/recarregar e a convivência com os outros construtores
 antes de ampliar os tipos de ação.
+
+## Checklist de recomendação desatualizada 0.3.3
+
+As listas são calculadas na última leitura, mas as travas são avaliadas ao
+vivo. Se uma fila ou condição estadual mudar antes da leitura seguinte, o
+cartão pode continuar visível com o botão desabilitado. A nova linha deve
+explicar que a recomendação mudou ou já foi enfileirada e pedir uma atualização;
+nenhuma ação deve ser executada pelo cartão antigo.
 
 ## Cenários econômicos
 
