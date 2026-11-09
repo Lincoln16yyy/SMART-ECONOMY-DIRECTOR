@@ -59,7 +59,7 @@ class Country:
                              construction_queue_num_queued_government_levels=2,
                              construction_queue_num_queued_private_levels=0,
                              year=1836, month=0, is_player=True, in_default=False,
-                             is_game_paused=True)
+                             is_game_paused=True, is_construction_paused=False)
         self.readings.update(readings)
         self.variables = {}
         self.variable_lists = {}
@@ -68,6 +68,8 @@ class Country:
         self.active_journal = False
         self.constructions = []
         self.construction_accepted = True
+        self.market_goods = {}
+        self.scheduled_events = []
 
     def country_scope(self):
         scope = dict(self.readings)
@@ -141,6 +143,15 @@ class Country:
             return not self.condition(entry.value, scope)
         if key == 'OR':
             return any(self.single_condition(e, scope) for e in entry.value)
+        if key == 'market':
+            return self.condition(entry.value, {'goods': self.market_goods})
+        if key.startswith('mg:'):
+            good = scope['goods'].get(key[3:])
+            return good is not None and self.condition(entry.value, good)
+        if key == 'any_scope_state':
+            return any(self.condition(entry.value, target) for target in self.states)
+        if key == 'has_active_production_method':
+            return entry.value in scope.get('production_methods', [])
         if key == 'has_variable':
             return entry.value in self.variables_for(scope)
         if key == 'has_journal_entry':
@@ -241,6 +252,8 @@ class Country:
             elif key == 'add_journal_entry':
                 self.journals_added += 1
                 self.active_journal = True
+            elif key == 'trigger_event':
+                self.scheduled_events.append((child(value, 'id'), self.number(child(value, 'days'), scope)))
             elif key in self.definitions:
                 self.run(key, scope)
             else:

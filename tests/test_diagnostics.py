@@ -3,11 +3,11 @@ from pathlib import Path
 import unittest
 import zipfile
 
-from tools.build_mod import ROOT, country_variables, outputs, runtime_variables
+from tools.build_mod import ROOT, STATE_VARIABLES, SUPPLY_TARGETS, country_variables, outputs, runtime_variables
 from tools.package_mod import package
 from tools.pdx_script import parse, child
 from tools.validate import validate
-from script_harness import Country, construction_sector, railway, state
+from script_harness import Country, building, construction_sector, railway, state
 
 
 def script_definitions():
@@ -26,6 +26,87 @@ class DiagnosisTests(unittest.TestCase):
         country = Country(self.definitions, **readings)
         country.run('sed_enable_country')
         return country
+
+    def test_modes_are_exclusive_and_auto_event_is_not_duplicated(self):
+        c = self.country()
+        self.assertIn('sed_mode_assisted', c.variables)
+        for mode in ('automatic', 'manual', 'assisted', 'automatic'):
+            c.run('sed_set_mode_' + mode)
+            self.assertEqual([m for m in ('manual', 'assisted', 'automatic')
+                              if 'sed_mode_' + m in c.variables], [mode])
+        self.assertEqual(c.scheduled_events, [('sed_pulse.1', 23)])
+
+    def test_auto_review_reports_blocker_without_queuing(self):
+        cases = [
+            ({'in_default': True}, {}, 10),
+            ({'construction_queue_num_queued_government_levels': 1}, {}, 11),
+            ({'construction_queue_num_queued_private_levels': 1}, {}, 11),
+            ({'is_construction_paused': True}, {}, 12),
+            ({}, {'advisor_auto_construction_enabled': True}, 13),
+            ({}, {'zw_var_expand_building': True}, 13),
+            ({}, {'aroai_autobuild': True}, 13),
+            ({}, {}, 2),
+        ]
+        for readings, variables, expected in cases:
+            with self.subTest(readings=readings, variables=variables):
+                c = self.country(construction_queue_num_queued_government_levels=0)
+                c.run('sed_set_mode_automatic')
+                c.readings.update(readings)
+                c.variables.update(variables)
+                c.states = [] if expected == 2 else [state(-5, buildings=[railway()])]
+                c.run('sed_auto_apply_monthly')
+                self.assertEqual(c.variables['sed_auto_action_status'], expected)
+                self.assertEqual(c.constructions, [])
+
+    def test_auto_review_queues_only_one_and_rechecks_occupied_queue(self):
+        c = self.country(construction_queue_num_queued_government_levels=0)
+        c.run('sed_set_mode_automatic')
+        c.states = [state(-5, buildings=[railway()]), state(-2, buildings=[railway()])]
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(len(c.constructions), 1)
+        self.assertEqual(c.variables['sed_auto_action_status'], 1)
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(len(c.constructions), 1)
+        self.assertEqual(c.variables['sed_auto_action_status'], 11)
+
+    def test_supply_requires_shortage_active_output_and_available_producer(self):
+        for item in SUPPLY_TARGETS:
+            with self.subTest(good=item['good']):
+                c = self.country()
+                producer = building(item['building'])
+                producer['production_methods'] = [item['methods'][0]]
+                target = state(buildings=[producer])
+                c.states = [target]
+                effect = 'sed_refresh_supply_candidates'
+                key = 'sed_' + item['good'] + '_candidates'
+                c.run(effect)
+                self.assertNotIn(key, c.variable_lists)
+                c.market_goods[item['good']] = {'market_goods_has_goods_shortage': True}
+                c.run(effect)
+                self.assertEqual(c.variable_lists[key], [target])
+                for field, invalid in [('production_methods', []), ('occupancy', 0.79),
+                                       ('has_failed_hires', True),
+                                       ('building_has_goods_shortage', True),
+                                       ('level_after_queued_constructions', 2)]:
+                    original = producer[field]
+                    producer[field] = invalid
+                    c.run(effect)
+                    self.assertNotIn(key, c.variable_lists, field)
+                    producer[field] = original
+                c.run('sed_run_' + item['good'] + '_approval', target)
+                self.assertEqual(len(c.constructions), 1)
+                self.assertIn('sed_' + item['good'] + '_request_pending', target['variables'])
+                c.run('sed_run_' + item['good'] + '_approval', target)
+                self.assertEqual(len(c.constructions), 1)
+
+    def test_manual_approval_allows_running_game_and_negative_balance(self):
+        for action, factory in [('railway', railway), ('construction', construction_sector)]:
+            with self.subTest(action=action):
+                c = self.country(is_game_paused=False, net_total_income=-100,
+                                 num_queued_government_constructions=3)
+                target = state(-2, buildings=[factory()])
+                c.run('sed_run_' + action + '_approval', target)
+                self.assertEqual(len(c.constructions), 1)
 
     def test_activation_collects_real_supplied_readings(self):
         c = self.country(gdp=12345, total_population=500, average_sol=13.25)
@@ -256,9 +337,7 @@ class DiagnosisTests(unittest.TestCase):
         self.assertTrue(valid())
         guards = {
             'enabled': ('variables', {'sed_enabled': None}),
-            'paused': ('readings', {'is_game_paused': False}),
             'default': ('readings', {'in_default': True}),
-            'negative_balance': ('readings', {'net_total_income': -1}),
             'private_queue': ('readings', {'construction_queue_num_queued_private_levels': 1}),
         }
         for name, (area, value) in guards.items():
@@ -269,10 +348,10 @@ class DiagnosisTests(unittest.TestCase):
                     self.assertFalse(valid())
                     c.variables.update(original)
                 else:
-                    original = c.readings[name] if name in c.readings else None
+                    original = {field: c.readings[field] for field in value}
                     c.readings.update(value)
                     self.assertFalse(valid())
-                    c.readings.update({name: original})
+                    c.readings.update(original)
         target['variables']['sed_railway_request_pending'] = True
         self.assertFalse(valid())
         del target['variables']['sed_railway_request_pending']
@@ -302,7 +381,7 @@ class DiagnosisTests(unittest.TestCase):
         self.assertNotIn('sed_railway_request_pending', target['variables'])
 
     def test_invalid_approval_does_not_touch_the_construction_queue(self):
-        c = self.country(is_game_paused=False)
+        c = self.country(in_default=True)
         target = state(-2, buildings=[railway()])
         c.states = [target]
         c.run('sed_run_railway_approval', target)
@@ -312,8 +391,7 @@ class DiagnosisTests(unittest.TestCase):
 
     def test_state_variables_are_separate_from_the_country_cleanup_registry(self):
         self.assertEqual(set(runtime_variables()) - set(country_variables()),
-                         {'sed_railway_request_pending',
-                          'sed_construction_request_pending'})
+                         set(STATE_VARIABLES))
 
     def test_construction_candidate_requires_staffed_sector_and_free_queue(self):
         c = self.country()
@@ -402,9 +480,7 @@ class DiagnosisTests(unittest.TestCase):
         self.assertTrue(valid())
         guards = {
             'queue': ('readings', 'num_queued_government_constructions', 2),
-            'paused': ('readings', 'is_game_paused', False),
             'default': ('readings', 'in_default', True),
-            'negative_balance': ('readings', 'net_total_income', -1),
             'private_queue': ('readings', 'construction_queue_num_queued_private_levels', 1),
         }
         for name, (area, field, value) in guards.items():
@@ -430,7 +506,7 @@ class DiagnosisTests(unittest.TestCase):
             with self.subTest(action=action):
                 c = self.country(num_queued_government_constructions=3)
                 target = factory()
-                guards = ['paused', 'queue', 'private', 'default', 'balance']
+                guards = ['queue', 'private', 'default']
                 if action == 'railway':
                     guards.remove('queue')
 
@@ -447,11 +523,9 @@ class DiagnosisTests(unittest.TestCase):
 
                 assert_only(None)
                 cases = {
-                    'paused': ('is_game_paused', False),
                     'queue': ('num_queued_government_constructions', 2),
                     'private': ('construction_queue_num_queued_private_levels', 1),
                     'default': ('in_default', True),
-                    'balance': ('net_total_income', -1),
                 }
                 for guard in guards:
                     with self.subTest(guard=guard):
@@ -462,9 +536,9 @@ class DiagnosisTests(unittest.TestCase):
                         c.readings[field] = original
                 # Cascading: an earlier failing guard wins over later ones.
                 c.readings.update(
-                    is_game_paused=False,
+                    in_default=True,
                     construction_queue_num_queued_private_levels=1)
-                assert_only('paused')
+                assert_only('private')
                 # Ineligible states name no guard.
                 ineligible = state(-2, buildings=[])
                 self.assertFalse(any(

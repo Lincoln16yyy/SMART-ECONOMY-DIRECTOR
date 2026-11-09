@@ -511,3 +511,25 @@ Automático é opt-in. Uma revisão mensal pode enfileirar no máximo um nível 
 A captura do Egito (setembro de 1838) mostra o Director ativo e construção em andamento: fila pública com 46 níveis, fila privada com 2. A automação bloqueia corretamente nesses casos, mas o estado anterior era genérico e não ajudava a distinguir bloqueio de falha. A 0.3.7 atribui status diferentes a candidato ausente, inadimplência, fila ocupada, construção pausada e automação concorrente, e apresenta a razão no alto do diário.
 
 A mudança não relaxa as travas nem habilita novas ações. Geração, validação estática e pacote contra os arquivos do jogo passaram. A 0.3.7 ainda precisa ser instalada no perfil local e a nova linha de status confirmada na campanha após um ciclo mensal.
+
+
+## Continuação — recuperação da suíte da 0.3.7
+
+A execução da suíte encontrou 34 falhas inicialmente: o harness ainda não
+suportava o escopo de mercado usado desde a 0.3.5. Após modelar mercado, bens
+opcionais ausentes, métodos de produção ativos, busca de estados e registro de
+eventos, restaram expectativas antigas de pausa, saldo e variáveis estaduais.
+Essas expectativas foram alinhadas às regras atuais. A restauração de leituras
+entre subcasos ferroviários foi corrigida para restaurar o campo alterado.
+
+Foram adicionados cenários para os três modos exclusivos, evento sem duplicata,
+travas de inadimplência/filas/construção pausada/construtores conhecidos,
+ausência de candidato, limite de uma ação e revalidação após inclusão. Os oito
+produtores são exercitados com e sem escassez, método ativo, ocupação, falha de
+contratação, falta de insumos e expansão prévia; nova aprovação não duplica.
+Aprovações manuais com jogo rodando e saldo negativo também são cobertas.
+
+Resultado: **51 testes passaram**; artefatos gerados atuais, validação estática
+sem caminho do jogo e `git diff --check` passaram. Não houve mudança nos
+arquivos carregáveis, reinstalação nem teste gráfico. A conferência da revisão
+mensal e dos botões na engine continua pendente.

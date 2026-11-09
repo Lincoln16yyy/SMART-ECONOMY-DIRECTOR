@@ -6,6 +6,17 @@ integralmente em PROJECT_BRIEF.md. Leia-o antes de trabalhar.
 
 Fase atual: refinamento da automação opt-in em 0.3.7. Depois que o jogador confirmou que os controles automáticos aparecem (captura do Egito, setembro de 1838), a dúvida restante é se o executor tenta agir e por que não enfileira. O status de revisão agora separa ausência de candidato elegível, inadimplência, filas ocupadas, construção pausada e automação concorrente. A captura mostra fila pública de 46 níveis e fila privada de 2, condições que intencionalmente bloqueiam o executor. Validação estática passou e a 0.3.7 foi instalada com backup da 0.3.6, preservando as 11 entradas do load order. Não iniciar jogo nem teste gráfico longo.
 
+Continuação em 2026-11-09: a suíte foi retomada e os **51 testes passaram**.
+O harness agora modela mercado/bens ausentes, métodos ativos, existência de
+estado elegível e registro de eventos agendados. Foram atualizados cenários
+históricos que ainda exigiam pausa/saldo positivo e ignoravam as oito marcas
+estaduais de oferta. Novos cenários cobrem exclusividade dos modos, agendamento
+sem duplicata, razões de bloqueio, máximo de uma ação com revalidação da fila,
+e elegibilidade/expansão sem duplicata dos oito produtores. Esses resultados
+são simulação dos scripts gerados, não confirmação da engine. Nenhum arquivo
+carregável ou instalação foi alterado. Os números e regras das seções abaixo
+são históricos; a conferência da revisão mensal em campanha segue pendente.
+
 Fase anterior: protótipo da Fase 2 em 0.3.4. O jogador confirmou em campanha a
 interface, os indicadores e a seção vazia de oportunidades. A 0.2.0 acrescentou
 até três recomendações ferroviárias e um botão para aprovar uma por vez; a
