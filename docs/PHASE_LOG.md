@@ -122,3 +122,23 @@ Detalhes: RUNTIME_SMOKE.md.
 Status: implementação inicial empacotada para testes; validação funcional da
 Fase 1 permanece aberta. Pendentes: decisão/diário na campanha, comparação de
 indicadores, agenda, limpeza na engine, salvar/recarregar e ecossistema completo.
+
+## 2026-11-08 — Conferência da interface e instalação para teste do jogador
+
+O teste com Gamescope headless e DXVK nativo permitiu entrar na campanha nova
+da França. Foram conferidos ativação pela decisão, abertura e rolagem do diário,
+atualização manual, agenda sob solicitação e congelamento das leituras enquanto
+a campanha avançava para fevereiro. PIB, SoL e alfabetização corresponderam
+à barra do jogo. O saldo observado do script diferiu da previsão da GUI;
+nenhuma fórmula foi alterada sem fechar essa investigação.
+
+O jogador preferiu fazer a conferência diretamente por causa da demora e da
+sessão sem janela visível. O áudio dessa sessão foi silenciado e o processo de
+teste foi encerrado. Não houve novos testes de campanha após esse pedido.
+
+O pacote 0.1.0 foi conferido contra os arquivos gerados, instalado e habilitado
+no prefixo real do jogo. As dez entradas preexistentes foram preservadas na
+mesma ordem; o Director foi acrescentado ao final. Backup da lista original:
+`sed_backups/content_load_20261108_222107_956307.json`. Saves não foram alterados.
+O jogador abrirá o jogo e procurará a decisão de ativação. Fase 1 permanece em
+validação, sem alegação de automação econômica ou compatibilidade completa.

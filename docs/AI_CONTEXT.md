@@ -10,6 +10,24 @@ registradas e bloqueiam automação econômica, não a entrega de diagnóstico.
 Existe pacote instalável gerado em `dist/`, com validação de campanha pendente.
 Não copiar economia de mods por suposição.
 
+Atualização mais recente: a continuação conseguiu entrar na França com
+Gamescope headless/DXVK e confirmou ativação por decisão, abertura/rolagem do
+diário, atualização manual, agenda sob solicitação e congelamento das leituras
+ao avançar de janeiro para fevereiro. PIB, SoL e alfabetização corresponderam
+à barra do jogo; saldo observado e previsão da GUI diferiram (RESEARCH/RUNTIME
+devem preservar essa distinção). Os demais testes interativos ainda estão
+pendentes. O jogador reclamou da demora dos testes ocultos e preferiu abrir
+o jogo pessoalmente: não voltar a iniciar testes gráficos prolongados sem
+necessidade ou novo pedido. A sessão oculta foi encerrada.
+
+A versão 0.1.0 foi então instalada em `mod/Smart Economy Director` no prefixo
+Wine já identificado e adicionada ao final de `content_load.json`, preservando
+as dez entradas anteriores. Backup:
+`sed_backups/content_load_20261108_222107_956307.json`, nos dados do usuário.
+O jogador foi orientado a abrir o jogo normal e verificar J → Decisões →
+Ativar Smart Economy Director. Aguardar sua observação para corrigir problemas
+reais de interface/instalação. Isso não valida a convivência em campanha.
+
 RESEARCH.md contém fontes e lacunas; ARCHITECTURE.md descreve propostas, não
 funções concluídas. COMPATIBILITY.md diferencia instalação, habilitação no
 launcher e automação ativa no país. SOURCE_INVENTORY.json registra commit da

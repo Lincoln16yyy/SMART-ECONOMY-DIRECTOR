@@ -1,5 +1,25 @@
 # Inicialização na engine — 0.1.0
 
+**Atualização da continuação:** o uso de Gamescope headless com DXVK nativo
+permitiu entrar numa campanha nova da França. Foram confirmados a decisão de
+ativação, criação e abertura do diário, atualização manual, alteração da agenda
+para leitura sob solicitação e manutenção das leituras de janeiro ao avançar
+até 16 de fevereiro. A atualização manual em fevereiro mostrou PIB de £21,2M,
+SoL 11,2 e alfabetização 48,3%, correspondentes aos indicadores exibidos pelo
+jogo. A variação acumulada de PIB foi 4,1%, com distância de um mês de calendário
+entre as bases. Rolagem e leitura da parte inferior do widget foram conferidas.
+
+O saldo do script é uma leitura observada e diferiu da previsão do orçamento:
+em 16 de fevereiro, £−4,71K no diagnóstico e £−4,68K na barra. A diferença inicial
+em 1 de janeiro foi maior. Não equiparar a leitura ao valor previsto da GUI sem
+investigar essa semântica. Não foi alterada a fórmula com base nessa diferença.
+
+A sessão oculta foi encerrada após o jogador preferir realizar a conferência
+diretamente. Não houve confirmação completa de desativação/reativação,
+salvar/recarregar, ciclo mensal retomado ou convivência do conjunto completo.
+Esses pontos permanecem pendentes. As limitações abaixo descrevem a primeira
+execução, anterior a essa continuação.
+
 Data: 2026-11-08. Executável local: Victoria 3 1.15.0,
 build `6338547985dbc271523e149f362a6fd93dc62975`.
 
