@@ -1,5 +1,21 @@
 # Contexto de continuidade
 
+## Continuação — auxiliar de inspeção de filas
+
+Criado `tools/build_queue_probe.py`: gera um mod auxiliar independente 0.1.0,
+namespace sedqp_, com decisão/JE, leituras manuais de projetos e níveis por
+lado, e nível atual/após fila/diferença por prédio dos dez tipos do Director.
+Não tem mutações econômicas nem agenda. Não foi instalado/habilitado; runtime
+do Director continua 0.4.1. Instruções e limitações em
+[QUEUE_PROBE.md](QUEUE_PROBE.md). Não apresentar nível zero sintético, variáveis
+Building ou listas no harness como confirmação da engine.
+
+67 testes passam (61 anteriores + 6 do auxiliar). A entrega separa os dois
+ZIPs; o principal não inclui scripts sedqp_. Próximo passo útil: conferir uma
+linha pública, uma privada e primeira construção em cópia, registrando o que
+foi realmente exposto. Ainda não há reconciliação por projeto, política fiscal
+incremental ou inclusão real confirmada. Não iniciar teste oculto prolongado.
+
 ## Continuação — entrega CI e contrato de fila
 
 A etapa seguinte corrigiu `.github/workflows/validate.yml`: publica o pacote

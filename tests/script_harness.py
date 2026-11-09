@@ -162,6 +162,8 @@ class Country:
             return bool(self.variable_lists.get(entry.value))
         if key == 'has_building':
             return self.building(scope, entry.value) is not None
+        if key == 'is_building_type':
+            return scope.get('building') == entry.value
         if key == 'can_construct_building':
             return bool(scope.get('can_construct_building'))
         if key.startswith('b:'):

@@ -49,6 +49,9 @@ O GitHub Actions publica o artefato **smart-economy-director**, com ZIP interno
 `smart-economy-director.zip`; os descritores informam a versão. A geração local
 sem `--output` mantém o nome versionado.
 
+Para verificar a cobertura da fila há um [auxiliar opcional de inspeção](docs/QUEUE_PROBE.md),
+gerado separadamente e ainda sem confirmação de funcionamento na engine.
+
 ## Desenvolvimento e verificação
 
 ```bash
