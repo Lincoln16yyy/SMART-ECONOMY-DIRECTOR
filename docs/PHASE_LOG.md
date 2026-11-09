@@ -194,8 +194,9 @@ contratação, escassez ou expansão já enfileirada. O botão revalida o estado
 ser clicado e só fica habilitado com o jogo pausado, saldo semanal não negativo,
 sem default e fila privada vazia. Ele solicita um nível público de ferrovia;
 nenhuma ação ocorre sem clique, não há estimativa de retorno e não há repetição
-automática. A solicitação pendente fica marcada até o nível entrar na fila ou
-ser cancelado.
+automática. A solicitação pendente fica marcada até a expansão enfileirada ser
+concluída ou cancelada; enquanto ela estiver na fila, o estado não é oferecido
+novamente.
 
 Gerados e empacotados os arquivos da 0.2.0. Validação estática do pacote e
 `git diff --check` passaram; não foram executados testes unitários nem testes
@@ -222,3 +223,27 @@ unitários nem sessão gráfica oculta.
 Pacote 0.2.1 instalado no perfil local após backup de 0.2.0 em
 `sed_backups/mod_0.2.0_20261108_231349_643103`. As 11 entradas preexistentes
 foram preservadas e o mod permaneceu habilitado.
+
+## Fase 2 — Testes automatizados alinhados à ação ferroviária
+
+Troquei o interpretador restrito da 0.1.0 por um modelo de escopos de país,
+estado e edifício, com variáveis por estado, listas, ordenação de estados,
+`owner`/`prev`, leitura de triggers próprios e simulação controlada de
+`start_building_construction`. Isso permite executar os scripts gerados da
+0.2.1 sem emular a engine: os resultados continuam sendo regressões do recorte
+de script, não validação de primitivas, datamodel ou renderização.
+
+Foram acrescentados testes para os filtros de elegibilidade da ferrovia, o
+ranking de até três estados por déficit, as mensagens de estado vazio, as cinco
+travas de aprovação, a confirmação ou rejeição da inclusão na fila, o estado
+pendente por estado e a limpeza de listas/variáveis. **33 testes passam** (nove
+de auditoria e 24 da
+implementação). A suíte revelou que a documentação descrevia a pendência como
+se ela terminasse ao entrar na fila; o script mantém a marca enquanto a
+expansão está enfileirada e a remove quando ela é concluída ou cancelada. O
+texto foi corrigido sem alterar o comportamento econômico.
+
+`build_mod.py --check` e a validação estática continuam passando. Nada foi
+executado na engine nem em sessão gráfica. A conferência do botão, da pausa,
+das travas, do contador público, da recarga e da coexistência com outros mods
+segue pendente e depende do jogador em cópia de save.

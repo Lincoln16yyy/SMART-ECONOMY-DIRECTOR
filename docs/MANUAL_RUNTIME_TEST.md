@@ -3,8 +3,10 @@
 O jogador confirmou em campanha a interface e as leituras principais da 0.1.0,
 e na 0.2.0 confirmou a renderização da seção ferroviária vazia. A ação econômica
 da 0.2.1 e a convivência com o conjunto de mods continuam
-**não testadas em campanha**. Os testes automatizados e tentativas de
-inicialização constam em PHASE1.md; nenhum resultado da nova ação foi simulado.
+**não testadas em campanha**. A suíte automatizada atual executa os scripts
+gerados em um modelo restrito de país/estado/edifício e cobre filtros, ranking,
+travas, confirmação/rejeição da fila e limpeza; ela não é evidência de
+renderização ou de aceitação pela engine.
 
 ## Checklist específico da versão 0.1.0
 

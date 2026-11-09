@@ -10,6 +10,7 @@ até três recomendações ferroviárias e um botão para aprovar uma por vez; a
 0.2.1 explica se não há déficit de infraestrutura ou se há déficit sem
 candidato elegível. A execução do botão e a coexistência com mods ainda não
 foram validadas. Não há automação periódica. A 0.2.1 está instalada localmente.
+A suíte de scripts foi atualizada e cobre o fluxo ferroviário com 33 testes.
 
 Atualização histórica: a continuação conseguiu entrar na França com
 Gamescope headless/DXVK e confirmou ativação por decisão, abertura/rolagem do
@@ -76,15 +77,19 @@ econômica. O histórico mantém duas amostras-base mensais de PIB e leitura atu
 Comandos de desenvolvimento permanecem: `python3 tools/build_mod.py --check`,
 `python3 tools/validate.py --game "/caminho/Victoria 3/game"`,
 `python3 -m unittest discover -s tests -v`, `python3 tools/package_mod.py`.
-Vinte e quatro testes pertencem à versão 0.1.0; não foram atualizados nem
-executados para o executor 0.2.0. O interpretador restrito não confirma
-primitivas de fila, listas dinâmicas nem GUI na engine.
+**33 testes passam** (nove de auditoria e 24 da implementação). O
+interpretador de testes foi atualizado para escopos de país/estado/edifício,
+listas, ordenação e construção simulada, cobrindo filtros, ranking, mensagens
+de estado vazio, travas, confirmação/rejeição de fila e limpeza. Ele não
+confirma primitivas, datamodel nem GUI na engine.
 
 Próximos passos: pedir ao jogador uma conferência breve do botão ferroviário,
 em cópia de save, com o jogo pausado. Registrar se o
 estado aparece, se as travas desabilitam o botão e se a fila pública ganha um
 único nível. Não iniciar testes gráficos ocultos prolongados. Depois verificar
-desativação, recarga e coexistência antes de ampliar os tipos de ação.
+desativação, recarga e coexistência antes de ampliar os tipos de ação. O
+comportamento real da pendência é: a marca permanece enquanto a expansão está
+enfileirada e some quando ela é concluída ou cancelada.
 
 Houve teste de inicialização isolado em Xvfb/Wine, descrito em RUNTIME_SMOKE.md:
 o mod foi reconhecido e chegou ao menu sem erros próprios na execução limpa.

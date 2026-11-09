@@ -3,11 +3,11 @@ from pathlib import Path
 import unittest
 import zipfile
 
-from tools.build_mod import ROOT, outputs, runtime_variables
+from tools.build_mod import ROOT, country_variables, outputs, runtime_variables
 from tools.package_mod import package
 from tools.pdx_script import parse, child
 from tools.validate import validate
-from script_harness import Country
+from script_harness import Country, railway, state
 
 
 def script_definitions():
@@ -121,10 +121,16 @@ class DiagnosisTests(unittest.TestCase):
 
     def test_disable_cleans_every_runtime_variable_and_never_reactivates(self):
         c = self.country()
-        for name in runtime_variables():
+        for name in country_variables():
             c.variables.setdefault(name, 123)
+        pending = state()
+        pending['variables']['sed_railway_request_pending'] = 123
+        c.states = [pending]
+        c.variable_lists['sed_railway_candidates'] = [pending]
         c.run('sed_disable_country')
         self.assertEqual(c.variables, {'sed_schema_version': 1})
+        self.assertEqual(pending['variables'], {})
+        self.assertNotIn('sed_railway_candidates', c.variable_lists)
         c.run('sed_monthly_update')
         c.run('sed_refresh_diagnostics')
         self.assertEqual(c.variables, {'sed_schema_version': 1})
@@ -137,6 +143,138 @@ class DiagnosisTests(unittest.TestCase):
         c.readings.update(is_player=False, gdp=20000)
         c.run('sed_monthly_update')
         self.assertEqual(c.variables['sed_gdp'], 10000)
+
+    def test_railway_candidate_requires_deficit_operation_and_free_queue(self):
+        c = self.country()
+        cases = {
+            'eligible': (state(-2, buildings=[railway()]), True),
+            'no_deficit': (state(0, buildings=[railway()]), False),
+            'unincorporated': (state(-2, incorporated=False, buildings=[railway()]), False),
+            'understaffed': (state(-2, buildings=[railway(occupancy=0.79)]), False),
+            'failed_hires': (state(-2, buildings=[railway(failed_hires=True)]), False),
+            'goods_shortage': (state(-2, buildings=[railway(shortage=True)]), False),
+            'queued_expansion': (state(-2, buildings=[railway(queued_levels=1)]), False),
+            'cannot_construct': (state(-2, can_construct=False, buildings=[railway()]), False),
+            'no_railway': (state(-2), False),
+        }
+        for name, (target, expected) in cases.items():
+            with self.subTest(name):
+                self.assertEqual(
+                    c.condition(c.definitions['sed_railway_candidate_eligible'], target), expected)
+
+    def test_candidate_refresh_ranks_by_deficit_and_limits_results(self):
+        states = [state(-1, buildings=[railway()]),
+                  state(-9, buildings=[railway()]),
+                  state(-3, buildings=[railway()]),
+                  state(-5, buildings=[railway()]),
+                  state(2, buildings=[railway()])]
+        c = self.country()
+        c.states = states
+        c.run('sed_refresh_railway_candidates')
+        self.assertEqual(c.variable_lists['sed_railway_candidates'],
+                         [states[1], states[3], states[2]])
+
+    def test_pending_request_stays_while_queued_and_clears_when_resolved(self):
+        target = state(-2, buildings=[railway(queued_levels=1)])
+        target['variables']['sed_railway_request_pending'] = True
+        c = self.country()
+        c.states = [target]
+        c.run('sed_refresh_railway_candidates')
+        self.assertTrue(target['variables']['sed_railway_request_pending'])
+        self.assertNotIn('sed_railway_candidates', c.variable_lists)
+
+        target['buildings'][0]['level_after_queued_constructions'] = 1
+        c.run('sed_refresh_railway_candidates')
+        self.assertNotIn('sed_railway_request_pending', target['variables'])
+        self.assertEqual(c.variable_lists['sed_railway_candidates'], [target])
+
+    def test_empty_opportunity_messages_distinguish_no_deficit_from_filters(self):
+        c = self.country()
+
+        def shown(name):
+            block = next(entry.value for entry in self.definitions[name]
+                         if entry.key == 'is_shown')
+            return c.condition(block, c.country_scope())
+
+        no_deficit = 'sed_no_infrastructure_opportunity_visible_sgui'
+        filtered = 'sed_no_railway_candidate_visible_sgui'
+        recommendations = 'sed_recommendations_visible_sgui'
+        c.variables['sed_infrastructure_short_states'] = 0
+        self.assertTrue(shown(no_deficit))
+        self.assertFalse(shown(filtered))
+        self.assertFalse(shown(recommendations))
+        c.variables['sed_infrastructure_short_states'] = 2
+        self.assertFalse(shown(no_deficit))
+        self.assertTrue(shown(filtered))
+        c.variable_lists['sed_railway_candidates'] = [state()]
+        self.assertFalse(shown(no_deficit))
+        self.assertFalse(shown(filtered))
+        self.assertTrue(shown(recommendations))
+
+    def test_railway_approval_revalidates_every_guard(self):
+        c = self.country()
+        target = state(-2, buildings=[railway()])
+        valid = lambda: c.condition(c.definitions['sed_railway_approval_valid'], target)
+        self.assertTrue(valid())
+        guards = {
+            'enabled': ('variables', {'sed_enabled': None}),
+            'paused': ('readings', {'is_game_paused': False}),
+            'default': ('readings', {'in_default': True}),
+            'negative_balance': ('readings', {'net_total_income': -1}),
+            'private_queue': ('readings', {'construction_queue_num_queued_private_levels': 1}),
+        }
+        for name, (area, value) in guards.items():
+            with self.subTest(name):
+                if area == 'variables':
+                    original = dict(c.variables)
+                    c.variables.clear()
+                    self.assertFalse(valid())
+                    c.variables.update(original)
+                else:
+                    original = c.readings[name] if name in c.readings else None
+                    c.readings.update(value)
+                    self.assertFalse(valid())
+                    c.readings.update({name: original})
+        target['variables']['sed_railway_request_pending'] = True
+        self.assertFalse(valid())
+        del target['variables']['sed_railway_request_pending']
+        target['buildings'][0]['level_after_queued_constructions'] = 2
+        self.assertFalse(valid())
+
+    def test_approved_railway_queues_one_level_and_marks_request(self):
+        c = self.country()
+        target = state(-2, buildings=[railway()])
+        c.states = [target]
+        c.run('sed_refresh_railway_candidates')
+        c.run('sed_run_railway_approval', target)
+        self.assertEqual(c.constructions,
+                         [{'building': 'building_railway', 'state': target}])
+        self.assertEqual(c.variables['sed_railway_action_status'], 1)
+        self.assertTrue(target['variables']['sed_railway_request_pending'])
+        self.assertNotIn('sed_queue_levels_before', c.variables)
+
+    def test_failed_queue_insertion_is_reported_without_retry_or_pending_state(self):
+        c = self.country()
+        c.construction_accepted = False
+        target = state(-2, buildings=[railway()])
+        c.states = [target]
+        c.run('sed_run_railway_approval', target)
+        self.assertEqual(len(c.constructions), 1)
+        self.assertEqual(c.variables['sed_railway_action_status'], 2)
+        self.assertNotIn('sed_railway_request_pending', target['variables'])
+
+    def test_invalid_approval_does_not_touch_the_construction_queue(self):
+        c = self.country(is_game_paused=False)
+        target = state(-2, buildings=[railway()])
+        c.states = [target]
+        c.run('sed_run_railway_approval', target)
+        self.assertEqual(c.constructions, [])
+        self.assertEqual(c.variables['sed_railway_action_status'], 0)
+        self.assertNotIn('sed_railway_request_pending', target['variables'])
+
+    def test_state_variables_are_separate_from_the_country_cleanup_registry(self):
+        self.assertEqual(set(runtime_variables()) - set(country_variables()),
+                         {'sed_railway_request_pending'})
 
     def test_repository_passes_reference_and_action_boundary_checks(self):
         self.assertEqual(validate(), [])
