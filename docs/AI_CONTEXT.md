@@ -22,9 +22,12 @@ suficiente. Depois, o jogador confirmou atualização (inclusive sob
 solicitação) e desativação na engine: os botões clicáveis somem ao
 senhor de desativar. Em leitura posterior, a seção de construção
 renderizou o candidato Baixo Egito com o botão de aprovar, e a variação
-mensal de PIB funcionou (6,4%). Nenhum clique de aprovação foi relatado:
-execução, travas de clique, linha de motivos com déficit presente, recarga
-e coexistência seguem pendentes.
+mensal de PIB funcionou (6,4%). O jogador clicou no botão e nada
+haconteceu: o tooltip mostrava o botão Bloqueado, e a fila privada tinha
+2 projetos, satisfazendo corretamente a trava da fila privada. Para
+confirmar a aprovação, será preciso fila privada vazia. Execução com
+clique permitido, linha de motivos com déficit presente, recarga e
+coexistência seguem pendentes.
 
 Atualização histórica: a continuação conseguiu entrar na França com
 Gamescope headless/DXVK e confirmou ativação por decisão, abertura/rolagem do

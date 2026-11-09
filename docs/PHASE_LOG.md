@@ -353,3 +353,19 @@ Não foi relatado o clique no botão de aprovação, portanto a inclusão do
 nível na fila pública, as travas de clique e a revalidação na engine
 seguem sem confirmação. Recarga e coexistência com outros construtores
 ainda permanecem pendentes.
+
+## Fase 2 — Clique no botão bloqueado pela fila privada (5 de março de 1836)
+
+O jogador clicou no botão “Aprovar: enfileirar 1 nível do setor” do
+candidato Baixo Egito e nada aconteceu nem apareceu. A captura mostra o
+tooltip do botão com cadeado **Bloqueado** e o texto: “Só funciona com o
+game pausado, fila pública de ao menos três projetos, saldo semanal não
+negativo, sem inadimplência e sem níveis na fila privada. Também revalida
+o estado e as filas no clique.” Nesta leitura, a fila privada tem **2
+projetos**, portanto a trava da fila privada mantém o botão desabilitado
+e o clique é ignorado — comportamento correto.
+
+Para confirmar a aprovação na engine, o jogador precisará esvaziar a fila
+privada (ou usar uma cópia de save em que ela esteja vazia), com o jogo
+pausado, e então clicar. A inclusão do nível na fila pública, a
+revalidação no clique e o aviso de confirmação seguem sem confirmação.
