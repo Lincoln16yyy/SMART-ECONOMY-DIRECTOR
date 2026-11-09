@@ -47,10 +47,6 @@ sed_railway_blocked_default_sgui = {
  scope = state
  is_shown = { sed_railway_candidate_eligible = yes is_game_paused = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
 }
-sed_railway_blocked_balance_sgui = {
- scope = state
- is_shown = { sed_railway_candidate_eligible = yes is_game_paused = yes owner = { construction_queue_num_queued_private_levels = 0 NOT = { in_default = yes } net_total_income < 0 } }
-}
 sed_construction_blocked_paused_sgui = {
  scope = state
  is_shown = { sed_construction_candidate_eligible = yes NOT = { is_game_paused = yes } }
@@ -67,17 +63,29 @@ sed_construction_blocked_default_sgui = {
  scope = state
  is_shown = { sed_construction_candidate_eligible = yes is_game_paused = yes owner = { num_queued_government_constructions >= 3 construction_queue_num_queued_private_levels = 0 in_default = yes } }
 }
-sed_construction_blocked_balance_sgui = {
- scope = state
- is_shown = { sed_construction_candidate_eligible = yes is_game_paused = yes owner = { num_queued_government_constructions >= 3 construction_queue_num_queued_private_levels = 0 NOT = { in_default = yes } net_total_income < 0 } }
-}
 sed_railway_stale_sgui = {
  scope = state
- is_shown = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_railway_candidate_eligible = yes } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_railway_candidate_eligible = yes } NOT = { has_variable = sed_railway_request_pending } }
+}
+sed_railway_pending_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } has_variable = sed_railway_request_pending }
+}
+sed_railway_finance_caution_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled net_total_income < 0 } }
 }
 sed_construction_stale_sgui = {
  scope = state
- is_shown = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_construction_candidate_eligible = yes } }
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_construction_candidate_eligible = yes } NOT = { has_variable = sed_construction_request_pending } }
+}
+sed_construction_pending_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } has_variable = sed_construction_request_pending }
+}
+sed_construction_finance_caution_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled net_total_income < 0 } }
 }
 sed_monthly_visible_sgui = {
  scope = country

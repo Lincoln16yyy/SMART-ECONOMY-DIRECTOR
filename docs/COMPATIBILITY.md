@@ -34,8 +34,9 @@ Government Advisor apenas como recomendador de leis. Isso não autoriza o
 Director a iniciar promulgações nem a escrever variáveis de outros mods.
 
 Como Economy Advisor e Supply Chain Semi-Auto Builder estão habilitados, a
-construção é um domínio disputado. Os botões atuais exigem pausa, saldo semanal
-não negativo, país fora de inadimplência e fila privada vazia; a ferrovia valida
+construção é um domínio disputado. Os botões atuais exigem pausa, país fora de
+inadimplência e fila privada vazia; saldo semanal negativo aparece como alerta,
+mas não bloqueia aprovação manual. A ferrovia valida
 o estado e o nível no clique, e o setor de construção revalida a fila pública
 mínima e o edifício. Ambos usam o efeito normal e conferem o contador público.
 Isso não foi validado na engine da campanha. Nenhuma automação mensal de

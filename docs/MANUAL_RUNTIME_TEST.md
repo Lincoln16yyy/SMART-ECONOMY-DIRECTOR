@@ -1,10 +1,10 @@
-# Plano de testes de campanha — validação das ações 0.3.3 pendente
+# Plano de testes de campanha — validação das ações 0.3.4 pendente
 
 O jogador confirmou em campanha a interface e as leituras principais da 0.1.0,
 a renderização das seções ferroviária e de capacidade de construção vazias na
 0.3.0. A 0.3.1 teve os estados vazios conferidos; o candidato e a trava da fila
 privada também apareceram em campanha. A aprovação, as linhas de motivo das
-versões 0.3.2–0.3.3 e a convivência com o conjunto de mods continuam **não
+versões 0.3.2–0.3.4 e a convivência com o conjunto de mods continuam **não
 testadas em campanha**. A suíte automatizada atual executa os scripts gerados
 em um modelo restrito de país/estado/edifício e cobre filtros, ranking, travas,
 contagens disjuntas de rejeição, confirmação/rejeição da fila e limpeza; ela
@@ -67,9 +67,10 @@ para as duas seções e para a nova ação de capacidade de construção.
 
 ## Checklist da ação ferroviária 0.2.1
 
-Use uma cópia do save. Para aparecer uma oportunidade, o país precisa ter saldo
-semanal de script não negativo e estar fora de inadimplência; o jogo precisa
-estar pausado para aprovar. A fila privada nacional deve estar vazia. A
+Use uma cópia do save. Para aparecer uma oportunidade, aplicam-se os filtros
+estaduais abaixo. O país deve estar fora de inadimplência, o jogo pausado e a
+fila privada vazia para aprovar. Saldo semanal negativo gera um alerta, mas não
+bloqueia a aprovação desde a 0.3.4. A
 recomendação requer uma ferrovia já construída, ocupação de pelo menos 80%, sem
 falha de contratação ou falta de insumos, num estado incorporado com
 infraestrutura negativa e sem expansão ferroviária já enfileirada.
@@ -78,7 +79,8 @@ infraestrutura negativa e sem expansão ferroviária já enfileirada.
 | --- | --- |
 | Abrir a seção de oportunidades | Até três estados ordenados pelo maior déficit observado; sem candidato e sem déficit, explica que não há oportunidade de infraestrutura; com déficit mas sem candidato, explica que os filtros ferroviários rejeitaram os estados |
 | Tentar aprovar com o jogo rodando | Botão desabilitado; nenhuma ação ocorre |
-| Pausar, criar fila privada ou entrar em inadimplência / saldo negativo | Botão desabilitado ao consultar de novo a elegibilidade |
+| Pausar, criar fila privada ou entrar em inadimplência | Botão desabilitado ao consultar de novo a elegibilidade |
+| Manter saldo semanal negativo, com as outras travas liberadas | Alerta financeiro aparece e o botão continua clicável |
 | Reordenar fila pública/privada antes do clique | Uma expansão pública para o estado mostrado, ou botão desabilitado se a ferrovia já estiver na fila |
 | Aprovar uma oportunidade | Contador público aumenta em um nível; aviso confirma a inclusão; não há repetição automática |
 | Atualizar diagnóstico depois de aprovar | Mesmo estado não volta a oferecer o nível enquanto a expansão estiver enfileirada |
@@ -97,7 +99,8 @@ A recomendação exige uma fila pública com pelo menos três projetos. O estado
 precisa ter um setor de construção já construído, ocupação de pelo menos 90%,
 sem falha de contratação ou falta de insumos, sem expansão já enfileirada e
 elegibilidade normal do jogo. O país deve estar pausado para aprovar, fora de
-inadimplência, com saldo semanal não negativo e fila privada vazia. Entre os
+inadimplência e com fila privada vazia. Saldo negativo gera apenas um alerta
+desde a 0.3.4. Entre os
 setores elegíveis, o Director mostra o estado mais populoso.
 
 | Ação | Resultado a conferir |
@@ -105,7 +108,8 @@ setores elegíveis, o Director mostra o estado mais populoso.
 | Abrir a seção com fila pública curta | Explica que há menos de três projetos e não recomenda ampliar capacidade |
 | Abrir a seção com fila pública de três ou mais projetos | Mostra no máximo um setor de construção, ou explica que nenhum passou pelos filtros |
 | Tentar aprovar com o jogo rodando | Botão desabilitado; nenhuma ação ocorre |
-| Pausar, criar fila privada, entrar em inadimplência ou ficar com saldo negativo | Botão desabilitado na revalidação |
+| Pausar, criar fila privada ou entrar em inadimplência | Botão desabilitado na revalidação |
+| Manter saldo semanal negativo com as outras travas liberadas | Alerta financeiro aparece e o botão continua clicável |
 | Reduzir a fila pública para menos de três projetos antes do clique | Botão desabilitado ou candidato recusado |
 | Aprovar o setor mostrado | Contador público aumenta em um nível; aviso confirma; nenhuma repetição automática |
 | Atualizar o diagnóstico depois de aprovar | O mesmo estado não volta a oferecer o setor enquanto a expansão estiver enfileirada |
@@ -140,12 +144,13 @@ Registrar totais e parcelas de cada seção, data da leitura e se a linha
 sumiu quando surgiu candidato. A decomposição descreve os filtros atuais;
 não estima custo, prazo ou retorno.
 
-## Checklist do motivo do botão bloqueado 0.3.3
+## Checklist do motivo do botão bloqueado 0.3.4
 
 Quando um candidato está listado, mas o botão de aprovar está
 bloqueado, uma linha sob o botão nomeia a primeira guarda que falha: jogo
 rodando, fila pública abaixo de três projetos (apenas construção), fila
-privada não vazia, inadimplência ou saldo semanal negativo. O jogador
+privada não vazia ou inadimplência. O saldo semanal negativo não bloqueia mais
+a aprovação: aparece como alerta para revisar o custo na fila. O jogador
 clicou com fila privada de 2 projetos e apenas o tooltip com cadeado
 indicou o bloqueio, sem dizer qual trava falhava; a 0.3.2 deve mostrar
 “Botão bloqueado: há níveis na fila privada” nesse cenário.
@@ -155,7 +160,8 @@ indicou o bloqueio, sem dizer qual trava falhava; a 0.3.2 deve mostrar
 | Abrir o candidato com fila privada não vazia | Linha de motivo indica a fila privada |
 | Esvaziar a fila privada, pausar e reabrir/atualizar | Linha some e o botão fica clicável |
 | Testar com o jogo rodando | Linha indica que o jogo precisa estar pausado |
-| Testar em inadimplência ou saldo negativo | Linha indica inadimplência ou saldo, nessa ordem |
+| Testar em inadimplência | Linha indica inadimplência |
+| Testar com saldo semanal negativo e demais travas liberadas | Alerta financeiro aparece, mas botão continua clicável |
 | Na construção, reduzir a fila pública para menos de três | Linha indica a fila pública |
 | Aprovar com fila privada vazia e jogo pausado | Nível entra na fila pública; aviso confirma; sem repetição automática |
 
@@ -163,13 +169,14 @@ Depois dessa conferência, os pontos restantes são desativação (já uma vez
 confirmada), save/recarregar e a convivência com os outros construtores
 antes de ampliar os tipos de ação.
 
-## Checklist de recomendação desatualizada 0.3.3
+## Checklist de recomendação desatualizada e pendente 0.3.4
 
 As listas são calculadas na última leitura, mas as travas são avaliadas ao
 vivo. Se uma fila ou condição estadual mudar antes da leitura seguinte, o
 cartão pode continuar visível com o botão desabilitado. A nova linha deve
-explicar que a recomendação mudou ou já foi enfileirada e pedir uma atualização;
-nenhuma ação deve ser executada pelo cartão antigo.
+explicar que a recomendação mudou ou já foi enfileirada. Cartão desatualizado
+pede nova leitura e não executa a ação; cartão já enfileirado diz para não
+aprovar de novo. Nenhuma ação deve ser executada pelo cartão antigo.
 
 ## Cenários econômicos
 
@@ -177,7 +184,7 @@ nenhuma ação deve ser executada pelo cartão antigo.
 | --- | --- |
 | Haiti pequeno | Emprego, orçamento, infraestrutura e insumos permitem as prioridades? Registrar motivos e candidatos rejeitados |
 | País rico | Investimento aproveita capacidade sem expandir setor saturado? Comparar fila e custos recorrentes |
-| Crise fiscal | Bloquear novas expansões inviáveis sem prometer cancelar custos já contratados; verificar reserva/dívida |
+| Crise fiscal | Exibir saldo, reservas e dívida; alerta financeiro acompanha o candidato, e a aprovação manual segue disponível fora de default quando as demais travas passam |
 | Escassez | Distinguir preço alto de falta de insumo; impedir indústria dependente de abastecimento inexistente |
 | Sem oportunidade | Até zero recomendações; fila vazia permitida; nenhum candidato artificial |
 | Fila privada e pública | Mesmo edifício/estado em ambas, obra em andamento, primeira construção e cancelamento; nenhum pedido duplicado |

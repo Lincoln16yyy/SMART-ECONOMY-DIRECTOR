@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.3.3'
+VERSION = '0.3.4'
 STATE_VARIABLES = ['sed_railway_request_pending', 'sed_construction_request_pending']
 EXTRA_VARIABLES = '''sed_last_year sed_last_month sed_month_key sed_in_default
 sed_gdp_per_capita sed_per_capita_available sed_debt_share sed_debt_share_available
@@ -194,15 +194,6 @@ def widget():
      text = "sed_railway_blocked_default"
     }
     textbox = {
-     visible = "[GetScriptedGui('sed_railway_blocked_balance_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_railway_blocked_balance"
-    }
-    textbox = {
      visible = "[GetScriptedGui('sed_railway_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
      autoresize = yes
      multiline = yes
@@ -210,6 +201,24 @@ def widget():
      using = fontsize_small
      minimumsize = { 480 -1 }
      text = "sed_railway_stale"
+    }
+    textbox = {
+     visible = "[GetScriptedGui('sed_railway_pending_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_railway_pending"
+    }
+    textbox = {
+     visible = "[GetScriptedGui('sed_railway_finance_caution_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_railway_finance_caution"
     }
    }
   }
@@ -288,15 +297,6 @@ def widget():
      text = "sed_construction_blocked_default"
     }
     textbox = {
-     visible = "[GetScriptedGui('sed_construction_blocked_balance_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_construction_blocked_balance"
-    }
-    textbox = {
      visible = "[GetScriptedGui('sed_construction_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
      autoresize = yes
      multiline = yes
@@ -304,6 +304,24 @@ def widget():
      using = fontsize_small
      minimumsize = { 480 -1 }
      text = "sed_construction_stale"
+    }
+    textbox = {
+     visible = "[GetScriptedGui('sed_construction_pending_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_construction_pending"
+    }
+    textbox = {
+     visible = "[GetScriptedGui('sed_construction_finance_caution_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_construction_finance_caution"
     }
    }
   }
@@ -635,21 +653,19 @@ sed_approve_construction_sgui = {
  effect = { if = { limit = { sed_construction_approval_valid = yes } sed_run_construction_approval = yes } }
 }
 '''
-    # Blocked-reason lines, cascading so exactly one guard is named. Guard
-    # order: paused, queue (construction only), private queue, default, balance.
+    # Hard blockers appear in order. A negative budget is a caution, not a
+    # blocker. Pending actions and stale cards each have their own message.
     blocked = {
         'railway': {
             'paused': 'NOT = { is_game_paused = yes }',
             'private': 'is_game_paused = yes owner = { construction_queue_num_queued_private_levels > 0 }',
             'default': 'is_game_paused = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes }',
-            'balance': 'is_game_paused = yes owner = { construction_queue_num_queued_private_levels = 0 NOT = { in_default = yes } net_total_income < 0 }',
         },
         'construction': {
             'paused': 'NOT = { is_game_paused = yes }',
             'queue': 'is_game_paused = yes owner = { num_queued_government_constructions < 3 }',
             'private': 'is_game_paused = yes owner = { num_queued_government_constructions >= 3 construction_queue_num_queued_private_levels > 0 }',
             'default': 'is_game_paused = yes owner = { num_queued_government_constructions >= 3 construction_queue_num_queued_private_levels = 0 in_default = yes }',
-            'balance': 'is_game_paused = yes owner = { num_queued_government_constructions >= 3 construction_queue_num_queued_private_levels = 0 NOT = { in_default = yes } net_total_income < 0 }',
         },
     }
     for action, guards in blocked.items():
@@ -659,7 +675,14 @@ sed_approve_construction_sgui = {
     for action in ('railway', 'construction'):
         result += (f'sed_{action}_stale_sgui = {{\n scope = state\n'
                    f' is_shown = {{ owner = {{ is_player = yes has_variable = sed_enabled }} '
-                   f'NOT = {{ sed_{action}_candidate_eligible = yes }} }}\n}}\n')
+                   f'NOT = {{ sed_{action}_candidate_eligible = yes }} '
+                   f'NOT = {{ has_variable = sed_{action}_request_pending }} }}\n}}\n')
+        result += (f'sed_{action}_pending_sgui = {{\n scope = state\n'
+                   f' is_shown = {{ owner = {{ is_player = yes has_variable = sed_enabled }} '
+                   f'has_variable = sed_{action}_request_pending }}\n}}\n')
+        result += (f'sed_{action}_finance_caution_sgui = {{\n scope = state\n'
+                   f' is_shown = {{ owner = {{ is_player = yes has_variable = sed_enabled '
+                   f'net_total_income < 0 }} }}\n}}\n')
     conditions = {
         'monthly': 'has_variable = sed_monthly_refresh',
         'manual': 'NOT = { has_variable = sed_monthly_refresh }',
@@ -718,7 +741,6 @@ sed_railway_approval_valid = {
   is_player = yes
   has_variable = sed_enabled
   NOT = { in_default = yes }
-  net_total_income >= 0
   construction_queue_num_queued_private_levels = 0
  }
 }
@@ -745,7 +767,6 @@ sed_construction_approval_valid = {
   is_player = yes
   has_variable = sed_enabled
   NOT = { in_default = yes }
-  net_total_income >= 0
   num_queued_government_constructions >= 3
   construction_queue_num_queued_private_levels = 0
  }
@@ -808,12 +829,13 @@ def localization(language):
         'sed_railway_candidate_title': ('#bold [State.GetName]#! — saldo de infraestrutura: #v [State.GetInfrastructureBalance|0+=]#!', '#bold [State.GetName]#! — infrastructure balance: #v [State.GetInfrastructureBalance|0+=]#!'),
         'sed_railway_candidate_reason': ('A ferrovia está empregada, sem falta de insumos nem expansão já enfileirada. Um nível público pode aliviar o gargalo; o efeito e o custo futuros não são previstos.', 'The railway is staffed, has no input shortage, and has no queued expansion. One government level may relieve the bottleneck; future impact and cost are not forecast.'),
         'sed_approve_railway': ('Aprovar: enfileirar 1 nível público', 'Approve: queue 1 government level'),
-        'sed_approve_railway_tt': ('Só funciona com o jogo pausado, saldo semanal não negativo, sem inadimplência e sem níveis na fila privada. Também revalida o estado e as filas no clique. Usa a fila normal do jogo.', 'Requires the game paused, nonnegative weekly balance, no default, and no private queued levels. Rechecks the state and queues on click. Uses the game’s normal construction queue.'),
+        'sed_approve_railway_tt': ('Requer jogo pausado, país fora de inadimplência e fila privada vazia; estado e filas são revalidados no clique. Saldo semanal negativo gera um alerta financeiro, mas não bloqueia a aprovação. Usa a fila normal do jogo.', 'Requires the game paused, no default, and an empty private queue; state and queues are rechecked on click. A negative weekly balance raises a financial caution but does not block approval. Uses the normal game queue.'),
         'sed_railway_blocked_paused': ('Botão bloqueado: o jogo precisa estar pausado.', 'Button blocked: the game must be paused.'),
         'sed_railway_blocked_private': ('Botão bloqueado: há níveis na fila privada.', 'Button blocked: the private queue has levels.'),
         'sed_railway_blocked_default': ('Botão bloqueado: o país está em inadimplência.', 'Button blocked: the country is in default.'),
-        'sed_railway_blocked_balance': ('Botão bloqueado: saldo semanal negativo.', 'Button blocked: negative weekly balance.'),
-        'sed_railway_stale': ('Recomendação desatualizada ou já enfileirada. Atualize o diagnóstico para recalcular; nenhuma ação será executada enquanto os filtros não forem atendidos.', 'This recommendation is stale or already queued. Refresh the diagnosis to recalculate; no action runs unless the filters pass.'),
+        'sed_railway_stale': ('Esta recomendação mudou desde a última leitura. Nenhuma ação foi executada; atualize o diagnóstico para recalcular antes de aprovar.', 'This recommendation changed since the last reading. No action was executed; refresh the diagnosis before approving.'),
+        'sed_railway_pending': ('Esta expansão já está na fila. Não aprove novamente; a marca será limpa numa leitura após concluir ou cancelar a obra.', 'This expansion is already queued. Do not approve again; the marker clears on a reading after completion or cancellation.'),
+        'sed_railway_finance_caution': ('Alerta: o saldo semanal está negativo. A aprovação continua disponível; confira na fila o custo e o prazo antes de prosseguir.', 'Caution: the weekly balance is negative. Approval remains available; review the queue cost and timing before proceeding.'),
         'sed_railway_action_success': ('Pedido adicionado à fila pública. Confira os custos e o prazo na fila do jogo.', 'Request added to the government queue. Review cost and timing in the game queue.'),
         'sed_railway_action_failed': ('A engine não confirmou a inclusão na fila. Nenhuma nova tentativa será automática.', 'The engine did not confirm the queue addition. No automatic retry will occur.'),
         'sed_construction_title': ('Capacidade de construção', 'Construction capacity'),
@@ -824,13 +846,14 @@ def localization(language):
         'sed_construction_candidate_title': ('#bold [State.GetName]#! — setor de construção', '#bold [State.GetName]#! — construction sector'),
         'sed_construction_candidate_reason': ('O setor está empregado, sem falta de insumos nem expansão já enfileirada. Um nível público pode aumentar a capacidade; o efeito, o custo e o prazo futuros não são previstos.', 'The sector is staffed, has no input shortage, and has no queued expansion. One government level may raise capacity; future impact, cost, and timing are not forecast.'),
         'sed_approve_construction': ('Aprovar: enfileirar 1 nível do setor', 'Approve: queue 1 construction sector level'),
-        'sed_approve_construction_tt': ('Só funciona com o jogo pausado, fila pública de ao menos três projetos, saldo semanal não negativo, sem inadimplência e sem níveis na fila privada. Também revalida o estado e as filas no clique. Usa a fila normal do jogo.', 'Requires the game paused, at least three government projects queued, nonnegative weekly balance, no default, and no private queued levels. Rechecks the state and queues on click. Uses the game’s normal construction queue.'),
+        'sed_approve_construction_tt': ('Requer jogo pausado, pelo menos três projetos na fila pública, país fora de inadimplência e fila privada vazia; estado e filas são revalidados no clique. Saldo semanal negativo gera um alerta financeiro, mas não bloqueia a aprovação. Usa a fila normal do jogo.', 'Requires the game paused, at least three government projects queued, no default, and an empty private queue; state and queues are rechecked on click. A negative weekly balance raises a financial caution but does not block approval. Uses the normal game queue.'),
         'sed_construction_blocked_paused': ('Botão bloqueado: o jogo precisa estar pausado.', 'Button blocked: the game must be paused.'),
         'sed_construction_blocked_queue': ('Botão bloqueado: a fila pública tem menos de três projetos.', 'Button blocked: the government queue has fewer than three projects.'),
         'sed_construction_blocked_private': ('Botão bloqueado: há níveis na fila privada.', 'Button blocked: the private queue has levels.'),
         'sed_construction_blocked_default': ('Botão bloqueado: o país está em inadimplência.', 'Button blocked: the country is in default.'),
-        'sed_construction_blocked_balance': ('Botão bloqueado: saldo semanal negativo.', 'Button blocked: negative weekly balance.'),
-        'sed_construction_stale': ('Recomendação desatualizada ou já enfileirada. Atualize o diagnóstico para recalcular; nenhuma ação será executada enquanto os filtros não forem atendidos.', 'This recommendation is stale or already queued. Refresh the diagnosis to recalculate; no action runs unless the filters pass.'),
+        'sed_construction_stale': ('Esta recomendação mudou desde a última leitura. Nenhuma ação foi executada; atualize o diagnóstico para recalcular antes de aprovar.', 'This recommendation changed since the last reading. No action was executed; refresh the diagnosis before approving.'),
+        'sed_construction_pending': ('Esta expansão já está na fila. Não aprove novamente; a marca será limpa numa leitura após concluir ou cancelar a obra.', 'This expansion is already queued. Do not approve again; the marker clears on a reading after completion or cancellation.'),
+        'sed_construction_finance_caution': ('Alerta: o saldo semanal está negativo. A aprovação continua disponível; confira na fila o custo e o prazo antes de prosseguir.', 'Caution: the weekly balance is negative. Approval remains available; review the queue cost and timing before proceeding.'),
         'sed_construction_action_success': ('Pedido do setor de construção adicionado à fila pública. Confira os custos e o prazo na fila do jogo.', 'Construction sector request added to the government queue. Review cost and timing in the game queue.'),
         'sed_construction_action_failed': ('A engine não confirmou a inclusão do setor de construção na fila. Nenhuma nova tentativa será automática.', 'The engine did not confirm the construction sector queue addition. No automatic retry will occur.'),
         'sed_limitations': ('Protótipos limitados a ferrovias operantes com infraestrutura negativa e a setores de construção operantes com fila pública de ao menos três projetos. Não estima custo, contratação futura ou retorno. A aprovação apenas adiciona um nível à fila pública; os custos e o tempo dependem do jogo. Qualificações, salários, desempregados e dependência externa ainda não são medidos diretamente. Edifícios com contratação incompleta não equivalem a desempregados. As filas mostram projetos, não níveis nem custos futuros. A alfabetização segue a abrangência do indicador do jogo. Variações de PIB podem refletir mudanças de fronteira e mercado. O setor de construção depende de trabalhadores e insumos disponíveis; a recomendação não garante que o novo nível será contratado.', 'Prototypes limited to operating railways in states with negative infrastructure and operating construction sectors when the government queue has at least three projects. They do not estimate cost, future hiring, or returns. Approval only adds one level to the government queue; costs and timing depend on the game. Qualifications, wages, unemployed workers and external dependence are not directly measured. Incompletely staffed buildings are not a count of unemployed workers. Queues show projects, not levels or future costs. Literacy follows the game indicator’s coverage. GDP changes may reflect borders and markets. Construction sectors depend on available workers and inputs; the recommendation does not guarantee that the new level will be staffed.'),

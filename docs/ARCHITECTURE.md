@@ -89,9 +89,10 @@ Se essa consulta não for confiável, a construção automática permanecerá bl
 
 Na 0.2.0, o primeiro recorte considera apenas ferrovias já existentes e
 operantes em estados incorporados com infraestrutura abaixo de zero. Exige jogo
-pausado, ausência de inadimplência, saldo semanal não negativo e fila privada
-vazia; confere o nível ferroviário já enfileirado e a elegibilidade normal do
-jogo no clique. Mesmo com essas travas, custo e retorno não são previstos. O
+pausado, ausência de inadimplência e fila privada vazia; confere o nível
+ferroviário já enfileirado e a elegibilidade normal do jogo no clique. Saldo
+semanal negativo gera um alerta junto ao candidato, mas não bloqueia a aprovação.
+Mesmo com essas travas, custo e retorno não são previstos. O
 pedido cria um único nível na fila pública e sua inclusão é conferida pelo
 contador de níveis públicos.
 
@@ -99,7 +100,8 @@ Na 0.3.0, a segunda ação só aparece quando a fila pública tem pelo menos tr�
 projetos. Entre os setores de construção operantes, sem falta de insumos, sem
 falha de contratação e sem expansão enfileirada, o Director mostra o estado mais
 populoso. A aprovação repete as travas fiscais e de fila, enfileira um único
-nível e confere o mesmo contador público. O recorte não calcula custo, prazo nem
+nível e confere o mesmo contador público. Saldo semanal negativo é alerta, não
+bloqueio. O recorte não calcula custo, prazo nem
 garante que o novo nível será contratado; a localização no estado mais populoso
 não é uma projeção de retorno.
 

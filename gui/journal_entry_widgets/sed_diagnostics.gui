@@ -65,15 +65,6 @@ types sed_diagnostics_types {
      text = "sed_railway_blocked_default"
     }
     textbox = {
-     visible = "[GetScriptedGui('sed_railway_blocked_balance_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_railway_blocked_balance"
-    }
-    textbox = {
      visible = "[GetScriptedGui('sed_railway_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
      autoresize = yes
      multiline = yes
@@ -81,6 +72,24 @@ types sed_diagnostics_types {
      using = fontsize_small
      minimumsize = { 480 -1 }
      text = "sed_railway_stale"
+    }
+    textbox = {
+     visible = "[GetScriptedGui('sed_railway_pending_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_railway_pending"
+    }
+    textbox = {
+     visible = "[GetScriptedGui('sed_railway_finance_caution_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_railway_finance_caution"
     }
    }
   }
@@ -159,15 +168,6 @@ types sed_diagnostics_types {
      text = "sed_construction_blocked_default"
     }
     textbox = {
-     visible = "[GetScriptedGui('sed_construction_blocked_balance_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
-     autoresize = yes
-     multiline = yes
-     align = left|nobaseline
-     using = fontsize_small
-     minimumsize = { 480 -1 }
-     text = "sed_construction_blocked_balance"
-    }
-    textbox = {
      visible = "[GetScriptedGui('sed_construction_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
      autoresize = yes
      multiline = yes
@@ -175,6 +175,24 @@ types sed_diagnostics_types {
      using = fontsize_small
      minimumsize = { 480 -1 }
      text = "sed_construction_stale"
+    }
+    textbox = {
+     visible = "[GetScriptedGui('sed_construction_pending_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_construction_pending"
+    }
+    textbox = {
+     visible = "[GetScriptedGui('sed_construction_finance_caution_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_construction_finance_caution"
     }
    }
   }

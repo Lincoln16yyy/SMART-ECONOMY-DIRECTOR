@@ -430,3 +430,34 @@ local após backup da 0.3.2 em
 `sed_backups/mod_0.3.2_20261109_002500_858490`; o mod segue habilitado e as 11
 entradas anteriores foram preservadas. A mensagem precisa ser conferida numa
 campanha.
+
+## Fase 2 — Alerta de orçamento sem bloquear aprovação 0.3.4
+
+O jogador esclareceu que saldo semanal negativo não deve impedir uma ação
+econômica recomendada: o Director precisa expor o alerta e deixar a decisão
+final ao botão de aprovação. Removi o saldo mínimo das duas validações de
+aprovação e dos motivos de bloqueio; pausa, ausência de inadimplência, fila
+privada vazia, elegibilidade estadual e a exigência de três projetos para
+expandir o setor de construção continuam como travas.
+
+Também separei o estado de ação pendente do cartão realmente desatualizado.
+Depois de uma aprovação incluída na fila, a linha informa que não se deve
+aprovar de novo; um cartão que perdeu elegibilidade pede nova leitura e deixa
+claro que nada foi executado. O saldo negativo aparece como alerta junto a cada
+candidato, com orientação para revisar custo e prazo na fila do jogo.
+
+Geração, `build_mod.py --check`, validação estática no empacotamento e
+`git diff --check` passaram. Não foram executados testes unitários nem feita
+conferência na engine para a 0.3.4. O pacote foi instalado no perfil local após
+backup da 0.3.3 em
+`sed_backups/mod_0.3.3_20261109_005440_321706`; o mod continua habilitado e as
+11 entradas do load order foram preservadas.
+
+Na captura do Haiti (11/01/1836), havia 0 estados com déficit de infraestrutura,
+fila pública/privada 0/0 e saldo semanal -£4,27K. Portanto, nenhuma das duas
+ações estreitas gera candidato nesse cenário: ferrovia exige déficit de
+infraestrutura e setor de construção exige fila pública de ao menos três
+projetos. A nova regra permite aprovar uma oportunidade elegível mesmo com
+saldo negativo, mas não inventa uma oportunidade. A próxima ação para cobrir
+esse caso depende de identificar uma necessidade específica do mercado e uma
+resposta produtiva compatível com emprego e insumos.

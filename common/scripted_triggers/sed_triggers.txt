@@ -21,7 +21,6 @@ sed_railway_approval_valid = {
   is_player = yes
   has_variable = sed_enabled
   NOT = { in_default = yes }
-  net_total_income >= 0
   construction_queue_num_queued_private_levels = 0
  }
 }
@@ -48,7 +47,6 @@ sed_construction_approval_valid = {
   is_player = yes
   has_variable = sed_enabled
   NOT = { in_default = yes }
-  net_total_income >= 0
   num_queued_government_constructions >= 3
   construction_queue_num_queued_private_levels = 0
  }
