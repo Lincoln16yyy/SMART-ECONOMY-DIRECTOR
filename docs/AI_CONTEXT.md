@@ -4,13 +4,15 @@ O usuário solicitou seguir `Texto colado.txt` e ir publicando no GitHub
 `Lincoln16yyy/SMART-ECONOMY-DIRECTOR`. O conteúdo original está preservado
 integralmente em PROJECT_BRIEF.md. Leia-o antes de trabalhar.
 
-Fase atual: correções de integridade da execução em 0.3.8. A prioridade
-ferroviária automática agora usa o mesmo sinal da lista de recomendações,
-priorizando o maior déficit de infraestrutura. Resolver uma expansão de setor
-de construção não apaga mais marcas de oferta de outros prédios no estado.
-Desativar continua limpando todas as marcas. Os dois defeitos foram reproduzidos
-por testes antes da correção; a suíte agora tem 53 testes aprovados.
-A 0.3.8 foi instalada com backup da 0.3.7 em `mod_0.3.7_20261109_100657_248672`, preservando o load order byte a byte. Ainda requer conferência na engine; não iniciar teste gráfico longo.
+Fase atual: status de inclusão não confirmada na revisão automática 0.3.9.
+Instalada localmente com backup `mod_0.3.8_20261109_100912_949247`; load order preservado.
+Quando há candidato selecionado mas a fila não confirma a inclusão, o status
+agora é 15 e a interface o distingue de ausência de candidato (2). A revisão
+não tenta outro candidato após a tentativa; uma revisão mensal futura segue
+as regras normais. Status antigos mantêm seus valores. Os 55 testes passam,
+incluindo os nove tipos de ação automática com inserção recusada e o evento
+real gerado após troca de modo/desativação. Nenhuma campanha foi iniciada;
+confirmação de execução e renderização na engine permanece pendente.
 
 Continuação em 2026-11-09: a suíte foi retomada e os **51 testes passaram**.
 O harness agora modela mercado/bens ausentes, métodos ativos, existência de

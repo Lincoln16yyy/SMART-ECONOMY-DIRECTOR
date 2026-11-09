@@ -266,3 +266,17 @@ erro de script ou um clique duplicar construção.
 - Desativar: todas as marcas estaduais do Director devem ser removidas.
 
 Esses casos passaram no harness; a confirmação na engine permanece pendente.
+
+
+## Revisão com inclusão não confirmada 0.3.9
+
+Se a revisão selecionar candidato mas não confirmar aumento na fila pública,
+o diário deve informar inclusão não confirmada, pedir conferência da fila e
+explicar que não tentou outra expansão nessa revisão. Não deve informar
+"sem ação elegível". Esse caminho foi verificado por inserção recusada no
+harness; não foi identificado um método seguro para forçar a recusa na engine.
+
+Com evento já agendado, trocar para Manual/Assistido ou desativar antes de sua
+execução deve impedir a ação. Em Automático, a execução deve permitir agendar
+novamente no pulso mensal seguinte. Conferir também save/reload com evento
+pendente; persistência e passagem de tempo não são simuladas pelos testes.

@@ -27,6 +27,7 @@
  sed_auto_status_paused:0 "A revisão automática não enfileirou obra porque a construção está pausada."
  sed_auto_status_competing:0 "A revisão automática foi suspensa porque outra automação de construção conhecida está ativa."
  sed_auto_status_safety:0 "A revisão automática foi suspensa por uma condição de segurança não classificada. Nenhuma obra foi enfileirada."
+ sed_auto_status_unconfirmed:0 "A revisão automática selecionou uma expansão, mas não confirmou a inclusão na fila pública. Confira a fila do jogo. Esta revisão não tentou outra expansão."
  sed_refresh:0 "Atualizar diagnóstico"
  sed_refresh_tt:0 "Lê novamente os indicadores deste país."
  sed_disable:0 "Desativar"

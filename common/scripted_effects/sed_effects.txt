@@ -771,6 +771,8 @@ sed_auto_apply_monthly = {
     order_by = { value = infrastructure_delta multiply = -1 }
     max = 1
     check_range_bounds = no
+    # A candidate was selected; only confirmed insertion changes this to success.
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
     sed_run_railway_approval = yes
    }
   }
@@ -781,6 +783,8 @@ sed_auto_apply_monthly = {
     order_by = { value = state_population multiply = -1 }
     max = 1
     check_range_bounds = no
+    # A candidate was selected; only confirmed insertion changes this to success.
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
     sed_run_wood_approval = yes
    }
   }
@@ -791,6 +795,8 @@ sed_auto_apply_monthly = {
     order_by = { value = state_population multiply = -1 }
     max = 1
     check_range_bounds = no
+    # A candidate was selected; only confirmed insertion changes this to success.
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
     sed_run_iron_approval = yes
    }
   }
@@ -801,6 +807,8 @@ sed_auto_apply_monthly = {
     order_by = { value = state_population multiply = -1 }
     max = 1
     check_range_bounds = no
+    # A candidate was selected; only confirmed insertion changes this to success.
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
     sed_run_coal_approval = yes
    }
   }
@@ -811,6 +819,8 @@ sed_auto_apply_monthly = {
     order_by = { value = state_population multiply = -1 }
     max = 1
     check_range_bounds = no
+    # A candidate was selected; only confirmed insertion changes this to success.
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
     sed_run_grain_approval = yes
    }
   }
@@ -821,6 +831,8 @@ sed_auto_apply_monthly = {
     order_by = { value = state_population multiply = -1 }
     max = 1
     check_range_bounds = no
+    # A candidate was selected; only confirmed insertion changes this to success.
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
     sed_run_fabric_approval = yes
    }
   }
@@ -831,6 +843,8 @@ sed_auto_apply_monthly = {
     order_by = { value = state_population multiply = -1 }
     max = 1
     check_range_bounds = no
+    # A candidate was selected; only confirmed insertion changes this to success.
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
     sed_run_tools_approval = yes
    }
   }
@@ -841,6 +855,8 @@ sed_auto_apply_monthly = {
     order_by = { value = state_population multiply = -1 }
     max = 1
     check_range_bounds = no
+    # A candidate was selected; only confirmed insertion changes this to success.
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
     sed_run_groceries_approval = yes
    }
   }
@@ -851,6 +867,8 @@ sed_auto_apply_monthly = {
     order_by = { value = state_population multiply = -1 }
     max = 1
     check_range_bounds = no
+    # A candidate was selected; only confirmed insertion changes this to success.
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
     sed_run_clothes_approval = yes
    }
   }

@@ -587,3 +587,4 @@ sed_auto_status_queue_visible_sgui = { scope = country is_shown = { has_variable
 sed_auto_status_paused_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 12 } }
 sed_auto_status_competing_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 13 } }
 sed_auto_status_safety_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 14 } }
+sed_auto_status_unconfirmed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled var:sed_auto_action_status = 15 } }

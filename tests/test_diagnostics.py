@@ -130,6 +130,49 @@ class DiagnosisTests(unittest.TestCase):
         self.assertNotIn('sed_construction_request_pending', target['variables'])
         self.assertIn('sed_wood_request_pending', target['variables'])
 
+    def test_auto_failed_insertion_has_distinct_status_and_no_second_attempt(self):
+        for action in ['railway'] + [item['good'] for item in SUPPLY_TARGETS]:
+            with self.subTest(action=action):
+                c = self.country(construction_queue_num_queued_government_levels=0)
+                c.run('sed_set_mode_automatic')
+                c.construction_accepted = False
+                if action == 'railway':
+                    producer = railway()
+                else:
+                    item = next(item for item in SUPPLY_TARGETS if item['good'] == action)
+                    producer = building(item['building'])
+                    producer['production_methods'] = [item['methods'][0]]
+                    c.market_goods[action] = {'market_goods_has_goods_shortage': True}
+                c.states = [state(-2 if action == 'railway' else 0, buildings=[producer]),
+                            state(-3 if action == 'railway' else 0, buildings=[producer.copy()])]
+                c.run('sed_auto_apply_monthly')
+                self.assertEqual(len(c.constructions), 1)
+                self.assertEqual(c.variables['sed_auto_action_status'], 15)
+                self.assertTrue(all('sed_' + action + '_request_pending' not in target['variables']
+                                    for target in c.states))
+                self.assertNotIn('sed_queue_levels_before', c.variables)
+
+    def test_scheduled_event_rechecks_mode_and_activation(self):
+        event = next(entry.value for entry in parse(
+            outputs()['events/sed_events.txt'].decode('utf-8-sig'))
+                     if entry.key == 'sed_pulse.1')
+        for mode in ('automatic', 'assisted', 'manual', 'disabled'):
+            with self.subTest(mode=mode):
+                c = self.country(construction_queue_num_queued_government_levels=0)
+                c.states = [state(-3, buildings=[railway()])]
+                c.run('sed_set_mode_automatic')
+                if mode == 'disabled':
+                    c.run('sed_disable_country')
+                else:
+                    c.run('sed_set_mode_' + mode)
+                if c.condition(child(event, 'trigger'), c.country_scope()):
+                    c.execute(child(event, 'immediate'), c.country_scope())
+                self.assertEqual(len(c.constructions), int(mode == 'automatic'))
+                self.assertNotIn('sed_auto_event_pending', c.variables)
+                if mode != 'disabled':
+                    c.run('sed_monthly_update')
+                    self.assertEqual(len(c.scheduled_events), 2 if mode == 'automatic' else 1)
+
     def test_activation_collects_real_supplied_readings(self):
         c = self.country(gdp=12345, total_population=500, average_sol=13.25)
         self.assertEqual(c.variables['sed_gdp'], 12345)

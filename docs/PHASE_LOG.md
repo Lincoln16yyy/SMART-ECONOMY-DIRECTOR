@@ -553,3 +553,28 @@ Geração, validação estática contra o jogo local, empacotamento e
 gerador, sem jogo em execução. Backup: `mod_0.3.7_20261109_100657_248672`.
 O load order foi preservado byte a byte. O envio ao GitHub segue impedido por
 falha de resolução DNS de github.com.
+
+
+## Status de tentativa automática sem confirmação 0.3.9
+
+O teste de inserção recusada reproduziu, nos nove tipos de ação automática,
+um estado incorreto: havia candidato e tentativa, mas a mensagem dizia que não
+havia ação elegível. A revisão agora atribui 15 ao selecionar candidato e só
+muda para sucesso com confirmação de aumento na fila pública. A GUI apresenta
+uma linha em português/inglês para a inclusão não confirmada. Não há tentativa
+de outro candidato na mesma revisão. A revisão mensal futura continua normal.
+Os códigos antigos de status foram preservados.
+
+O evento gerado também foi testado com Automático, Assistido, Manual e Director
+desativado: revalida o modo, não age após desativação e libera o marcador para
+agendar a próxima revisão no modo automático. São verificações do harness,
+sem simular passagem de tempo ou persistência de eventos na engine.
+
+Resultado: 55 testes aprovados, validação estática contra o jogo local e
+empacotamento aprovados. Nenhum jogo foi iniciado. O error.log disponível é de
+02:38 de 2026-11-09, anterior às instalações da 0.3.8/0.3.9; tem mensagens de
+localização ausente dos status da 0.3.7, mas não comprova defeito na instalação
+atual. As chaves estão nos dois arquivos de localização atuais.
+
+Instalada a 0.3.9 sem jogo em execução, com backup `mod_0.3.8_20261109_100912_949247`.
+Arquivos conferidos byte a byte com o gerador; load order preservado byte a byte.
