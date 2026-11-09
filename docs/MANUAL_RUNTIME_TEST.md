@@ -1,13 +1,13 @@
-# Plano de testes de campanha — validação das ações 0.3.0 pendente
+# Plano de testes de campanha — validação das ações 0.3.1 pendente
 
 O jogador confirmou em campanha a interface e as leituras principais da 0.1.0,
-a renderização da seção ferroviária vazia na 0.2.0 e a seção de capacidade de
-construção vazia na 0.3.0. As ações
-ferroviária e de capacidade de construção da 0.3.0 e a convivência com o
-conjunto de mods continuam **não testadas em campanha**. A suíte automatizada
-atual executa os scripts gerados em um modelo restrito de país/estado/edifício e
-cobre filtros, ranking, travas, confirmação/rejeição da fila e limpeza; ela não
-é evidência de renderização ou de aceitação pela engine.
+a renderização das seções ferroviária e de capacidade de construção vazias na
+0.3.0. As ações ferroviária e de capacidade de construção, a decomposição de
+motivos da 0.3.1 e a convivência com o conjunto de mods continuam **não
+testadas em campanha**. A suíte automatizada atual executa os scripts gerados
+em um modelo restrito de país/estado/edifício e cobre filtros, ranking, travas,
+contagens disjuntas de rejeição, confirmação/rejeição da fila e limpeza; ela
+não é evidência de renderização ou de aceitação pela engine.
 
 ## Checklist específico da versão 0.1.0
 
@@ -114,6 +114,28 @@ setores elegíveis, o Director mostra o estado mais populoso.
 Registrar a fila pública antes/depois, o nível do setor, ocupação, insumos,
 população do estado, pausa, saldo e flags dos outros construtores. A ação não
 promete que o novo nível será contratado nem que reduzirá o prazo da fila.
+
+## Checklist da decomposição de motivos 0.3.1
+
+Quando não há candidato, cada seção mostra uma linha de motivos com contagens
+por estado. Na seção ferroviária, o total de estados com déficit de
+infraestrutura é dividido em sem ferrovia, ferrovia não operante e bloqueados
+por incorporação ou permissão; na capacidade de construção, o total de
+estados com setor é dividido em setor não operante e bloqueados. Cada estado
+entra em um único motivo, e as contagens somam o total exibido. Os contadores
+são zerados a cada leitura.
+
+| Ação | Resultado a conferir |
+| --- | --- |
+| Abrir as seções sem candidato | Linha de motivos visível e valores coerentes com os estados do país; a soma das parcelas corresponde ao total |
+| Atualizar duas vezes no mesmo mês | Contagens permanecem as mesmas, sem acumular entre leituras |
+| Fazer um candidato aparecer (ou usar cópia de save com um) | Linha some e a recomendação aparece |
+| Atualizar após a aprovação | O estado aprovado sai da lista e os contadores refletem o estado atual |
+| Comparar com a telinha de estados do jogo | Estados sem ferrovia/setor e prédios parados correspondem às parcelas mostradas |
+
+Registrar totais e parcelas de cada seção, data da leitura e se a linha
+sumiu quando surgiu candidato. A decomposição descreve os filtros atuais;
+não estima custo, prazo ou retorno.
 
 ## Cenários econômicos
 

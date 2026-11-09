@@ -92,12 +92,13 @@ limpeza dos dois fluxos. Ele não confirma primitivas, datamodel nem GUI na
 engine.
 
 Próximos passos: pedir ao jogador uma conferência breve dos dois botões e da
-linha de motivos, em cópia de save, com o jogo pausado. Registrar se os estados
-aparecem, se as travas desabilitam os botões e se a fila pública ganha um único
-nível em cada tipo. Não iniciar testes gráficos ocultos prolongados. Depois
-verificar desativação, recarga e coexistência antes de ampliar os tipos de ação.
-O comportamento real das pendências é: a marca permanece enquanto a expansão está
-enfileirada e some quando ela é concluída ou cancelada.
+linha de motivos, em cópia de save, com o jogo pausado, seguindo o checklist
+da 0.3.1 em MANUAL_RUNTIME_TEST.md. Registrar se os estados aparecem, se as
+travas desabilitam os botões e se a fila pública ganha um único nível em cada
+tipo. Não iniciar testes gráficos ocultos prolongados. Depois verificar
+desativação, recarga e coexistência antes de ampliar os tipos de ação.
+O comportamento real das pendências é: a marca permanece enquanto a expansão
+está enfileirada e some quando ela é concluída ou cancelada.
 
 Houve teste de inicialização isolado em Xvfb/Wine, descrito em RUNTIME_SMOKE.md:
 o mod foi reconhecido e chegou ao menu sem erros próprios na execução limpa.
