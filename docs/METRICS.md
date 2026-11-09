@@ -1,10 +1,10 @@
 # Métricas: fonte, escopo e apresentação
 
-Pesquisa estática de 2026-11-08. A versão 0.2.0 mantém o núcleo de leituras
+Pesquisa estática de 2026-11-08. A versão 0.3.0 mantém o núcleo de leituras
 introduzido em `data/metrics.json` e derivações/contagens descritas em PHASE1.md.
 O jogador confirmou a tela e as leituras principais da 0.1.0 em campanha; o
-novo binding da lista de estados e o botão ferroviário da 0.2.0 ainda não foram
-conferidos no jogo.
+binding da lista de estados e os dois botões de construção da 0.3.0 ainda não
+foram conferidos no jogo.
 Uma função na GUI não comprova que seu valor possa ser lido por um scripted
 effect. Uma primitiva usada por outro mod não prova que o motor a tenha aceitado.
 

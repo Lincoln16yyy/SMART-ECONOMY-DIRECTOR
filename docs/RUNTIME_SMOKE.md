@@ -72,8 +72,8 @@ para instalar o mod e podem desaparecer ao reiniciar a máquina.
 **Confirmado:** descoberta do mod, correspondência de versão, inicialização
 até o menu e ausência de erros próprios de carregamento identificados na
 execução limpa. A suíte automatizada da 0.1.0 (24 testes) passava; a suíte
-atual, já ampliada para a ação 0.2.1, tem 33 testes aprovados, e a validação
-estática também passa.
+atual, já ampliada para as ações 0.2.1 e 0.3.0, tem 40 testes aprovados, e a
+validação estática também passa.
 
 **Não confirmado:** ativação por decisão numa campanha, renderização do widget,
 correspondência dos números com as telas, atualização mensal, limpeza observada

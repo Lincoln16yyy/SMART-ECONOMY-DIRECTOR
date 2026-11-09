@@ -8,6 +8,7 @@ sed_enable_country = {
  set_variable = { name = sed_enabled value = yes }
  set_variable = { name = sed_monthly_refresh value = yes }
  set_variable = { name = sed_railway_action_status value = 0 }
+ set_variable = { name = sed_construction_action_status value = 0 }
  sed_refresh_diagnostics = yes
  sed_ensure_journal_entry = yes
 }
@@ -52,9 +53,14 @@ sed_disable_country = {
  remove_variable = sed_growth_months
  remove_variable = sed_growth_available
  remove_variable = sed_railway_action_status
+ remove_variable = sed_construction_action_status
  remove_variable = sed_queue_levels_before
  clear_variable_list = sed_railway_candidates
- every_scope_state = { remove_variable = sed_railway_request_pending }
+ clear_variable_list = sed_construction_candidates
+ every_scope_state = {
+  remove_variable = sed_railway_request_pending
+  remove_variable = sed_construction_request_pending
+ }
  # The schema marker is the only retained variable. Re-enable uses a decision.
 }
 
@@ -155,6 +161,7 @@ sed_refresh_diagnostics = {
   }
   sed_update_growth = yes
   sed_refresh_railway_candidates = yes
+  sed_refresh_construction_candidates = yes
  }
 }
 
@@ -200,6 +207,57 @@ sed_run_railway_approval = {
     prev = { set_variable = { name = sed_railway_request_pending value = yes } }
    }
    else = { set_variable = { name = sed_railway_action_status value = 2 } }
+   remove_variable = sed_queue_levels_before
+  }
+ }
+}
+
+sed_refresh_construction_candidates = {
+ clear_variable_list = sed_construction_candidates
+ every_scope_state = {
+  if = {
+   limit = {
+    has_variable = sed_construction_request_pending
+    OR = {
+     NOT = { has_building = building_construction_sector }
+     b:building_construction_sector = { level_after_queued_constructions <= level }
+    }
+   }
+   remove_variable = sed_construction_request_pending
+  }
+ }
+ if = {
+  limit = {
+   is_player = yes
+   has_variable = sed_enabled
+   num_queued_government_constructions >= 3
+  }
+  ordered_scope_state = {
+   limit = { sed_construction_candidate_eligible = yes }
+   order_by = { value = state_population }
+   max = 1
+   check_range_bounds = no
+   root = {
+    add_to_variable_list = { name = sed_construction_candidates target = prev }
+   }
+  }
+ }
+}
+
+sed_run_construction_approval = {
+ if = {
+  limit = { sed_construction_approval_valid = yes }
+  owner = {
+   set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }
+  }
+  start_building_construction = building_construction_sector
+  owner = {
+   if = {
+    limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_construction_action_status value = 1 }
+    prev = { set_variable = { name = sed_construction_request_pending value = yes } }
+   }
+   else = { set_variable = { name = sed_construction_action_status value = 2 } }
    remove_variable = sed_queue_levels_before
   }
  }

@@ -2,9 +2,9 @@
 
 Data: 2026-11-08. Habilitado significa listado em `content_load.json`, não
 automação comprovadamente ativa em campanha. A interface e o estado vazio da
-seção de oportunidades foram confirmados pelo jogador. A ação ferroviária
-aprovada da 0.2.1 ainda não foi
-conferida em campanha nem com os outros mods ativos.
+seção de oportunidades foram confirmados pelo jogador. As ações ferroviária e de
+capacidade de construção da 0.3.0 ainda não foram conferidas em campanha nem
+com os outros mods ativos.
 
 | Mod | Evidência local / responsabilidade | Conflito e coexistência proposta |
 | --- | --- | --- |
@@ -26,18 +26,21 @@ conferida em campanha nem com os outros mods ativos.
 
 O Director deve mostrar ações econômicas recomendadas com controles de
 aprovação que executem a ação real do jogo. A primeira versão desse fluxo está
-implementada para expandir ferrovias em estados elegíveis. O jogador quer manter o Smart
+implementada para expandir ferrovias em estados elegíveis e, na 0.3.0, para
+ampliar um setor de construção quando a fila pública tem pelo menos três
+projetos. O jogador quer manter o Smart
 Government Advisor apenas como recomendador de leis. Isso não autoriza o
 Director a iniciar promulgações nem a escrever variáveis de outros mods.
 
 Como Economy Advisor e Supply Chain Semi-Auto Builder estão habilitados, a
-construção é um domínio disputado. O botão atual exige pausa, saldo semanal não
-negativo, país fora de inadimplência e fila privada vazia; valida o estado e
-nível ferroviário no clique, usa o efeito normal e confere o contador público.
+construção é um domínio disputado. Os botões atuais exigem pausa, saldo semanal
+não negativo, país fora de inadimplência e fila privada vazia; a ferrovia valida
+o estado e o nível no clique, e o setor de construção revalida a fila pública
+mínima e o edifício. Ambos usam o efeito normal e conferem o contador público.
 Isso não foi validado na engine da campanha. Nenhuma automação mensal de
 construção está habilitada. As opções por país dos outros construtores ainda
-não foram confirmadas; a ação precisa de teste com o conjunto de mods e flags
-registrados antes de ser tratada como segura para uso prolongado.
+não foram confirmadas; as ações precisam de teste com o conjunto de mods e flags
+registrados antes de serem tratadas como seguras para uso prolongado.
 
 No Supply Chain, a rotina ferroviária ordena estados por infraestrutura,
 verifica ocupação e construção existente em certos caminhos, e executa

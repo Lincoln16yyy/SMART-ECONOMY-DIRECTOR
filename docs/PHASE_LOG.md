@@ -247,3 +247,28 @@ texto foi corrigido sem alterar o comportamento econômico.
 executado na engine nem em sessão gráfica. A conferência do botão, da pausa,
 das travas, do contador público, da recarga e da coexistência com outros mods
 segue pendente e depende do jogador em cópia de save.
+
+## Fase 2 — Segunda ação aprovada: capacidade de construção 0.3.0
+
+Acrescentei o segundo fluxo vertical de recomendação e execução. Quando a fila
+pública tem pelo menos três projetos, o Director examina estados incorporados
+com setor de construção existente, nível positivo, ocupação de ao menos 90%,
+sem falha de contratação, falta de insumos ou expansão já enfileirada. Entre os
+elegíveis, mostra no máximo o estado mais populoso. O botão revalida o edifício,
+a fila pública mínima, a pausa, o saldo semanal não negativo, a ausência de
+inadimplência e a fila privada vazia. A aprovação enfileira um único nível
+público e confere o contador da fila; não há repetição automática.
+
+A lista, o pedido pendente e o status são separados dos da ferrovia. A limpeza
+remove as duas listas e as duas marcas estaduais. O validador passou a exigir
+que cada ação aprovada enfileire somente o edifício declarado. A interface ganhou
+uma seção própria, com estados vazios distintos para fila curta e para setores
+rejeitados pelos filtros.
+
+Validação: **40 testes passam** (nove de auditoria e 31 da implementação), a
+geração está atualizada e a validação estática passa. O pacote 0.3.0 foi gerado.
+A versão foi instalada no perfil local com backup da 0.2.1 em
+`sed_backups/mod_0.2.1_20261108_232750`; as 11 entradas de
+`content_load.json` foram preservadas e o Director permaneceu habilitado.
+Não houve execução na engine nem sessão gráfica; renderização, clique, contador
+público, recarga e coexistência com outros construtores continuam pendentes.

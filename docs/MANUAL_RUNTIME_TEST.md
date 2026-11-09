@@ -1,12 +1,12 @@
-# Plano de testes de campanha — validação da ação 0.2.1 pendente
+# Plano de testes de campanha — validação das ações 0.3.0 pendente
 
 O jogador confirmou em campanha a interface e as leituras principais da 0.1.0,
-e na 0.2.0 confirmou a renderização da seção ferroviária vazia. A ação econômica
-da 0.2.1 e a convivência com o conjunto de mods continuam
-**não testadas em campanha**. A suíte automatizada atual executa os scripts
-gerados em um modelo restrito de país/estado/edifício e cobre filtros, ranking,
-travas, confirmação/rejeição da fila e limpeza; ela não é evidência de
-renderização ou de aceitação pela engine.
+e na 0.2.0 confirmou a renderização da seção ferroviária vazia. As ações
+ferroviária e de capacidade de construção da 0.3.0 e a convivência com o
+conjunto de mods continuam **não testadas em campanha**. A suíte automatizada
+atual executa os scripts gerados em um modelo restrito de país/estado/edifício e
+cobre filtros, ranking, travas, confirmação/rejeição da fila e limpeza; ela não
+é evidência de renderização ou de aceitação pela engine.
 
 ## Checklist específico da versão 0.1.0
 
@@ -60,7 +60,8 @@ Conferir português e fallback inglês, tooltip, ignorar/restaurar e estado vazi
 Na 0.2.0, confirmar que a ação ocorre só após aprovação individual e
 revalidação. Não existe modo automático; recomendações não aprovadas não devem
 alterar a fila. Reordenar as recomendações antes de clicar para verificar que
-o botão continua ligado ao estado mostrado.
+o botão continua ligado ao estado mostrado. A 0.3.0 mantém o mesmo contrato
+para as duas seções e para a nova ação de capacidade de construção.
 
 ## Checklist da ação ferroviária 0.2.1
 
@@ -86,7 +87,32 @@ Registrar saldo, contador público antes/depois, estado, prédio, ocupação,
 infraestrutura, filas, estado de pausa e flags dos outros construtores. A ação
 não estima custo, uso de construção futuro, contratação ou retorno. Se não
 houver candidato no save atual, isso não invalida o botão; significa que este
-único tipo de oportunidade não passou os filtros.
+tipo de oportunidade não passou os filtros.
+
+## Checklist da capacidade de construção 0.3.0
+
+A recomendação exige uma fila pública com pelo menos três projetos. O estado
+precisa ter um setor de construção já construído, ocupação de pelo menos 90%,
+sem falha de contratação ou falta de insumos, sem expansão já enfileirada e
+elegibilidade normal do jogo. O país deve estar pausado para aprovar, fora de
+inadimplência, com saldo semanal não negativo e fila privada vazia. Entre os
+setores elegíveis, o Director mostra o estado mais populoso.
+
+| Ação | Resultado a conferir |
+| --- | --- |
+| Abrir a seção com fila pública curta | Explica que há menos de três projetos e não recomenda ampliar capacidade |
+| Abrir a seção com fila pública de três ou mais projetos | Mostra no máximo um setor de construção, ou explica que nenhum passou pelos filtros |
+| Tentar aprovar com o jogo rodando | Botão desabilitado; nenhuma ação ocorre |
+| Pausar, criar fila privada, entrar em inadimplência ou ficar com saldo negativo | Botão desabilitado na revalidação |
+| Reduzir a fila pública para menos de três projetos antes do clique | Botão desabilitado ou candidato recusado |
+| Aprovar o setor mostrado | Contador público aumenta em um nível; aviso confirma; nenhuma repetição automática |
+| Atualizar o diagnóstico depois de aprovar | O mesmo estado não volta a oferecer o setor enquanto a expansão estiver enfileirada |
+| Cancelar ou concluir a expansão e atualizar | A recomendação pode reaparecer se a fila e os demais filtros persistirem |
+| Salvar/recarregar após a aprovação | Fila normal persiste; o pedido não duplica |
+
+Registrar a fila pública antes/depois, o nível do setor, ocupação, insumos,
+população do estado, pausa, saldo e flags dos outros construtores. A ação não
+promete que o novo nível será contratado nem que reduzirá o prazo da fila.
 
 ## Cenários econômicos
 

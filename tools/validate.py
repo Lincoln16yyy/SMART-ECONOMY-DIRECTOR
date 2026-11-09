@@ -85,12 +85,17 @@ def validate(root=ROOT, game=None):
             errors.append('Unexpected economic/political mutation: ' + mutation)
     construction_calls = [(name, entry) for name, tree in trees.items() for entry in walk(tree)
                           if entry.key == 'start_building_construction']
-    approved_construction = [entry for entry in walk(custom.get('sed_run_railway_approval', []))
-                             if entry.key == 'start_building_construction']
-    if (len(construction_calls) != 1 or len(approved_construction) != 1
-            or construction_calls[0][0] != 'common/scripted_effects/sed_effects.txt'
-            or approved_construction[0].value != 'building_railway'):
-        errors.append('Construction is allowed only as one approved railway level in sed_run_railway_approval')
+    approved_actions = {'sed_run_railway_approval': 'building_railway',
+                        'sed_run_construction_approval': 'building_construction_sector'}
+    construction_error = False
+    for effect, building in approved_actions.items():
+        approved_construction = [entry for entry in walk(custom.get(effect, []))
+                                 if entry.key == 'start_building_construction']
+        if len(approved_construction) != 1 or approved_construction[0].value != building:
+            construction_error = True
+    if (len(construction_calls) != len(approved_actions) or construction_error
+            or any(name != 'common/scripted_effects/sed_effects.txt' for name, _ in construction_calls)):
+        errors.append('Each approved action may queue only its declared building level')
     cleaned = {entry.value for entry in walk(custom.get('sed_disable_country', []))
                if entry.key == 'remove_variable'}
     assigned = {child(entry.value, 'name') for tree in trees.values() for entry in walk(tree)

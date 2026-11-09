@@ -40,6 +40,46 @@ types sed_diagnostics_types {
    }
   }
  }
+ type sed_construction_candidate_item = flowcontainer {
+  direction = vertical
+  spacing = 4
+  widget = {
+   datacontext = "[Scope.GetState]"
+   size = { 500 112 }
+   background = { using = dark_area }
+   flowcontainer = {
+    position = { 8 4 }
+    direction = vertical
+    spacing = 4
+    textbox = {
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_construction_candidate_title"
+    }
+    textbox = {
+     autoresize = yes
+     multiline = yes
+     align = left|nobaseline
+     using = fontsize_small
+     minimumsize = { 480 -1 }
+     text = "sed_construction_candidate_reason"
+    }
+    button = {
+     size = { 300 30 }
+     using = select_button_sound
+     using = tooltip_se
+     text = "sed_approve_construction"
+     tooltip = "sed_approve_construction_tt"
+     visible = "[GetScriptedGui('sed_approve_construction_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+     enabled = "[GetScriptedGui('sed_approve_construction_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+     onclick = "[GetScriptedGui('sed_approve_construction_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
+    }
+   }
+  }
+ }
 }
 
 flowcontainer = {
@@ -484,6 +524,71 @@ textbox = {
  minimumsize = { 500 -1 }
  maximumsize = { 500 -1 }
  text = "sed_railway_action_failed"
+}
+textbox = {
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_medium
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_construction_title"
+}
+textbox = {
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_construction_intro"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_no_construction_queue_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_no_construction_queue"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_no_construction_candidate_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_no_construction_candidate"
+}
+fixedgridbox = {
+ visible = "[GetScriptedGui('sed_construction_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_construction_candidates')]"
+ addcolumn = 500
+ addrow = 118
+ item = { sed_construction_candidate_item = {} }
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_construction_action_success_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_construction_action_success"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_construction_action_failed_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes
+ multiline = yes
+ align = left|nobaseline
+ using = fontsize_small
+ minimumsize = { 500 -1 }
+ maximumsize = { 500 -1 }
+ text = "sed_construction_action_failed"
 }
 textbox = {
  autoresize = yes

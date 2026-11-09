@@ -1,25 +1,26 @@
 # Smart Economy Director — Victoria 3 1.15
 
-Versão de desenvolvimento **0.2.1 — diagnóstico e primeira ação aprovada**. O
-mod tem diário próprio, leituras manuais ou mensais, recomendações limitadas de
-infraestrutura e um botão para aprovar a expansão de uma ferrovia elegível.
-Não há execução econômica automática.
+Versão de desenvolvimento **0.3.0 — diagnóstico e duas ações aprovadas**. O mod
+tem diário próprio, leituras manuais ou mensais, recomendações limitadas de
+infraestrutura e capacidade de construção, e botões para aprovar a expansão de
+uma ferrovia elegível ou de um setor de construção operante. Não há execução
+econômica automática.
 
 O painel mostra finanças, PIB, população, padrão de vida, alfabetização,
 capacidade de construção, filas e sinais de infraestrutura, abastecimento e
 contratação. Os dados correspondem à última leitura indicada no painel.
 O crescimento do PIB requer amostras em meses distintos.
 
-**Estado: a interface e o estado vazio das oportunidades foram confirmados em
-campanha. A execução do botão ferroviário ainda precisa ser conferida no jogo
-normal.** Compatibilidade ampliada
-continua pendente.
-Não é uma versão de automação econômica pronta para deixar uma campanha sozinha.
+**Estado: a interface, os indicadores, o estado vazio das oportunidades e a
+renderização da seção ferroviária foram confirmados em campanha. A execução dos
+botões ferroviário e do setor de construção ainda precisa ser conferida no jogo
+normal.** Compatibilidade ampliada continua pendente. Não é uma versão de
+automação econômica pronta para deixar uma campanha sozinha.
 
 ## Instalação e uso
 
 Consulte [instalação e geração do ZIP](docs/INSTALL.md). O pacote gerado em
-`dist/smart-economy-director-0.2.1.zip` contém a pasta do mod e o descritor
+`dist/smart-economy-director-0.3.0.zip` contém a pasta do mod e o descritor
 externo. Ative no launcher e use a decisão **Ativar Smart Economy Director**.
 Nenhum outro mod é obrigatório; nenhuma ativação econômica é automática.
 
@@ -56,6 +57,7 @@ substituem a validação no motor do jogo.
 
 A [pesquisa anterior na nuvem](docs/RESEARCH_CLOUD.md) e as
 [instruções de continuidade local](docs/LOCAL_CODEX.md) foram preservadas.
-PMs continuam sob responsabilidade dos outros mods. O botão ferroviário do
-Director só adiciona um nível público após aprovação e checagens atuais; não
-ativa um construtor periódico.
+PMs continuam sob responsabilidade dos outros mods. Os botões do Director só
+adicionam um nível público após aprovação e checagens atuais; não ativam um
+construtor periódico. A recomendação do setor de construção exige fila pública
+com pelo menos três projetos e não promete contratação futura.

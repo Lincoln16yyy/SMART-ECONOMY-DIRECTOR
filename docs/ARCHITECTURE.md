@@ -1,10 +1,11 @@
 # Arquitetura por fases
 
 A Fase 1 de diagnóstico foi confirmada em campanha na 0.1.0; ver
-[PHASE1.md](PHASE1.md). A 0.2.0 começa a Fase 2 com até três candidatos
-ferroviários e uma aprovação individual que enfileira uma expansão elegível.
-Ranking nacional completo, outros tipos de ação e automação periódica continuam
-por implementar.
+[PHASE1.md](PHASE1.md). A 0.2.0 começou a Fase 2 com até três candidatos
+ferroviários e uma aprovação individual que enfileira uma expansão elegível. A
+0.3.0 acrescenta uma segunda ação aprovada para ampliar um setor de construção
+quando a fila pública tem pelo menos três projetos. Ranking nacional completo,
+outros tipos de ação e automação periódica continuam por implementar.
 
 ## Responsabilidade
 
@@ -41,7 +42,7 @@ Government Advisor só recomende promulgações.
 | Ciclo de vida | `common/on_actions/sed_on_actions.txt`, efeitos e decisões próprios | Ativação, migração e limpeza com marcador de schema |
 | Planejamento | Valores e efeitos `sed_` separados | Objetivos, filtros, ranking e motivos de rejeição |
 | Interface | Journal Entry, scripted GUIs e widget `sed_` | Situação, estratégia, três recomendações e ações efetivas |
-| Execução inicial | `sed_run_railway_approval` | Uma expansão ferroviária pública, aprovada e revalidada; sem tentativa automática |
+| Execução inicial | `sed_run_railway_approval`, `sed_run_construction_approval` | Uma expansão pública aprovada e revalidada por clique; sem tentativa automática |
 | Localização | `localization/braz_por/`, `localization/english/` | Português escrito de fato e fallback inglês; UTF-8 BOM |
 | Verificação | `tests/`, `tools/validate.py` | Cenários e referências cruzadas; runtime separado |
 
@@ -90,6 +91,14 @@ vazia; confere o nível ferroviário já enfileirado e a elegibilidade normal do
 jogo no clique. Mesmo com essas travas, custo e retorno não são previstos. O
 pedido cria um único nível na fila pública e sua inclusão é conferida pelo
 contador de níveis públicos.
+
+Na 0.3.0, a segunda ação só aparece quando a fila pública tem pelo menos três
+projetos. Entre os setores de construção operantes, sem falta de insumos, sem
+falha de contratação e sem expansão enfileirada, o Director mostra o estado mais
+populoso. A aprovação repete as travas fiscais e de fila, enfileira um único
+nível e confere o mesmo contador público. O recorte não calcula custo, prazo nem
+garante que o novo nível será contratado; a localização no estado mais populoso
+não é uma projeção de retorno.
 
 O modo automático futuro só habilitará domínios cujo executor seja o Director.
 Uma aprovação manual não habilita sozinha ações periódicas. Quando outro mod

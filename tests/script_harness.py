@@ -13,11 +13,12 @@ BUILDING = 'building'
 
 
 def state(infrastructure_delta=0, market_access=1, incorporated=True,
-          can_construct=True, buildings=None, **readings):
+          can_construct=True, buildings=None, population=1000, **readings):
     """Build the reading shape used by state-scoped scripts in this harness."""
     result = dict(infrastructure_delta=infrastructure_delta,
                   market_access=market_access, is_incorporated=incorporated,
                   can_construct_building=can_construct,
+                  state_population=population,
                   buildings=buildings or [], variables={})
     result.update(readings)
     result['__scope__'] = STATE
@@ -27,7 +28,20 @@ def state(infrastructure_delta=0, market_access=1, incorporated=True,
 def railway(level=1, occupancy=1, failed_hires=False, shortage=False,
             queued_levels=0):
     """A railway building reading; queued_levels raises the post-queue level."""
-    return dict(building='building_railway', level=level,
+    return building('building_railway', level, occupancy, failed_hires,
+                    shortage, queued_levels)
+
+
+def construction_sector(level=1, occupancy=1, failed_hires=False,
+                        shortage=False, queued_levels=0):
+    """A construction sector reading; queued_levels raises the post-queue level."""
+    return building('building_construction_sector', level, occupancy,
+                    failed_hires, shortage, queued_levels)
+
+
+def building(kind, level=1, occupancy=1, failed_hires=False, shortage=False,
+             queued_levels=0):
+    return dict(building=kind, level=level,
                 level_after_queued_constructions=level + queued_levels,
                 occupancy=occupancy, has_failed_hires=failed_hires,
                 building_has_goods_shortage=shortage,
@@ -84,7 +98,8 @@ class Country:
         if scope.get('__scope__') == STATE or 'buildings' in scope:
             # State triggers omitted by a fixture use the engine's neutral value.
             return {'is_incorporated': True, 'can_construct_building': True,
-                    'infrastructure_delta': 0, 'market_access': 1}[name]
+                    'infrastructure_delta': 0, 'market_access': 1,
+                    'state_population': 0}[name]
         raise AssertionError('Unsupported reading in harness: ' + name)
 
     def number(self, value, scope):

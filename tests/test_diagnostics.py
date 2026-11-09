@@ -7,7 +7,7 @@ from tools.build_mod import ROOT, country_variables, outputs, runtime_variables
 from tools.package_mod import package
 from tools.pdx_script import parse, child
 from tools.validate import validate
-from script_harness import Country, railway, state
+from script_harness import Country, construction_sector, railway, state
 
 
 def script_definitions():
@@ -125,12 +125,15 @@ class DiagnosisTests(unittest.TestCase):
             c.variables.setdefault(name, 123)
         pending = state()
         pending['variables']['sed_railway_request_pending'] = 123
+        pending['variables']['sed_construction_request_pending'] = 123
         c.states = [pending]
         c.variable_lists['sed_railway_candidates'] = [pending]
+        c.variable_lists['sed_construction_candidates'] = [pending]
         c.run('sed_disable_country')
         self.assertEqual(c.variables, {'sed_schema_version': 1})
         self.assertEqual(pending['variables'], {})
         self.assertNotIn('sed_railway_candidates', c.variable_lists)
+        self.assertNotIn('sed_construction_candidates', c.variable_lists)
         c.run('sed_monthly_update')
         c.run('sed_refresh_diagnostics')
         self.assertEqual(c.variables, {'sed_schema_version': 1})
@@ -274,9 +277,134 @@ class DiagnosisTests(unittest.TestCase):
 
     def test_state_variables_are_separate_from_the_country_cleanup_registry(self):
         self.assertEqual(set(runtime_variables()) - set(country_variables()),
-                         {'sed_railway_request_pending'})
+                         {'sed_railway_request_pending',
+                          'sed_construction_request_pending'})
 
-    def test_repository_passes_reference_and_action_boundary_checks(self):
+    def test_construction_candidate_requires_staffed_sector_and_free_queue(self):
+        c = self.country()
+        cases = {
+            'eligible': (state(-2, buildings=[construction_sector()]), True),
+            'pending': (state(-2, buildings=[construction_sector()]), False),
+            'no_sector': (state(-2), False),
+            'unincorporated': (state(-2, incorporated=False,
+                                    buildings=[construction_sector()]), False),
+            'understaffed': (state(-2, buildings=[construction_sector(occupancy=0.89)]), False),
+            'failed_hires': (state(-2, buildings=[construction_sector(failed_hires=True)]), False),
+            'goods_shortage': (state(-2, buildings=[construction_sector(shortage=True)]), False),
+            'queued_expansion': (state(-2, buildings=[construction_sector(queued_levels=1)]), False),
+            'cannot_construct': (state(-2, can_construct=False,
+                                       buildings=[construction_sector()]), False),
+        }
+        for name, (target, expected) in cases.items():
+            with self.subTest(name):
+                if name == 'pending':
+                    target['variables']['sed_construction_request_pending'] = True
+                self.assertEqual(
+                    c.condition(c.definitions['sed_construction_candidate_eligible'], target),
+                    expected)
+
+    def test_construction_refresh_requires_queue_and_picks_most_populous_state(self):
+        states = [state(-1, population=500, buildings=[construction_sector()]),
+                  state(-1, population=5000, buildings=[construction_sector()]),
+                  state(-1, population=2000, buildings=[construction_sector()])]
+        c = self.country()
+        c.states = states
+        c.run('sed_refresh_construction_candidates')
+        self.assertNotIn('sed_construction_candidates', c.variable_lists)
+        c.readings['num_queued_government_constructions'] = 3
+        c.run('sed_refresh_construction_candidates')
+        self.assertEqual(c.variable_lists['sed_construction_candidates'], [states[1]])
+
+    def test_construction_pending_clears_when_queue_resolves(self):
+        target = state(-2, buildings=[construction_sector(queued_levels=1)])
+        target['variables']['sed_construction_request_pending'] = True
+        c = self.country(num_queued_government_constructions=3)
+        c.states = [target]
+        c.run('sed_refresh_construction_candidates')
+        self.assertTrue(target['variables']['sed_construction_request_pending'])
+        self.assertNotIn('sed_construction_candidates', c.variable_lists)
+        target['buildings'][0]['level_after_queued_constructions'] = 1
+        c.run('sed_refresh_construction_candidates')
+        self.assertNotIn('sed_construction_request_pending', target['variables'])
+        self.assertEqual(c.variable_lists['sed_construction_candidates'], [target])
+
+    def test_construction_approval_revalidates_queue_and_budget_guards(self):
+        c = self.country(num_queued_government_constructions=3)
+        target = state(-2, buildings=[construction_sector()])
+
+        def valid():
+            return c.condition(c.definitions['sed_construction_approval_valid'], target)
+
+        self.assertTrue(valid())
+        guards = {
+            'queue': ('readings', 'num_queued_government_constructions', 2),
+            'paused': ('readings', 'is_game_paused', False),
+            'default': ('readings', 'in_default', True),
+            'negative_balance': ('readings', 'net_total_income', -1),
+            'private_queue': ('readings', 'construction_queue_num_queued_private_levels', 1),
+        }
+        for name, (area, field, value) in guards.items():
+            with self.subTest(name):
+                original = c.readings[field]
+                c.readings[field] = value
+                self.assertFalse(valid())
+                c.readings[field] = original
+        original = dict(c.variables)
+        c.variables.clear()
+        self.assertFalse(valid())
+        c.variables.update(original)
+        target['variables']['sed_construction_request_pending'] = True
+        self.assertFalse(valid())
+        del target['variables']['sed_construction_request_pending']
+        target['buildings'][0]['level_after_queued_constructions'] = 2
+        self.assertFalse(valid())
+
+    def test_approved_construction_sector_queues_one_level_and_marks_request(self):
+        c = self.country(num_queued_government_constructions=3)
+        target = state(-2, buildings=[construction_sector()])
+        c.states = [target]
+        c.run('sed_refresh_construction_candidates')
+        c.run('sed_run_construction_approval', target)
+        self.assertEqual(c.constructions,
+                         [{'building': 'building_construction_sector', 'state': target}])
+        self.assertEqual(c.variables['sed_construction_action_status'], 1)
+        self.assertTrue(target['variables']['sed_construction_request_pending'])
+        self.assertNotIn('sed_queue_levels_before', c.variables)
+
+    def test_failed_construction_queue_insertion_is_reported_without_retry(self):
+        c = self.country(num_queued_government_constructions=3)
+        c.construction_accepted = False
+        target = state(-2, buildings=[construction_sector()])
+        c.states = [target]
+        c.run('sed_run_construction_approval', target)
+        self.assertEqual(len(c.constructions), 1)
+        self.assertEqual(c.variables['sed_construction_action_status'], 2)
+        self.assertNotIn('sed_construction_request_pending', target['variables'])
+
+    def test_construction_empty_messages_follow_queue_pressure(self):
+        c = self.country()
+
+        def shown(name):
+            block = next(entry.value for entry in self.definitions[name]
+                         if entry.key == 'is_shown')
+            return c.condition(block, c.country_scope())
+
+        short = 'sed_no_construction_queue_visible_sgui'
+        filtered = 'sed_no_construction_candidate_visible_sgui'
+        recommendations = 'sed_construction_recommendations_visible_sgui'
+        c.readings['num_queued_government_constructions'] = 2
+        self.assertTrue(shown(short))
+        self.assertFalse(shown(filtered))
+        self.assertFalse(shown(recommendations))
+        c.readings['num_queued_government_constructions'] = 3
+        self.assertFalse(shown(short))
+        self.assertTrue(shown(filtered))
+        c.variable_lists['sed_construction_candidates'] = [state()]
+        self.assertFalse(shown(short))
+        self.assertFalse(shown(filtered))
+        self.assertTrue(shown(recommendations))
+
+
         self.assertEqual(validate(), [])
 
     def test_validator_rejects_foreign_state_and_missing_localization(self):
@@ -294,6 +422,21 @@ class DiagnosisTests(unittest.TestCase):
             errors = validate(root=root)
             self.assertTrue(any('Foreign variable removed' in error for error in errors))
             self.assertTrue(any('Localization key sets differ' in error for error in errors))
+
+    def test_validator_rejects_action_building_mismatch(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name, data in outputs().items():
+                path = root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(data)
+            path = root / 'common/scripted_effects/sed_effects.txt'
+            text = path.read_text(encoding='utf-8-sig').replace(
+                ' start_building_construction = building_railway',
+                ' start_building_construction = building_construction_sector')
+            path.write_text(text, encoding='utf-8-sig')
+            errors = validate(root=root)
+            self.assertTrue(any('declared building level' in error for error in errors))
 
     def test_release_has_correct_layout_and_no_research_or_saves(self):
         with tempfile.TemporaryDirectory() as directory:
