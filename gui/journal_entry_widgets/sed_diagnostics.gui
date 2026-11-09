@@ -1205,6 +1205,13 @@ textbox = {
  text = "sed_auto_current_default"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_auto_current_month_limit_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_current_month_limit"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_auto_current_queue_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -1294,6 +1301,13 @@ textbox = {
  using = fontsize_large
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_auto_status_unconfirmed"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_status_month_limit_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_status_month_limit"
 }
 flowcontainer = { direction = horizontal spacing = 12
 button = {

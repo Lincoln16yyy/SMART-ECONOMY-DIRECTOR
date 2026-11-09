@@ -22,6 +22,7 @@ sed_railway_approval_valid = {
   has_variable = sed_enabled
   NOT = { in_default = yes }
   construction_queue_num_queued_private_levels = 0
+  OR = { NOT = { has_variable = sed_mode_automatic } NOT = { sed_auto_month_limit_reached = yes } }
  }
 }
 
@@ -49,6 +50,7 @@ sed_construction_approval_valid = {
   NOT = { in_default = yes }
   num_queued_government_constructions >= 3
   construction_queue_num_queued_private_levels = 0
+  OR = { NOT = { has_variable = sed_mode_automatic } NOT = { sed_auto_month_limit_reached = yes } }
  }
 }
 # State scope: expand an operating local producer only while its market good is scarce.
@@ -80,6 +82,7 @@ sed_wood_approval_valid = {
   has_variable = sed_enabled
   NOT = { in_default = yes }
   construction_queue_num_queued_private_levels = 0
+  OR = { NOT = { has_variable = sed_mode_automatic } NOT = { sed_auto_month_limit_reached = yes } }
  }
 }
 # State scope: expand an operating local producer only while its market good is scarce.
@@ -114,6 +117,7 @@ sed_iron_approval_valid = {
   has_variable = sed_enabled
   NOT = { in_default = yes }
   construction_queue_num_queued_private_levels = 0
+  OR = { NOT = { has_variable = sed_mode_automatic } NOT = { sed_auto_month_limit_reached = yes } }
  }
 }
 # State scope: expand an operating local producer only while its market good is scarce.
@@ -148,6 +152,7 @@ sed_coal_approval_valid = {
   has_variable = sed_enabled
   NOT = { in_default = yes }
   construction_queue_num_queued_private_levels = 0
+  OR = { NOT = { has_variable = sed_mode_automatic } NOT = { sed_auto_month_limit_reached = yes } }
  }
 }
 # State scope: expand an operating local producer only while its market good is scarce.
@@ -179,6 +184,7 @@ sed_grain_approval_valid = {
   has_variable = sed_enabled
   NOT = { in_default = yes }
   construction_queue_num_queued_private_levels = 0
+  OR = { NOT = { has_variable = sed_mode_automatic } NOT = { sed_auto_month_limit_reached = yes } }
  }
 }
 # State scope: expand an operating local producer only while its market good is scarce.
@@ -211,6 +217,7 @@ sed_fabric_approval_valid = {
   has_variable = sed_enabled
   NOT = { in_default = yes }
   construction_queue_num_queued_private_levels = 0
+  OR = { NOT = { has_variable = sed_mode_automatic } NOT = { sed_auto_month_limit_reached = yes } }
  }
 }
 # State scope: expand an operating local producer only while its market good is scarce.
@@ -243,6 +250,7 @@ sed_tools_approval_valid = {
   has_variable = sed_enabled
   NOT = { in_default = yes }
   construction_queue_num_queued_private_levels = 0
+  OR = { NOT = { has_variable = sed_mode_automatic } NOT = { sed_auto_month_limit_reached = yes } }
  }
 }
 # State scope: expand an operating local producer only while its market good is scarce.
@@ -278,6 +286,7 @@ sed_groceries_approval_valid = {
   has_variable = sed_enabled
   NOT = { in_default = yes }
   construction_queue_num_queued_private_levels = 0
+  OR = { NOT = { has_variable = sed_mode_automatic } NOT = { sed_auto_month_limit_reached = yes } }
  }
 }
 # State scope: expand an operating local producer only while its market good is scarce.
@@ -310,11 +319,18 @@ sed_clothes_approval_valid = {
   has_variable = sed_enabled
   NOT = { in_default = yes }
   construction_queue_num_queued_private_levels = 0
+  OR = { NOT = { has_variable = sed_mode_automatic } NOT = { sed_auto_month_limit_reached = yes } }
  }
 }
 # Country scope: prevent this executor from competing with known construction automations.
+sed_auto_month_limit_reached = {
+ has_variable = sed_auto_last_attempt_month
+ var:sed_auto_last_attempt_month = { value = year multiply = 12 add = month }
+}
+
 sed_auto_executor_safe = {
  has_variable = sed_mode_automatic
+ NOT = { sed_auto_month_limit_reached = yes }
  NOT = { in_default = yes }
  construction_queue_num_queued_government_levels = 0
  construction_queue_num_queued_private_levels = 0

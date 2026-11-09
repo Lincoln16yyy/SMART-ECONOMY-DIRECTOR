@@ -57,8 +57,9 @@ class DiagnosisTests(unittest.TestCase):
                 c.run('sed_auto_apply_monthly')
                 self.assertEqual(c.variables['sed_auto_action_status'], expected)
                 self.assertEqual(c.constructions, [])
+                self.assertNotIn('sed_auto_last_attempt_month', c.variables)
 
-    def test_auto_review_queues_only_one_and_rechecks_occupied_queue(self):
+    def test_auto_review_queues_only_one_and_stops_at_month_limit(self):
         c = self.country(construction_queue_num_queued_government_levels=0)
         c.run('sed_set_mode_automatic')
         c.states = [state(-5, buildings=[railway()]), state(-2, buildings=[railway()])]
@@ -67,7 +68,7 @@ class DiagnosisTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_auto_action_status'], 1)
         c.run('sed_auto_apply_monthly')
         self.assertEqual(len(c.constructions), 1)
-        self.assertEqual(c.variables['sed_auto_action_status'], 11)
+        self.assertEqual(c.variables['sed_auto_action_status'], 16)
 
     def test_supply_requires_shortage_active_output_and_available_producer(self):
         for item in SUPPLY_TARGETS:
@@ -525,6 +526,92 @@ class DiagnosisTests(unittest.TestCase):
         self.assertEqual(c.constructions, [])
         c.run('sed_monthly_update')
         self.assertTrue(self.auto_panel_shown(c, 'pending'))
+
+    def test_auto_month_limit_survives_empty_queue_mode_changes_and_reenable(self):
+        for name in ACTION_NAMES:
+            with self.subTest(action=name):
+                c, target, producer = self.card_fixture(name)
+                c.readings['construction_queue_num_queued_government_levels'] = 0
+                c.run('sed_set_mode_automatic')
+                c.run('sed_run_' + name + '_approval', target)
+                self.assertEqual(len(c.constructions), 1)
+                marker = c.variables['sed_auto_last_attempt_month']
+                # A second state remains eligible after the first queued project is removed.
+                other = state(-2 if name == 'railway' else 0, buildings=[producer.copy()])
+                c.states.append(other)
+                c.readings['construction_queue_num_queued_government_levels'] = 0
+                for mode in ('manual', 'assisted', 'automatic'):
+                    c.run('sed_set_mode_' + mode)
+                c.run('sed_run_' + name + '_approval', other)
+                c.run('sed_auto_apply_monthly')
+                self.assertEqual(len(c.constructions), 1)
+                self.assertEqual(c.variables['sed_auto_action_status'], 16)
+                self.assertTrue(self.auto_panel_shown(c, 'current_month_limit'))
+                self.assertFalse(self.auto_panel_shown(c, 'current_clear'))
+                c.run('sed_disable_country')
+                self.assertEqual(c.variables, {'sed_schema_version': 1,
+                                               'sed_auto_last_attempt_month': marker})
+                c.run('sed_enable_country')
+                c.run('sed_set_mode_automatic')
+                c.run('sed_auto_apply_monthly')
+                self.assertEqual(len(c.constructions), 1)
+                self.assertEqual(c.variables['sed_auto_action_status'], 16)
+
+    def test_failed_auto_attempt_consumes_month_but_manual_approval_is_available(self):
+        for name in ACTION_NAMES:
+            with self.subTest(action=name):
+                c, target, producer = self.card_fixture(name)
+                c.readings['construction_queue_num_queued_government_levels'] = 0
+                c.run('sed_set_mode_automatic')
+                c.construction_accepted = False
+                c.run('sed_run_' + name + '_approval', target)
+                self.assertEqual(len(c.constructions), 1)
+                self.assertNotIn(f'sed_{name}_request_pending', target['variables'])
+                marker = c.variables['sed_auto_last_attempt_month']
+                c.construction_accepted = True
+                c.run('sed_run_' + name + '_approval', target)
+                self.assertEqual(len(c.constructions), 1)
+                c.run('sed_set_mode_assisted')
+                self.assertTrue(c.condition(child(self.definitions[f'sed_{name}_ready_sgui'],
+                                                   'is_shown'), target))
+                c.run('sed_run_' + name + '_approval', target)
+                self.assertEqual(len(c.constructions), 2)
+                self.assertEqual(c.variables['sed_auto_last_attempt_month'], marker)
+
+    def test_auto_month_limit_reads_live_calendar_and_releases_after_year_rollover(self):
+        for name in ACTION_NAMES:
+            with self.subTest(action=name):
+                c, target, producer = self.card_fixture(name)
+                c.readings.update(year=1840, month=11,
+                                  construction_queue_num_queued_government_levels=0)
+                c.run('sed_set_mode_automatic')
+                c.run('sed_run_' + name + '_approval', target)
+                self.assertEqual(c.variables['sed_auto_last_attempt_month'], 1840 * 12 + 11)
+                stale_diagnostic_month = c.variables['sed_month_key']
+                other = state(-2 if name == 'railway' else 0, buildings=[producer.copy()])
+                c.states.append(other)
+                c.readings.update(year=1841, month=0,
+                                  construction_queue_num_queued_government_levels=0)
+                # No diagnostic refresh: the safety check must not use a stale sampled date.
+                c.run('sed_run_' + name + '_approval', other)
+                self.assertEqual(len(c.constructions), 2)
+                self.assertEqual(c.variables['sed_auto_last_attempt_month'], 1841 * 12)
+                self.assertEqual(c.variables['sed_month_key'], stale_diagnostic_month)
+
+    def test_validator_rejects_cleanup_that_resets_automatic_month_limit(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name, data in outputs().items():
+                path = root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(data)
+            path = root / 'common/scripted_effects/sed_effects.txt'
+            text = path.read_text(encoding='utf-8-sig').replace(
+                'sed_disable_country = {',
+                'sed_disable_country = {\n remove_variable = sed_auto_last_attempt_month', 1)
+            path.write_text(text, encoding='utf-8-sig')
+            errors = validate(root=root)
+            self.assertTrue(any('monthly safety marker' in error for error in errors))
 
     def test_activation_collects_real_supplied_readings(self):
         c = self.country(gdp=12345, total_population=500, average_sol=13.25)

@@ -7,12 +7,12 @@ locais e a validação estática passaram, mas construção bem-sucedida,
 reconciliação de projetos e save/reload ainda não foram comprovados na engine.
 A automação não está certificada como segura para campanha sem supervisão.
 
-Versão de desenvolvimento **0.5.2 — interface legível e botões nativos**. O mod tem diário próprio, leituras manuais ou
+Versão de desenvolvimento **0.5.3 — interface legível e botões nativos**. O mod tem diário próprio, leituras manuais ou
 mensais, recomendações limitadas de infraestrutura e capacidade de construção,
 além de produtores locais para oito bens em escassez. Os três modos aparecem em
 botões no topo do diário. Manual só diagnostica; Assistido mostra botões para
-aprovar ações individuais; Automático revisa mensalmente e pode enfileirar no
-máximo um nível quando as filas estão vazias, o país está fora de inadimplência
+aprovar ações individuais; Automático revisa mensalmente e pode tentar
+no máximo uma expansão por mês quando as filas estão vazias e o país está fora de inadimplência
 e não há uma das automações concorrentes detectadas ativa. Cada botão de ação
 permanece visível no cartão e é revalidado no clique. Quando
 não há candidato, o painel decompõe os estados por motivo principal; quando o
@@ -20,11 +20,11 @@ botão de aprovação está bloqueado, o painel indica a guarda que bloqueia a a
 Saldo semanal negativo aparece como alerta, sem bloquear a aprovação. O modo
 Automático pode agir apenas em ferrovias elegíveis e produtores existentes
 para madeira, ferro, carvão, cereais, tecido, ferramentas, mantimentos e roupas
-em escassez; não altera PMs nem leis. A 0.5.2 passou validação estática; modos,
+em escassez; não altera PMs nem leis. A 0.5.3 passou validação estática; modos,
 botões e execução agendada ainda precisam de confirmação na campanha antes de
 serem considerados validados na engine.
 
-A interface 0.5.2 usa fonte de 20 pontos no corpo e 26 nos títulos, botões
+A interface 0.5.3 usa fonte de 20 pontos no corpo e 26 nos títulos, botões
 nativos de 52 pixels de altura com fundo/borda e cartões de altura variável.
 As recomendações vêm antes dos indicadores completos. **Mostrar indicadores
 e detalhes** abre as leituras e motivos extensos; **Ocultar** recolhe essa
@@ -43,6 +43,15 @@ construções nem uma revisão automática. Trocar de modo preserva esse último
 resultado; desativar limpa o registro. A leitura atual das filas não depende
 de aguardar o próximo evento.
 
+O limite mensal conta uma **tentativa automática**, mesmo sem confirmação da
+inclusão. Revisão sem candidato ou bloqueada antes de tentar não o consome.
+Trocar modo, cancelar obra ou desativar/reativar não reinicia o limite. A
+aprovação manual no Assistido continua disponível sob suas guardas normais.
+Desativar limpa o diagnóstico, mas preserva schema e uma marca de segurança
+com o mês da última tentativa; o mês seguinte é avaliado pelo calendário atual.
+Essa proteção começa nas tentativas observadas pela 0.5.3; não reconstrói
+um histórico completo de tentativas de versões anteriores.
+
 Cada cartão elegível permite ignorar apenas aquele tipo de expansão naquele estado.
 A escolha bloqueia recomendações e execução nos três modos até usar
 **Restaurar recomendações ignoradas**, no topo do diário. Desativar limpa essas
@@ -58,7 +67,7 @@ O crescimento do PIB requer amostras em meses distintos.
 ## Instalação e uso
 
 Consulte [instalação e geração do ZIP](docs/INSTALL.md). O pacote gerado em
-`dist/smart-economy-director-0.5.2.zip` contém a pasta do mod e o descritor
+`dist/smart-economy-director-0.5.3.zip` contém a pasta do mod e o descritor
 externo. Ative no launcher e use a decisão **Ativar Smart Economy Director**.
 O modo inicial é Assistido; a automação só começa se o jogador selecionar
 Automático no diário.

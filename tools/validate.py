@@ -7,10 +7,10 @@ from pathlib import Path
 import re
 
 try:
-    from .build_mod import ROOT, outputs, runtime_variables
+    from .build_mod import PERSISTENT_VARIABLES, ROOT, outputs, runtime_variables
     from .pdx_script import parse, walk, child
 except ImportError:
-    from build_mod import ROOT, outputs, runtime_variables
+    from build_mod import PERSISTENT_VARIABLES, ROOT, outputs, runtime_variables
     from pdx_script import parse, walk, child
 
 
@@ -108,8 +108,10 @@ def validate(root=ROOT, game=None):
                if entry.key == 'remove_variable'}
     assigned = {child(entry.value, 'name') for tree in trees.values() for entry in walk(tree)
                 if entry.key == 'set_variable'}
-    if assigned - cleaned != {'sed_schema_version'}:
-        errors.append('Cleanup must retain only the schema marker: ' + str(sorted(assigned - cleaned)))
+    if assigned - cleaned != set(PERSISTENT_VARIABLES):
+        errors.append('Cleanup must retain only declared persistent safety state: ' + str(sorted(assigned - cleaned)))
+    if cleaned & set(PERSISTENT_VARIABLES):
+        errors.append('Cleanup must preserve the schema and monthly safety marker')
     if set(runtime_variables()) != cleaned:
         errors.append('Runtime variable registry differs from cleanup')
     keys = {}

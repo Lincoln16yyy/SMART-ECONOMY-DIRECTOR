@@ -1,4 +1,4 @@
-# Plano de teste da campanha — interface 0.5.2
+# Plano de teste da campanha — interface 0.5.3
 
 Estado atual: [auditoria de 09/11/2026](AUDIT_2026-11-09.md). Os roteiros abaixo
 não são resultados executados. Não iniciar novas funcionalidades até fechar
@@ -350,3 +350,16 @@ e consultar o painel: motivo atual muda, resultado datado anterior permanece.
 Trocar modo e atualizar diagnóstico não devem apagar esse resultado nem
 executar uma obra. Desativar limpa o arquivo. Passagem de tempo/save-reload
 continuam pendentes de teste na engine; não foram simulados como aprovados.
+
+
+## Limite mensal de tentativas 0.5.3 — roteiro futuro
+
+Em cópia, registrar uma tentativa automática e verificar a mensagem de limite.
+Cancelar a obra de teste, se apropriado, e manter o mês: outra revisão não deve
+adicionar uma expansão. Trocar modo e desativar/reativar não devem reiniciar o
+limite. Assistido deve continuar sujeito às guardas de aprovação e pode operar
+por clique explícito. No mês seguinte, sem depender de refresh manual, a guarda
+mensal deve liberar avaliação de outro candidato. Conferir save/reload com a
+marca presente; esse caminho não foi verificado na engine. Inclusão recusada
+também consome o mês; revisão sem candidato não consome. Não presumir uma
+história de tentativas anterior à instalação da 0.5.3.

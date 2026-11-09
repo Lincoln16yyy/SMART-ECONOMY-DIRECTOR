@@ -1,5 +1,14 @@
 # Arquitetura por fases
 
+Atualização 0.5.3: há uma guarda persistente de uma tentativa automática por
+mês, não uma reconciliação de projetos. Desativar remove runtime e conserva
+schema + sed_auto_last_attempt_month quando existente, impedindo reinício
+do limite por reativação. A política inclui tentativas sem confirmação;
+Assistido mantém aprovação explícita. O mês corrente é lido diretamente, sem
+depender da amostra do diagnóstico. Essa exceção de segurança substitui, para
+a versão atual, descrições históricas de limpeza conservando somente schema.
+
+
 Estado autoritativo em 09/11/2026: [auditoria](AUDIT_2026-11-09.md). O fluxo
 estratégico desta proposta não está integralmente implementado: faltam objetivos,
 ranking nacional, proteção fiscal incremental e reconciliação por projeto.

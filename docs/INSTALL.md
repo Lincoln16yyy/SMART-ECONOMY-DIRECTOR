@@ -1,6 +1,6 @@
-# Instalação e uso — versão 0.5.2
+# Instalação e uso — versão 0.5.3
 
-Requer Victoria 3 1.15.x. A versão 0.5.2 mantém o diagnóstico e os protótipos
+Requer Victoria 3 1.15.x. A versão 0.5.3 mantém o diagnóstico e os protótipos
 de expansão ferroviária e de capacidade de construção. Acrescenta recomendações
 e botões de aprovação para expandir produtores locais de madeira, ferro,
 carvão, cereais, tecido, ferramentas, mantimentos e roupas quando o mercado
@@ -23,7 +23,7 @@ python3 tools/validate.py --game "/caminho/Victoria 3/game"
 python3 tools/package_mod.py
 ```
 
-O resultado fica em `dist/smart-economy-director-0.5.2.zip`. O pacote contém
+O resultado fica em `dist/smart-economy-director-0.5.3.zip`. O pacote contém
 somente os arquivos carregáveis; não inclui saves, fontes do jogo, pesquisa,
 testes ou outro mod. A geração é determinística e não modifica a instalação.
 
@@ -98,7 +98,8 @@ incompleta não representam o número de desempregados.
 
 Desative pelo Director, avance o tempo suficiente para o diário processar a
 desativação e salve a cópia de teste. A limpeza remove suas variáveis de
-execução e conserva apenas `sed_schema_version`. Depois, feche o jogo,
+execução, mas conserva `sed_schema_version` e, quando existente,
+`sed_auto_last_attempt_month`, a marca de segurança do limite mensal. Depois, feche o jogo,
 desative no launcher e remova a pasta e o descritor externo.
 
 A inclusão em saves existentes usa uma decisão e foi coberta estruturalmente;
@@ -120,22 +121,36 @@ e atualiza a análise. Ignorar vale nos três modos e não cancela obras;
 restaurar não aprova obras. Desativar o Director limpa essas preferências.
 
 
-Interface 0.5.2: fonte principal 20, títulos 26 e botões nativos de 52 pixels,
+Interface 0.5.3: fonte principal 20, títulos 26 e botões nativos de 52 pixels,
 com fundo/borda. As recomendações vêm primeiro e os indicadores completos
 podem ser abertos com Mostrar indicadores e detalhes. As listas de cartões
 crescem com o conteúdo em vez de usar uma altura de linha fixa. Os critérios
 econômicos, modos e travas de aprovação permanecem iguais.
 
 
-Na 0.5.2, cada cartão indica quando a aprovação está disponível. Em outro modo,
+Na 0.5.3, cada cartão indica quando a aprovação está disponível. Em outro modo,
 Passar para Assistido muda apenas o modo; depois o jogador decide se aprova.
 Atualizar recomendações aparece no cartão desatualizado e pode removê-lo da
 lista sem executar obras. Abrir fila de construção leva ao painel nativo.
 A fonte e os botões maiores da 0.5.0 foram mantidos.
 
 
-O painel Automático 0.5.2 mostra se há evento pendente e o bloqueio atual,
+O painel Automático 0.5.3 mostra se há evento pendente e o bloqueio atual,
 mesmo antes da próxima revisão. Registra o último resultado com mês/ano,
 separadamente dos indicadores. Atualizar diagnóstico não executa a revisão;
 trocar modo preserva esse registro e desativar limpa. Em save antigo sem dados
 da revisão, a versão informa ausência de registro em vez de atribuir data.
+
+
+Na 0.5.3 o Automático permite uma tentativa por mês, registrada antes da chamada
+de construção. Uma inclusão não confirmada também consome o limite; revisão
+bloqueada antes de tentar ou sem candidato não consome. O marcador não é
+apagado por atualizar, trocar modo, cancelar projeto ou desativar/reativar.
+No próximo mês, o calendário atual libera outra tentativa, se elegível.
+Assistido não usa esse limite; mantém revalidação e demais guardas.
+
+O marcador mensal é uma exceção intencional à limpeza total do diagnóstico:
+sem preservá-lo, reativar permitiria outra tentativa no mesmo mês. Ele não
+agenda ações, não guarda projetos e não interfere com o mod desabilitado.
+Não reconstrói tentativas antigas sem registro nem comprova persistência na
+engine; save/reload ainda exige verificação em cópia de campanha.

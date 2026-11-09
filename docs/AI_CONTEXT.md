@@ -1,5 +1,31 @@
 # Contexto de continuidade
 
+## Continuação — limite mensal persistente de tentativas 0.5.3
+
+Instalada sem jogo em execução; backup `mod_0.5.2_20261109_121259_782337`;
+13 outputs conferidos e load order preservado.
+
+O Automático agora admite uma tentativa por mês, gravando
+sed_auto_last_attempt_month antes de construir. A guarda é consultada no
+executor e nos dez efeitos de aprovação quando o modo é Automático; isso não
+adiciona setor de construção ao dispatcher automático. Inclusão sem confirmação
+consome o mês; sem candidato/operacionalmente bloqueado não consome.
+
+Importante mudança de limpeza: PERSISTENT_VARIABLES declara schema e marcador
+mensal. Desativar limpa runtime/leituras/pendências, mas preserva essa única
+marca de segurança quando existe. Evita reiniciar limite por modo/desativação.
+Validador foi ajustado para exigir a preservação e não aceitar outras sobras.
+Assistido continua explícito e sem esse limite, sujeito às guardas existentes.
+A comparação usa year/month atuais, não sed_month_key do diagnóstico.
+
+81 testes passam (77 anteriores + quatro), incluindo dez tipos, fila esvaziada,
+troca de modo, reativação, falha de inclusão, Assistido, virada de ano sem
+refresh e regressão negativa de limpeza. O contador sintético não comprova
+fila real; persistência de variáveis continua sem save/reload na engine.
+Proteção não é reconciliação completa, nem calibração fiscal, e não recupera
+um histórico completo de versões anteriores. Manter interface legível e não
+cobrar teste do jogador agora.
+
 ## Continuação — status temporal do Automático 0.5.2
 
 Instalada sem jogo em execução; backup `mod_0.5.1_20261109_115813_269189`;
