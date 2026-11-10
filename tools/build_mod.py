@@ -11,7 +11,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.6.3'
+VERSION = '0.6.7'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -64,7 +64,9 @@ SUPPLY_DIAGNOSTICS = ('producer_states', 'ignored_states', 'pending_states', 'un
                       'understaffed_states', 'hiring_states', 'input_states',
                       'method_states', 'permission_states', 'infrastructure_states')
 STATE_VARIABLES = ['sed_railway_request_pending', 'sed_construction_request_pending'] + [
-    f"sed_{item['good']}_request_pending" for item in SUPPLY_TARGETS] + IGNORED_VARIABLES
+    f"sed_{item['good']}_request_pending" for item in SUPPLY_TARGETS] + IGNORED_VARIABLES + [
+    f"sed_{item['good']}_{field}" for item in SUPPLY_TARGETS
+    for field in ('intent_level', 'intent_variant')]
 STATE_VARIABLES += planning.state_variables(ACTION_NAMES)
 EXTRA_VARIABLES = '''sed_last_year sed_last_month sed_month_key sed_in_default
 sed_gdp_per_capita sed_per_capita_available sed_debt_share sed_debt_share_available
@@ -81,8 +83,11 @@ sed_construction_blocked_states sed_construction_infrastructure_states
 sed_queue_levels_before'''.split() + [
     'sed_mode_manual', 'sed_mode_assisted', 'sed_mode_automatic',
     'sed_auto_action_status', 'sed_auto_event_pending', 'sed_details_visible',
+    'sed_tax_level_saved', 'sed_gov_wage_saved',
     'sed_auto_review_status', 'sed_auto_review_year', 'sed_auto_review_month',
     *[f"sed_{item['good']}_action_status" for item in SUPPLY_TARGETS],
+    *[f"sed_{item['good']}_{field}" for item in SUPPLY_TARGETS
+      for field in ('intents', 'completed', 'abandoned', 'result', 'result_month')],
     *[f"sed_{item['good']}_{reason}" for item in SUPPLY_TARGETS
       for reason in SUPPLY_DIAGNOSTICS],
 ]
@@ -159,6 +164,20 @@ sed_refresh_supply_candidates = {''']
    }}
 '''
             breakdown += '  }'
+        outcome = '''   if = {
+    limit = { has_variable = sed_''' + good + '''_intent_variant }
+'''
+        for index, variant in enumerate(vs, 1):
+            branch = 'if' if index == 1 else 'else_if'
+            outcome += f'''    {branch} = {{
+     limit = {{ var:sed_{good}_intent_variant = {index}
+      b:{variant['building']}.level > var:sed_{good}_intent_level
+     }}
+     sed_{good}_record_completed = yes
+    }}
+'''
+        outcome += f'''    else = {{ sed_{good}_record_abandoned = yes }}
+   }}'''
         result.extend([
             reset,
             f' clear_variable_list = sed_{good}_candidates',
@@ -167,6 +186,7 @@ sed_refresh_supply_candidates = {''']
    limit = {{ has_variable = sed_{good}_request_pending
     NOT = {{ OR = {{ {any_queued} }} }}
    }}
+{outcome}
    remove_variable = sed_{good}_request_pending
   }}
 {breakdown}
@@ -193,6 +213,9 @@ sed_refresh_supply_candidates = {''']
             branch = 'if' if index == 0 else 'else_if'
             enqueue += f'''  {branch} = {{
    limit = {{ sed_{good}_{variant_id(variant)}_eligible = yes }}
+   # Baseline level before queuing; the monthly review compares it after the queue.
+   set_variable = {{ name = sed_{good}_intent_level value = b:{variant['building']}.level }}
+   set_variable = {{ name = sed_{good}_intent_variant value = {index + 1} }}
    start_building_construction = {variant['building']}
   }}
 '''
@@ -206,18 +229,43 @@ sed_refresh_supply_candidates = {''']
     limit = {{ construction_queue_num_queued_government_levels > var:sed_queue_levels_before }}
     set_variable = {{ name = sed_{good}_action_status value = 1 }}
     if = {{ limit = {{ has_variable = sed_mode_automatic }} set_variable = {{ name = sed_auto_action_status value = 1 }} }}
+    if = {{ limit = {{ has_variable = sed_{good}_intents }}
+     change_variable = {{ name = sed_{good}_intents add = 1 }}
+    }}
+    else = {{ set_variable = {{ name = sed_{good}_intents value = 1 }} }}
     prev = {{ set_variable = {{ name = sed_{good}_request_pending value = yes }} }}
    }}
-   else = {{ set_variable = {{ name = sed_{good}_action_status value = 2 }} }}
+   else = {{
+    set_variable = {{ name = sed_{good}_action_status value = 2 }}
+    prev = {{
+     remove_variable = sed_{good}_intent_level
+     remove_variable = sed_{good}_intent_variant
+    }}
+   }}
    remove_variable = sed_queue_levels_before
   }}
  }}
 }}''')
+        record = []
+        for outcome, code in (('completed', 1), ('abandoned', 2)):
+            record.append(f'''sed_{good}_record_{outcome} = {{
+ owner = {{
+  if = {{ limit = {{ has_variable = sed_{good}_{outcome} }}
+   change_variable = {{ name = sed_{good}_{outcome} add = 1 }}
+  }}
+  else = {{ set_variable = {{ name = sed_{good}_{outcome} value = 1 }} }}
+  set_variable = {{ name = sed_{good}_result value = {code} }}
+  set_variable = {{ name = sed_{good}_result_month value = sed_live_month_key }}
+ }}
+ remove_variable = sed_{good}_intent_level
+ remove_variable = sed_{good}_intent_variant
+}}''')
+        result.extend(record)
     mode_actions = []
     for mode in ('manual', 'assisted', 'automatic'):
         other_modes = [value for value in ('manual', 'assisted', 'automatic') if value != mode]
         cleanup = '\n'.join(f' remove_variable = sed_mode_{value}' for value in other_modes)
-        release = ' sed_coord_restore = yes\n' if mode != 'automatic' else ''
+        release = ' sed_coord_restore = yes\n sed_restore_fiscal_policy = yes\n sed_restore_wage_policy = yes\n' if mode != 'automatic' else ''
         takeover = ''
         if mode == 'automatic':
             takeover = ' if = { limit = { has_variable = sed_enabled NOT = { has_variable = sed_coord_active } sed_coord_tools_available = yes } sed_coord_enable = yes }\n'
@@ -237,6 +285,8 @@ sed_refresh_supply_candidates = {''']
 }''')
     result.append('''sed_auto_apply_monthly = {
  sed_refresh_national_plan = yes
+ sed_apply_fiscal_policy = yes
+ sed_apply_wage_policy = yes
  set_variable = { name = sed_auto_action_status value = 2 }
  if = {
   limit = { has_variable = sed_coord_active }
@@ -434,9 +484,17 @@ def widget():
     for goal in range(10):
         body += textbox(f'sed_goal_{goal}', f'sed_goal_{goal}_visible_sgui')
     body += textbox('sed_plan_policy')
+    body += textbox('sed_tax_policy', 'sed_tax_policy_visible_sgui')
+    body += textbox('sed_wage_policy', 'sed_tax_policy_visible_sgui')
+    for item in SUPPLY_TARGETS:
+        name = item['good']
+        body += textbox(f'sed_meta_{name}', f'sed_meta_{name}_visible_sgui')
     for item in SUPPLY_TARGETS:
         name = item['good']
         body += textbox(f'sed_plan_missing_{name}', f'sed_plan_missing_{name}_visible_sgui')
+    for item in SUPPLY_TARGETS:
+        name = item['good']
+        body += textbox(f'sed_book_{name}', f'sed_book_{name}_visible_sgui')
     body += textbox('sed_plan_empty', 'sed_plan_empty_visible_sgui')
     for rank in planning.RANKS:
         body += textbox(f'sed_plan_rank_{rank}', f'sed_plan_rank_{rank}_visible_sgui', heading=True)
@@ -527,6 +585,8 @@ sed_enable_country = {
 
 sed_disable_country = {
  sed_coord_restore = yes
+ sed_restore_fiscal_policy = yes
+ sed_restore_wage_policy = yes
 ''' + '\n'.join(' remove_variable = ' + name for name in country_variables()) + '''
  clear_variable_list = sed_railway_candidates
  clear_variable_list = sed_construction_candidates
@@ -834,8 +894,9 @@ sed_update_growth = {
         f" clear_variable_list = sed_{item['good']}_candidates"
         for item in SUPPLY_TARGETS)
     supply_state_cleanup = '\n'.join(
-        f"  remove_variable = sed_{item['good']}_request_pending"
-        for item in SUPPLY_TARGETS)
+        f"  remove_variable = sed_{item['good']}_{field}"
+        for item in SUPPLY_TARGETS
+        for field in ('request_pending', 'intent_level', 'intent_variant'))
     script = script.replace(
         ' set_variable = { name = sed_construction_action_status value = 0 }',
         ' set_variable = { name = sed_construction_action_status value = 0 }\n' + supply_status)
@@ -867,7 +928,7 @@ sed_update_growth = {
     state_cleanup = '\n'.join('  remove_variable = ' + name for name in planning.state_variables(ACTION_NAMES))
     script = script.replace(' # Schema and automatic attempt month',
                             ' every_scope_state = {\n' + state_cleanup + '\n }\n # Schema and automatic attempt month', 1)
-    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + coordination.effects()
+    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + planning.tax_policy_effects() + planning.wage_policy_effects() + coordination.effects()
 
 
 def scripted_guis():
@@ -1102,6 +1163,12 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
         result += f'sed_goal_{goal}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_plan_goal var:sed_plan_goal = {goal} }} }}\n'
     for item in SUPPLY_TARGETS:
         name = item['good']
+        result += f'sed_meta_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_{name}_meta_year var:sed_{name}_meta_year = year }} }}\n'
+    for item in SUPPLY_TARGETS:
+        name = item['good']
+        result += f'sed_book_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_{name}_intents var:sed_{name}_intents > 0 }} }}\n'
+    for item in SUPPLY_TARGETS:
+        name = item['good']
         result += f'sed_plan_missing_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_plan_missing_{name} var:sed_plan_missing_{name} = 1 }} }}\n'
     result += 'sed_plan_empty_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_count var:sed_plan_count = 0 } }\n'
     for rank in planning.RANKS:
@@ -1111,6 +1178,7 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
             result += f'sed_plan_{rank}_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable_list = sed_plan_{rank}_{name} }} }}\n'
     for name in ACTION_NAMES:
         result += f'sed_plan_{name}_score_visible_sgui = {{ scope = state is_shown = {{ owner = {{ has_variable = sed_enabled }} has_variable = sed_plan_{name}_score var:sed_plan_{name}_score > 0 }} }}\n'
+    result += 'sed_tax_policy_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_mode_automatic } }\n'
     result += 'sed_details_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_details_visible } }\n'
     return '# Generated by tools/build_mod.py.\n' + result
 
@@ -1496,6 +1564,8 @@ def localization(language):
         'sed_plan_title': ('Plano nacional — prioridades atuais', 'National plan — current priorities'),
         'sed_plan_date': ('Plano de ' + v('plan_month', '0') + '/' + v('plan_year', '0') + '.', 'Plan for ' + v('plan_month', '0') + '/' + v('plan_year', '0') + '.'),
         'sed_plan_policy': ('Até três expansões elegíveis, comparadas entre estados e setores. Pontos combinam déficit de infraestrutura, falta relativa de oferta e prioridade a bens essenciais. São uma regra inicial, não retorno previsto. Curto prazo: tratar a primeira prioridade; médio prazo: reavaliar oferta e infraestrutura após a obra; longo prazo: diversificação e desenvolvimento ainda sem modelo validado.', 'Up to three eligible expansions compared across states and sectors. Scores combine infrastructure deficit, relative supply gap and essential goods priority. Initial policy, not predicted returns. Short term: address first priority; medium term: reassess supply and infrastructure after construction; long term: diversification and development still lack a validated model.'),
+        'sed_tax_policy': ('Impostos sob o Director: no Automático, uma alteração por revisão mensal. Sobe um nível em cautela, crise ou default; desce um nível com saldo positivo, sem dívida e reservas de doze semanas de despesas fixas. O nível original é restaurado ao sair do Automático ou desativar. Não altera despesas ou alíquotas de consumo.', 'Taxes under the Director: in Automatic, one change per monthly review. One step up under caution, crisis or default; one step down with positive balance, no debt and twelve weeks of fixed expenses in reserves. The original level is restored when leaving Automatic or disabling. Does not change spending or consumption tax rates.'),
+        'sed_wage_policy': ('Salários do governo sob o Director: no Automático, caem um nível em crise ou default (mínimo baixo) e sobem um nível com saúde fiscal (máximo médio). O nível original é restaurado ao sair do Automático ou desativar. Salários militares e despesas não são alterados.', 'Government wages under the Director: in Automatic, one step down under crisis or default (floor low) and one step up with fiscal health (ceiling medium). The original level is restored when leaving Automatic or disabling. Military wages and spending are not changed.'),
         'sed_plan_empty': ('Sem expansão elegível no escopo atual. Não construir é um resultado válido; consulte os detalhes para os motivos.', 'No eligible expansion in the current scope. Not building is a valid outcome; see details for rejection reasons.'),
         'sed_fiscal_1': ('Fiscal: condições iniciais para expansão. Saldo e saldo operacional não negativos, reservas de ao menos quatro semanas de despesas fixas e dívida até 75% do crédito. Isso não garante capacidade de pagar a próxima obra.', 'Fiscal: initial expansion conditions. Nonnegative balance and operating balance, reserves covering at least four weeks of fixed expenses and debt up to 75% of credit. This does not guarantee affordability of the next project.'),
         'sed_fiscal_2': ('Fiscal: cautela. A política inicial suspende novas tentativas automáticas; aprovação Assistida continua explícita.', 'Fiscal: caution. Initial policy suspends new automatic attempts; Assisted approval remains explicit.'),
@@ -1521,7 +1591,13 @@ def localization(language):
     pairs['sed_goal_5'] = ('Objetivo atual: investigar ausência dos produtores atendidos pelo protótipo para bens em escassez. A construção direta do Director ainda exige produtor existente; a ferramenta externa mantém sua própria seleção.', 'Current objective: investigate missing prototype-supported producers for scarce goods. Direct Director construction still requires an existing producer; the external tool keeps its own selection.')
     for item in SUPPLY_TARGETS:
         name = item['good']
-        pairs[f'sed_plan_missing_{name}'] = (f"Setor a investigar: {item['label_pt']} em escassez no mercado, sem {item['building_pt']} nos estados do país. Importação ou outros produtores podem suprir o bem; não é ordem de autossuficiência.", f"Sector to investigate: market shortage of {item['label_en']}, with no {item['building_en']} in the country's states. Imports or other producers may supply it; this is not a self-sufficiency mandate.")
+        names_pt = [variant['building_pt'] for variant in variants(item)]
+        names_en = [variant['building_en'] for variant in variants(item)]
+        producers_pt = ', '.join(names_pt[:-1]) + (' ou ' if len(names_pt) > 1 else '') + names_pt[-1]
+        producers_en = ', '.join(names_en[:-1]) + (' or ' if len(names_en) > 1 else '') + names_en[-1]
+        pairs[f'sed_plan_missing_{name}'] = (f"Setor a investigar: {item['label_pt']} em escassez no mercado, sem produtor verificado ({producers_pt}) nos estados do país. Importação ou outros produtores podem suprir o bem; não é ordem de autossuficiência.", f"Sector to investigate: market shortage of {item['label_en']}, with no verified producer ({producers_en}) in the country's states. Imports or other producers may supply it; this is not a self-sufficiency mandate.")
+        pairs[f'sed_book_{name}'] = (f"Histórico de {item['label_pt']}: {v(name + '_intents', '0')} pedidos, {v(name + '_completed', '0')} concluídos, {v(name + '_abandoned', '0')} abandonados. Conclusão inferida quando o nível do produtor sobe ao sair da fila; cancelamento ou obra externa podem distorcer a leitura.", f"{item['label_en'].capitalize()} history: {v(name + '_intents', '0')} requested, {v(name + '_completed', '0')} completed, {v(name + '_abandoned', '0')} abandoned. Completion is inferred when the producer level rises after leaving the queue; cancellation or external work can distort it.")
+        pairs[f'sed_meta_{name}'] = (f"Meta industrial anual: ampliar a oferta de {item['label_pt']}. A escassez desse bem durou três meses ou mais; ele mantém prioridade no plano até o fim do ano. A meta não dispensa os filtros de trabalhadores, insumos, fila, infraestrutura e proteção fiscal.", f"Annual industrial goal: expand the supply of {item['label_en']}. The shortage lasted three months or more; it keeps priority in the plan until the end of the year. The goal does not bypass the worker, input, queue, infrastructure and fiscal guards.")
     for rank in planning.RANKS:
         pairs[f'sed_plan_rank_{rank}'] = (f'Prioridade {rank}', f'Priority {rank}')
     for name in ACTION_NAMES:

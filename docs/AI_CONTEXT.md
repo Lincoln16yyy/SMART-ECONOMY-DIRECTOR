@@ -1,5 +1,77 @@
 # Contexto de continuidade
 
+Entrega local 0.6.7 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.7_20261110_012225_626750`.
+
+## Livro de resultados por alvo 0.6.7
+
+Cada aprovação dos oito bens grava no estado `sed_<bem>_intent_level` (nível do
+produtor antes da fila) e `sed_<bem>_intent_variant`. A confirmação incrementa
+`sed_<bem>_intents`. Quando o pedido sai da fila, o nível atual é comparado à
+linha de base: maior conta `sed_<bem>_completed`, igual ou menor conta
+`sed_<bem>_abandoned`; `sed_<bem>_result` e `_result_month` guardam o último
+desfecho. O plano mostra pedidos/concluídos/abandonados só quando há histórico.
+É inferência por fila e nível, não identidade de projeto; cancelamento com obra
+externa pode distorcer. Ferrovia e setor ainda sem registro. A captura usa
+`b:<prédio>.level` como valor (forma do Advisor instalado,
+`advisor_core_values.txt:1040`). 136 testes aprovados; sem confirmação na engine.
+
+## Entrega local 0.6.6
+
+Entrega local 0.6.6 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.6_20261110_011134_926784`.
+
+## Salários do governo 0.6.6
+
+`sed_apply_wage_policy` move o salário civil do governo um passo por revisão no
+Automático: desce em crise/default (piso `low`) e sobe com classificação 1/5,
+superávit, sem dívida e doze semanas de despesas fixas em ouro (teto `medium`).
+`sed_gov_wage_saved` guarda o original e `sed_restore_wage_policy` o devolve ao
+sair do Automático ou desativar. Cautela, Manual e Assistido não alteram
+salários; militares e despesas ficam fora. O efeito
+`set_government_wage_level` só aparece na localização vanilla, sem uso em
+scripts: aceitação na engine é a principal incerteza. 135 testes aprovados.
+
+## Entrega local 0.6.5
+
+Entrega local 0.6.5 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.5_20261110_010449_284523`.
+
+## Política fiscal própria 0.6.5
+
+No Automático, `sed_apply_fiscal_policy` move o nível de imposto um passo por
+revisão mensal: sobe em cautela, crise ou default (até `very_high`) e desce com
+classificação 1/5, superávit, sem dívida e doze semanas de despesas fixas em
+ouro (até `low`). `sed_tax_level_saved` guarda o nível original e
+`sed_restore_fiscal_policy` o devolve ao sair do Automático ou desativar.
+Mudanças manuais durante o Automático são substituídas na revisão seguinte.
+O validador limita `set_tax_level` a esses dois efeitos e exige a guarda de modo.
+Salários, despesas, impostos de consumo e leis não são alterados; efeito real na
+receita e aceitação na engine não confirmados. 132 testes aprovados.
+
+## Entrega local 0.6.4
+
+Entrega local 0.6.4 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.4_20261110_005319_526047`.
+
+## Metas industriais anuais 0.6.4
+
+Escassez de mercado por três meses consecutivos define uma meta industrial
+anual para o bem: `sed_<bem>_short_months` conta a sequência e
+`sed_<bem>_meta_year` grava o ano. A meta vale até a virada do ano civil, recebe
+25 pontos adicionais no plano e aparece em linha própria no diário. Não cria
+candidato: elegibilidade, fila, insumos, trabalhadores, infraestrutura,
+permissão e política fiscal continuam obrigatórias. Desativar limpa contadores
+e marcadores. Três meses e 25 pontos são parâmetros iniciais sem calibração em
+campanha. Metas plurianuais, cadeias completas e feedback por alvo continuam
+pendentes. 129 testes aprovados; comportamento na engine não confirmado.
+
+## Entrega local 0.6.3
+
 Entrega local 0.6.3 instalada com jogo fechado, 14 outputs conferidos e
 content_load.json preservado. Backup em
 `sed_backups/mod_before_0.6.3_20261110_002209_786280`.

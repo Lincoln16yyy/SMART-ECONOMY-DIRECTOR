@@ -1,4 +1,4 @@
-# Planejamento e coordenação — 0.6.3
+# Planejamento e coordenação — 0.6.7
 
 Esta versão implementa política nacional inicial e adaptadores de opções de
 construção. Não é um controlador econômico completo nem comprova crescimento
@@ -261,3 +261,139 @@ fora do denominador.
 126 testes sintéticos aprovados incluem fazenda de milho planejada e
 enfileirada, fazenda de gado elegível para tecido e ausência de falso produtor
 para cereais. Nenhuma dessas combinações foi observada em campanha.
+
+## Metas industriais anuais na 0.6.4
+
+O plano mensal reagia à escassez do mês. Um pico passageiro de outro bem podia
+deslocar uma falta recorrente, e o diário não distinguia escassez estrutural de
+oscilação. A 0.6.4 acrescenta uma meta anual de oferta derivada da observação:
+
+- `sed_<bem>_short_months` conta meses consecutivos com escassez de mercado;
+  sem escassez, o contador é removido.
+- Ao atingir três meses consecutivos, o Director grava
+  `sed_<bem>_meta_year = ano` e declara a meta industrial anual daquele bem.
+- A meta vale até a virada do ano civil. Se a escassez persistir, os três meses
+  seguintes a reativam no novo ano; se tiver acabado, ela expira em janeiro.
+- Enquanto a meta vale, o bem recebe 25 pontos adicionais na pontuação do plano.
+  Isso mantém prioridade sobre uma falta mais aguda, mas recente, sem criar
+  candidato: a elegibilidade continua exigindo mercado em escassez, produtor
+  verificado, ocupação, insumos, fila, infraestrutura, permissão e política
+  fiscal.
+
+O diário mostra uma linha por bem com meta ativa: "Meta industrial anual:
+ampliar a oferta de ...". O texto informa que a meta não dispensa os filtros e
+não promete obra, custo ou resultado. Desativar o Director remove contadores e
+marcadores anuais.
+
+Três meses e 25 pontos são decisões desta implementação, escolhidas para
+separar recorrência de ruído mensal; não foram calibradas em campanha. A meta
+não altera o objetivo macro, impostos, gastos ou o orçamento dos executores
+externos. Metas plurianuais, cadeias completas e feedback de resultados por
+alvo continuam pendentes.
+
+129 testes sintéticos aprovados incluem ativação no terceiro mês, expiração na
+virada do ano, limpeza ao desativar e prioridade da meta sobre falta mais aguda
+mas recente. O comportamento na engine e em save/reload ainda não foi
+observado.
+
+## Política fiscal própria na 0.6.5
+
+O Director lia a situação fiscal e bloqueava ou coordenava construção, mas não
+agia sobre a receita. A 0.6.5 acrescenta uma alteração de nível de imposto por
+revisão mensal, somente no modo Automático e com o Director ativado:
+
+- Cautela, crise ou default (classificações 2, 3 e 4): sobe um nível, até
+  `very_high`.
+- Classificação 1 ou 5 com saldo total positivo, sem dívida e ouro cobrindo
+  doze semanas de despesas fixas: desce um nível, até `low`.
+- Nenhuma outra combinação altera o nível, e só uma alteração ocorre por
+  revisão mensal.
+
+O nível original é capturado na primeira alteração em `sed_tax_level_saved` e
+restaurado ao sair do Automático ou desativar. Mudanças manuais de imposto
+feitas durante o Automático são substituídas na revisão seguinte; para manter
+controle manual, use Manual ou Assistido. O snapshot segue o mesmo princípio já
+usado nas opções dos executores externos.
+
+Fontes vanilla 1.15: `common/effect_localization/00_country_effects_loc.txt:44`
+(`set_tax_level`), `common/trigger_localization/00_trigger_localization.txt:3242`
+(`tax_level`) e os níveis ordenados `very_low`–`very_high` usados em
+`common/history/countries/hai - haiti.txt:25` e
+`common/scripted_progress_bars/00_sepoy_mutiny_progress_bars.txt:250,271`.
+
+O validador autoriza `set_tax_level` somente em `sed_apply_fiscal_policy` e
+`sed_restore_fiscal_policy`, com valores do enum, e exige a guarda explícita de
+modo Automático no efeito de aplicação. A política não altera salários
+(militares ou civis), despesas, impostos de consumo, leis ou dívida; esses
+controles continuam pendentes. O passo único por mês e os limites `low` e
+`very_high` são decisões iniciais sem calibração em campanha, e a resposta da
+receita a cada passo não é estimada.
+
+132 testes sintéticos aprovados incluem subida em cautela, teto `very_high`,
+descida com reservas e superávit, ausência de alteração fora do Automático,
+restauração ao trocar de modo e ao desativar. Nada foi observado na engine: a
+aceitação de `set_tax_level` fora do histórico e o efeito real na receita
+continuam sem confirmação.
+
+## Salários do governo na 0.6.6
+
+O controle de gastos começa pelo salário civil do governo, com a mesma
+reversibilidade dos impostos:
+
+- Crise ou default (classificações 3 e 4): desce um nível, com piso `low`.
+- Classificação 1 ou 5 com superávit, sem dívida e doze semanas de despesas
+  fixas em ouro: sobe um nível, com teto `medium`.
+- Cautela (2), Manual e Assistido não alteram salários.
+
+`sed_gov_wage_saved` guarda o nível original na primeira alteração e
+`sed_restore_wage_policy` o devolve ao sair do Automático ou desativar. A
+revisão mensal aplica no máximo um passo de imposto e um de salário. Salários
+militares, despesas discricionárias, subsídios e impostos de consumo continuam
+fora do controle; não há estimativa do efeito de um passo no orçamento nem na
+burocracia.
+
+Fonte vanilla 1.15: `set_government_wage_level` em
+`common/effect_localization/00_country_effects_loc.txt:279`, trigger
+`government_wage_level` em
+`common/trigger_localization/00_trigger_localization.txt:3269` e níveis
+`very_low`–`very_high` em `common/static_modifiers/00_code_static_modifiers.txt:366–393`.
+O efeito aparece apenas na localização de efeitos, sem uso nos scripts e
+históricos vanilla; por isso a aceitação na engine é a principal incerteza
+desta etapa, mais do que no `set_tax_level`, que é usado no histórico.
+
+O validador permite `set_government_wage_level` somente em
+`sed_apply_wage_policy` e `sed_restore_wage_policy`, com valores do enum, e
+exige guarda explícita de modo Automático. 135 testes sintéticos aprovados
+incluem corte até o piso, subida até o teto, ausência de mudança em cautela e
+restauração por troca de modo e desativação.
+
+## Livro de resultados por alvo na 0.6.7
+
+O Director registrava apenas que uma obra foi enfileirada, sem medir o que
+acontecia depois. A 0.6.7 relaciona cada pedido confirmado dos oito bens
+estratégicos a um desfecho observado:
+
+- Na aprovação, o estado guarda `sed_<bem>_intent_level` (nível do produtor
+  antes da fila) e `sed_<bem>_intent_variant` (qual variante foi enfileirada).
+- A confirmação incrementa `sed_<bem>_intents` no país.
+- Quando o pedido sai da fila, o nível atual é comparado com a linha de base.
+  Nível maior conta `sed_<bem>_completed`; nível igual ou menor conta
+  `sed_<bem>_abandoned`; `sed_<bem>_result` guarda 1 ou 2 e
+  `sed_<bem>_result_month` registra o mês civil pelo `sed_live_month_key`.
+- A leitura é exibida no plano somente depois do primeiro pedido, com pedidos,
+  concluídos e abandonados por bem.
+
+A conclusão é **inferida** pela saída da fila e pelo nível do produtor, não por
+uma identidade de projeto. Cancelamento seguido de obra externa no mesmo estado
+e prédio, rebaixamento ou remoção podem distorcer a contagem. O livro cobre os
+oito bens; ferrovia e setor de construção continuam sem esse registro.
+
+A captura de nível usa `b:<prédio>.level` como valor de script, forma presente
+no Advisor instalado (`common/script_values/advisor_core_values.txt:1040` e
+`:1579–1580`), além das comparações de nível já usadas pelo Director.
+
+136 testes sintéticos aprovados incluem captura de linha de base e variante,
+conclusão quando o nível sobe, abandono quando a fila esvazia sem novo nível e
+contagem acumulada de dois pedidos. Nada foi observado na engine: a leitura de
+`b:<prédio>.level` em valor e a ordem exata entre conclusão, cancelamento e
+limpeza mensal ainda não foram confirmadas.

@@ -213,6 +213,158 @@ class PlanningTests(unittest.TestCase):
             self.assertEqual(c.variables['sed_fabric_' + reason], 0, reason)
         self.assertEqual(c.variable_lists['sed_fabric_candidates'], [target])
 
+    def test_persistent_shortage_defines_an_annual_industrial_goal(self):
+        grain = self.producer('grain', buy=100, sell=30)
+        c = self.c
+        visible = c.definitions['sed_meta_grain_visible_sgui']
+        for expected_months in (1, 2):
+            c.run('sed_refresh_national_plan')
+            self.assertEqual(c.variables['sed_grain_short_months'], expected_months)
+            self.assertFalse(c.condition(child(visible, 'is_shown'), c.country_scope()))
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_grain_short_months'], 3)
+        self.assertEqual(c.variables['sed_grain_meta_year'], 1836)
+        self.assertTrue(c.condition(child(visible, 'is_shown'), c.country_scope()))
+        # A cleared shortage removes the counter but the annual goal lasts to January.
+        c.market_goods.clear()
+        c.run('sed_refresh_national_plan')
+        self.assertNotIn('sed_grain_short_months', c.variables)
+        self.assertTrue(c.condition(child(visible, 'is_shown'), c.country_scope()))
+        c.readings['year'] = 1837
+        self.assertFalse(c.condition(child(visible, 'is_shown'), c.country_scope()))
+
+    def test_annual_goal_keeps_priority_over_a_newer_higher_gap(self):
+        grain = self.producer('grain', buy=100, sell=40)
+        clothes = self.producer('clothes', buy=100, sell=30)
+        self.c.market_goods['clothes']['market_goods_has_goods_shortage'] = False
+        c = self.c
+        for _ in range(3):
+            c.run('sed_refresh_national_plan')
+        self.assertEqual([x[1] for x in self.ranked()], ['grain'])
+        self.c.market_goods['clothes']['market_goods_has_goods_shortage'] = True
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_pressure_grain'], 60)
+        self.assertEqual(c.variables['sed_plan_pressure_clothes'], 70)
+        self.assertEqual(c.variables['sed_clothes_short_months'], 1)
+        self.assertEqual(grain['variables']['sed_plan_grain_score'], 185)
+        self.assertEqual(clothes['variables']['sed_plan_clothes_score'], 170)
+        self.assertEqual([x[1] for x in self.ranked()], ['grain', 'clothes'])
+        self.assertEqual([x[2] for x in self.ranked()], [grain, clothes])
+
+    def test_disable_clears_shortage_counters_and_annual_goal(self):
+        self.producer('grain')
+        c = self.c
+        for _ in range(3):
+            c.run('sed_refresh_national_plan')
+        c.run('sed_disable_country')
+        self.assertNotIn('sed_grain_short_months', c.variables)
+        self.assertNotIn('sed_grain_meta_year', c.variables)
+
+    def test_automatic_fiscal_policy_raises_tax_and_restores_on_mode_change(self):
+        c = self.c
+        c.readings['gold_reserves'] = 100  # Status 2: reserves under four weeks.
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_fiscal_status'], 2)
+        self.assertEqual(c.readings['tax_level'], 'high')
+        self.assertEqual(c.variables['sed_tax_level_saved'], 3)
+        c.run('sed_set_mode_assisted')
+        self.assertEqual(c.readings['tax_level'], 'medium')
+        self.assertNotIn('sed_tax_level_saved', c.variables)
+
+    def test_fiscal_policy_caps_at_very_high_and_disable_restores(self):
+        c = self.c
+        c.readings['gold_reserves'] = 100
+        c.run('sed_set_mode_automatic')
+        for _ in range(3):
+            c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.readings['tax_level'], 'very_high')
+        self.assertEqual(c.tax_changes, ['high', 'very_high'])
+        c.run('sed_disable_country')
+        self.assertEqual(c.readings['tax_level'], 'medium')
+        self.assertNotIn('sed_tax_level_saved', c.variables)
+
+    def test_fiscal_policy_lowers_one_step_only_when_healthy(self):
+        c = self.c
+        c.readings.update(principal=0, gold_reserves=1000, net_total_income=100)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_fiscal_status'], 1)
+        self.assertEqual(c.readings['tax_level'], 'low')
+        c.readings['principal'] = 1
+        c.run('sed_set_mode_manual')
+        self.assertEqual(c.readings['tax_level'], 'medium')
+        c.readings['gold_reserves'] = 100
+        c.run('sed_set_mode_assisted')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.readings['tax_level'], 'medium')
+        self.assertNotIn('sed_tax_level_saved', c.variables)
+
+    def test_wage_policy_cuts_in_crisis_to_floor_and_restores(self):
+        c = self.c
+        c.readings.update(gold_reserves=100, net_total_income=-100)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_fiscal_status'], 3)
+        self.assertEqual(c.readings['government_wage_level'], 'low')
+        self.assertEqual(c.variables['sed_gov_wage_saved'], 3)
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.wage_changes, ['low'])
+        c.run('sed_set_mode_manual')
+        self.assertEqual(c.readings['government_wage_level'], 'medium')
+        self.assertNotIn('sed_gov_wage_saved', c.variables)
+
+    def test_wage_policy_raises_with_health_up_to_medium(self):
+        c = self.c
+        c.readings.update(government_wage_level='low', principal=0,
+                          net_total_income=100, gold_reserves=1000)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.readings['government_wage_level'], 'medium')
+        self.assertEqual(c.variables['sed_gov_wage_saved'], 2)
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.wage_changes, ['medium'])
+        c.run('sed_disable_country')
+        self.assertEqual(c.readings['government_wage_level'], 'low')
+
+    def test_wage_policy_stays_put_under_caution(self):
+        c = self.c
+        c.readings.update(gold_reserves=100, net_total_income=100)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_fiscal_status'], 2)
+        self.assertEqual(c.readings['tax_level'], 'high')
+        self.assertEqual(c.wage_changes, [])
+        self.assertNotIn('sed_gov_wage_saved', c.variables)
+
+    def test_supply_book_records_completed_and_abandoned_outcomes(self):
+        target = self.producer('grain')
+        building = target['buildings'][0]
+        c = self.c
+        c.run('sed_set_mode_assisted')
+        c.run('sed_run_grain_approval', target)
+        self.assertEqual(target['variables']['sed_grain_intent_level'], 1)
+        self.assertEqual(target['variables']['sed_grain_intent_variant'], 1)
+        self.assertEqual(c.variables['sed_grain_intents'], 1)
+        building['level_after_queued_constructions'] = 2
+        c.run('sed_refresh_supply_candidates')
+        self.assertIn('sed_grain_request_pending', target['variables'])
+        building['level'] = 2
+        c.run('sed_refresh_supply_candidates')
+        self.assertNotIn('sed_grain_request_pending', target['variables'])
+        self.assertEqual(c.variables['sed_grain_completed'], 1)
+        self.assertEqual(c.variables['sed_grain_result'], 1)
+        self.assertNotIn('sed_grain_intent_level', target['variables'])
+        # A request that leaves the queue without a higher level is abandoned.
+        c.run('sed_run_grain_approval', target)
+        building['level_after_queued_constructions'] = 3
+        c.run('sed_refresh_supply_candidates')
+        building['level_after_queued_constructions'] = 2
+        c.run('sed_refresh_supply_candidates')
+        self.assertEqual(c.variables['sed_grain_abandoned'], 1)
+        self.assertEqual(c.variables['sed_grain_result'], 2)
+        self.assertEqual(c.variables['sed_grain_intents'], 2)
+
     def test_queue_wait_preserves_plan_but_never_calls_constructor(self):
         self.producer('grain')
         c = self.c

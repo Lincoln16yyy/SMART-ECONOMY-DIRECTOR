@@ -947,6 +947,22 @@ sed_goal_6_visible_sgui = { scope = country is_shown = { has_variable = sed_enab
 sed_goal_7_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_goal var:sed_plan_goal = 7 } }
 sed_goal_8_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_goal var:sed_plan_goal = 8 } }
 sed_goal_9_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_goal var:sed_plan_goal = 9 } }
+sed_meta_wood_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_wood_meta_year var:sed_wood_meta_year = year } }
+sed_meta_iron_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_iron_meta_year var:sed_iron_meta_year = year } }
+sed_meta_coal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coal_meta_year var:sed_coal_meta_year = year } }
+sed_meta_grain_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_grain_meta_year var:sed_grain_meta_year = year } }
+sed_meta_fabric_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_fabric_meta_year var:sed_fabric_meta_year = year } }
+sed_meta_tools_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_tools_meta_year var:sed_tools_meta_year = year } }
+sed_meta_groceries_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_groceries_meta_year var:sed_groceries_meta_year = year } }
+sed_meta_clothes_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_clothes_meta_year var:sed_clothes_meta_year = year } }
+sed_book_wood_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_wood_intents var:sed_wood_intents > 0 } }
+sed_book_iron_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_iron_intents var:sed_iron_intents > 0 } }
+sed_book_coal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coal_intents var:sed_coal_intents > 0 } }
+sed_book_grain_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_grain_intents var:sed_grain_intents > 0 } }
+sed_book_fabric_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_fabric_intents var:sed_fabric_intents > 0 } }
+sed_book_tools_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_tools_intents var:sed_tools_intents > 0 } }
+sed_book_groceries_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_groceries_intents var:sed_groceries_intents > 0 } }
+sed_book_clothes_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_clothes_intents var:sed_clothes_intents > 0 } }
 sed_plan_missing_wood_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_missing_wood var:sed_plan_missing_wood = 1 } }
 sed_plan_missing_iron_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_missing_iron var:sed_plan_missing_iron = 1 } }
 sed_plan_missing_coal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_missing_coal var:sed_plan_missing_coal = 1 } }
@@ -999,4 +1015,5 @@ sed_plan_fabric_score_visible_sgui = { scope = state is_shown = { owner = { has_
 sed_plan_tools_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_tools_score var:sed_plan_tools_score > 0 } }
 sed_plan_groceries_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_groceries_score var:sed_plan_groceries_score > 0 } }
 sed_plan_clothes_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_clothes_score var:sed_plan_clothes_score > 0 } }
+sed_tax_policy_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_mode_automatic } }
 sed_details_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_details_visible } }

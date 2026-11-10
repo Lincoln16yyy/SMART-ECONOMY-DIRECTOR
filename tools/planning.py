@@ -10,7 +10,9 @@ def country_variables(actions):
     supply = [name for name in actions if name not in ('railway', 'construction')]
     pressure = [f'sed_plan_pressure_{name}' for name in supply]
     missing = [f'sed_plan_missing_{name}' for name in supply]
-    return COUNTRY_VARIABLES + pressure + missing
+    months = [f'sed_{name}_short_months' for name in supply]
+    meta = [f'sed_{name}_meta_year' for name in supply]
+    return COUNTRY_VARIABLES + pressure + missing + months + meta
 
 
 def state_variables(actions):
@@ -20,6 +22,130 @@ def state_variables(actions):
 
 def lists(actions):
     return [f'sed_plan_{rank}_{name}' for rank in RANKS for name in actions]
+
+
+TAX_LEVELS = ('very_low', 'low', 'medium', 'high', 'very_high')
+
+
+def tax_policy_effects():
+    """One reviewed tax step per monthly review; the original level is restored."""
+    snapshot = []
+    for index, level in enumerate(TAX_LEVELS, 1):
+        branch = 'if' if index == 1 else 'else_if'
+        snapshot.append(f'''  {branch} = {{ limit = {{ tax_level = {level} }}
+   set_variable = {{ name = sed_tax_level_saved value = {index} }}
+  }}''')
+    raise_steps = []
+    lower_steps = []
+    restore_steps = []
+    for index, level in enumerate(TAX_LEVELS, 1):
+        if index < len(TAX_LEVELS):
+            branch = 'if' if index == 1 else 'else_if'
+            raise_steps.append(f'   {branch} = {{ limit = {{ tax_level = {level} }} set_tax_level = {TAX_LEVELS[index]} }}')
+        if index > 1:
+            branch = 'if' if index == 2 else 'else_if'
+            lower_steps.append(f'   {branch} = {{ limit = {{ tax_level = {level} }} set_tax_level = {TAX_LEVELS[index - 2]} }}')
+        branch = 'if' if index == 1 else 'else_if'
+        restore_steps.append(f'  {branch} = {{ limit = {{ var:sed_tax_level_saved = {index} }} set_tax_level = {level} }}')
+    return '''# Country scope. TAX_LEVELS is ordered: very_low, low, medium, high, very_high.
+# Snapshot before the first change so leaving Automatic or disabling can restore.
+sed_tax_policy_save = {
+ if = {
+  limit = { is_player = yes NOT = { has_variable = sed_tax_level_saved } }
+''' + '\n'.join(snapshot) + '''
+ }
+}
+
+sed_apply_fiscal_policy = {
+ if = {
+  limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic
+   has_variable = sed_fiscal_status
+  }
+  if = {
+   limit = { OR = { var:sed_fiscal_status = 2 var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } }
+   sed_tax_policy_save = yes
+''' + '\n'.join(raise_steps) + '''
+  }
+  else_if = {
+   limit = { OR = { var:sed_fiscal_status = 1 var:sed_fiscal_status = 5 }
+    gold_reserves >= { value = fixed_expenses min = 0 multiply = 12 }
+    principal <= 0
+    net_total_income > 0
+   }
+   sed_tax_policy_save = yes
+''' + '\n'.join(lower_steps) + '''
+  }
+ }
+}
+
+sed_restore_fiscal_policy = {
+ if = {
+  limit = { is_player = yes has_variable = sed_tax_level_saved }
+''' + '\n'.join(restore_steps) + '''
+  remove_variable = sed_tax_level_saved
+ }
+}
+'''
+
+
+def wage_policy_effects():
+    """Cut government wages in crisis, restore them with fiscal health."""
+    snapshot = []
+    cut_steps = []
+    raise_steps = []
+    restore_steps = []
+    for index, level in enumerate(TAX_LEVELS, 1):
+        branch = 'if' if index == 1 else 'else_if'
+        snapshot.append(f'''  {branch} = {{ limit = {{ government_wage_level = {level} }}
+   set_variable = {{ name = sed_gov_wage_saved value = {index} }}
+  }}''')
+        if index > 2:
+            previous = TAX_LEVELS[index - 2]
+            branch = 'if' if index == 3 else 'else_if'
+            cut_steps.append(f'   {branch} = {{ limit = {{ government_wage_level = {level} }} set_government_wage_level = {previous} }}')
+        if index < 3:
+            branch = 'if' if index == 1 else 'else_if'
+            raise_steps.append(f'   {branch} = {{ limit = {{ government_wage_level = {level} }} set_government_wage_level = {TAX_LEVELS[index]} }}')
+        branch = 'if' if index == 1 else 'else_if'
+        restore_steps.append(f'  {branch} = {{ limit = {{ var:sed_gov_wage_saved = {index} }} set_government_wage_level = {level} }}')
+    return '''# Country scope; civilian government wages only, one step per monthly review.
+sed_wage_policy_save = {
+ if = {
+  limit = { is_player = yes NOT = { has_variable = sed_gov_wage_saved } }
+''' + '\n'.join(snapshot) + '''
+ }
+}
+
+sed_apply_wage_policy = {
+ if = {
+  limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic
+   has_variable = sed_fiscal_status
+  }
+  if = {
+   limit = { OR = { var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } }
+   sed_wage_policy_save = yes
+''' + '\n'.join(cut_steps) + '''
+  }
+  else_if = {
+   limit = { OR = { var:sed_fiscal_status = 1 var:sed_fiscal_status = 5 }
+    gold_reserves >= { value = fixed_expenses min = 0 multiply = 12 }
+    principal <= 0
+    net_total_income > 0
+   }
+   sed_wage_policy_save = yes
+''' + '\n'.join(raise_steps) + '''
+  }
+ }
+}
+
+sed_restore_wage_policy = {
+ if = {
+  limit = { is_player = yes has_variable = sed_gov_wage_saved }
+''' + '\n'.join(restore_steps) + '''
+  remove_variable = sed_gov_wage_saved
+ }
+}
+'''
 
 
 def triggers():
@@ -95,6 +221,25 @@ def effects(actions, buildings):
     }}
    }} }}
   }} }}''')
+        # Three consecutive months of shortage define an annual industrial goal.
+        # The year marker expires in January; a lasting shortage activates it again.
+        result.append(f'''  if = {{ limit = {{
+   market = {{ mg:{name} ?= {{ market_goods_has_goods_shortage = yes }} }}
+  }}
+   if = {{ limit = {{ has_variable = sed_{name}_short_months }}
+    change_variable = {{ name = sed_{name}_short_months add = 1 }}
+   }}
+   else = {{ set_variable = {{ name = sed_{name}_short_months value = 1 }} }}
+   if = {{ limit = {{ var:sed_{name}_short_months >= 3 }}
+    if = {{ limit = {{ NOT = {{ has_variable = sed_{name}_meta_year }} }}
+     set_variable = {{ name = sed_{name}_meta_year value = year }}
+    }}
+    else_if = {{ limit = {{ NOT = {{ var:sed_{name}_meta_year = year }} }}
+     set_variable = {{ name = sed_{name}_meta_year value = year }}
+    }}
+   }}
+  }}
+  else = {{ remove_variable = sed_{name}_short_months }}''')
     result.append('  every_scope_state = {')
     for name in actions:
         result.append(f'   set_variable = {{ name = sed_plan_{name}_rank value = 0 }}')
@@ -108,7 +253,8 @@ def effects(actions, buildings):
             score = 'value = 40'
         else:
             bonus = 20 if name in ('grain', 'groceries', 'clothes') else 10
-            score = f'value = owner.var:sed_plan_pressure_{name} add = {80 + bonus}'
+            score = f'''value = owner.var:sed_plan_pressure_{name} add = {80 + bonus}
+    if = {{ limit = {{ owner = {{ has_variable = sed_{name}_meta_year var:sed_{name}_meta_year = year }} }} add = 25 }}'''
         result.append(f'''   if = {{ limit = {{ {eligibility} }}
     set_variable = {{ name = sed_plan_{name}_score value = {{ {score} }} }}
    }}''')

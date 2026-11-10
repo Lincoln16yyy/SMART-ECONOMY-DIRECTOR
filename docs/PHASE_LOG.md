@@ -1118,3 +1118,134 @@ content_load.json preservado. Backup em
 `sed_backups/mod_before_0.6.3_20261110_002209_786280`. ZIP em
 `dist/smart-economy-director-0.6.3.zip`. As novas combinações ainda não foram
 observadas em campanha nem na engine.
+
+## 2026-11-10 — Metas industriais anuais 0.6.4
+
+Objetivo: definir metas econômicas a partir da observação, em vez de apenas
+reagir à escassez do mês corrente, sem criar candidatos fora dos filtros.
+
+O plano passou a contar meses consecutivos de escassez de mercado por bem
+estratégico (`sed_<bem>_short_months`). No terceiro mês, o Director grava a meta
+anual (`sed_<bem>_meta_year`) correspondente ao ano civil. Enquanto a meta vale,
+o bem recebe 25 pontos adicionais na pontuação e uma linha própria no diário
+("Meta industrial anual: ampliar a oferta de ..."). A meta expira em janeiro;
+se a falta continuar, os três meses seguintes a reativam. Ela não cria
+candidato e não dispensa trabalhadores, insumos, fila, infraestrutura,
+permissão ou proteção fiscal, nem altera objetivo macro, impostos, gastos ou
+orçamento externo.
+
+O texto do setor ausente também passou a listar todos os produtores verificados,
+em vez de nomear apenas o prédio principal. Três meses e 25 pontos são decisões
+desta implementação, sem calibração em campanha.
+
+129 testes sintéticos aprovados (três novos: ativação no terceiro mês e
+expiração anual, prioridade sobre falta mais aguda mas recente, limpeza ao
+desativar). Geração atual, validação estática contra Victoria 3 1.15 e
+`git diff --check` aprovados.
+
+Entrega local 0.6.4 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.4_20261110_005319_526047`. ZIP em
+`dist/smart-economy-director-0.6.4.zip`. A meta ainda não foi observada na
+engine nem em campanha.
+
+## 2026-11-10 — Política fiscal própria 0.6.5
+
+Objetivo: agir sobre a receita, não apenas ler a situação fiscal e bloquear
+construção. O Director passa a ajustar o nível de imposto, preservando o
+controle reversível já usado nas opções externas.
+
+No Automático, `sed_apply_fiscal_policy` move um passo por revisão mensal:
+sobe em cautela, crise ou default (até `very_high`) e desce com classificação
+1/5, superávit, sem dívida e ouro cobrindo doze semanas de despesas fixas (até
+`low`). O nível original é guardado em `sed_tax_level_saved` na primeira
+alteração e restaurado por `sed_restore_fiscal_policy` ao sair do Automático ou
+desativar. Mudanças manuais durante o Automático são substituídas na revisão
+seguinte; Manual e Assistido não alteram impostos.
+
+Fontes vanilla 1.15: efeito `set_tax_level` em
+`common/effect_localization/00_country_effects_loc.txt:44`, trigger `tax_level`
+em `common/trigger_localization/00_trigger_localization.txt:3242` e níveis
+ordenados em `common/history/countries/hai - haiti.txt:25` e
+`common/scripted_progress_bars/00_sepoy_mutiny_progress_bars.txt:250,271`.
+
+O validador autoriza `set_tax_level` somente nos dois efeitos fiscais, com
+valores do enum, e exige guarda explícita de modo Automático. Salários,
+despesas, impostos de consumo, leis e dívida continuam fora do controle.
+Passo único, piso `low` e teto `very_high` são decisões iniciais sem calibração.
+
+132 testes sintéticos aprovados (três novos: subida e restauração por troca de
+modo, teto e restauração ao desativar, descida apenas com saúde fiscal).
+Geração, validação estática contra Victoria 3 1.15 e `git diff --check`
+aprovados.
+
+Entrega local 0.6.5 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.5_20261110_010449_284523`. ZIP em
+`dist/smart-economy-director-0.6.5.zip`. Nada observado na engine; a aceitação
+de `set_tax_level` em scripted effects e o efeito real na receita seguem sem
+confirmação.
+
+## 2026-11-10 — Salários do governo 0.6.6
+
+Objetivo: começar o controle de gastos pelo salário civil do governo, com a
+mesma reversibilidade dos impostos. Em crise ou default, o Director desce um
+nível (piso `low`); com classificação 1/5, superávit, sem dívida e doze semanas
+de despesas fixas em ouro, sobe um nível (teto `medium`). Cautela, Manual e
+Assistido não alteram salários. O nível original é guardado em
+`sed_gov_wage_saved` e restaurado ao sair do Automático ou desativar.
+
+Fontes vanilla 1.15: `set_government_wage_level` em
+`common/effect_localization/00_country_effects_loc.txt:279`, trigger
+`government_wage_level` em
+`common/trigger_localization/00_trigger_localization.txt:3269` e níveis em
+`common/static_modifiers/00_code_static_modifiers.txt:366–393`. O efeito não é
+usado por scripts ou históricos vanilla, apenas pela localização; a aceitação
+na engine é a principal incerteza, maior que no `set_tax_level`.
+
+O validador autoriza `set_government_wage_level` somente em
+`sed_apply_wage_policy` e `sed_restore_wage_policy`, com valores do enum, e
+exige guarda de modo Automático. Salários militares, despesas, subsídios e
+impostos de consumo seguem fora do controle.
+
+135 testes sintéticos aprovados (três novos: corte até o piso e restauração,
+subida até o teto e restauração ao desativar, ausência de mudança em cautela).
+Geração, validação estática contra Victoria 3 1.15 e `git diff --check`
+aprovados.
+
+Entrega local 0.6.6 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.6_20261110_011134_926784`. ZIP em
+`dist/smart-economy-director-0.6.6.zip`. Nada observado na engine.
+
+## 2026-11-10 — Livro de resultados por alvo 0.6.7
+
+Objetivo: medir o que acontece depois da aprovação, em vez de registrar apenas
+que a obra entrou na fila. Cada pedido confirmado dos oito bens estratégicos
+guarda no estado o nível do produtor antes da fila (`sed_<bem>_intent_level`) e
+a variante enfileirada (`sed_<bem>_intent_variant`). A confirmação incrementa
+`sed_<bem>_intents`.
+
+Quando o pedido sai da fila, o nível atual é comparado à linha de base: nível
+maior conta `sed_<bem>_completed`, igual ou menor conta `sed_<bem>_abandoned`.
+`sed_<bem>_result` (1/2) e `sed_<bem>_result_month` guardam o último desfecho.
+O plano exibe pedidos, concluídos e abandonados somente após o primeiro pedido.
+
+A conclusão é inferida por fila e nível, não por identidade de projeto;
+cancelamento seguido de obra externa no mesmo estado/prédio pode distorcer a
+contagem. Ferrovia e setor de construção continuam sem registro. A captura usa
+`b:<prédio>.level` como valor de script, forma presente no Advisor instalado
+(`advisor_core_values.txt:1040`; `:1579–1580`), além das comparações de nível
+já usadas pelo Director.
+
+136 testes sintéticos aprovados (um novo: linha de base e variante, conclusão
+por nível maior, abandono por fila vazia sem novo nível e acumulação de dois
+pedidos). Geração, validação estática contra Victoria 3 1.15 e
+`git diff --check` aprovados.
+
+Entrega local 0.6.7 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.7_20261110_012225_626750`. ZIP em
+`dist/smart-economy-director-0.6.7.zip`. Nada observado na engine: a leitura de
+`b:<prédio>.level` em valor e a ordem entre conclusão, cancelamento e limpeza
+mensal seguem sem confirmação.
