@@ -2,7 +2,8 @@
 
 This is a deliberately conservative reference, not an engine expense forecast.
 It charges the next project's potential points at the highest active method's
-material cost, with a 75% price stress. Existing wages and completed-factory
+material cost, capped by the sectors' level/occupancy material reference,
+with a 75% price stress. Existing wages and completed-factory
 operating costs are outside this incremental material benchmark.
 """
 BASE_PRICES = {'wood': 20, 'fabric': 20, 'iron': 40, 'tools': 40,
@@ -17,7 +18,7 @@ PROFILES = (
 )
 VARIABLES = ['sed_build_budget_known', 'sed_build_budget_points',
              'sed_build_budget_point_cost', 'sed_build_budget_weekly',
-             'sed_build_budget_required_gold']
+             'sed_build_budget_required_gold', 'sed_build_budget_material_capacity']
 
 
 def effects():
@@ -41,8 +42,26 @@ def effects():
     result.append(f'''  if = {{ limit = {{ any_scope_state = {{ has_building = building_construction_sector
    b:building_construction_sector = {{ level > 0 occupancy > 0 NOT = {{ OR = {{ {methods} }} }} }}
   }} }} set_variable = {{ name = sed_build_budget_known value = 0 }} }}''')
-    result.append('''  set_variable = { name = sed_build_budget_weekly value = {
+    result.append('''  set_variable = { name = sed_build_budget_material_capacity value = {
+   value = 0
+   every_scope_state = {
+    limit = { has_building = building_construction_sector
+     b:building_construction_sector = { level > 0 occupancy > 0 }
+    }
+''')
+    for method, _, inputs in PROFILES:
+        cost = sum(BASE_PRICES[good] * amount for good, amount in inputs.items()) * 1.75
+        result.append(f'''    if = {{ limit = {{ b:building_construction_sector = {{ has_active_production_method = {method} }} }}
+     add = {{ value = b:building_construction_sector.level
+      multiply = {{ value = b:building_construction_sector.occupancy min = 0 max = 1 }}
+      multiply = {cost:g}
+     }}
+    }}''')
+    result.append('''   }
+  } }
+  set_variable = { name = sed_build_budget_weekly value = {
    value = var:sed_build_budget_points multiply = var:sed_build_budget_point_cost
+   max = var:sed_build_budget_material_capacity
   } }
   set_variable = { name = sed_build_budget_required_gold value = {
    value = fixed_expenses min = 0 multiply = 4

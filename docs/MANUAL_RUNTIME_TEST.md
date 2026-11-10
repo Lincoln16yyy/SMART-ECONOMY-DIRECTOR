@@ -11,7 +11,7 @@ Leitura manual corrigiu snapshot fiscal desatualizado. O controle por reservas
 continuava ativo com déficit e fila pública, motivando a pausa da 0.6.16.
 
 
-## Teste conjunto da 0.6.17
+## Teste conjunto da 0.6.18
 
 Realizar quando o jogador decidir retomar os testes. Registrar uma captura
 inicial do orçamento, opções dos construtores e fila, e guardar um save.
@@ -65,8 +65,10 @@ inicial do orçamento, opções dos construtores e fila, e guardar um save.
     inclusão de obra pelo clique. A última revisão automática deve conservar
     sua data e resultado anteriores até a revisão efetiva.
 
-12. Conferir o orçamento direto mostrado no plano. Comparar os métodos dos
-    setores ativos e os pontos potenciais com a referência semanal. Quando o
+12. Conferir o orçamento direto mostrado no plano. Comparar os métodos, níveis e ocupação dos
+    setores ativos, os pontos potenciais e o teto material com a referência
+    semanal. Conferir se um setor pequeno limita a referência, mesmo com
+    capacidade nacional gratuita maior. Quando o
     orçamento não cobrir a referência, a revisão deve registrar bloqueio de
     materiais sem consumir tentativa. Com cobertura, filas livres e candidata
     viável, confirmar inclusão. Registrar casos em que a referência parece

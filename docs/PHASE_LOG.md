@@ -1539,3 +1539,35 @@ limites de renda/reservas, dívida, método desconhecido, revalidação e limpez
 A validação adversarial também verifica remoção da guarda de orçamento e da
 atualização antes da execução. Geração e validação estática local aprovadas.
 Referência e bloqueios precisam de calibração e observação em campanha.
+
+## 2026-11-10 — Calibração da referência material
+
+A referência da 0.6.17 podia aplicar o método ativo mais caro a pontos nacionais
+que incluem construção gratuita. A origem da parcela gratuita é escalada pelo
+PIB nos modificadores vanilla; não foi adotada uma dedução fixa de pontos.
+
+A referência agora é limitada à soma de materiais dos setores existentes,
+com seus níveis e ocupação atuais, mantendo preços-base acrescidos de 75%.
+Cada estado soma os insumos de seu método reconhecido. A soma é recalculada em
+cada leitura. O orçamento usa o menor valor entre essa soma e a referência
+por pontos do próximo projeto. O limite semanal por projeto e as guardas
+financeiras continuam iguais. A distribuição privada não introduz nova regra,
+pois o executor direto já exige as duas filas vazias antes de construir.
+
+Exemplo sintético com capacidade nacional 10 e um setor de madeira nível 1,
+ocupação integral. Referência por pontos anterior de 17.500/semana passa a ser
+limitada pelos materiais do setor em 3.500/semana. A reserva exigida para saldo
+100 e despesas fixas 50 passa de 452.600 para 88.600. Esses valores são do
+cenário de teste, sem confirmação de despesa real na campanha do jogador.
+
+A referência continua sendo um cenário de materiais. Pode superestimar,
+inclusive a parcela gratuita e os métodos mistos, e pode divergir do custo
+real por preços locais, modificadores, emprego futuro e duração. Salários e
+subsídios futuros permanecem fora do cálculo. O teto por ocupação atual não é
+uma garantia contra crescimento futuro do consumo dos setores.
+
+209 testes aprovados. Quatro regressões adicionais cobrem setor pequeno,
+níveis/ocupação, soma entre estados e atualização, além do teto por projeto.
+O harness suporta o iterador numérico de estados usado por scripts vanilla.
+Geração e validação estática local aprovadas. Novos valores e comportamento
+precisam de calibração em campanha.

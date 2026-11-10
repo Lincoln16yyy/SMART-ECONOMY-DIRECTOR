@@ -430,6 +430,7 @@ sed_disable_country = {
  remove_variable = sed_build_budget_point_cost
  remove_variable = sed_build_budget_weekly
  remove_variable = sed_build_budget_required_gold
+ remove_variable = sed_build_budget_material_capacity
  clear_variable_list = sed_railway_candidates
  clear_variable_list = sed_construction_candidates
  clear_variable_list = sed_wood_candidates
@@ -4426,8 +4427,42 @@ sed_refresh_direct_budget = {
   if = { limit = { any_scope_state = { has_building = building_construction_sector
    b:building_construction_sector = { level > 0 occupancy > 0 NOT = { OR = { has_active_production_method = pm_wooden_buildings has_active_production_method = pm_iron_frame_buildings has_active_production_method = pm_steel_frame_buildings has_active_production_method = pm_arc_welded_buildings } } }
   } } set_variable = { name = sed_build_budget_known value = 0 } }
+  set_variable = { name = sed_build_budget_material_capacity value = {
+   value = 0
+   every_scope_state = {
+    limit = { has_building = building_construction_sector
+     b:building_construction_sector = { level > 0 occupancy > 0 }
+    }
+
+    if = { limit = { b:building_construction_sector = { has_active_production_method = pm_wooden_buildings } }
+     add = { value = b:building_construction_sector.level
+      multiply = { value = b:building_construction_sector.occupancy min = 0 max = 1 }
+      multiply = 3500
+     }
+    }
+    if = { limit = { b:building_construction_sector = { has_active_production_method = pm_iron_frame_buildings } }
+     add = { value = b:building_construction_sector.level
+      multiply = { value = b:building_construction_sector.occupancy min = 0 max = 1 }
+      multiply = 6300
+     }
+    }
+    if = { limit = { b:building_construction_sector = { has_active_production_method = pm_steel_frame_buildings } }
+     add = { value = b:building_construction_sector.level
+      multiply = { value = b:building_construction_sector.occupancy min = 0 max = 1 }
+      multiply = 9450
+     }
+    }
+    if = { limit = { b:building_construction_sector = { has_active_production_method = pm_arc_welded_buildings } }
+     add = { value = b:building_construction_sector.level
+      multiply = { value = b:building_construction_sector.occupancy min = 0 max = 1 }
+      multiply = 13825
+     }
+    }
+   }
+  } }
   set_variable = { name = sed_build_budget_weekly value = {
    value = var:sed_build_budget_points multiply = var:sed_build_budget_point_cost
+   max = var:sed_build_budget_material_capacity
   } }
   set_variable = { name = sed_build_budget_required_gold value = {
    value = fixed_expenses min = 0 multiply = 4

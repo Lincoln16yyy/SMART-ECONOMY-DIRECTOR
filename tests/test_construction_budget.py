@@ -37,7 +37,7 @@ class ConstructionBudgetTests(unittest.TestCase):
                 c.run('sed_refresh_direct_budget')
                 expected = sum(BASE_PRICES[good] * amount for good, amount in inputs.items()) * 1.75 / points
                 self.assertAlmostEqual(c.variables['sed_build_budget_point_cost'], expected, places=5)
-                self.assertAlmostEqual(c.variables['sed_build_budget_weekly'], expected * 10, places=4)
+                self.assertAlmostEqual(c.variables['sed_build_budget_weekly'], min(expected * 10, expected * points), places=4)
                 self.assertEqual(c.variables['sed_build_budget_known'], 1)
 
     def test_mixed_methods_use_the_highest_cost_and_project_point_cap(self):
@@ -48,7 +48,7 @@ class ConstructionBudgetTests(unittest.TestCase):
         c.run('sed_refresh_direct_budget')
         self.assertEqual(c.variables['sed_build_budget_points'], 25)
         self.assertEqual(c.variables['sed_build_budget_point_cost'], 1750)
-        self.assertEqual(c.variables['sed_build_budget_weekly'], 43750)
+        self.assertEqual(c.variables['sed_build_budget_weekly'], 12950)
 
     def test_insufficient_reference_coverage_blocks_without_consuming_attempt(self):
         c = self.c
@@ -64,11 +64,11 @@ class ConstructionBudgetTests(unittest.TestCase):
         c = self.c
         self.sector('pm_wooden_buildings')
         self.target()
-        c.readings.update(principal=0, gold_reserves=452599)
+        c.readings.update(principal=0, gold_reserves=88599)
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')
         self.assertEqual(c.constructions, [])
-        c.readings['gold_reserves'] = 452600
+        c.readings['gold_reserves'] = 88600
         c.run('sed_auto_apply_monthly')
         self.assertEqual(len(c.constructions), 1)
         self.assertEqual(c.variables['sed_auto_review_status'], 1)
@@ -79,7 +79,7 @@ class ConstructionBudgetTests(unittest.TestCase):
         c.readings.update(principal=1, gold_reserves=1000000)
         c.run('sed_refresh_direct_budget')
         self.assertFalse(c.condition(c.definitions['sed_direct_budget_safe'], c.country_scope()))
-        c.readings['net_total_income'] = 17500
+        c.readings['net_total_income'] = 3500
         c.run('sed_refresh_direct_budget')
         self.assertTrue(c.condition(c.definitions['sed_direct_budget_safe'], c.country_scope()))
 
@@ -119,6 +119,49 @@ class ConstructionBudgetTests(unittest.TestCase):
         c.run('sed_auto_apply_monthly')
         self.assertEqual(c.variables['sed_auto_review_status'], 22)
         self.assertEqual(c.constructions, [])
+
+    def test_small_sector_does_not_charge_free_capacity_at_the_material_rate(self):
+        c = self.c
+        self.sector('pm_wooden_buildings')
+        c.readings['modifier:country_construction_add'] = 100
+        c.run('sed_refresh_direct_budget')
+        self.assertEqual(c.variables['sed_build_budget_points'], 25)
+        self.assertEqual(c.variables['sed_build_budget_material_capacity'], 3500)
+        self.assertEqual(c.variables['sed_build_budget_weekly'], 3500)
+
+    def test_sector_levels_and_occupancy_recompute_the_material_cap(self):
+        c = self.c
+        sector = self.sector('pm_wooden_buildings')
+        sector.update(level=3, occupancy=0.5)
+        c.run('sed_refresh_direct_budget')
+        self.assertEqual(c.variables['sed_build_budget_material_capacity'], 5250)
+        self.assertEqual(c.variables['sed_build_budget_weekly'], 5250)
+        sector['occupancy'] = 0
+        c.run('sed_refresh_direct_budget')
+        self.assertEqual(c.variables['sed_build_budget_material_capacity'], 0)
+        self.assertEqual(c.variables['sed_build_budget_weekly'], 0)
+
+    def test_mixed_states_sum_material_cap_without_reusing_previous_readings(self):
+        c = self.c
+        wood = self.sector('pm_wooden_buildings')
+        iron = self.sector('pm_iron_frame_buildings')
+        wood.update(level=2, occupancy=0.5)
+        iron.update(level=2, occupancy=1)
+        c.run('sed_refresh_direct_budget')
+        self.assertEqual(c.variables['sed_build_budget_material_capacity'], 16100)
+        c.states.pop()
+        c.run('sed_refresh_direct_budget')
+        self.assertEqual(c.variables['sed_build_budget_material_capacity'], 3500)
+        self.assertEqual(c.variables['sed_build_budget_weekly'], 3500)
+
+    def test_project_cap_still_limits_large_sector_material_reference(self):
+        c = self.c
+        sector = self.sector('pm_wooden_buildings')
+        sector['level'] = 100
+        c.readings['modifier:country_construction_add'] = 1000
+        c.run('sed_refresh_direct_budget')
+        self.assertEqual(c.variables['sed_build_budget_material_capacity'], 350000)
+        self.assertEqual(c.variables['sed_build_budget_weekly'], 43750)
 
     def test_budget_variables_are_cleared_on_disable(self):
         c = self.c

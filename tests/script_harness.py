@@ -135,6 +135,12 @@ class Country:
             return self.lookup(value, scope)
         result = 0
         for entry in value:
+            if entry.key == 'every_scope_state':
+                limit = child(entry.value, 'limit')
+                rest = [item for item in entry.value if item.key != 'limit']
+                result += sum(self.number(rest, target) for target in self.states
+                              if self.condition(limit, target))
+                continue
             if entry.key == 'market':
                 result += self.number(entry.value, {'goods': self.market_goods})
                 continue

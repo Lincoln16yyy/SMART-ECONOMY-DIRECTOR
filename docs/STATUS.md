@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.6.17
+# Estado dos requisitos — 0.6.18
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.
@@ -11,7 +11,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Até três prioridades nacionais | Implementado sobre pares estado/tipo elegíveis | Validar layout e dados das novas prioridades na engine |
 | Setores estratégicos ausentes | Onze bens, incluindo armas, artilharia e munição; cereais cobrem cinco tipos de fazenda e tecido cobre plantação e pecuária | Demais bens ainda têm um único produtor; considerar importações e objetivos industriais |
 | Emprego e insumos | Filtros atuais de ocupação, falha de contratação e escassez do prédio | Projetar disponibilidade futura de trabalhadores, qualificações e insumos |
-| Reserva, dívida e ritmo | Guarda proporcional inicial, classificações 1–4 e construção financiada por reservas (5) | Referência de materiais implementada na 0.6.17. Calibrar limiares e custo real incremental, duração e serviço da dívida |
+| Reserva, dívida e ritmo | Guarda proporcional inicial, classificações 1–4 e construção financiada por reservas (5) | Referência de materiais implementada na 0.6.17 e limitada por níveis/ocupação na 0.6.18. Calibrar limiares e custo real incremental, duração e serviço da dívida |
 | Impostos e gastos | Nível de imposto e salário civil do governo no Automático, com um passo mensal, snapshot e restauração | Leitura das rotinas aceita no menu da engine. Observar alterações em campanha e calibrar limiares |
 | Coordenação Advisor/Supply Chain | Adaptadores de sete opções de construção, quatro de objetivo/orçamento e três de política do Supply Chain, com restauração | Verificar efeitos reais, save/reload e compatibilidade das versões instaladas |
 | Ativar somente caminho necessário | Automático usa rotinas específicas para administração, tributação, energia e, preferencialmente, setores de construção | Oferta elegível pode usar alvo direto do plano. Nas rotas externas, a seleção continua sob o algoritmo da ferramenta escolhida |
