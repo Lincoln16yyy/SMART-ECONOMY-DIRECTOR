@@ -1,0 +1,522 @@
+{
+  "building_railway": {
+    "pm_diesel_trains": {
+      "engines": 5,
+      "oil": 6
+    },
+    "pm_diesel_trains_principle_transport_3": {
+      "engines": 6,
+      "oil": 8
+    },
+    "pm_early_trains": {
+      "engines": 5,
+      "coal": 2
+    },
+    "pm_electric_trains": {
+      "engines": 5,
+      "electricity": 8
+    },
+    "pm_electric_trains_principle_transport_3": {
+      "engines": 6,
+      "electricity": 10
+    },
+    "pm_steam_trains": {
+      "engines": 5,
+      "coal": 5
+    },
+    "pm_steam_trains_principle_transport_3": {
+      "engines": 6,
+      "coal": 6
+    },
+    "pm_steel_passenger_carriages": {
+      "steel": 5
+    },
+    "pm_wooden_passenger_carriages": {
+      "wood": 8
+    }
+  },
+  "building_construction_sector": {
+    "pm_arc_welded_buildings": {
+      "steel": 50,
+      "glass": 40,
+      "explosives": 20,
+      "tools": 30,
+      "electricity": 40,
+      "copper": 10
+    },
+    "pm_iron_frame_buildings": {
+      "wood": 40,
+      "fabric": 20,
+      "iron": 50,
+      "tools": 10
+    },
+    "pm_steel_frame_buildings": {
+      "steel": 50,
+      "glass": 40,
+      "explosives": 10,
+      "tools": 20
+    },
+    "pm_wooden_buildings": {
+      "fabric": 25,
+      "wood": 75
+    }
+  },
+  "building_logging_camp": {
+    "pm_chainsaws": {
+      "engines": 1,
+      "oil": 4
+    },
+    "pm_electric_saw_mills": {
+      "tools": 10,
+      "electricity": 5
+    },
+    "pm_log_carts": {
+      "transportation": 8
+    },
+    "pm_rail_transport_building_logging_camp": {
+      "transportation": 5
+    },
+    "pm_saw_mills": {
+      "tools": 5
+    },
+    "pm_steam_donkey_building_logging_camp": {
+      "engines": 1,
+      "coal": 4
+    }
+  },
+  "building_iron_mine": {
+    "pm_atmospheric_engine_pump_building_iron_mine": {
+      "tools": 10,
+      "coal": 10
+    },
+    "pm_condensing_engine_pump_building_iron_mine": {
+      "tools": 15,
+      "coal": 15
+    },
+    "pm_diesel_pump_building_iron_mine": {
+      "tools": 15,
+      "oil": 5
+    },
+    "pm_dynamite_building_iron_mine": {
+      "explosives": 10
+    },
+    "pm_nitroglycerin_building_iron_mine": {
+      "explosives": 5
+    },
+    "pm_picks_and_shovels_building_iron_mine": {
+      "tools": 5
+    },
+    "pm_rail_transport_mine": {
+      "transportation": 5
+    },
+    "pm_steam_donkey_mine": {
+      "engines": 1,
+      "coal": 4
+    }
+  },
+  "building_coal_mine": {
+    "pm_atmospheric_engine_pump_building_coal_mine": {
+      "tools": 10
+    },
+    "pm_condensing_engine_pump_building_coal_mine": {
+      "tools": 15
+    },
+    "pm_diesel_pump_building_coal_mine": {
+      "tools": 15,
+      "oil": 5
+    },
+    "pm_dynamite_building_coal_mine": {
+      "explosives": 10
+    },
+    "pm_nitroglycerin_building_coal_mine": {
+      "explosives": 5
+    },
+    "pm_picks_and_shovels_building_coal_mine": {
+      "tools": 5
+    },
+    "pm_rail_transport_mine": {
+      "transportation": 5
+    },
+    "pm_steam_donkey_building_coal_mine": {
+      "engines": 1
+    }
+  },
+  "building_wheat_farm": {
+    "pm_chemical_fertilizer": {
+      "fertilizer": 15
+    },
+    "pm_compression_ignition_tractors": {
+      "oil": 2,
+      "engines": 1
+    },
+    "pm_fertilization": {
+      "fertilizer": 10
+    },
+    "pm_herring_meal_farming": {
+      "fish": 5
+    },
+    "pm_soil_enriching_farming": {
+      "fertilizer": 5
+    },
+    "pm_steam_threshers": {
+      "tools": 2,
+      "coal": 1
+    },
+    "pm_tools": {
+      "tools": 2
+    },
+    "pm_tractors": {
+      "coal": 2,
+      "engines": 1
+    }
+  },
+  "building_rye_farm": {
+    "pm_chemical_fertilizer": {
+      "fertilizer": 15
+    },
+    "pm_compression_ignition_tractors": {
+      "oil": 2,
+      "engines": 1
+    },
+    "pm_fertilization": {
+      "fertilizer": 10
+    },
+    "pm_soil_enriching_farming": {
+      "fertilizer": 5
+    },
+    "pm_steam_threshers": {
+      "tools": 2,
+      "coal": 1
+    },
+    "pm_tools": {
+      "tools": 2
+    },
+    "pm_tractors": {
+      "coal": 2,
+      "engines": 1
+    }
+  },
+  "building_rice_farm": {
+    "pm_chemical_fertilizer_building_rice_farm": {
+      "fertilizer": 30
+    },
+    "pm_fertilization_building_rice_farm": {
+      "fertilizer": 20
+    },
+    "pm_herring_meal_farming_building_rice_farm": {
+      "fish": 10
+    },
+    "pm_soil_enriching_farming_building_rice_farm": {
+      "fertilizer": 10
+    },
+    "pm_steam_threshers_building_rice_farm": {
+      "tools": 4,
+      "coal": 2
+    },
+    "pm_tools_building_rice_farm": {
+      "tools": 4
+    }
+  },
+  "building_maize_farm": {
+    "pm_chemical_fertilizer": {
+      "fertilizer": 15
+    },
+    "pm_compression_ignition_tractors": {
+      "oil": 2,
+      "engines": 1
+    },
+    "pm_fertilization": {
+      "fertilizer": 10
+    },
+    "pm_soil_enriching_farming": {
+      "fertilizer": 5
+    },
+    "pm_steam_threshers": {
+      "tools": 2,
+      "coal": 1
+    },
+    "pm_tools": {
+      "tools": 2
+    },
+    "pm_tractors": {
+      "coal": 2,
+      "engines": 1
+    }
+  },
+  "building_millet_farm": {
+    "pm_chemical_fertilizer": {
+      "fertilizer": 15
+    },
+    "pm_compression_ignition_tractors": {
+      "oil": 2,
+      "engines": 1
+    },
+    "pm_fertilization": {
+      "fertilizer": 10
+    },
+    "pm_soil_enriching_farming": {
+      "fertilizer": 5
+    },
+    "pm_steam_threshers": {
+      "tools": 2,
+      "coal": 1
+    },
+    "pm_tools": {
+      "tools": 2
+    },
+    "pm_tractors": {
+      "coal": 2,
+      "engines": 1
+    }
+  },
+  "building_cotton_plantation": {
+    "automatic_irrigation_building_cotton_plantation": {
+      "engines": 5
+    },
+    "pm_steam_rail_transport": {
+      "transportation": 5
+    }
+  },
+  "building_livestock_ranch": {
+    "pm_barbed_wire_fences": {
+      "iron": 1
+    },
+    "pm_butchering_tools": {
+      "tools": 2
+    },
+    "pm_electric_fencing": {
+      "iron": 1,
+      "electricity": 1
+    },
+    "pm_intensive_grazing_ranch": {
+      "grain": 15
+    },
+    "pm_mechanized_slaughtering": {
+      "tools": 5,
+      "coal": 5
+    },
+    "pm_refrigerated_rail_cars_building_livestock_ranch": {
+      "electricity": 1,
+      "transportation": 1
+    },
+    "pm_refrigerated_storage_building_livestock_ranch": {
+      "electricity": 1
+    },
+    "pm_sheep_farms": {
+      "grain": 10
+    },
+    "pm_slaughterhouses": {
+      "tools": 5
+    }
+  },
+  "building_tooling_workshop": {
+    "pm_assembly_lines_building_tooling_workshop": {
+      "oil": 9,
+      "copper": 1,
+      "electricity": 5
+    },
+    "pm_crude_tools": {
+      "wood": 30
+    },
+    "pm_pig_iron": {
+      "wood": 30,
+      "iron": 20
+    },
+    "pm_rotary_valve_engine_building_tooling_workshop": {
+      "coal": 15
+    },
+    "pm_rubber_grips": {
+      "rubber": 10,
+      "steel": 30
+    },
+    "pm_steel": {
+      "wood": 30,
+      "steel": 20
+    },
+    "pm_watertube_boiler_building_tooling_workshop": {
+      "coal": 10
+    }
+  },
+  "building_food_industry": {
+    "pm_automated_bakery": {
+      "electricity": 5,
+      "copper": 1,
+      "tools": 2
+    },
+    "pm_bakery": {
+      "grain": 40
+    },
+    "pm_baking_powder": {
+      "grain": 80,
+      "sugar": 30
+    },
+    "pm_cannery": {
+      "grain": -20,
+      "meat": 20,
+      "iron": 10
+    },
+    "pm_cannery_fish": {
+      "grain": -20,
+      "fish": 30,
+      "iron": 10
+    },
+    "pm_patent_stills": {
+      "sugar": 25,
+      "glass": 6,
+      "copper": 4
+    },
+    "pm_pot_stills": {
+      "sugar": 25,
+      "glass": 3,
+      "copper": 2
+    },
+    "pm_sweeteners": {
+      "grain": 40,
+      "sugar": 15
+    },
+    "pm_vacuum_canning": {
+      "grain": -30,
+      "fish": 30,
+      "meat": 20,
+      "iron": 10,
+      "oil": 5
+    },
+    "pm_vacuum_canning_principle_3": {
+      "grain": -30,
+      "fish": 30,
+      "meat": 20,
+      "iron": 10,
+      "oil": 5
+    }
+  },
+  "building_textile_mill": {
+    "pm_automatic_power_looms": {
+      "tools": 3,
+      "copper": 2,
+      "electricity": 10
+    },
+    "pm_craftsman_sewing": {
+      "silk": 15,
+      "fabric": -15
+    },
+    "pm_dye_workshops": {
+      "fabric": 40,
+      "dye": 5
+    },
+    "pm_elastics": {
+      "rubber": 10,
+      "silk": 35,
+      "fabric": -35
+    },
+    "pm_electric_sewing_machines": {
+      "fabric": 60,
+      "dye": 20,
+      "tools": 8,
+      "copper": 2,
+      "electricity": 10
+    },
+    "pm_handsewn_clothes": {
+      "fabric": 40
+    },
+    "pm_mechanized_looms": {
+      "tools": 5
+    },
+    "pm_sewing_machines": {
+      "fabric": 60,
+      "dye": 10,
+      "tools": 5
+    }
+  },
+  "building_arms_industry": {
+    "pm_assembly_lines_building_arms_industry": {
+      "tools": 4,
+      "copper": 1,
+      "oil": 5,
+      "electricity": 5
+    },
+    "pm_bolt_action_rifles": {
+      "steel": 20,
+      "hardwood": 10,
+      "tools": 20,
+      "oil": 10
+    },
+    "pm_muskets": {
+      "iron": 10,
+      "hardwood": 10
+    },
+    "pm_repeaters": {
+      "steel": 20,
+      "hardwood": 10,
+      "tools": 10
+    },
+    "pm_rifles": {
+      "steel": 10,
+      "hardwood": 10,
+      "tools": 5
+    },
+    "pm_rotary_valve_engine_building_arms_industry": {
+      "tools": 4,
+      "coal": 10
+    }
+  },
+  "building_artillery_foundry": {
+    "pm_assembly_lines_building_arms_industry": {
+      "tools": 4,
+      "copper": 1,
+      "oil": 5,
+      "electricity": 5
+    },
+    "pm_breech_loaders": {
+      "steel": 25,
+      "hardwood": 10,
+      "tools": 10
+    },
+    "pm_bronze_cannons": {
+      "copper": 10,
+      "hardwood": 15
+    },
+    "pm_bronze_smoothbores": {
+      "copper": 20,
+      "hardwood": 20
+    },
+    "pm_cannons": {
+      "iron": 15,
+      "hardwood": 10
+    },
+    "pm_recoiled_barrels": {
+      "steel": 40,
+      "tools": 20,
+      "oil": 10
+    },
+    "pm_rotary_valve_engine_building_arms_industry": {
+      "tools": 4,
+      "coal": 10
+    },
+    "pm_smoothbores": {
+      "iron": 25,
+      "hardwood": 15
+    }
+  },
+  "building_munition_plant": {
+    "pm_assembly_lines_building_munition_plant": {
+      "tools": 4,
+      "copper": 1,
+      "oil": 5,
+      "electricity": 5
+    },
+    "pm_explosive_shells": {
+      "explosives": 40,
+      "lead": 20,
+      "copper": 10
+    },
+    "pm_percussion_caps": {
+      "explosives": 20,
+      "lead": 15,
+      "copper": 5
+    },
+    "pm_rotary_valve_engine_building_munition_plant": {
+      "tools": 4,
+      "coal": 10
+    }
+  }
+}

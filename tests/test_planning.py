@@ -195,8 +195,10 @@ class PlanningTests(unittest.TestCase):
         self.producer('clothes', target, buy=100, sell=10)
         self.producer('tools', target, buy=100, sell=20)
         self.producer('wood', target, buy=100, sell=30)
+        self.producer('ammunition', target, buy=100, sell=20)
+        self.c.readings['military_expenses'] = 40
         self.c.run('sed_refresh_national_plan')
-        self.assertEqual([x[1] for x in self.ranked()], ['grain', 'clothes', 'tools'])
+        self.assertEqual([x[1] for x in self.ranked()], ['grain', 'clothes', 'ammunition'])
         self.assertTrue(all(x[2] is target for x in self.ranked()))
         self.assertEqual(self.c.variables['sed_plan_count'], 3)
         self.assertEqual(target['variables']['sed_plan_wood_rank'], 0)

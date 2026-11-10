@@ -894,17 +894,18 @@ sed_construction_action_failed_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_construction_action_status = 2 }
 }
+sed_wood_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_input_priority_wood sed_wood_supply_demand = yes } }
 sed_wood_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_wood_candidates }
 }
 sed_wood_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_wood_supply_demand = yes }
 }
 sed_wood_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_wood_candidates } }
+ is_shown = { has_variable = sed_enabled sed_wood_supply_demand = yes NOT = { has_variable_list = sed_wood_candidates } }
 }
 sed_wood_action_success_visible_sgui = {
  scope = country
@@ -914,17 +915,18 @@ sed_wood_action_failed_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_wood_action_status = 2 }
 }
+sed_iron_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_input_priority_iron sed_iron_supply_demand = yes } }
 sed_iron_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_iron_candidates }
 }
 sed_iron_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_iron_supply_demand = yes }
 }
 sed_iron_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_iron_candidates } }
+ is_shown = { has_variable = sed_enabled sed_iron_supply_demand = yes NOT = { has_variable_list = sed_iron_candidates } }
 }
 sed_iron_action_success_visible_sgui = {
  scope = country
@@ -934,17 +936,18 @@ sed_iron_action_failed_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_iron_action_status = 2 }
 }
+sed_coal_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_input_priority_coal sed_coal_supply_demand = yes } }
 sed_coal_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_coal_candidates }
 }
 sed_coal_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_coal_supply_demand = yes }
 }
 sed_coal_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_coal_candidates } }
+ is_shown = { has_variable = sed_enabled sed_coal_supply_demand = yes NOT = { has_variable_list = sed_coal_candidates } }
 }
 sed_coal_action_success_visible_sgui = {
  scope = country
@@ -954,17 +957,18 @@ sed_coal_action_failed_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_coal_action_status = 2 }
 }
+sed_grain_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_input_priority_grain sed_grain_supply_demand = yes } }
 sed_grain_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_grain_candidates }
 }
 sed_grain_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_grain_supply_demand = yes }
 }
 sed_grain_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_grain_candidates } }
+ is_shown = { has_variable = sed_enabled sed_grain_supply_demand = yes NOT = { has_variable_list = sed_grain_candidates } }
 }
 sed_grain_action_success_visible_sgui = {
  scope = country
@@ -974,17 +978,18 @@ sed_grain_action_failed_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_grain_action_status = 2 }
 }
+sed_fabric_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_input_priority_fabric sed_fabric_supply_demand = yes } }
 sed_fabric_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_fabric_candidates }
 }
 sed_fabric_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_fabric_supply_demand = yes }
 }
 sed_fabric_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_fabric_candidates } }
+ is_shown = { has_variable = sed_enabled sed_fabric_supply_demand = yes NOT = { has_variable_list = sed_fabric_candidates } }
 }
 sed_fabric_action_success_visible_sgui = {
  scope = country
@@ -994,17 +999,18 @@ sed_fabric_action_failed_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_fabric_action_status = 2 }
 }
+sed_tools_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_input_priority_tools sed_tools_supply_demand = yes } }
 sed_tools_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_tools_candidates }
 }
 sed_tools_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_tools_supply_demand = yes }
 }
 sed_tools_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_tools_candidates } }
+ is_shown = { has_variable = sed_enabled sed_tools_supply_demand = yes NOT = { has_variable_list = sed_tools_candidates } }
 }
 sed_tools_action_success_visible_sgui = {
  scope = country
@@ -1020,11 +1026,11 @@ sed_groceries_recommendations_visible_sgui = {
 }
 sed_groceries_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_groceries_supply_demand = yes }
 }
 sed_groceries_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_groceries_candidates } }
+ is_shown = { has_variable = sed_enabled sed_groceries_supply_demand = yes NOT = { has_variable_list = sed_groceries_candidates } }
 }
 sed_groceries_action_success_visible_sgui = {
  scope = country
@@ -1040,11 +1046,11 @@ sed_clothes_recommendations_visible_sgui = {
 }
 sed_clothes_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_clothes_supply_demand = yes }
 }
 sed_clothes_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_clothes_candidates } }
+ is_shown = { has_variable = sed_enabled sed_clothes_supply_demand = yes NOT = { has_variable_list = sed_clothes_candidates } }
 }
 sed_clothes_action_success_visible_sgui = {
  scope = country
@@ -1060,11 +1066,11 @@ sed_small_arms_recommendations_visible_sgui = {
 }
 sed_small_arms_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_small_arms_supply_demand = yes }
 }
 sed_small_arms_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_small_arms_candidates } }
+ is_shown = { has_variable = sed_enabled sed_small_arms_supply_demand = yes NOT = { has_variable_list = sed_small_arms_candidates } }
 }
 sed_small_arms_action_success_visible_sgui = {
  scope = country
@@ -1080,11 +1086,11 @@ sed_artillery_recommendations_visible_sgui = {
 }
 sed_artillery_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_artillery_supply_demand = yes }
 }
 sed_artillery_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_artillery_candidates } }
+ is_shown = { has_variable = sed_enabled sed_artillery_supply_demand = yes NOT = { has_variable_list = sed_artillery_candidates } }
 }
 sed_artillery_action_success_visible_sgui = {
  scope = country
@@ -1100,11 +1106,11 @@ sed_ammunition_recommendations_visible_sgui = {
 }
 sed_ammunition_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_ammunition_supply_demand = yes }
 }
 sed_ammunition_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_ammunition_candidates } }
+ is_shown = { has_variable = sed_enabled sed_ammunition_supply_demand = yes NOT = { has_variable_list = sed_ammunition_candidates } }
 }
 sed_ammunition_action_success_visible_sgui = {
  scope = country
@@ -1184,6 +1190,104 @@ sed_reserve_budget_visible_sgui = { scope = country is_shown = { has_variable = 
 sed_auto_status_budget_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 22 } }
 sed_build_budget_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_build_budget_known var:sed_build_budget_known = 1 } }
 sed_build_budget_unknown_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_build_budget_known var:sed_build_budget_known = 0 } }
+sed_input_ref_logging_camp_coal_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_logging_camp sed_input_logging_camp_coal > 0 } }
+sed_input_ref_logging_camp_electricity_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_logging_camp sed_input_logging_camp_electricity > 0 } }
+sed_input_ref_logging_camp_engines_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_logging_camp sed_input_logging_camp_engines > 0 } }
+sed_input_ref_logging_camp_oil_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_logging_camp sed_input_logging_camp_oil > 0 } }
+sed_input_ref_logging_camp_tools_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_logging_camp sed_input_logging_camp_tools > 0 } }
+sed_input_ref_logging_camp_transportation_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_logging_camp sed_input_logging_camp_transportation > 0 } }
+sed_input_ref_iron_mine_coal_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_iron_mine sed_input_iron_mine_coal > 0 } }
+sed_input_ref_iron_mine_engines_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_iron_mine sed_input_iron_mine_engines > 0 } }
+sed_input_ref_iron_mine_explosives_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_iron_mine sed_input_iron_mine_explosives > 0 } }
+sed_input_ref_iron_mine_oil_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_iron_mine sed_input_iron_mine_oil > 0 } }
+sed_input_ref_iron_mine_tools_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_iron_mine sed_input_iron_mine_tools > 0 } }
+sed_input_ref_iron_mine_transportation_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_iron_mine sed_input_iron_mine_transportation > 0 } }
+sed_input_ref_coal_mine_engines_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_coal_mine sed_input_coal_mine_engines > 0 } }
+sed_input_ref_coal_mine_explosives_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_coal_mine sed_input_coal_mine_explosives > 0 } }
+sed_input_ref_coal_mine_oil_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_coal_mine sed_input_coal_mine_oil > 0 } }
+sed_input_ref_coal_mine_tools_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_coal_mine sed_input_coal_mine_tools > 0 } }
+sed_input_ref_coal_mine_transportation_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_coal_mine sed_input_coal_mine_transportation > 0 } }
+sed_input_ref_wheat_farm_coal_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_wheat_farm sed_input_wheat_farm_coal > 0 } }
+sed_input_ref_wheat_farm_engines_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_wheat_farm sed_input_wheat_farm_engines > 0 } }
+sed_input_ref_wheat_farm_fertilizer_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_wheat_farm sed_input_wheat_farm_fertilizer > 0 } }
+sed_input_ref_wheat_farm_fish_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_wheat_farm sed_input_wheat_farm_fish > 0 } }
+sed_input_ref_wheat_farm_oil_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_wheat_farm sed_input_wheat_farm_oil > 0 } }
+sed_input_ref_wheat_farm_tools_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_wheat_farm sed_input_wheat_farm_tools > 0 } }
+sed_input_ref_rye_farm_coal_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_rye_farm sed_input_rye_farm_coal > 0 } }
+sed_input_ref_rye_farm_engines_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_rye_farm sed_input_rye_farm_engines > 0 } }
+sed_input_ref_rye_farm_fertilizer_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_rye_farm sed_input_rye_farm_fertilizer > 0 } }
+sed_input_ref_rye_farm_oil_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_rye_farm sed_input_rye_farm_oil > 0 } }
+sed_input_ref_rye_farm_tools_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_rye_farm sed_input_rye_farm_tools > 0 } }
+sed_input_ref_rice_farm_coal_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_rice_farm sed_input_rice_farm_coal > 0 } }
+sed_input_ref_rice_farm_fertilizer_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_rice_farm sed_input_rice_farm_fertilizer > 0 } }
+sed_input_ref_rice_farm_fish_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_rice_farm sed_input_rice_farm_fish > 0 } }
+sed_input_ref_rice_farm_tools_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_rice_farm sed_input_rice_farm_tools > 0 } }
+sed_input_ref_maize_farm_coal_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_maize_farm sed_input_maize_farm_coal > 0 } }
+sed_input_ref_maize_farm_engines_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_maize_farm sed_input_maize_farm_engines > 0 } }
+sed_input_ref_maize_farm_fertilizer_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_maize_farm sed_input_maize_farm_fertilizer > 0 } }
+sed_input_ref_maize_farm_oil_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_maize_farm sed_input_maize_farm_oil > 0 } }
+sed_input_ref_maize_farm_tools_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_maize_farm sed_input_maize_farm_tools > 0 } }
+sed_input_ref_millet_farm_coal_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_millet_farm sed_input_millet_farm_coal > 0 } }
+sed_input_ref_millet_farm_engines_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_millet_farm sed_input_millet_farm_engines > 0 } }
+sed_input_ref_millet_farm_fertilizer_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_millet_farm sed_input_millet_farm_fertilizer > 0 } }
+sed_input_ref_millet_farm_oil_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_millet_farm sed_input_millet_farm_oil > 0 } }
+sed_input_ref_millet_farm_tools_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_millet_farm sed_input_millet_farm_tools > 0 } }
+sed_input_ref_cotton_plantation_engines_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_cotton_plantation sed_input_cotton_plantation_engines > 0 } }
+sed_input_ref_cotton_plantation_transportation_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_cotton_plantation sed_input_cotton_plantation_transportation > 0 } }
+sed_input_ref_livestock_ranch_coal_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_livestock_ranch sed_input_livestock_ranch_coal > 0 } }
+sed_input_ref_livestock_ranch_electricity_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_livestock_ranch sed_input_livestock_ranch_electricity > 0 } }
+sed_input_ref_livestock_ranch_grain_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_livestock_ranch sed_input_livestock_ranch_grain > 0 } }
+sed_input_ref_livestock_ranch_iron_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_livestock_ranch sed_input_livestock_ranch_iron > 0 } }
+sed_input_ref_livestock_ranch_tools_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_livestock_ranch sed_input_livestock_ranch_tools > 0 } }
+sed_input_ref_livestock_ranch_transportation_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_livestock_ranch sed_input_livestock_ranch_transportation > 0 } }
+sed_input_ref_tooling_workshop_coal_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_tooling_workshop sed_input_tooling_workshop_coal > 0 } }
+sed_input_ref_tooling_workshop_copper_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_tooling_workshop sed_input_tooling_workshop_copper > 0 } }
+sed_input_ref_tooling_workshop_electricity_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_tooling_workshop sed_input_tooling_workshop_electricity > 0 } }
+sed_input_ref_tooling_workshop_iron_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_tooling_workshop sed_input_tooling_workshop_iron > 0 } }
+sed_input_ref_tooling_workshop_oil_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_tooling_workshop sed_input_tooling_workshop_oil > 0 } }
+sed_input_ref_tooling_workshop_rubber_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_tooling_workshop sed_input_tooling_workshop_rubber > 0 } }
+sed_input_ref_tooling_workshop_steel_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_tooling_workshop sed_input_tooling_workshop_steel > 0 } }
+sed_input_ref_tooling_workshop_wood_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_tooling_workshop sed_input_tooling_workshop_wood > 0 } }
+sed_input_ref_food_industry_copper_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_food_industry sed_input_food_industry_copper > 0 } }
+sed_input_ref_food_industry_electricity_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_food_industry sed_input_food_industry_electricity > 0 } }
+sed_input_ref_food_industry_fish_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_food_industry sed_input_food_industry_fish > 0 } }
+sed_input_ref_food_industry_glass_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_food_industry sed_input_food_industry_glass > 0 } }
+sed_input_ref_food_industry_grain_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_food_industry sed_input_food_industry_grain > 0 } }
+sed_input_ref_food_industry_iron_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_food_industry sed_input_food_industry_iron > 0 } }
+sed_input_ref_food_industry_meat_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_food_industry sed_input_food_industry_meat > 0 } }
+sed_input_ref_food_industry_oil_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_food_industry sed_input_food_industry_oil > 0 } }
+sed_input_ref_food_industry_sugar_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_food_industry sed_input_food_industry_sugar > 0 } }
+sed_input_ref_food_industry_tools_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_food_industry sed_input_food_industry_tools > 0 } }
+sed_input_ref_textile_mill_copper_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_textile_mill sed_input_textile_mill_copper > 0 } }
+sed_input_ref_textile_mill_dye_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_textile_mill sed_input_textile_mill_dye > 0 } }
+sed_input_ref_textile_mill_electricity_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_textile_mill sed_input_textile_mill_electricity > 0 } }
+sed_input_ref_textile_mill_fabric_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_textile_mill sed_input_textile_mill_fabric > 0 } }
+sed_input_ref_textile_mill_rubber_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_textile_mill sed_input_textile_mill_rubber > 0 } }
+sed_input_ref_textile_mill_silk_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_textile_mill sed_input_textile_mill_silk > 0 } }
+sed_input_ref_textile_mill_tools_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_textile_mill sed_input_textile_mill_tools > 0 } }
+sed_input_ref_arms_industry_coal_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_arms_industry sed_input_arms_industry_coal > 0 } }
+sed_input_ref_arms_industry_copper_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_arms_industry sed_input_arms_industry_copper > 0 } }
+sed_input_ref_arms_industry_electricity_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_arms_industry sed_input_arms_industry_electricity > 0 } }
+sed_input_ref_arms_industry_hardwood_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_arms_industry sed_input_arms_industry_hardwood > 0 } }
+sed_input_ref_arms_industry_iron_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_arms_industry sed_input_arms_industry_iron > 0 } }
+sed_input_ref_arms_industry_oil_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_arms_industry sed_input_arms_industry_oil > 0 } }
+sed_input_ref_arms_industry_steel_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_arms_industry sed_input_arms_industry_steel > 0 } }
+sed_input_ref_arms_industry_tools_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_arms_industry sed_input_arms_industry_tools > 0 } }
+sed_input_ref_artillery_foundry_coal_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_artillery_foundry sed_input_artillery_foundry_coal > 0 } }
+sed_input_ref_artillery_foundry_copper_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_artillery_foundry sed_input_artillery_foundry_copper > 0 } }
+sed_input_ref_artillery_foundry_electricity_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_artillery_foundry sed_input_artillery_foundry_electricity > 0 } }
+sed_input_ref_artillery_foundry_hardwood_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_artillery_foundry sed_input_artillery_foundry_hardwood > 0 } }
+sed_input_ref_artillery_foundry_iron_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_artillery_foundry sed_input_artillery_foundry_iron > 0 } }
+sed_input_ref_artillery_foundry_oil_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_artillery_foundry sed_input_artillery_foundry_oil > 0 } }
+sed_input_ref_artillery_foundry_steel_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_artillery_foundry sed_input_artillery_foundry_steel > 0 } }
+sed_input_ref_artillery_foundry_tools_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_artillery_foundry sed_input_artillery_foundry_tools > 0 } }
+sed_input_ref_munition_plant_coal_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_munition_plant sed_input_munition_plant_coal > 0 } }
+sed_input_ref_munition_plant_copper_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_munition_plant sed_input_munition_plant_copper > 0 } }
+sed_input_ref_munition_plant_electricity_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_munition_plant sed_input_munition_plant_electricity > 0 } }
+sed_input_ref_munition_plant_explosives_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_munition_plant sed_input_munition_plant_explosives > 0 } }
+sed_input_ref_munition_plant_lead_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_munition_plant sed_input_munition_plant_lead > 0 } }
+sed_input_ref_munition_plant_oil_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_munition_plant sed_input_munition_plant_oil > 0 } }
+sed_input_ref_munition_plant_tools_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_munition_plant sed_input_munition_plant_tools > 0 } }
 sed_auto_status_fiscal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 17 } }
 sed_fiscal_1_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = 1 } }
 sed_fiscal_2_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = 2 } }

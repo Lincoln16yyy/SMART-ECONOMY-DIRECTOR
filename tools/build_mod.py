@@ -5,13 +5,13 @@ import json
 from pathlib import Path
 
 try:
-    from . import planning, coordination, construction_budget, labor
+    from . import planning, coordination, construction_budget, labor, input_forecast
 except ImportError:
-    import planning, coordination, construction_budget, labor
+    import planning, coordination, construction_budget, labor, input_forecast
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.6.19'
+VERSION = '0.6.21'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -62,17 +62,53 @@ def variant_id(variant):
 def variant_methods(variant, indent='  '):
     return '\n'.join(f'{indent}has_active_production_method = {method}'
                       for method in variant['methods'])
+# Only direct links from a genuinely scarce output to a supported market input.
+INPUT_DEPENDENCIES = {
+    upstream['good']: [
+        (downstream['good'], variant)
+        for downstream in SUPPLY_TARGETS if downstream['good'] != upstream['good']
+        for variant in variants(downstream)
+        if upstream['good'] in input_forecast.building_goods(variant['building'])
+    ]
+    for upstream in SUPPLY_TARGETS
+}
+INPUT_DEPENDENCIES = {good: links for good, links in INPUT_DEPENDENCIES.items() if links}
+
+
+def input_priority_effect():
+    result = ['sed_refresh_input_priorities = {']
+    for good, links in INPUT_DEPENDENCIES.items():
+        blockers = []
+        for downstream, variant in links:
+            name = variant_id(variant)
+            blockers.append(f'''    AND = {{
+     sed_{downstream}_candidate_site = yes
+     owner = {{ market = {{ mg:{downstream} ?= {{ market_goods_has_goods_shortage = yes }} }} }}
+     sed_{downstream}_{name}_operable = yes
+     {input_forecast.blocked_input(variant['building'], good)}
+    }}''')
+        conditions = '\n'.join(blockers)
+        result.append(f''' remove_variable = sed_input_priority_{good}
+ if = {{
+  limit = {{ any_scope_state = {{ OR = {{
+{conditions}
+  }} }} }}
+  set_variable = {{ name = sed_input_priority_{good} value = yes }}
+ }}''')
+    return '\n'.join(result) + '\n}\n'
+
+
 ACTION_NAMES = ('railway', 'construction') + tuple(item['good'] for item in SUPPLY_TARGETS)
 IGNORED_VARIABLES = [f'sed_{name}_ignored' for name in ACTION_NAMES]
 SUPPLY_DIAGNOSTICS = ('producer_states', 'ignored_states', 'pending_states', 'unincorporated_states',
                       'understaffed_states', 'hiring_states', 'input_states',
-                      'method_states', 'permission_states', 'infrastructure_states', 'labor_states')
+                      'method_states', 'permission_states', 'infrastructure_states', 'labor_states', 'forecast_states')
 STATE_VARIABLES = ['sed_railway_request_pending', 'sed_construction_request_pending',
                    'sed_railway_intent_level', 'sed_construction_intent_level'] + [
     f"sed_{item['good']}_request_pending" for item in SUPPLY_TARGETS] + IGNORED_VARIABLES + [
     f"sed_{item['good']}_{field}" for item in SUPPLY_TARGETS
     for field in ('intent_level', 'intent_variant')]
-STATE_VARIABLES += planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES
+STATE_VARIABLES += planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES
 EXTRA_VARIABLES = '''sed_last_year sed_last_month sed_month_key sed_in_default
 sed_gdp_per_capita sed_per_capita_available sed_debt_share sed_debt_share_available
 sed_reserve_weeks sed_reserve_weeks_available sed_states sed_infrastructure_short_states
@@ -102,7 +138,8 @@ sed_queue_levels_before'''.split() + [
 ]
 
 
-EXTRA_VARIABLES += planning.country_variables(ACTION_NAMES) + coordination.VARIABLES + construction_budget.VARIABLES
+EXTRA_VARIABLES += planning.country_variables(ACTION_NAMES) + coordination.VARIABLES + construction_budget.VARIABLES + input_forecast.COUNTRY_VARIABLES
+EXTRA_VARIABLES += [f'sed_input_priority_{good}' for good in INPUT_DEPENDENCIES]
 
 
 def runtime_variables():
@@ -131,7 +168,8 @@ sed_record_auto_attempt = {
  }
 }
 
-sed_refresh_supply_candidates = {''']
+sed_refresh_supply_candidates = {
+ sed_refresh_input_readings = yes''']
     for item in SUPPLY_TARGETS:
         good = item['good']
         vs = variants(item)
@@ -167,6 +205,7 @@ sed_refresh_supply_candidates = {''']
                 ('hiring_states', f'b:{building} = {{ has_failed_hires = yes }}'),
                 ('labor_states', f'sed_state_labor_available < {labor.REQUIREMENTS[building]}'),
                 ('input_states', f'b:{building} = {{ building_has_goods_shortage = yes }}'),
+                ('forecast_states', f'NOT = {{ sed_input_{variant_id(variant)}_safe = yes }}'),
                 ('method_states', f'b:{building} = {{ NOT = {{ OR = {{ {methods} }} }} }}'),
                 ('permission_states', f'NOT = {{ can_construct_building = {building} }}'),
                 ('infrastructure_states', 'infrastructure_delta < 0'),
@@ -212,7 +251,7 @@ sed_refresh_supply_candidates = {''']
  }}''',
             f''' if = {{
   limit = {{ is_player = yes has_variable = sed_enabled
-   market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }}
+   sed_{good}_supply_demand = yes
   }}
   ordered_scope_state = {{
    limit = {{ sed_{good}_candidate_eligible = yes }}
@@ -239,7 +278,7 @@ sed_refresh_supply_candidates = {''']
   }}
 '''
         result.append(f'''sed_run_{good}_approval = {{
- owner = {{ if = {{ limit = {{ is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic }} sed_refresh_direct_budget = yes }} }}
+ owner = {{ if = {{ limit = {{ is_player = yes has_variable = sed_enabled }} sed_refresh_input_readings = yes if = {{ limit = {{ has_variable = sed_mode_automatic }} sed_refresh_direct_budget = yes }} }} }}
  if = {{
   limit = {{ sed_{good}_approval_valid = yes }}
   owner = {{ set_variable = {{ name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }} }}
@@ -332,6 +371,7 @@ sed_refresh_supply_candidates = {''']
 }
 
 sed_auto_run_direct = {
+ sed_refresh_input_readings = yes
  sed_refresh_direct_budget = yes
  if = {
   limit = { sed_auto_executor_safe = yes }
@@ -442,6 +482,12 @@ def candidate_item(name):
         content += textbox('sed_candidate_infrastructure', width=468)
         content += textbox('sed_expansion_infrastructure_blocked', f'sed_{name}_infrastructure_blocked_sgui', width=468, state=True)
     content += textbox('sed_candidate_labor', width=468)
+    if supply:
+        item = next(item for item in SUPPLY_TARGETS if item['good'] == name)
+        for variant in variants(item):
+            for good in input_forecast.building_goods(variant['building']):
+                key = 'sed_input_ref_' + variant_id(variant) + '_' + good
+                content += textbox(key, key + '_visible_sgui', width=468, state=True)
     content += textbox('sed_approval_ready', f'sed_{name}_ready_sgui', width=468, state=True)
     content += textbox('sed_mode_approval_blocked', f'sed_{name}_switch_assisted_sgui', width=468, state=True)
     content += button('sed_switch_assisted', f'sed_{name}_switch_assisted_sgui', width=468, state=True)
@@ -537,6 +583,7 @@ def widget():
     for good, _, _ in planning.MILITARY_GOODS:
         body += textbox(f'sed_military_short_{good}', f'sed_military_short_{good}_visible_sgui')
     body += textbox('sed_military_scope')
+    body += textbox('sed_input_forecast_policy')
     body += textbox('sed_plan_policy')
     body += textbox('sed_tax_policy', 'sed_tax_policy_visible_sgui')
     body += textbox('sed_wage_policy', 'sed_tax_policy_visible_sgui')
@@ -583,6 +630,8 @@ def widget():
     for item in SUPPLY_TARGETS:
         good = item['good']
         all_candidates += textbox(f'sed_{good}_section_title', f'sed_{good}_section_visible_sgui', heading=True)
+        if good in INPUT_DEPENDENCIES:
+            all_candidates += textbox('sed_input_priority_notice', f'sed_{good}_input_priority_visible_sgui')
         all_candidates += candidate_list(good, f'sed_{good}_recommendations_visible_sgui')
         all_candidates += textbox('sed_supply_no_candidate', f'sed_{good}_no_candidates_visible_sgui')
         all_candidates += details(textbox(f'sed_{good}_rejection_summary', f'sed_{good}_no_candidates_visible_sgui')
@@ -1074,10 +1123,10 @@ sed_update_growth = {
     cleanup = '\n'.join(' clear_variable_list = ' + name for name in planning.lists(ACTION_NAMES))
     script = script.replace('sed_disable_country = {', 'sed_disable_country = {\n' + cleanup, 1)
     # All state-scoped planner variables are removed on deactivation.
-    state_cleanup = '\n'.join('  remove_variable = ' + name for name in planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES)
+    state_cleanup = '\n'.join('  remove_variable = ' + name for name in planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES)
     script = script.replace(' # Schema and automatic attempt month',
                             ' every_scope_state = {\n' + state_cleanup + '\n }\n # Schema and automatic attempt month', 1)
-    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + labor.effects() + construction_budget.effects() + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + coordination.effects()
+    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, INPUT_DEPENDENCIES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + input_forecast.effects() + input_priority_effect() + labor.effects() + construction_budget.effects() + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + coordination.effects()
 
 
 def scripted_guis():
@@ -1257,12 +1306,16 @@ sed_{name}_refresh_card_sgui = {{
         result += f'sed_{name}_visible_sgui = {{\n scope = country\n is_shown = {{ has_variable = sed_enabled {condition} }}\n}}\n'
     for item in SUPPLY_TARGETS:
         good = item['good']
+        if good in INPUT_DEPENDENCIES:
+            result += (f'sed_{good}_input_priority_visible_sgui = {{ scope = country '
+                       f'is_shown = {{ has_variable = sed_enabled has_variable = sed_input_priority_{good} '
+                       f'sed_{good}_supply_demand = yes }} }}\n')
         result += (f'sed_{good}_recommendations_visible_sgui = {{\n scope = country\n'
                    f' is_shown = {{ has_variable = sed_enabled has_variable_list = sed_{good}_candidates }}\n}}\n')
         result += (f'sed_{good}_section_visible_sgui = {{\n scope = country\n'
-                   f' is_shown = {{ has_variable = sed_enabled market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }} }}\n}}\n')
+                   f' is_shown = {{ has_variable = sed_enabled sed_{good}_supply_demand = yes }}\n}}\n')
         result += (f'sed_{good}_no_candidates_visible_sgui = {{\n scope = country\n'
-                   f' is_shown = {{ has_variable = sed_enabled market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }} NOT = {{ has_variable_list = sed_{good}_candidates }} }}\n}}\n')
+                   f' is_shown = {{ has_variable = sed_enabled sed_{good}_supply_demand = yes NOT = {{ has_variable_list = sed_{good}_candidates }} }}\n}}\n')
         result += (f'sed_{good}_action_success_visible_sgui = {{\n scope = country\n'
                    f' is_shown = {{ has_variable = sed_enabled var:sed_{good}_action_status = 1 }}\n}}\n')
         result += (f'sed_{good}_action_failed_visible_sgui = {{\n scope = country\n'
@@ -1323,6 +1376,12 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
     result += 'sed_auto_status_budget_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 22 } }\n'
     result += 'sed_build_budget_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_build_budget_known var:sed_build_budget_known = 1 } }\n'
     result += 'sed_build_budget_unknown_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_build_budget_known var:sed_build_budget_known = 0 } }\n'
+    for item in SUPPLY_TARGETS:
+        for variant in variants(item):
+            for good in input_forecast.building_goods(variant['building']):
+                key = 'sed_input_ref_' + variant_id(variant) + '_' + good
+                amount = input_forecast.amount_name(variant['building'], good)
+                result += f'{key}_visible_sgui = {{ scope = state is_shown = {{ owner = {{ has_variable = sed_enabled }} has_building = {variant["building"]} {amount} > 0 }} }}\n'
     result += 'sed_auto_status_fiscal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 17 } }\n'
     for status in range(1, 6):
         result += f'sed_fiscal_{status}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = {status} }} }}\n'
@@ -1422,14 +1481,22 @@ def supply_triggers():
         alternatives = ' '.join(f'sed_{good}_{variant_id(variant)}_eligible = yes' for variant in vs)
         military_gate = ('owner = { military_expenses > 0 market = { mg:' + good + ' ?= { market_goods_buy_orders > 0 } } }'
                          if good in planning.MILITARY_INDUSTRY_GOODS else '')
-        result.append(f'''# State scope: expand an operating local producer only while its market good is scarce.
-sed_{good}_candidate_eligible = {{
+        shortage = f'market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }}'
+        demand = shortage
+        if good in INPUT_DEPENDENCIES:
+            demand = (f'OR = {{ {shortage} AND = {{ has_variable = sed_input_priority_{good} '
+                      f'NOT = {{ any_scope_state = {{ sed_{good}_queued_supply = yes }} }} }} }}')
+        result.append(f'''sed_{good}_supply_demand = {{ {demand} }}
+sed_{good}_candidate_site = {{
  is_incorporated = yes
  infrastructure_delta >= 0
  NOT = {{ has_variable = sed_{good}_ignored }}
  NOT = {{ has_variable = sed_{good}_request_pending }}
 {military_gate}
- owner = {{ market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }} }}
+}}
+sed_{good}_candidate_eligible = {{
+ sed_{good}_candidate_site = yes
+ owner = {{ sed_{good}_supply_demand = yes }}
  OR = {{ {alternatives} }}
 }}
 ''')
@@ -1443,6 +1510,10 @@ sed_{good}_candidate_eligible = {{
             methods = variant_methods(variant, '  ')
             result.append(f'''# State scope: one verified producer type for {good}; output checked by active method.
 sed_{good}_{variant_id(variant)}_eligible = {{
+ sed_{good}_{variant_id(variant)}_operable = yes
+ sed_input_{variant_id(variant)}_safe = yes
+}}
+sed_{good}_{variant_id(variant)}_operable = {{
  has_building = {building}
  b:{building} = {{
   level > 0
@@ -1515,7 +1586,7 @@ sed_auto_executor_safe = {
     result.append('sed_direct_supply_priority_exists = {\n OR = {\n' + priorities + '\n }\n}')
     options = '\n'.join(f'  has_variable = {option}' for name, option, pt, en in COMPETING_BUILDERS)
     result.append('sed_competing_builder_configured = {\n OR = {\n' + options + '\n }\n}')
-    return '\n'.join(result).rstrip() + '\n' + planning.triggers() + construction_budget.triggers() + coordination.triggers()
+    return '\n'.join(result).rstrip() + '\n' + planning.triggers() + construction_budget.triggers() + input_forecast.triggers() + coordination.triggers()
 
 
 def value(name, fmt='1'):
@@ -1622,7 +1693,7 @@ def localization(language):
         'sed_construction_finance_caution': ('Alerta: o saldo semanal está negativo. A aprovação continua disponível; confira na fila o custo e o prazo antes de prosseguir.', 'Caution: the weekly balance is negative. Approval remains available; review the queue cost and timing before proceeding.'),
         'sed_construction_action_success': ('Pedido do setor de construção adicionado à fila pública. Confira os custos e o prazo na fila do jogo.', 'Construction sector request added to the government queue. Review cost and timing in the game queue.'),
         'sed_construction_action_failed': ('Inclusão do setor não confirmada. Confira a fila antes de aprovar novamente.', 'Construction sector queue addition not confirmed. Inspect the queue before approving again.'),
-        'sed_supply_title': ('Oferta para escassez de mercado', 'Supply for market shortages'),
+        'sed_supply_title': ('Prioridades de oferta', 'Supply priorities'),
         'sed_supply_intro': ('Aparece quando o mercado registra escassez e há um produtor local operante. A recomendação não prevê preço, retorno ou custo; o botão apenas enfileira um nível público após sua aprovação.', 'Shown when a market good is scarce and an operating local producer exists. The recommendation does not forecast prices, returns, or cost; the button only queues one government level after your approval.'),
         'sed_supply_no_candidate': ('Há escassez no mercado, mas nenhum produtor local passou pelos filtros de operação, incorporação e fila. O Director não sugere construir um prédio novo nesta versão.', 'The market reports a shortage, but no local producer passed the operation, incorporation, and queue filters. This version does not recommend a new building.'),
         'sed_supply_blocked_private': ('Botão bloqueado: esvazie a fila privada antes de usar a fila pública pelo Director.', 'Button blocked: clear the private queue before using the Director’s government queue.'),
@@ -1661,6 +1732,7 @@ def localization(language):
             ('hiring_states', 'falha de contratação', 'failed hires'),
             ('labor_states', 'reserva estimada de trabalhadores insuficiente', 'insufficient estimated labor reserve'),
             ('input_states', 'falta de insumos', 'input shortage'),
+            ('forecast_states', 'risco de escassez com demanda adicional prevista', 'shortage risk from projected additional demand'),
             ('method_states', 'método ativo sem produção confirmada do bem', 'active method without confirmed output of this good'),
             ('permission_states', 'construção não permitida', 'construction not allowed'),
             ('infrastructure_states', 'déficit de infraestrutura', 'infrastructure deficit'),
@@ -1682,9 +1754,9 @@ def localization(language):
             approve_en = f'Approve: queue 1 {building_en} level'
             success_pt = f'Pedido de expansão de {building_pt} adicionado à fila pública. Confira custo e prazo na fila do jogo.'
             success_en = f'{building_en.title()} expansion added to the government queue. Review cost and timing in the game queue.'
-        pairs[f'sed_{good}_section_title'] = (f'Escassez no mercado: {label_pt}', f'Market shortage: {label_en}')
+        pairs[f'sed_{good}_section_title'] = (f'Prioridade de oferta — {label_pt}', f'Supply priority — {label_en}')
         pairs[f'sed_{good}_candidate_title'] = (title_pt, title_en)
-        pairs[f'sed_{good}_candidate_reason'] = (f'O mercado está em escassez de {label_pt}. Este produtor está operante, sem falta de insumos nem expansão já enfileirada. Um nível pode ampliar a oferta; efeito e custo não são previstos.', f'The market reports a shortage of {label_en}. This producer is operating, has no input shortage, and has no expansion queued. One level may increase supply; impact and cost are not forecast.')
+        pairs[f'sed_{good}_candidate_reason'] = (f'Este produtor pode ampliar a oferta de {label_pt}. A recomendação considera operação, insumos e fila.', f'This producer can increase the supply of {label_en}. The recommendation considers operations, inputs and the queue.')
         pairs[f'sed_{good}_approve'] = (approve_pt, approve_en)
         pairs[f'sed_{good}_approve_tt'] = ('Requer modo Assistido, país fora de inadimplência e fila privada vazia. A escassez e o prédio existente são revalidados no clique; entre produtores alternativos, o Director usa o primeiro elegível. Saldo semanal negativo gera alerta, mas não bloqueia. Usa a fila normal do jogo.', 'Requires Assisted mode, no default, and an empty private queue. The shortage and existing building are rechecked on click; among alternative producers, the Director uses the first eligible one. A negative balance raises a caution but does not block. Uses the normal game queue.')
         pairs[f'sed_{good}_action_success'] = (success_pt, success_en)
@@ -1725,7 +1797,7 @@ def localization(language):
         'sed_ignore_recommendation': ('Ignorar neste estado', 'Ignore in this state'),
         'sed_recommendations_intro': ('Expansões de ferrovias existentes quando falta infraestrutura. Aprovar adiciona um nível público.', 'Expand existing railways where infrastructure is insufficient. Approval adds one government level.'),
         'sed_construction_intro': ('Expandir um setor existente quando há pelo menos três projetos públicos.', 'Expand an existing sector when at least three government projects are queued.'),
-        'sed_supply_intro': ('Expandir um produtor existente para um bem em escassez. Custos e retorno não são estimados.', 'Expand an existing producer for a scarce good. Costs and returns are not estimated.'),
+        'sed_supply_intro': ('Expansões de produtores existentes para atender à escassez do mercado ou abastecer outra expansão.', 'Existing producer expansions to address market shortages or supply another expansion.'),
         'sed_supply_no_candidate': ('Nenhum produtor elegível nesta leitura. Esta versão só expande prédios existentes.', 'No eligible producer in this reading. This version only expands existing buildings.'),
     })
     for name in ACTION_NAMES:
@@ -1858,6 +1930,22 @@ def localization(language):
     })
     for good, pt, en in planning.MILITARY_GOODS:
         pairs[f'sed_military_short_{good}'] = (f'Abastecimento militar a investigar: {pt}, com demanda positiva e escassez no mercado.', f'Military supply to investigate: {en}, with positive demand and a market shortage.')
+    pairs['sed_input_priority_notice'] = (
+        'Insumo prioritário para uma expansão que ficaria sem abastecimento.',
+        'Priority input for an expansion that would lack supplies.')
+    pairs['sed_input_forecast_policy'] = (
+        'Previsão de insumos para expansões de oferta. Soma os métodos ativos de um nível completo e aplica margem de 25%. Considera vagas e expansões conhecidas na fila, mantendo a oferta atual. Eletricidade e transporte usam dados do estado. O filtro aguarda quando a demanda projetada ultrapassa o limiar de escassez de 50% de oferta/demanda. Preços futuros, modificadores, comércio e produção futura ainda precisam ser previstos.',
+        'Input forecast for supply expansions. Sums active methods for one full level with a 25% demand margin. Includes known vacancies and queued expansions while holding current supply fixed. Electricity and transportation use state data. The filter waits when projected demand crosses the 50% supply/demand shortage threshold. Future prices, modifiers, trade and production still require forecasting.')
+    for item in SUPPLY_TARGETS:
+        for variant in variants(item):
+            for good in input_forecast.building_goods(variant['building']):
+                key = 'sed_input_ref_' + variant_id(variant) + '_' + good
+                amount = input_forecast.amount_name(variant['building'], good)
+                quantity = f"[State.MakeScope.ScriptValue('{amount}')|1]"
+                headroom = f"[State.MakeScope.ScriptValue('sed_input_headroom_{good}')|1]"
+                pairs[key] = (
+                    variant['building_pt'] + ' — ' + input_forecast.LABELS_PT[good] + ', referência por nível: ' + quantity + '. Margem até o limiar de escassez após compromissos: ' + headroom + '. O filtro acrescenta 25% à referência.',
+                    variant['building_en'] + ' — ' + good + ', reference per level: ' + quantity + '. Demand room to shortage threshold after commitments: ' + headroom + '. The filter adds 25% to the reference.')
     for metric in METRICS:
         unit = metric['unit']
         fmt = {'money': 'K', 'money_week': 'K', 'count': '0', 'decimal': '1', 'ratio': '%1'}[unit]
@@ -1939,7 +2027,7 @@ sed_pulse.1 = {
         'common/scripted_effects/sed_effects.txt': effects(),
         'common/scripted_guis/sed_scripted_guis.txt': scripted_guis(),
         'common/scripted_triggers/sed_triggers.txt': scripted_triggers(),
-        'common/script_values/sed_values.txt': '# Current calendar, independent of diagnostic refresh.\nsed_live_month_key = { value = year multiply = 12 add = month }\n' + labor.values(),
+        'common/script_values/sed_values.txt': '# Current calendar, independent of diagnostic refresh.\nsed_live_month_key = { value = year multiply = 12 add = month }\n' + labor.values() + input_forecast.values(),
         'gui/journal_entry_widgets/sed_diagnostics.gui': widget(),
         'localization/braz_por/sed_l_braz_por.yml': localization('braz_por'),
         'localization/english/sed_l_english.yml': localization('english'),

@@ -312,6 +312,48 @@ textbox = {
  text = "sed_candidate_labor"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_logging_camp_coal_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_logging_camp_coal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_logging_camp_electricity_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_logging_camp_electricity"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_logging_camp_engines_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_logging_camp_engines"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_logging_camp_oil_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_logging_camp_oil"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_logging_camp_tools_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_logging_camp_tools"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_logging_camp_transportation_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_logging_camp_transportation"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_wood_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -446,6 +488,48 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_candidate_labor"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_iron_mine_coal_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_iron_mine_coal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_iron_mine_engines_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_iron_mine_engines"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_iron_mine_explosives_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_iron_mine_explosives"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_iron_mine_oil_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_iron_mine_oil"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_iron_mine_tools_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_iron_mine_tools"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_iron_mine_transportation_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_iron_mine_transportation"
 }
 textbox = {
  visible = "[GetScriptedGui('sed_iron_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
@@ -584,6 +668,41 @@ textbox = {
  text = "sed_candidate_labor"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_coal_mine_engines_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_coal_mine_engines"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_coal_mine_explosives_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_coal_mine_explosives"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_coal_mine_oil_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_coal_mine_oil"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_coal_mine_tools_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_coal_mine_tools"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_coal_mine_transportation_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_coal_mine_transportation"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_coal_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -718,6 +837,181 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_candidate_labor"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_wheat_farm_coal_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_wheat_farm_coal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_wheat_farm_engines_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_wheat_farm_engines"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_wheat_farm_fertilizer_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_wheat_farm_fertilizer"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_wheat_farm_fish_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_wheat_farm_fish"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_wheat_farm_oil_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_wheat_farm_oil"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_wheat_farm_tools_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_wheat_farm_tools"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_rye_farm_coal_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_rye_farm_coal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_rye_farm_engines_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_rye_farm_engines"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_rye_farm_fertilizer_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_rye_farm_fertilizer"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_rye_farm_oil_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_rye_farm_oil"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_rye_farm_tools_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_rye_farm_tools"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_rice_farm_coal_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_rice_farm_coal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_rice_farm_fertilizer_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_rice_farm_fertilizer"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_rice_farm_fish_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_rice_farm_fish"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_rice_farm_tools_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_rice_farm_tools"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_maize_farm_coal_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_maize_farm_coal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_maize_farm_engines_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_maize_farm_engines"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_maize_farm_fertilizer_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_maize_farm_fertilizer"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_maize_farm_oil_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_maize_farm_oil"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_maize_farm_tools_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_maize_farm_tools"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_millet_farm_coal_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_millet_farm_coal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_millet_farm_engines_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_millet_farm_engines"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_millet_farm_fertilizer_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_millet_farm_fertilizer"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_millet_farm_oil_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_millet_farm_oil"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_millet_farm_tools_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_millet_farm_tools"
 }
 textbox = {
  visible = "[GetScriptedGui('sed_grain_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
@@ -856,6 +1150,62 @@ textbox = {
  text = "sed_candidate_labor"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_cotton_plantation_engines_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_cotton_plantation_engines"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_cotton_plantation_transportation_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_cotton_plantation_transportation"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_livestock_ranch_coal_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_livestock_ranch_coal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_livestock_ranch_electricity_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_livestock_ranch_electricity"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_livestock_ranch_grain_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_livestock_ranch_grain"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_livestock_ranch_iron_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_livestock_ranch_iron"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_livestock_ranch_tools_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_livestock_ranch_tools"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_livestock_ranch_transportation_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_livestock_ranch_transportation"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_fabric_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -990,6 +1340,62 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_candidate_labor"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_tooling_workshop_coal_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_tooling_workshop_coal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_tooling_workshop_copper_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_tooling_workshop_copper"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_tooling_workshop_electricity_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_tooling_workshop_electricity"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_tooling_workshop_iron_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_tooling_workshop_iron"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_tooling_workshop_oil_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_tooling_workshop_oil"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_tooling_workshop_rubber_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_tooling_workshop_rubber"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_tooling_workshop_steel_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_tooling_workshop_steel"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_tooling_workshop_wood_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_tooling_workshop_wood"
 }
 textbox = {
  visible = "[GetScriptedGui('sed_tools_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
@@ -1128,6 +1534,76 @@ textbox = {
  text = "sed_candidate_labor"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_food_industry_copper_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_food_industry_copper"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_food_industry_electricity_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_food_industry_electricity"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_food_industry_fish_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_food_industry_fish"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_food_industry_glass_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_food_industry_glass"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_food_industry_grain_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_food_industry_grain"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_food_industry_iron_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_food_industry_iron"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_food_industry_meat_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_food_industry_meat"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_food_industry_oil_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_food_industry_oil"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_food_industry_sugar_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_food_industry_sugar"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_food_industry_tools_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_food_industry_tools"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_groceries_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -1262,6 +1738,55 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_candidate_labor"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_textile_mill_copper_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_textile_mill_copper"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_textile_mill_dye_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_textile_mill_dye"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_textile_mill_electricity_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_textile_mill_electricity"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_textile_mill_fabric_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_textile_mill_fabric"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_textile_mill_rubber_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_textile_mill_rubber"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_textile_mill_silk_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_textile_mill_silk"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_textile_mill_tools_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_textile_mill_tools"
 }
 textbox = {
  visible = "[GetScriptedGui('sed_clothes_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
@@ -1400,6 +1925,62 @@ textbox = {
  text = "sed_candidate_labor"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_arms_industry_coal_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_arms_industry_coal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_arms_industry_copper_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_arms_industry_copper"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_arms_industry_electricity_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_arms_industry_electricity"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_arms_industry_hardwood_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_arms_industry_hardwood"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_arms_industry_iron_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_arms_industry_iron"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_arms_industry_oil_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_arms_industry_oil"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_arms_industry_steel_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_arms_industry_steel"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_arms_industry_tools_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_arms_industry_tools"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_small_arms_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -1536,6 +2117,62 @@ textbox = {
  text = "sed_candidate_labor"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_artillery_foundry_coal_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_artillery_foundry_coal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_artillery_foundry_copper_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_artillery_foundry_copper"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_artillery_foundry_electricity_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_artillery_foundry_electricity"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_artillery_foundry_hardwood_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_artillery_foundry_hardwood"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_artillery_foundry_iron_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_artillery_foundry_iron"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_artillery_foundry_oil_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_artillery_foundry_oil"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_artillery_foundry_steel_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_artillery_foundry_steel"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_artillery_foundry_tools_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_artillery_foundry_tools"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_artillery_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -1670,6 +2307,55 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_candidate_labor"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_munition_plant_coal_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_munition_plant_coal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_munition_plant_copper_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_munition_plant_copper"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_munition_plant_electricity_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_munition_plant_electricity"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_munition_plant_explosives_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_munition_plant_explosives"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_munition_plant_lead_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_munition_plant_lead"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_munition_plant_oil_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_munition_plant_oil"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_munition_plant_tools_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_munition_plant_tools"
 }
 textbox = {
  visible = "[GetScriptedGui('sed_ammunition_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
@@ -2621,6 +3307,12 @@ textbox = {
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_input_forecast_policy"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_plan_policy"
 }
 textbox = {
@@ -3277,6 +3969,13 @@ textbox = {
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_wood_section_title"
 }
+textbox = {
+ visible = "[GetScriptedGui('sed_wood_input_priority_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_input_priority_notice"
+}
 flowcontainer = {
  visible = "[GetScriptedGui('sed_wood_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  direction = vertical spacing = 16 ignoreinvisible = yes
@@ -3327,6 +4026,13 @@ textbox = {
  using = fontsize_xxl
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_iron_section_title"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_iron_input_priority_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_input_priority_notice"
 }
 flowcontainer = {
  visible = "[GetScriptedGui('sed_iron_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
@@ -3379,6 +4085,13 @@ textbox = {
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_coal_section_title"
 }
+textbox = {
+ visible = "[GetScriptedGui('sed_coal_input_priority_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_input_priority_notice"
+}
 flowcontainer = {
  visible = "[GetScriptedGui('sed_coal_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  direction = vertical spacing = 16 ignoreinvisible = yes
@@ -3429,6 +4142,13 @@ textbox = {
  using = fontsize_xxl
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_grain_section_title"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_grain_input_priority_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_input_priority_notice"
 }
 flowcontainer = {
  visible = "[GetScriptedGui('sed_grain_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
@@ -3481,6 +4201,13 @@ textbox = {
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_fabric_section_title"
 }
+textbox = {
+ visible = "[GetScriptedGui('sed_fabric_input_priority_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_input_priority_notice"
+}
 flowcontainer = {
  visible = "[GetScriptedGui('sed_fabric_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  direction = vertical spacing = 16 ignoreinvisible = yes
@@ -3531,6 +4258,13 @@ textbox = {
  using = fontsize_xxl
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_tools_section_title"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_tools_input_priority_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_input_priority_notice"
 }
 flowcontainer = {
  visible = "[GetScriptedGui('sed_tools_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"

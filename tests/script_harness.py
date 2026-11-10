@@ -5,6 +5,7 @@ It does not emulate the game, validate primitive names, or test GUI rendering.
 """
 
 from tools.pdx_script import child
+from tools.input_forecast import MARKET_GOODS, LOCAL_GOODS
 
 
 COUNTRY = 'country'
@@ -22,7 +23,10 @@ def state(infrastructure_delta=0, market_access=1, incorporated=True,
                   state_population=population, state_unemployment_rate=0.1,
                   **{'pop_type_percent_state(pop_type:peasants)': 0.5,
                      'modifier:state_working_adult_ratio_add': 0},
-                  buildings=buildings or [], variables={})
+                  buildings=buildings or [], variables={},
+                  state_goods={good: {'state_goods_production': 1000,
+                                      'state_goods_consumption': 1000,
+                                      'state_goods_pricier': 0} for good in LOCAL_GOODS})
     result.update(readings)
     result['__scope__'] = STATE
     return result
@@ -78,7 +82,9 @@ class Country:
         self.tax_changes = []
         self.wage_changes = []
         self.construction_accepted = True
-        self.market_goods = {}
+        self.market_goods = {good: {'market_goods_buy_orders': 1000,
+                                    'market_goods_sell_orders': 1000,
+                                    'market_goods_has_goods_shortage': False} for good in MARKET_GOODS}
         self.scheduled_events = []
 
     def country_scope(self):
@@ -112,7 +118,8 @@ class Country:
             return float(name)
         except ValueError:
             pass
-        if name in ('market_goods_buy_orders', 'market_goods_sell_orders'):
+        if name in ('market_goods_buy_orders', 'market_goods_sell_orders',
+                    'state_goods_production', 'state_goods_consumption'):
             return scope.get(name, 0)  # Explicit synthetic zero-orders default; never engine evidence.
         if name in scope:
             return scope[name]
@@ -148,6 +155,11 @@ class Country:
                 continue
             if entry.key == 'market':
                 result += self.number(entry.value, {'goods': self.market_goods})
+                continue
+            if entry.key.startswith('sg:'):
+                good = scope.get('state_goods', {}).get(entry.key[3:])
+                if good is not None:
+                    result += self.number(entry.value, good)
                 continue
             if entry.key.startswith('mg:'):
                 good = scope['goods'].get(entry.key[3:])

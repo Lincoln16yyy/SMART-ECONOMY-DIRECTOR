@@ -260,7 +260,8 @@ class DiagnosisTests(unittest.TestCase):
                 c.states = targets + [state()]  # States without this producer are excluded.
                 c.run('sed_refresh_supply_candidates')
                 self.assertEqual(c.variables['sed_' + good + '_producer_states'], 11)
-                for reason in SUPPLY_DIAGNOSTICS[1:]:
+                self.assertEqual(c.variables['sed_' + good + '_forecast_states'], 0)
+                for reason in (reason for reason in SUPPLY_DIAGNOSTICS[1:] if reason != 'forecast_states'):
                     self.assertEqual(c.variables['sed_' + good + '_' + reason], 1, reason)
                 self.assertEqual(c.variable_lists['sed_' + good + '_candidates'], [targets[7]])
                 c.states = []

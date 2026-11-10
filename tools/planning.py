@@ -215,11 +215,12 @@ sed_coord_fiscal_safe = {
 '''
 
 
-def effects(actions, buildings):
+def effects(actions, dependencies, buildings):
     supply = [name for name in actions if name not in ('railway', 'construction')]
     result = ['''sed_refresh_national_plan = {
  if = {
   limit = { is_player = yes has_variable = sed_enabled }
+  sed_refresh_input_readings = yes
   set_variable = { name = sed_plan_count value = 0 }
   set_variable = { name = sed_plan_missing_count value = 0 }
   set_variable = { name = sed_plan_goal value = 0 }
@@ -314,6 +315,8 @@ def effects(actions, buildings):
             bonus = 20 if name in ('grain', 'groceries', 'clothes') else 10
             score = f'''value = owner.var:sed_plan_pressure_{name} add = {80 + bonus}
     if = {{ limit = {{ owner = {{ has_variable = sed_{name}_meta_year var:sed_{name}_meta_year = year }} }} add = 25 }}'''
+            if name in dependencies:
+                score += f'\n    if = {{ limit = {{ owner = {{ has_variable = sed_input_priority_{name} }} }} add = 75 }}'
             if name in MILITARY_INDUSTRY_GOODS:
                 score += '\n    if = { limit = { owner = { is_at_war = yes } } add = 20 }'
         result.append(f'''   if = {{ limit = {{ {eligibility} }}
@@ -361,8 +364,11 @@ def effects(actions, buildings):
     for name in supply:
         military_demand = (f'military_expenses > 0 market = {{ mg:{name} ?= {{ market_goods_buy_orders > 0 }} }}'
                            if name in MILITARY_INDUSTRY_GOODS else '')
+        demand = f'market = {{ mg:{name} ?= {{ market_goods_has_goods_shortage = yes }} }}'
+        if name in dependencies:
+            demand = f'OR = {{ {demand} has_variable = sed_input_priority_{name} }}'
         result.append(f'''  if = {{ limit = {{ var:sed_plan_goal = 0 {military_demand}
-   market = {{ mg:{name} ?= {{ market_goods_has_goods_shortage = yes }} }}
+   {demand}
    any_scope_state = {{ is_incorporated = yes NOT = {{ has_variable = sed_{name}_ignored }} sed_{name}_queued_supply = yes }}
   }}
    set_variable = {{ name = sed_plan_goal value = 2 }}
