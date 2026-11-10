@@ -81,3 +81,9 @@ registra o estado histórico da 0.4.1.
 A 0.6.1 foi instalada localmente com backup, 13 outputs conferidos e ordem
 dos mods preservada. Os 120 testes sintéticos e a validação estática passaram.
 A verificação do novo fluxo na engine segue pendente.
+
+A revisão 0.6.9 corrige amostragem mensal de metas, limite fiscal por mês,
+piso de imposto e acompanhamento da variante solicitada. Contadores antigos
+sem data são reconstruídos com novas observações. A suíte tem 146 testes
+aprovados e a inicialização da engine chegou ao menu com as rotinas carregadas.
+O relatório está em [REVIEW_2026-11-10.md](docs/REVIEW_2026-11-10.md).

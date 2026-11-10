@@ -116,16 +116,23 @@ def validate(root=ROOT, game=None):
             if entry.key.startswith('sed_') and entry.value == 'yes' and entry.key not in custom:
                 errors.append('Undefined scripted call: ' + entry.key)
     all_text = '\n'.join(p.read_text(encoding='utf-8-sig') for p in (root / 'common').rglob('*.txt'))
-    fiscal_guard = custom.get('sed_apply_fiscal_policy', [])
-    fiscal_outer = fiscal_guard[0] if len(fiscal_guard) == 1 else None
-    fiscal_limit = child(fiscal_outer.value, 'limit') if fiscal_outer and fiscal_outer.key == 'if' else []
-    if not any(e.key == 'has_variable' and e.value == 'sed_mode_automatic' for e in fiscal_limit):
-        errors.append('Fiscal policy lacks an explicit Automatic-mode guard')
-    wage_guard = custom.get('sed_apply_wage_policy', [])
-    wage_outer = wage_guard[0] if len(wage_guard) == 1 else None
-    wage_limit = child(wage_outer.value, 'limit') if wage_outer and wage_outer.key == 'if' else []
-    if not any(e.key == 'has_variable' and e.value == 'sed_mode_automatic' for e in wage_limit):
-        errors.append('Wage policy lacks an explicit Automatic-mode guard')
+    for name, monthly_guard in (
+        ('sed_apply_fiscal_policy', 'sed_tax_month_limit_reached'),
+        ('sed_apply_wage_policy', 'sed_wage_month_limit_reached'),
+    ):
+        body = custom.get(name, [])
+        outer = body[0] if len(body) == 1 else None
+        limit = child(outer.value, 'limit') if outer and outer.key == 'if' else []
+        for key, value in [('is_player', 'yes'), ('has_variable', 'sed_enabled'),
+                           ('has_variable', 'sed_mode_automatic')]:
+            if not any(entry.key == key and entry.value == value for entry in limit):
+                errors.append('Fiscal/wage policy lacks required execution guard: ' + name + ' ' + value)
+        for key, value in [(monthly_guard, 'yes'), ('has_variable', 'sed_mode_manual'),
+                           ('has_variable', 'sed_mode_assisted')]:
+            if not any(entry.key == 'NOT' and isinstance(entry.value, list)
+                       and any(item.key == key and item.value == value for item in entry.value)
+                       for entry in limit):
+                errors.append('Fiscal/wage policy lacks monthly or mode exclusion: ' + name + ' ' + value)
     for mutation in ('activate_production_method', 'start_enactment', 'add_treasury',
                      'declare_war', 'add_modifier'):
         if re.search(r'\b' + mutation + r'\s*=', all_text):
@@ -160,7 +167,7 @@ def validate(root=ROOT, game=None):
     if assigned - cleaned != set(PERSISTENT_VARIABLES):
         errors.append('Cleanup must retain only declared persistent safety state: ' + str(sorted(assigned - cleaned)))
     if cleaned & set(PERSISTENT_VARIABLES):
-        errors.append('Cleanup must preserve the schema and monthly safety marker')
+        errors.append('Cleanup must preserve the schema and monthly safety markers')
     if set(runtime_variables()) != cleaned:
         errors.append('Runtime variable registry differs from cleanup')
     keys = {}

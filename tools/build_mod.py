@@ -11,7 +11,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.6.8'
+VERSION = '0.6.9'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -42,7 +42,8 @@ SUPPLY_TARGETS = [
     {'good': 'groceries', 'building': 'building_food_industry', 'methods': ['pm_bakery', 'pm_baking_powder', 'pm_cannery', 'pm_cannery_fish', 'pm_sweeteners', 'pm_vacuum_canning', 'pm_vacuum_canning_principle_3'], 'label_pt': 'mantimentos', 'label_en': 'groceries', 'building_pt': 'indústria alimentícia', 'building_en': 'food industry'},
     {'good': 'clothes', 'building': 'building_textile_mill', 'methods': ['pm_dye_workshops', 'pm_electric_sewing_machines', 'pm_handsewn_clothes', 'pm_sewing_machines'], 'label_pt': 'roupas', 'label_en': 'clothes', 'building_pt': 'fábrica têxtil', 'building_en': 'textile mill'},
 ]
-PERSISTENT_VARIABLES = ['sed_schema_version', 'sed_auto_last_attempt_month']
+PERSISTENT_VARIABLES = ['sed_schema_version', 'sed_auto_last_attempt_month',
+                        'sed_tax_last_change_month', 'sed_wage_last_change_month']
 
 
 def variants(item):
@@ -134,6 +135,14 @@ sed_refresh_supply_candidates = {''']
         any_queued = ' '.join(
             f'AND = {{ has_building = {variant["building"]} b:{variant["building"]} = {{ level_after_queued_constructions > level }} }}'
             for variant in vs)
+        tracked_queued = ' '.join(
+            f'AND = {{ var:sed_{good}_intent_variant = {index} has_building = {variant["building"]} '
+            f'b:{variant["building"]} = {{ level_after_queued_constructions > level }} }}'
+            for index, variant in enumerate(vs, 1))
+        request_queued = (f'OR = {{ AND = {{ has_variable = sed_{good}_intent_variant '
+                          f'OR = {{ {tracked_queued} }} }} '
+                          f'AND = {{ NOT = {{ has_variable = sed_{good}_intent_variant }} '
+                          f'OR = {{ {any_queued} }} }} }}')
         reset = '\n'.join(f' set_variable = {{ name = sed_{good}_{reason} value = 0 }}'
                           for reason in SUPPLY_DIAGNOSTICS)
         breakdown = f'''  if = {{
@@ -168,12 +177,13 @@ sed_refresh_supply_candidates = {''']
 '''
             breakdown += '  }'
         outcome = '''   if = {
-    limit = { has_variable = sed_''' + good + '''_intent_variant }
+    limit = { has_variable = sed_''' + good + '''_intent_variant has_variable = sed_''' + good + '''_intent_level }
 '''
         for index, variant in enumerate(vs, 1):
             branch = 'if' if index == 1 else 'else_if'
             outcome += f'''    {branch} = {{
      limit = {{ var:sed_{good}_intent_variant = {index}
+      has_building = {variant['building']}
       b:{variant['building']}.level > var:sed_{good}_intent_level
      }}
      sed_{good}_record_completed = yes
@@ -187,7 +197,7 @@ sed_refresh_supply_candidates = {''']
             f''' every_scope_state = {{
   if = {{
    limit = {{ has_variable = sed_{good}_request_pending
-    NOT = {{ OR = {{ {any_queued} }} }}
+    NOT = {{ {request_queued} }}
    }}
 {outcome}
    remove_variable = sed_{good}_request_pending
@@ -1642,10 +1652,13 @@ def localization(language):
         'Fiscal com construção financiada por reservas. Saldo operacional não negativo, sem dívida e ouro cobrindo doze semanas de despesas fixas mais 26 semanas do déficit observado. O Advisor pode avaliar investimentos com seu próprio orçamento. Os caminhos do Supply Chain exigem a guarda de saldo não negativo.',
         'Fiscal state with reserve-funded construction. Nonnegative operating balance, no debt and gold covering twelve weeks of fixed expenses plus 26 weeks of the observed deficit. The Advisor can assess investment using its own budget. Supply Chain paths require the nonnegative-balance guard.')
     pairs['sed_mode_automatic_button_tt'] = (
-        'Com Economy Advisor ou Supply Chain detectados, guarda as opções verificadas de construção, objetivo e orçamento e assume a coordenação de construção: um executor externo por objetivo, sujeito à política fiscal inicial. Sair do Automático restaura as opções anteriores. Sem ferramenta detectada, usa o executor próprio limitado a uma tentativa mensal. Não controla PMs, impostos ou ARoAI.',
-        'When Economy Advisor or Supply Chain is detected, saves verified construction, objective and budget options and takes construction coordination: one external executor per objective, subject to initial fiscal policy. Leaving Automatic restores previous options. Without detected tools, uses its own executor limited to one monthly attempt. Does not control PMs, taxes or ARoAI.')
+        'Coordena os construtores detectados e aplica a política fiscal. Impostos e salários civis admitem um ajuste por mês de calendário. Sair do Automático restaura as opções e níveis anteriores. O executor próprio admite uma tentativa de obra por mês. As ferramentas externas seguem seus próprios limites.',
+        'Coordinates detected builders and applies fiscal policy. Taxes and civilian government wages allow one adjustment per calendar month. Leaving Automatic restores previous options and levels. The direct executor allows one construction attempt per month. External tools follow their own limits.')
+    pairs['sed_mode_automatic_status'] = (
+        'Automático ativo. As revisões periódicas atualizam plano, executor e política fiscal.',
+        'Automatic is active. Periodic reviews update the plan, executor and fiscal policy.')
     pairs.update({
-        'sed_coord_intro': ('Ao escolher Automático, o Director guarda as opções verificadas e coordena os construtores externos detectados conforme o plano. Adaptadores iniciais para Economy Advisor e Supply Chain; PMs, impostos e outros executores continuam fora deste controle.', 'Choosing Automatic saves verified options and coordinates detected external builders according to the plan. Initial adapters for Economy Advisor and Supply Chain; PMs, taxes and other executors remain outside this control.'),
+        'sed_coord_intro': ('No Automático, o Director coordena os construtores detectados e aplica a política fiscal. Voltar para Assistido ou Manual restaura suas opções e níveis originais.', 'In Automatic, the Director coordinates detected builders and applies fiscal policy. Returning to Assisted or Manual restores your original options and levels.'),
         'sed_coord_enable': ('Coordenar construtores externos', 'Coordinate external builders'),
         'sed_coord_enable_tt': ('Guarda as opções verificadas de construção, objetivo e orçamento, entra no Automático e configura um executor. Pode suspender rotinas de energia e administração que o plano ainda não cobre. Não inicia obra neste clique. Sair do Automático, desativar ou liberar restaura as opções originais, inclusive valores numéricos. Não controla PMs ou outros construtores.', 'Saves verified construction, objective and budget options, enters Automatic mode and configures one executor. May suspend power and administration routines not yet covered by the plan. Does not start construction on click. Leaving Automatic, disabling or releasing restores original options, including numeric values. Does not control PMs or other builders.'),
         'sed_coord_release': ('Restaurar opções e voltar ao Assistido', 'Restore options and return to Assisted'),
@@ -1695,7 +1708,7 @@ def localization(language):
         producers_en = ', '.join(names_en[:-1]) + (' or ' if len(names_en) > 1 else '') + names_en[-1]
         pairs[f'sed_plan_missing_{name}'] = (f"Setor a investigar: {item['label_pt']} em escassez no mercado, sem produtor verificado ({producers_pt}) nos estados do país. Importação ou outros produtores podem suprir o bem; não é ordem de autossuficiência.", f"Sector to investigate: market shortage of {item['label_en']}, with no verified producer ({producers_en}) in the country's states. Imports or other producers may supply it; this is not a self-sufficiency mandate.")
         pairs[f'sed_book_{name}'] = (f"Histórico de {item['label_pt']}: {v(name + '_intents', '0')} pedidos, {v(name + '_completed', '0')} concluídos, {v(name + '_abandoned', '0')} abandonados. Conclusão inferida quando o nível do produtor sobe ao sair da fila; cancelamento ou obra externa podem distorcer a leitura.", f"{item['label_en'].capitalize()} history: {v(name + '_intents', '0')} requested, {v(name + '_completed', '0')} completed, {v(name + '_abandoned', '0')} abandoned. Completion is inferred when the producer level rises after leaving the queue; cancellation or external work can distort it.")
-        pairs[f'sed_meta_{name}'] = (f"Meta industrial anual: ampliar a oferta de {item['label_pt']}. A escassez desse bem durou três meses ou mais; ele mantém prioridade no plano até o fim do ano. A meta não dispensa os filtros de trabalhadores, insumos, fila, infraestrutura e proteção fiscal.", f"Annual industrial goal: expand the supply of {item['label_en']}. The shortage lasted three months or more; it keeps priority in the plan until the end of the year. The goal does not bypass the worker, input, queue, infrastructure and fiscal guards.")
+        pairs[f'sed_meta_{name}'] = (f"Meta industrial anual: ampliar a oferta de {item['label_pt']}. A escassez foi observada em três meses de calendário consecutivos; ele mantém prioridade no plano até o fim do ano. A meta não dispensa os filtros de trabalhadores, insumos, fila, infraestrutura e proteção fiscal.", f"Annual industrial goal: expand the supply of {item['label_en']}. Shortage was observed in three consecutive calendar months; it keeps priority in the plan until the end of the year. The goal does not bypass the worker, input, queue, infrastructure and fiscal guards.")
     pairs['sed_book_railway'] = (f"Histórico de ferrovias: {v('railway_intents', '0')} pedidos, {v('railway_completed', '0')} concluídos, {v('railway_abandoned', '0')} abandonados. Conclusão inferida quando o nível sobe ao sair da fila.", f"Railway history: {v('railway_intents', '0')} requested, {v('railway_completed', '0')} completed, {v('railway_abandoned', '0')} abandoned. Completion is inferred when the level rises after leaving the queue.")
     pairs['sed_book_construction'] = (f"Histórico de setores de construção: {v('construction_intents', '0')} pedidos, {v('construction_completed', '0')} concluídos, {v('construction_abandoned', '0')} abandonados. Conclusão inferida quando o nível sobe ao sair da fila.", f"Construction sector history: {v('construction_intents', '0')} requested, {v('construction_completed', '0')} completed, {v('construction_abandoned', '0')} abandoned. Completion is inferred when the level rises after leaving the queue.")
     for rank in planning.RANKS:

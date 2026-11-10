@@ -512,6 +512,16 @@ sed_competing_builder_configured = {
   has_variable = aroai_autobuild
  }
 }
+sed_tax_month_limit_reached = {
+ has_variable = sed_tax_last_change_month
+ var:sed_tax_last_change_month = sed_live_month_key
+}
+
+sed_wage_month_limit_reached = {
+ has_variable = sed_wage_last_change_month
+ var:sed_wage_last_change_month = sed_live_month_key
+}
+
 # Initial proportional policy; not an incremental cost estimate.
 sed_auto_fiscal_safe = {
  net_total_income >= 0
