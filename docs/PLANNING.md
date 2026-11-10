@@ -1,5 +1,57 @@
 # Planejamento e coordenação — 0.6.8
 
+## 0.6.26 — Setor de construção e segunda revisão no Automático
+
+O Automático passou a tratar o setor de construção como alvo do dispatcher,
+como ferrovia e os onze bens. O setor só entra quando o plano o coloca em
+primeiro lugar, o que exige ao menos três projetos públicos e um setor com
+ocupação de 90%, sem falha de contratação, falta de insumos ou expansão já
+enfileirada. As guardas fiscais, a referência de materiais e o limite de uma
+tentativa por mês continuam valendo; sem orçamento de materiais conhecido o
+setor não é enfileirado. A aprovação manual e Assistida do setor não mudou.
+
+Quando a revisão mensal termina bloqueada pela fila privada (11) ou pela
+construção pausada (12), o Director agenda uma segunda revisão sete dias
+depois. O marcador `sed_auto_retry_month` permite no máximo uma segunda
+revisão por mês de calendário, mesmo que a primeira volte a ser bloqueada. A
+tentativa só é consumida se houver inclusão. A segunda revisão usa o mesmo
+dispatcher e as mesmas guardas.
+
+241 testes sintéticos aprovados, incluindo setor ranqueado, setor fora do
+primeiro lugar, fila pública ocupada, fila privada bloqueando e a segunda
+revisão única por mês. Geração e validação estática locais aprovadas. Nada foi
+observado na engine: agenda real do evento, concorrência e custo incremental
+seguem sem confirmação de campanha.
+
+## 0.6.25 — Execução automática com fila pública ocupada
+
+A revisão mensal deixava de agir sempre que a fila pública tinha qualquer
+projeto, mesmo sendo obras de outros construtores. Em campanha, isso mantinha
+o Automático parado. A guarda do executor próprio passa a exigir apenas a fila
+privada vazia; a fila pública pode estar ocupada e recebe no máximo um nível
+por revisão.
+
+Continuam iguais: limite de uma tentativa por mês, inadimplência, construção
+pausada, construtores conhecidos, proteção fiscal, referência de materiais,
+elegibilidade do prédio e `level_after_queued_constructions` por prédio. O
+status 11 agora descreve somente a fila privada. Aprovações manuais e
+Assistidas não mudaram; o setor de construção foi incorporado ao dispatcher
+automático na 0.6.26.
+
+238 testes sintéticos aprovados nesta etapa, incluindo fila pública ocupada
+com inclusão confirmada, bloqueio da segunda tentativa no mesmo mês e fila
+privada ainda bloqueando. Geração e validação estática locais aprovadas. Nada
+foi observado na engine: fila longa, custo incremental e concorrência real
+continuam sem confirmação de campanha.
+
+## 0.6.21–0.6.24 — Fornecedores de maior saída e prioridade de insumos
+
+O Automático escolhe, entre produtores alternativos do mesmo bem, o de maior
+saída estimada pelo registro `data/supplier_output_profiles.json`. Bloqueios
+por insumo são exibidos nos cartões e o plano pode priorizar o bem em falta
+para uma expansão bloqueada quando não existe fornecedor imediato. A segunda
+passagem só roda no Automático e não cria candidato por si.
+
 ## 0.6.20 — Previsão de insumos das expansões de oferta
 
 A recomendação e a aprovação dos onze bens agora verificam a demanda adicional

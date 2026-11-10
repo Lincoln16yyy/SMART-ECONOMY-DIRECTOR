@@ -1,5 +1,30 @@
 # Contexto de continuidade
 
+Última entrega documentada: 0.6.20 instalada com jogo fechado. A 0.6.26 foi
+gerada e validada localmente, sem instalação ou execução na engine.
+
+## 0.6.26 — Setor de construção e segunda revisão no Automático
+
+O dispatcher automático passou a aceitar o setor de construção quando ele é a
+primeira prioridade do plano, com as guardas fiscais, de materiais e de fila
+existentes. Uma revisão bloqueada pela fila privada (11) ou pela construção
+pausada (12) agenda uma segunda tentativa sete dias depois, no máximo uma por
+mês de calendário (`sed_auto_retry_month`). 241 testes sintéticos aprovados;
+geração e validação estática locais aprovadas; comportamento na engine
+pendente.
+
+## 0.6.25 — Automático com fila pública ocupada
+
+O executor próprio agora age com a fila pública ocupada; exige somente a fila
+privada vazia. O status 11 e o painel passaram a descrever a fila privada.
+Limite mensal, proteção fiscal, referência de materiais, construtores
+conhecidos e `level_after_queued_constructions` por prédio continuam iguais.
+238 testes sintéticos aprovados; geração e validação estática locais
+aprovadas; comportamento na engine pendente.
+
+Antes dela, as 0.6.21–0.6.24 escolheram o fornecedor de maior saída estimada e
+adicionaram prioridade automática do insumo que bloqueia uma expansão.
+
 Entrega 0.6.20 instalada com jogo fechado, 14 outputs conferidos no ZIP e na
 instalação, ordem preservada. Backup
 `sed_backups/mod_before_0.6.20_20261110_190043_106415`.

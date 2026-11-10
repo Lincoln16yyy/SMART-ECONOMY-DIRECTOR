@@ -725,16 +725,85 @@ class PlanningTests(unittest.TestCase):
         self.assertNotIn('sed_railway_intent_level', target['variables'])
         self.assertNotIn('sed_construction_intent_level', sector['variables'])
 
-    def test_queue_wait_preserves_plan_but_never_calls_constructor(self):
+    def test_private_queue_wait_preserves_plan_but_never_calls_constructor(self):
         self.producer('grain')
         c = self.c
-        c.readings['construction_queue_num_queued_government_levels'] = 1
+        c.readings['construction_queue_num_queued_private_levels'] = 1
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')
         self.assertEqual(c.variables['sed_plan_count'], 1)
         self.assertEqual(c.variables['sed_auto_review_status'], 11)
         self.assertEqual(c.constructions, [])
         self.assertNotIn('sed_auto_last_attempt_month', c.variables)
+
+    def test_automatic_mode_expands_the_ranked_construction_sector(self):
+        sector = construction_sector()
+        target = state(buildings=[sector])
+        c = self.c
+        c.states = [target]
+        c.readings['num_queued_government_constructions'] = 3
+        c.readings.update(principal=0, gold_reserves=200000)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_plan_goal'], 3)
+        self.assertEqual(target['variables']['sed_plan_construction_rank'], 1)
+        self.assertEqual(c.constructions,
+                         [{'building': 'building_construction_sector', 'state': target}])
+        self.assertEqual(c.variables['sed_auto_review_status'], 1)
+        self.assertEqual(c.variables['sed_construction_intents'], 1)
+
+    def test_automatic_mode_does_not_expand_an_unranked_sector(self):
+        sector = construction_sector()
+        target = state(-5, buildings=[sector, railway()])
+        c = self.c
+        c.states = [target]
+        c.readings['num_queued_government_constructions'] = 3
+        c.readings.update(principal=0, gold_reserves=200000)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        # Railways outrank the sector; the sector itself is not queued.
+        self.assertNotIn('sed_construction_request_pending', target['variables'])
+        self.assertEqual([item['building'] for item in c.constructions], ['building_railway'])
+
+    def test_transient_private_queue_schedules_one_retry_per_month(self):
+        self.producer('grain')
+        c = self.c
+        c.readings['construction_queue_num_queued_private_levels'] = 1
+        c.run('sed_set_mode_automatic')
+        # The monthly event already fired for this cycle.
+        c.variables.pop('sed_auto_event_pending')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_auto_review_status'], 11)
+        self.assertTrue(c.variables.get('sed_auto_event_pending'))
+        self.assertIn(('sed_pulse.1', 7), c.scheduled_events)
+        retries = c.scheduled_events.count(('sed_pulse.1', 7))
+        # A second blocked review in the same month does not schedule another retry.
+        c.variables.pop('sed_auto_event_pending')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.scheduled_events.count(('sed_pulse.1', 7)), retries)
+        # A confirmed insertion leaves no retry pending.
+        c.readings['construction_queue_num_queued_private_levels'] = 0
+        c.variables.pop('sed_auto_event_pending', None)
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(len(c.constructions), 1)
+        self.assertEqual(c.variables['sed_auto_review_status'], 1)
+
+    def test_busy_public_queue_still_allows_one_monthly_expansion(self):
+        target = self.producer('grain')
+        c = self.c
+        # Other builders commonly keep the public queue busy; the Director now
+        # adds its single monthly project instead of waiting for an empty queue.
+        c.readings['construction_queue_num_queued_government_levels'] = 12
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(len(c.constructions), 1)
+        self.assertEqual(c.constructions[0]['state'], target)
+        self.assertEqual(c.variables['sed_auto_review_status'], 1)
+        self.assertIn('sed_auto_last_attempt_month', c.variables)
+        # The monthly cap still blocks a second attempt in the same month.
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(len(c.constructions), 1)
+        self.assertEqual(c.variables['sed_auto_review_status'], 16)
 
 
 if __name__ == '__main__':

@@ -452,21 +452,27 @@ class CoordinationTests(unittest.TestCase):
         self.assertEqual(len(c.constructions), 1)
         self.assertEqual(c.variables['sed_auto_review_status'], 16)
 
-    def test_coordinated_direct_supply_waits_for_either_queue_to_clear(self):
-        for queue in ('construction_queue_num_queued_government_levels',
-                      'construction_queue_num_queued_private_levels'):
-            with self.subTest(queue=queue):
-                self.setUp()
-                c = self.c
-                self.direct_supply_fixture()
-                c.readings[queue] = 1
-                c.run('sed_auto_apply_monthly')
-                self.assertEqual(c.constructions, [])
-                self.assertEqual(self.external(), {})
-                self.assertEqual(c.variables['sed_auto_review_status'], 11)
-                c.readings[queue] = 0
-                c.run('sed_auto_apply_monthly')
-                self.assertEqual(len(c.constructions), 1)
+    def test_coordinated_direct_supply_waits_only_for_the_private_queue(self):
+        c = self.c
+        target, _ = self.direct_supply_fixture()
+        c.readings['construction_queue_num_queued_private_levels'] = 1
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.constructions, [])
+        self.assertEqual(self.external(), {})
+        self.assertEqual(c.variables['sed_auto_review_status'], 11)
+        c.readings['construction_queue_num_queued_private_levels'] = 0
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(len(c.constructions), 1)
+        self.assertEqual(c.constructions[0]['state'], target)
+
+    def test_coordinated_direct_supply_acts_with_a_busy_public_queue(self):
+        c = self.c
+        target, _ = self.direct_supply_fixture()
+        c.readings['construction_queue_num_queued_government_levels'] = 8
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(len(c.constructions), 1)
+        self.assertEqual(c.constructions[0]['state'], target)
+        self.assertEqual(c.variables['sed_auto_review_status'], 1)
 
     def test_stale_coordinated_target_and_competing_switch_are_revalidated(self):
         c = self.c

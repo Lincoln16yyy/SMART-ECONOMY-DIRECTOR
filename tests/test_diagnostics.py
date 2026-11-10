@@ -40,7 +40,6 @@ class DiagnosisTests(unittest.TestCase):
     def test_auto_review_reports_blocker_without_queuing(self):
         cases = [
             ({'in_default': True}, {}, 10),
-            ({'construction_queue_num_queued_government_levels': 1}, {}, 11),
             ({'construction_queue_num_queued_private_levels': 1}, {}, 11),
             ({'is_construction_paused': True}, {}, 12),
             ({}, {'advisor_auto_construction_enabled': True}, 13),
@@ -528,8 +527,9 @@ class DiagnosisTests(unittest.TestCase):
             'aroai': 'aroai_autobuild',
         }
         c = self.country()
+        c.readings['construction_queue_num_queued_private_levels'] = 1
         c.run('sed_set_mode_automatic')
-        c.run('sed_auto_apply_monthly')  # Archived queue blocker, independent of options.
+        c.run('sed_auto_apply_monthly')  # Archived private-queue blocker, independent of options.
         self.assertFalse(self.auto_panel_shown(c, 'builders'))
         for name, option in options.items():
             with self.subTest(option=option):
@@ -562,6 +562,7 @@ class DiagnosisTests(unittest.TestCase):
 
     def test_auto_panel_explains_pending_review_before_any_execution(self):
         c = self.country()
+        c.readings['construction_queue_num_queued_private_levels'] = 1
         c.run('sed_set_mode_automatic')
         self.assertTrue(self.auto_panel_shown(c, 'pending'))
         self.assertTrue(self.auto_panel_shown(c, 'unrecorded'))
@@ -575,6 +576,7 @@ class DiagnosisTests(unittest.TestCase):
 
     def test_auto_review_record_survives_refresh_and_mode_changes_but_cleans_on_disable(self):
         c = self.country(year=1840, month=11)
+        c.readings['construction_queue_num_queued_private_levels'] = 1
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')
         self.assertEqual(c.variables['sed_auto_review_status'], 11)
@@ -597,8 +599,9 @@ class DiagnosisTests(unittest.TestCase):
 
     def test_auto_current_blockers_are_live_exclusive_and_do_not_rewrite_history(self):
         c = self.country()
+        c.readings['construction_queue_num_queued_private_levels'] = 1
         c.run('sed_set_mode_automatic')
-        c.run('sed_auto_apply_monthly')  # Queue occupied at the recorded review.
+        c.run('sed_auto_apply_monthly')  # Private queue occupied at the recorded review.
         c.readings.update(in_default=True, is_construction_paused=True)
         c.variables['advisor_auto_construction_enabled'] = True
         def only(expected):
@@ -609,7 +612,7 @@ class DiagnosisTests(unittest.TestCase):
         only('default')
         c.readings['in_default'] = False
         only('queue')
-        c.readings['construction_queue_num_queued_government_levels'] = 0
+        c.readings['construction_queue_num_queued_private_levels'] = 0
         only('paused')
         c.readings['is_construction_paused'] = False
         only('competing')
@@ -619,6 +622,7 @@ class DiagnosisTests(unittest.TestCase):
 
     def test_legacy_status_does_not_invent_review_date_and_event_records_new_result(self):
         c = self.country()
+        c.readings['construction_queue_num_queued_private_levels'] = 1
         c.variables['sed_auto_action_status'] = 11  # Existing save from the previous version.
         c.run('sed_set_mode_automatic')
         self.assertTrue(self.auto_panel_shown(c, 'unrecorded'))
@@ -629,9 +633,10 @@ class DiagnosisTests(unittest.TestCase):
         c.execute(child(event, 'immediate'), c.country_scope())
         self.assertTrue(self.auto_panel_shown(c, 'last_review'))
         self.assertTrue(self.auto_panel_shown(c, 'status_queue'))
-        self.assertTrue(self.auto_panel_shown(c, 'idle'))
+        # The blocked review schedules its one late retry, so the panel is not idle.
+        self.assertFalse(self.auto_panel_shown(c, 'idle'))
+        self.assertTrue(self.auto_panel_shown(c, 'pending'))
         self.assertFalse(self.auto_panel_shown(c, 'unrecorded'))
-        self.assertFalse(self.auto_panel_shown(c, 'pending'))
         self.assertEqual(c.constructions, [])
         c.run('sed_monthly_update')
         self.assertTrue(self.auto_panel_shown(c, 'pending'))
@@ -666,7 +671,6 @@ class DiagnosisTests(unittest.TestCase):
 
     def test_mutating_effects_revalidate_all_auto_guards_without_consuming_attempt(self):
         blockers = [
-            ({'construction_queue_num_queued_government_levels': 1}, {}),
             ({'construction_queue_num_queued_private_levels': 1}, {}),
             ({'is_construction_paused': True}, {}),
             ({'in_default': True}, {}),

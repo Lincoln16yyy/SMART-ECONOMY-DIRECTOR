@@ -344,10 +344,13 @@ sed_wood_candidate_site = {
  NOT = { has_variable = sed_wood_request_pending }
 
 }
-sed_wood_candidate_eligible = {
+sed_wood_supplier_available = {
  sed_wood_candidate_site = yes
- owner = { sed_wood_supply_demand = yes }
  OR = { sed_wood_logging_camp_eligible = yes }
+}
+sed_wood_candidate_eligible = {
+ owner = { sed_wood_supply_demand = yes }
+ sed_wood_supplier_available = yes
 }
 
 sed_wood_queued_supply = { OR = { AND = { has_building = building_logging_camp b:building_logging_camp = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_electric_saw_mills
@@ -396,10 +399,13 @@ sed_iron_candidate_site = {
  NOT = { has_variable = sed_iron_request_pending }
 
 }
-sed_iron_candidate_eligible = {
+sed_iron_supplier_available = {
  sed_iron_candidate_site = yes
- owner = { sed_iron_supply_demand = yes }
  OR = { sed_iron_iron_mine_eligible = yes }
+}
+sed_iron_candidate_eligible = {
+ owner = { sed_iron_supply_demand = yes }
+ sed_iron_supplier_available = yes
 }
 
 sed_iron_queued_supply = { OR = { AND = { has_building = building_iron_mine b:building_iron_mine = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_atmospheric_engine_pump_building_iron_mine
@@ -454,10 +460,13 @@ sed_coal_candidate_site = {
  NOT = { has_variable = sed_coal_request_pending }
 
 }
-sed_coal_candidate_eligible = {
+sed_coal_supplier_available = {
  sed_coal_candidate_site = yes
- owner = { sed_coal_supply_demand = yes }
  OR = { sed_coal_coal_mine_eligible = yes }
+}
+sed_coal_candidate_eligible = {
+ owner = { sed_coal_supply_demand = yes }
+ sed_coal_supplier_available = yes
 }
 
 sed_coal_queued_supply = { OR = { AND = { has_building = building_coal_mine b:building_coal_mine = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_atmospheric_engine_pump_building_coal_mine
@@ -512,10 +521,13 @@ sed_grain_candidate_site = {
  NOT = { has_variable = sed_grain_request_pending }
 
 }
-sed_grain_candidate_eligible = {
+sed_grain_supplier_available = {
  sed_grain_candidate_site = yes
- owner = { sed_grain_supply_demand = yes }
  OR = { sed_grain_wheat_farm_eligible = yes sed_grain_rye_farm_eligible = yes sed_grain_rice_farm_eligible = yes sed_grain_maize_farm_eligible = yes sed_grain_millet_farm_eligible = yes }
+}
+sed_grain_candidate_eligible = {
+ owner = { sed_grain_supply_demand = yes }
+ sed_grain_supplier_available = yes
 }
 
 sed_grain_queued_supply = { OR = { AND = { has_building = building_wheat_farm b:building_wheat_farm = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_chemical_fertilizer
@@ -778,10 +790,13 @@ sed_fabric_candidate_site = {
  NOT = { has_variable = sed_fabric_request_pending }
 
 }
-sed_fabric_candidate_eligible = {
+sed_fabric_supplier_available = {
  sed_fabric_candidate_site = yes
- owner = { sed_fabric_supply_demand = yes }
  OR = { sed_fabric_cotton_plantation_eligible = yes sed_fabric_livestock_ranch_eligible = yes }
+}
+sed_fabric_candidate_eligible = {
+ owner = { sed_fabric_supply_demand = yes }
+ sed_fabric_supplier_available = yes
 }
 
 sed_fabric_queued_supply = { OR = { AND = { has_building = building_cotton_plantation b:building_cotton_plantation = { level_after_queued_constructions > level OR = {   has_active_production_method = automatic_irrigation_building_cotton_plantation
@@ -873,10 +888,13 @@ sed_tools_candidate_site = {
  NOT = { has_variable = sed_tools_request_pending }
 
 }
-sed_tools_candidate_eligible = {
+sed_tools_supplier_available = {
  sed_tools_candidate_site = yes
- owner = { sed_tools_supply_demand = yes }
  OR = { sed_tools_tooling_workshop_eligible = yes }
+}
+sed_tools_candidate_eligible = {
+ owner = { sed_tools_supply_demand = yes }
+ sed_tools_supplier_available = yes
 }
 
 sed_tools_queued_supply = { OR = { AND = { has_building = building_tooling_workshop b:building_tooling_workshop = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_crude_tools
@@ -927,10 +945,13 @@ sed_groceries_candidate_site = {
  NOT = { has_variable = sed_groceries_request_pending }
 
 }
-sed_groceries_candidate_eligible = {
+sed_groceries_supplier_available = {
  sed_groceries_candidate_site = yes
- owner = { sed_groceries_supply_demand = yes }
  OR = { sed_groceries_food_industry_eligible = yes }
+}
+sed_groceries_candidate_eligible = {
+ owner = { sed_groceries_supply_demand = yes }
+ sed_groceries_supplier_available = yes
 }
 
 sed_groceries_queued_supply = { OR = { AND = { has_building = building_food_industry b:building_food_industry = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_bakery
@@ -987,10 +1008,13 @@ sed_clothes_candidate_site = {
  NOT = { has_variable = sed_clothes_request_pending }
 
 }
-sed_clothes_candidate_eligible = {
+sed_clothes_supplier_available = {
  sed_clothes_candidate_site = yes
- owner = { sed_clothes_supply_demand = yes }
  OR = { sed_clothes_textile_mill_eligible = yes }
+}
+sed_clothes_candidate_eligible = {
+ owner = { sed_clothes_supply_demand = yes }
+ sed_clothes_supplier_available = yes
 }
 
 sed_clothes_queued_supply = { OR = { AND = { has_building = building_textile_mill b:building_textile_mill = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_dye_workshops
@@ -1041,10 +1065,13 @@ sed_small_arms_candidate_site = {
  NOT = { has_variable = sed_small_arms_request_pending }
 owner = { military_expenses > 0 market = { mg:small_arms ?= { market_goods_buy_orders > 0 } } }
 }
-sed_small_arms_candidate_eligible = {
+sed_small_arms_supplier_available = {
  sed_small_arms_candidate_site = yes
- owner = { sed_small_arms_supply_demand = yes }
  OR = { sed_small_arms_arms_industry_eligible = yes }
+}
+sed_small_arms_candidate_eligible = {
+ owner = { sed_small_arms_supply_demand = yes }
+ sed_small_arms_supplier_available = yes
 }
 
 sed_small_arms_queued_supply = { OR = { AND = { has_building = building_arms_industry b:building_arms_industry = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_muskets
@@ -1095,10 +1122,13 @@ sed_artillery_candidate_site = {
  NOT = { has_variable = sed_artillery_request_pending }
 owner = { military_expenses > 0 market = { mg:artillery ?= { market_goods_buy_orders > 0 } } }
 }
-sed_artillery_candidate_eligible = {
+sed_artillery_supplier_available = {
  sed_artillery_candidate_site = yes
- owner = { sed_artillery_supply_demand = yes }
  OR = { sed_artillery_artillery_foundry_eligible = yes }
+}
+sed_artillery_candidate_eligible = {
+ owner = { sed_artillery_supply_demand = yes }
+ sed_artillery_supplier_available = yes
 }
 
 sed_artillery_queued_supply = { OR = { AND = { has_building = building_artillery_foundry b:building_artillery_foundry = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_cannons
@@ -1153,10 +1183,13 @@ sed_ammunition_candidate_site = {
  NOT = { has_variable = sed_ammunition_request_pending }
 owner = { military_expenses > 0 market = { mg:ammunition ?= { market_goods_buy_orders > 0 } } }
 }
-sed_ammunition_candidate_eligible = {
+sed_ammunition_supplier_available = {
  sed_ammunition_candidate_site = yes
- owner = { sed_ammunition_supply_demand = yes }
  OR = { sed_ammunition_munition_plant_eligible = yes }
+}
+sed_ammunition_candidate_eligible = {
+ owner = { sed_ammunition_supply_demand = yes }
+ sed_ammunition_supplier_available = yes
 }
 
 sed_ammunition_queued_supply = { OR = { AND = { has_building = building_munition_plant b:building_munition_plant = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_percussion_caps
@@ -1228,7 +1261,6 @@ sed_auto_executor_safe = {
  has_variable = sed_mode_automatic
  NOT = { sed_auto_month_limit_reached = yes }
  NOT = { in_default = yes }
- construction_queue_num_queued_government_levels = 0
  construction_queue_num_queued_private_levels = 0
  is_construction_paused = no
  NOT = { sed_competing_builder_configured = yes }
