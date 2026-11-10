@@ -2535,35 +2535,35 @@ sed_run_grain_approval = {
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
   if = {
-   limit = { sed_grain_wheat_farm_eligible = yes }
+   limit = { sed_grain_wheat_farm_eligible = yes OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_grain } } } sed_grain_wheat_farm_preferred_supplier = yes } }
    # Baseline level before queuing; the monthly review compares it after the queue.
    set_variable = { name = sed_grain_intent_level value = b:building_wheat_farm.level }
    set_variable = { name = sed_grain_intent_variant value = 1 }
    start_building_construction = building_wheat_farm
   }
   else_if = {
-   limit = { sed_grain_rye_farm_eligible = yes }
+   limit = { sed_grain_rye_farm_eligible = yes OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_grain } } } sed_grain_rye_farm_preferred_supplier = yes } }
    # Baseline level before queuing; the monthly review compares it after the queue.
    set_variable = { name = sed_grain_intent_level value = b:building_rye_farm.level }
    set_variable = { name = sed_grain_intent_variant value = 2 }
    start_building_construction = building_rye_farm
   }
   else_if = {
-   limit = { sed_grain_rice_farm_eligible = yes }
+   limit = { sed_grain_rice_farm_eligible = yes OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_grain } } } sed_grain_rice_farm_preferred_supplier = yes } }
    # Baseline level before queuing; the monthly review compares it after the queue.
    set_variable = { name = sed_grain_intent_level value = b:building_rice_farm.level }
    set_variable = { name = sed_grain_intent_variant value = 3 }
    start_building_construction = building_rice_farm
   }
   else_if = {
-   limit = { sed_grain_maize_farm_eligible = yes }
+   limit = { sed_grain_maize_farm_eligible = yes OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_grain } } } sed_grain_maize_farm_preferred_supplier = yes } }
    # Baseline level before queuing; the monthly review compares it after the queue.
    set_variable = { name = sed_grain_intent_level value = b:building_maize_farm.level }
    set_variable = { name = sed_grain_intent_variant value = 4 }
    start_building_construction = building_maize_farm
   }
   else_if = {
-   limit = { sed_grain_millet_farm_eligible = yes }
+   limit = { sed_grain_millet_farm_eligible = yes OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_grain } } } sed_grain_millet_farm_preferred_supplier = yes } }
    # Baseline level before queuing; the monthly review compares it after the queue.
    set_variable = { name = sed_grain_intent_level value = b:building_millet_farm.level }
    set_variable = { name = sed_grain_intent_variant value = 5 }
@@ -2622,14 +2622,14 @@ sed_run_fabric_approval = {
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
   if = {
-   limit = { sed_fabric_cotton_plantation_eligible = yes }
+   limit = { sed_fabric_cotton_plantation_eligible = yes OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_fabric } } } sed_fabric_cotton_plantation_preferred_supplier = yes } }
    # Baseline level before queuing; the monthly review compares it after the queue.
    set_variable = { name = sed_fabric_intent_level value = b:building_cotton_plantation.level }
    set_variable = { name = sed_fabric_intent_variant value = 1 }
    start_building_construction = building_cotton_plantation
   }
   else_if = {
-   limit = { sed_fabric_livestock_ranch_eligible = yes }
+   limit = { sed_fabric_livestock_ranch_eligible = yes OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_fabric } } } sed_fabric_livestock_ranch_preferred_supplier = yes } }
    # Baseline level before queuing; the monthly review compares it after the queue.
    set_variable = { name = sed_fabric_intent_level value = b:building_livestock_ranch.level }
    set_variable = { name = sed_fabric_intent_variant value = 2 }
@@ -4090,51 +4090,165 @@ sed_refresh_national_plan = {
     }
    }
    if = { limit = { var:sed_plan_type = 3 }
-    set_variable = { name = sed_plan_wood_rank value = 1 }
-    owner = {
-     add_to_variable_list = { name = sed_plan_1_wood target = prev }
-     change_variable = { name = sed_plan_count add = 1 }
-     set_variable = { name = sed_plan_goal value = 2 }
+    if = {
+     limit = { owner = { has_variable = sed_mode_automatic has_variable = sed_input_priority_wood } }
+     owner = {
+      ordered_scope_state = {
+       limit = { var:sed_plan_wood_score > 0 }
+       order_by = { value = sed_supplier_wood_output }
+       max = 1
+       check_range_bounds = no
+       set_variable = { name = sed_plan_wood_rank value = 1 }
+       owner = {
+        add_to_variable_list = { name = sed_plan_1_wood target = prev }
+        change_variable = { name = sed_plan_count add = 1 }
+        set_variable = { name = sed_plan_goal value = 2 }
+       }
+      }
+     }
+    }
+    else = {
+     set_variable = { name = sed_plan_wood_rank value = 1 }
+     owner = {
+      add_to_variable_list = { name = sed_plan_1_wood target = prev }
+      change_variable = { name = sed_plan_count add = 1 }
+      set_variable = { name = sed_plan_goal value = 2 }
+     }
     }
    }
    if = { limit = { var:sed_plan_type = 4 }
-    set_variable = { name = sed_plan_iron_rank value = 1 }
-    owner = {
-     add_to_variable_list = { name = sed_plan_1_iron target = prev }
-     change_variable = { name = sed_plan_count add = 1 }
-     set_variable = { name = sed_plan_goal value = 2 }
+    if = {
+     limit = { owner = { has_variable = sed_mode_automatic has_variable = sed_input_priority_iron } }
+     owner = {
+      ordered_scope_state = {
+       limit = { var:sed_plan_iron_score > 0 }
+       order_by = { value = sed_supplier_iron_output }
+       max = 1
+       check_range_bounds = no
+       set_variable = { name = sed_plan_iron_rank value = 1 }
+       owner = {
+        add_to_variable_list = { name = sed_plan_1_iron target = prev }
+        change_variable = { name = sed_plan_count add = 1 }
+        set_variable = { name = sed_plan_goal value = 2 }
+       }
+      }
+     }
+    }
+    else = {
+     set_variable = { name = sed_plan_iron_rank value = 1 }
+     owner = {
+      add_to_variable_list = { name = sed_plan_1_iron target = prev }
+      change_variable = { name = sed_plan_count add = 1 }
+      set_variable = { name = sed_plan_goal value = 2 }
+     }
     }
    }
    if = { limit = { var:sed_plan_type = 5 }
-    set_variable = { name = sed_plan_coal_rank value = 1 }
-    owner = {
-     add_to_variable_list = { name = sed_plan_1_coal target = prev }
-     change_variable = { name = sed_plan_count add = 1 }
-     set_variable = { name = sed_plan_goal value = 2 }
+    if = {
+     limit = { owner = { has_variable = sed_mode_automatic has_variable = sed_input_priority_coal } }
+     owner = {
+      ordered_scope_state = {
+       limit = { var:sed_plan_coal_score > 0 }
+       order_by = { value = sed_supplier_coal_output }
+       max = 1
+       check_range_bounds = no
+       set_variable = { name = sed_plan_coal_rank value = 1 }
+       owner = {
+        add_to_variable_list = { name = sed_plan_1_coal target = prev }
+        change_variable = { name = sed_plan_count add = 1 }
+        set_variable = { name = sed_plan_goal value = 2 }
+       }
+      }
+     }
+    }
+    else = {
+     set_variable = { name = sed_plan_coal_rank value = 1 }
+     owner = {
+      add_to_variable_list = { name = sed_plan_1_coal target = prev }
+      change_variable = { name = sed_plan_count add = 1 }
+      set_variable = { name = sed_plan_goal value = 2 }
+     }
     }
    }
    if = { limit = { var:sed_plan_type = 6 }
-    set_variable = { name = sed_plan_grain_rank value = 1 }
-    owner = {
-     add_to_variable_list = { name = sed_plan_1_grain target = prev }
-     change_variable = { name = sed_plan_count add = 1 }
-     set_variable = { name = sed_plan_goal value = 2 }
+    if = {
+     limit = { owner = { has_variable = sed_mode_automatic has_variable = sed_input_priority_grain } }
+     owner = {
+      ordered_scope_state = {
+       limit = { var:sed_plan_grain_score > 0 }
+       order_by = { value = sed_supplier_grain_output }
+       max = 1
+       check_range_bounds = no
+       set_variable = { name = sed_plan_grain_rank value = 1 }
+       owner = {
+        add_to_variable_list = { name = sed_plan_1_grain target = prev }
+        change_variable = { name = sed_plan_count add = 1 }
+        set_variable = { name = sed_plan_goal value = 2 }
+       }
+      }
+     }
+    }
+    else = {
+     set_variable = { name = sed_plan_grain_rank value = 1 }
+     owner = {
+      add_to_variable_list = { name = sed_plan_1_grain target = prev }
+      change_variable = { name = sed_plan_count add = 1 }
+      set_variable = { name = sed_plan_goal value = 2 }
+     }
     }
    }
    if = { limit = { var:sed_plan_type = 7 }
-    set_variable = { name = sed_plan_fabric_rank value = 1 }
-    owner = {
-     add_to_variable_list = { name = sed_plan_1_fabric target = prev }
-     change_variable = { name = sed_plan_count add = 1 }
-     set_variable = { name = sed_plan_goal value = 2 }
+    if = {
+     limit = { owner = { has_variable = sed_mode_automatic has_variable = sed_input_priority_fabric } }
+     owner = {
+      ordered_scope_state = {
+       limit = { var:sed_plan_fabric_score > 0 }
+       order_by = { value = sed_supplier_fabric_output }
+       max = 1
+       check_range_bounds = no
+       set_variable = { name = sed_plan_fabric_rank value = 1 }
+       owner = {
+        add_to_variable_list = { name = sed_plan_1_fabric target = prev }
+        change_variable = { name = sed_plan_count add = 1 }
+        set_variable = { name = sed_plan_goal value = 2 }
+       }
+      }
+     }
+    }
+    else = {
+     set_variable = { name = sed_plan_fabric_rank value = 1 }
+     owner = {
+      add_to_variable_list = { name = sed_plan_1_fabric target = prev }
+      change_variable = { name = sed_plan_count add = 1 }
+      set_variable = { name = sed_plan_goal value = 2 }
+     }
     }
    }
    if = { limit = { var:sed_plan_type = 8 }
-    set_variable = { name = sed_plan_tools_rank value = 1 }
-    owner = {
-     add_to_variable_list = { name = sed_plan_1_tools target = prev }
-     change_variable = { name = sed_plan_count add = 1 }
-     set_variable = { name = sed_plan_goal value = 2 }
+    if = {
+     limit = { owner = { has_variable = sed_mode_automatic has_variable = sed_input_priority_tools } }
+     owner = {
+      ordered_scope_state = {
+       limit = { var:sed_plan_tools_score > 0 }
+       order_by = { value = sed_supplier_tools_output }
+       max = 1
+       check_range_bounds = no
+       set_variable = { name = sed_plan_tools_rank value = 1 }
+       owner = {
+        add_to_variable_list = { name = sed_plan_1_tools target = prev }
+        change_variable = { name = sed_plan_count add = 1 }
+        set_variable = { name = sed_plan_goal value = 2 }
+       }
+      }
+     }
+    }
+    else = {
+     set_variable = { name = sed_plan_tools_rank value = 1 }
+     owner = {
+      add_to_variable_list = { name = sed_plan_1_tools target = prev }
+      change_variable = { name = sed_plan_count add = 1 }
+      set_variable = { name = sed_plan_goal value = 2 }
+     }
     }
    }
    if = { limit = { var:sed_plan_type = 9 }

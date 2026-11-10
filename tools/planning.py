@@ -1,5 +1,7 @@
 """Generate a bounded national plan from observable readings, not a return model."""
 
+from textwrap import indent
+
 RANKS = (1, 2, 3)
 MILITARY_GOODS = (
     ('small_arms', 'armas leves', 'small arms'),
@@ -345,13 +347,31 @@ def effects(actions, dependencies, buildings):
             if rank == 1:
                 goal = {'railway': 1, 'construction': 3}.get(name, 2)
                 goal_update = f'set_variable = {{ name = sed_plan_goal value = {goal} }}'
+            assign_rank = f'''set_variable = {{ name = sed_plan_{name}_rank value = {rank} }}
+owner = {{
+ add_to_variable_list = {{ name = sed_plan_{rank}_{name} target = prev }}
+ change_variable = {{ name = sed_plan_count add = 1 }}
+ {goal_update}
+}}'''
+            if rank == 1 and name in dependencies:
+                # Choose the good by the existing policy before comparing its suppliers.
+                assign_rank = f'''if = {{
+ limit = {{ owner = {{ has_variable = sed_mode_automatic has_variable = sed_input_priority_{name} }} }}
+ owner = {{
+  ordered_scope_state = {{
+   limit = {{ var:sed_plan_{name}_score > 0 }}
+   order_by = {{ value = sed_supplier_{name}_output }}
+   max = 1
+   check_range_bounds = no
+{indent(assign_rank, '   ')}
+  }}
+ }}
+}}
+else = {{
+{indent(assign_rank, ' ')}
+}}'''
             result.append(f'''   if = {{ limit = {{ var:sed_plan_type = {index} }}
-    set_variable = {{ name = sed_plan_{name}_rank value = {rank} }}
-    owner = {{
-     add_to_variable_list = {{ name = sed_plan_{rank}_{name} target = prev }}
-     change_variable = {{ name = sed_plan_count add = 1 }}
-     {goal_update}
-    }}
+{indent(assign_rank, '    ')}
    }}''')
         result.append('  }')
     result.append('''  if = { limit = { var:sed_plan_goal = 0 any_scope_state = {

@@ -2045,3 +2045,135 @@ sed_input_country_headroom_wood = {
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_wood } }
 }
 sed_input_headroom_wood = { value = owner.var:sed_input_market_margin_wood }
+sed_supplier_logging_camp_output = {
+ value = 0
+ if = { limit = { b:building_logging_camp = { has_active_production_method = pm_simple_forestry } } add = 30 }
+ if = { limit = { b:building_logging_camp = { has_active_production_method = pm_saw_mills } } add = 60 }
+ if = { limit = { b:building_logging_camp = { has_active_production_method = pm_electric_saw_mills } } add = 100 }
+ if = { limit = { b:building_logging_camp = { has_active_production_method = pm_hardwood } } add = -25 }
+ if = { limit = { b:building_logging_camp = { has_active_production_method = pm_increased_hardwood } } add = -40 }
+ min = 0
+}
+sed_supplier_wood_output = {
+ value = 0
+ if = { limit = { sed_wood_logging_camp_eligible = yes } add = sed_supplier_logging_camp_output }
+}
+sed_supplier_iron_mine_output = {
+ value = 0
+ if = { limit = { b:building_iron_mine = { has_active_production_method = pm_picks_and_shovels_building_iron_mine } } add = 20 }
+ if = { limit = { b:building_iron_mine = { has_active_production_method = pm_atmospheric_engine_pump_building_iron_mine } } add = 40 }
+ if = { limit = { b:building_iron_mine = { has_active_production_method = pm_condensing_engine_pump_building_iron_mine } } add = 60 }
+ if = { limit = { b:building_iron_mine = { has_active_production_method = pm_diesel_pump_building_iron_mine } } add = 70 }
+ if = { limit = { b:building_iron_mine = { has_active_production_method = pm_nitroglycerin_building_iron_mine } } add = 12 }
+ if = { limit = { b:building_iron_mine = { has_active_production_method = pm_dynamite_building_iron_mine } } add = 20 }
+ min = 0
+}
+sed_supplier_iron_output = {
+ value = 0
+ if = { limit = { sed_iron_iron_mine_eligible = yes } add = sed_supplier_iron_mine_output }
+}
+sed_supplier_coal_mine_output = {
+ value = 0
+ if = { limit = { b:building_coal_mine = { has_active_production_method = pm_picks_and_shovels_building_coal_mine } } add = 25 }
+ if = { limit = { b:building_coal_mine = { has_active_production_method = pm_atmospheric_engine_pump_building_coal_mine } } add = 40 }
+ if = { limit = { b:building_coal_mine = { has_active_production_method = pm_condensing_engine_pump_building_coal_mine } } add = 60 }
+ if = { limit = { b:building_coal_mine = { has_active_production_method = pm_diesel_pump_building_coal_mine } } add = 90 }
+ if = { limit = { b:building_coal_mine = { has_active_production_method = pm_nitroglycerin_building_coal_mine } } add = 15 }
+ if = { limit = { b:building_coal_mine = { has_active_production_method = pm_dynamite_building_coal_mine } } add = 25 }
+ if = { limit = { b:building_coal_mine = { has_active_production_method = pm_steam_donkey_building_coal_mine } } add = -3 }
+ min = 0
+}
+sed_supplier_coal_output = {
+ value = 0
+ if = { limit = { sed_coal_coal_mine_eligible = yes } add = sed_supplier_coal_mine_output }
+}
+sed_supplier_wheat_farm_output = {
+ value = 0
+ if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_simple_farming } } add = 20 }
+ if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_herring_meal_farming } } add = 25 }
+ if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_soil_enriching_farming } } add = 30 }
+ if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_fertilization } } add = 45 }
+ if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_chemical_fertilizer } } add = 60 }
+ if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_citrus_orchards } } add = -8 }
+ if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_sugar_beets } } add = -5 }
+ min = 0
+}
+sed_supplier_rye_farm_output = {
+ value = 0
+ if = { limit = { b:building_rye_farm = { has_active_production_method = pm_simple_farming } } add = 20 }
+ if = { limit = { b:building_rye_farm = { has_active_production_method = pm_soil_enriching_farming } } add = 30 }
+ if = { limit = { b:building_rye_farm = { has_active_production_method = pm_fertilization } } add = 45 }
+ if = { limit = { b:building_rye_farm = { has_active_production_method = pm_chemical_fertilizer } } add = 60 }
+ if = { limit = { b:building_rye_farm = { has_active_production_method = pm_potatoes } } add = -10 }
+ if = { limit = { b:building_rye_farm = { has_active_production_method = pm_apple_orchards } } add = -8 }
+ if = { limit = { b:building_rye_farm = { has_active_production_method = pm_sugar_beets } } add = -5 }
+ min = 0
+}
+sed_supplier_rice_farm_output = {
+ value = 0
+ if = { limit = { b:building_rice_farm = { has_active_production_method = pm_simple_farming_building_rice_farm } } add = 35 }
+ if = { limit = { b:building_rice_farm = { has_active_production_method = pm_herring_meal_farming_building_rice_farm } } add = 45 }
+ if = { limit = { b:building_rice_farm = { has_active_production_method = pm_soil_enriching_farming_building_rice_farm } } add = 50 }
+ if = { limit = { b:building_rice_farm = { has_active_production_method = pm_fertilization_building_rice_farm } } add = 75 }
+ if = { limit = { b:building_rice_farm = { has_active_production_method = pm_chemical_fertilizer_building_rice_farm } } add = 100 }
+ if = { limit = { b:building_rice_farm = { has_active_production_method = pm_fig_orchards_building_rice_farm } } add = -20 }
+ min = 0
+}
+sed_supplier_maize_farm_output = {
+ value = 0
+ if = { limit = { b:building_maize_farm = { has_active_production_method = pm_simple_farming } } add = 20 }
+ if = { limit = { b:building_maize_farm = { has_active_production_method = pm_soil_enriching_farming } } add = 30 }
+ if = { limit = { b:building_maize_farm = { has_active_production_method = pm_fertilization } } add = 45 }
+ if = { limit = { b:building_maize_farm = { has_active_production_method = pm_chemical_fertilizer } } add = 60 }
+ if = { limit = { b:building_maize_farm = { has_active_production_method = pm_citrus_orchards } } add = -8 }
+ min = 0
+}
+sed_supplier_millet_farm_output = {
+ value = 0
+ if = { limit = { b:building_millet_farm = { has_active_production_method = pm_simple_farming } } add = 20 }
+ if = { limit = { b:building_millet_farm = { has_active_production_method = pm_soil_enriching_farming } } add = 30 }
+ if = { limit = { b:building_millet_farm = { has_active_production_method = pm_fertilization } } add = 45 }
+ if = { limit = { b:building_millet_farm = { has_active_production_method = pm_chemical_fertilizer } } add = 60 }
+ if = { limit = { b:building_millet_farm = { has_active_production_method = pm_fig_orchards } } add = -8 }
+ min = 0
+}
+sed_supplier_grain_output = {
+ value = 0
+ if = { limit = { sed_grain_wheat_farm_preferred_supplier = yes } add = sed_supplier_wheat_farm_output }
+ if = { limit = { sed_grain_rye_farm_preferred_supplier = yes } add = sed_supplier_rye_farm_output }
+ if = { limit = { sed_grain_rice_farm_preferred_supplier = yes } add = sed_supplier_rice_farm_output }
+ if = { limit = { sed_grain_maize_farm_preferred_supplier = yes } add = sed_supplier_maize_farm_output }
+ if = { limit = { sed_grain_millet_farm_preferred_supplier = yes } add = sed_supplier_millet_farm_output }
+}
+sed_supplier_cotton_plantation_output = {
+ value = 0
+ if = { limit = { b:building_cotton_plantation = { has_active_production_method = default_building_cotton_plantation } } add = 45 }
+ if = { limit = { b:building_cotton_plantation = { has_active_production_method = automatic_irrigation_building_cotton_plantation } } add = 80 }
+ if = { limit = { b:building_cotton_plantation = { has_active_production_method = slave_exploitation_cotton } } add = 20 }
+ if = { limit = { b:building_cotton_plantation = { has_active_production_method = worker_exploitation_cotton } } add = 10 }
+ min = 0
+}
+sed_supplier_livestock_ranch_output = {
+ value = 0
+ if = { limit = { b:building_livestock_ranch = { has_active_production_method = pm_simple_ranch } } add = 5 }
+ if = { limit = { b:building_livestock_ranch = { has_active_production_method = pm_sheep_farms } } add = 15 }
+ if = { limit = { b:building_livestock_ranch = { has_active_production_method = pm_intensive_grazing_ranch } } add = 25 }
+ min = 0
+}
+sed_supplier_fabric_output = {
+ value = 0
+ if = { limit = { sed_fabric_cotton_plantation_preferred_supplier = yes } add = sed_supplier_cotton_plantation_output }
+ if = { limit = { sed_fabric_livestock_ranch_preferred_supplier = yes } add = sed_supplier_livestock_ranch_output }
+}
+sed_supplier_tooling_workshop_output = {
+ value = 0
+ if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_crude_tools } } add = 30 }
+ if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_pig_iron } } add = 60 }
+ if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_steel } } add = 80 }
+ if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_rubber_grips } } add = 110 }
+ min = 0
+}
+sed_supplier_tools_output = {
+ value = 0
+ if = { limit = { sed_tools_tooling_workshop_eligible = yes } add = sed_supplier_tooling_workshop_output }
+}

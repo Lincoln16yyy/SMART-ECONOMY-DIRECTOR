@@ -659,6 +659,106 @@ sed_grain_millet_farm_operable = {
  can_construct_building = building_millet_farm
 }
 
+sed_grain_wheat_farm_preferred_supplier = {
+ sed_grain_wheat_farm_eligible = yes
+ OR = {
+  NOT = { sed_grain_rye_farm_eligible = yes }
+  sed_supplier_wheat_farm_output >= sed_supplier_rye_farm_output
+ }
+ OR = {
+  NOT = { sed_grain_rice_farm_eligible = yes }
+  sed_supplier_wheat_farm_output >= sed_supplier_rice_farm_output
+ }
+ OR = {
+  NOT = { sed_grain_maize_farm_eligible = yes }
+  sed_supplier_wheat_farm_output >= sed_supplier_maize_farm_output
+ }
+ OR = {
+  NOT = { sed_grain_millet_farm_eligible = yes }
+  sed_supplier_wheat_farm_output >= sed_supplier_millet_farm_output
+ }
+}
+
+sed_grain_rye_farm_preferred_supplier = {
+ sed_grain_rye_farm_eligible = yes
+ OR = {
+  NOT = { sed_grain_wheat_farm_eligible = yes }
+  sed_supplier_rye_farm_output > sed_supplier_wheat_farm_output
+ }
+ OR = {
+  NOT = { sed_grain_rice_farm_eligible = yes }
+  sed_supplier_rye_farm_output >= sed_supplier_rice_farm_output
+ }
+ OR = {
+  NOT = { sed_grain_maize_farm_eligible = yes }
+  sed_supplier_rye_farm_output >= sed_supplier_maize_farm_output
+ }
+ OR = {
+  NOT = { sed_grain_millet_farm_eligible = yes }
+  sed_supplier_rye_farm_output >= sed_supplier_millet_farm_output
+ }
+}
+
+sed_grain_rice_farm_preferred_supplier = {
+ sed_grain_rice_farm_eligible = yes
+ OR = {
+  NOT = { sed_grain_wheat_farm_eligible = yes }
+  sed_supplier_rice_farm_output > sed_supplier_wheat_farm_output
+ }
+ OR = {
+  NOT = { sed_grain_rye_farm_eligible = yes }
+  sed_supplier_rice_farm_output > sed_supplier_rye_farm_output
+ }
+ OR = {
+  NOT = { sed_grain_maize_farm_eligible = yes }
+  sed_supplier_rice_farm_output >= sed_supplier_maize_farm_output
+ }
+ OR = {
+  NOT = { sed_grain_millet_farm_eligible = yes }
+  sed_supplier_rice_farm_output >= sed_supplier_millet_farm_output
+ }
+}
+
+sed_grain_maize_farm_preferred_supplier = {
+ sed_grain_maize_farm_eligible = yes
+ OR = {
+  NOT = { sed_grain_wheat_farm_eligible = yes }
+  sed_supplier_maize_farm_output > sed_supplier_wheat_farm_output
+ }
+ OR = {
+  NOT = { sed_grain_rye_farm_eligible = yes }
+  sed_supplier_maize_farm_output > sed_supplier_rye_farm_output
+ }
+ OR = {
+  NOT = { sed_grain_rice_farm_eligible = yes }
+  sed_supplier_maize_farm_output > sed_supplier_rice_farm_output
+ }
+ OR = {
+  NOT = { sed_grain_millet_farm_eligible = yes }
+  sed_supplier_maize_farm_output >= sed_supplier_millet_farm_output
+ }
+}
+
+sed_grain_millet_farm_preferred_supplier = {
+ sed_grain_millet_farm_eligible = yes
+ OR = {
+  NOT = { sed_grain_wheat_farm_eligible = yes }
+  sed_supplier_millet_farm_output > sed_supplier_wheat_farm_output
+ }
+ OR = {
+  NOT = { sed_grain_rye_farm_eligible = yes }
+  sed_supplier_millet_farm_output > sed_supplier_rye_farm_output
+ }
+ OR = {
+  NOT = { sed_grain_rice_farm_eligible = yes }
+  sed_supplier_millet_farm_output > sed_supplier_rice_farm_output
+ }
+ OR = {
+  NOT = { sed_grain_maize_farm_eligible = yes }
+  sed_supplier_millet_farm_output > sed_supplier_maize_farm_output
+ }
+}
+
 sed_grain_approval_valid = {
  sed_grain_candidate_eligible = yes
  OR = { owner = { NOT = { has_variable = sed_coord_active } } var:sed_plan_grain_rank = 1 }
@@ -736,6 +836,22 @@ sed_fabric_livestock_ranch_operable = {
  }
  sed_state_labor_available >= 5000
  can_construct_building = building_livestock_ranch
+}
+
+sed_fabric_cotton_plantation_preferred_supplier = {
+ sed_fabric_cotton_plantation_eligible = yes
+ OR = {
+  NOT = { sed_fabric_livestock_ranch_eligible = yes }
+  sed_supplier_cotton_plantation_output >= sed_supplier_livestock_ranch_output
+ }
+}
+
+sed_fabric_livestock_ranch_preferred_supplier = {
+ sed_fabric_livestock_ranch_eligible = yes
+ OR = {
+  NOT = { sed_fabric_cotton_plantation_eligible = yes }
+  sed_supplier_livestock_ranch_output > sed_supplier_cotton_plantation_output
+ }
 }
 
 sed_fabric_approval_valid = {

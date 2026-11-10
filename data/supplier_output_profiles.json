@@ -1,0 +1,83 @@
+{
+  "building_logging_camp": {
+    "pm_simple_forestry": 30,
+    "pm_saw_mills": 60,
+    "pm_electric_saw_mills": 100,
+    "pm_hardwood": -25,
+    "pm_increased_hardwood": -40
+  },
+  "building_iron_mine": {
+    "pm_picks_and_shovels_building_iron_mine": 20,
+    "pm_atmospheric_engine_pump_building_iron_mine": 40,
+    "pm_condensing_engine_pump_building_iron_mine": 60,
+    "pm_diesel_pump_building_iron_mine": 70,
+    "pm_nitroglycerin_building_iron_mine": 12,
+    "pm_dynamite_building_iron_mine": 20
+  },
+  "building_coal_mine": {
+    "pm_picks_and_shovels_building_coal_mine": 25,
+    "pm_atmospheric_engine_pump_building_coal_mine": 40,
+    "pm_condensing_engine_pump_building_coal_mine": 60,
+    "pm_diesel_pump_building_coal_mine": 90,
+    "pm_nitroglycerin_building_coal_mine": 15,
+    "pm_dynamite_building_coal_mine": 25,
+    "pm_steam_donkey_building_coal_mine": -3
+  },
+  "building_wheat_farm": {
+    "pm_simple_farming": 20,
+    "pm_herring_meal_farming": 25,
+    "pm_soil_enriching_farming": 30,
+    "pm_fertilization": 45,
+    "pm_chemical_fertilizer": 60,
+    "pm_citrus_orchards": -8,
+    "pm_sugar_beets": -5
+  },
+  "building_rye_farm": {
+    "pm_simple_farming": 20,
+    "pm_soil_enriching_farming": 30,
+    "pm_fertilization": 45,
+    "pm_chemical_fertilizer": 60,
+    "pm_potatoes": -10,
+    "pm_apple_orchards": -8,
+    "pm_sugar_beets": -5
+  },
+  "building_rice_farm": {
+    "pm_simple_farming_building_rice_farm": 35,
+    "pm_herring_meal_farming_building_rice_farm": 45,
+    "pm_soil_enriching_farming_building_rice_farm": 50,
+    "pm_fertilization_building_rice_farm": 75,
+    "pm_chemical_fertilizer_building_rice_farm": 100,
+    "pm_fig_orchards_building_rice_farm": -20
+  },
+  "building_maize_farm": {
+    "pm_simple_farming": 20,
+    "pm_soil_enriching_farming": 30,
+    "pm_fertilization": 45,
+    "pm_chemical_fertilizer": 60,
+    "pm_citrus_orchards": -8
+  },
+  "building_millet_farm": {
+    "pm_simple_farming": 20,
+    "pm_soil_enriching_farming": 30,
+    "pm_fertilization": 45,
+    "pm_chemical_fertilizer": 60,
+    "pm_fig_orchards": -8
+  },
+  "building_cotton_plantation": {
+    "default_building_cotton_plantation": 45,
+    "automatic_irrigation_building_cotton_plantation": 80,
+    "slave_exploitation_cotton": 20,
+    "worker_exploitation_cotton": 10
+  },
+  "building_livestock_ranch": {
+    "pm_simple_ranch": 5,
+    "pm_sheep_farms": 15,
+    "pm_intensive_grazing_ranch": 25
+  },
+  "building_tooling_workshop": {
+    "pm_crude_tools": 30,
+    "pm_pig_iron": 60,
+    "pm_steel": 80,
+    "pm_rubber_grips": 110
+  }
+}

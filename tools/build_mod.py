@@ -11,7 +11,8 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.6.22'
+SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
+VERSION = '0.6.23'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -73,6 +74,29 @@ INPUT_DEPENDENCIES = {
     for upstream in SUPPLY_TARGETS
 }
 INPUT_DEPENDENCIES = {good: links for good, links in INPUT_DEPENDENCIES.items() if links}
+
+
+def supplier_output_values():
+    result = []
+    for item in SUPPLY_TARGETS:
+        good = item['good']
+        if good not in INPUT_DEPENDENCIES:
+            continue
+        suppliers = variants(item)
+        for supplier in suppliers:
+            building = supplier['building']
+            name = variant_id(supplier)
+            result.append(f'sed_supplier_{name}_output = {{\n value = 0')
+            for method, amount in SUPPLIER_OUTPUT_PROFILES[building].items():
+                result.append(f' if = {{ limit = {{ b:{building} = {{ has_active_production_method = {method} }} }} add = {amount} }}')
+            result.append(' min = 0\n}')
+        result.append(f'sed_supplier_{good}_output = {{\n value = 0')
+        for supplier in suppliers:
+            name = variant_id(supplier)
+            preferred = 'preferred_supplier' if len(suppliers) > 1 else 'eligible'
+            result.append(f' if = {{ limit = {{ sed_{good}_{name}_{preferred} = yes }} add = sed_supplier_{name}_output }}')
+        result.append('}')
+    return '\n'.join(result) + '\n'
 
 
 def input_blocker_key(good, downstream, variant):
@@ -275,8 +299,14 @@ sed_refresh_supply_candidates = {
         enqueue = ''
         for index, variant in enumerate(vs):
             branch = 'if' if index == 0 else 'else_if'
+            name = variant_id(variant)
+            eligible = f'sed_{good}_{name}_eligible = yes'
+            if good in INPUT_DEPENDENCIES and len(vs) > 1:
+                eligible += (f' OR = {{ owner = {{ NOT = {{ AND = {{ has_variable = sed_mode_automatic '
+                             f'has_variable = sed_input_priority_{good} }} }} }} '
+                             f'sed_{good}_{name}_preferred_supplier = yes }}')
             enqueue += f'''  {branch} = {{
-   limit = {{ sed_{good}_{variant_id(variant)}_eligible = yes }}
+   limit = {{ {eligible} }}
    # Baseline level before queuing; the monthly review compares it after the queue.
    set_variable = {{ name = sed_{good}_intent_level value = b:{variant['building']}.level }}
    set_variable = {{ name = sed_{good}_intent_variant value = {index + 1} }}
@@ -1569,6 +1599,21 @@ sed_{good}_{variant_id(variant)}_operable = {{
  can_construct_building = {building}
 }}
 ''')
+        if good in INPUT_DEPENDENCIES and len(vs) > 1:
+            for index, variant in enumerate(vs):
+                name = variant_id(variant)
+                result.append(f'sed_{good}_{name}_preferred_supplier = {{\n sed_{good}_{name}_eligible = yes')
+                for other_index, other in enumerate(vs):
+                    if other_index == index:
+                        continue
+                    other_name = variant_id(other)
+                    # Earlier variants win ties, matching the existing approval order.
+                    comparison = '>' if other_index < index else '>='
+                    result.append(f''' OR = {{
+  NOT = {{ sed_{good}_{other_name}_eligible = yes }}
+  sed_supplier_{name}_output {comparison} sed_supplier_{other_name}_output
+ }}''')
+                result.append('}\n')
         result.append(f'''sed_{good}_approval_valid = {{
  sed_{good}_candidate_eligible = yes
  OR = {{ owner = {{ NOT = {{ has_variable = sed_coord_active }} }} var:sed_plan_{good}_rank = 1 }}
@@ -2071,7 +2116,7 @@ sed_pulse.1 = {
         'common/scripted_effects/sed_effects.txt': effects(),
         'common/scripted_guis/sed_scripted_guis.txt': scripted_guis(),
         'common/scripted_triggers/sed_triggers.txt': scripted_triggers(),
-        'common/script_values/sed_values.txt': '# Current calendar, independent of diagnostic refresh.\nsed_live_month_key = { value = year multiply = 12 add = month }\n' + labor.values() + input_forecast.values(),
+        'common/script_values/sed_values.txt': '# Current calendar, independent of diagnostic refresh.\nsed_live_month_key = { value = year multiply = 12 add = month }\n' + labor.values() + input_forecast.values() + supplier_output_values(),
         'gui/journal_entry_widgets/sed_diagnostics.gui': widget(),
         'localization/braz_por/sed_l_braz_por.yml': localization('braz_por'),
         'localization/english/sed_l_english.yml': localization('english'),
