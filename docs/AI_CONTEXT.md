@@ -1,5 +1,76 @@
 # Contexto de continuidade
 
+Entrega 0.6.15 instalada com jogo fechado, 14 outputs conferidos no ZIP e na
+instalação, ordem preservada. Backup
+`sed_backups/mod_before_0.6.15_20261110_121434_509591`.
+
+## 0.6.15 — Execução direta da prioridade de oferta na coordenação
+
+A coordenação agora escolhe o Director (executor 11) quando o objetivo de
+oferta tem uma primeira prioridade elegível e passa pela guarda fiscal
+normal. As sete opções verificadas de construção externa são suspensas antes
+da execução. Infraestrutura e demais objetivos mantêm as rotas anteriores;
+a delegação geral permanece para casos sem alvo direto viável.
+
+O modo apenas seleciona a rota; a inclusão ocorre na revisão automática.
+`sed_auto_run_direct` é compartilhado pelo Automático próprio e pelo novo
+executor coordenado. Exige jogador, mod habilitado, Automático exclusivo,
+filas pública e privada vazias, construção ativa, proteção fiscal e limite
+mensal. Conflito com ARoAI ou outro switch conhecido impede execução.
+A exceção de coordenação exige executor 11, objetivo 2 e primeira prioridade
+atualmente elegível. Cada aprovação também exige o rank 1 daquele tipo/estado
+quando a coordenação está ativa. Um candidato de outro tipo no mesmo estado
+não pode aproveitar a autorização.
+
+O resultado mensal registra a inclusão observada na fila, falha, bloqueio de
+fila ou limite mensal. Continua sendo uma tentativa por mês; falha consome a
+tentativa. A política de restauração permanece intacta. Obras existentes,
+construtores desconhecidos e autoexpansões nativas continuam fora do controle.
+A guarda ainda usa a política fiscal inicial, sem previsão completa de custo
+incremental, trabalhadores e insumos futuros.
+
+189 testes sintéticos aprovados. Oito regressões exercitam execução direta,
+restauração, limite, filas, revalidação, tipo/estado, finanças e ARoAI. Um teste
+de validação adversarial rejeita autoridade ampliada, remoção da guarda e rank
+menos restritivo. Validação estática e gerador aprovados. Inclusão real e UI
+permanecem pendentes de campanha.
+
+
+Entrega 0.6.14 instalada com jogo fechado, 14 outputs conferidos no ZIP e na
+instalação, ordem preservada. Backup
+`sed_backups/mod_before_0.6.14_20261110_120531_431140`.
+
+## 0.6.14 — Expansões da indústria bélica
+
+O catálogo passa de oito para onze bens com armas leves, artilharia e munição.
+Doze métodos ativos e seus outputs foram conferidos no `01_industry.txt`
+vanilla local. Os novos alvos reutilizam elegibilidade, aprovação, limite
+mensal, fila, histórico de resultado, ignorar/restaurar e metas anuais.
+
+Candidatas militares exigem despesa militar positiva, demanda de mercado
+positiva e escassez atual. O produtor deve existir, produzir o bem pelo método
+ativo, estar em estado incorporado, com ocupação mínima de 80%, sem falha de
+contratação, falta de insumos, déficit de infraestrutura ou expansão na fila.
+Isso ainda usa despesa nacional como sinal parcial de necessidade. Demanda
+do mercado compartilhado não identifica precisamente consumo das tropas.
+
+A pontuação recebe bônus de 20 durante guerra. A regra é inicial e não foi
+calibrada em campanha. Prioridades civis continuam concorrendo pela pontuação;
+crise fiscal continua prevalecendo no objetivo macro e na proteção automática.
+
+Assistido permite aprovar um nível de produtor militar elegível. Automático
+próprio aplica os limites fiscais e de fila já existentes. Com coordenação
+externa ativa, o Director preserva a delegação geral e não executa em paralelo.
+O Advisor/Supply Chain ainda seleciona os próprios projetos, sem garantia de
+executar o alvo militar específico. Navios continuam no diagnóstico; nova
+fábrica, PMs das tropas e recrutamento seguem pendentes.
+
+180 testes sintéticos aprovados. As oito novas regressões militares cobrem
+aprovação, demanda, trabalhadores, insumos, ranking, proteção fiscal,
+coordenação e livro de resultados. Geração, ZIP e validação estática local
+aprovados. Inclusão real de obra e layout ainda exigem teste de campanha.
+
+
 Entrega 0.6.13 instalada com jogo fechado, 14 outputs conferidos no ZIP e na
 instalação, ordem preservada. Backup
 `sed_backups/mod_before_0.6.13_20261110_115247_160824`.

@@ -11,7 +11,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.6.13'
+VERSION = '0.6.15'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -41,6 +41,9 @@ SUPPLY_TARGETS = [
     {'good': 'tools', 'building': 'building_tooling_workshop', 'methods': ['pm_crude_tools', 'pm_pig_iron', 'pm_rubber_grips', 'pm_steel'], 'label_pt': 'ferramentas', 'label_en': 'tools', 'building_pt': 'oficina de ferramentas', 'building_en': 'tooling workshop'},
     {'good': 'groceries', 'building': 'building_food_industry', 'methods': ['pm_bakery', 'pm_baking_powder', 'pm_cannery', 'pm_cannery_fish', 'pm_sweeteners', 'pm_vacuum_canning', 'pm_vacuum_canning_principle_3'], 'label_pt': 'mantimentos', 'label_en': 'groceries', 'building_pt': 'indústria alimentícia', 'building_en': 'food industry'},
     {'good': 'clothes', 'building': 'building_textile_mill', 'methods': ['pm_dye_workshops', 'pm_electric_sewing_machines', 'pm_handsewn_clothes', 'pm_sewing_machines'], 'label_pt': 'roupas', 'label_en': 'clothes', 'building_pt': 'fábrica têxtil', 'building_en': 'textile mill'},
+    {'good': 'small_arms', 'building': 'building_arms_industry', 'methods': ['pm_muskets', 'pm_rifles', 'pm_repeaters', 'pm_bolt_action_rifles'], 'label_pt': 'armas leves', 'label_en': 'small arms', 'building_pt': 'indústria de armas', 'building_en': 'arms industry'},
+    {'good': 'artillery', 'building': 'building_artillery_foundry', 'methods': ['pm_cannons', 'pm_bronze_cannons', 'pm_smoothbores', 'pm_bronze_smoothbores', 'pm_breech_loaders', 'pm_recoiled_barrels'], 'label_pt': 'artilharia', 'label_en': 'artillery', 'building_pt': 'fundição de artilharia', 'building_en': 'artillery foundry'},
+    {'good': 'ammunition', 'building': 'building_munition_plant', 'methods': ['pm_percussion_caps', 'pm_explosive_shells'], 'label_pt': 'munição', 'label_en': 'ammunition', 'building_pt': 'fábrica de munição', 'building_en': 'munition plant'},
 ]
 PERSISTENT_VARIABLES = ['sed_schema_version', 'sed_auto_last_attempt_month',
                         'sed_tax_last_change_month', 'sed_wage_last_change_month']
@@ -306,16 +309,27 @@ sed_refresh_supply_candidates = {''']
  if = {
   limit = { has_variable = sed_coord_active }
   sed_coord_sync = yes
-  set_variable = { name = sed_auto_action_status value = 18 }
-  if = { limit = { var:sed_coord_executor = 10 } set_variable = { name = sed_auto_action_status value = 20 } }
-  else_if = { limit = { var:sed_coord_executor = 9 } set_variable = { name = sed_auto_action_status value = 19 } }
-  else_if = { limit = { var:sed_coord_executor = 5 } set_variable = { name = sed_auto_action_status value = 13 } }
-  else_if = { limit = { var:sed_coord_executor = 0 }
-   set_variable = { name = sed_auto_action_status value = 2 }
-   if = { limit = { NOT = { sed_coord_fiscal_safe = yes } } set_variable = { name = sed_auto_action_status value = 17 } }
+  if = { limit = { var:sed_coord_executor = 11 } sed_auto_run_direct = yes }
+  else = {
+   set_variable = { name = sed_auto_action_status value = 18 }
+   if = { limit = { var:sed_coord_executor = 10 } set_variable = { name = sed_auto_action_status value = 20 } }
+   else_if = { limit = { var:sed_coord_executor = 9 } set_variable = { name = sed_auto_action_status value = 19 } }
+   else_if = { limit = { var:sed_coord_executor = 5 } set_variable = { name = sed_auto_action_status value = 13 } }
+   else_if = { limit = { var:sed_coord_executor = 0 }
+    set_variable = { name = sed_auto_action_status value = 2 }
+    if = { limit = { NOT = { sed_coord_fiscal_safe = yes } } set_variable = { name = sed_auto_action_status value = 17 } }
+   }
   }
  }
- else_if = {
+ else = { sed_auto_run_direct = yes }
+ # Store the actual result after either direct execution or delegation.
+ set_variable = { name = sed_auto_review_status value = var:sed_auto_action_status }
+ set_variable = { name = sed_auto_review_year value = year }
+ set_variable = { name = sed_auto_review_month value = { value = month add = 1 } }
+}
+
+sed_auto_run_direct = {
+ if = {
   limit = { sed_auto_executor_safe = yes }
 ''')
     choices = [('railway', 'sed_railway_candidate_eligible')]
@@ -344,10 +358,6 @@ sed_refresh_supply_candidates = {''']
  else_if = { limit = { sed_competing_builder_configured = yes } set_variable = { name = sed_auto_action_status value = 13 } }
  else_if = { limit = { NOT = { sed_auto_fiscal_safe = yes } } set_variable = { name = sed_auto_action_status value = 17 } }
  else = { set_variable = { name = sed_auto_action_status value = 14 } }
- # Preserve the result independently from mode controls and diagnostic refreshes.
- set_variable = { name = sed_auto_review_status value = var:sed_auto_action_status }
- set_variable = { name = sed_auto_review_year value = year }
- set_variable = { name = sed_auto_review_month value = { value = month add = 1 } }
 }
 ''')
     return '\n'.join(result).rstrip() + '\n'
@@ -464,7 +474,7 @@ def widget():
     body += textbox('sed_coord_intro')
     body += button('sed_coord_enable', 'sed_coord_enable_sgui')
     body += button('sed_coord_release', 'sed_coord_release_sgui')
-    for executor in range(11):
+    for executor in range(12):
         body += textbox(f'sed_coord_executor_{executor}', f'sed_coord_executor_{executor}_visible_sgui')
     body += textbox('sed_coord_supply_policy', 'sed_coord_supply_policy_visible_sgui')
     for policy in (1, 2, 3):
@@ -1280,7 +1290,7 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
         previous += f' NOT = {{ {condition} }}'
     result += f'sed_auto_current_clear_visible_sgui = {{ scope = country is_shown = {{ {base} sed_auto_executor_safe = yes }} }}\n'
     result += 'sed_auto_status_delegated_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 18 } }\n'
-    for executor in range(11):
+    for executor in range(12):
         result += f'sed_coord_executor_{executor}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = {executor} }} }}\n'
     for policy in (1, 2, 3):
         result += f'sed_coord_advisor_policy_{policy}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 1 has_variable = sed_coord_advisor_policy var:sed_coord_advisor_policy = {policy} }} }}\n'
@@ -1345,6 +1355,7 @@ sed_railway_candidate_eligible = {
 
 sed_railway_approval_valid = {
  sed_railway_candidate_eligible = yes
+ OR = { owner = { NOT = { has_variable = sed_coord_active } } var:sed_plan_railway_rank = 1 }
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -1373,6 +1384,7 @@ sed_construction_candidate_eligible = {
 
 sed_construction_approval_valid = {
  sed_construction_candidate_eligible = yes
+ OR = { owner = { NOT = { has_variable = sed_coord_active } } var:sed_plan_construction_rank = 1 }
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -1391,12 +1403,15 @@ def supply_triggers():
         good = item['good']
         vs = variants(item)
         alternatives = ' '.join(f'sed_{good}_{variant_id(variant)}_eligible = yes' for variant in vs)
+        military_gate = ('owner = { military_expenses > 0 market = { mg:' + good + ' ?= { market_goods_buy_orders > 0 } } }'
+                         if good in planning.MILITARY_INDUSTRY_GOODS else '')
         result.append(f'''# State scope: expand an operating local producer only while its market good is scarce.
 sed_{good}_candidate_eligible = {{
  is_incorporated = yes
  infrastructure_delta >= 0
  NOT = {{ has_variable = sed_{good}_ignored }}
  NOT = {{ has_variable = sed_{good}_request_pending }}
+{military_gate}
  owner = {{ market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }} }}
  OR = {{ {alternatives} }}
 }}
@@ -1427,6 +1442,7 @@ sed_{good}_{variant_id(variant)}_eligible = {{
 ''')
         result.append(f'''sed_{good}_approval_valid = {{
  sed_{good}_candidate_eligible = yes
+ OR = {{ owner = {{ NOT = {{ has_variable = sed_coord_active }} }} var:sed_plan_{good}_rank = 1 }}
  owner = {{
   is_player = yes
   has_variable = sed_enabled
@@ -1457,7 +1473,14 @@ sed_execution_mode_permits_approval = {
 }
 
 sed_auto_executor_safe = {
- NOT = { has_variable = sed_coord_active }
+ is_player = yes
+ has_variable = sed_enabled
+ NOT = { has_variable = sed_mode_manual }
+ NOT = { has_variable = sed_mode_assisted }
+ OR = {
+  NOT = { has_variable = sed_coord_active }
+  AND = { has_variable = sed_coord_active var:sed_coord_executor = 11 var:sed_plan_goal = 2 sed_direct_supply_priority_exists = yes }
+ }
  has_variable = sed_mode_automatic
  NOT = { sed_auto_month_limit_reached = yes }
  NOT = { in_default = yes }
@@ -1467,6 +1490,10 @@ sed_auto_executor_safe = {
  NOT = { sed_competing_builder_configured = yes }
  sed_auto_fiscal_safe = yes
 }''')
+    priorities = '\n'.join(
+        f'  any_scope_state = {{ var:sed_plan_{item["good"]}_rank = 1 sed_{item["good"]}_candidate_eligible = yes }}'
+        for item in SUPPLY_TARGETS)
+    result.append('sed_direct_supply_priority_exists = {\n OR = {\n' + priorities + '\n }\n}')
     options = '\n'.join(f'  has_variable = {option}' for name, option, pt, en in COMPETING_BUILDERS)
     result.append('sed_competing_builder_configured = {\n OR = {\n' + options + '\n }\n}')
     return '\n'.join(result).rstrip() + '\n' + planning.triggers() + coordination.triggers()
@@ -1735,6 +1762,7 @@ def localization(language):
         'sed_goal_8': ('Objetivo atual: buscar crescimento e diversificação. Sem gargalo elegível no escopo direto, o executor externo avalia novos investimentos com seus próprios filtros.', 'Current objective: seek growth and diversification. With no eligible bottleneck in direct scope, the external executor evaluates new investment using its own filters.'),
         'sed_goal_9': ('Objetivo atual: investigar energia local cara, com preço ao menos 20% acima da base em algum estado. A ferramenta externa verifica viabilidade.', 'Current objective: investigate costly local power, priced at least 20% above base in a state. The external tool checks feasibility.'),
         'sed_coord_supply_policy': ('Política do Supply Chain sob o Director. Expansões em estados incorporados; administração trata o déficit atual de burocracia. Limites numéricos de construção em um nível por local escolhido, conforme a rotina externa. A soma nacional pode superar um nível. Tributação é avaliada em junho/dezembro e setores em fevereiro/agosto. Opções anteriores são restauradas ao sair do Automático.', 'Supply Chain policy under the Director. Expansion in incorporated states; administration addresses the current bureaucracy deficit. Numeric construction limits are one level per selected location, according to the external routine. The national total may exceed one level. Tax capacity is evaluated in June/December and construction sectors in February/August. Previous settings are restored when leaving Automatic.'),
+        'sed_coord_executor_11': ('Executor escolhido: Director, expansão da primeira prioridade de oferta. As opções verificadas de construção do Advisor e Supply Chain ficam suspensas. Aguarda orçamento e filas livres; no máximo uma tentativa por mês. O resultado da revisão confirma se houve inclusão.', 'Selected executor: Director, expansion of the first supply priority. Verified Advisor and Supply Chain construction options remain suspended. Waits for budget and empty queues; at most one attempt per month. The review outcome confirms insertion.'),
         'sed_coord_executor_10': ('Coordenação em espera. Há expansão enfileirada de um prédio relacionado ao objetivo atual. Novas opções externas ficam suspensas até reavaliar a fila ou surgir outra prioridade elegível.', 'Coordination waiting. A building related to the current objective has a queued expansion. New external options remain suspended until queue reassessment or another eligible priority appears.'),
         'sed_plan_waiting': ('Plano em acompanhamento de obra relacionada. A fila ainda não comprova resolução do gargalo. A autoria e o efeito futuro do projeto não foram identificados.', 'Plan monitoring related construction. The queue does not yet prove resolution of the bottleneck. Project origin and future impact have not been identified.'),
         'sed_auto_status_waiting': ('Última revisão: aguardando expansão relacionada ao objetivo. Reavalia após mudança da fila; nenhuma nova rotina externa autorizada nesta revisão.', 'Last review: waiting for an expansion related to the objective. Reassesses after queue changes; no new external routine authorized in this review.'),
@@ -1796,7 +1824,7 @@ def localization(language):
         'sed_military_posture_2': ('Diretriz militar: investigar abastecimento antes de ampliar compromissos. Há bens militares com demanda e escassez no mercado.', 'Military guidance: investigate supply before increasing commitments. Military goods have market demand and shortages.'),
         'sed_military_posture_3': ('Diretriz militar: estabilizar o orçamento e preservar o abastecimento da força atual. A avaliação fiscal está em crise ou o saldo operacional é negativo.', 'Military guidance: stabilize the budget and preserve current force supply. Fiscal assessment is in crisis or operating balance is negative.'),
         'sed_military_posture_4': ('Diretriz militar: orçamento permite estudar modernização. Há superávit, ausência de dívida e doze semanas de despesas fixas em reservas. Custo de uma modernização específica ainda precisa ser avaliado.', 'Military guidance: budget permits studying modernization. Positive balance, no debt and twelve weeks of fixed expenses in reserves. A specific modernization cost still requires assessment.'),
-        'sed_military_scope': ('Avaliação econômica de apoio. Escassez é do mercado compartilhado; demanda das tropas nacionais ainda requer diagnóstico próprio. A execução de modernização e de investimentos militares dirigidos permanece pendente.', 'Supporting economic assessment. Shortages refer to the shared market; national troop demand still requires dedicated diagnosis. Modernization and targeted military investment execution remain pending.'),
+        'sed_military_scope': ('Avaliação econômica de apoio. Escassez é do mercado compartilhado; demanda das tropas nacionais ainda requer diagnóstico próprio. Armas, artilharia e munição podem gerar expansão de produtor existente com filtros de operação, insumos e orçamento. O executor externo mantém a própria seleção. Modernização das forças permanece pendente.', 'Supporting economic assessment. Shortages refer to the shared market; national troop demand still requires dedicated diagnosis. Arms, artillery and ammunition can yield existing-producer expansion with operation, input and budget filters. The external executor retains its own selection. Force modernization remains pending.'),
     })
     for good, pt, en in planning.MILITARY_GOODS:
         pairs[f'sed_military_short_{good}'] = (f'Abastecimento militar a investigar: {pt}, com demanda positiva e escassez no mercado.', f'Military supply to investigate: {en}, with positive demand and a market shortage.')

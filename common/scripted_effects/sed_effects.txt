@@ -17,6 +17,9 @@ sed_enable_country = {
  set_variable = { name = sed_tools_action_status value = 0 }
  set_variable = { name = sed_groceries_action_status value = 0 }
  set_variable = { name = sed_clothes_action_status value = 0 }
+ set_variable = { name = sed_small_arms_action_status value = 0 }
+ set_variable = { name = sed_artillery_action_status value = 0 }
+ set_variable = { name = sed_ammunition_action_status value = 0 }
  if = {
   limit = { NOT = { OR = { has_variable = sed_mode_manual has_variable = sed_mode_assisted has_variable = sed_mode_automatic } } }
   sed_set_mode_assisted = yes
@@ -36,6 +39,9 @@ sed_disable_country = {
  clear_variable_list = sed_plan_1_tools
  clear_variable_list = sed_plan_1_groceries
  clear_variable_list = sed_plan_1_clothes
+ clear_variable_list = sed_plan_1_small_arms
+ clear_variable_list = sed_plan_1_artillery
+ clear_variable_list = sed_plan_1_ammunition
  clear_variable_list = sed_plan_2_railway
  clear_variable_list = sed_plan_2_construction
  clear_variable_list = sed_plan_2_wood
@@ -46,6 +52,9 @@ sed_disable_country = {
  clear_variable_list = sed_plan_2_tools
  clear_variable_list = sed_plan_2_groceries
  clear_variable_list = sed_plan_2_clothes
+ clear_variable_list = sed_plan_2_small_arms
+ clear_variable_list = sed_plan_2_artillery
+ clear_variable_list = sed_plan_2_ammunition
  clear_variable_list = sed_plan_3_railway
  clear_variable_list = sed_plan_3_construction
  clear_variable_list = sed_plan_3_wood
@@ -56,6 +65,9 @@ sed_disable_country = {
  clear_variable_list = sed_plan_3_tools
  clear_variable_list = sed_plan_3_groceries
  clear_variable_list = sed_plan_3_clothes
+ clear_variable_list = sed_plan_3_small_arms
+ clear_variable_list = sed_plan_3_artillery
+ clear_variable_list = sed_plan_3_ammunition
  sed_coord_restore = yes
  sed_restore_fiscal_policy = yes
  sed_restore_wage_policy = yes
@@ -139,6 +151,9 @@ sed_disable_country = {
  remove_variable = sed_tools_action_status
  remove_variable = sed_groceries_action_status
  remove_variable = sed_clothes_action_status
+ remove_variable = sed_small_arms_action_status
+ remove_variable = sed_artillery_action_status
+ remove_variable = sed_ammunition_action_status
  remove_variable = sed_wood_intents
  remove_variable = sed_wood_completed
  remove_variable = sed_wood_abandoned
@@ -179,6 +194,21 @@ sed_disable_country = {
  remove_variable = sed_clothes_abandoned
  remove_variable = sed_clothes_result
  remove_variable = sed_clothes_result_month
+ remove_variable = sed_small_arms_intents
+ remove_variable = sed_small_arms_completed
+ remove_variable = sed_small_arms_abandoned
+ remove_variable = sed_small_arms_result
+ remove_variable = sed_small_arms_result_month
+ remove_variable = sed_artillery_intents
+ remove_variable = sed_artillery_completed
+ remove_variable = sed_artillery_abandoned
+ remove_variable = sed_artillery_result
+ remove_variable = sed_artillery_result_month
+ remove_variable = sed_ammunition_intents
+ remove_variable = sed_ammunition_completed
+ remove_variable = sed_ammunition_abandoned
+ remove_variable = sed_ammunition_result
+ remove_variable = sed_ammunition_result_month
  remove_variable = sed_railway_intents
  remove_variable = sed_railway_completed
  remove_variable = sed_railway_abandoned
@@ -269,6 +299,36 @@ sed_disable_country = {
  remove_variable = sed_clothes_method_states
  remove_variable = sed_clothes_permission_states
  remove_variable = sed_clothes_infrastructure_states
+ remove_variable = sed_small_arms_producer_states
+ remove_variable = sed_small_arms_ignored_states
+ remove_variable = sed_small_arms_pending_states
+ remove_variable = sed_small_arms_unincorporated_states
+ remove_variable = sed_small_arms_understaffed_states
+ remove_variable = sed_small_arms_hiring_states
+ remove_variable = sed_small_arms_input_states
+ remove_variable = sed_small_arms_method_states
+ remove_variable = sed_small_arms_permission_states
+ remove_variable = sed_small_arms_infrastructure_states
+ remove_variable = sed_artillery_producer_states
+ remove_variable = sed_artillery_ignored_states
+ remove_variable = sed_artillery_pending_states
+ remove_variable = sed_artillery_unincorporated_states
+ remove_variable = sed_artillery_understaffed_states
+ remove_variable = sed_artillery_hiring_states
+ remove_variable = sed_artillery_input_states
+ remove_variable = sed_artillery_method_states
+ remove_variable = sed_artillery_permission_states
+ remove_variable = sed_artillery_infrastructure_states
+ remove_variable = sed_ammunition_producer_states
+ remove_variable = sed_ammunition_ignored_states
+ remove_variable = sed_ammunition_pending_states
+ remove_variable = sed_ammunition_unincorporated_states
+ remove_variable = sed_ammunition_understaffed_states
+ remove_variable = sed_ammunition_hiring_states
+ remove_variable = sed_ammunition_input_states
+ remove_variable = sed_ammunition_method_states
+ remove_variable = sed_ammunition_permission_states
+ remove_variable = sed_ammunition_infrastructure_states
  remove_variable = sed_plan_count
  remove_variable = sed_plan_goal
  remove_variable = sed_fiscal_status
@@ -292,6 +352,9 @@ sed_disable_country = {
  remove_variable = sed_plan_pressure_tools
  remove_variable = sed_plan_pressure_groceries
  remove_variable = sed_plan_pressure_clothes
+ remove_variable = sed_plan_pressure_small_arms
+ remove_variable = sed_plan_pressure_artillery
+ remove_variable = sed_plan_pressure_ammunition
  remove_variable = sed_plan_missing_wood
  remove_variable = sed_plan_missing_iron
  remove_variable = sed_plan_missing_coal
@@ -300,6 +363,9 @@ sed_disable_country = {
  remove_variable = sed_plan_missing_tools
  remove_variable = sed_plan_missing_groceries
  remove_variable = sed_plan_missing_clothes
+ remove_variable = sed_plan_missing_small_arms
+ remove_variable = sed_plan_missing_artillery
+ remove_variable = sed_plan_missing_ammunition
  remove_variable = sed_wood_short_months
  remove_variable = sed_iron_short_months
  remove_variable = sed_coal_short_months
@@ -308,6 +374,9 @@ sed_disable_country = {
  remove_variable = sed_tools_short_months
  remove_variable = sed_groceries_short_months
  remove_variable = sed_clothes_short_months
+ remove_variable = sed_small_arms_short_months
+ remove_variable = sed_artillery_short_months
+ remove_variable = sed_ammunition_short_months
  remove_variable = sed_wood_meta_year
  remove_variable = sed_iron_meta_year
  remove_variable = sed_coal_meta_year
@@ -316,6 +385,9 @@ sed_disable_country = {
  remove_variable = sed_tools_meta_year
  remove_variable = sed_groceries_meta_year
  remove_variable = sed_clothes_meta_year
+ remove_variable = sed_small_arms_meta_year
+ remove_variable = sed_artillery_meta_year
+ remove_variable = sed_ammunition_meta_year
  remove_variable = sed_wood_short_sample_month
  remove_variable = sed_iron_short_sample_month
  remove_variable = sed_coal_short_sample_month
@@ -324,6 +396,9 @@ sed_disable_country = {
  remove_variable = sed_tools_short_sample_month
  remove_variable = sed_groceries_short_sample_month
  remove_variable = sed_clothes_short_sample_month
+ remove_variable = sed_small_arms_short_sample_month
+ remove_variable = sed_artillery_short_sample_month
+ remove_variable = sed_ammunition_short_sample_month
  remove_variable = sed_short_sample_gap
  remove_variable = sed_coord_active
  remove_variable = sed_coord_supply_known
@@ -356,6 +431,9 @@ sed_disable_country = {
  clear_variable_list = sed_tools_candidates
  clear_variable_list = sed_groceries_candidates
  clear_variable_list = sed_clothes_candidates
+ clear_variable_list = sed_small_arms_candidates
+ clear_variable_list = sed_artillery_candidates
+ clear_variable_list = sed_ammunition_candidates
  every_scope_state = {
   remove_variable = sed_railway_request_pending
   remove_variable = sed_construction_request_pending
@@ -385,6 +463,15 @@ sed_disable_country = {
   remove_variable = sed_clothes_request_pending
   remove_variable = sed_clothes_intent_level
   remove_variable = sed_clothes_intent_variant
+  remove_variable = sed_small_arms_request_pending
+  remove_variable = sed_small_arms_intent_level
+  remove_variable = sed_small_arms_intent_variant
+  remove_variable = sed_artillery_request_pending
+  remove_variable = sed_artillery_intent_level
+  remove_variable = sed_artillery_intent_variant
+  remove_variable = sed_ammunition_request_pending
+  remove_variable = sed_ammunition_intent_level
+  remove_variable = sed_ammunition_intent_variant
   remove_variable = sed_railway_ignored
   remove_variable = sed_construction_ignored
   remove_variable = sed_wood_ignored
@@ -395,6 +482,9 @@ sed_disable_country = {
   remove_variable = sed_tools_ignored
   remove_variable = sed_groceries_ignored
   remove_variable = sed_clothes_ignored
+  remove_variable = sed_small_arms_ignored
+  remove_variable = sed_artillery_ignored
+  remove_variable = sed_ammunition_ignored
  }
  every_scope_state = {
   remove_variable = sed_plan_score
@@ -419,6 +509,12 @@ sed_disable_country = {
   remove_variable = sed_plan_groceries_score
   remove_variable = sed_plan_clothes_rank
   remove_variable = sed_plan_clothes_score
+  remove_variable = sed_plan_small_arms_rank
+  remove_variable = sed_plan_small_arms_score
+  remove_variable = sed_plan_artillery_rank
+  remove_variable = sed_plan_artillery_score
+  remove_variable = sed_plan_ammunition_rank
+  remove_variable = sed_plan_ammunition_score
  }
  # Schema and automatic attempt month persist; disabling cannot reset the monthly cap.
 }
@@ -654,6 +750,9 @@ sed_refresh_construction_candidates = {
  clear_variable_list = sed_tools_candidates
  clear_variable_list = sed_groceries_candidates
  clear_variable_list = sed_clothes_candidates
+ clear_variable_list = sed_small_arms_candidates
+ clear_variable_list = sed_artillery_candidates
+ clear_variable_list = sed_ammunition_candidates
  # Same primary-reason cascade as the railway counts. Only states that already
  # have a construction sector enter this denominator.
  set_variable = { name = sed_construction_ignored_states value = 0 }
@@ -1769,6 +1868,264 @@ sed_refresh_supply_candidates = {
    root = { add_to_variable_list = { name = sed_clothes_candidates target = prev } }
   }
  }
+ set_variable = { name = sed_small_arms_producer_states value = 0 }
+ set_variable = { name = sed_small_arms_ignored_states value = 0 }
+ set_variable = { name = sed_small_arms_pending_states value = 0 }
+ set_variable = { name = sed_small_arms_unincorporated_states value = 0 }
+ set_variable = { name = sed_small_arms_understaffed_states value = 0 }
+ set_variable = { name = sed_small_arms_hiring_states value = 0 }
+ set_variable = { name = sed_small_arms_input_states value = 0 }
+ set_variable = { name = sed_small_arms_method_states value = 0 }
+ set_variable = { name = sed_small_arms_permission_states value = 0 }
+ set_variable = { name = sed_small_arms_infrastructure_states value = 0 }
+ clear_variable_list = sed_small_arms_candidates
+ every_scope_state = {
+  if = {
+   limit = { has_variable = sed_small_arms_request_pending
+    NOT = { OR = { AND = { has_variable = sed_small_arms_intent_variant OR = { AND = { var:sed_small_arms_intent_variant = 1 has_building = building_arms_industry b:building_arms_industry = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_small_arms_intent_variant } OR = { AND = { has_building = building_arms_industry b:building_arms_industry = { level_after_queued_constructions > level } } } } } }
+   }
+   if = {
+    limit = { has_variable = sed_small_arms_intent_variant has_variable = sed_small_arms_intent_level }
+    if = {
+     limit = { var:sed_small_arms_intent_variant = 1
+      has_building = building_arms_industry
+      b:building_arms_industry.level > var:sed_small_arms_intent_level
+     }
+     sed_small_arms_record_completed = yes
+    }
+    else = { sed_small_arms_record_abandoned = yes }
+   }
+   remove_variable = sed_small_arms_request_pending
+  }
+  if = {
+   limit = { OR = { has_building = building_arms_industry } }
+   root = { change_variable = { name = sed_small_arms_producer_states add = 1 } }
+  }
+  if = { limit = { sed_small_arms_candidate_eligible = yes } }
+  else_if = {
+   limit = { has_building = building_arms_industry }
+   if = {
+    limit = { has_variable = sed_small_arms_ignored }
+    root = { change_variable = { name = sed_small_arms_ignored_states add = 1 } }
+   }
+   else_if = {
+    limit = { OR = { has_variable = sed_small_arms_request_pending b:building_arms_industry = { level_after_queued_constructions > level } } }
+    root = { change_variable = { name = sed_small_arms_pending_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { is_incorporated = yes } }
+    root = { change_variable = { name = sed_small_arms_unincorporated_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_arms_industry = { OR = { level <= 0 occupancy < 0.8 } } }
+    root = { change_variable = { name = sed_small_arms_understaffed_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_arms_industry = { has_failed_hires = yes } }
+    root = { change_variable = { name = sed_small_arms_hiring_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_arms_industry = { building_has_goods_shortage = yes } }
+    root = { change_variable = { name = sed_small_arms_input_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_arms_industry = { NOT = { OR = { has_active_production_method = pm_muskets has_active_production_method = pm_rifles has_active_production_method = pm_repeaters has_active_production_method = pm_bolt_action_rifles } } } }
+    root = { change_variable = { name = sed_small_arms_method_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { can_construct_building = building_arms_industry } }
+    root = { change_variable = { name = sed_small_arms_permission_states add = 1 } }
+   }
+   else_if = {
+    limit = { infrastructure_delta < 0 }
+    root = { change_variable = { name = sed_small_arms_infrastructure_states add = 1 } }
+   }
+  }
+ }
+ if = {
+  limit = { is_player = yes has_variable = sed_enabled
+   market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }
+  }
+  ordered_scope_state = {
+   limit = { sed_small_arms_candidate_eligible = yes }
+   order_by = { value = state_population multiply = -1 }
+   max = 3
+   check_range_bounds = no
+   root = { add_to_variable_list = { name = sed_small_arms_candidates target = prev } }
+  }
+ }
+ set_variable = { name = sed_artillery_producer_states value = 0 }
+ set_variable = { name = sed_artillery_ignored_states value = 0 }
+ set_variable = { name = sed_artillery_pending_states value = 0 }
+ set_variable = { name = sed_artillery_unincorporated_states value = 0 }
+ set_variable = { name = sed_artillery_understaffed_states value = 0 }
+ set_variable = { name = sed_artillery_hiring_states value = 0 }
+ set_variable = { name = sed_artillery_input_states value = 0 }
+ set_variable = { name = sed_artillery_method_states value = 0 }
+ set_variable = { name = sed_artillery_permission_states value = 0 }
+ set_variable = { name = sed_artillery_infrastructure_states value = 0 }
+ clear_variable_list = sed_artillery_candidates
+ every_scope_state = {
+  if = {
+   limit = { has_variable = sed_artillery_request_pending
+    NOT = { OR = { AND = { has_variable = sed_artillery_intent_variant OR = { AND = { var:sed_artillery_intent_variant = 1 has_building = building_artillery_foundry b:building_artillery_foundry = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_artillery_intent_variant } OR = { AND = { has_building = building_artillery_foundry b:building_artillery_foundry = { level_after_queued_constructions > level } } } } } }
+   }
+   if = {
+    limit = { has_variable = sed_artillery_intent_variant has_variable = sed_artillery_intent_level }
+    if = {
+     limit = { var:sed_artillery_intent_variant = 1
+      has_building = building_artillery_foundry
+      b:building_artillery_foundry.level > var:sed_artillery_intent_level
+     }
+     sed_artillery_record_completed = yes
+    }
+    else = { sed_artillery_record_abandoned = yes }
+   }
+   remove_variable = sed_artillery_request_pending
+  }
+  if = {
+   limit = { OR = { has_building = building_artillery_foundry } }
+   root = { change_variable = { name = sed_artillery_producer_states add = 1 } }
+  }
+  if = { limit = { sed_artillery_candidate_eligible = yes } }
+  else_if = {
+   limit = { has_building = building_artillery_foundry }
+   if = {
+    limit = { has_variable = sed_artillery_ignored }
+    root = { change_variable = { name = sed_artillery_ignored_states add = 1 } }
+   }
+   else_if = {
+    limit = { OR = { has_variable = sed_artillery_request_pending b:building_artillery_foundry = { level_after_queued_constructions > level } } }
+    root = { change_variable = { name = sed_artillery_pending_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { is_incorporated = yes } }
+    root = { change_variable = { name = sed_artillery_unincorporated_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_artillery_foundry = { OR = { level <= 0 occupancy < 0.8 } } }
+    root = { change_variable = { name = sed_artillery_understaffed_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_artillery_foundry = { has_failed_hires = yes } }
+    root = { change_variable = { name = sed_artillery_hiring_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_artillery_foundry = { building_has_goods_shortage = yes } }
+    root = { change_variable = { name = sed_artillery_input_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_artillery_foundry = { NOT = { OR = { has_active_production_method = pm_cannons has_active_production_method = pm_bronze_cannons has_active_production_method = pm_smoothbores has_active_production_method = pm_bronze_smoothbores has_active_production_method = pm_breech_loaders has_active_production_method = pm_recoiled_barrels } } } }
+    root = { change_variable = { name = sed_artillery_method_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { can_construct_building = building_artillery_foundry } }
+    root = { change_variable = { name = sed_artillery_permission_states add = 1 } }
+   }
+   else_if = {
+    limit = { infrastructure_delta < 0 }
+    root = { change_variable = { name = sed_artillery_infrastructure_states add = 1 } }
+   }
+  }
+ }
+ if = {
+  limit = { is_player = yes has_variable = sed_enabled
+   market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }
+  }
+  ordered_scope_state = {
+   limit = { sed_artillery_candidate_eligible = yes }
+   order_by = { value = state_population multiply = -1 }
+   max = 3
+   check_range_bounds = no
+   root = { add_to_variable_list = { name = sed_artillery_candidates target = prev } }
+  }
+ }
+ set_variable = { name = sed_ammunition_producer_states value = 0 }
+ set_variable = { name = sed_ammunition_ignored_states value = 0 }
+ set_variable = { name = sed_ammunition_pending_states value = 0 }
+ set_variable = { name = sed_ammunition_unincorporated_states value = 0 }
+ set_variable = { name = sed_ammunition_understaffed_states value = 0 }
+ set_variable = { name = sed_ammunition_hiring_states value = 0 }
+ set_variable = { name = sed_ammunition_input_states value = 0 }
+ set_variable = { name = sed_ammunition_method_states value = 0 }
+ set_variable = { name = sed_ammunition_permission_states value = 0 }
+ set_variable = { name = sed_ammunition_infrastructure_states value = 0 }
+ clear_variable_list = sed_ammunition_candidates
+ every_scope_state = {
+  if = {
+   limit = { has_variable = sed_ammunition_request_pending
+    NOT = { OR = { AND = { has_variable = sed_ammunition_intent_variant OR = { AND = { var:sed_ammunition_intent_variant = 1 has_building = building_munition_plant b:building_munition_plant = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_ammunition_intent_variant } OR = { AND = { has_building = building_munition_plant b:building_munition_plant = { level_after_queued_constructions > level } } } } } }
+   }
+   if = {
+    limit = { has_variable = sed_ammunition_intent_variant has_variable = sed_ammunition_intent_level }
+    if = {
+     limit = { var:sed_ammunition_intent_variant = 1
+      has_building = building_munition_plant
+      b:building_munition_plant.level > var:sed_ammunition_intent_level
+     }
+     sed_ammunition_record_completed = yes
+    }
+    else = { sed_ammunition_record_abandoned = yes }
+   }
+   remove_variable = sed_ammunition_request_pending
+  }
+  if = {
+   limit = { OR = { has_building = building_munition_plant } }
+   root = { change_variable = { name = sed_ammunition_producer_states add = 1 } }
+  }
+  if = { limit = { sed_ammunition_candidate_eligible = yes } }
+  else_if = {
+   limit = { has_building = building_munition_plant }
+   if = {
+    limit = { has_variable = sed_ammunition_ignored }
+    root = { change_variable = { name = sed_ammunition_ignored_states add = 1 } }
+   }
+   else_if = {
+    limit = { OR = { has_variable = sed_ammunition_request_pending b:building_munition_plant = { level_after_queued_constructions > level } } }
+    root = { change_variable = { name = sed_ammunition_pending_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { is_incorporated = yes } }
+    root = { change_variable = { name = sed_ammunition_unincorporated_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_munition_plant = { OR = { level <= 0 occupancy < 0.8 } } }
+    root = { change_variable = { name = sed_ammunition_understaffed_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_munition_plant = { has_failed_hires = yes } }
+    root = { change_variable = { name = sed_ammunition_hiring_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_munition_plant = { building_has_goods_shortage = yes } }
+    root = { change_variable = { name = sed_ammunition_input_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_munition_plant = { NOT = { OR = { has_active_production_method = pm_percussion_caps has_active_production_method = pm_explosive_shells } } } }
+    root = { change_variable = { name = sed_ammunition_method_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { can_construct_building = building_munition_plant } }
+    root = { change_variable = { name = sed_ammunition_permission_states add = 1 } }
+   }
+   else_if = {
+    limit = { infrastructure_delta < 0 }
+    root = { change_variable = { name = sed_ammunition_infrastructure_states add = 1 } }
+   }
+  }
+ }
+ if = {
+  limit = { is_player = yes has_variable = sed_enabled
+   market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } }
+  }
+  ordered_scope_state = {
+   limit = { sed_ammunition_candidate_eligible = yes }
+   order_by = { value = state_population multiply = -1 }
+   max = 3
+   check_range_bounds = no
+   root = { add_to_variable_list = { name = sed_ammunition_candidates target = prev } }
+  }
+ }
 }
 sed_run_wood_approval = {
  if = {
@@ -2269,6 +2626,180 @@ sed_clothes_record_abandoned = {
  remove_variable = sed_clothes_intent_level
  remove_variable = sed_clothes_intent_variant
 }
+sed_run_small_arms_approval = {
+ if = {
+  limit = { sed_small_arms_approval_valid = yes }
+  owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
+  owner = { sed_record_auto_attempt = yes }
+  if = {
+   limit = { sed_small_arms_arms_industry_eligible = yes }
+   # Baseline level before queuing; the monthly review compares it after the queue.
+   set_variable = { name = sed_small_arms_intent_level value = b:building_arms_industry.level }
+   set_variable = { name = sed_small_arms_intent_variant value = 1 }
+   start_building_construction = building_arms_industry
+  }
+  owner = {
+   if = {
+    limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_small_arms_action_status value = 1 }
+    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
+    if = { limit = { has_variable = sed_small_arms_intents }
+     change_variable = { name = sed_small_arms_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_small_arms_intents value = 1 } }
+    prev = { set_variable = { name = sed_small_arms_request_pending value = yes } }
+   }
+   else = {
+    set_variable = { name = sed_small_arms_action_status value = 2 }
+    prev = {
+     remove_variable = sed_small_arms_intent_level
+     remove_variable = sed_small_arms_intent_variant
+    }
+   }
+   remove_variable = sed_queue_levels_before
+  }
+ }
+}
+sed_small_arms_record_completed = {
+ owner = {
+  if = { limit = { has_variable = sed_small_arms_completed }
+   change_variable = { name = sed_small_arms_completed add = 1 }
+  }
+  else = { set_variable = { name = sed_small_arms_completed value = 1 } }
+  set_variable = { name = sed_small_arms_result value = 1 }
+  set_variable = { name = sed_small_arms_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_small_arms_intent_level
+ remove_variable = sed_small_arms_intent_variant
+}
+sed_small_arms_record_abandoned = {
+ owner = {
+  if = { limit = { has_variable = sed_small_arms_abandoned }
+   change_variable = { name = sed_small_arms_abandoned add = 1 }
+  }
+  else = { set_variable = { name = sed_small_arms_abandoned value = 1 } }
+  set_variable = { name = sed_small_arms_result value = 2 }
+  set_variable = { name = sed_small_arms_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_small_arms_intent_level
+ remove_variable = sed_small_arms_intent_variant
+}
+sed_run_artillery_approval = {
+ if = {
+  limit = { sed_artillery_approval_valid = yes }
+  owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
+  owner = { sed_record_auto_attempt = yes }
+  if = {
+   limit = { sed_artillery_artillery_foundry_eligible = yes }
+   # Baseline level before queuing; the monthly review compares it after the queue.
+   set_variable = { name = sed_artillery_intent_level value = b:building_artillery_foundry.level }
+   set_variable = { name = sed_artillery_intent_variant value = 1 }
+   start_building_construction = building_artillery_foundry
+  }
+  owner = {
+   if = {
+    limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_artillery_action_status value = 1 }
+    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
+    if = { limit = { has_variable = sed_artillery_intents }
+     change_variable = { name = sed_artillery_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_artillery_intents value = 1 } }
+    prev = { set_variable = { name = sed_artillery_request_pending value = yes } }
+   }
+   else = {
+    set_variable = { name = sed_artillery_action_status value = 2 }
+    prev = {
+     remove_variable = sed_artillery_intent_level
+     remove_variable = sed_artillery_intent_variant
+    }
+   }
+   remove_variable = sed_queue_levels_before
+  }
+ }
+}
+sed_artillery_record_completed = {
+ owner = {
+  if = { limit = { has_variable = sed_artillery_completed }
+   change_variable = { name = sed_artillery_completed add = 1 }
+  }
+  else = { set_variable = { name = sed_artillery_completed value = 1 } }
+  set_variable = { name = sed_artillery_result value = 1 }
+  set_variable = { name = sed_artillery_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_artillery_intent_level
+ remove_variable = sed_artillery_intent_variant
+}
+sed_artillery_record_abandoned = {
+ owner = {
+  if = { limit = { has_variable = sed_artillery_abandoned }
+   change_variable = { name = sed_artillery_abandoned add = 1 }
+  }
+  else = { set_variable = { name = sed_artillery_abandoned value = 1 } }
+  set_variable = { name = sed_artillery_result value = 2 }
+  set_variable = { name = sed_artillery_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_artillery_intent_level
+ remove_variable = sed_artillery_intent_variant
+}
+sed_run_ammunition_approval = {
+ if = {
+  limit = { sed_ammunition_approval_valid = yes }
+  owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
+  owner = { sed_record_auto_attempt = yes }
+  if = {
+   limit = { sed_ammunition_munition_plant_eligible = yes }
+   # Baseline level before queuing; the monthly review compares it after the queue.
+   set_variable = { name = sed_ammunition_intent_level value = b:building_munition_plant.level }
+   set_variable = { name = sed_ammunition_intent_variant value = 1 }
+   start_building_construction = building_munition_plant
+  }
+  owner = {
+   if = {
+    limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_ammunition_action_status value = 1 }
+    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
+    if = { limit = { has_variable = sed_ammunition_intents }
+     change_variable = { name = sed_ammunition_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_ammunition_intents value = 1 } }
+    prev = { set_variable = { name = sed_ammunition_request_pending value = yes } }
+   }
+   else = {
+    set_variable = { name = sed_ammunition_action_status value = 2 }
+    prev = {
+     remove_variable = sed_ammunition_intent_level
+     remove_variable = sed_ammunition_intent_variant
+    }
+   }
+   remove_variable = sed_queue_levels_before
+  }
+ }
+}
+sed_ammunition_record_completed = {
+ owner = {
+  if = { limit = { has_variable = sed_ammunition_completed }
+   change_variable = { name = sed_ammunition_completed add = 1 }
+  }
+  else = { set_variable = { name = sed_ammunition_completed value = 1 } }
+  set_variable = { name = sed_ammunition_result value = 1 }
+  set_variable = { name = sed_ammunition_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_ammunition_intent_level
+ remove_variable = sed_ammunition_intent_variant
+}
+sed_ammunition_record_abandoned = {
+ owner = {
+  if = { limit = { has_variable = sed_ammunition_abandoned }
+   change_variable = { name = sed_ammunition_abandoned add = 1 }
+  }
+  else = { set_variable = { name = sed_ammunition_abandoned value = 1 } }
+  set_variable = { name = sed_ammunition_result value = 2 }
+  set_variable = { name = sed_ammunition_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_ammunition_intent_level
+ remove_variable = sed_ammunition_intent_variant
+}
 sed_set_mode_manual = {
  sed_coord_restore = yes
  sed_restore_fiscal_policy = yes
@@ -2312,16 +2843,27 @@ sed_auto_apply_monthly = {
  if = {
   limit = { has_variable = sed_coord_active }
   sed_coord_sync = yes
-  set_variable = { name = sed_auto_action_status value = 18 }
-  if = { limit = { var:sed_coord_executor = 10 } set_variable = { name = sed_auto_action_status value = 20 } }
-  else_if = { limit = { var:sed_coord_executor = 9 } set_variable = { name = sed_auto_action_status value = 19 } }
-  else_if = { limit = { var:sed_coord_executor = 5 } set_variable = { name = sed_auto_action_status value = 13 } }
-  else_if = { limit = { var:sed_coord_executor = 0 }
-   set_variable = { name = sed_auto_action_status value = 2 }
-   if = { limit = { NOT = { sed_coord_fiscal_safe = yes } } set_variable = { name = sed_auto_action_status value = 17 } }
+  if = { limit = { var:sed_coord_executor = 11 } sed_auto_run_direct = yes }
+  else = {
+   set_variable = { name = sed_auto_action_status value = 18 }
+   if = { limit = { var:sed_coord_executor = 10 } set_variable = { name = sed_auto_action_status value = 20 } }
+   else_if = { limit = { var:sed_coord_executor = 9 } set_variable = { name = sed_auto_action_status value = 19 } }
+   else_if = { limit = { var:sed_coord_executor = 5 } set_variable = { name = sed_auto_action_status value = 13 } }
+   else_if = { limit = { var:sed_coord_executor = 0 }
+    set_variable = { name = sed_auto_action_status value = 2 }
+    if = { limit = { NOT = { sed_coord_fiscal_safe = yes } } set_variable = { name = sed_auto_action_status value = 17 } }
+   }
   }
  }
- else_if = {
+ else = { sed_auto_run_direct = yes }
+ # Store the actual result after either direct execution or delegation.
+ set_variable = { name = sed_auto_review_status value = var:sed_auto_action_status }
+ set_variable = { name = sed_auto_review_year value = year }
+ set_variable = { name = sed_auto_review_month value = { value = month add = 1 } }
+}
+
+sed_auto_run_direct = {
+ if = {
   limit = { sed_auto_executor_safe = yes }
 
   if = {
@@ -2432,6 +2974,42 @@ sed_auto_apply_monthly = {
     sed_run_clothes_approval = yes
    }
   }
+  else_if = {
+   limit = { any_scope_state = { sed_small_arms_candidate_eligible = yes var:sed_plan_small_arms_rank = 1 } }
+   ordered_scope_state = {
+    limit = { sed_small_arms_candidate_eligible = yes var:sed_plan_small_arms_rank = 1 }
+    order_by = { value = state_population multiply = -1 }
+    max = 1
+    check_range_bounds = no
+    # A candidate was selected; only confirmed insertion changes this to success.
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
+    sed_run_small_arms_approval = yes
+   }
+  }
+  else_if = {
+   limit = { any_scope_state = { sed_artillery_candidate_eligible = yes var:sed_plan_artillery_rank = 1 } }
+   ordered_scope_state = {
+    limit = { sed_artillery_candidate_eligible = yes var:sed_plan_artillery_rank = 1 }
+    order_by = { value = state_population multiply = -1 }
+    max = 1
+    check_range_bounds = no
+    # A candidate was selected; only confirmed insertion changes this to success.
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
+    sed_run_artillery_approval = yes
+   }
+  }
+  else_if = {
+   limit = { any_scope_state = { sed_ammunition_candidate_eligible = yes var:sed_plan_ammunition_rank = 1 } }
+   ordered_scope_state = {
+    limit = { sed_ammunition_candidate_eligible = yes var:sed_plan_ammunition_rank = 1 }
+    order_by = { value = state_population multiply = -1 }
+    max = 1
+    check_range_bounds = no
+    # A candidate was selected; only confirmed insertion changes this to success.
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
+    sed_run_ammunition_approval = yes
+   }
+  }
  }
  else_if = { limit = { in_default = yes } set_variable = { name = sed_auto_action_status value = 10 } }
  else_if = { limit = { sed_auto_month_limit_reached = yes } set_variable = { name = sed_auto_action_status value = 16 } }
@@ -2440,10 +3018,6 @@ sed_auto_apply_monthly = {
  else_if = { limit = { sed_competing_builder_configured = yes } set_variable = { name = sed_auto_action_status value = 13 } }
  else_if = { limit = { NOT = { sed_auto_fiscal_safe = yes } } set_variable = { name = sed_auto_action_status value = 17 } }
  else = { set_variable = { name = sed_auto_action_status value = 14 } }
- # Preserve the result independently from mode controls and diagnostic refreshes.
- set_variable = { name = sed_auto_review_status value = var:sed_auto_action_status }
- set_variable = { name = sed_auto_review_year value = year }
- set_variable = { name = sed_auto_review_month value = { value = month add = 1 } }
 }
 sed_ignore_railway = {
  if = {
@@ -2525,6 +3099,30 @@ sed_ignore_clothes = {
  }
 }
 
+sed_ignore_small_arms = {
+ if = {
+  limit = { owner = { is_player = yes has_variable = sed_enabled } sed_small_arms_candidate_eligible = yes }
+  set_variable = { name = sed_small_arms_ignored value = yes }
+  owner = { sed_refresh_diagnostics = yes }
+ }
+}
+
+sed_ignore_artillery = {
+ if = {
+  limit = { owner = { is_player = yes has_variable = sed_enabled } sed_artillery_candidate_eligible = yes }
+  set_variable = { name = sed_artillery_ignored value = yes }
+  owner = { sed_refresh_diagnostics = yes }
+ }
+}
+
+sed_ignore_ammunition = {
+ if = {
+  limit = { owner = { is_player = yes has_variable = sed_enabled } sed_ammunition_candidate_eligible = yes }
+  set_variable = { name = sed_ammunition_ignored value = yes }
+  owner = { sed_refresh_diagnostics = yes }
+ }
+}
+
 sed_restore_ignored = {
  if = {
   limit = { is_player = yes has_variable = sed_enabled }
@@ -2539,6 +3137,9 @@ sed_restore_ignored = {
   remove_variable = sed_tools_ignored
   remove_variable = sed_groceries_ignored
   remove_variable = sed_clothes_ignored
+  remove_variable = sed_small_arms_ignored
+  remove_variable = sed_artillery_ignored
+  remove_variable = sed_ammunition_ignored
   }
   sed_refresh_diagnostics = yes
  }
@@ -2573,6 +3174,9 @@ sed_refresh_national_plan = {
   clear_variable_list = sed_plan_1_tools
   clear_variable_list = sed_plan_1_groceries
   clear_variable_list = sed_plan_1_clothes
+  clear_variable_list = sed_plan_1_small_arms
+  clear_variable_list = sed_plan_1_artillery
+  clear_variable_list = sed_plan_1_ammunition
   clear_variable_list = sed_plan_2_railway
   clear_variable_list = sed_plan_2_construction
   clear_variable_list = sed_plan_2_wood
@@ -2583,6 +3187,9 @@ sed_refresh_national_plan = {
   clear_variable_list = sed_plan_2_tools
   clear_variable_list = sed_plan_2_groceries
   clear_variable_list = sed_plan_2_clothes
+  clear_variable_list = sed_plan_2_small_arms
+  clear_variable_list = sed_plan_2_artillery
+  clear_variable_list = sed_plan_2_ammunition
   clear_variable_list = sed_plan_3_railway
   clear_variable_list = sed_plan_3_construction
   clear_variable_list = sed_plan_3_wood
@@ -2593,8 +3200,12 @@ sed_refresh_national_plan = {
   clear_variable_list = sed_plan_3_tools
   clear_variable_list = sed_plan_3_groceries
   clear_variable_list = sed_plan_3_clothes
+  clear_variable_list = sed_plan_3_small_arms
+  clear_variable_list = sed_plan_3_artillery
+  clear_variable_list = sed_plan_3_ammunition
   set_variable = { name = sed_plan_missing_wood value = 0 }
   if = { limit = {
+
    market = { mg:wood ?= { market_goods_has_goods_shortage = yes } }
    NOT = { any_scope_state = { OR = { has_building = building_logging_camp } } }
   }
@@ -2614,7 +3225,7 @@ sed_refresh_national_plan = {
    remove_variable = sed_wood_short_months
    remove_variable = sed_wood_meta_year
   }
-  if = { limit = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } }
+  if = { limit = {  market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } }
    if = { limit = { NOT = { has_variable = sed_wood_short_sample_month var:sed_wood_short_sample_month = sed_live_month_key } }
     set_variable = { name = sed_short_sample_gap value = 0 }
     if = { limit = { has_variable = sed_wood_short_sample_month }
@@ -2637,6 +3248,7 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_wood_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_iron value = 0 }
   if = { limit = {
+
    market = { mg:iron ?= { market_goods_has_goods_shortage = yes } }
    NOT = { any_scope_state = { OR = { has_building = building_iron_mine } } }
   }
@@ -2656,7 +3268,7 @@ sed_refresh_national_plan = {
    remove_variable = sed_iron_short_months
    remove_variable = sed_iron_meta_year
   }
-  if = { limit = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
+  if = { limit = {  market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
    if = { limit = { NOT = { has_variable = sed_iron_short_sample_month var:sed_iron_short_sample_month = sed_live_month_key } }
     set_variable = { name = sed_short_sample_gap value = 0 }
     if = { limit = { has_variable = sed_iron_short_sample_month }
@@ -2679,6 +3291,7 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_iron_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_coal value = 0 }
   if = { limit = {
+
    market = { mg:coal ?= { market_goods_has_goods_shortage = yes } }
    NOT = { any_scope_state = { OR = { has_building = building_coal_mine } } }
   }
@@ -2698,7 +3311,7 @@ sed_refresh_national_plan = {
    remove_variable = sed_coal_short_months
    remove_variable = sed_coal_meta_year
   }
-  if = { limit = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+  if = { limit = {  market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
    if = { limit = { NOT = { has_variable = sed_coal_short_sample_month var:sed_coal_short_sample_month = sed_live_month_key } }
     set_variable = { name = sed_short_sample_gap value = 0 }
     if = { limit = { has_variable = sed_coal_short_sample_month }
@@ -2721,6 +3334,7 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_coal_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_grain value = 0 }
   if = { limit = {
+
    market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
    NOT = { any_scope_state = { OR = { has_building = building_wheat_farm has_building = building_rye_farm has_building = building_rice_farm has_building = building_maize_farm has_building = building_millet_farm } } }
   }
@@ -2740,7 +3354,7 @@ sed_refresh_national_plan = {
    remove_variable = sed_grain_short_months
    remove_variable = sed_grain_meta_year
   }
-  if = { limit = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
+  if = { limit = {  market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
    if = { limit = { NOT = { has_variable = sed_grain_short_sample_month var:sed_grain_short_sample_month = sed_live_month_key } }
     set_variable = { name = sed_short_sample_gap value = 0 }
     if = { limit = { has_variable = sed_grain_short_sample_month }
@@ -2763,6 +3377,7 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_grain_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_fabric value = 0 }
   if = { limit = {
+
    market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } }
    NOT = { any_scope_state = { OR = { has_building = building_cotton_plantation has_building = building_livestock_ranch } } }
   }
@@ -2782,7 +3397,7 @@ sed_refresh_national_plan = {
    remove_variable = sed_fabric_short_months
    remove_variable = sed_fabric_meta_year
   }
-  if = { limit = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
+  if = { limit = {  market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
    if = { limit = { NOT = { has_variable = sed_fabric_short_sample_month var:sed_fabric_short_sample_month = sed_live_month_key } }
     set_variable = { name = sed_short_sample_gap value = 0 }
     if = { limit = { has_variable = sed_fabric_short_sample_month }
@@ -2805,6 +3420,7 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_fabric_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_tools value = 0 }
   if = { limit = {
+
    market = { mg:tools ?= { market_goods_has_goods_shortage = yes } }
    NOT = { any_scope_state = { OR = { has_building = building_tooling_workshop } } }
   }
@@ -2824,7 +3440,7 @@ sed_refresh_national_plan = {
    remove_variable = sed_tools_short_months
    remove_variable = sed_tools_meta_year
   }
-  if = { limit = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+  if = { limit = {  market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
    if = { limit = { NOT = { has_variable = sed_tools_short_sample_month var:sed_tools_short_sample_month = sed_live_month_key } }
     set_variable = { name = sed_short_sample_gap value = 0 }
     if = { limit = { has_variable = sed_tools_short_sample_month }
@@ -2847,6 +3463,7 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_tools_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_groceries value = 0 }
   if = { limit = {
+
    market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } }
    NOT = { any_scope_state = { OR = { has_building = building_food_industry } } }
   }
@@ -2866,7 +3483,7 @@ sed_refresh_national_plan = {
    remove_variable = sed_groceries_short_months
    remove_variable = sed_groceries_meta_year
   }
-  if = { limit = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } }
+  if = { limit = {  market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } }
    if = { limit = { NOT = { has_variable = sed_groceries_short_sample_month var:sed_groceries_short_sample_month = sed_live_month_key } }
     set_variable = { name = sed_short_sample_gap value = 0 }
     if = { limit = { has_variable = sed_groceries_short_sample_month }
@@ -2889,6 +3506,7 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_groceries_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_clothes value = 0 }
   if = { limit = {
+
    market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } }
    NOT = { any_scope_state = { OR = { has_building = building_textile_mill } } }
   }
@@ -2908,7 +3526,7 @@ sed_refresh_national_plan = {
    remove_variable = sed_clothes_short_months
    remove_variable = sed_clothes_meta_year
   }
-  if = { limit = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } }
+  if = { limit = {  market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } }
    if = { limit = { NOT = { has_variable = sed_clothes_short_sample_month var:sed_clothes_short_sample_month = sed_live_month_key } }
     set_variable = { name = sed_short_sample_gap value = 0 }
     if = { limit = { has_variable = sed_clothes_short_sample_month }
@@ -2929,6 +3547,135 @@ sed_refresh_national_plan = {
   }
   else = { remove_variable = sed_clothes_short_months }
   set_variable = { name = sed_clothes_short_sample_month value = sed_live_month_key }
+  set_variable = { name = sed_plan_missing_small_arms value = 0 }
+  if = { limit = {
+   military_expenses > 0 market = { mg:small_arms ?= { market_goods_buy_orders > 0 } }
+   market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }
+   NOT = { any_scope_state = { OR = { has_building = building_arms_industry } } }
+  }
+   set_variable = { name = sed_plan_missing_small_arms value = 1 }
+   change_variable = { name = sed_plan_missing_count add = 1 }
+  }
+  set_variable = { name = sed_plan_pressure_small_arms value = {
+   value = 0
+   market ?= { mg:small_arms ?= {
+    if = { limit = { market_goods_buy_orders > 0 }
+     add = { value = market_goods_buy_orders subtract = market_goods_sell_orders
+      divide = market_goods_buy_orders min = 0 max = 1 multiply = 100 }
+    }
+   } }
+  } }
+  if = { limit = { NOT = { has_variable = sed_small_arms_short_sample_month } }
+   remove_variable = sed_small_arms_short_months
+   remove_variable = sed_small_arms_meta_year
+  }
+  if = { limit = { military_expenses > 0 market = { mg:small_arms ?= { market_goods_buy_orders > 0 } } market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } } }
+   if = { limit = { NOT = { has_variable = sed_small_arms_short_sample_month var:sed_small_arms_short_sample_month = sed_live_month_key } }
+    set_variable = { name = sed_short_sample_gap value = 0 }
+    if = { limit = { has_variable = sed_small_arms_short_sample_month }
+     set_variable = { name = sed_short_sample_gap value = { value = sed_live_month_key subtract = var:sed_small_arms_short_sample_month } }
+    }
+    if = { limit = { var:sed_short_sample_gap = 1 has_variable = sed_small_arms_short_months }
+     change_variable = { name = sed_small_arms_short_months add = 1 }
+    }
+    else = { set_variable = { name = sed_small_arms_short_months value = 1 } }
+    remove_variable = sed_short_sample_gap
+   }
+   else_if = { limit = { NOT = { has_variable = sed_small_arms_short_months } }
+    set_variable = { name = sed_small_arms_short_months value = 1 }
+   }
+   if = { limit = { var:sed_small_arms_short_months >= 3 }
+    set_variable = { name = sed_small_arms_meta_year value = year }
+   }
+  }
+  else = { remove_variable = sed_small_arms_short_months }
+  set_variable = { name = sed_small_arms_short_sample_month value = sed_live_month_key }
+  set_variable = { name = sed_plan_missing_artillery value = 0 }
+  if = { limit = {
+   military_expenses > 0 market = { mg:artillery ?= { market_goods_buy_orders > 0 } }
+   market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }
+   NOT = { any_scope_state = { OR = { has_building = building_artillery_foundry } } }
+  }
+   set_variable = { name = sed_plan_missing_artillery value = 1 }
+   change_variable = { name = sed_plan_missing_count add = 1 }
+  }
+  set_variable = { name = sed_plan_pressure_artillery value = {
+   value = 0
+   market ?= { mg:artillery ?= {
+    if = { limit = { market_goods_buy_orders > 0 }
+     add = { value = market_goods_buy_orders subtract = market_goods_sell_orders
+      divide = market_goods_buy_orders min = 0 max = 1 multiply = 100 }
+    }
+   } }
+  } }
+  if = { limit = { NOT = { has_variable = sed_artillery_short_sample_month } }
+   remove_variable = sed_artillery_short_months
+   remove_variable = sed_artillery_meta_year
+  }
+  if = { limit = { military_expenses > 0 market = { mg:artillery ?= { market_goods_buy_orders > 0 } } market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } } }
+   if = { limit = { NOT = { has_variable = sed_artillery_short_sample_month var:sed_artillery_short_sample_month = sed_live_month_key } }
+    set_variable = { name = sed_short_sample_gap value = 0 }
+    if = { limit = { has_variable = sed_artillery_short_sample_month }
+     set_variable = { name = sed_short_sample_gap value = { value = sed_live_month_key subtract = var:sed_artillery_short_sample_month } }
+    }
+    if = { limit = { var:sed_short_sample_gap = 1 has_variable = sed_artillery_short_months }
+     change_variable = { name = sed_artillery_short_months add = 1 }
+    }
+    else = { set_variable = { name = sed_artillery_short_months value = 1 } }
+    remove_variable = sed_short_sample_gap
+   }
+   else_if = { limit = { NOT = { has_variable = sed_artillery_short_months } }
+    set_variable = { name = sed_artillery_short_months value = 1 }
+   }
+   if = { limit = { var:sed_artillery_short_months >= 3 }
+    set_variable = { name = sed_artillery_meta_year value = year }
+   }
+  }
+  else = { remove_variable = sed_artillery_short_months }
+  set_variable = { name = sed_artillery_short_sample_month value = sed_live_month_key }
+  set_variable = { name = sed_plan_missing_ammunition value = 0 }
+  if = { limit = {
+   military_expenses > 0 market = { mg:ammunition ?= { market_goods_buy_orders > 0 } }
+   market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } }
+   NOT = { any_scope_state = { OR = { has_building = building_munition_plant } } }
+  }
+   set_variable = { name = sed_plan_missing_ammunition value = 1 }
+   change_variable = { name = sed_plan_missing_count add = 1 }
+  }
+  set_variable = { name = sed_plan_pressure_ammunition value = {
+   value = 0
+   market ?= { mg:ammunition ?= {
+    if = { limit = { market_goods_buy_orders > 0 }
+     add = { value = market_goods_buy_orders subtract = market_goods_sell_orders
+      divide = market_goods_buy_orders min = 0 max = 1 multiply = 100 }
+    }
+   } }
+  } }
+  if = { limit = { NOT = { has_variable = sed_ammunition_short_sample_month } }
+   remove_variable = sed_ammunition_short_months
+   remove_variable = sed_ammunition_meta_year
+  }
+  if = { limit = { military_expenses > 0 market = { mg:ammunition ?= { market_goods_buy_orders > 0 } } market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } } }
+   if = { limit = { NOT = { has_variable = sed_ammunition_short_sample_month var:sed_ammunition_short_sample_month = sed_live_month_key } }
+    set_variable = { name = sed_short_sample_gap value = 0 }
+    if = { limit = { has_variable = sed_ammunition_short_sample_month }
+     set_variable = { name = sed_short_sample_gap value = { value = sed_live_month_key subtract = var:sed_ammunition_short_sample_month } }
+    }
+    if = { limit = { var:sed_short_sample_gap = 1 has_variable = sed_ammunition_short_months }
+     change_variable = { name = sed_ammunition_short_months add = 1 }
+    }
+    else = { set_variable = { name = sed_ammunition_short_months value = 1 } }
+    remove_variable = sed_short_sample_gap
+   }
+   else_if = { limit = { NOT = { has_variable = sed_ammunition_short_months } }
+    set_variable = { name = sed_ammunition_short_months value = 1 }
+   }
+   if = { limit = { var:sed_ammunition_short_months >= 3 }
+    set_variable = { name = sed_ammunition_meta_year value = year }
+   }
+  }
+  else = { remove_variable = sed_ammunition_short_months }
+  set_variable = { name = sed_ammunition_short_sample_month value = sed_live_month_key }
   every_scope_state = {
    set_variable = { name = sed_plan_railway_rank value = 0 }
    set_variable = { name = sed_plan_railway_score value = 0 }
@@ -2988,6 +3735,27 @@ sed_refresh_national_plan = {
     set_variable = { name = sed_plan_clothes_score value = { value = owner.var:sed_plan_pressure_clothes add = 100
     if = { limit = { owner = { has_variable = sed_clothes_meta_year var:sed_clothes_meta_year = year } } add = 25 } } }
    }
+   set_variable = { name = sed_plan_small_arms_rank value = 0 }
+   set_variable = { name = sed_plan_small_arms_score value = 0 }
+   if = { limit = { sed_small_arms_candidate_eligible = yes }
+    set_variable = { name = sed_plan_small_arms_score value = { value = owner.var:sed_plan_pressure_small_arms add = 90
+    if = { limit = { owner = { has_variable = sed_small_arms_meta_year var:sed_small_arms_meta_year = year } } add = 25 }
+    if = { limit = { owner = { is_at_war = yes } } add = 20 } } }
+   }
+   set_variable = { name = sed_plan_artillery_rank value = 0 }
+   set_variable = { name = sed_plan_artillery_score value = 0 }
+   if = { limit = { sed_artillery_candidate_eligible = yes }
+    set_variable = { name = sed_plan_artillery_score value = { value = owner.var:sed_plan_pressure_artillery add = 90
+    if = { limit = { owner = { has_variable = sed_artillery_meta_year var:sed_artillery_meta_year = year } } add = 25 }
+    if = { limit = { owner = { is_at_war = yes } } add = 20 } } }
+   }
+   set_variable = { name = sed_plan_ammunition_rank value = 0 }
+   set_variable = { name = sed_plan_ammunition_score value = 0 }
+   if = { limit = { sed_ammunition_candidate_eligible = yes }
+    set_variable = { name = sed_plan_ammunition_score value = { value = owner.var:sed_plan_pressure_ammunition add = 90
+    if = { limit = { owner = { has_variable = sed_ammunition_meta_year var:sed_ammunition_meta_year = year } } add = 25 }
+    if = { limit = { owner = { is_at_war = yes } } add = 20 } } }
+   }
   }
   every_scope_state = {
    set_variable = { name = sed_plan_score value = 0 }
@@ -3031,6 +3799,18 @@ sed_refresh_national_plan = {
    if = { limit = { var:sed_plan_clothes_rank = 0 var:sed_plan_clothes_score > var:sed_plan_score }
     set_variable = { name = sed_plan_score value = var:sed_plan_clothes_score }
     set_variable = { name = sed_plan_type value = 10 }
+   }
+   if = { limit = { var:sed_plan_small_arms_rank = 0 var:sed_plan_small_arms_score > var:sed_plan_score }
+    set_variable = { name = sed_plan_score value = var:sed_plan_small_arms_score }
+    set_variable = { name = sed_plan_type value = 11 }
+   }
+   if = { limit = { var:sed_plan_artillery_rank = 0 var:sed_plan_artillery_score > var:sed_plan_score }
+    set_variable = { name = sed_plan_score value = var:sed_plan_artillery_score }
+    set_variable = { name = sed_plan_type value = 12 }
+   }
+   if = { limit = { var:sed_plan_ammunition_rank = 0 var:sed_plan_ammunition_score > var:sed_plan_score }
+    set_variable = { name = sed_plan_score value = var:sed_plan_ammunition_score }
+    set_variable = { name = sed_plan_type value = 13 }
    }
   }
   ordered_scope_state = {
@@ -3118,6 +3898,30 @@ sed_refresh_national_plan = {
      set_variable = { name = sed_plan_goal value = 2 }
     }
    }
+   if = { limit = { var:sed_plan_type = 11 }
+    set_variable = { name = sed_plan_small_arms_rank value = 1 }
+    owner = {
+     add_to_variable_list = { name = sed_plan_1_small_arms target = prev }
+     change_variable = { name = sed_plan_count add = 1 }
+     set_variable = { name = sed_plan_goal value = 2 }
+    }
+   }
+   if = { limit = { var:sed_plan_type = 12 }
+    set_variable = { name = sed_plan_artillery_rank value = 1 }
+    owner = {
+     add_to_variable_list = { name = sed_plan_1_artillery target = prev }
+     change_variable = { name = sed_plan_count add = 1 }
+     set_variable = { name = sed_plan_goal value = 2 }
+    }
+   }
+   if = { limit = { var:sed_plan_type = 13 }
+    set_variable = { name = sed_plan_ammunition_rank value = 1 }
+    owner = {
+     add_to_variable_list = { name = sed_plan_1_ammunition target = prev }
+     change_variable = { name = sed_plan_count add = 1 }
+     set_variable = { name = sed_plan_goal value = 2 }
+    }
+   }
   }
   every_scope_state = {
    set_variable = { name = sed_plan_score value = 0 }
@@ -3161,6 +3965,18 @@ sed_refresh_national_plan = {
    if = { limit = { var:sed_plan_clothes_rank = 0 var:sed_plan_clothes_score > var:sed_plan_score }
     set_variable = { name = sed_plan_score value = var:sed_plan_clothes_score }
     set_variable = { name = sed_plan_type value = 10 }
+   }
+   if = { limit = { var:sed_plan_small_arms_rank = 0 var:sed_plan_small_arms_score > var:sed_plan_score }
+    set_variable = { name = sed_plan_score value = var:sed_plan_small_arms_score }
+    set_variable = { name = sed_plan_type value = 11 }
+   }
+   if = { limit = { var:sed_plan_artillery_rank = 0 var:sed_plan_artillery_score > var:sed_plan_score }
+    set_variable = { name = sed_plan_score value = var:sed_plan_artillery_score }
+    set_variable = { name = sed_plan_type value = 12 }
+   }
+   if = { limit = { var:sed_plan_ammunition_rank = 0 var:sed_plan_ammunition_score > var:sed_plan_score }
+    set_variable = { name = sed_plan_score value = var:sed_plan_ammunition_score }
+    set_variable = { name = sed_plan_type value = 13 }
    }
   }
   ordered_scope_state = {
@@ -3248,6 +4064,30 @@ sed_refresh_national_plan = {
 
     }
    }
+   if = { limit = { var:sed_plan_type = 11 }
+    set_variable = { name = sed_plan_small_arms_rank value = 2 }
+    owner = {
+     add_to_variable_list = { name = sed_plan_2_small_arms target = prev }
+     change_variable = { name = sed_plan_count add = 1 }
+
+    }
+   }
+   if = { limit = { var:sed_plan_type = 12 }
+    set_variable = { name = sed_plan_artillery_rank value = 2 }
+    owner = {
+     add_to_variable_list = { name = sed_plan_2_artillery target = prev }
+     change_variable = { name = sed_plan_count add = 1 }
+
+    }
+   }
+   if = { limit = { var:sed_plan_type = 13 }
+    set_variable = { name = sed_plan_ammunition_rank value = 2 }
+    owner = {
+     add_to_variable_list = { name = sed_plan_2_ammunition target = prev }
+     change_variable = { name = sed_plan_count add = 1 }
+
+    }
+   }
   }
   every_scope_state = {
    set_variable = { name = sed_plan_score value = 0 }
@@ -3291,6 +4131,18 @@ sed_refresh_national_plan = {
    if = { limit = { var:sed_plan_clothes_rank = 0 var:sed_plan_clothes_score > var:sed_plan_score }
     set_variable = { name = sed_plan_score value = var:sed_plan_clothes_score }
     set_variable = { name = sed_plan_type value = 10 }
+   }
+   if = { limit = { var:sed_plan_small_arms_rank = 0 var:sed_plan_small_arms_score > var:sed_plan_score }
+    set_variable = { name = sed_plan_score value = var:sed_plan_small_arms_score }
+    set_variable = { name = sed_plan_type value = 11 }
+   }
+   if = { limit = { var:sed_plan_artillery_rank = 0 var:sed_plan_artillery_score > var:sed_plan_score }
+    set_variable = { name = sed_plan_score value = var:sed_plan_artillery_score }
+    set_variable = { name = sed_plan_type value = 12 }
+   }
+   if = { limit = { var:sed_plan_ammunition_rank = 0 var:sed_plan_ammunition_score > var:sed_plan_score }
+    set_variable = { name = sed_plan_score value = var:sed_plan_ammunition_score }
+    set_variable = { name = sed_plan_type value = 13 }
    }
   }
   ordered_scope_state = {
@@ -3378,6 +4230,30 @@ sed_refresh_national_plan = {
 
     }
    }
+   if = { limit = { var:sed_plan_type = 11 }
+    set_variable = { name = sed_plan_small_arms_rank value = 3 }
+    owner = {
+     add_to_variable_list = { name = sed_plan_3_small_arms target = prev }
+     change_variable = { name = sed_plan_count add = 1 }
+
+    }
+   }
+   if = { limit = { var:sed_plan_type = 12 }
+    set_variable = { name = sed_plan_artillery_rank value = 3 }
+    owner = {
+     add_to_variable_list = { name = sed_plan_3_artillery target = prev }
+     change_variable = { name = sed_plan_count add = 1 }
+
+    }
+   }
+   if = { limit = { var:sed_plan_type = 13 }
+    set_variable = { name = sed_plan_ammunition_rank value = 3 }
+    owner = {
+     add_to_variable_list = { name = sed_plan_3_ammunition target = prev }
+     change_variable = { name = sed_plan_count add = 1 }
+
+    }
+   }
   }
   if = { limit = { var:sed_plan_goal = 0 any_scope_state = {
    is_incorporated = yes infrastructure_delta < 0 NOT = { has_variable = sed_railway_ignored } has_building = building_railway
@@ -3438,6 +4314,27 @@ sed_refresh_national_plan = {
   if = { limit = { var:sed_plan_goal = 0
    market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } }
    any_scope_state = { is_incorporated = yes NOT = { has_variable = sed_clothes_ignored } sed_clothes_queued_supply = yes }
+  }
+   set_variable = { name = sed_plan_goal value = 2 }
+   set_variable = { name = sed_plan_waiting value = 1 }
+  }
+  if = { limit = { var:sed_plan_goal = 0 military_expenses > 0 market = { mg:small_arms ?= { market_goods_buy_orders > 0 } }
+   market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }
+   any_scope_state = { is_incorporated = yes NOT = { has_variable = sed_small_arms_ignored } sed_small_arms_queued_supply = yes }
+  }
+   set_variable = { name = sed_plan_goal value = 2 }
+   set_variable = { name = sed_plan_waiting value = 1 }
+  }
+  if = { limit = { var:sed_plan_goal = 0 military_expenses > 0 market = { mg:artillery ?= { market_goods_buy_orders > 0 } }
+   market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }
+   any_scope_state = { is_incorporated = yes NOT = { has_variable = sed_artillery_ignored } sed_artillery_queued_supply = yes }
+  }
+   set_variable = { name = sed_plan_goal value = 2 }
+   set_variable = { name = sed_plan_waiting value = 1 }
+  }
+  if = { limit = { var:sed_plan_goal = 0 military_expenses > 0 market = { mg:ammunition ?= { market_goods_buy_orders > 0 } }
+   market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } }
+   any_scope_state = { is_incorporated = yes NOT = { has_variable = sed_ammunition_ignored } sed_ammunition_queued_supply = yes }
   }
    set_variable = { name = sed_plan_goal value = 2 }
    set_variable = { name = sed_plan_waiting value = 1 }
@@ -3816,6 +4713,9 @@ sed_coord_sync = {
   else_if = { limit = { sed_coord_fiscal_safe = yes NOT = { in_default = yes } is_construction_paused = no }
    if = { limit = { var:sed_plan_waiting = 1 }
     set_variable = { name = sed_coord_executor value = 10 }
+   }
+   else_if = { limit = { var:sed_plan_goal = 2 sed_auto_fiscal_safe = yes sed_direct_supply_priority_exists = yes }
+    set_variable = { name = sed_coord_executor value = 11 }
    }
    else_if = { limit = { var:sed_plan_goal = 1 has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes }
     set_variable = { name = zw_var_scsab_construct_railway value = 1 }
