@@ -76,10 +76,11 @@ def effects(actions, buildings):
     for name in lists(actions):
         result.append(f'  clear_variable_list = {name}')
     for name in supply:
+        producers = ' '.join(f'has_building = {building}' for building in buildings[name])
         result.append(f'''  set_variable = {{ name = sed_plan_missing_{name} value = 0 }}
   if = {{ limit = {{
    market = {{ mg:{name} ?= {{ market_goods_has_goods_shortage = yes }} }}
-   NOT = {{ any_scope_state = {{ has_building = {buildings[name]} }} }}
+   NOT = {{ any_scope_state = {{ OR = {{ {producers} }} }} }}
   }}
    set_variable = {{ name = sed_plan_missing_{name} value = 1 }}
    change_variable = {{ name = sed_plan_missing_count add = 1 }}

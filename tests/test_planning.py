@@ -183,6 +183,36 @@ class PlanningTests(unittest.TestCase):
                 c.readings['net_fixed_income'] = -1
                 self.assertFalse(c.condition(c.definitions['sed_coord_reserve_drawdown_safe'], c.country_scope()))
 
+    def test_grain_alternative_producer_is_planned_and_queued(self):
+        maize = building('building_maize_farm')
+        maize['production_methods'] = ['pm_simple_farming']
+        target = state(buildings=[maize])
+        self.c.states.append(target)
+        self.c.market_goods['grain'] = dict(market_goods_has_goods_shortage=True,
+                                            market_goods_buy_orders=100,
+                                            market_goods_sell_orders=0)
+        c = self.c
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(self.ranked(), [(1, 'grain', target)])
+        self.assertEqual(c.variables['sed_plan_missing_grain'], 0)
+        c.run('sed_set_mode_assisted')
+        c.run('sed_run_grain_approval', target)
+        self.assertEqual(c.constructions, [dict(building='building_maize_farm', state=target)])
+
+    def test_alternative_producer_absent_from_rejection_counts_when_eligible(self):
+        ranch = building('building_livestock_ranch')
+        ranch['production_methods'] = ['pm_simple_ranch']
+        target = state(buildings=[ranch])
+        self.c.states.append(target)
+        self.c.market_goods['fabric'] = dict(market_goods_has_goods_shortage=True)
+        c = self.c
+        c.run('sed_refresh_supply_candidates')
+        self.assertEqual(c.variables['sed_fabric_producer_states'], 1)
+        for reason in ('understaffed_states', 'hiring_states', 'input_states', 'method_states',
+                       'permission_states', 'infrastructure_states'):
+            self.assertEqual(c.variables['sed_fabric_' + reason], 0, reason)
+        self.assertEqual(c.variable_lists['sed_fabric_candidates'], [target])
+
     def test_queue_wait_preserves_plan_but_never_calls_constructor(self):
         self.producer('grain')
         c = self.c

@@ -131,63 +131,63 @@ sed_approve_clothes_sgui = {
 sed_construction_infrastructure_blocked_sgui = {
  scope = state
  is_shown = { owner = { is_player = yes has_variable = sed_enabled }
-  has_building = building_construction_sector infrastructure_delta < 0
+  OR = { has_building = building_construction_sector } infrastructure_delta < 0
   NOT = { has_variable = sed_construction_request_pending }
   NOT = { has_variable = sed_construction_ignored } }
 }
 sed_wood_infrastructure_blocked_sgui = {
  scope = state
  is_shown = { owner = { is_player = yes has_variable = sed_enabled }
-  has_building = building_logging_camp infrastructure_delta < 0
+  OR = { has_building = building_logging_camp } infrastructure_delta < 0
   NOT = { has_variable = sed_wood_request_pending }
   NOT = { has_variable = sed_wood_ignored } }
 }
 sed_iron_infrastructure_blocked_sgui = {
  scope = state
  is_shown = { owner = { is_player = yes has_variable = sed_enabled }
-  has_building = building_iron_mine infrastructure_delta < 0
+  OR = { has_building = building_iron_mine } infrastructure_delta < 0
   NOT = { has_variable = sed_iron_request_pending }
   NOT = { has_variable = sed_iron_ignored } }
 }
 sed_coal_infrastructure_blocked_sgui = {
  scope = state
  is_shown = { owner = { is_player = yes has_variable = sed_enabled }
-  has_building = building_coal_mine infrastructure_delta < 0
+  OR = { has_building = building_coal_mine } infrastructure_delta < 0
   NOT = { has_variable = sed_coal_request_pending }
   NOT = { has_variable = sed_coal_ignored } }
 }
 sed_grain_infrastructure_blocked_sgui = {
  scope = state
  is_shown = { owner = { is_player = yes has_variable = sed_enabled }
-  has_building = building_wheat_farm infrastructure_delta < 0
+  OR = { has_building = building_wheat_farm has_building = building_rye_farm has_building = building_rice_farm has_building = building_maize_farm has_building = building_millet_farm } infrastructure_delta < 0
   NOT = { has_variable = sed_grain_request_pending }
   NOT = { has_variable = sed_grain_ignored } }
 }
 sed_fabric_infrastructure_blocked_sgui = {
  scope = state
  is_shown = { owner = { is_player = yes has_variable = sed_enabled }
-  has_building = building_cotton_plantation infrastructure_delta < 0
+  OR = { has_building = building_cotton_plantation has_building = building_livestock_ranch } infrastructure_delta < 0
   NOT = { has_variable = sed_fabric_request_pending }
   NOT = { has_variable = sed_fabric_ignored } }
 }
 sed_tools_infrastructure_blocked_sgui = {
  scope = state
  is_shown = { owner = { is_player = yes has_variable = sed_enabled }
-  has_building = building_tooling_workshop infrastructure_delta < 0
+  OR = { has_building = building_tooling_workshop } infrastructure_delta < 0
   NOT = { has_variable = sed_tools_request_pending }
   NOT = { has_variable = sed_tools_ignored } }
 }
 sed_groceries_infrastructure_blocked_sgui = {
  scope = state
  is_shown = { owner = { is_player = yes has_variable = sed_enabled }
-  has_building = building_food_industry infrastructure_delta < 0
+  OR = { has_building = building_food_industry } infrastructure_delta < 0
   NOT = { has_variable = sed_groceries_request_pending }
   NOT = { has_variable = sed_groceries_ignored } }
 }
 sed_clothes_infrastructure_blocked_sgui = {
  scope = state
  is_shown = { owner = { is_player = yes has_variable = sed_enabled }
-  has_building = building_textile_mill infrastructure_delta < 0
+  OR = { has_building = building_textile_mill } infrastructure_delta < 0
   NOT = { has_variable = sed_clothes_request_pending }
   NOT = { has_variable = sed_clothes_ignored } }
 }

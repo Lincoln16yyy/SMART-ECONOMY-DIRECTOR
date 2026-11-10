@@ -1,4 +1,4 @@
-# Planejamento e coordenação — 0.6.2
+# Planejamento e coordenação — 0.6.3
 
 Esta versão implementa política nacional inicial e adaptadores de opções de
 construção. Não é um controlador econômico completo nem comprova crescimento
@@ -226,3 +226,38 @@ em qualquer igualdade `var:`.
 124 testes sintéticos aprovados incluem escala da nova guarda, autorização do
 Advisor até o piso de ouro, bloqueio com dívida e ausência de construções
 próprias. A classificação 5 ainda não foi observada em campanha.
+
+## Produtores alternativos na 0.6.3
+
+Cada bem estratégico tinha um único prédio produtor verificado. Países com
+outro tipo de produtor recebiam a mensagem de base ausente e nenhuma
+recomendação, mesmo com o bem em escassez. A 0.6.3 acrescenta alternativas
+verificadas nos arquivos vanilla 1.15:
+
+| Bem | Produtores verificados |
+| --- | --- |
+| Cereais | Fazendas de trigo, centeio, arroz, milho e milhete |
+| Tecido | Plantação de algodão e fazenda de gado (métodos de ovelhas) |
+
+Fontes: `common/buildings/02_agro.txt:3–245`; grupos em
+`common/production_method_groups/02_agro.txt:1–175`; métodos com saída positiva
+de `grain` em `common/production_methods/02_agro.txt` e de `fabric` em
+`pm_simple_ranch`, `pm_sheep_farms` e `pm_intensive_grazing_ranch`.
+
+O filtro de elegibilidade passa a ser uma disjunção por prédio: estado
+incorporado, sem déficit de infraestrutura, sem escolha ignorada nem pedido
+pendente, mercado em escassez e ao menos um produtor com nível positivo,
+ocupação de 80%, sem falha de contratação, sem falta de insumos, sem expansão
+enfileirada, método ativo de saída e permissão de construção. Cada alternativa
+tem seu próprio trigger `sed_<bem>_<prédio>_eligible`.
+
+A aprovação enfileira o primeiro produtor elegível na ordem declarada. O
+cartão e o botão deixam de nomear um prédio único quando há alternativas; o
+tooltip informa que o prédio existente é revalidado. O diagnóstico de produtor
+ausente usa a mesma disjunção, e as rejeições contam o primeiro motivo do
+primeiro prédio presente no estado. Estados sem qualquer variante continuam
+fora do denominador.
+
+126 testes sintéticos aprovados incluem fazenda de milho planejada e
+enfileirada, fazenda de gado elegível para tecido e ausência de falso produtor
+para cereais. Nenhuma dessas combinações foi observada em campanha.

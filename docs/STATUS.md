@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.6.2
+# Estado dos requisitos — 0.6.3
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.
@@ -7,9 +7,9 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Requisito | Código e teste sintético | Verificação de campanha e trabalho restante |
 | --- | --- | --- |
 | Diagnóstico econômico e diário | Implementados, com métricas, data e atualização manual/mensal | Indicadores e UI de versões anteriores tiveram confirmação visual parcial |
-| Objetivo nacional atual | Implementado para gargalos, fiscal e crescimento/diversificação | Validar seleção e transições na 0.6.2 |
+| Objetivo nacional atual | Implementado para gargalos, fiscal e crescimento/diversificação | Validar seleção e transições na 0.6.3 |
 | Até três prioridades nacionais | Implementado sobre pares estado/tipo elegíveis | Validar layout e dados das novas prioridades na engine |
-| Setores estratégicos ausentes | Parcial, escassez de oito bens sem o tipo de produtor atendido | Ampliar catálogo e considerar produtores alternativos, importações e objetivos industriais |
+| Setores estratégicos ausentes | Oito bens; cereais cobrem cinco tipos de fazenda e tecido cobre plantação e pecuária | Demais bens ainda têm um único produtor; considerar importações e objetivos industriais |
 | Emprego e insumos | Filtros atuais de ocupação, falha de contratação e escassez do prédio | Projetar disponibilidade futura de trabalhadores, qualificações e insumos |
 | Reserva, dívida e ritmo | Guarda proporcional inicial, classificações 1–4 e construção financiada por reservas (5) | Calibrar limiares, estimar custo incremental e serviço da dívida |
 | Impostos e gastos | Leituras e orientação de estabilização | Orçamento do Advisor coordenado. Política própria de alíquotas, salários e despesas permanece pendente |
@@ -25,14 +25,16 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Leis, guerra e diplomacia | Fora das mutações econômicas implementadas | Mantidas sob responsabilidade dos módulos e decisões previstos pelo briefing |
 | Haiti, país rico e crise | Cenários sintéticos fiscais e de seleção | Campanhas registradas e comparáveis permanecem pendentes |
 | Crescimento em campanha longa | Ainda sem evidência | Medir PIB, SoL, emprego, dívida, reservas e diversificação durante vários anos |
-| Entrega | Gerador, validador, testes, ZIP e instalador com backup | Instalação 0.6.2 com backup e 14 outputs conferidos. Publicação segue por PR |
+| Entrega | Gerador, validador, testes, ZIP e instalador com backup | Instalação 0.6.3 com backup e 14 outputs conferidos. Publicação segue por PR |
 
 O jogador relatou que seus testes anteriores produziram pouca mudança visível,
 pois outros construtores já atuavam. Esse relato motivou os adaptadores da 0.6.1.
-A 0.6.2 acrescenta a classificação fiscal 5 para construção financiada por
-reservas e corrige a comparação de mês do limite automático. Ele ainda não
-confirma os novos fluxos de coordenação, aprovação, persistência ou resultados
-de crescimento desta versão.
+A 0.6.2 acrescentou a classificação fiscal 5 para construção financiada por
+reservas e corrigiu a comparação de mês do limite automático. A 0.6.3 amplia o
+catálogo de produtores locais: cereais em fazendas de trigo, centeio, arroz,
+milho e milhete, e tecido em plantação de algodão ou fazenda de gado. Ele ainda
+não confirma os novos fluxos de coordenação, aprovação, persistência ou
+resultados de crescimento.
 
 Os testes implementados ficam em `tests/test_planning.py`,
 `tests/test_coordination.py` e na suíte anterior. As fontes e decisões de

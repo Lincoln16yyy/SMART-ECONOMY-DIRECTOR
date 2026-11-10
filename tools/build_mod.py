@@ -11,7 +11,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.6.2'
+VERSION = '0.6.3'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -27,13 +27,37 @@ SUPPLY_TARGETS = [
     {'good': 'wood', 'building': 'building_logging_camp', 'methods': ['pm_electric_saw_mills', 'pm_saw_mills', 'pm_simple_forestry'], 'label_pt': 'madeira', 'label_en': 'wood', 'building_pt': 'acampamento madeireiro', 'building_en': 'logging camp'},
     {'good': 'iron', 'building': 'building_iron_mine', 'methods': ['pm_atmospheric_engine_pump_building_iron_mine', 'pm_condensing_engine_pump_building_iron_mine', 'pm_diesel_pump_building_iron_mine', 'pm_dynamite_building_iron_mine', 'pm_nitroglycerin_building_iron_mine', 'pm_picks_and_shovels_building_iron_mine'], 'label_pt': 'ferro', 'label_en': 'iron', 'building_pt': 'mina de ferro', 'building_en': 'iron mine'},
     {'good': 'coal', 'building': 'building_coal_mine', 'methods': ['pm_atmospheric_engine_pump_building_coal_mine', 'pm_condensing_engine_pump_building_coal_mine', 'pm_diesel_pump_building_coal_mine', 'pm_dynamite_building_coal_mine', 'pm_nitroglycerin_building_coal_mine', 'pm_picks_and_shovels_building_coal_mine'], 'label_pt': 'carvão', 'label_en': 'coal', 'building_pt': 'mina de carvão', 'building_en': 'coal mine'},
-    {'good': 'grain', 'building': 'building_wheat_farm', 'methods': ['pm_chemical_fertilizer', 'pm_simple_farming', 'pm_soil_enriching_farming'], 'label_pt': 'cereais', 'label_en': 'grain', 'building_pt': 'fazenda de trigo', 'building_en': 'wheat farm'},
-    {'good': 'fabric', 'building': 'building_cotton_plantation', 'methods': ['automatic_irrigation_building_cotton_plantation', 'default_building_cotton_plantation', 'slave_exploitation_cotton', 'worker_exploitation_cotton'], 'label_pt': 'tecido', 'label_en': 'fabric', 'building_pt': 'plantação de algodão', 'building_en': 'cotton plantation'},
+    {'good': 'grain', 'building': 'building_wheat_farm', 'methods': ['pm_chemical_fertilizer', 'pm_fertilization', 'pm_herring_meal_farming', 'pm_simple_farming', 'pm_soil_enriching_farming'], 'label_pt': 'cereais', 'label_en': 'grain', 'building_pt': 'fazenda de trigo', 'building_en': 'wheat farm',
+     'alternatives': [
+         {'building': 'building_rye_farm', 'methods': ['pm_chemical_fertilizer', 'pm_fertilization', 'pm_simple_farming', 'pm_soil_enriching_farming'], 'building_pt': 'fazenda de centeio', 'building_en': 'rye farm'},
+         {'building': 'building_rice_farm', 'methods': ['pm_chemical_fertilizer_building_rice_farm', 'pm_fertilization_building_rice_farm', 'pm_herring_meal_farming_building_rice_farm', 'pm_simple_farming_building_rice_farm', 'pm_soil_enriching_farming_building_rice_farm'], 'building_pt': 'fazenda de arroz', 'building_en': 'rice farm'},
+         {'building': 'building_maize_farm', 'methods': ['pm_chemical_fertilizer', 'pm_fertilization', 'pm_simple_farming', 'pm_soil_enriching_farming'], 'building_pt': 'fazenda de milho', 'building_en': 'maize farm'},
+         {'building': 'building_millet_farm', 'methods': ['pm_chemical_fertilizer', 'pm_fertilization', 'pm_simple_farming', 'pm_soil_enriching_farming'], 'building_pt': 'fazenda de milhete', 'building_en': 'millet farm'},
+     ]},
+    {'good': 'fabric', 'building': 'building_cotton_plantation', 'methods': ['automatic_irrigation_building_cotton_plantation', 'default_building_cotton_plantation', 'slave_exploitation_cotton', 'worker_exploitation_cotton'], 'label_pt': 'tecido', 'label_en': 'fabric', 'building_pt': 'plantação de algodão', 'building_en': 'cotton plantation',
+     'alternatives': [
+         {'building': 'building_livestock_ranch', 'methods': ['pm_intensive_grazing_ranch', 'pm_sheep_farms', 'pm_simple_ranch'], 'building_pt': 'fazenda de gado', 'building_en': 'livestock ranch'},
+     ]},
     {'good': 'tools', 'building': 'building_tooling_workshop', 'methods': ['pm_crude_tools', 'pm_pig_iron', 'pm_rubber_grips', 'pm_steel'], 'label_pt': 'ferramentas', 'label_en': 'tools', 'building_pt': 'oficina de ferramentas', 'building_en': 'tooling workshop'},
     {'good': 'groceries', 'building': 'building_food_industry', 'methods': ['pm_bakery', 'pm_baking_powder', 'pm_cannery', 'pm_cannery_fish', 'pm_sweeteners', 'pm_vacuum_canning', 'pm_vacuum_canning_principle_3'], 'label_pt': 'mantimentos', 'label_en': 'groceries', 'building_pt': 'indústria alimentícia', 'building_en': 'food industry'},
     {'good': 'clothes', 'building': 'building_textile_mill', 'methods': ['pm_dye_workshops', 'pm_electric_sewing_machines', 'pm_handsewn_clothes', 'pm_sewing_machines'], 'label_pt': 'roupas', 'label_en': 'clothes', 'building_pt': 'fábrica têxtil', 'building_en': 'textile mill'},
 ]
 PERSISTENT_VARIABLES = ['sed_schema_version', 'sed_auto_last_attempt_month']
+
+
+def variants(item):
+    """Primary producer plus verified alternatives for the same market good."""
+    return [{'building': item['building'], 'methods': item['methods'],
+             'building_pt': item['building_pt'], 'building_en': item['building_en']}] + item.get('alternatives', [])
+
+
+def variant_id(variant):
+    return variant['building'].removeprefix('building_')
+
+
+def variant_methods(variant, indent='  '):
+    return '\n'.join(f'{indent}has_active_production_method = {method}'
+                      for method in variant['methods'])
 ACTION_NAMES = ('railway', 'construction') + tuple(item['good'] for item in SUPPLY_TARGETS)
 IGNORED_VARIABLES = [f'sed_{name}_ignored' for name in ACTION_NAMES]
 SUPPLY_DIAGNOSTICS = ('producer_states', 'ignored_states', 'pending_states', 'unincorporated_states',
@@ -96,40 +120,52 @@ sed_record_auto_attempt = {
 sed_refresh_supply_candidates = {''']
     for item in SUPPLY_TARGETS:
         good = item['good']
-        building = item['building']
-        methods = ' '.join(f'has_active_production_method = {method}' for method in item['methods'])
-        reasons = [
-            ('ignored_states', f'has_variable = sed_{good}_ignored'),
-            ('pending_states', f'OR = {{ has_variable = sed_{good}_request_pending b:{building} = {{ level_after_queued_constructions > level }} }}'),
-            ('unincorporated_states', 'NOT = { is_incorporated = yes }'),
-            ('understaffed_states', f'b:{building} = {{ OR = {{ level <= 0 occupancy < 0.8 }} }}'),
-            ('hiring_states', f'b:{building} = {{ has_failed_hires = yes }}'),
-            ('input_states', f'b:{building} = {{ building_has_goods_shortage = yes }}'),
-            ('method_states', f'b:{building} = {{ NOT = {{ OR = {{ {methods} }} }} }}'),
-            ('permission_states', f'NOT = {{ can_construct_building = {building} }}'),
-            ('infrastructure_states', 'infrastructure_delta < 0'),
-        ]
+        vs = variants(item)
+        primary = vs[0]['building']
+        any_present = ' '.join(f'has_building = {variant["building"]}' for variant in vs)
+        any_queued = ' '.join(
+            f'AND = {{ has_building = {variant["building"]} b:{variant["building"]} = {{ level_after_queued_constructions > level }} }}'
+            for variant in vs)
         reset = '\n'.join(f' set_variable = {{ name = sed_{good}_{reason} value = 0 }}'
                           for reason in SUPPLY_DIAGNOSTICS)
         breakdown = f'''  if = {{
-   limit = {{ has_building = {building} }}
+   limit = {{ OR = {{ {any_present} }} }}
    root = {{ change_variable = {{ name = sed_{good}_producer_states add = 1 }} }}
+  }}
+  if = {{ limit = {{ sed_{good}_candidate_eligible = yes }} }}
 '''
-        for index, (reason, condition) in enumerate(reasons):
-            branch = 'if' if index == 0 else 'else_if'
-            breakdown += f'''   {branch} = {{
+        for variant in vs:
+            building = variant['building']
+            methods = ' '.join(f'has_active_production_method = {method}' for method in variant['methods'])
+            reasons = [
+                ('ignored_states', f'has_variable = sed_{good}_ignored'),
+                ('pending_states', f'OR = {{ has_variable = sed_{good}_request_pending b:{building} = {{ level_after_queued_constructions > level }} }}'),
+                ('unincorporated_states', 'NOT = { is_incorporated = yes }'),
+                ('understaffed_states', f'b:{building} = {{ OR = {{ level <= 0 occupancy < 0.8 }} }}'),
+                ('hiring_states', f'b:{building} = {{ has_failed_hires = yes }}'),
+                ('input_states', f'b:{building} = {{ building_has_goods_shortage = yes }}'),
+                ('method_states', f'b:{building} = {{ NOT = {{ OR = {{ {methods} }} }} }}'),
+                ('permission_states', f'NOT = {{ can_construct_building = {building} }}'),
+                ('infrastructure_states', 'infrastructure_delta < 0'),
+            ]
+            breakdown += f'''  else_if = {{
+   limit = {{ has_building = {building} }}
+'''
+            for index, (reason, condition) in enumerate(reasons):
+                branch = 'if' if index == 0 else 'else_if'
+                breakdown += f'''   {branch} = {{
     limit = {{ {condition} }}
     root = {{ change_variable = {{ name = sed_{good}_{reason} add = 1 }} }}
    }}
 '''
-        breakdown += '  }'
+            breakdown += '  }'
         result.extend([
             reset,
             f' clear_variable_list = sed_{good}_candidates',
             f''' every_scope_state = {{
   if = {{
    limit = {{ has_variable = sed_{good}_request_pending
-    OR = {{ NOT = {{ has_building = {building} }} b:{building} = {{ level_after_queued_constructions <= level }} }}
+    NOT = {{ OR = {{ {any_queued} }} }}
    }}
    remove_variable = sed_{good}_request_pending
   }}
@@ -150,14 +186,22 @@ sed_refresh_supply_candidates = {''']
         ])
     result.append('}')
     for item in SUPPLY_TARGETS:
-        good, building = item['good'], item['building']
+        good = item['good']
+        vs = variants(item)
+        enqueue = ''
+        for index, variant in enumerate(vs):
+            branch = 'if' if index == 0 else 'else_if'
+            enqueue += f'''  {branch} = {{
+   limit = {{ sed_{good}_{variant_id(variant)}_eligible = yes }}
+   start_building_construction = {variant['building']}
+  }}
+'''
         result.append(f'''sed_run_{good}_approval = {{
  if = {{
   limit = {{ sed_{good}_approval_valid = yes }}
   owner = {{ set_variable = {{ name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }} }}
   owner = {{ sed_record_auto_attempt = yes }}
-  start_building_construction = {building}
-  owner = {{
+{enqueue}  owner = {{
    if = {{
     limit = {{ construction_queue_num_queued_government_levels > var:sed_queue_levels_before }}
     set_variable = {{ name = sed_{good}_action_status value = 1 }}
@@ -823,7 +867,7 @@ sed_update_growth = {
     state_cleanup = '\n'.join('  remove_variable = ' + name for name in planning.state_variables(ACTION_NAMES))
     script = script.replace(' # Schema and automatic attempt month',
                             ' every_scope_state = {\n' + state_cleanup + '\n }\n # Schema and automatic attempt month', 1)
-    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, {item['good']: item['building'] for item in SUPPLY_TARGETS}) + coordination.effects()
+    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + coordination.effects()
 
 
 def scripted_guis():
@@ -871,13 +915,15 @@ sed_mode_{mode}_visible_sgui = {{ scope = country is_shown = {{ has_variable = s
  effect = {{ if = {{ limit = {{ owner = {{ has_variable = sed_mode_assisted }} sed_{good}_approval_valid = yes }} sed_run_{good}_approval = yes }} }}
 }}
 '''
-    infrastructure_types = {'construction': 'building_construction_sector',
-                            **{item['good']: item['building'] for item in SUPPLY_TARGETS}}
-    for name, building in infrastructure_types.items():
+    infrastructure_types = {'construction': ['building_construction_sector'],
+                            **{item['good']: [variant['building'] for variant in variants(item)]
+                               for item in SUPPLY_TARGETS}}
+    for name, building_list in infrastructure_types.items():
+        present = ' '.join(f'has_building = {building}' for building in building_list)
         result += f"""sed_{name}_infrastructure_blocked_sgui = {{
  scope = state
  is_shown = {{ owner = {{ is_player = yes has_variable = sed_enabled }}
-  has_building = {building} infrastructure_delta < 0
+  OR = {{ {present} }} infrastructure_delta < 0
   NOT = {{ has_variable = sed_{name}_request_pending }}
   NOT = {{ has_variable = sed_{name}_ignored }} }}
 }}
@@ -1132,8 +1178,9 @@ sed_construction_approval_valid = {
 def supply_triggers():
     result = []
     for item in SUPPLY_TARGETS:
-        good, building = item['good'], item['building']
-        methods = '\n'.join(f'    has_active_production_method = {method}' for method in item['methods'])
+        good = item['good']
+        vs = variants(item)
+        alternatives = ' '.join(f'sed_{good}_{variant_id(variant)}_eligible = yes' for variant in vs)
         result.append(f'''# State scope: expand an operating local producer only while its market good is scarce.
 sed_{good}_candidate_eligible = {{
  is_incorporated = yes
@@ -1141,6 +1188,14 @@ sed_{good}_candidate_eligible = {{
  NOT = {{ has_variable = sed_{good}_ignored }}
  NOT = {{ has_variable = sed_{good}_request_pending }}
  owner = {{ market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }} }}
+ OR = {{ {alternatives} }}
+}}
+''')
+        for variant in vs:
+            building = variant['building']
+            methods = variant_methods(variant, '  ')
+            result.append(f'''# State scope: one verified producer type for {good}; output checked by active method.
+sed_{good}_{variant_id(variant)}_eligible = {{
  has_building = {building}
  b:{building} = {{
   level > 0
@@ -1154,8 +1209,8 @@ sed_{good}_candidate_eligible = {{
  }}
  can_construct_building = {building}
 }}
-
-sed_{good}_approval_valid = {{
+''')
+        result.append(f'''sed_{good}_approval_valid = {{
  sed_{good}_candidate_eligible = yes
  owner = {{
   is_player = yes
@@ -1319,11 +1374,21 @@ def localization(language):
     for item in SUPPLY_TARGETS:
         good = item['good']
         label_pt, label_en = item['label_pt'], item['label_en']
-        building_pt, building_en = item['building_pt'], item['building_en']
+        vs = variants(item)
+        building_pt = ' / '.join(variant['building_pt'] for variant in vs)
+        building_en = ' / '.join(variant['building_en'] for variant in vs)
+        plural_pt = 'estados com ' + building_pt
+        if len(vs) == 1:
+            plural_en = 'states with a ' + vs[0]['building_en']
+        elif len(vs) == 2:
+            plural_en = 'states with a ' + vs[0]['building_en'] + ' or ' + vs[1]['building_en']
+        else:
+            plural_en = ('states with a ' + ', '.join(variant['building_en'] for variant in vs[:-1])
+                         + ', or ' + vs[-1]['building_en'])
         pairs[f'sed_{good}_rejection_summary'] = (
-            f"Última leitura — estados com {building_pt}: " + v(good + '_producer_states', '0')
+            f"Última leitura — {plural_pt}: " + v(good + '_producer_states', '0')
             + '. Cada estado rejeitado é contado pelo primeiro motivo aplicável.',
-            f"Last reading — states with a {building_en}: " + v(good + '_producer_states', '0')
+            f"Last reading — {plural_en}: " + v(good + '_producer_states', '0')
             + '. Each rejected state is counted under its first applicable reason.')
         labels = [
             ('ignored_states', 'ignorado por você', 'ignored by you'),
@@ -1339,12 +1404,26 @@ def localization(language):
         pairs[f'sed_{good}_rejection_details'] = tuple(
             '; '.join(label[language_index] + ': ' + v(good + '_' + label[0], '0')
                       for label in labels) + '.' for language_index in (1, 2))
+        if len(vs) > 1:
+            title_pt = f'#bold [State.GetName]#! — produtor de {label_pt}'
+            title_en = f'#bold [State.GetName]#! — {label_en} producer'
+            approve_pt = f'Aprovar: enfileirar 1 nível do produtor de {label_pt}'
+            approve_en = f'Approve: queue 1 {label_en} producer level'
+            success_pt = f'Pedido de expansão do produtor de {label_pt} adicionado à fila pública. Confira custo e prazo na fila do jogo.'
+            success_en = f'{label_en.title()} producer expansion added to the government queue. Review cost and timing in the game queue.'
+        else:
+            title_pt = f'#bold [State.GetName]#! — {building_pt} → {label_pt}'
+            title_en = f'#bold [State.GetName]#! — {building_en} → {label_en}'
+            approve_pt = f'Aprovar: enfileirar 1 nível de {building_pt}'
+            approve_en = f'Approve: queue 1 {building_en} level'
+            success_pt = f'Pedido de expansão de {building_pt} adicionado à fila pública. Confira custo e prazo na fila do jogo.'
+            success_en = f'{building_en.title()} expansion added to the government queue. Review cost and timing in the game queue.'
         pairs[f'sed_{good}_section_title'] = (f'Escassez no mercado: {label_pt}', f'Market shortage: {label_en}')
-        pairs[f'sed_{good}_candidate_title'] = (f'#bold [State.GetName]#! — {building_pt} → {label_pt}', f'#bold [State.GetName]#! — {building_en} → {label_en}')
+        pairs[f'sed_{good}_candidate_title'] = (title_pt, title_en)
         pairs[f'sed_{good}_candidate_reason'] = (f'O mercado está em escassez de {label_pt}. Este produtor está operante, sem falta de insumos nem expansão já enfileirada. Um nível pode ampliar a oferta; efeito e custo não são previstos.', f'The market reports a shortage of {label_en}. This producer is operating, has no input shortage, and has no expansion queued. One level may increase supply; impact and cost are not forecast.')
-        pairs[f'sed_{good}_approve'] = (f'Aprovar: enfileirar 1 nível de {building_pt}', f'Approve: queue 1 {building_en} level')
-        pairs[f'sed_{good}_approve_tt'] = ('Requer modo Assistido, país fora de inadimplência e fila privada vazia. A escassez e o prédio são revalidados no clique. Saldo semanal negativo gera alerta, mas não bloqueia. Usa a fila normal do jogo.', 'Requires Assisted mode, no default, and an empty private queue. The shortage and building are rechecked on click. A negative balance raises a caution but does not block. Uses the normal game queue.')
-        pairs[f'sed_{good}_action_success'] = (f'Pedido de expansão de {building_pt} adicionado à fila pública. Confira custo e prazo na fila do jogo.', f'{building_en.title()} expansion added to the government queue. Review cost and timing in the game queue.')
+        pairs[f'sed_{good}_approve'] = (approve_pt, approve_en)
+        pairs[f'sed_{good}_approve_tt'] = ('Requer modo Assistido, país fora de inadimplência e fila privada vazia. A escassez e o prédio existente são revalidados no clique; entre produtores alternativos, o Director usa o primeiro elegível. Saldo semanal negativo gera alerta, mas não bloqueia. Usa a fila normal do jogo.', 'Requires Assisted mode, no default, and an empty private queue. The shortage and existing building are rechecked on click; among alternative producers, the Director uses the first eligible one. A negative balance raises a caution but does not block. Uses the normal game queue.')
+        pairs[f'sed_{good}_action_success'] = (success_pt, success_en)
         pairs[f'sed_{good}_action_failed'] = ('Inclusão não confirmada. Confira a fila antes de aprovar novamente.', 'Queue addition not confirmed. Inspect the queue before approving again.')
     pairs.update({
         'sed_title': ('Economia e construções', 'Economy and construction'),

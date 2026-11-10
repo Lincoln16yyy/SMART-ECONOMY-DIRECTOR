@@ -1093,3 +1093,28 @@ byte a byte e content_load.json preservado. Backup em
 `sed_backups/mod_before_0.6.2_20261109_235909_180351`. ZIP em
 `dist/smart-economy-director-0.6.2.zip`. A verificação da classificação 5,
 do novo limite mensal e da delegação somente ao Advisor segue pendente na engine.
+
+## Produtores alternativos 0.6.3
+
+O catálogo tratava cada bem como um único prédio produtor. Um país com fazendas
+de milho ou arroz, por exemplo, recebia "sem base produtiva" para cereais
+mesmo com escassez e produtor operante — caso provável no Haiti. Verifiquei nos
+arquivos vanilla 1.15 que cinco fazendas produzem cereais e que a fazenda de
+gado produz tecido pelos métodos de ovelhas.
+
+Cada bem agora aceita uma lista de variantes. O filtro de elegibilidade é uma
+disjunção de triggers por prédio; a aprovação enfileira o primeiro produtor
+elegível na ordem declarada; o diagnóstico de produtor ausente e as contagens
+de rejeição usam as mesmas variantes. A correção também completou os métodos
+das fazendas de trigo (fertilização e farinha de arenque) e de arroz.
+
+O validador passou a aceitar todos os prédios declarados em cada efeito de
+aprovação, exigindo que nenhuma construção ocorra fora deles. 126 testes
+sintéticos aprovados, geração atual, validação estática com o jogo 1.15,
+`git diff --check` e pacote aprovados.
+
+Entrega local 0.6.3 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.3_20261110_002209_786280`. ZIP em
+`dist/smart-economy-director-0.6.3.zip`. As novas combinações ainda não foram
+observadas em campanha nem na engine.
