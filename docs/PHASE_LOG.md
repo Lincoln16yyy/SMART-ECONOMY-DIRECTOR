@@ -1249,3 +1249,27 @@ content_load.json preservado. Backup em
 `dist/smart-economy-director-0.6.7.zip`. Nada observado na engine: a leitura de
 `b:<prédio>.level` em valor e a ordem entre conclusão, cancelamento e limpeza
 mensal seguem sem confirmação.
+
+## 2026-11-10 — Livro completo 0.6.8
+
+Objetivo: estender o livro de resultados a ferrovia e setor de construção,
+fechando os dez tipos de ação do Director. A aprovação grava
+`sed_railway_intent_level` ou `sed_construction_intent_level` no estado e a
+confirmação incrementa `sed_<tipo>_intents`. Quando o pedido sai da fila, nível
+maior conta como concluído; nível igual ou menor, ou prédio ausente, como
+abandonado. `sed_<tipo>_result` (1/2) e `_result_month` guardam o último
+desfecho, e o plano exibe pedidos/concluídos/abandonados após o primeiro.
+
+A conclusão continua inferida por fila e nível, sem identidade de projeto.
+Desativar limpa os marcadores estaduais e os contadores nacionais; a limpeza
+foi corrigida para incluir os marcadores dos oito bens e as escolhas ignoradas,
+que o gerador havia deixado fora do bloco após a mudança de formato.
+
+137 testes sintéticos aprovados (um novo: ferrovia concluída e setor
+abandonado no mesmo cenário). Geração, validação estática contra Victoria 3
+1.15 e `git diff --check` aprovados.
+
+Entrega local 0.6.8 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.8_20261110_013400_273582`. ZIP em
+`dist/smart-economy-director-0.6.8.zip`. Nada observado na engine.

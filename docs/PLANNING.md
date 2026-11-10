@@ -1,4 +1,4 @@
-# Planejamento e coordenação — 0.6.7
+# Planejamento e coordenação — 0.6.8
 
 Esta versão implementa política nacional inicial e adaptadores de opções de
 construção. Não é um controlador econômico completo nem comprova crescimento
@@ -397,3 +397,19 @@ conclusão quando o nível sobe, abandono quando a fila esvazia sem novo nível 
 contagem acumulada de dois pedidos. Nada foi observado na engine: a leitura de
 `b:<prédio>.level` em valor e a ordem exata entre conclusão, cancelamento e
 limpeza mensal ainda não foram confirmadas.
+
+### Ferrovia e setor de construção na 0.6.8
+
+O mesmo livro passou a cobrir os dois tipos restantes. A aprovação grava
+`sed_railway_intent_level` ou `sed_construction_intent_level` no estado; a
+confirmação incrementa `sed_<tipo>_intents`. Quando o pedido sai da fila, nível
+maior conta `sed_<tipo>_completed`; nível igual ou menor, ou prédio ausente,
+conta `sed_<tipo>_abandoned`. `sed_<tipo>_result` e `_result_month` guardam o
+último desfecho, e o plano mostra pedidos/concluídos/abandonados após o
+primeiro pedido de cada tipo.
+
+A mesma inferência por fila e nível se aplica: não há identidade de projeto, e
+cancelamento seguido de obra externa no mesmo estado pode contar como
+conclusão. Desativar limpa os marcadores estaduais e os contadores nacionais.
+137 testes sintéticos aprovados incluem ferrovia concluída e setor abandonado
+no mesmo cenário. Continua sem confirmação na engine.

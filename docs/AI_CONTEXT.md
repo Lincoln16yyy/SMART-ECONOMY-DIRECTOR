@@ -1,5 +1,21 @@
 # Contexto de continuidade
 
+Entrega local 0.6.8 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.8_20261110_013400_273582`.
+
+## Livro completo 0.6.8
+
+O livro de resultados cobre também ferrovia e setor de construção:
+`sed_railway_intent_level` / `sed_construction_intent_level` guardam o nível
+na aprovação; `sed_<tipo>_intents`, `_completed`, `_abandoned`, `_result` e
+`_result_month` registram o desfecho quando a fila esvazia. Prédio ausente
+conta como abandono. É inferência por fila/nível, sem identidade de projeto.
+Desativar limpa marcadores estaduais e contadores. 137 testes aprovados; sem
+confirmação na engine.
+
+## Entrega local 0.6.7
+
 Entrega local 0.6.7 instalada com jogo fechado, 14 outputs conferidos e
 content_load.json preservado. Backup em
 `sed_backups/mod_before_0.6.7_20261110_012225_626750`.

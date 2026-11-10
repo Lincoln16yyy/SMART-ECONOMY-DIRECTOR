@@ -4,7 +4,7 @@ import unittest
 from tools.build_mod import ACTION_NAMES, SUPPLY_TARGETS
 from tools.pdx_script import child, parse, walk
 from test_diagnostics import script_definitions
-from script_harness import Country, building, railway, state
+from script_harness import Country, building, construction_sector, railway, state
 
 
 class PlanningTests(unittest.TestCase):
@@ -364,6 +364,36 @@ class PlanningTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_grain_abandoned'], 1)
         self.assertEqual(c.variables['sed_grain_result'], 2)
         self.assertEqual(c.variables['sed_grain_intents'], 2)
+
+    def test_railway_and_sector_books_record_outcomes(self):
+        target = state(-5, buildings=[railway()])
+        sector = state(buildings=[construction_sector()])
+        self.c.states.extend([target, sector])
+        c = self.c
+        c.readings['num_queued_government_constructions'] = 3
+        c.run('sed_set_mode_assisted')
+        c.run('sed_run_railway_approval', target)
+        self.assertEqual(target['variables']['sed_railway_intent_level'], 1)
+        self.assertEqual(c.variables['sed_railway_intents'], 1)
+        c.run('sed_run_construction_approval', sector)
+        self.assertEqual(sector['variables']['sed_construction_intent_level'], 1)
+        self.assertEqual(c.variables['sed_construction_intents'], 1)
+        target['buildings'][0]['level_after_queued_constructions'] = 2
+        sector['buildings'][0]['level_after_queued_constructions'] = 2
+        c.run('sed_refresh_railway_candidates')
+        c.run('sed_refresh_construction_candidates')
+        self.assertIn('sed_railway_request_pending', target['variables'])
+        self.assertIn('sed_construction_request_pending', sector['variables'])
+        target['buildings'][0]['level'] = 2
+        sector['buildings'][0]['level_after_queued_constructions'] = 1
+        c.run('sed_refresh_railway_candidates')
+        c.run('sed_refresh_construction_candidates')
+        self.assertEqual(c.variables['sed_railway_completed'], 1)
+        self.assertEqual(c.variables['sed_railway_result'], 1)
+        self.assertEqual(c.variables['sed_construction_abandoned'], 1)
+        self.assertEqual(c.variables['sed_construction_result'], 2)
+        self.assertNotIn('sed_railway_intent_level', target['variables'])
+        self.assertNotIn('sed_construction_intent_level', sector['variables'])
 
     def test_queue_wait_preserves_plan_but_never_calls_constructor(self):
         self.producer('grain')

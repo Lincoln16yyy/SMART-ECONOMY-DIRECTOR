@@ -169,6 +169,16 @@ sed_disable_country = {
  remove_variable = sed_clothes_abandoned
  remove_variable = sed_clothes_result
  remove_variable = sed_clothes_result_month
+ remove_variable = sed_railway_intents
+ remove_variable = sed_railway_completed
+ remove_variable = sed_railway_abandoned
+ remove_variable = sed_railway_result
+ remove_variable = sed_railway_result_month
+ remove_variable = sed_construction_intents
+ remove_variable = sed_construction_completed
+ remove_variable = sed_construction_abandoned
+ remove_variable = sed_construction_result
+ remove_variable = sed_construction_result_month
  remove_variable = sed_wood_producer_states
  remove_variable = sed_wood_ignored_states
  remove_variable = sed_wood_pending_states
@@ -317,6 +327,8 @@ sed_disable_country = {
  every_scope_state = {
   remove_variable = sed_railway_request_pending
   remove_variable = sed_construction_request_pending
+  remove_variable = sed_railway_intent_level
+  remove_variable = sed_construction_intent_level
   remove_variable = sed_wood_request_pending
   remove_variable = sed_wood_intent_level
   remove_variable = sed_wood_intent_variant
@@ -503,7 +515,19 @@ sed_refresh_railway_candidates = {
      b:building_railway = { level_after_queued_constructions <= level }
     }
    }
+   if = {
+    limit = { has_variable = sed_railway_intent_level
+     has_building = building_railway
+     b:building_railway.level > var:sed_railway_intent_level
+    }
+    sed_railway_record_completed = yes
+   }
+   else_if = {
+    limit = { has_variable = sed_railway_intent_level }
+    sed_railway_record_abandoned = yes
+   }
    remove_variable = sed_railway_request_pending
+   remove_variable = sed_railway_intent_level
   }
   if = {
    limit = { infrastructure_delta < 0 }
@@ -562,15 +586,23 @@ sed_run_railway_approval = {
    set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }
   }
   owner = { sed_record_auto_attempt = yes }
+  set_variable = { name = sed_railway_intent_level value = b:building_railway.level }
   start_building_construction = building_railway
   owner = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_railway_action_status value = 1 }
     if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
+    if = { limit = { has_variable = sed_railway_intents }
+     change_variable = { name = sed_railway_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_railway_intents value = 1 } }
     prev = { set_variable = { name = sed_railway_request_pending value = yes } }
    }
-   else = { set_variable = { name = sed_railway_action_status value = 2 } }
+   else = {
+    set_variable = { name = sed_railway_action_status value = 2 }
+    prev = { remove_variable = sed_railway_intent_level }
+   }
    remove_variable = sed_queue_levels_before
   }
  }
@@ -602,7 +634,19 @@ sed_refresh_construction_candidates = {
      b:building_construction_sector = { level_after_queued_constructions <= level }
     }
    }
+   if = {
+    limit = { has_variable = sed_construction_intent_level
+     has_building = building_construction_sector
+     b:building_construction_sector.level > var:sed_construction_intent_level
+    }
+    sed_construction_record_completed = yes
+   }
+   else_if = {
+    limit = { has_variable = sed_construction_intent_level }
+    sed_construction_record_abandoned = yes
+   }
    remove_variable = sed_construction_request_pending
+   remove_variable = sed_construction_intent_level
   }
   if = {
    limit = { has_building = building_construction_sector }
@@ -665,17 +709,74 @@ sed_run_construction_approval = {
    set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }
   }
   owner = { sed_record_auto_attempt = yes }
+  set_variable = { name = sed_construction_intent_level value = b:building_construction_sector.level }
   start_building_construction = building_construction_sector
   owner = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_construction_action_status value = 1 }
+    if = { limit = { has_variable = sed_construction_intents }
+     change_variable = { name = sed_construction_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_construction_intents value = 1 } }
     prev = { set_variable = { name = sed_construction_request_pending value = yes } }
    }
-   else = { set_variable = { name = sed_construction_action_status value = 2 } }
+   else = {
+    set_variable = { name = sed_construction_action_status value = 2 }
+    prev = { remove_variable = sed_construction_intent_level }
+   }
    remove_variable = sed_queue_levels_before
   }
  }
+}
+
+# Country counters; completion is inferred from the queue leaving and level rising.
+sed_railway_record_completed = {
+ owner = {
+  if = { limit = { has_variable = sed_railway_completed }
+   change_variable = { name = sed_railway_completed add = 1 }
+  }
+  else = { set_variable = { name = sed_railway_completed value = 1 } }
+  set_variable = { name = sed_railway_result value = 1 }
+  set_variable = { name = sed_railway_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_railway_intent_level
+}
+
+sed_railway_record_abandoned = {
+ owner = {
+  if = { limit = { has_variable = sed_railway_abandoned }
+   change_variable = { name = sed_railway_abandoned add = 1 }
+  }
+  else = { set_variable = { name = sed_railway_abandoned value = 1 } }
+  set_variable = { name = sed_railway_result value = 2 }
+  set_variable = { name = sed_railway_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_railway_intent_level
+}
+
+sed_construction_record_completed = {
+ owner = {
+  if = { limit = { has_variable = sed_construction_completed }
+   change_variable = { name = sed_construction_completed add = 1 }
+  }
+  else = { set_variable = { name = sed_construction_completed value = 1 } }
+  set_variable = { name = sed_construction_result value = 1 }
+  set_variable = { name = sed_construction_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_construction_intent_level
+}
+
+sed_construction_record_abandoned = {
+ owner = {
+  if = { limit = { has_variable = sed_construction_abandoned }
+   change_variable = { name = sed_construction_abandoned add = 1 }
+  }
+  else = { set_variable = { name = sed_construction_abandoned value = 1 } }
+  set_variable = { name = sed_construction_result value = 2 }
+  set_variable = { name = sed_construction_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_construction_intent_level
 }
 
 # Keep the first sample of each recorded month as the anchor. A second click in
