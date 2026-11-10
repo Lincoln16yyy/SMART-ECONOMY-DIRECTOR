@@ -1,0 +1,2 @@
+﻿# Current calendar, independent of diagnostic refresh.
+sed_live_month_key = { value = year multiply = 12 add = month }

@@ -1060,3 +1060,61 @@ política em PLANNING.md. Instalação e publicação registradas na entrega aba
 Entrega local 0.6.1 instalada com jogo fechado, 13 outputs conferidos e
 content_load.json preservado. Backup em
 `sed_backups/mod_before_0.6.1_20261109_222628_869777`.
+
+## Construção financiada por reservas 0.6.2
+
+A guarda fiscal 1–4 exigia saldo semanal não negativo, então a coordenação
+parava sempre que um déficit operacional coberto por reservas aparecia — mesmo
+com ouro suficiente para o horizonte do Advisor. A 0.6.2 acrescenta a
+classificação 5, aplicada antes de 2–4: receita fixa não negativa, déficit total
+observado, sem dívida e ouro cobrindo doze semanas de despesas fixas mais 26
+semanas desse déficit. A guarda escala com as leituras e não aprova sem ouro.
+
+`sed_coord_fiscal_safe` combina a guarda antiga com a classificação 5 quando o
+Advisor foi detectado. A entrada de `sed_coord_sync` e o objetivo de
+crescimento/diversificação usam essa guarda. Os ramos do Supply Chain mantêm
+`sed_auto_fiscal_safe` cada um, de modo que a classificação 5 delega apenas ao
+Advisor. Somente as classificações 3 e 4 substituem o objetivo por
+estabilização; a 5 permite crescimento.
+
+Também corrigi o limite automático mensal: a comparação usava aritmética
+embutida na igualdade (`var:x = { value = year ... }`), que a engine não avalia.
+Agora compara com o script value `sed_live_month_key`, e o validador rejeita
+essa forma em qualquer igualdade `var:`. A variável não usada
+`sed_supply_action_status` saiu do registro de limpeza.
+
+Validação: **124 testes sintéticos aprovados**, geração atual,
+`build_mod.py --check`, validação estática sem caminho do jogo e
+`git diff --check`. Nenhum jogo foi iniciado e a classificação 5 ainda não foi
+observada em campanha.
+
+Entrega local 0.6.2 instalada com jogo fechado, 14 outputs conferidos
+byte a byte e content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.2_20261109_235909_180351`. ZIP em
+`dist/smart-economy-director-0.6.2.zip`. A verificação da classificação 5,
+do novo limite mensal e da delegação somente ao Advisor segue pendente na engine.
+
+## Produtores alternativos 0.6.3
+
+O catálogo tratava cada bem como um único prédio produtor. Um país com fazendas
+de milho ou arroz, por exemplo, recebia "sem base produtiva" para cereais
+mesmo com escassez e produtor operante — caso provável no Haiti. Verifiquei nos
+arquivos vanilla 1.15 que cinco fazendas produzem cereais e que a fazenda de
+gado produz tecido pelos métodos de ovelhas.
+
+Cada bem agora aceita uma lista de variantes. O filtro de elegibilidade é uma
+disjunção de triggers por prédio; a aprovação enfileira o primeiro produtor
+elegível na ordem declarada; o diagnóstico de produtor ausente e as contagens
+de rejeição usam as mesmas variantes. A correção também completou os métodos
+das fazendas de trigo (fertilização e farinha de arenque) e de arroz.
+
+O validador passou a aceitar todos os prédios declarados em cada efeito de
+aprovação, exigindo que nenhuma construção ocorra fora deles. 126 testes
+sintéticos aprovados, geração atual, validação estática com o jogo 1.15,
+`git diff --check` e pacote aprovados.
+
+Entrega local 0.6.3 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.3_20261110_002209_786280`. ZIP em
+`dist/smart-economy-director-0.6.3.zip`. As novas combinações ainda não foram
+observadas em campanha nem na engine.

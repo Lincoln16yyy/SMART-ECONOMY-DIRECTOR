@@ -33,6 +33,21 @@ sed_auto_fiscal_safe = {
   AND = { credit > 0 principal <= { value = credit multiply = 0.75 } }
  }
 }
+
+# Keep a reserve floor plus six months of the currently observed deficit.
+sed_coord_reserve_drawdown_safe = {
+ net_fixed_income >= 0
+ net_total_income < 0
+ principal <= 0
+ gold_reserves >= {
+  value = fixed_expenses min = 0 multiply = 12
+  add = { value = net_total_income multiply = -26 }
+ }
+}
+
+sed_coord_fiscal_safe = {
+ OR = { sed_auto_fiscal_safe = yes AND = { has_variable = sed_coord_advisor_known sed_coord_reserve_drawdown_safe = yes } }
+}
 '''
 
 
@@ -55,15 +70,17 @@ def effects(actions, buildings):
    } }
    set_variable = { name = sed_fiscal_status value = 3 }
   }
+  else_if = { limit = { sed_coord_reserve_drawdown_safe = yes } set_variable = { name = sed_fiscal_status value = 5 } }
   else_if = { limit = { NOT = { sed_auto_fiscal_safe = yes } } set_variable = { name = sed_fiscal_status value = 2 } }
 ''']
     for name in lists(actions):
         result.append(f'  clear_variable_list = {name}')
     for name in supply:
+        producers = ' '.join(f'has_building = {building}' for building in buildings[name])
         result.append(f'''  set_variable = {{ name = sed_plan_missing_{name} value = 0 }}
   if = {{ limit = {{
    market = {{ mg:{name} ?= {{ market_goods_has_goods_shortage = yes }} }}
-   NOT = {{ any_scope_state = {{ has_building = {buildings[name]} }} }}
+   NOT = {{ any_scope_state = {{ OR = {{ {producers} }} }} }}
   }}
    set_variable = {{ name = sed_plan_missing_{name} value = 1 }}
    change_variable = {{ name = sed_plan_missing_count add = 1 }}
@@ -128,11 +145,11 @@ def effects(actions, buildings):
    }}''')
         result.append('  }')
     result.append('''  if = { limit = { var:sed_plan_count = 0 var:sed_plan_missing_count > 0 } set_variable = { name = sed_plan_goal value = 5 } }
-  if = { limit = { var:sed_plan_goal = 0 sed_auto_fiscal_safe = yes } set_variable = { name = sed_plan_goal value = 8 } }
+  if = { limit = { var:sed_plan_goal = 0 sed_coord_fiscal_safe = yes } set_variable = { name = sed_plan_goal value = 8 } }
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } bureaucracy < 0 } set_variable = { name = sed_plan_goal value = 6 } }
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } any_scope_state = { tax_capacity_usage > tax_capacity } } set_variable = { name = sed_plan_goal value = 7 } }
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } any_scope_state = { sg:electricity ?= { state_goods_pricier >= 0.2 } } } set_variable = { name = sed_plan_goal value = 9 } }
-  if = { limit = { var:sed_fiscal_status >= 3 } set_variable = { name = sed_plan_goal value = 4 } }
+  if = { limit = { OR = { var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } } set_variable = { name = sed_plan_goal value = 4 } }
  }
 }
 ''')

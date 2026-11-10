@@ -61,6 +61,11 @@ sed_wood_candidate_eligible = {
  NOT = { has_variable = sed_wood_ignored }
  NOT = { has_variable = sed_wood_request_pending }
  owner = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } }
+ OR = { sed_wood_logging_camp_eligible = yes }
+}
+
+# State scope: one verified producer type for wood; output checked by active method.
+sed_wood_logging_camp_eligible = {
  has_building = building_logging_camp
  b:building_logging_camp = {
   level > 0
@@ -69,9 +74,9 @@ sed_wood_candidate_eligible = {
   building_has_goods_shortage = no
   level_after_queued_constructions <= level
   OR = {
-    has_active_production_method = pm_electric_saw_mills
-    has_active_production_method = pm_saw_mills
-    has_active_production_method = pm_simple_forestry
+  has_active_production_method = pm_electric_saw_mills
+  has_active_production_method = pm_saw_mills
+  has_active_production_method = pm_simple_forestry
   }
  }
  can_construct_building = building_logging_camp
@@ -94,6 +99,11 @@ sed_iron_candidate_eligible = {
  NOT = { has_variable = sed_iron_ignored }
  NOT = { has_variable = sed_iron_request_pending }
  owner = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
+ OR = { sed_iron_iron_mine_eligible = yes }
+}
+
+# State scope: one verified producer type for iron; output checked by active method.
+sed_iron_iron_mine_eligible = {
  has_building = building_iron_mine
  b:building_iron_mine = {
   level > 0
@@ -102,12 +112,12 @@ sed_iron_candidate_eligible = {
   building_has_goods_shortage = no
   level_after_queued_constructions <= level
   OR = {
-    has_active_production_method = pm_atmospheric_engine_pump_building_iron_mine
-    has_active_production_method = pm_condensing_engine_pump_building_iron_mine
-    has_active_production_method = pm_diesel_pump_building_iron_mine
-    has_active_production_method = pm_dynamite_building_iron_mine
-    has_active_production_method = pm_nitroglycerin_building_iron_mine
-    has_active_production_method = pm_picks_and_shovels_building_iron_mine
+  has_active_production_method = pm_atmospheric_engine_pump_building_iron_mine
+  has_active_production_method = pm_condensing_engine_pump_building_iron_mine
+  has_active_production_method = pm_diesel_pump_building_iron_mine
+  has_active_production_method = pm_dynamite_building_iron_mine
+  has_active_production_method = pm_nitroglycerin_building_iron_mine
+  has_active_production_method = pm_picks_and_shovels_building_iron_mine
   }
  }
  can_construct_building = building_iron_mine
@@ -130,6 +140,11 @@ sed_coal_candidate_eligible = {
  NOT = { has_variable = sed_coal_ignored }
  NOT = { has_variable = sed_coal_request_pending }
  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ OR = { sed_coal_coal_mine_eligible = yes }
+}
+
+# State scope: one verified producer type for coal; output checked by active method.
+sed_coal_coal_mine_eligible = {
  has_building = building_coal_mine
  b:building_coal_mine = {
   level > 0
@@ -138,12 +153,12 @@ sed_coal_candidate_eligible = {
   building_has_goods_shortage = no
   level_after_queued_constructions <= level
   OR = {
-    has_active_production_method = pm_atmospheric_engine_pump_building_coal_mine
-    has_active_production_method = pm_condensing_engine_pump_building_coal_mine
-    has_active_production_method = pm_diesel_pump_building_coal_mine
-    has_active_production_method = pm_dynamite_building_coal_mine
-    has_active_production_method = pm_nitroglycerin_building_coal_mine
-    has_active_production_method = pm_picks_and_shovels_building_coal_mine
+  has_active_production_method = pm_atmospheric_engine_pump_building_coal_mine
+  has_active_production_method = pm_condensing_engine_pump_building_coal_mine
+  has_active_production_method = pm_diesel_pump_building_coal_mine
+  has_active_production_method = pm_dynamite_building_coal_mine
+  has_active_production_method = pm_nitroglycerin_building_coal_mine
+  has_active_production_method = pm_picks_and_shovels_building_coal_mine
   }
  }
  can_construct_building = building_coal_mine
@@ -166,6 +181,11 @@ sed_grain_candidate_eligible = {
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_request_pending }
  owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
+ OR = { sed_grain_wheat_farm_eligible = yes sed_grain_rye_farm_eligible = yes sed_grain_rice_farm_eligible = yes sed_grain_maize_farm_eligible = yes sed_grain_millet_farm_eligible = yes }
+}
+
+# State scope: one verified producer type for grain; output checked by active method.
+sed_grain_wheat_farm_eligible = {
  has_building = building_wheat_farm
  b:building_wheat_farm = {
   level > 0
@@ -174,12 +194,91 @@ sed_grain_candidate_eligible = {
   building_has_goods_shortage = no
   level_after_queued_constructions <= level
   OR = {
-    has_active_production_method = pm_chemical_fertilizer
-    has_active_production_method = pm_simple_farming
-    has_active_production_method = pm_soil_enriching_farming
+  has_active_production_method = pm_chemical_fertilizer
+  has_active_production_method = pm_fertilization
+  has_active_production_method = pm_herring_meal_farming
+  has_active_production_method = pm_simple_farming
+  has_active_production_method = pm_soil_enriching_farming
   }
  }
  can_construct_building = building_wheat_farm
+}
+
+# State scope: one verified producer type for grain; output checked by active method.
+sed_grain_rye_farm_eligible = {
+ has_building = building_rye_farm
+ b:building_rye_farm = {
+  level > 0
+  occupancy >= 0.8
+  has_failed_hires = no
+  building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  OR = {
+  has_active_production_method = pm_chemical_fertilizer
+  has_active_production_method = pm_fertilization
+  has_active_production_method = pm_simple_farming
+  has_active_production_method = pm_soil_enriching_farming
+  }
+ }
+ can_construct_building = building_rye_farm
+}
+
+# State scope: one verified producer type for grain; output checked by active method.
+sed_grain_rice_farm_eligible = {
+ has_building = building_rice_farm
+ b:building_rice_farm = {
+  level > 0
+  occupancy >= 0.8
+  has_failed_hires = no
+  building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  OR = {
+  has_active_production_method = pm_chemical_fertilizer_building_rice_farm
+  has_active_production_method = pm_fertilization_building_rice_farm
+  has_active_production_method = pm_herring_meal_farming_building_rice_farm
+  has_active_production_method = pm_simple_farming_building_rice_farm
+  has_active_production_method = pm_soil_enriching_farming_building_rice_farm
+  }
+ }
+ can_construct_building = building_rice_farm
+}
+
+# State scope: one verified producer type for grain; output checked by active method.
+sed_grain_maize_farm_eligible = {
+ has_building = building_maize_farm
+ b:building_maize_farm = {
+  level > 0
+  occupancy >= 0.8
+  has_failed_hires = no
+  building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  OR = {
+  has_active_production_method = pm_chemical_fertilizer
+  has_active_production_method = pm_fertilization
+  has_active_production_method = pm_simple_farming
+  has_active_production_method = pm_soil_enriching_farming
+  }
+ }
+ can_construct_building = building_maize_farm
+}
+
+# State scope: one verified producer type for grain; output checked by active method.
+sed_grain_millet_farm_eligible = {
+ has_building = building_millet_farm
+ b:building_millet_farm = {
+  level > 0
+  occupancy >= 0.8
+  has_failed_hires = no
+  building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  OR = {
+  has_active_production_method = pm_chemical_fertilizer
+  has_active_production_method = pm_fertilization
+  has_active_production_method = pm_simple_farming
+  has_active_production_method = pm_soil_enriching_farming
+  }
+ }
+ can_construct_building = building_millet_farm
 }
 
 sed_grain_approval_valid = {
@@ -199,6 +298,11 @@ sed_fabric_candidate_eligible = {
  NOT = { has_variable = sed_fabric_ignored }
  NOT = { has_variable = sed_fabric_request_pending }
  owner = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
+ OR = { sed_fabric_cotton_plantation_eligible = yes sed_fabric_livestock_ranch_eligible = yes }
+}
+
+# State scope: one verified producer type for fabric; output checked by active method.
+sed_fabric_cotton_plantation_eligible = {
  has_building = building_cotton_plantation
  b:building_cotton_plantation = {
   level > 0
@@ -207,13 +311,31 @@ sed_fabric_candidate_eligible = {
   building_has_goods_shortage = no
   level_after_queued_constructions <= level
   OR = {
-    has_active_production_method = automatic_irrigation_building_cotton_plantation
-    has_active_production_method = default_building_cotton_plantation
-    has_active_production_method = slave_exploitation_cotton
-    has_active_production_method = worker_exploitation_cotton
+  has_active_production_method = automatic_irrigation_building_cotton_plantation
+  has_active_production_method = default_building_cotton_plantation
+  has_active_production_method = slave_exploitation_cotton
+  has_active_production_method = worker_exploitation_cotton
   }
  }
  can_construct_building = building_cotton_plantation
+}
+
+# State scope: one verified producer type for fabric; output checked by active method.
+sed_fabric_livestock_ranch_eligible = {
+ has_building = building_livestock_ranch
+ b:building_livestock_ranch = {
+  level > 0
+  occupancy >= 0.8
+  has_failed_hires = no
+  building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  OR = {
+  has_active_production_method = pm_intensive_grazing_ranch
+  has_active_production_method = pm_sheep_farms
+  has_active_production_method = pm_simple_ranch
+  }
+ }
+ can_construct_building = building_livestock_ranch
 }
 
 sed_fabric_approval_valid = {
@@ -233,6 +355,11 @@ sed_tools_candidate_eligible = {
  NOT = { has_variable = sed_tools_ignored }
  NOT = { has_variable = sed_tools_request_pending }
  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ OR = { sed_tools_tooling_workshop_eligible = yes }
+}
+
+# State scope: one verified producer type for tools; output checked by active method.
+sed_tools_tooling_workshop_eligible = {
  has_building = building_tooling_workshop
  b:building_tooling_workshop = {
   level > 0
@@ -241,10 +368,10 @@ sed_tools_candidate_eligible = {
   building_has_goods_shortage = no
   level_after_queued_constructions <= level
   OR = {
-    has_active_production_method = pm_crude_tools
-    has_active_production_method = pm_pig_iron
-    has_active_production_method = pm_rubber_grips
-    has_active_production_method = pm_steel
+  has_active_production_method = pm_crude_tools
+  has_active_production_method = pm_pig_iron
+  has_active_production_method = pm_rubber_grips
+  has_active_production_method = pm_steel
   }
  }
  can_construct_building = building_tooling_workshop
@@ -267,6 +394,11 @@ sed_groceries_candidate_eligible = {
  NOT = { has_variable = sed_groceries_ignored }
  NOT = { has_variable = sed_groceries_request_pending }
  owner = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } }
+ OR = { sed_groceries_food_industry_eligible = yes }
+}
+
+# State scope: one verified producer type for groceries; output checked by active method.
+sed_groceries_food_industry_eligible = {
  has_building = building_food_industry
  b:building_food_industry = {
   level > 0
@@ -275,13 +407,13 @@ sed_groceries_candidate_eligible = {
   building_has_goods_shortage = no
   level_after_queued_constructions <= level
   OR = {
-    has_active_production_method = pm_bakery
-    has_active_production_method = pm_baking_powder
-    has_active_production_method = pm_cannery
-    has_active_production_method = pm_cannery_fish
-    has_active_production_method = pm_sweeteners
-    has_active_production_method = pm_vacuum_canning
-    has_active_production_method = pm_vacuum_canning_principle_3
+  has_active_production_method = pm_bakery
+  has_active_production_method = pm_baking_powder
+  has_active_production_method = pm_cannery
+  has_active_production_method = pm_cannery_fish
+  has_active_production_method = pm_sweeteners
+  has_active_production_method = pm_vacuum_canning
+  has_active_production_method = pm_vacuum_canning_principle_3
   }
  }
  can_construct_building = building_food_industry
@@ -304,6 +436,11 @@ sed_clothes_candidate_eligible = {
  NOT = { has_variable = sed_clothes_ignored }
  NOT = { has_variable = sed_clothes_request_pending }
  owner = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } }
+ OR = { sed_clothes_textile_mill_eligible = yes }
+}
+
+# State scope: one verified producer type for clothes; output checked by active method.
+sed_clothes_textile_mill_eligible = {
  has_building = building_textile_mill
  b:building_textile_mill = {
   level > 0
@@ -312,10 +449,10 @@ sed_clothes_candidate_eligible = {
   building_has_goods_shortage = no
   level_after_queued_constructions <= level
   OR = {
-    has_active_production_method = pm_dye_workshops
-    has_active_production_method = pm_electric_sewing_machines
-    has_active_production_method = pm_handsewn_clothes
-    has_active_production_method = pm_sewing_machines
+  has_active_production_method = pm_dye_workshops
+  has_active_production_method = pm_electric_sewing_machines
+  has_active_production_method = pm_handsewn_clothes
+  has_active_production_method = pm_sewing_machines
   }
  }
  can_construct_building = building_textile_mill
@@ -336,7 +473,7 @@ sed_clothes_approval_valid = {
 # Supply Chain independent options remain enabled without its chains toggle.
 sed_auto_month_limit_reached = {
  has_variable = sed_auto_last_attempt_month
- var:sed_auto_last_attempt_month = { value = year multiply = 12 add = month }
+ var:sed_auto_last_attempt_month = sed_live_month_key
 }
 
 # Require an explicit execution mode even when the effect is called directly.
@@ -384,6 +521,21 @@ sed_auto_fiscal_safe = {
   principal <= 0
   AND = { credit > 0 principal <= { value = credit multiply = 0.75 } }
  }
+}
+
+# Keep a reserve floor plus six months of the currently observed deficit.
+sed_coord_reserve_drawdown_safe = {
+ net_fixed_income >= 0
+ net_total_income < 0
+ principal <= 0
+ gold_reserves >= {
+  value = fixed_expenses min = 0 multiply = 12
+  add = { value = net_total_income multiply = -26 }
+ }
+}
+
+sed_coord_fiscal_safe = {
+ OR = { sed_auto_fiscal_safe = yes AND = { has_variable = sed_coord_advisor_known sed_coord_reserve_drawdown_safe = yes } }
 }
 sed_coord_tools_available = {
  OR = {

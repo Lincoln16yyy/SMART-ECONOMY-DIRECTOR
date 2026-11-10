@@ -753,6 +753,21 @@ class DiagnosisTests(unittest.TestCase):
                 self.assertEqual(c.variables['sed_auto_last_attempt_month'], 1841 * 12)
                 self.assertEqual(c.variables['sed_month_key'], stale_diagnostic_month)
 
+    def test_validator_rejects_inline_arithmetic_in_variable_equality(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name, data in outputs().items():
+                path = root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(data)
+            path = root / 'common/scripted_triggers/sed_triggers.txt'
+            text = path.read_text(encoding='utf-8-sig').replace(
+                'var:sed_auto_last_attempt_month = sed_live_month_key',
+                'var:sed_auto_last_attempt_month = { value = year multiply = 12 add = month }', 1)
+            path.write_text(text, encoding='utf-8-sig')
+            self.assertTrue(any('Inline arithmetic in variable equality' in error
+                                for error in validate(root)))
+
     def test_validator_rejects_cleanup_that_resets_automatic_month_limit(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

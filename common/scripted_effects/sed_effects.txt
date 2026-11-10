@@ -108,7 +108,6 @@ sed_disable_country = {
  remove_variable = sed_construction_blocked_states
  remove_variable = sed_construction_infrastructure_states
  remove_variable = sed_queue_levels_before
- remove_variable = sed_supply_action_status
  remove_variable = sed_mode_manual
  remove_variable = sed_mode_assisted
  remove_variable = sed_mode_automatic
@@ -658,13 +657,17 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_wood_request_pending
-    OR = { NOT = { has_building = building_logging_camp } b:building_logging_camp = { level_after_queued_constructions <= level } }
+    NOT = { OR = { AND = { has_building = building_logging_camp b:building_logging_camp = { level_after_queued_constructions > level } } } }
    }
    remove_variable = sed_wood_request_pending
   }
   if = {
-   limit = { has_building = building_logging_camp }
+   limit = { OR = { has_building = building_logging_camp } }
    root = { change_variable = { name = sed_wood_producer_states add = 1 } }
+  }
+  if = { limit = { sed_wood_candidate_eligible = yes } }
+  else_if = {
+   limit = { has_building = building_logging_camp }
    if = {
     limit = { has_variable = sed_wood_ignored }
     root = { change_variable = { name = sed_wood_ignored_states add = 1 } }
@@ -729,13 +732,17 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_iron_request_pending
-    OR = { NOT = { has_building = building_iron_mine } b:building_iron_mine = { level_after_queued_constructions <= level } }
+    NOT = { OR = { AND = { has_building = building_iron_mine b:building_iron_mine = { level_after_queued_constructions > level } } } }
    }
    remove_variable = sed_iron_request_pending
   }
   if = {
-   limit = { has_building = building_iron_mine }
+   limit = { OR = { has_building = building_iron_mine } }
    root = { change_variable = { name = sed_iron_producer_states add = 1 } }
+  }
+  if = { limit = { sed_iron_candidate_eligible = yes } }
+  else_if = {
+   limit = { has_building = building_iron_mine }
    if = {
     limit = { has_variable = sed_iron_ignored }
     root = { change_variable = { name = sed_iron_ignored_states add = 1 } }
@@ -800,13 +807,17 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_coal_request_pending
-    OR = { NOT = { has_building = building_coal_mine } b:building_coal_mine = { level_after_queued_constructions <= level } }
+    NOT = { OR = { AND = { has_building = building_coal_mine b:building_coal_mine = { level_after_queued_constructions > level } } } }
    }
    remove_variable = sed_coal_request_pending
   }
   if = {
-   limit = { has_building = building_coal_mine }
+   limit = { OR = { has_building = building_coal_mine } }
    root = { change_variable = { name = sed_coal_producer_states add = 1 } }
+  }
+  if = { limit = { sed_coal_candidate_eligible = yes } }
+  else_if = {
+   limit = { has_building = building_coal_mine }
    if = {
     limit = { has_variable = sed_coal_ignored }
     root = { change_variable = { name = sed_coal_ignored_states add = 1 } }
@@ -871,13 +882,17 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_grain_request_pending
-    OR = { NOT = { has_building = building_wheat_farm } b:building_wheat_farm = { level_after_queued_constructions <= level } }
+    NOT = { OR = { AND = { has_building = building_wheat_farm b:building_wheat_farm = { level_after_queued_constructions > level } } AND = { has_building = building_rye_farm b:building_rye_farm = { level_after_queued_constructions > level } } AND = { has_building = building_rice_farm b:building_rice_farm = { level_after_queued_constructions > level } } AND = { has_building = building_maize_farm b:building_maize_farm = { level_after_queued_constructions > level } } AND = { has_building = building_millet_farm b:building_millet_farm = { level_after_queued_constructions > level } } } }
    }
    remove_variable = sed_grain_request_pending
   }
   if = {
-   limit = { has_building = building_wheat_farm }
+   limit = { OR = { has_building = building_wheat_farm has_building = building_rye_farm has_building = building_rice_farm has_building = building_maize_farm has_building = building_millet_farm } }
    root = { change_variable = { name = sed_grain_producer_states add = 1 } }
+  }
+  if = { limit = { sed_grain_candidate_eligible = yes } }
+  else_if = {
+   limit = { has_building = building_wheat_farm }
    if = {
     limit = { has_variable = sed_grain_ignored }
     root = { change_variable = { name = sed_grain_ignored_states add = 1 } }
@@ -903,11 +918,163 @@ sed_refresh_supply_candidates = {
     root = { change_variable = { name = sed_grain_input_states add = 1 } }
    }
    else_if = {
-    limit = { b:building_wheat_farm = { NOT = { OR = { has_active_production_method = pm_chemical_fertilizer has_active_production_method = pm_simple_farming has_active_production_method = pm_soil_enriching_farming } } } }
+    limit = { b:building_wheat_farm = { NOT = { OR = { has_active_production_method = pm_chemical_fertilizer has_active_production_method = pm_fertilization has_active_production_method = pm_herring_meal_farming has_active_production_method = pm_simple_farming has_active_production_method = pm_soil_enriching_farming } } } }
     root = { change_variable = { name = sed_grain_method_states add = 1 } }
    }
    else_if = {
     limit = { NOT = { can_construct_building = building_wheat_farm } }
+    root = { change_variable = { name = sed_grain_permission_states add = 1 } }
+   }
+   else_if = {
+    limit = { infrastructure_delta < 0 }
+    root = { change_variable = { name = sed_grain_infrastructure_states add = 1 } }
+   }
+  }  else_if = {
+   limit = { has_building = building_rye_farm }
+   if = {
+    limit = { has_variable = sed_grain_ignored }
+    root = { change_variable = { name = sed_grain_ignored_states add = 1 } }
+   }
+   else_if = {
+    limit = { OR = { has_variable = sed_grain_request_pending b:building_rye_farm = { level_after_queued_constructions > level } } }
+    root = { change_variable = { name = sed_grain_pending_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { is_incorporated = yes } }
+    root = { change_variable = { name = sed_grain_unincorporated_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_rye_farm = { OR = { level <= 0 occupancy < 0.8 } } }
+    root = { change_variable = { name = sed_grain_understaffed_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_rye_farm = { has_failed_hires = yes } }
+    root = { change_variable = { name = sed_grain_hiring_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_rye_farm = { building_has_goods_shortage = yes } }
+    root = { change_variable = { name = sed_grain_input_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_rye_farm = { NOT = { OR = { has_active_production_method = pm_chemical_fertilizer has_active_production_method = pm_fertilization has_active_production_method = pm_simple_farming has_active_production_method = pm_soil_enriching_farming } } } }
+    root = { change_variable = { name = sed_grain_method_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { can_construct_building = building_rye_farm } }
+    root = { change_variable = { name = sed_grain_permission_states add = 1 } }
+   }
+   else_if = {
+    limit = { infrastructure_delta < 0 }
+    root = { change_variable = { name = sed_grain_infrastructure_states add = 1 } }
+   }
+  }  else_if = {
+   limit = { has_building = building_rice_farm }
+   if = {
+    limit = { has_variable = sed_grain_ignored }
+    root = { change_variable = { name = sed_grain_ignored_states add = 1 } }
+   }
+   else_if = {
+    limit = { OR = { has_variable = sed_grain_request_pending b:building_rice_farm = { level_after_queued_constructions > level } } }
+    root = { change_variable = { name = sed_grain_pending_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { is_incorporated = yes } }
+    root = { change_variable = { name = sed_grain_unincorporated_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_rice_farm = { OR = { level <= 0 occupancy < 0.8 } } }
+    root = { change_variable = { name = sed_grain_understaffed_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_rice_farm = { has_failed_hires = yes } }
+    root = { change_variable = { name = sed_grain_hiring_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_rice_farm = { building_has_goods_shortage = yes } }
+    root = { change_variable = { name = sed_grain_input_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_rice_farm = { NOT = { OR = { has_active_production_method = pm_chemical_fertilizer_building_rice_farm has_active_production_method = pm_fertilization_building_rice_farm has_active_production_method = pm_herring_meal_farming_building_rice_farm has_active_production_method = pm_simple_farming_building_rice_farm has_active_production_method = pm_soil_enriching_farming_building_rice_farm } } } }
+    root = { change_variable = { name = sed_grain_method_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { can_construct_building = building_rice_farm } }
+    root = { change_variable = { name = sed_grain_permission_states add = 1 } }
+   }
+   else_if = {
+    limit = { infrastructure_delta < 0 }
+    root = { change_variable = { name = sed_grain_infrastructure_states add = 1 } }
+   }
+  }  else_if = {
+   limit = { has_building = building_maize_farm }
+   if = {
+    limit = { has_variable = sed_grain_ignored }
+    root = { change_variable = { name = sed_grain_ignored_states add = 1 } }
+   }
+   else_if = {
+    limit = { OR = { has_variable = sed_grain_request_pending b:building_maize_farm = { level_after_queued_constructions > level } } }
+    root = { change_variable = { name = sed_grain_pending_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { is_incorporated = yes } }
+    root = { change_variable = { name = sed_grain_unincorporated_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_maize_farm = { OR = { level <= 0 occupancy < 0.8 } } }
+    root = { change_variable = { name = sed_grain_understaffed_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_maize_farm = { has_failed_hires = yes } }
+    root = { change_variable = { name = sed_grain_hiring_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_maize_farm = { building_has_goods_shortage = yes } }
+    root = { change_variable = { name = sed_grain_input_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_maize_farm = { NOT = { OR = { has_active_production_method = pm_chemical_fertilizer has_active_production_method = pm_fertilization has_active_production_method = pm_simple_farming has_active_production_method = pm_soil_enriching_farming } } } }
+    root = { change_variable = { name = sed_grain_method_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { can_construct_building = building_maize_farm } }
+    root = { change_variable = { name = sed_grain_permission_states add = 1 } }
+   }
+   else_if = {
+    limit = { infrastructure_delta < 0 }
+    root = { change_variable = { name = sed_grain_infrastructure_states add = 1 } }
+   }
+  }  else_if = {
+   limit = { has_building = building_millet_farm }
+   if = {
+    limit = { has_variable = sed_grain_ignored }
+    root = { change_variable = { name = sed_grain_ignored_states add = 1 } }
+   }
+   else_if = {
+    limit = { OR = { has_variable = sed_grain_request_pending b:building_millet_farm = { level_after_queued_constructions > level } } }
+    root = { change_variable = { name = sed_grain_pending_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { is_incorporated = yes } }
+    root = { change_variable = { name = sed_grain_unincorporated_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_millet_farm = { OR = { level <= 0 occupancy < 0.8 } } }
+    root = { change_variable = { name = sed_grain_understaffed_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_millet_farm = { has_failed_hires = yes } }
+    root = { change_variable = { name = sed_grain_hiring_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_millet_farm = { building_has_goods_shortage = yes } }
+    root = { change_variable = { name = sed_grain_input_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_millet_farm = { NOT = { OR = { has_active_production_method = pm_chemical_fertilizer has_active_production_method = pm_fertilization has_active_production_method = pm_simple_farming has_active_production_method = pm_soil_enriching_farming } } } }
+    root = { change_variable = { name = sed_grain_method_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { can_construct_building = building_millet_farm } }
     root = { change_variable = { name = sed_grain_permission_states add = 1 } }
    }
    else_if = {
@@ -942,13 +1109,17 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_fabric_request_pending
-    OR = { NOT = { has_building = building_cotton_plantation } b:building_cotton_plantation = { level_after_queued_constructions <= level } }
+    NOT = { OR = { AND = { has_building = building_cotton_plantation b:building_cotton_plantation = { level_after_queued_constructions > level } } AND = { has_building = building_livestock_ranch b:building_livestock_ranch = { level_after_queued_constructions > level } } } }
    }
    remove_variable = sed_fabric_request_pending
   }
   if = {
-   limit = { has_building = building_cotton_plantation }
+   limit = { OR = { has_building = building_cotton_plantation has_building = building_livestock_ranch } }
    root = { change_variable = { name = sed_fabric_producer_states add = 1 } }
+  }
+  if = { limit = { sed_fabric_candidate_eligible = yes } }
+  else_if = {
+   limit = { has_building = building_cotton_plantation }
    if = {
     limit = { has_variable = sed_fabric_ignored }
     root = { change_variable = { name = sed_fabric_ignored_states add = 1 } }
@@ -985,6 +1156,44 @@ sed_refresh_supply_candidates = {
     limit = { infrastructure_delta < 0 }
     root = { change_variable = { name = sed_fabric_infrastructure_states add = 1 } }
    }
+  }  else_if = {
+   limit = { has_building = building_livestock_ranch }
+   if = {
+    limit = { has_variable = sed_fabric_ignored }
+    root = { change_variable = { name = sed_fabric_ignored_states add = 1 } }
+   }
+   else_if = {
+    limit = { OR = { has_variable = sed_fabric_request_pending b:building_livestock_ranch = { level_after_queued_constructions > level } } }
+    root = { change_variable = { name = sed_fabric_pending_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { is_incorporated = yes } }
+    root = { change_variable = { name = sed_fabric_unincorporated_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_livestock_ranch = { OR = { level <= 0 occupancy < 0.8 } } }
+    root = { change_variable = { name = sed_fabric_understaffed_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_livestock_ranch = { has_failed_hires = yes } }
+    root = { change_variable = { name = sed_fabric_hiring_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_livestock_ranch = { building_has_goods_shortage = yes } }
+    root = { change_variable = { name = sed_fabric_input_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_livestock_ranch = { NOT = { OR = { has_active_production_method = pm_intensive_grazing_ranch has_active_production_method = pm_sheep_farms has_active_production_method = pm_simple_ranch } } } }
+    root = { change_variable = { name = sed_fabric_method_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { can_construct_building = building_livestock_ranch } }
+    root = { change_variable = { name = sed_fabric_permission_states add = 1 } }
+   }
+   else_if = {
+    limit = { infrastructure_delta < 0 }
+    root = { change_variable = { name = sed_fabric_infrastructure_states add = 1 } }
+   }
   }
  }
  if = {
@@ -1013,13 +1222,17 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_tools_request_pending
-    OR = { NOT = { has_building = building_tooling_workshop } b:building_tooling_workshop = { level_after_queued_constructions <= level } }
+    NOT = { OR = { AND = { has_building = building_tooling_workshop b:building_tooling_workshop = { level_after_queued_constructions > level } } } }
    }
    remove_variable = sed_tools_request_pending
   }
   if = {
-   limit = { has_building = building_tooling_workshop }
+   limit = { OR = { has_building = building_tooling_workshop } }
    root = { change_variable = { name = sed_tools_producer_states add = 1 } }
+  }
+  if = { limit = { sed_tools_candidate_eligible = yes } }
+  else_if = {
+   limit = { has_building = building_tooling_workshop }
    if = {
     limit = { has_variable = sed_tools_ignored }
     root = { change_variable = { name = sed_tools_ignored_states add = 1 } }
@@ -1084,13 +1297,17 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_groceries_request_pending
-    OR = { NOT = { has_building = building_food_industry } b:building_food_industry = { level_after_queued_constructions <= level } }
+    NOT = { OR = { AND = { has_building = building_food_industry b:building_food_industry = { level_after_queued_constructions > level } } } }
    }
    remove_variable = sed_groceries_request_pending
   }
   if = {
-   limit = { has_building = building_food_industry }
+   limit = { OR = { has_building = building_food_industry } }
    root = { change_variable = { name = sed_groceries_producer_states add = 1 } }
+  }
+  if = { limit = { sed_groceries_candidate_eligible = yes } }
+  else_if = {
+   limit = { has_building = building_food_industry }
    if = {
     limit = { has_variable = sed_groceries_ignored }
     root = { change_variable = { name = sed_groceries_ignored_states add = 1 } }
@@ -1155,13 +1372,17 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_clothes_request_pending
-    OR = { NOT = { has_building = building_textile_mill } b:building_textile_mill = { level_after_queued_constructions <= level } }
+    NOT = { OR = { AND = { has_building = building_textile_mill b:building_textile_mill = { level_after_queued_constructions > level } } } }
    }
    remove_variable = sed_clothes_request_pending
   }
   if = {
-   limit = { has_building = building_textile_mill }
+   limit = { OR = { has_building = building_textile_mill } }
    root = { change_variable = { name = sed_clothes_producer_states add = 1 } }
+  }
+  if = { limit = { sed_clothes_candidate_eligible = yes } }
+  else_if = {
+   limit = { has_building = building_textile_mill }
    if = {
     limit = { has_variable = sed_clothes_ignored }
     root = { change_variable = { name = sed_clothes_ignored_states add = 1 } }
@@ -1218,7 +1439,10 @@ sed_run_wood_approval = {
   limit = { sed_wood_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
-  start_building_construction = building_logging_camp
+  if = {
+   limit = { sed_wood_logging_camp_eligible = yes }
+   start_building_construction = building_logging_camp
+  }
   owner = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
@@ -1236,7 +1460,10 @@ sed_run_iron_approval = {
   limit = { sed_iron_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
-  start_building_construction = building_iron_mine
+  if = {
+   limit = { sed_iron_iron_mine_eligible = yes }
+   start_building_construction = building_iron_mine
+  }
   owner = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
@@ -1254,7 +1481,10 @@ sed_run_coal_approval = {
   limit = { sed_coal_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
-  start_building_construction = building_coal_mine
+  if = {
+   limit = { sed_coal_coal_mine_eligible = yes }
+   start_building_construction = building_coal_mine
+  }
   owner = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
@@ -1272,7 +1502,26 @@ sed_run_grain_approval = {
   limit = { sed_grain_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
-  start_building_construction = building_wheat_farm
+  if = {
+   limit = { sed_grain_wheat_farm_eligible = yes }
+   start_building_construction = building_wheat_farm
+  }
+  else_if = {
+   limit = { sed_grain_rye_farm_eligible = yes }
+   start_building_construction = building_rye_farm
+  }
+  else_if = {
+   limit = { sed_grain_rice_farm_eligible = yes }
+   start_building_construction = building_rice_farm
+  }
+  else_if = {
+   limit = { sed_grain_maize_farm_eligible = yes }
+   start_building_construction = building_maize_farm
+  }
+  else_if = {
+   limit = { sed_grain_millet_farm_eligible = yes }
+   start_building_construction = building_millet_farm
+  }
   owner = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
@@ -1290,7 +1539,14 @@ sed_run_fabric_approval = {
   limit = { sed_fabric_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
-  start_building_construction = building_cotton_plantation
+  if = {
+   limit = { sed_fabric_cotton_plantation_eligible = yes }
+   start_building_construction = building_cotton_plantation
+  }
+  else_if = {
+   limit = { sed_fabric_livestock_ranch_eligible = yes }
+   start_building_construction = building_livestock_ranch
+  }
   owner = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
@@ -1308,7 +1564,10 @@ sed_run_tools_approval = {
   limit = { sed_tools_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
-  start_building_construction = building_tooling_workshop
+  if = {
+   limit = { sed_tools_tooling_workshop_eligible = yes }
+   start_building_construction = building_tooling_workshop
+  }
   owner = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
@@ -1326,7 +1585,10 @@ sed_run_groceries_approval = {
   limit = { sed_groceries_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
-  start_building_construction = building_food_industry
+  if = {
+   limit = { sed_groceries_food_industry_eligible = yes }
+   start_building_construction = building_food_industry
+  }
   owner = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
@@ -1344,7 +1606,10 @@ sed_run_clothes_approval = {
   limit = { sed_clothes_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
-  start_building_construction = building_textile_mill
+  if = {
+   limit = { sed_clothes_textile_mill_eligible = yes }
+   start_building_construction = building_textile_mill
+  }
   owner = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
@@ -1635,6 +1900,7 @@ sed_refresh_national_plan = {
    } }
    set_variable = { name = sed_fiscal_status value = 3 }
   }
+  else_if = { limit = { sed_coord_reserve_drawdown_safe = yes } set_variable = { name = sed_fiscal_status value = 5 } }
   else_if = { limit = { NOT = { sed_auto_fiscal_safe = yes } } set_variable = { name = sed_fiscal_status value = 2 } }
   clear_variable_list = sed_plan_1_railway
   clear_variable_list = sed_plan_1_construction
@@ -1669,7 +1935,7 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_plan_missing_wood value = 0 }
   if = { limit = {
    market = { mg:wood ?= { market_goods_has_goods_shortage = yes } }
-   NOT = { any_scope_state = { has_building = building_logging_camp } }
+   NOT = { any_scope_state = { OR = { has_building = building_logging_camp } } }
   }
    set_variable = { name = sed_plan_missing_wood value = 1 }
    change_variable = { name = sed_plan_missing_count add = 1 }
@@ -1686,7 +1952,7 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_plan_missing_iron value = 0 }
   if = { limit = {
    market = { mg:iron ?= { market_goods_has_goods_shortage = yes } }
-   NOT = { any_scope_state = { has_building = building_iron_mine } }
+   NOT = { any_scope_state = { OR = { has_building = building_iron_mine } } }
   }
    set_variable = { name = sed_plan_missing_iron value = 1 }
    change_variable = { name = sed_plan_missing_count add = 1 }
@@ -1703,7 +1969,7 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_plan_missing_coal value = 0 }
   if = { limit = {
    market = { mg:coal ?= { market_goods_has_goods_shortage = yes } }
-   NOT = { any_scope_state = { has_building = building_coal_mine } }
+   NOT = { any_scope_state = { OR = { has_building = building_coal_mine } } }
   }
    set_variable = { name = sed_plan_missing_coal value = 1 }
    change_variable = { name = sed_plan_missing_count add = 1 }
@@ -1720,7 +1986,7 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_plan_missing_grain value = 0 }
   if = { limit = {
    market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
-   NOT = { any_scope_state = { has_building = building_wheat_farm } }
+   NOT = { any_scope_state = { OR = { has_building = building_wheat_farm has_building = building_rye_farm has_building = building_rice_farm has_building = building_maize_farm has_building = building_millet_farm } } }
   }
    set_variable = { name = sed_plan_missing_grain value = 1 }
    change_variable = { name = sed_plan_missing_count add = 1 }
@@ -1737,7 +2003,7 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_plan_missing_fabric value = 0 }
   if = { limit = {
    market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } }
-   NOT = { any_scope_state = { has_building = building_cotton_plantation } }
+   NOT = { any_scope_state = { OR = { has_building = building_cotton_plantation has_building = building_livestock_ranch } } }
   }
    set_variable = { name = sed_plan_missing_fabric value = 1 }
    change_variable = { name = sed_plan_missing_count add = 1 }
@@ -1754,7 +2020,7 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_plan_missing_tools value = 0 }
   if = { limit = {
    market = { mg:tools ?= { market_goods_has_goods_shortage = yes } }
-   NOT = { any_scope_state = { has_building = building_tooling_workshop } }
+   NOT = { any_scope_state = { OR = { has_building = building_tooling_workshop } } }
   }
    set_variable = { name = sed_plan_missing_tools value = 1 }
    change_variable = { name = sed_plan_missing_count add = 1 }
@@ -1771,7 +2037,7 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_plan_missing_groceries value = 0 }
   if = { limit = {
    market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } }
-   NOT = { any_scope_state = { has_building = building_food_industry } }
+   NOT = { any_scope_state = { OR = { has_building = building_food_industry } } }
   }
    set_variable = { name = sed_plan_missing_groceries value = 1 }
    change_variable = { name = sed_plan_missing_count add = 1 }
@@ -1788,7 +2054,7 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_plan_missing_clothes value = 0 }
   if = { limit = {
    market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } }
-   NOT = { any_scope_state = { has_building = building_textile_mill } }
+   NOT = { any_scope_state = { OR = { has_building = building_textile_mill } } }
   }
    set_variable = { name = sed_plan_missing_clothes value = 1 }
    change_variable = { name = sed_plan_missing_count add = 1 }
@@ -2245,11 +2511,11 @@ sed_refresh_national_plan = {
    }
   }
   if = { limit = { var:sed_plan_count = 0 var:sed_plan_missing_count > 0 } set_variable = { name = sed_plan_goal value = 5 } }
-  if = { limit = { var:sed_plan_goal = 0 sed_auto_fiscal_safe = yes } set_variable = { name = sed_plan_goal value = 8 } }
+  if = { limit = { var:sed_plan_goal = 0 sed_coord_fiscal_safe = yes } set_variable = { name = sed_plan_goal value = 8 } }
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } bureaucracy < 0 } set_variable = { name = sed_plan_goal value = 6 } }
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } any_scope_state = { tax_capacity_usage > tax_capacity } } set_variable = { name = sed_plan_goal value = 7 } }
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } any_scope_state = { sg:electricity ?= { state_goods_pricier >= 0.2 } } } set_variable = { name = sed_plan_goal value = 9 } }
-  if = { limit = { var:sed_fiscal_status >= 3 } set_variable = { name = sed_plan_goal value = 4 } }
+  if = { limit = { OR = { var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } } set_variable = { name = sed_plan_goal value = 4 } }
  }
 }
 sed_coord_capture_advisor_policy = {
@@ -2389,29 +2655,29 @@ sed_coord_sync = {
   set_variable = { name = sed_coord_executor value = 0 }
   set_variable = { name = sed_coord_advisor_policy value = 0 }
   if = { limit = { has_variable = aroai_autobuild } set_variable = { name = sed_coord_executor value = 5 } }
-  else_if = { limit = { sed_auto_fiscal_safe = yes NOT = { in_default = yes } is_construction_paused = no }
-   if = { limit = { var:sed_plan_goal = 1 has_variable = sed_coord_supply_known }
+  else_if = { limit = { sed_coord_fiscal_safe = yes NOT = { in_default = yes } is_construction_paused = no }
+   if = { limit = { var:sed_plan_goal = 1 has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes }
     if = { limit = { has_variable = sed_coord_saved_railways }
  set_variable = { name = zw_var_scsab_construct_railway value = var:sed_coord_saved_railways }
 }
 else = { set_variable = { name = zw_var_scsab_construct_railway value = 1 } }
     set_variable = { name = sed_coord_executor value = 2 }
    }
-   else_if = { limit = { has_variable = sed_coord_supply_known var:sed_plan_goal = 6 }
+   else_if = { limit = { has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 6 }
     if = { limit = { has_variable = sed_coord_saved_admin }
  set_variable = { name = zw_var_scsab_gov_admin value = var:sed_coord_saved_admin }
 }
 else = { set_variable = { name = zw_var_scsab_gov_admin value = 10 } }
     set_variable = { name = sed_coord_executor value = 6 }
    }
-   else_if = { limit = { has_variable = sed_coord_supply_known var:sed_plan_goal = 7 }
+   else_if = { limit = { has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 7 }
     if = { limit = { has_variable = sed_coord_saved_tax }
  set_variable = { name = zw_var_scsab_gov_admin_for_tax value = var:sed_coord_saved_tax }
 }
 else = { set_variable = { name = zw_var_scsab_gov_admin_for_tax value = 1 } }
     set_variable = { name = sed_coord_executor value = 7 }
    }
-   else_if = { limit = { has_variable = sed_coord_supply_known var:sed_plan_goal = 9 }
+   else_if = { limit = { has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 9 }
     if = { limit = { has_variable = sed_coord_saved_power }
  set_variable = { name = zw_var_scsab_construct_power_plant value = var:sed_coord_saved_power }
 }
@@ -2443,14 +2709,14 @@ else = { set_variable = { name = advisor_auto_construction_enabled value = 1 } }
      set_variable = { name = sed_coord_advisor_policy value = 2 }
     }
    }
-   else_if = { limit = { has_variable = sed_coord_supply_known OR = { var:sed_plan_goal = 2 var:sed_plan_goal = 5 var:sed_plan_goal = 8 } }
+   else_if = { limit = { has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes OR = { var:sed_plan_goal = 2 var:sed_plan_goal = 5 var:sed_plan_goal = 8 } }
     if = { limit = { has_variable = sed_coord_saved_chains }
  set_variable = { name = zw_var_expand_building value = var:sed_coord_saved_chains }
 }
 else = { set_variable = { name = zw_var_expand_building value = 0 } }
     set_variable = { name = sed_coord_executor value = 3 }
    }
-   else_if = { limit = { has_variable = sed_coord_supply_known var:sed_plan_goal = 3 }
+   else_if = { limit = { has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 3 }
     if = { limit = { has_variable = sed_coord_saved_sectors }
  set_variable = { name = zw_var_more_construction_sectors value = var:sed_coord_saved_sectors }
 }

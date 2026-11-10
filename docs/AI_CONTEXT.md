@@ -1,8 +1,40 @@
 # Contexto de continuidade
 
-Entrega local 0.6.1 instalada com jogo fechado, 13 outputs conferidos e
+Entrega local 0.6.3 instalada com jogo fechado, 14 outputs conferidos e
 content_load.json preservado. Backup em
-`sed_backups/mod_before_0.6.1_20261109_222628_869777`.
+`sed_backups/mod_before_0.6.3_20261110_002209_786280`.
+
+## Produtores alternativos 0.6.3
+
+O catálogo deixou de assumir um prédio por bem. Cereais aceitam fazendas de
+trigo, centeio, arroz, milho e milhete; tecido aceita plantação de algodão e
+fazenda de gado. Cada variante tem trigger próprio `sed_<bem>_<prédio>_eligible`;
+a elegibilidade é uma disjunção e a aprovação enfileira o primeiro produtor
+elegível. O diagnóstico de produtor ausente e as rejeições usam as mesmas
+variantes. Fontes vanilla e limites em PLANNING.md. 126 testes aprovados;
+combinações novas ainda sem confirmação na engine.
+
+## Entrega local 0.6.2
+
+Instalada com jogo fechado, 14 outputs conferidos e content_load.json
+preservado. Backup em `sed_backups/mod_before_0.6.2_20261109_235909_180351`.
+
+## Construção financiada por reservas 0.6.2
+
+A classificação fiscal 5 permite coordenação quando o déficit operacional é
+coberto por reservas: receita fixa não negativa, déficit total observado, sem
+dívida e ouro cobrindo doze semanas de despesas fixas mais 26 semanas do
+déficit. `sed_coord_fiscal_safe` aceita a guarda antiga ou a 5 com Advisor
+detectado; os ramos do Supply Chain continuam exigindo saldo não negativo. A
+classificação 5 permite crescimento e não força estabilização. O limite
+mensal automático passou a usar o script value `sed_live_month_key`, e o
+validador rejeita aritmética embutida em igualdades `var:`. 124 testes
+aprovados; instalação e comportamento em campanha ainda não confirmados.
+
+## Entrega local 0.6.1
+
+Instalada com jogo fechado, 13 outputs conferidos e content_load.json
+preservado. Backup em `sed_backups/mod_before_0.6.1_20261109_222628_869777`.
 
 ## Objetivo e orçamento do Advisor 0.6.1
 

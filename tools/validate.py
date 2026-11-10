@@ -99,6 +99,10 @@ def validate(root=ROOT, game=None):
                 check_effects(entry.value)
             if '/events/' in name and entry.key == 'immediate' and isinstance(entry.value, list):
                 check_effects(entry.value)
+            if entry.key.startswith('var:') and entry.op == '=' and isinstance(entry.value, list):
+                numeric_ops = {'value', 'add', 'subtract', 'multiply', 'divide'}
+                if any(item.key in numeric_ops for item in entry.value):
+                    errors.append('Inline arithmetic in variable equality requires a named script value: ' + entry.key)
             if entry.key.startswith('sed_') and entry.value == 'yes' and entry.key not in custom:
                 errors.append('Undefined scripted call: ' + entry.key)
     all_text = '\n'.join(p.read_text(encoding='utf-8-sig') for p in (root / 'common').rglob('*.txt'))
@@ -108,23 +112,27 @@ def validate(root=ROOT, game=None):
             errors.append('Unexpected economic/political mutation: ' + mutation)
     construction_calls = [(name, entry) for name, tree in trees.items() for entry in walk(tree)
                           if entry.key == 'start_building_construction']
-    approved_actions = {'sed_run_railway_approval': 'building_railway',
-                        'sed_run_construction_approval': 'building_construction_sector'}
+    approved_actions = {'sed_run_railway_approval': {'building_railway'},
+                        'sed_run_construction_approval': {'building_construction_sector'}}
     try:
-        from .build_mod import SUPPLY_TARGETS
+        from .build_mod import SUPPLY_TARGETS, variants
     except ImportError:
-        from build_mod import SUPPLY_TARGETS
-    approved_actions.update({f"sed_run_{item['good']}_approval": item['building']
+        from build_mod import SUPPLY_TARGETS, variants
+    approved_actions.update({f"sed_run_{item['good']}_approval":
+                             {variant['building'] for variant in variants(item)}
                              for item in SUPPLY_TARGETS})
     construction_error = False
-    for effect, building in approved_actions.items():
+    covered = 0
+    for effect, allowed in approved_actions.items():
         approved_construction = [entry for entry in walk(custom.get(effect, []))
                                  if entry.key == 'start_building_construction']
-        if len(approved_construction) != 1 or approved_construction[0].value != building:
+        covered += len(approved_construction)
+        if not approved_construction or any(entry.value not in allowed
+                                            for entry in approved_construction):
             construction_error = True
-    if (len(construction_calls) != len(approved_actions) or construction_error
+    if (covered != len(construction_calls) or construction_error
             or any(name != 'common/scripted_effects/sed_effects.txt' for name, _ in construction_calls)):
-        errors.append('Each approved action may queue only its declared building level')
+        errors.append('Each approved action may queue only its declared building levels')
     cleaned = {entry.value for entry in walk(custom.get('sed_disable_country', []))
                if entry.key == 'remove_variable'}
     assigned = {child(entry.value, 'name') for tree in trees.values() for entry in walk(tree)
