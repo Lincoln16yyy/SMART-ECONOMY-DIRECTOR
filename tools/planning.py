@@ -1,9 +1,17 @@
 """Generate a bounded national plan from observable readings, not a return model."""
 
 RANKS = (1, 2, 3)
+MILITARY_GOODS = (
+    ('small_arms', 'armas leves', 'small arms'),
+    ('artillery', 'artilharia', 'artillery'),
+    ('ammunition', 'munição', 'ammunition'),
+    ('manowars', 'navios de guerra à vela', 'sailing warships'),
+    ('ironclads', 'navios de guerra blindados', 'ironclads'),
+)
 COUNTRY_VARIABLES = ['sed_plan_count', 'sed_plan_goal', 'sed_fiscal_status',
                      'sed_plan_year', 'sed_plan_month', 'sed_plan_missing_count',
-                     'sed_plan_waiting']
+                     'sed_plan_waiting', 'sed_military_posture', 'sed_military_at_war',
+                     'sed_military_shortage_count'] + [f'sed_military_short_{good}' for good, _, _ in MILITARY_GOODS]
 STATE_VARIABLES = ['sed_plan_score', 'sed_plan_type']
 
 
@@ -358,7 +366,44 @@ def effects(actions, buildings):
    set_variable = { name = sed_plan_goal value = 4 }
    set_variable = { name = sed_plan_waiting value = 0 }
   }
+  sed_refresh_military_plan = yes
  }
 }
 ''')
     return '\n'.join(line.rstrip() for block in result for line in block.splitlines()) + '\n'
+
+
+def military_effects():
+    result = ["""# Country scope; read-only military-economic assessment.
+sed_refresh_military_plan = {
+ if = { limit = { is_player = yes has_variable = sed_enabled }
+  set_variable = { name = sed_military_expenses value = military_expenses }
+  set_variable = { name = sed_military_share value = military_expenses_share }
+  set_variable = { name = sed_military_at_war value = 0 }
+  if = { limit = { is_at_war = yes } set_variable = { name = sed_military_at_war value = 1 } }
+  set_variable = { name = sed_military_shortage_count value = 0 }
+  set_variable = { name = sed_military_posture value = 0 }
+"""]
+    for good, _, _ in MILITARY_GOODS:
+        result.append(f"""  set_variable = {{ name = sed_military_short_{good} value = 0 }}
+  if = {{ limit = {{ market = {{ mg:{good} ?= {{ market_goods_buy_orders > 0 market_goods_has_goods_shortage = yes }} }} }}
+   set_variable = {{ name = sed_military_short_{good} value = 1 }}
+   change_variable = {{ name = sed_military_shortage_count add = 1 }}
+  }}""")
+    result.append("""  if = { limit = { military_expenses > 0 }
+   set_variable = { name = sed_military_posture value = 1 }
+   if = { limit = { var:sed_military_shortage_count > 0 }
+    set_variable = { name = sed_military_posture value = 2 }
+   }
+   if = { limit = { OR = { var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 net_fixed_income < 0 } }
+    set_variable = { name = sed_military_posture value = 3 }
+   }
+   else_if = { limit = { var:sed_military_shortage_count = 0
+    sed_auto_fiscal_safe = yes principal <= 0 net_total_income > 0
+    gold_reserves >= { value = fixed_expenses min = 0 multiply = 12 }
+   } set_variable = { name = sed_military_posture value = 4 } }
+  }
+ }
+}
+""")
+    return '\n'.join(result)

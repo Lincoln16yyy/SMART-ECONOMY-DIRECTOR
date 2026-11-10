@@ -1,5 +1,40 @@
 # Contexto de continuidade
 
+Entrega 0.6.13 instalada com jogo fechado, 14 outputs conferidos no ZIP e na
+instalação, ordem preservada. Backup
+`sed_backups/mod_before_0.6.13_20261110_115247_160824`.
+
+## 0.6.13 — Avaliação econômico-militar
+
+O briefing inclui financiamento do exército, indústria bélica e marinha.
+A nova avaliação é atualizada pela entrada normal do plano nacional e lê
+`military_expenses`, `military_expenses_share` e `is_at_war`, verificados nos
+scripts vanilla locais. A participação é apresentada como indicador do jogo,
+sem presumir denominador diferente do fornecido pela engine.
+
+Armas leves, artilharia, munição, navios de guerra à vela e blindados são
+monitorados no mercado. Avisos exigem demanda positiva e escassez. Um mercado
+compartilhado pode ter demanda de outros países; esses sinais ainda não
+identificam o consumo das forças nacionais.
+
+Diretrizes distinguem observar demanda, sustentar a força atual, investigar
+abastecimento, estabilizar orçamento e estudar modernização. A última exige
+saldo positivo, guarda fiscal de expansão, ausência de dívida e doze semanas
+de despesas fixas em reservas, sem escassez militar detectada. Esse limiar é
+inicial e não estima o custo de uma modernização específica. Crise/default ou
+saldo operacional negativo têm precedência. Sem despesa militar positiva,
+a escassez compartilhada não cria inferência de necessidade nacional.
+
+A avaliação é informativa e não muda a seleção dos executores, recrutamento,
+PMs, salários militares ou composição das forças. Construção militar dirigida,
+consumo nacional, prontidão e coordenação do recrutador permanecem pendentes.
+
+172 testes sintéticos aprovados. Sete novas regressões cobrem atualização
+normal, escassez, ausência de demanda, limites fiscais, resolução e limpeza.
+Geração, ZIP e validação estática local passaram. Novos dados e layout ainda
+exigem observação na campanha, junto do roteiro acumulado.
+
+
 Entrega 0.6.12 instalada com jogo fechado, 14 outputs conferidos no ZIP e na
 instalação, ordem preservada. Backup
 `sed_backups/mod_before_0.6.12_20261110_114152_397000`.

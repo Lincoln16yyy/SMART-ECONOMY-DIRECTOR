@@ -74,6 +74,8 @@ sed_disable_country = {
  remove_variable = sed_construction
  remove_variable = sed_public_projects
  remove_variable = sed_private_projects
+ remove_variable = sed_military_expenses
+ remove_variable = sed_military_share
  remove_variable = sed_last_year
  remove_variable = sed_last_month
  remove_variable = sed_month_key
@@ -274,6 +276,14 @@ sed_disable_country = {
  remove_variable = sed_plan_month
  remove_variable = sed_plan_missing_count
  remove_variable = sed_plan_waiting
+ remove_variable = sed_military_posture
+ remove_variable = sed_military_at_war
+ remove_variable = sed_military_shortage_count
+ remove_variable = sed_military_short_small_arms
+ remove_variable = sed_military_short_artillery
+ remove_variable = sed_military_short_ammunition
+ remove_variable = sed_military_short_manowars
+ remove_variable = sed_military_short_ironclads
  remove_variable = sed_plan_pressure_wood
  remove_variable = sed_plan_pressure_iron
  remove_variable = sed_plan_pressure_coal
@@ -467,6 +477,10 @@ sed_refresh_diagnostics = {
  set_variable = { name = sed_public_projects value = num_queued_government_constructions }
  # Economy Advisor/advisor_core_values.txt
  set_variable = { name = sed_private_projects value = num_queued_private_constructions }
+ # vanilla/common/script_values/01_power_bloc_values.txt
+ set_variable = { name = sed_military_expenses value = military_expenses }
+ # vanilla/common/script_values/01_power_bloc_values.txt
+ set_variable = { name = sed_military_share value = military_expenses_share }
   set_variable = { name = sed_last_year value = year }
   # The game's month trigger is zero-based (vanilla ip4_custom_loc.txt).
   set_variable = { name = sed_last_month value = { value = month add = 1 } }
@@ -3443,6 +3457,57 @@ sed_refresh_national_plan = {
   if = { limit = { OR = { var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } }
    set_variable = { name = sed_plan_goal value = 4 }
    set_variable = { name = sed_plan_waiting value = 0 }
+  }
+  sed_refresh_military_plan = yes
+ }
+}
+# Country scope; read-only military-economic assessment.
+sed_refresh_military_plan = {
+ if = { limit = { is_player = yes has_variable = sed_enabled }
+  set_variable = { name = sed_military_expenses value = military_expenses }
+  set_variable = { name = sed_military_share value = military_expenses_share }
+  set_variable = { name = sed_military_at_war value = 0 }
+  if = { limit = { is_at_war = yes } set_variable = { name = sed_military_at_war value = 1 } }
+  set_variable = { name = sed_military_shortage_count value = 0 }
+  set_variable = { name = sed_military_posture value = 0 }
+
+  set_variable = { name = sed_military_short_small_arms value = 0 }
+  if = { limit = { market = { mg:small_arms ?= { market_goods_buy_orders > 0 market_goods_has_goods_shortage = yes } } }
+   set_variable = { name = sed_military_short_small_arms value = 1 }
+   change_variable = { name = sed_military_shortage_count add = 1 }
+  }
+  set_variable = { name = sed_military_short_artillery value = 0 }
+  if = { limit = { market = { mg:artillery ?= { market_goods_buy_orders > 0 market_goods_has_goods_shortage = yes } } }
+   set_variable = { name = sed_military_short_artillery value = 1 }
+   change_variable = { name = sed_military_shortage_count add = 1 }
+  }
+  set_variable = { name = sed_military_short_ammunition value = 0 }
+  if = { limit = { market = { mg:ammunition ?= { market_goods_buy_orders > 0 market_goods_has_goods_shortage = yes } } }
+   set_variable = { name = sed_military_short_ammunition value = 1 }
+   change_variable = { name = sed_military_shortage_count add = 1 }
+  }
+  set_variable = { name = sed_military_short_manowars value = 0 }
+  if = { limit = { market = { mg:manowars ?= { market_goods_buy_orders > 0 market_goods_has_goods_shortage = yes } } }
+   set_variable = { name = sed_military_short_manowars value = 1 }
+   change_variable = { name = sed_military_shortage_count add = 1 }
+  }
+  set_variable = { name = sed_military_short_ironclads value = 0 }
+  if = { limit = { market = { mg:ironclads ?= { market_goods_buy_orders > 0 market_goods_has_goods_shortage = yes } } }
+   set_variable = { name = sed_military_short_ironclads value = 1 }
+   change_variable = { name = sed_military_shortage_count add = 1 }
+  }
+  if = { limit = { military_expenses > 0 }
+   set_variable = { name = sed_military_posture value = 1 }
+   if = { limit = { var:sed_military_shortage_count > 0 }
+    set_variable = { name = sed_military_posture value = 2 }
+   }
+   if = { limit = { OR = { var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 net_fixed_income < 0 } }
+    set_variable = { name = sed_military_posture value = 3 }
+   }
+   else_if = { limit = { var:sed_military_shortage_count = 0
+    sed_auto_fiscal_safe = yes principal <= 0 net_total_income > 0
+    gold_reserves >= { value = fixed_expenses min = 0 multiply = 12 }
+   } set_variable = { name = sed_military_posture value = 4 } }
   }
  }
 }
