@@ -11,7 +11,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.6.7'
+VERSION = '0.6.8'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -63,7 +63,8 @@ IGNORED_VARIABLES = [f'sed_{name}_ignored' for name in ACTION_NAMES]
 SUPPLY_DIAGNOSTICS = ('producer_states', 'ignored_states', 'pending_states', 'unincorporated_states',
                       'understaffed_states', 'hiring_states', 'input_states',
                       'method_states', 'permission_states', 'infrastructure_states')
-STATE_VARIABLES = ['sed_railway_request_pending', 'sed_construction_request_pending'] + [
+STATE_VARIABLES = ['sed_railway_request_pending', 'sed_construction_request_pending',
+                   'sed_railway_intent_level', 'sed_construction_intent_level'] + [
     f"sed_{item['good']}_request_pending" for item in SUPPLY_TARGETS] + IGNORED_VARIABLES + [
     f"sed_{item['good']}_{field}" for item in SUPPLY_TARGETS
     for field in ('intent_level', 'intent_variant')]
@@ -87,6 +88,8 @@ sed_queue_levels_before'''.split() + [
     'sed_auto_review_status', 'sed_auto_review_year', 'sed_auto_review_month',
     *[f"sed_{item['good']}_action_status" for item in SUPPLY_TARGETS],
     *[f"sed_{item['good']}_{field}" for item in SUPPLY_TARGETS
+      for field in ('intents', 'completed', 'abandoned', 'result', 'result_month')],
+    *[f"sed_{name}_{field}" for name in ('railway', 'construction')
       for field in ('intents', 'completed', 'abandoned', 'result', 'result_month')],
     *[f"sed_{item['good']}_{reason}" for item in SUPPLY_TARGETS
       for reason in SUPPLY_DIAGNOSTICS],
@@ -495,6 +498,8 @@ def widget():
     for item in SUPPLY_TARGETS:
         name = item['good']
         body += textbox(f'sed_book_{name}', f'sed_book_{name}_visible_sgui')
+    for name in ('railway', 'construction'):
+        body += textbox(f'sed_book_{name}', f'sed_book_{name}_visible_sgui')
     body += textbox('sed_plan_empty', 'sed_plan_empty_visible_sgui')
     for rank in planning.RANKS:
         body += textbox(f'sed_plan_rank_{rank}', f'sed_plan_rank_{rank}_visible_sgui', heading=True)
@@ -593,6 +598,9 @@ sed_disable_country = {
  every_scope_state = {
   remove_variable = sed_railway_request_pending
   remove_variable = sed_construction_request_pending
+  remove_variable = sed_railway_intent_level
+  remove_variable = sed_construction_intent_level
+__SUPPLY_STATE_CLEANUP__
  }
  # Schema and automatic attempt month persist; disabling cannot reset the monthly cap.
 }
@@ -695,7 +703,19 @@ sed_refresh_railway_candidates = {
      b:building_railway = { level_after_queued_constructions <= level }
     }
    }
+   if = {
+    limit = { has_variable = sed_railway_intent_level
+     has_building = building_railway
+     b:building_railway.level > var:sed_railway_intent_level
+    }
+    sed_railway_record_completed = yes
+   }
+   else_if = {
+    limit = { has_variable = sed_railway_intent_level }
+    sed_railway_record_abandoned = yes
+   }
    remove_variable = sed_railway_request_pending
+   remove_variable = sed_railway_intent_level
   }
   if = {
    limit = { infrastructure_delta < 0 }
@@ -754,14 +774,22 @@ sed_run_railway_approval = {
    set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }
   }
   owner = { sed_record_auto_attempt = yes }
+  set_variable = { name = sed_railway_intent_level value = b:building_railway.level }
   start_building_construction = building_railway
   owner = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_railway_action_status value = 1 }
+    if = { limit = { has_variable = sed_railway_intents }
+     change_variable = { name = sed_railway_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_railway_intents value = 1 } }
     prev = { set_variable = { name = sed_railway_request_pending value = yes } }
    }
-   else = { set_variable = { name = sed_railway_action_status value = 2 } }
+   else = {
+    set_variable = { name = sed_railway_action_status value = 2 }
+    prev = { remove_variable = sed_railway_intent_level }
+   }
    remove_variable = sed_queue_levels_before
   }
  }
@@ -785,7 +813,19 @@ sed_refresh_construction_candidates = {
      b:building_construction_sector = { level_after_queued_constructions <= level }
     }
    }
+   if = {
+    limit = { has_variable = sed_construction_intent_level
+     has_building = building_construction_sector
+     b:building_construction_sector.level > var:sed_construction_intent_level
+    }
+    sed_construction_record_completed = yes
+   }
+   else_if = {
+    limit = { has_variable = sed_construction_intent_level }
+    sed_construction_record_abandoned = yes
+   }
    remove_variable = sed_construction_request_pending
+   remove_variable = sed_construction_intent_level
   }
   if = {
    limit = { has_building = building_construction_sector }
@@ -848,17 +888,74 @@ sed_run_construction_approval = {
    set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }
   }
   owner = { sed_record_auto_attempt = yes }
+  set_variable = { name = sed_construction_intent_level value = b:building_construction_sector.level }
   start_building_construction = building_construction_sector
   owner = {
    if = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_construction_action_status value = 1 }
+    if = { limit = { has_variable = sed_construction_intents }
+     change_variable = { name = sed_construction_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_construction_intents value = 1 } }
     prev = { set_variable = { name = sed_construction_request_pending value = yes } }
    }
-   else = { set_variable = { name = sed_construction_action_status value = 2 } }
+   else = {
+    set_variable = { name = sed_construction_action_status value = 2 }
+    prev = { remove_variable = sed_construction_intent_level }
+   }
    remove_variable = sed_queue_levels_before
   }
  }
+}
+
+# Country counters; completion is inferred from the queue leaving and level rising.
+sed_railway_record_completed = {
+ owner = {
+  if = { limit = { has_variable = sed_railway_completed }
+   change_variable = { name = sed_railway_completed add = 1 }
+  }
+  else = { set_variable = { name = sed_railway_completed value = 1 } }
+  set_variable = { name = sed_railway_result value = 1 }
+  set_variable = { name = sed_railway_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_railway_intent_level
+}
+
+sed_railway_record_abandoned = {
+ owner = {
+  if = { limit = { has_variable = sed_railway_abandoned }
+   change_variable = { name = sed_railway_abandoned add = 1 }
+  }
+  else = { set_variable = { name = sed_railway_abandoned value = 1 } }
+  set_variable = { name = sed_railway_result value = 2 }
+  set_variable = { name = sed_railway_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_railway_intent_level
+}
+
+sed_construction_record_completed = {
+ owner = {
+  if = { limit = { has_variable = sed_construction_completed }
+   change_variable = { name = sed_construction_completed add = 1 }
+  }
+  else = { set_variable = { name = sed_construction_completed value = 1 } }
+  set_variable = { name = sed_construction_result value = 1 }
+  set_variable = { name = sed_construction_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_construction_intent_level
+}
+
+sed_construction_record_abandoned = {
+ owner = {
+  if = { limit = { has_variable = sed_construction_abandoned }
+   change_variable = { name = sed_construction_abandoned add = 1 }
+  }
+  else = { set_variable = { name = sed_construction_abandoned value = 1 } }
+  set_variable = { name = sed_construction_result value = 2 }
+  set_variable = { name = sed_construction_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_construction_intent_level
 }
 
 # Keep the first sample of each recorded month as the anchor. A second click in
@@ -906,10 +1003,9 @@ sed_update_growth = {
     # Supply markers belong to their own queued buildings. Clear them all only
     # when disabling, never when a construction-sector request resolves.
     script = script.replace(
-        '  remove_variable = sed_construction_request_pending\n }\n # Schema and automatic attempt month',
-        '  remove_variable = sed_construction_request_pending\n' + supply_state_cleanup
-        + '\n' + '\n'.join('  remove_variable = ' + name for name in IGNORED_VARIABLES)
-        + '\n }\n # Schema and automatic attempt month', 1)
+        '__SUPPLY_STATE_CLEANUP__',
+        supply_state_cleanup + '\n'
+        + '\n'.join('  remove_variable = ' + name for name in IGNORED_VARIABLES))
     script = script.replace(
         '    set_variable = { name = sed_railway_action_status value = 1 }',
         '    set_variable = { name = sed_railway_action_status value = 1 }\n'
@@ -1166,6 +1262,8 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
         result += f'sed_meta_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_{name}_meta_year var:sed_{name}_meta_year = year }} }}\n'
     for item in SUPPLY_TARGETS:
         name = item['good']
+        result += f'sed_book_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_{name}_intents var:sed_{name}_intents > 0 }} }}\n'
+    for name in ('railway', 'construction'):
         result += f'sed_book_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_{name}_intents var:sed_{name}_intents > 0 }} }}\n'
     for item in SUPPLY_TARGETS:
         name = item['good']
@@ -1598,6 +1696,8 @@ def localization(language):
         pairs[f'sed_plan_missing_{name}'] = (f"Setor a investigar: {item['label_pt']} em escassez no mercado, sem produtor verificado ({producers_pt}) nos estados do país. Importação ou outros produtores podem suprir o bem; não é ordem de autossuficiência.", f"Sector to investigate: market shortage of {item['label_en']}, with no verified producer ({producers_en}) in the country's states. Imports or other producers may supply it; this is not a self-sufficiency mandate.")
         pairs[f'sed_book_{name}'] = (f"Histórico de {item['label_pt']}: {v(name + '_intents', '0')} pedidos, {v(name + '_completed', '0')} concluídos, {v(name + '_abandoned', '0')} abandonados. Conclusão inferida quando o nível do produtor sobe ao sair da fila; cancelamento ou obra externa podem distorcer a leitura.", f"{item['label_en'].capitalize()} history: {v(name + '_intents', '0')} requested, {v(name + '_completed', '0')} completed, {v(name + '_abandoned', '0')} abandoned. Completion is inferred when the producer level rises after leaving the queue; cancellation or external work can distort it.")
         pairs[f'sed_meta_{name}'] = (f"Meta industrial anual: ampliar a oferta de {item['label_pt']}. A escassez desse bem durou três meses ou mais; ele mantém prioridade no plano até o fim do ano. A meta não dispensa os filtros de trabalhadores, insumos, fila, infraestrutura e proteção fiscal.", f"Annual industrial goal: expand the supply of {item['label_en']}. The shortage lasted three months or more; it keeps priority in the plan until the end of the year. The goal does not bypass the worker, input, queue, infrastructure and fiscal guards.")
+    pairs['sed_book_railway'] = (f"Histórico de ferrovias: {v('railway_intents', '0')} pedidos, {v('railway_completed', '0')} concluídos, {v('railway_abandoned', '0')} abandonados. Conclusão inferida quando o nível sobe ao sair da fila.", f"Railway history: {v('railway_intents', '0')} requested, {v('railway_completed', '0')} completed, {v('railway_abandoned', '0')} abandoned. Completion is inferred when the level rises after leaving the queue.")
+    pairs['sed_book_construction'] = (f"Histórico de setores de construção: {v('construction_intents', '0')} pedidos, {v('construction_completed', '0')} concluídos, {v('construction_abandoned', '0')} abandonados. Conclusão inferida quando o nível sobe ao sair da fila.", f"Construction sector history: {v('construction_intents', '0')} requested, {v('construction_completed', '0')} completed, {v('construction_abandoned', '0')} abandoned. Completion is inferred when the level rises after leaving the queue.")
     for rank in planning.RANKS:
         pairs[f'sed_plan_rank_{rank}'] = (f'Prioridade {rank}', f'Priority {rank}')
     for name in ACTION_NAMES:

@@ -963,6 +963,8 @@ sed_book_fabric_visible_sgui = { scope = country is_shown = { has_variable = sed
 sed_book_tools_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_tools_intents var:sed_tools_intents > 0 } }
 sed_book_groceries_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_groceries_intents var:sed_groceries_intents > 0 } }
 sed_book_clothes_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_clothes_intents var:sed_clothes_intents > 0 } }
+sed_book_railway_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_railway_intents var:sed_railway_intents > 0 } }
+sed_book_construction_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_construction_intents var:sed_construction_intents > 0 } }
 sed_plan_missing_wood_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_missing_wood var:sed_plan_missing_wood = 1 } }
 sed_plan_missing_iron_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_missing_iron var:sed_plan_missing_iron = 1 } }
 sed_plan_missing_coal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_missing_coal var:sed_plan_missing_coal = 1 } }

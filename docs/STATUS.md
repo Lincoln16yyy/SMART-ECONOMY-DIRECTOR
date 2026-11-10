@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.6.7
+# Estado dos requisitos — 0.6.8
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.
@@ -19,13 +19,13 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Evitar executor próprio em paralelo | Bloqueio explícito durante coordenação | ARoAI detectado suspende delegação, autoexpansões nativas continuam sem controle |
 | Desativar e devolver opções | Restaura presença e valor original das onze opções, com testes de idempotência | Confirmar restauração após save/reload e atualização de versão |
 | Manual e Assistido | Autorizações e trocas de modo testadas | Restauração pode reativar opções externas originalmente ligadas |
-| Histórico | Resultado mensal datado, status externo e livro de pedidos/concluídos/abandonados dos oito bens | Conclusão é inferida pela fila e nível; ampliar a ferrovia/setor e reduzir ambiguidade de cancelamento |
+| Histórico | Resultado mensal datado, status externo e livro dos oito bens, ferrovia e setor de construção | Conclusão é inferida pela fila e nível; reduzir ambiguidade de cancelamento |
 | Fila sem duplicação | Guardas agregadas, nível após fila e marcas por tipo/estado | Identidade, lado, investidor, conclusão/cancelamento e reconciliação completa |
 | Planejamento de longo prazo | Direção atual, reavaliação periódica e meta anual de oferta para escassez persistente | Metas plurianuais, cadeias completas, diversificação medida e feedback de resultados |
 | Leis, guerra e diplomacia | Fora das mutações econômicas implementadas | Mantidas sob responsabilidade dos módulos e decisões previstos pelo briefing |
 | Haiti, país rico e crise | Cenários sintéticos fiscais e de seleção | Campanhas registradas e comparáveis permanecem pendentes |
 | Crescimento em campanha longa | Ainda sem evidência | Medir PIB, SoL, emprego, dívida, reservas e diversificação durante vários anos |
-| Entrega | Gerador, validador, testes, ZIP e instalador com backup | Instalação 0.6.7 com backup e 14 outputs conferidos. Publicação segue por PR |
+| Entrega | Gerador, validador, testes, ZIP e instalador com backup | Instalação 0.6.8 com backup e 14 outputs conferidos. PR #14 aberto para main |
 
 O jogador relatou que seus testes anteriores produziram pouca mudança visível,
 pois outros construtores já atuavam. Esse relato motivou os adaptadores da 0.6.1.
@@ -65,6 +65,9 @@ concluído e nível igual ou menor como abandonado. A leitura é inferida, não
 usa identidade de projeto, e pode ser distorcida por cancelamento seguido de
 obra externa. Ferrovia e setor de construção ainda não têm registro. A captura
 usa `b:<prédio>.level` como valor, forma presente no Advisor instalado.
+
+A 0.6.8 estende o livro de resultados a ferrovia e setor de construção, com a
+mesma inferência por fila e nível. Desativar limpa marcadores e contadores.
 
 Os testes implementados ficam em `tests/test_planning.py`,
 `tests/test_coordination.py` e na suíte anterior. As fontes e decisões de
