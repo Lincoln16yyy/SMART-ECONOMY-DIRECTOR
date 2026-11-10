@@ -5,13 +5,13 @@ import json
 from pathlib import Path
 
 try:
-    from . import planning, coordination, construction_budget
+    from . import planning, coordination, construction_budget, labor
 except ImportError:
-    import planning, coordination, construction_budget
+    import planning, coordination, construction_budget, labor
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.6.18'
+VERSION = '0.6.19'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -66,13 +66,13 @@ ACTION_NAMES = ('railway', 'construction') + tuple(item['good'] for item in SUPP
 IGNORED_VARIABLES = [f'sed_{name}_ignored' for name in ACTION_NAMES]
 SUPPLY_DIAGNOSTICS = ('producer_states', 'ignored_states', 'pending_states', 'unincorporated_states',
                       'understaffed_states', 'hiring_states', 'input_states',
-                      'method_states', 'permission_states', 'infrastructure_states')
+                      'method_states', 'permission_states', 'infrastructure_states', 'labor_states')
 STATE_VARIABLES = ['sed_railway_request_pending', 'sed_construction_request_pending',
                    'sed_railway_intent_level', 'sed_construction_intent_level'] + [
     f"sed_{item['good']}_request_pending" for item in SUPPLY_TARGETS] + IGNORED_VARIABLES + [
     f"sed_{item['good']}_{field}" for item in SUPPLY_TARGETS
     for field in ('intent_level', 'intent_variant')]
-STATE_VARIABLES += planning.state_variables(ACTION_NAMES)
+STATE_VARIABLES += planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES
 EXTRA_VARIABLES = '''sed_last_year sed_last_month sed_month_key sed_in_default
 sed_gdp_per_capita sed_per_capita_available sed_debt_share sed_debt_share_available
 sed_reserve_weeks sed_reserve_weeks_available sed_states sed_infrastructure_short_states
@@ -165,6 +165,7 @@ sed_refresh_supply_candidates = {''']
                 ('unincorporated_states', 'NOT = { is_incorporated = yes }'),
                 ('understaffed_states', f'b:{building} = {{ OR = {{ level <= 0 occupancy < 0.8 }} }}'),
                 ('hiring_states', f'b:{building} = {{ has_failed_hires = yes }}'),
+                ('labor_states', f'sed_state_labor_available < {labor.REQUIREMENTS[building]}'),
                 ('input_states', f'b:{building} = {{ building_has_goods_shortage = yes }}'),
                 ('method_states', f'b:{building} = {{ NOT = {{ OR = {{ {methods} }} }} }}'),
                 ('permission_states', f'NOT = {{ can_construct_building = {building} }}'),
@@ -440,6 +441,7 @@ def candidate_item(name):
     if name != 'railway':
         content += textbox('sed_candidate_infrastructure', width=468)
         content += textbox('sed_expansion_infrastructure_blocked', f'sed_{name}_infrastructure_blocked_sgui', width=468, state=True)
+    content += textbox('sed_candidate_labor', width=468)
     content += textbox('sed_approval_ready', f'sed_{name}_ready_sgui', width=468, state=True)
     content += textbox('sed_mode_approval_blocked', f'sed_{name}_switch_assisted_sgui', width=468, state=True)
     content += button('sed_switch_assisted', f'sed_{name}_switch_assisted_sgui', width=468, state=True)
@@ -1072,10 +1074,10 @@ sed_update_growth = {
     cleanup = '\n'.join(' clear_variable_list = ' + name for name in planning.lists(ACTION_NAMES))
     script = script.replace('sed_disable_country = {', 'sed_disable_country = {\n' + cleanup, 1)
     # All state-scoped planner variables are removed on deactivation.
-    state_cleanup = '\n'.join('  remove_variable = ' + name for name in planning.state_variables(ACTION_NAMES))
+    state_cleanup = '\n'.join('  remove_variable = ' + name for name in planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES)
     script = script.replace(' # Schema and automatic attempt month',
                             ' every_scope_state = {\n' + state_cleanup + '\n }\n # Schema and automatic attempt month', 1)
-    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + construction_budget.effects() + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + coordination.effects()
+    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + labor.effects() + construction_budget.effects() + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + coordination.effects()
 
 
 def scripted_guis():
@@ -1452,6 +1454,7 @@ sed_{good}_{variant_id(variant)}_eligible = {{
 {methods}
   }}
  }}
+ sed_state_labor_available >= {labor.REQUIREMENTS[building]}
  can_construct_building = {building}
 }}
 ''')
@@ -1643,17 +1646,20 @@ def localization(language):
         else:
             plural_en = ('states with a ' + ', '.join(variant['building_en'] for variant in vs[:-1])
                          + ', or ' + vs[-1]['building_en'])
+        labor_pt = ', '.join(variant['building_pt'] + ' ' + str(labor.REQUIREMENTS[variant['building']]) for variant in vs)
+        labor_en = ', '.join(variant['building_en'] + ' ' + str(labor.REQUIREMENTS[variant['building']]) for variant in vs)
         pairs[f'sed_{good}_rejection_summary'] = (
             f"Última leitura — {plural_pt}: " + v(good + '_producer_states', '0')
-            + '. Cada estado rejeitado é contado pelo primeiro motivo aplicável.',
+            + '. Cada estado rejeitado é contado pelo primeiro motivo aplicável. Referência de trabalhadores por nível: ' + labor_pt + '.',
             f"Last reading — {plural_en}: " + v(good + '_producer_states', '0')
-            + '. Each rejected state is counted under its first applicable reason.')
+            + '. Each rejected state is counted under its first applicable reason. Worker reference per level: ' + labor_en + '.')
         labels = [
             ('ignored_states', 'ignorado por você', 'ignored by you'),
             ('pending_states', 'expansão pendente ou enfileirada', 'pending or queued expansion'),
             ('unincorporated_states', 'estado não incorporado', 'unincorporated state'),
             ('understaffed_states', 'nível zero ou ocupação abaixo de 80%', 'zero level or occupancy below 80%'),
             ('hiring_states', 'falha de contratação', 'failed hires'),
+            ('labor_states', 'reserva estimada de trabalhadores insuficiente', 'insufficient estimated labor reserve'),
             ('input_states', 'falta de insumos', 'input shortage'),
             ('method_states', 'método ativo sem produção confirmada do bem', 'active method without confirmed output of this good'),
             ('permission_states', 'construção não permitida', 'construction not allowed'),
@@ -1779,6 +1785,7 @@ def localization(language):
         'sed_goal_9': ('Objetivo atual: investigar energia local cara, com preço ao menos 20% acima da base em algum estado. A ferramenta externa verifica viabilidade.', 'Current objective: investigate costly local power, priced at least 20% above base in a state. The external tool checks feasibility.'),
         'sed_coord_supply_policy': ('Política do Supply Chain sob o Director. Expansões em estados incorporados; administração trata o déficit atual de burocracia. Limites numéricos de construção em um nível por local escolhido, conforme a rotina externa. A soma nacional pode superar um nível. Tributação é avaliada em junho/dezembro e setores em fevereiro/agosto. Opções anteriores são restauradas ao sair do Automático.', 'Supply Chain policy under the Director. Expansion in incorporated states; administration addresses the current bureaucracy deficit. Numeric construction limits are one level per selected location, according to the external routine. The national total may exceed one level. Tax capacity is evaluated in June/December and construction sectors in February/August. Previous settings are restored when leaving Automatic.'),
         'sed_auto_current_budget': ('Agora: orçamento direto aguarda cobertura da referência de materiais, capacidade de construção ou método reconhecido. Confira os valores no plano nacional.', 'Now: direct execution awaits material-reference coverage, construction capacity or a recognized method. Check the national plan values.'),
+        'sed_candidate_labor': ("Última leitura de mão de obra. Reserva estimada após vagas e filas conhecidas: [State.MakeScope.Var('sed_labor_available').GetValue|0]. Compromissos estimados: [State.MakeScope.Var('sed_labor_committed').GetValue|0]. Referência demográfica; qualificações e migração futura ainda precisam de avaliação.", "Last labor reading. Estimated reserve after known vacancies and queues: [State.MakeScope.Var('sed_labor_available').GetValue|0]. Estimated commitments: [State.MakeScope.Var('sed_labor_committed').GetValue|0]. Demographic reference; qualifications and future migration still require assessment."),
         'sed_auto_status_budget': ('Última revisão: referência de materiais da próxima obra sem cobertura ou método de construção desconhecido. Nenhuma tentativa consumida. Confira o orçamento direto no plano.', 'Last review: next-project material benchmark is uncovered or construction method is unknown. No attempt consumed. See the direct budget in the plan.'),
         'sed_build_budget_unknown': ('Orçamento direto pendente. Um setor ativo usa método de construção fora dos quatro perfis verificados. O Automático direto aguarda uma leitura reconhecida; aprovação Assistida permanece explícita.', 'Direct budget pending. An active sector uses a construction method outside the four verified profiles. Direct Automatic awaits recognized data; Assisted approval remains explicit.'),
         'sed_build_budget': ('Referência conservadora para materiais da próxima obra direta: @money!' + v('build_budget_weekly', 'K') + '/semana, para até ' + v('build_budget_points', '1') + ' pontos. Teto de materiais pelos níveis e ocupação dos setores: @money!' + v('build_budget_material_capacity', 'K') + '/semana. Ouro exigido se o saldo não cobrir a referência: @money!' + v('build_budget_required_gold', 'K') + ', com ausência de dívida. Usa o maior custo entre métodos ativos, limitado pelos materiais dos setores existentes, com preços-base acrescidos de 75%. Pode superestimar; salários futuros, subsídios, modificadores e duração da obra ainda precisam ser avaliados.', 'Conservative material benchmark for the next direct project: @money!' + v('build_budget_weekly', 'K') + '/week, for up to ' + v('build_budget_points', '1') + ' points. Sector level/occupancy material cap: @money!' + v('build_budget_material_capacity', 'K') + '/week. Gold required if the balance does not cover the benchmark: @money!' + v('build_budget_required_gold', 'K') + ', with no debt. Uses the highest active-method cost, capped by existing sector materials, with base prices plus 75%. May overestimate; future wages, subsidies, modifiers and project duration still require assessment.'),
@@ -1932,7 +1939,7 @@ sed_pulse.1 = {
         'common/scripted_effects/sed_effects.txt': effects(),
         'common/scripted_guis/sed_scripted_guis.txt': scripted_guis(),
         'common/scripted_triggers/sed_triggers.txt': scripted_triggers(),
-        'common/script_values/sed_values.txt': '# Current calendar, independent of diagnostic refresh.\nsed_live_month_key = { value = year multiply = 12 add = month }\n',
+        'common/script_values/sed_values.txt': '# Current calendar, independent of diagnostic refresh.\nsed_live_month_key = { value = year multiply = 12 add = month }\n' + labor.values(),
         'gui/journal_entry_widgets/sed_diagnostics.gui': widget(),
         'localization/braz_por/sed_l_braz_por.yml': localization('braz_por'),
         'localization/english/sed_l_english.yml': localization('english'),

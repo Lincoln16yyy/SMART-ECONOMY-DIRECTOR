@@ -1571,3 +1571,41 @@ níveis/ocupação, soma entre estados e atualização, além do teto por projet
 O harness suporta o iterador numérico de estados usado por scripts vanilla.
 Geração e validação estática local aprovadas. Novos valores e comportamento
 precisam de calibração em campanha.
+
+## 2026-11-10 — Referência de mão de obra
+
+As candidatas dos onze bens agora exigem reserva estimada de trabalhadores
+para um nível adicional do produtor escolhido. O filtro aplica-se à
+recomendação, aprovação Assistida e execução direta automática. Rotas externas
+mantêm seus próprios critérios. Ferrovia e setor de construção entram no
+cálculo de compromissos, mas seus filtros de candidatura permanecem anteriores.
+
+A reserva demográfica usa população, referência de participação no trabalho
+(0,25 mais modificador estadual, limitada entre 0,05 e 1), desemprego e metade
+da participação de camponeses. Taxas são limitadas ao intervalo 0–1. Essa
+fórmula é uma aproximação; não representa contagem direta de trabalhadores.
+Não inclui qualificações, migração futura ou atração de empregados de outros
+setores. Por isso pode rejeitar investimentos que seriam viáveis por esses
+mecanismos.
+
+A reserva é reduzida pelos compromissos conhecidos dos 18 tipos de prédio
+registrados. Inclui vagas estimadas dos níveis atuais e os níveis adicionais
+na fila, usando ocupação atual e coeficiente por nível. O coeficiente é a soma
+dos maiores empregos de cada grupo de PMs vanilla do tipo, desconsiderando
+economias de automação. O registro `data/labor_requirements.json` foi extraído
+dos edifícios, grupos e métodos locais. Outros tipos de prédio e alterações
+de emprego por outros mods continuam fora desse registro.
+
+Os valores são calculados ao vivo nos filtros e registrados por estado na
+leitura do plano. Cartões mostram reserva e compromissos; o diagnóstico de
+rejeição tem motivo específico e coeficientes por produtor. Cancelar obra ou
+liberar vagas muda a avaliação na próxima leitura. Desativar limpa snapshots.
+
+217 testes sintéticos aprovados, incluindo oito regressões de referência,
+fronteira, vagas, filas, camponeses, revalidação, variantes e limpeza. O harness
+compara script values numéricos no lado esquerdo das condições. Geração e
+validação estática local aprovadas. Novas leituras e bloqueios ainda aguardam
+calibração e observação em campanha, junto do roteiro acumulado.
+
+O jogador pediu testes apenas após mudanças relevantes. Acumular validações
+locais e evitar solicitar capturas para cada alteração pequena.

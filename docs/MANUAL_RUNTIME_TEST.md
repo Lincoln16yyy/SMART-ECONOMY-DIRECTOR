@@ -11,7 +11,7 @@ Leitura manual corrigiu snapshot fiscal desatualizado. O controle por reservas
 continuava ativo com déficit e fila pública, motivando a pausa da 0.6.16.
 
 
-## Teste conjunto da 0.6.18
+## Teste conjunto da 0.6.19
 
 Realizar quando o jogador decidir retomar os testes. Registrar uma captura
 inicial do orçamento, opções dos construtores e fila, e guardar um save.
@@ -74,6 +74,13 @@ inicial do orçamento, opções dos construtores e fila, e guardar um save.
     viável, confirmar inclusão. Registrar casos em que a referência parece
     excessiva para calibrar o modelo. Métodos desconhecidos devem manter o
     aviso específico. Aprovação Assistida continua exigindo decisão do jogador.
+
+13. Quando houver uma rodada significativa de teste, conferir os cartões e
+    o novo motivo de rejeição por reserva estimada de trabalhadores. Comparar
+    com desempregados/camponeses e obras do estado. Registrar exemplos de
+    bloqueio excessivo, especialmente onde migração ou mudança de emprego
+    permitiriam expansão. A referência não prevê qualificações. Conferir se
+    liberar uma obra ou vagas altera a reserva na leitura seguinte.
 
 Guardar capturas de um caso saudável, um caso de crise e a restauração. Obras
 existentes e investimentos privados não comprovam autoria do Director.

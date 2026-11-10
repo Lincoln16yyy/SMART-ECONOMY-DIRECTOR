@@ -1,2 +1,127 @@
 ﻿# Current calendar, independent of diagnostic refresh.
 sed_live_month_key = { value = year multiply = 12 add = month }
+# State scope; demographic proxy rather than a worker count from the engine.
+sed_state_labor_pool = {
+ value = state_population min = 0
+ multiply = { value = 0.25 add = modifier:state_working_adult_ratio_add min = 0.05 max = 1 }
+ multiply = {
+  value = state_unemployment_rate min = 0 max = 1
+  add = { value = "pop_type_percent_state(pop_type:peasants)" min = 0 max = 1 multiply = 0.5 }
+  max = 1
+ }
+}
+sed_state_labor_committed = {
+ value = 0
+
+ if = { limit = { has_building = building_railway }
+  add = { value = b:building_railway.level_after_queued_constructions
+   subtract = { value = b:building_railway.level multiply = { value = b:building_railway.occupancy min = 0 max = 1 } }
+   min = 0 multiply = 1200
+  }
+ }
+ if = { limit = { has_building = building_construction_sector }
+  add = { value = b:building_construction_sector.level_after_queued_constructions
+   subtract = { value = b:building_construction_sector.level multiply = { value = b:building_construction_sector.occupancy min = 0 max = 1 } }
+   min = 0 multiply = 1000
+  }
+ }
+ if = { limit = { has_building = building_logging_camp }
+  add = { value = b:building_logging_camp.level_after_queued_constructions
+   subtract = { value = b:building_logging_camp.level multiply = { value = b:building_logging_camp.occupancy min = 0 max = 1 } }
+   min = 0 multiply = 5000
+  }
+ }
+ if = { limit = { has_building = building_iron_mine }
+  add = { value = b:building_iron_mine.level_after_queued_constructions
+   subtract = { value = b:building_iron_mine.level multiply = { value = b:building_iron_mine.occupancy min = 0 max = 1 } }
+   min = 0 multiply = 5250
+  }
+ }
+ if = { limit = { has_building = building_coal_mine }
+  add = { value = b:building_coal_mine.level_after_queued_constructions
+   subtract = { value = b:building_coal_mine.level multiply = { value = b:building_coal_mine.occupancy min = 0 max = 1 } }
+   min = 0 multiply = 5250
+  }
+ }
+ if = { limit = { has_building = building_wheat_farm }
+  add = { value = b:building_wheat_farm.level_after_queued_constructions
+   subtract = { value = b:building_wheat_farm.level multiply = { value = b:building_wheat_farm.occupancy min = 0 max = 1 } }
+   min = 0 multiply = 5000
+  }
+ }
+ if = { limit = { has_building = building_rye_farm }
+  add = { value = b:building_rye_farm.level_after_queued_constructions
+   subtract = { value = b:building_rye_farm.level multiply = { value = b:building_rye_farm.occupancy min = 0 max = 1 } }
+   min = 0 multiply = 5000
+  }
+ }
+ if = { limit = { has_building = building_rice_farm }
+  add = { value = b:building_rice_farm.level_after_queued_constructions
+   subtract = { value = b:building_rice_farm.level multiply = { value = b:building_rice_farm.occupancy min = 0 max = 1 } }
+   min = 0 multiply = 10000
+  }
+ }
+ if = { limit = { has_building = building_maize_farm }
+  add = { value = b:building_maize_farm.level_after_queued_constructions
+   subtract = { value = b:building_maize_farm.level multiply = { value = b:building_maize_farm.occupancy min = 0 max = 1 } }
+   min = 0 multiply = 5000
+  }
+ }
+ if = { limit = { has_building = building_millet_farm }
+  add = { value = b:building_millet_farm.level_after_queued_constructions
+   subtract = { value = b:building_millet_farm.level multiply = { value = b:building_millet_farm.occupancy min = 0 max = 1 } }
+   min = 0 multiply = 5000
+  }
+ }
+ if = { limit = { has_building = building_cotton_plantation }
+  add = { value = b:building_cotton_plantation.level_after_queued_constructions
+   subtract = { value = b:building_cotton_plantation.level multiply = { value = b:building_cotton_plantation.occupancy min = 0 max = 1 } }
+   min = 0 multiply = 8000
+  }
+ }
+ if = { limit = { has_building = building_livestock_ranch }
+  add = { value = b:building_livestock_ranch.level_after_queued_constructions
+   subtract = { value = b:building_livestock_ranch.level multiply = { value = b:building_livestock_ranch.occupancy min = 0 max = 1 } }
+   min = 0 multiply = 5000
+  }
+ }
+ if = { limit = { has_building = building_tooling_workshop }
+  add = { value = b:building_tooling_workshop.level_after_queued_constructions
+   subtract = { value = b:building_tooling_workshop.level multiply = { value = b:building_tooling_workshop.occupancy min = 0 max = 1 } }
+   min = 0 multiply = 5000
+  }
+ }
+ if = { limit = { has_building = building_food_industry }
+  add = { value = b:building_food_industry.level_after_queued_constructions
+   subtract = { value = b:building_food_industry.level multiply = { value = b:building_food_industry.occupancy min = 0 max = 1 } }
+   min = 0 multiply = 6600
+  }
+ }
+ if = { limit = { has_building = building_textile_mill }
+  add = { value = b:building_textile_mill.level_after_queued_constructions
+   subtract = { value = b:building_textile_mill.level multiply = { value = b:building_textile_mill.occupancy min = 0 max = 1 } }
+   min = 0 multiply = 6000
+  }
+ }
+ if = { limit = { has_building = building_arms_industry }
+  add = { value = b:building_arms_industry.level_after_queued_constructions
+   subtract = { value = b:building_arms_industry.level multiply = { value = b:building_arms_industry.occupancy min = 0 max = 1 } }
+   min = 0 multiply = 5000
+  }
+ }
+ if = { limit = { has_building = building_artillery_foundry }
+  add = { value = b:building_artillery_foundry.level_after_queued_constructions
+   subtract = { value = b:building_artillery_foundry.level multiply = { value = b:building_artillery_foundry.occupancy min = 0 max = 1 } }
+   min = 0 multiply = 5250
+  }
+ }
+ if = { limit = { has_building = building_munition_plant }
+  add = { value = b:building_munition_plant.level_after_queued_constructions
+   subtract = { value = b:building_munition_plant.level multiply = { value = b:building_munition_plant.occupancy min = 0 max = 1 } }
+   min = 0 multiply = 5000
+  }
+ }
+}
+sed_state_labor_available = {
+ value = sed_state_labor_pool subtract = sed_state_labor_committed min = 0
+}
