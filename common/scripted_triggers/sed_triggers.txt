@@ -724,6 +724,7 @@ sed_auto_executor_safe = {
  is_construction_paused = no
  NOT = { sed_competing_builder_configured = yes }
  sed_auto_fiscal_safe = yes
+ sed_direct_budget_safe = yes
 }
 sed_direct_supply_priority_exists = {
  OR = {
@@ -786,6 +787,16 @@ sed_coord_reserve_drawdown_safe = {
 
 sed_coord_fiscal_safe = {
  OR = { sed_auto_fiscal_safe = yes AND = { has_variable = sed_coord_advisor_known sed_coord_reserve_drawdown_safe = yes } }
+}
+sed_direct_budget_safe = {
+ has_variable = sed_build_budget_known var:sed_build_budget_known = 1
+ has_variable = sed_build_budget_weekly
+ modifier:country_construction_add > 0
+ modifier:country_max_weekly_construction_progress_add > 0
+ OR = {
+  net_total_income >= var:sed_build_budget_weekly
+  AND = { principal <= 0 gold_reserves >= var:sed_build_budget_required_gold }
+ }
 }
 sed_coord_tools_available = {
  OR = {

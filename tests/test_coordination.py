@@ -604,6 +604,10 @@ class CoordinationTests(unittest.TestCase):
             ('common/scripted_triggers/sed_triggers.txt',
              'var:sed_coord_executor = 11', 'var:sed_coord_executor = 1'),
             ('common/scripted_triggers/sed_triggers.txt',
+             ' sed_direct_budget_safe = yes\n}', ' # material guard removed\n}'),
+            ('common/scripted_effects/sed_effects.txt',
+             'sed_auto_run_direct = {\n sed_refresh_direct_budget = yes', 'sed_auto_run_direct = {'),
+            ('common/scripted_triggers/sed_triggers.txt',
              'var:sed_plan_wood_rank = 1 }', 'var:sed_plan_wood_rank >= 1 }'),
             ('common/scripted_effects/sed_effects.txt',
              'limit = { sed_auto_executor_safe = yes }', 'limit = { always = yes }'),
@@ -620,7 +624,7 @@ class CoordinationTests(unittest.TestCase):
                 target.write_text(text.replace(old, new, 1), encoding='utf-8-sig')
                 errors = validate(root)
                 self.assertTrue(any('authority' in error or 'safety guard' in error
-                                    or 'first-ranked target' in error for error in errors), errors)
+                                    or 'first-ranked target' in error or 'material budget' in error for error in errors), errors)
 
     def test_validator_rejects_foreign_write_outside_adapter_and_unlisted_option(self):
         for replacement in (

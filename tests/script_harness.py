@@ -36,8 +36,10 @@ def railway(level=1, occupancy=1, failed_hires=False, shortage=False,
 def construction_sector(level=1, occupancy=1, failed_hires=False,
                         shortage=False, queued_levels=0):
     """A construction sector reading; queued_levels raises the post-queue level."""
-    return building('building_construction_sector', level, occupancy,
-                    failed_hires, shortage, queued_levels)
+    result = building('building_construction_sector', level, occupancy,
+                      failed_hires, shortage, queued_levels)
+    result['production_methods'] = ['pm_wooden_buildings']
+    return result
 
 
 def building(kind, level=1, occupancy=1, failed_hires=False, shortage=False,
@@ -55,7 +57,8 @@ class Country:
         self.readings = dict(net_total_income=100, net_fixed_income=200, fixed_expenses=50,
                              gold_reserves=1000, principal=100, credit=1000, gdp=10000,
                              total_population=1000, average_sol=10, literacy_rate=0.2,
-                             **{'modifier:country_construction_add': 10},
+                             **{'modifier:country_construction_add': 10,
+                                'modifier:country_max_weekly_construction_progress_add': 25},
                              num_queued_government_constructions=2, num_queued_private_constructions=1,
                              construction_queue_num_queued_government_levels=2,
                              construction_queue_num_queued_private_levels=0,
@@ -132,6 +135,12 @@ class Country:
             return self.lookup(value, scope)
         result = 0
         for entry in value:
+            if entry.key == 'every_scope_state':
+                limit = child(entry.value, 'limit')
+                rest = [item for item in entry.value if item.key != 'limit']
+                result += sum(self.number(rest, target) for target in self.states
+                              if self.condition(limit, target))
+                continue
             if entry.key == 'market':
                 result += self.number(entry.value, {'goods': self.market_goods})
                 continue

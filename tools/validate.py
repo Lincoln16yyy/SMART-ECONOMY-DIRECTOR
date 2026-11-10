@@ -181,12 +181,20 @@ def validate(root=ROOT, game=None):
     if child(custom.get('sed_auto_executor_safe', []), 'OR') != direct_authority:
         errors.append('Direct execution requires the restricted coordination authority')
     direct_effect = custom.get('sed_auto_run_direct', [])
-    first_direct = direct_effect[0] if direct_effect else None
+    first_direct = next((entry for entry in direct_effect if entry.key == 'if'), None)
     direct_limit = child(first_direct.value, 'limit') if first_direct and first_direct.key == 'if' else []
     if direct_limit != parse('guard = { sed_auto_executor_safe = yes }')[0].value:
         errors.append('Direct execution helper lacks its safety guard')
+    if not any(entry.key == 'sed_direct_budget_safe' and entry.value == 'yes'
+               for entry in custom.get('sed_auto_executor_safe', [])):
+        errors.append('Direct execution lacks its material budget guard')
+    if not any(entry.key == 'sed_refresh_direct_budget' and entry.value == 'yes'
+               for entry in direct_effect):
+        errors.append('Direct execution lacks a fresh material budget')
     for action in approved_actions:
         name = action.removeprefix('sed_run_').removesuffix('_approval')
+        if not any(entry.key == 'sed_refresh_direct_budget' for entry in walk(custom.get(action, []))):
+            errors.append('Approval lacks material budget revalidation: ' + name)
         target_authority = parse(f"""guard = {{
             owner = {{ NOT = {{ has_variable = sed_coord_active }} }}
             var:sed_plan_{name}_rank = 1
