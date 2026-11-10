@@ -4,9 +4,14 @@ import argparse
 import json
 from pathlib import Path
 
+try:
+    from . import planning, coordination
+except ImportError:
+    import planning, coordination
+
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.5.9'
+VERSION = '0.6.0'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -36,6 +41,7 @@ SUPPLY_DIAGNOSTICS = ('producer_states', 'ignored_states', 'pending_states', 'un
                       'method_states', 'permission_states', 'infrastructure_states')
 STATE_VARIABLES = ['sed_railway_request_pending', 'sed_construction_request_pending'] + [
     f"sed_{item['good']}_request_pending" for item in SUPPLY_TARGETS] + IGNORED_VARIABLES
+STATE_VARIABLES += planning.state_variables(ACTION_NAMES)
 EXTRA_VARIABLES = '''sed_last_year sed_last_month sed_month_key sed_in_default
 sed_gdp_per_capita sed_per_capita_available sed_debt_share sed_debt_share_available
 sed_reserve_weeks sed_reserve_weeks_available sed_states sed_infrastructure_short_states
@@ -57,6 +63,9 @@ sed_queue_levels_before'''.split() + [
     *[f"sed_{item['good']}_{reason}" for item in SUPPLY_TARGETS
       for reason in SUPPLY_DIAGNOSTICS],
 ]
+
+
+EXTRA_VARIABLES += planning.country_variables(ACTION_NAMES) + coordination.VARIABLES
 
 
 def runtime_variables():
@@ -165,11 +174,15 @@ sed_refresh_supply_candidates = {''']
     for mode in ('manual', 'assisted', 'automatic'):
         other_modes = [value for value in ('manual', 'assisted', 'automatic') if value != mode]
         cleanup = '\n'.join(f' remove_variable = sed_mode_{value}' for value in other_modes)
+        release = ' sed_coord_restore = yes\n' if mode != 'automatic' else ''
+        takeover = ''
+        if mode == 'automatic':
+            takeover = ' if = { limit = { has_variable = sed_enabled NOT = { has_variable = sed_coord_active } sed_coord_tools_available = yes } sed_coord_enable = yes }\n'
         mode_actions.append(f'''sed_set_mode_{mode} = {{
- remove_variable = sed_mode_{mode}{cleanup}
+{release} remove_variable = sed_mode_{mode}{cleanup}
  set_variable = {{ name = sed_mode_{mode} value = yes }}
  set_variable = {{ name = sed_auto_action_status value = 0 }}
- if = {{ limit = {{ has_variable = sed_mode_automatic }} sed_schedule_auto_event = yes }}
+{takeover} if = {{ limit = {{ has_variable = sed_mode_automatic }} sed_schedule_auto_event = yes }}
 }}''')
     result.extend(mode_actions)
     result.append('''sed_schedule_auto_event = {
@@ -180,8 +193,14 @@ sed_refresh_supply_candidates = {''']
  }
 }''')
     result.append('''sed_auto_apply_monthly = {
+ sed_refresh_national_plan = yes
  set_variable = { name = sed_auto_action_status value = 2 }
  if = {
+  limit = { has_variable = sed_coord_active }
+  sed_coord_sync = yes
+  set_variable = { name = sed_auto_action_status value = 18 }
+ }
+ else_if = {
   limit = { sed_auto_executor_safe = yes }
 ''')
     choices = [('railway', 'sed_railway_candidate_eligible')]
@@ -191,9 +210,9 @@ sed_refresh_supply_candidates = {''']
         order = 'infrastructure_delta' if name == 'railway' else 'state_population'
         direction = ' multiply = -1'
         result.append(f'''  {start} = {{
-   limit = {{ any_scope_state = {{ {eligibility} = yes }} }}
+   limit = {{ any_scope_state = {{ {eligibility} = yes var:sed_plan_{name}_rank = 1 }} }}
    ordered_scope_state = {{
-    limit = {{ {eligibility} = yes }}
+    limit = {{ {eligibility} = yes var:sed_plan_{name}_rank = 1 }}
     order_by = {{ value = {order}{direction} }}
     max = 1
     check_range_bounds = no
@@ -208,6 +227,7 @@ sed_refresh_supply_candidates = {''']
  else_if = { limit = { OR = { construction_queue_num_queued_government_levels > 0 construction_queue_num_queued_private_levels > 0 } } set_variable = { name = sed_auto_action_status value = 11 } }
  else_if = { limit = { is_construction_paused = yes } set_variable = { name = sed_auto_action_status value = 12 } }
  else_if = { limit = { sed_competing_builder_configured = yes } set_variable = { name = sed_auto_action_status value = 13 } }
+ else_if = { limit = { NOT = { sed_auto_fiscal_safe = yes } } set_variable = { name = sed_auto_action_status value = 17 } }
  else = { set_variable = { name = sed_auto_action_status value = 14 } }
  # Preserve the result independently from mode controls and diagnostic refreshes.
  set_variable = { name = sed_auto_review_status value = var:sed_auto_action_status }
@@ -287,6 +307,7 @@ def candidate_item(name):
     prefix = 'sed_supply' if supply else f'sed_{name}'
     content = textbox(f'sed_{name}_candidate_title', heading=True, width=468)
     content += textbox(f'sed_{name}_candidate_reason', width=468)
+    content += textbox(f'sed_plan_{name}_score', f'sed_plan_{name}_score_visible_sgui', width=468, state=True)
     if name != 'railway':
         content += textbox('sed_candidate_infrastructure', width=468)
         content += textbox('sed_expansion_infrastructure_blocked', f'sed_{name}_infrastructure_blocked_sgui', width=468, state=True)
@@ -325,6 +346,11 @@ def candidate_list(name, visibility):
 def widget():
     body = textbox('sed_title', heading=True)
     body += textbox('sed_mode_title', heading=True)
+    body += textbox('sed_coord_intro')
+    body += button('sed_coord_enable', 'sed_coord_enable_sgui')
+    body += button('sed_coord_release', 'sed_coord_release_sgui')
+    for executor in range(9):
+        body += textbox(f'sed_coord_executor_{executor}', f'sed_coord_executor_{executor}_visible_sgui')
     body += 'flowcontainer = { direction = horizontal spacing = 10\n'
     for mode in ('manual', 'assisted', 'automatic'):
         body += mode_button(f'sed_mode_{mode}_button', f'sed_set_mode_{mode}_sgui')
@@ -333,14 +359,14 @@ def widget():
         body += textbox(f'sed_mode_{mode}_status', f'sed_mode_{mode}_visible_sgui')
     for state in ('pending', 'idle', 'unrecorded'):
         body += textbox(f'sed_auto_{state}', f'sed_auto_{state}_visible_sgui')
-    for blocker in ('default', 'month_limit', 'queue', 'paused', 'competing', 'clear'):
+    for blocker in ('default', 'month_limit', 'queue', 'paused', 'competing', 'fiscal', 'clear'):
         body += textbox(f'sed_auto_current_{blocker}', f'sed_auto_current_{blocker}_visible_sgui')
     body += textbox('sed_auto_builders_title', 'sed_auto_builders_visible_sgui')
     for name, option, pt, en in COMPETING_BUILDERS:
         body += textbox(f'sed_auto_builder_{name}', f'sed_auto_builder_{name}_visible_sgui')
     body += textbox('sed_auto_builders_help', 'sed_auto_builders_visible_sgui')
     body += textbox('sed_auto_last_review', 'sed_auto_last_review_visible_sgui')
-    for status in ('success', 'no_action', 'default', 'queue', 'paused', 'competing', 'safety', 'unconfirmed', 'month_limit'):
+    for status in ('success', 'no_action', 'default', 'queue', 'paused', 'competing', 'safety', 'unconfirmed', 'month_limit', 'fiscal', 'delegated'):
         body += textbox(f'sed_auto_status_{status}', f'sed_auto_status_{status}_visible_sgui')
     body += 'flowcontainer = { direction = horizontal spacing = 12\n'
     body += button('sed_refresh', 'sed_refresh_sgui', width=244)
@@ -356,31 +382,55 @@ def widget():
     body += textbox('sed_ignored_notice', 'sed_restore_ignored_sgui')
     body += textbox('sed_default_warning', 'sed_default_visible_sgui')
     body += textbox('sed_deficit_warning', 'sed_deficit_visible_sgui')
-    body += textbox('sed_recommendations_title', heading=True)
-    body += textbox('sed_recommendations_intro')
-    body += textbox('sed_no_infrastructure_opportunity', 'sed_no_infrastructure_opportunity_visible_sgui')
-    body += textbox('sed_no_railway_candidate', 'sed_no_railway_candidate_visible_sgui')
-    body += details(textbox('sed_railway_breakdown', 'sed_railway_breakdown_visible_sgui'))
-    body += candidate_list('railway', 'sed_recommendations_visible_sgui')
-    body += textbox('sed_railway_action_success', 'sed_action_success_visible_sgui')
-    body += textbox('sed_railway_action_failed', 'sed_action_failed_visible_sgui')
-    body += textbox('sed_construction_title', heading=True) + textbox('sed_construction_intro')
-    body += textbox('sed_no_construction_queue', 'sed_no_construction_queue_visible_sgui')
-    body += textbox('sed_no_construction_candidate', 'sed_no_construction_candidate_visible_sgui')
-    body += details(textbox('sed_construction_breakdown', 'sed_construction_breakdown_visible_sgui'))
-    body += candidate_list('construction', 'sed_construction_recommendations_visible_sgui')
-    body += textbox('sed_construction_action_success', 'sed_construction_action_success_visible_sgui')
-    body += textbox('sed_construction_action_failed', 'sed_construction_action_failed_visible_sgui')
-    body += textbox('sed_supply_title', heading=True) + textbox('sed_supply_intro')
+    body += textbox('sed_plan_title', heading=True)
+    body += textbox('sed_plan_date')
+    for status in range(1, 5):
+        body += textbox(f'sed_fiscal_{status}', f'sed_fiscal_{status}_visible_sgui')
+    for goal in range(10):
+        body += textbox(f'sed_goal_{goal}', f'sed_goal_{goal}_visible_sgui')
+    body += textbox('sed_plan_policy')
+    for item in SUPPLY_TARGETS:
+        name = item['good']
+        body += textbox(f'sed_plan_missing_{name}', f'sed_plan_missing_{name}_visible_sgui')
+    body += textbox('sed_plan_empty', 'sed_plan_empty_visible_sgui')
+    for rank in planning.RANKS:
+        body += textbox(f'sed_plan_rank_{rank}', f'sed_plan_rank_{rank}_visible_sgui', heading=True)
+        for name in ACTION_NAMES:
+            body += f"""flowcontainer = {{
+ visible = "[{sgui(f'sed_plan_{rank}_{name}_visible_sgui', 'IsShown')}]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_{rank}_{name}')]"
+ item = {{ sed_{name}_candidate_item = {{}} }}
+}}
+"""
+    # Keep detailed per-type candidate lists available under the existing toggle.
+    all_candidates = ''
+    all_candidates += textbox('sed_recommendations_title', heading=True)
+    all_candidates += textbox('sed_recommendations_intro')
+    all_candidates += textbox('sed_no_infrastructure_opportunity', 'sed_no_infrastructure_opportunity_visible_sgui')
+    all_candidates += textbox('sed_no_railway_candidate', 'sed_no_railway_candidate_visible_sgui')
+    all_candidates += details(textbox('sed_railway_breakdown', 'sed_railway_breakdown_visible_sgui'))
+    all_candidates += candidate_list('railway', 'sed_recommendations_visible_sgui')
+    all_candidates += textbox('sed_railway_action_success', 'sed_action_success_visible_sgui')
+    all_candidates += textbox('sed_railway_action_failed', 'sed_action_failed_visible_sgui')
+    all_candidates += textbox('sed_construction_title', heading=True) + textbox('sed_construction_intro')
+    all_candidates += textbox('sed_no_construction_queue', 'sed_no_construction_queue_visible_sgui')
+    all_candidates += textbox('sed_no_construction_candidate', 'sed_no_construction_candidate_visible_sgui')
+    all_candidates += details(textbox('sed_construction_breakdown', 'sed_construction_breakdown_visible_sgui'))
+    all_candidates += candidate_list('construction', 'sed_construction_recommendations_visible_sgui')
+    all_candidates += textbox('sed_construction_action_success', 'sed_construction_action_success_visible_sgui')
+    all_candidates += textbox('sed_construction_action_failed', 'sed_construction_action_failed_visible_sgui')
+    all_candidates += textbox('sed_supply_title', heading=True) + textbox('sed_supply_intro')
     for item in SUPPLY_TARGETS:
         good = item['good']
-        body += textbox(f'sed_{good}_section_title', f'sed_{good}_section_visible_sgui', heading=True)
-        body += candidate_list(good, f'sed_{good}_recommendations_visible_sgui')
-        body += textbox('sed_supply_no_candidate', f'sed_{good}_no_candidates_visible_sgui')
-        body += details(textbox(f'sed_{good}_rejection_summary', f'sed_{good}_no_candidates_visible_sgui')
+        all_candidates += textbox(f'sed_{good}_section_title', f'sed_{good}_section_visible_sgui', heading=True)
+        all_candidates += candidate_list(good, f'sed_{good}_recommendations_visible_sgui')
+        all_candidates += textbox('sed_supply_no_candidate', f'sed_{good}_no_candidates_visible_sgui')
+        all_candidates += details(textbox(f'sed_{good}_rejection_summary', f'sed_{good}_no_candidates_visible_sgui')
                         + textbox(f'sed_{good}_rejection_details', f'sed_{good}_no_candidates_visible_sgui'))
-        body += textbox(f'sed_{good}_action_success', f'sed_{good}_action_success_visible_sgui')
-        body += textbox(f'sed_{good}_action_failed', f'sed_{good}_action_failed_visible_sgui')
+        all_candidates += textbox(f'sed_{good}_action_success', f'sed_{good}_action_success_visible_sgui')
+        all_candidates += textbox(f'sed_{good}_action_failed', f'sed_{good}_action_failed_visible_sgui')
+    body += details(all_candidates)
     diagnostic = textbox('sed_details_title', heading=True)
     for title, metrics in [('sed_finance_title', ['balance', 'operating_balance', 'fixed_expenses', 'gold', 'debt', 'credit']),
                            ('sed_development_title', ['gdp', 'population', 'sol', 'literacy']),
@@ -431,6 +481,7 @@ sed_enable_country = {
 }
 
 sed_disable_country = {
+ sed_coord_restore = yes
 ''' + '\n'.join(' remove_variable = ' + name for name in country_variables()) + '''
  clear_variable_list = sed_railway_candidates
  clear_variable_list = sed_construction_candidates
@@ -460,6 +511,7 @@ sed_monthly_update = {
    limit = { has_variable = sed_monthly_refresh }
    sed_refresh_diagnostics = yes
   }
+  if = { limit = { has_variable = sed_coord_active } sed_refresh_national_plan = yes sed_coord_sync = yes }
   sed_schedule_auto_event = yes
  }
 }
@@ -762,7 +814,15 @@ sed_update_growth = {
             f'    set_variable = {{ name = sed_{good}_action_status value = 1 }}',
             f'    set_variable = {{ name = sed_{good}_action_status value = 1 }}\n'
             '    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }')
-    return script + supply_effects() + preference_effects()
+    script = script.replace('  sed_refresh_supply_candidates = yes\n }\n}',
+                            '  sed_refresh_supply_candidates = yes\n  sed_refresh_national_plan = yes\n }\n}', 1)
+    cleanup = '\n'.join(' clear_variable_list = ' + name for name in planning.lists(ACTION_NAMES))
+    script = script.replace('sed_disable_country = {', 'sed_disable_country = {\n' + cleanup, 1)
+    # All state-scoped planner variables are removed on deactivation.
+    state_cleanup = '\n'.join('  remove_variable = ' + name for name in planning.state_variables(ACTION_NAMES))
+    script = script.replace(' # Schema and automatic attempt month',
+                            ' every_scope_state = {\n' + state_cleanup + '\n }\n # Schema and automatic attempt month', 1)
+    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, {item['good']: item['building'] for item in SUPPLY_TARGETS}) + coordination.effects()
 
 
 def scripted_guis():
@@ -771,6 +831,8 @@ def scripted_guis():
         'refresh': ('has_variable = sed_enabled', 'sed_refresh_diagnostics = yes'),
         'show_details': ('has_variable = sed_enabled NOT = { has_variable = sed_details_visible }', 'set_variable = { name = sed_details_visible value = yes }'),
         'hide_details': ('has_variable = sed_enabled has_variable = sed_details_visible', 'remove_variable = sed_details_visible'),
+        'coord_enable': ('has_variable = sed_enabled NOT = { has_variable = sed_coord_active } sed_coord_tools_available = yes', 'sed_coord_enable = yes'),
+        'coord_release': ('has_variable = sed_enabled has_variable = sed_coord_active', 'sed_coord_restore = yes sed_set_mode_assisted = yes'),
         'disable': ('has_variable = sed_enabled', 'sed_disable_country = yes'),
         'manual_updates': ('has_variable = sed_enabled has_variable = sed_monthly_refresh', 'remove_variable = sed_monthly_refresh'),
         'monthly_updates': ('has_variable = sed_enabled NOT = { has_variable = sed_monthly_refresh }', 'set_variable = { name = sed_monthly_refresh value = yes } sed_refresh_diagnostics = yes'),
@@ -975,11 +1037,31 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
         ('month_limit', 'sed_auto_month_limit_reached = yes'),
         ('queue', 'OR = { construction_queue_num_queued_government_levels > 0 construction_queue_num_queued_private_levels > 0 }'),
         ('paused', 'is_construction_paused = yes'),
-        ('competing', 'sed_competing_builder_configured = yes'),
+        ('competing', 'AND = { sed_competing_builder_configured = yes NOT = { has_variable = sed_coord_active } }'),
+        ('fiscal', 'NOT = { sed_auto_fiscal_safe = yes }'),
     ]:
         result += f'sed_auto_current_{name}_visible_sgui = {{ scope = country is_shown = {{ {base} {previous} {condition} }} }}\n'
         previous += f' NOT = {{ {condition} }}'
     result += f'sed_auto_current_clear_visible_sgui = {{ scope = country is_shown = {{ {base} sed_auto_executor_safe = yes }} }}\n'
+    result += 'sed_auto_status_delegated_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 18 } }\n'
+    for executor in range(9):
+        result += f'sed_coord_executor_{executor}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = {executor} }} }}\n'
+    result += 'sed_auto_status_fiscal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 17 } }\n'
+    for status in range(1, 5):
+        result += f'sed_fiscal_{status}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = {status} }} }}\n'
+    for goal in range(10):
+        result += f'sed_goal_{goal}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_plan_goal var:sed_plan_goal = {goal} }} }}\n'
+    for item in SUPPLY_TARGETS:
+        name = item['good']
+        result += f'sed_plan_missing_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_plan_missing_{name} var:sed_plan_missing_{name} = 1 }} }}\n'
+    result += 'sed_plan_empty_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_count var:sed_plan_count = 0 } }\n'
+    for rank in planning.RANKS:
+        result += f'sed_plan_rank_{rank}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_plan_count var:sed_plan_count >= {rank} }} }}\n'
+    for rank in planning.RANKS:
+        for name in ACTION_NAMES:
+            result += f'sed_plan_{rank}_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable_list = sed_plan_{rank}_{name} }} }}\n'
+    for name in ACTION_NAMES:
+        result += f'sed_plan_{name}_score_visible_sgui = {{ scope = state is_shown = {{ owner = {{ has_variable = sed_enabled }} has_variable = sed_plan_{name}_score var:sed_plan_{name}_score > 0 }} }}\n'
     result += 'sed_details_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_details_visible } }\n'
     return '# Generated by tools/build_mod.py.\n' + result
 
@@ -1102,6 +1184,7 @@ sed_execution_mode_permits_approval = {
 }
 
 sed_auto_executor_safe = {
+ NOT = { has_variable = sed_coord_active }
  has_variable = sed_mode_automatic
  NOT = { sed_auto_month_limit_reached = yes }
  NOT = { in_default = yes }
@@ -1109,10 +1192,11 @@ sed_auto_executor_safe = {
  construction_queue_num_queued_private_levels = 0
  is_construction_paused = no
  NOT = { sed_competing_builder_configured = yes }
+ sed_auto_fiscal_safe = yes
 }''')
     options = '\n'.join(f'  has_variable = {option}' for name, option, pt, en in COMPETING_BUILDERS)
     result.append('sed_competing_builder_configured = {\n OR = {\n' + options + '\n }\n}')
-    return '\n'.join(result).rstrip() + '\n'
+    return '\n'.join(result).rstrip() + '\n' + planning.triggers() + coordination.triggers()
 
 
 def value(name, fmt='1'):
@@ -1301,10 +1385,62 @@ def localization(language):
     for name in ACTION_NAMES:
         key = f'sed_{name}_approve' if name not in ('railway', 'construction') else f'sed_approve_{name}'
         pairs[key] = ('Aprovar expansão: +1 nível', 'Approve expansion: +1 level')
+    pairs['sed_mode_automatic_button_tt'] = (
+        'Com Economy Advisor ou Supply Chain detectados, guarda as sete opções verificadas e assume a coordenação de construção: um executor externo por objetivo, sujeito à política fiscal inicial. Sair do Automático restaura as opções anteriores. Sem ferramenta detectada, usa o executor próprio limitado a uma tentativa mensal. Não controla PMs, impostos ou ARoAI.',
+        'When Economy Advisor or Supply Chain is detected, saves seven verified options and takes construction coordination: one external executor per objective, subject to initial fiscal policy. Leaving Automatic restores previous options. Without detected tools, uses its own executor limited to one monthly attempt. Does not control PMs, taxes or ARoAI.')
+    pairs.update({
+        'sed_coord_intro': ('Ao escolher Automático, o Director guarda as opções verificadas e coordena os construtores externos detectados conforme o plano. Adaptadores iniciais para Economy Advisor e Supply Chain; PMs, impostos e outros executores continuam fora deste controle.', 'Choosing Automatic saves verified options and coordinates detected external builders according to the plan. Initial adapters for Economy Advisor and Supply Chain; PMs, taxes and other executors remain outside this control.'),
+        'sed_coord_enable': ('Coordenar construtores externos', 'Coordinate external builders'),
+        'sed_coord_enable_tt': ('Guarda as sete opções verificadas, entra no Automático e configura um executor. Pode suspender rotinas de energia e administração que o plano ainda não cobre. Não inicia obra neste clique. Sair do Automático, desativar ou liberar restaura as opções originais, inclusive valores numéricos. Não controla PMs ou outros construtores.', 'Saves seven verified options, enters Automatic mode and configures one executor. May suspend power and administration routines not yet covered by the plan. Does not start construction on click. Leaving Automatic, disabling or releasing restores original options, including numeric values. Does not control PMs or other builders.'),
+        'sed_coord_release': ('Restaurar opções e voltar ao Assistido', 'Restore options and return to Assisted'),
+        'sed_coord_release_tt': ('Restaura as opções guardadas ao assumir o controle. Mudanças manuais feitas nessas sete opções durante a coordenação serão substituídas pelas opções originais. Obras já na fila permanecem.', 'Restores options saved when taking control. Manual changes to these seven options during coordination will be replaced by the original options. Existing queued projects remain.'),
+        'sed_coord_executor_0': ('Coordenação ativa: novas construções externas suspensas por finanças, ausência de prioridade ou executor disponível. Projetos existentes continuam. ARoAI e autoexpansões nativas não são controlados.', 'Coordination active: new external construction suspended for finances, lack of priority or available executor. Existing projects continue. ARoAI and native autoexpansion are not controlled.'),
+        'sed_coord_executor_1': ('Executor escolhido: Economy Advisor. Sua construção inteligente usa a política interna dele; o Director controla a autorização, não transmite um alvo exato.', 'Selected executor: Economy Advisor. Its smart construction uses its own internal policy; the Director controls authorization and does not transmit an exact target.'),
+        'sed_coord_executor_2': ('Executor escolhido: Supply Chain, somente ferrovias, para aliviar infraestrutura. Aguarda a agenda e os filtros do Supply Chain.', 'Selected executor: Supply Chain, railways only, to relieve infrastructure. Waits for Supply Chain scheduling and filters.'),
+        'sed_coord_executor_3': ('Executor escolhido: Supply Chain, cadeias produtivas. Categorias internas preservadas; o Director não força um prédio ou estado.', 'Selected executor: Supply Chain, production chains. Internal categories preserved; the Director does not force a building or state.'),
+        'sed_coord_executor_5': ('Coordenação suspensa: construção do ARoAI detectada. Este adaptador controla somente Economy Advisor e Supply Chain; desligue o construtor do ARoAI para delegar com estes controles.', 'Coordination suspended: ARoAI construction detected. This adapter controls only Economy Advisor and Supply Chain; turn off the ARoAI builder to delegate using these controls.'),
+        'sed_coord_executor_4': ('Executor escolhido: Supply Chain, setores de construção. A execução depende da agenda e do orçamento do Supply Chain.', 'Selected executor: Supply Chain, construction sectors. Execution depends on Supply Chain scheduling and budget.'),
+        'sed_auto_status_delegated': ('Última revisão: orientação externa atualizada. Isto não confirma inclusão de obra; o executor escolhido tem agenda e filtros próprios.', 'Last review: external guidance updated. This does not confirm construction insertion; the selected executor has its own schedule and filters.'),
+    })
+    pairs.update({
+        'sed_plan_title': ('Plano nacional — prioridades atuais', 'National plan — current priorities'),
+        'sed_plan_date': ('Plano de ' + v('plan_month', '0') + '/' + v('plan_year', '0') + '.', 'Plan for ' + v('plan_month', '0') + '/' + v('plan_year', '0') + '.'),
+        'sed_plan_policy': ('Até três expansões elegíveis, comparadas entre estados e setores. Pontos combinam déficit de infraestrutura, falta relativa de oferta e prioridade a bens essenciais. São uma regra inicial, não retorno previsto. Curto prazo: tratar a primeira prioridade; médio prazo: reavaliar oferta e infraestrutura após a obra; longo prazo: diversificação e desenvolvimento ainda sem modelo validado.', 'Up to three eligible expansions compared across states and sectors. Scores combine infrastructure deficit, relative supply gap and essential goods priority. Initial policy, not predicted returns. Short term: address first priority; medium term: reassess supply and infrastructure after construction; long term: diversification and development still lack a validated model.'),
+        'sed_plan_empty': ('Sem expansão elegível no escopo atual. Não construir é um resultado válido; consulte os detalhes para os motivos.', 'No eligible expansion in the current scope. Not building is a valid outcome; see details for rejection reasons.'),
+        'sed_fiscal_1': ('Fiscal: condições iniciais para expansão. Saldo e saldo operacional não negativos, reservas de ao menos quatro semanas de despesas fixas e dívida até 75% do crédito. Isso não garante capacidade de pagar a próxima obra.', 'Fiscal: initial expansion conditions. Nonnegative balance and operating balance, reserves covering at least four weeks of fixed expenses and debt up to 75% of credit. This does not guarantee affordability of the next project.'),
+        'sed_fiscal_2': ('Fiscal: cautela. A política inicial suspende novas tentativas automáticas; aprovação Assistida continua explícita.', 'Fiscal: caution. Initial policy suspends new automatic attempts; Assisted approval remains explicit.'),
+        'sed_fiscal_3': ('Fiscal: crise pela política inicial — déficit com menos de quatro semanas de reservas, dívida acima de 90% do crédito ou dívida sem limite de crédito positivo. Prioridade: estabilizar as finanças.', 'Fiscal: crisis under the initial policy — deficit with less than four weeks of reserves, debt above 90% of credit or debt without a positive credit limit. Priority: stabilize finances.'),
+        'sed_fiscal_4': ('Fiscal: emergência por inadimplência. Nenhuma expansão autorizada.', 'Fiscal: default emergency. No expansion authorized.'),
+        'sed_goal_0': ('Objetivo atual: observar e preservar recursos; sem expansão elegível.', 'Current objective: observe and preserve resources; no eligible expansion.'),
+        'sed_goal_1': ('Objetivo atual: aliviar o gargalo de infraestrutura.', 'Current objective: relieve the infrastructure bottleneck.'),
+        'sed_goal_2': ('Objetivo atual: reduzir escassez de bens com produtores viáveis.', 'Current objective: reduce goods shortages using viable producers.'),
+        'sed_goal_3': ('Objetivo atual: ampliar capacidade para a demanda da fila pública, com aprovação Assistida.', 'Current objective: expand capacity for government queue demand, with Assisted approval.'),
+        'sed_goal_4': ('Objetivo atual: estabilizar as finanças antes de ampliar compromissos.', 'Current objective: stabilize finances before expanding commitments.'),
+        'sed_auto_current_fiscal': ('Agora: política fiscal bloqueia novas tentativas automáticas. Requer saldos não negativos, reservas de quatro semanas de despesas fixas e dívida até 75% do crédito. Sem alterar impostos ou gastos.', 'Now: fiscal policy blocks new automatic attempts. Requires nonnegative balances, reserves covering four weeks of fixed expenses and debt up to 75% of credit. Does not change taxes or spending.'),
+        'sed_auto_status_fiscal': ('A última revisão não tentou obra por proteção fiscal.', 'The last review did not attempt construction because of fiscal protection.'),
+    })
+    pairs.update({
+        'sed_goal_6': ('Objetivo atual: recuperar capacidade administrativa; burocracia nacional negativa.', 'Current objective: restore administrative capacity; national bureaucracy is negative.'),
+        'sed_goal_7': ('Objetivo atual: investigar capacidade tributária insuficiente nos estados. Não altera alíquota de imposto.', 'Current objective: investigate insufficient state tax capacity. Does not change tax rates.'),
+        'sed_goal_8': ('Objetivo atual: buscar crescimento e diversificação. Sem gargalo elegível no escopo direto, o executor externo avalia novos investimentos com seus próprios filtros.', 'Current objective: seek growth and diversification. With no eligible bottleneck in direct scope, the external executor evaluates new investment using its own filters.'),
+        'sed_goal_9': ('Objetivo atual: investigar energia local cara, com preço ao menos 20% acima da base em algum estado. A ferramenta externa verifica viabilidade.', 'Current objective: investigate costly local power, priced at least 20% above base in a state. The external tool checks feasibility.'),
+        'sed_coord_executor_6': ('Executor escolhido: Supply Chain, administração geral. Aguarda a agenda e os filtros de burocracia do Supply Chain.', 'Selected executor: Supply Chain, general administration. Waits for Supply Chain scheduling and bureaucracy filters.'),
+        'sed_coord_executor_7': ('Executor escolhido: Supply Chain, administração tributária. Não altera impostos; busca capacidade administrativa conforme os filtros externos.', 'Selected executor: Supply Chain, tax administration. Does not change taxes; seeks administrative capacity using external filters.'),
+        'sed_coord_executor_8': ('Executor escolhido: Supply Chain, energia. Preço local alto é sinal de investigação, não garantia de lucro ou falta física de oferta.', 'Selected executor: Supply Chain, power. High local price is a signal to investigate, not a guarantee of profit or physical shortage.'),
+    })
+    pairs['sed_goal_5'] = ('Objetivo atual: investigar ausência dos produtores atendidos pelo protótipo para bens em escassez. A construção direta do Director ainda exige produtor existente; a ferramenta externa mantém sua própria seleção.', 'Current objective: investigate missing prototype-supported producers for scarce goods. Direct Director construction still requires an existing producer; the external tool keeps its own selection.')
+    for item in SUPPLY_TARGETS:
+        name = item['good']
+        pairs[f'sed_plan_missing_{name}'] = (f"Setor a investigar: {item['label_pt']} em escassez no mercado, sem {item['building_pt']} nos estados do país. Importação ou outros produtores podem suprir o bem; não é ordem de autossuficiência.", f"Sector to investigate: market shortage of {item['label_en']}, with no {item['building_en']} in the country's states. Imports or other producers may supply it; this is not a self-sufficiency mandate.")
+    for rank in planning.RANKS:
+        pairs[f'sed_plan_rank_{rank}'] = (f'Prioridade {rank}', f'Priority {rank}')
+    for name in ACTION_NAMES:
+        score = f"[State.MakeScope.Var('sed_plan_{name}_score').GetValue|1]"
+        pairs[f'sed_plan_{name}_score'] = ('Pontuação da última análise: ' + score + '. Custo incremental não estimado.', 'Last analysis score: ' + score + '. Incremental cost not estimated.')
     pairs['sed_auto_builders_title'] = ('Opções externas detectadas agora:', 'External options detected now:')
     pairs['sed_auto_builders_help'] = (
-        'Opção ligada já suspende o Automático, mesmo sem obra neste mês. O Director não desliga essas opções. Use Assistido para aprovar individualmente ou ajuste o outro mod para usar o Automático do Director. Esta lista não confirma execução externa.',
-        'An enabled option suspends Automatic mode even without construction this month. The Director does not disable these options. Use Assisted to approve individually or adjust the other mod to use the Director’s Automatic mode. This list does not confirm external execution.')
+        'Sem coordenação ativa, opção ligada suspende a construção direta do Director. Na coordenação, esta lista mostra o executor autorizado. Sair do Automático restaura suas opções originais. Esta lista não confirma execução externa.',
+        'Without active coordination, an enabled option suspends direct Director construction. During coordination, this list shows the authorized executor. Leaving Automatic restores original options. This list does not confirm external execution.')
     for name, option, pt_label, en_label in COMPETING_BUILDERS:
         pairs[f'sed_auto_builder_{name}'] = (pt_label, en_label)
     pairs['sed_railway_candidate_reason'] = ('Ferrovia operante em estado com déficit de infraestrutura. Custo e retorno não estimados.', 'Operating railway in a state with an infrastructure deficit. Cost and return not estimated.')

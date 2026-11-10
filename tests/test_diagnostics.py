@@ -83,14 +83,17 @@ class DiagnosisTests(unittest.TestCase):
                 c.run('sed_auto_apply_monthly')
                 self.assertEqual(len(c.constructions), 1)
 
-    def test_institution_target_without_general_admin_does_not_block_auto(self):
+    def test_institution_target_identifies_tool_without_enabling_general_admin(self):
         c = self.country(construction_queue_num_queued_government_levels=0)
         c.variables['zw_var_scsab_gov_admin_for_institution'] = 35
         c.states = [state(-5, buildings=[railway()])]
+        self.assertFalse(c.condition(self.definitions['sed_competing_builder_configured'], c.country_scope()))
         c.run('sed_set_mode_automatic')
-        self.assertTrue(self.auto_panel_shown(c, 'current_clear'))
         c.run('sed_auto_apply_monthly')
-        self.assertEqual(len(c.constructions), 1)
+        self.assertEqual(c.constructions, [])
+        self.assertEqual(c.variables['sed_coord_executor'], 2)
+        self.assertEqual(c.variables['zw_var_scsab_construct_railway'], 1)
+        self.assertNotIn('zw_var_scsab_gov_admin', c.variables)
         self.assertEqual(c.variables['zw_var_scsab_gov_admin_for_institution'], 35)
 
     def test_builder_configuration_does_not_block_assisted_or_mutate_foreign_options(self):
@@ -404,7 +407,7 @@ class DiagnosisTests(unittest.TestCase):
         tree = parse(text)
         # The former fixed row height clipped enlarged text and status messages.
         self.assertFalse(any(entry.key in ('fixedgridbox', 'addrow') for entry in walk(tree)))
-        self.assertEqual(sum(entry.key == 'datamodel' for entry in walk(tree)), len(ACTION_NAMES))
+        self.assertEqual(sum(entry.key == 'datamodel' for entry in walk(tree)), 4 * len(ACTION_NAMES))
         self.assertLess(text.index('text = "sed_recommendations_title"'),
                         text.index('text = "sed_metric_operating_balance"'))
         self.assertEqual(sum(entry.key == 'text' and entry.value == 'sed_supply_no_candidate'
@@ -933,13 +936,16 @@ class DiagnosisTests(unittest.TestCase):
         c.variable_lists['sed_railway_candidates'] = [pending]
         c.variable_lists['sed_construction_candidates'] = [pending]
         c.run('sed_disable_country')
-        self.assertEqual(c.variables, {'sed_schema_version': 1})
+        # Seeded snapshots are restored before the Director's own state is removed.
+        from tools.coordination import OPTIONS
+        expected = {'sed_schema_version': 1, **{option: 123 for _, option, _ in OPTIONS}}
+        self.assertEqual(c.variables, expected)
         self.assertEqual(pending['variables'], {})
         self.assertNotIn('sed_railway_candidates', c.variable_lists)
         self.assertNotIn('sed_construction_candidates', c.variable_lists)
         c.run('sed_monthly_update')
         c.run('sed_refresh_diagnostics')
-        self.assertEqual(c.variables, {'sed_schema_version': 1})
+        self.assertEqual(c.variables, expected)
         c.active_journal = False  # The engine's JE outcome is outside this harness.
         c.run('sed_enable_country')
         self.assertEqual(c.variables['sed_growth_available'], 0)

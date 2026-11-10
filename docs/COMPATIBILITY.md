@@ -1,5 +1,12 @@
 # Compatibilidade — estado auditado e inventário histórico
 
+Estado atual da 0.6.0 em [PLANNING.md](PLANNING.md) e [STATUS.md](STATUS.md).
+A implementação inclui plano nacional inicial e coordenação de sete opções
+externas com snapshot e restauração. A autorização do jogador para coordenar
+Economy Advisor e Supply Chain nesta sessão amplia o escopo dos adaptadores.
+As seções anteriores abaixo preservam a evolução histórica das versões.
+
+
 Atualização de 2026-11-09, código 0.4.1: há onze mods listados, incluindo o
 Director. A lista e a instalação foram reinspecionadas; opções efetivas no país
 continuam desconhecidas. Ver [auditoria, seção 7](AUDIT_2026-11-09.md#7-ecossistema-de-mods).

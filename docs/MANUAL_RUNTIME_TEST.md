@@ -414,3 +414,33 @@ fila ocupada para confirmar que a lista não some por prioridade do bloqueio.
 Remover opções deve retirar suas linhas. Manual/Assistido/desativado ocultam
 a lista. Verificar altura natural, legibilidade e ausência de cortes.
 Não altera o teste em andamento da 0.5.8.
+
+## Coordenação e plano 0.6.0
+
+Usar cópia dedicada com opções e versões dos executores registradas. A anotação
+de teste deve separar alteração de opção, execução externa e inclusão na fila.
+
+1. Registrar presença e valores das sete opções descritas em PLANNING.md.
+   Abrir o Director, atualizar diagnóstico e conferir data, situação fiscal,
+   objetivo e até três prioridades. Conferir o painel com o país da campanha.
+2. Selecionar Automático. Conferir executor escolhido e quais opções externas
+   ficaram ligadas. Comparar PMs e outras opções com o registro inicial.
+3. Conferir o caso de infraestrutura, depois burocracia, tributos e energia
+   quando ocorrerem no save. Registrar o motivo e a ferramenta selecionada.
+   Nenhuma alteração de campanha para fabricar candidatos foi realizada nesta entrega.
+4. Avançar pela agenda normal da ferramenta e registrar a eventual inclusão de
+   obra, alvo e quantidade. Status de orientação aplicada deve permanecer
+   distinguível de sucesso de inclusão.
+5. Conferir bloqueio fiscal em save apropriado. A suspensão limita autorizações
+   futuras. Obras já existentes continuam na fila.
+6. Alternar para Assistido ou Manual e comparar presença e valor das sete
+   opções com o registro original. Repetir a seleção de Automático para conferir
+   que o snapshot inicial de cada sessão permanece consistente.
+7. Salvar e recarregar a cópia com coordenação ativa. Conferir o executor,
+   snapshot, fila e restauração ao liberar ou desativar.
+8. Registrar cortes, chaves cruas, erros de script e discrepâncias. Ainda faltam
+   resultados desses casos na engine da 0.6.0.
+
+No upgrade de 0.5.x, selecionar Automático novamente aplica a tomada de controle
+pelos adaptadores. O modo salvo por si só preserva a escolha anterior até essa
+seleção. Remover o mod exige restaurar opções antes de desabilitar seus arquivos.

@@ -1,153 +1,81 @@
 # Smart Economy Director — Victoria 3 1.15
 
-**Auditoria de 09/11/2026:** [checklist detalhado e próximos passos](docs/AUDIT_2026-11-09.md).
-Há diagnóstico e protótipos locais de execução; o planejamento estratégico
-nacional ainda não foi implementado. A Fase 0 continua parcial. Os 61 testes
-locais e a validação estática passaram, mas construção bem-sucedida,
-reconciliação de projetos e save/reload ainda não foram comprovados na engine.
-A automação não está certificada como segura para campanha sem supervisão.
+A versão 0.6.0 acrescenta planejamento nacional inicial e coordenação de
+construção com Economy Advisor e Supply Chain Semi-Auto Builder. O diário
+mostra objetivo atual, situação fiscal, executor escolhido e até três
+prioridades entre estados e setores.
 
-Versão de desenvolvimento **0.5.9 — interface legível e botões nativos**. O mod tem diário próprio, leituras manuais ou
-mensais, recomendações limitadas de infraestrutura e capacidade de construção,
-além de produtores locais para oito bens em escassez. Os três modos aparecem em
-botões no topo do diário. Manual só diagnostica; Assistido mostra botões para
-aprovar ações individuais; Automático revisa mensalmente e pode tentar
-no máximo uma expansão por mês quando as filas estão vazias e o país está fora de inadimplência
-e não há uma das automações concorrentes detectadas ativa. Cada botão de ação
-permanece visível no cartão e é revalidado no clique. Quando
-não há candidato, o painel decompõe os estados por motivo principal; quando o
-botão de aprovação está bloqueado, o painel indica a guarda que bloqueia a ação. O estado do Automático identifica fila ocupada, inadimplência, construção pausada, outro construtor conhecido ou ausência de candidato.
-Saldo semanal negativo aparece como alerta, sem bloquear a aprovação. O modo
-Automático pode agir apenas em ferrovias elegíveis e produtores existentes
-para madeira, ferro, carvão, cereais, tecido, ferramentas, mantimentos e roupas
-em escassez; não altera PMs nem leis. A 0.5.9 passou validação estática; modos,
-botões e execução agendada ainda precisam de confirmação na campanha antes de
-serem considerados validados na engine.
+Ao selecionar **Automático**, o Director guarda as opções de construção dos
+executores detectados e habilita o caminho escolhido pelo plano. Infraestrutura,
+capacidade administrativa, energia, oferta e crescimento/diversificação têm
+rotas próprias. Sair para **Assistido** ou **Manual**, restaurar opções ou
+desativar devolve os valores originais aos outros mods.
 
-A interface 0.5.9 usa fonte de 20 pontos no corpo e 26 nos títulos, botões
-nativos de 52 pixels de altura com fundo/borda e cartões de altura variável.
-As recomendações vêm antes dos indicadores completos. **Mostrar indicadores
-e detalhes** abre as leituras e motivos extensos; **Ocultar** recolhe essa
-seção sem afetar recomendações ou execução. A nova renderização ainda não foi
-verificada na engine.
+Os adaptadores controlam sete opções verificadas nos arquivos instalados.
+O Economy Advisor continua escolhendo prédios e estados pela sua própria
+política. O Supply Chain mantém suas categorias e filtros internos. Revisões
+ocorrem no pulso mensal e no evento agendado do Director. O painel distingue
+orientação aplicada de inclusão de obra.
 
-Os cartões indicam **Aprovação disponível** quando as guardas passam.
-Em Manual/Automático, **Passar para Assistido** muda o modo sem aprovar obra.
-Cartões desatualizados oferecem **Atualizar recomendações**. O topo tem um
-atalho **Abrir fila de construção** para consultar os projetos no painel nativo.
-Esses controles não relaxam as travas nem garantem retorno econômico.
+O executor próprio permanece disponível quando ferramentas externas estão
+ausentes. Revalida as guardas e tenta a primeira expansão do plano, com limite
+persistente de uma tentativa mensal. Esse limite pertence ao executor próprio.
+Os executores externos seguem suas quantidades e agendas.
 
-No Automático, o painel distingue revisão agendada, bloqueio operacional atual
-e resultado datado da última revisão. Atualizar o diagnóstico não dispara
-construções nem uma revisão automática. Trocar de modo preserva esse último
-resultado; desativar limpa o registro. A leitura atual das filas não depende
-de aguardar o próximo evento.
+## Modos
 
-O limite mensal conta uma **tentativa automática**, mesmo sem confirmação da
-inclusão. Revisão sem candidato ou bloqueada antes de tentar não o consome.
-Trocar modo, cancelar obra ou desativar/reativar não reinicia o limite. A
-aprovação manual no Assistido continua disponível sob suas guardas normais.
-Desativar limpa o diagnóstico, mas preserva schema e uma marca de segurança
-com o mês da última tentativa; o mês seguinte é avaliado pelo calendário atual.
-Essa proteção começa nas tentativas observadas pela 0.5.3; não reconstrói
-um histórico completo de tentativas de versões anteriores.
+| Modo | Comportamento |
+| --- | --- |
+| Manual | Consulta diagnóstico e recomendações. Ao sair do Automático, restaura opções externas originais |
+| Assistido | Permite aprovação individual de expansões elegíveis |
+| Automático | Coordena executores detectados ou usa o executor próprio quando estão ausentes |
 
-Cada cartão elegível permite ignorar apenas aquele tipo de expansão naquele estado.
-A escolha bloqueia recomendações e execução nos três modos até usar
-**Restaurar recomendações ignoradas**, no topo do diário. Desativar limpa essas
-escolhas; ignorar ou restaurar não cancela nem enfileira obras.
+A interface usa botões nativos, corpo de texto de 20 pontos, títulos de 26 e
+cartões com altura natural. **Mostrar indicadores e detalhes** abre métricas,
+motivos de rejeição e listas completas de candidatos. O plano principal contém
+até três prioridades.
 
-O painel mostra finanças, PIB, população, padrão de vida, alfabetização,
-capacidade de construção, filas e sinais de infraestrutura, abastecimento e
-contratação. Os dados correspondem à última leitura indicada no painel.
-O crescimento do PIB requer amostras em meses distintos.
+## Política inicial e cobertura
 
-**Estado: interface, indicadores, atualização sob solicitação, desativação e candidatos anteriores foram confirmados em campanha nas versões 0.3.0–0.3.5.** As capturas do Império Otomano em junho de 1839 confirmaram modo Automático visível e mensagem de revisão bloqueada por filas ocupadas. Inclusão automática, aprovação permitida e o novo detalhamento de oferta ainda precisam de confirmação na engine. Compatibilidade ampliada continua pendente; não é uma versão para deixar uma campanha sem supervisão.
+Novas tentativas próprias e autorizações externas exigem saldos semanal e
+operacional não negativos, ouro cobrindo quatro semanas de despesas fixas e
+dívida até 75% do crédito, quando houver dívida. Inadimplência e pausa suspendem
+a coordenação de construção. Esses limiares são parâmetros iniciais avaliados
+em cenários sintéticos e ainda precisam de calibração em campanha.
 
-## Instalação e uso
+O plano compara infraestrutura e produtores existentes de madeira, ferro,
+carvão, cereais, tecido, ferramentas, mantimentos e roupas. Também identifica
+escassez desses bens sem o tipo de produtor atendido e objetivos administrativos
+ou de energia. A autorização do executor externo permite que ele avalie
+investimentos além do escopo das expansões próprias do Director.
 
-Consulte [instalação e geração do ZIP](docs/INSTALL.md). O pacote gerado em
-`dist/smart-economy-director-0.5.9.zip` contém a pasta do mod e o descritor
-externo. Ative no launcher e use a decisão **Ativar Smart Economy Director**.
-O modo inicial é Assistido; a automação só começa se o jogador selecionar
-Automático no diário.
+O desenvolvimento está parcial. Custo incremental completo, projeção de
+trabalhadores e insumos futuros, controle de impostos/gastos, identidade de
+projetos, aprendizado com obras concluídas e estratégia plurianual seguem
+pendentes. As integrações e o layout 0.6.0 ainda precisam de verificação na
+engine e de save/reload. ARoAI construtor é detectado e suspende a delegação
+pelos dois adaptadores. Autoexpansões nativas têm cobertura pendente.
 
-O GitHub Actions publica o artefato **smart-economy-director**, com ZIP interno
-`smart-economy-director.zip`; os descritores informam a versão. A geração local
-sem `--output` mantém o nome versionado.
-
-Para verificar a cobertura da fila há um [auxiliar opcional de inspeção](docs/QUEUE_PROBE.md),
-gerado separadamente e ainda sem confirmação de funcionamento na engine.
-
-## Desenvolvimento e verificação
+## Desenvolvimento e entrega
 
 ```bash
 python3 tools/build_mod.py
 python3 tools/build_mod.py --check
 python3 tools/validate.py --game "/caminho/Victoria 3/game"
+python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-Requer Python 3.10+ e somente a biblioteca padrão. Os scripts usam o prefixo
-`sed_`, português brasileiro e fallback inglês. Não sobrescrevem arquivos
-originais nem escrevem em variáveis de terceiros. Testes estáticos não
-substituem a validação no motor do jogo.
+O pacote fica em `dist/smart-economy-director-0.6.0.zip`. A instalação local
+pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
+comando documentado em [INSTALL.md](docs/INSTALL.md).
 
-## Documentação
+Consulte a [matriz viva de requisitos](docs/STATUS.md), a [política de planejamento
+e coordenação](docs/PLANNING.md), os [testes de campanha](docs/MANUAL_RUNTIME_TEST.md)
+e o [contexto de continuidade](docs/AI_CONTEXT.md). O briefing original está em
+[PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md). A [auditoria de 09/11](docs/AUDIT_2026-11-09.md)
+registra o estado histórico da 0.4.1.
 
-- [Entrega, arquitetura implementada e limites da Fase 1](docs/PHASE1.md)
-- [Requisitos originais completos](docs/PROJECT_BRIEF.md)
-- [Pesquisa técnica](docs/RESEARCH.md)
-- [Arquitetura por fases](docs/ARCHITECTURE.md)
-- [Compatibilidade](docs/COMPATIBILITY.md)
-- [Métricas e fontes](docs/METRICS.md)
-- [Auditoria local de mods e saves](docs/LOCAL_AUDIT.md)
-- [Relatório estruturado da auditoria](docs/ENVIRONMENT_AUDIT.json)
-- [Inventário inicial de fontes](docs/SOURCE_INVENTORY.json)
-- [Contexto para continuidade](docs/AI_CONTEXT.md)
-- [Registro de fases](docs/PHASE_LOG.md)
-- [Testes de campanha e da interface](docs/MANUAL_RUNTIME_TEST.md)
-- [Resultado do teste de inicialização na engine](docs/RUNTIME_SMOKE.md)
-
-A [pesquisa anterior na nuvem](docs/RESEARCH_CLOUD.md) e as
-[instruções de continuidade local](docs/LOCAL_CODEX.md) foram preservadas.
-PMs continuam sob responsabilidade dos outros mods. Os botões adicionam um
-nível público após checagens atuais. Em modo Automático, um evento mensal pode
-enfileirar no máximo um nível elegível e bloqueia com filas ocupadas,
-inadimplência, construção pausada ou flags conhecidas de outros construtores.
-A recomendação do setor de construção exige fila pública com pelo menos três
-projetos e não promete contratação futura.
-
-## Proteção de infraestrutura — 0.5.9
-
-Produtores dos oito bens atendidos e setores de construção exigem saldo atual
-de infraestrutura maior ou igual a zero. A aprovação revalida essa condição;
-um cartão antigo não autoriza expansão se o estado entrar em déficit.
-Ferrovias mantêm a elegibilidade em déficit para tratar esse gargalo.
-Cartões mostram o saldo ao vivo e o bloqueio, e os detalhes contam rejeições
-por infraestrutura separadamente, respeitando a prioridade dos demais motivos.
-
-84 testes automatizados aprovados: incluem invalidação de cartões antigos,
-limite zero, exceção ferroviária, escolha de outro estado pelo Automático e
-contadores sem dupla contagem. Validação estática contra os arquivos locais
-1.15.0 aprovada. Isso não verifica execução na engine, save/reload ou campanha.
-A guarda considera déficit atual, sem projetar consumo do próximo nível nem
-reservar capacidade para projetos concorrentes. Reconciliação completa das
-filas e planejamento fiscal incremental continuam pendentes.
-
-Na 0.5.9, opções independentes do Supply Chain para ferrovias, energia e
-setores de construção também suspendem o Automático. A guarda detecta
-configuração, mesmo quando o outro mod não construiria naquele mês. Aprovação
-Assistida permanece explícita. Administração geral e tributária também são detectadas; meta institucional
-isolada não habilita construção no Supply Chain.
-Pacote 0.5.9 disponível em `dist/`; instalação local permanece 0.5.8 durante o teste do jogador.
-
-Na 0.5.9, os efeitos de construção revalidam toda a guarda do Automático
-antes de tentar incluir a obra; Assistido preserva as regras anteriores.
-
-Na 0.5.9, os efeitos internos também recusam construção em Manual ou sem
-modo de execução definido. Assistido e Automático mantêm suas guardas próprias.
-
-A 0.5.9 mostra quais opções externas estão configuradas e explica por que
-bloqueiam o Automático mesmo sem obra. Preparada e empacotada; não instalada
-durante o teste atual, que usa 0.5.8.
+A 0.6.0 foi instalada localmente com backup, 13 outputs conferidos e ordem
+dos mods preservada. Os 115 testes sintéticos e a validação estática passaram.
+A verificação do novo fluxo na engine segue pendente.
