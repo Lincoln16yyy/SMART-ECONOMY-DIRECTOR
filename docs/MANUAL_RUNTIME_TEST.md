@@ -1,6 +1,6 @@
 # Plano de teste da campanha — interface 0.5.3
 
-## Teste conjunto da 0.6.12
+## Teste conjunto da 0.6.13
 
 Realizar quando o jogador decidir retomar os testes. Registrar uma captura
 inicial do orçamento, opções dos construtores e fila, e guardar um save.
@@ -26,6 +26,12 @@ inicial do orçamento, opções dos construtores e fila, e guardar um save.
    observar acompanhamento de obra quando não há outra prioridade elegível.
    Confirmar suspensão das opções externas e reavaliação após conclusão ou
    cancelamento. Uma obra em outro estado sem o gargalo não comprova resolução.
+
+8. Comparar despesas militares do orçamento com a seção econômico-militar.
+   Conferir a indicação de paz/guerra e avisos dos cinco bens no mercado.
+   Em país com dívida ou reservas insuficientes, a diretriz não deve dizer que
+   há condições para estudar modernização. Escassez militar deve manter o
+   aviso de abastecimento mesmo se a diretriz geral for estabilizar finanças.
 
 Guardar capturas de um caso saudável, um caso de crise e a restauração. Obras
 existentes e investimentos privados não comprovam autoria do Director.

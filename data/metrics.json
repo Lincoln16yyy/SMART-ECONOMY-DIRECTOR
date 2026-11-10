@@ -11,5 +11,7 @@
   {"id":"literacy","expression":"literacy_rate","unit":"ratio","pt":"Alfabetização","en":"Literacy","source":"vanilla/common/journal_entries/00_sick_man.txt"},
   {"id":"construction","expression":"modifier:country_construction_add","unit":"decimal","pt":"Capacidade total de construção","en":"Total construction capacity","source":"Economy Advisor/advisor_core_values.txt"},
   {"id":"public_projects","expression":"num_queued_government_constructions","unit":"count","pt":"Projetos na fila pública","en":"Government queue projects","source":"Economy Advisor/advisor_core_values.txt"},
-  {"id":"private_projects","expression":"num_queued_private_constructions","unit":"count","pt":"Projetos na fila privada","en":"Private queue projects","source":"Economy Advisor/advisor_core_values.txt"}
+  {"id":"private_projects","expression":"num_queued_private_constructions","unit":"count","pt":"Projetos na fila privada","en":"Private queue projects","source":"Economy Advisor/advisor_core_values.txt"},
+  {"id":"military_expenses","expression":"military_expenses","unit":"money_week","pt":"Despesas militares semanais","en":"Weekly military expenses","source":"vanilla/common/script_values/01_power_bloc_values.txt"},
+  {"id":"military_share","expression":"military_expenses_share","unit":"ratio","pt":"Participação das despesas militares (indicador do jogo)","en":"Military expense share (game indicator)","source":"vanilla/common/script_values/01_power_bloc_values.txt"}
 ]

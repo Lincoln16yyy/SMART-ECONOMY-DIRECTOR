@@ -1993,6 +1993,108 @@ textbox = {
 }
 textbox = {
  autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_xxl
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_military_title"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_military_summary"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_military_war_0_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_military_war_0"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_military_war_1_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_military_war_1"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_military_posture_0_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_military_posture_0"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_military_posture_1_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_military_posture_1"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_military_posture_2_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_military_posture_2"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_military_posture_3_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_military_posture_3"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_military_posture_4_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_military_posture_4"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_military_short_small_arms_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_military_short_small_arms"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_military_short_artillery_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_military_short_artillery"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_military_short_ammunition_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_military_short_ammunition"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_military_short_manowars_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_military_short_manowars"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_military_short_ironclads_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_military_short_ironclads"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_military_scope"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_plan_policy"

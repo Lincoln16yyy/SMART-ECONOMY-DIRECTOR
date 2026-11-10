@@ -939,6 +939,18 @@ sed_tax_last_command_visible_sgui = { scope = country is_shown = { has_variable 
 sed_wage_last_command_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_wage_last_from has_variable = sed_wage_last_to has_variable = sed_wage_last_month has_variable = sed_wage_last_year } }
 sed_auto_status_waiting_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 20 } }
 sed_plan_waiting_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_waiting var:sed_plan_waiting = 1 } }
+sed_military_war_0_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_military_at_war var:sed_military_at_war = 0 } }
+sed_military_war_1_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_military_at_war var:sed_military_at_war = 1 } }
+sed_military_posture_0_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_military_posture var:sed_military_posture = 0 } }
+sed_military_posture_1_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_military_posture var:sed_military_posture = 1 } }
+sed_military_posture_2_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_military_posture var:sed_military_posture = 2 } }
+sed_military_posture_3_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_military_posture var:sed_military_posture = 3 } }
+sed_military_posture_4_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_military_posture var:sed_military_posture = 4 } }
+sed_military_short_small_arms_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_military_short_small_arms var:sed_military_short_small_arms = 1 } }
+sed_military_short_artillery_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_military_short_artillery var:sed_military_short_artillery = 1 } }
+sed_military_short_ammunition_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_military_short_ammunition var:sed_military_short_ammunition = 1 } }
+sed_military_short_manowars_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_military_short_manowars var:sed_military_short_manowars = 1 } }
+sed_military_short_ironclads_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_military_short_ironclads var:sed_military_short_ironclads = 1 } }
 sed_auto_status_fiscal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 17 } }
 sed_fiscal_1_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = 1 } }
 sed_fiscal_2_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = 2 } }

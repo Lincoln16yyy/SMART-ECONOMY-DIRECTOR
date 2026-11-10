@@ -11,7 +11,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.6.12'
+VERSION = '0.6.13'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -509,6 +509,15 @@ def widget():
         body += textbox(f'sed_fiscal_{status}', f'sed_fiscal_{status}_visible_sgui')
     for goal in range(10):
         body += textbox(f'sed_goal_{goal}', f'sed_goal_{goal}_visible_sgui')
+    body += textbox('sed_military_title', heading=True)
+    body += textbox('sed_military_summary')
+    for war in (0, 1):
+        body += textbox(f'sed_military_war_{war}', f'sed_military_war_{war}_visible_sgui')
+    for posture in range(5):
+        body += textbox(f'sed_military_posture_{posture}', f'sed_military_posture_{posture}_visible_sgui')
+    for good, _, _ in planning.MILITARY_GOODS:
+        body += textbox(f'sed_military_short_{good}', f'sed_military_short_{good}_visible_sgui')
+    body += textbox('sed_military_scope')
     body += textbox('sed_plan_policy')
     body += textbox('sed_tax_policy', 'sed_tax_policy_visible_sgui')
     body += textbox('sed_wage_policy', 'sed_tax_policy_visible_sgui')
@@ -1047,7 +1056,7 @@ sed_update_growth = {
     state_cleanup = '\n'.join('  remove_variable = ' + name for name in planning.state_variables(ACTION_NAMES))
     script = script.replace(' # Schema and automatic attempt month',
                             ' every_scope_state = {\n' + state_cleanup + '\n }\n # Schema and automatic attempt month', 1)
-    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + planning.tax_policy_effects() + planning.wage_policy_effects() + coordination.effects()
+    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + coordination.effects()
 
 
 def scripted_guis():
@@ -1281,6 +1290,12 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
         result += f'sed_{policy}_last_command_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_{policy}_last_from has_variable = sed_{policy}_last_to has_variable = sed_{policy}_last_month has_variable = sed_{policy}_last_year }} }}\n'
     result += 'sed_auto_status_waiting_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 20 } }\n'
     result += 'sed_plan_waiting_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_waiting var:sed_plan_waiting = 1 } }\n'
+    for war in (0, 1):
+        result += f'sed_military_war_{war}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_military_at_war var:sed_military_at_war = {war} }} }}\n'
+    for posture in range(5):
+        result += f'sed_military_posture_{posture}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_military_posture var:sed_military_posture = {posture} }} }}\n'
+    for good, _, _ in planning.MILITARY_GOODS:
+        result += f'sed_military_short_{good}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_military_short_{good} var:sed_military_short_{good} = 1 }} }}\n'
     result += 'sed_auto_status_fiscal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 17 } }\n'
     for status in range(1, 6):
         result += f'sed_fiscal_{status}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = {status} }} }}\n'
@@ -1771,6 +1786,20 @@ def localization(language):
         if name == 'construction':
             pairs[key] = (pairs[key][0] + ' Déficit de infraestrutura: ' + v('construction_infrastructure_states', '0') + '.',
                           pairs[key][1] + ' Infrastructure deficit: ' + v('construction_infrastructure_states', '0') + '.')
+    pairs.update({
+        'sed_military_war_0': ('País em paz. Acompanhar o custo permanente das forças.', 'Country at peace. Monitor recurring force costs.'),
+        'sed_military_war_1': ('País em guerra. Acompanhar abastecimento e custos de mobilização durante as próximas revisões.', 'Country at war. Monitor supply and mobilization costs in subsequent reviews.'),
+        'sed_military_title': ('Economia militar e capacidade de modernização', 'Military economy and modernization capacity'),
+        'sed_military_summary': ('Despesas militares semanais: @money!' + v('military_expenses', 'K') + '. Participação indicada pelo jogo: ' + v('military_share', '%1') + '. Bens militares em escassez: ' + v('military_shortage_count', '0') + '.', 'Weekly military expenses: @money!' + v('military_expenses', 'K') + '. Game expense share: ' + v('military_share', '%1') + '. Military goods in shortage: ' + v('military_shortage_count', '0') + '.'),
+        'sed_military_posture_0': ('Diretriz militar: observar demanda; sem despesa militar positiva nesta leitura.', 'Military guidance: monitor demand; no positive military spending in this reading.'),
+        'sed_military_posture_1': ('Diretriz militar: sustentar a força atual e acompanhar o abastecimento.', 'Military guidance: sustain current forces and monitor supply.'),
+        'sed_military_posture_2': ('Diretriz militar: investigar abastecimento antes de ampliar compromissos. Há bens militares com demanda e escassez no mercado.', 'Military guidance: investigate supply before increasing commitments. Military goods have market demand and shortages.'),
+        'sed_military_posture_3': ('Diretriz militar: estabilizar o orçamento e preservar o abastecimento da força atual. A avaliação fiscal está em crise ou o saldo operacional é negativo.', 'Military guidance: stabilize the budget and preserve current force supply. Fiscal assessment is in crisis or operating balance is negative.'),
+        'sed_military_posture_4': ('Diretriz militar: orçamento permite estudar modernização. Há superávit, ausência de dívida e doze semanas de despesas fixas em reservas. Custo de uma modernização específica ainda precisa ser avaliado.', 'Military guidance: budget permits studying modernization. Positive balance, no debt and twelve weeks of fixed expenses in reserves. A specific modernization cost still requires assessment.'),
+        'sed_military_scope': ('Avaliação econômica de apoio. Escassez é do mercado compartilhado; demanda das tropas nacionais ainda requer diagnóstico próprio. A execução de modernização e de investimentos militares dirigidos permanece pendente.', 'Supporting economic assessment. Shortages refer to the shared market; national troop demand still requires dedicated diagnosis. Modernization and targeted military investment execution remain pending.'),
+    })
+    for good, pt, en in planning.MILITARY_GOODS:
+        pairs[f'sed_military_short_{good}'] = (f'Abastecimento militar a investigar: {pt}, com demanda positiva e escassez no mercado.', f'Military supply to investigate: {en}, with positive demand and a market shortage.')
     for metric in METRICS:
         unit = metric['unit']
         fmt = {'money': 'K', 'money_week': 'K', 'count': '0', 'decimal': '1', 'ratio': '%1'}[unit]
