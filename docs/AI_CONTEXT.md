@@ -1,5 +1,43 @@
 # Contexto de continuidade
 
+Entrega 0.6.16 instalada com jogo fechado, 14 outputs conferidos no ZIP e na
+instalação, ordem preservada. Backup
+`sed_backups/mod_before_0.6.16_20261110_180333_870620`.
+
+## 0.6.16 — Ritmo de investimento por reservas e sincronização
+
+O teste do jogador em março–maio de 1842 mostrou diagnóstico de ferro,
+rejeição por expansão na fila e ocupação, acompanhamento de obra relacionada,
+fim do aviso de escassez e retorno do objetivo para crescimento/diversificação.
+A execução direta e a autoria da expansão ainda não foram comprovadas.
+A leitura manual corrigiu uma divergência entre números registrados e a barra
+atual do jogo. Leituras continuam representando snapshots.
+
+Foi corrigida a sincronização após `sed_refresh_diagnostics`. O diagnóstico
+atualiza o plano e, em coordenação ativa, reaplica a seleção de executor e as
+opções autorizadas. Não enfileira obra, ajusta impostos/salários ou reescreve o
+resultado arquivado da última revisão automática. Essa mudança pode alterar
+as opções de construção externas durante o clique de diagnóstico.
+
+Durante déficit financiado por reservas, níveis públicos já enfileirados
+selecionam executor 12 e resultado 21. Novas opções externas ficam suspensas
+nas revisões até a fila pública liberar. A fila privada sozinha não impõe essa
+pausa. Com saldo não negativo, as rotas anteriores permanecem. O orçamento é
+revalidado antes de liberar o Advisor; guardas de default e ARoAI prevalecem.
+Obras existentes continuam; o mod não estima seu custo restante.
+
+O painel mostra piso de doze semanas de despesas fixas, ouro acima desse piso,
+cobertura em semanas do déficit atual e total exigido pela guarda de 26
+semanas. Esses números explicam o limiar já existente, sem alterar seus fatores
+ou prever custos incrementais. Casos de saldo zero e despesas negativas são
+tratados para evitar divisão por zero e reservas mínimas negativas.
+
+196 testes sintéticos aprovados. Sete regressões adicionais cobrem fila pública,
+retomada, fila privada, sincronização sem execução/histórico alterado e contas
+de reservas. Geração e validação estática local aprovadas. Novas transições e
+layout ainda aguardam campanha.
+
+
 Entrega 0.6.15 instalada com jogo fechado, 14 outputs conferidos no ZIP e na
 instalação, ordem preservada. Backup
 `sed_backups/mod_before_0.6.15_20261110_121434_509591`.

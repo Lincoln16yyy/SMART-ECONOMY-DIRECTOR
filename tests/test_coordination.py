@@ -359,6 +359,63 @@ class CoordinationTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_auto_review_status'], 18)
         self.assertEqual(self.external(), {'zw_var_scsab_construct_railway': 1})
 
+    def test_reserve_funded_queue_pauses_then_resumes_without_cancelling_projects(self):
+        c = self.c
+        c.states.clear()
+        c.readings.update(net_total_income=-10, net_fixed_income=100,
+                          fixed_expenses=50, gold_reserves=860, principal=0,
+                          construction_queue_num_queued_government_levels=1)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_fiscal_status'], 5)
+        self.assertEqual(c.variables['sed_coord_executor'], 12)
+        self.assertEqual(c.variables['sed_auto_review_status'], 21)
+        self.assertEqual(self.external(), {})
+        self.assertEqual(c.readings['construction_queue_num_queued_government_levels'], 1)
+        c.readings['construction_queue_num_queued_government_levels'] = 0
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_coord_executor'], 1)
+        self.assertEqual(self.external(), {'advisor_auto_construction_enabled': 1})
+        c.run('sed_set_mode_assisted')
+        self.assertEqual(self.external(), self.original)
+
+    def test_healthy_growth_with_queue_retains_previous_advisor_route(self):
+        c = self.c
+        c.states.clear()
+        c.readings['construction_queue_num_queued_government_levels'] = 1
+        c.run('sed_set_mode_automatic')
+        self.assertEqual(c.variables['sed_coord_executor'], 1)
+
+    def test_reserve_funded_private_queue_does_not_impose_public_queue_pause(self):
+        c = self.c
+        c.states.clear()
+        c.readings.update(net_total_income=-10, fixed_expenses=50,
+                          gold_reserves=860, principal=0,
+                          construction_queue_num_queued_private_levels=3)
+        c.run('sed_set_mode_automatic')
+        self.assertEqual(c.variables['sed_coord_executor'], 1)
+
+    def test_diagnostic_refresh_synchronizes_executor_without_building_or_rewriting_review(self):
+        c = self.c
+        c.states.clear()
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        review = {key: value for key, value in c.variables.items() if key.startswith('sed_auto_review_')}
+        c.readings.update(net_total_income=-10, fixed_expenses=50, gold_reserves=860,
+                          principal=0, construction_queue_num_queued_government_levels=1)
+        c.run('sed_refresh_diagnostics')
+        self.assertEqual(c.variables['sed_coord_executor'], 12)
+        self.assertEqual(self.external(), {})
+        self.assertEqual(c.constructions, [])
+        self.assertEqual({key: value for key, value in c.variables.items() if key in review}, review)
+        c.readings['gold_reserves'] = 859
+        c.run('sed_refresh_diagnostics')
+        self.assertEqual(c.variables['sed_coord_executor'], 0)
+        c.readings.update(net_total_income=100, gold_reserves=1000)
+        c.run('sed_refresh_diagnostics')
+        self.assertEqual(c.variables['sed_coord_executor'], 1)
+        self.assertEqual(c.constructions, [])
+
     def direct_supply_fixture(self):
         c = self.c
         item = next(item for item in SUPPLY_TARGETS if item['good'] == 'wood')

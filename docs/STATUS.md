@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.6.15
+# Estado dos requisitos — 0.6.16
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.
@@ -6,7 +6,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 
 | Requisito | Código e teste sintético | Verificação de campanha e trabalho restante |
 | --- | --- | --- |
-| Diagnóstico econômico e diário | Implementados, com métricas, data e atualização manual/mensal | Indicadores e UI de versões anteriores tiveram confirmação visual parcial |
+| Diagnóstico econômico e diário | Implementados, com métricas, data e atualização manual/mensal | Leitura e correção de snapshot observadas na campanha de 1842. Atualização do executor no diagnóstico corrigida na 0.6.16, pendente de confirmação |
 | Objetivo nacional atual | Implementado para gargalos, fiscal, crescimento/diversificação e meta industrial anual por escassez persistente | Amostragem mensal corrigida na 0.6.9. Validar seleção e transições em campanha |
 | Até três prioridades nacionais | Implementado sobre pares estado/tipo elegíveis | Validar layout e dados das novas prioridades na engine |
 | Setores estratégicos ausentes | Onze bens, incluindo armas, artilharia e munição; cereais cobrem cinco tipos de fazenda e tecido cobre plantação e pecuária | Demais bens ainda têm um único produtor; considerar importações e objetivos industriais |
@@ -15,7 +15,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Impostos e gastos | Nível de imposto e salário civil do governo no Automático, com um passo mensal, snapshot e restauração | Leitura das rotinas aceita no menu da engine. Observar alterações em campanha e calibrar limiares |
 | Coordenação Advisor/Supply Chain | Adaptadores de sete opções de construção, quatro de objetivo/orçamento e três de política do Supply Chain, com restauração | Verificar efeitos reais, save/reload e compatibilidade das versões instaladas |
 | Ativar somente caminho necessário | Automático usa rotinas específicas para administração, tributação, energia e, preferencialmente, setores de construção | Oferta elegível pode usar alvo direto do plano. Nas rotas externas, a seleção continua sob o algoritmo da ferramenta escolhida |
-| Construção própria automática | Consome a primeira prioridade, revalida guardas e limita tentativa mensal | Inclusão real e persistência ainda exigem evidência de engine |
+| Construção própria automática | Consome a primeira prioridade, revalida guardas e limita tentativa mensal | Inclusão direta e persistência ainda exigem evidência de campanha. Espera por obra e transição após fim da escassez tiveram confirmação visual parcial |
 | Evitar executor próprio em paralelo | Executor próprio exclusivo para primeira prioridade de oferta na 0.6.15; opções externas suspensas | ARoAI detectado suspende delegação, autoexpansões nativas continuam sem controle |
 | Desativar e devolver opções | Restaura presença e valor original das onze opções, com testes de idempotência | Limites fiscais preservados por mês. Confirmar restauração após save/reload e atualização de versão |
 | Manual e Assistido | Autorizações e trocas de modo testadas | Restauração pode reativar opções externas originalmente ligadas |
