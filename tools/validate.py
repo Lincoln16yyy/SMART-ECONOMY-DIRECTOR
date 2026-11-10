@@ -54,12 +54,14 @@ def validate(root=ROOT, game=None):
                        'trigger_event', 'order_by', 'max', 'check_range_bounds'}
 
     # Narrow, reviewed exception: only two guarded adapter effects may change
-    # these seven country options. All other foreign mutations stay rejected.
+    # these reviewed country options. All other foreign mutations stay rejected.
     coordinated_options = {
         'advisor_auto_construction_enabled', 'zw_var_expand_building',
         'zw_var_more_construction_sectors', 'zw_var_scsab_construct_railway',
         'zw_var_scsab_construct_power_plant', 'zw_var_scsab_gov_admin',
         'zw_var_scsab_gov_admin_for_tax',
+        'advisor_setting_sc_goal_sol', 'advisor_setting_sc_goal_treasury',
+        'advisor_setting_treasury_off', 'advisor_setting_borrow',
     }
     for effect_name in ('sed_coord_sync', 'sed_coord_restore'):
         top = custom.get(effect_name, [])

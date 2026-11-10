@@ -232,6 +232,8 @@ sed_disable_country = {
  remove_variable = sed_coord_supply_known
  remove_variable = sed_coord_advisor_known
  remove_variable = sed_coord_executor
+ remove_variable = sed_coord_advisor_policy
+ remove_variable = sed_coord_policy_saved
  remove_variable = sed_coord_saved_advisor
  remove_variable = sed_coord_saved_chains
  remove_variable = sed_coord_saved_sectors
@@ -239,6 +241,10 @@ sed_disable_country = {
  remove_variable = sed_coord_saved_power
  remove_variable = sed_coord_saved_admin
  remove_variable = sed_coord_saved_tax
+ remove_variable = sed_coord_saved_goal_sol
+ remove_variable = sed_coord_saved_goal_treasury
+ remove_variable = sed_coord_saved_treasury_off
+ remove_variable = sed_coord_saved_borrow
  clear_variable_list = sed_railway_candidates
  clear_variable_list = sed_construction_candidates
  clear_variable_list = sed_wood_candidates
@@ -2246,6 +2252,25 @@ sed_refresh_national_plan = {
   if = { limit = { var:sed_fiscal_status >= 3 } set_variable = { name = sed_plan_goal value = 4 } }
  }
 }
+sed_coord_capture_advisor_policy = {
+ if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_coord_active
+  has_variable = sed_coord_advisor_known NOT = { has_variable = sed_coord_policy_saved } }
+  if = { limit = { has_variable = advisor_setting_sc_goal_sol }
+   set_variable = { name = sed_coord_saved_goal_sol value = var:advisor_setting_sc_goal_sol }
+  }
+  if = { limit = { has_variable = advisor_setting_sc_goal_treasury }
+   set_variable = { name = sed_coord_saved_goal_treasury value = var:advisor_setting_sc_goal_treasury }
+  }
+  if = { limit = { has_variable = advisor_setting_treasury_off }
+   set_variable = { name = sed_coord_saved_treasury_off value = var:advisor_setting_treasury_off }
+  }
+  if = { limit = { has_variable = advisor_setting_borrow }
+   set_variable = { name = sed_coord_saved_borrow value = var:advisor_setting_borrow }
+  }
+  set_variable = { name = sed_coord_policy_saved value = yes }
+ }
+}
+
 sed_coord_enable = {
  if = {
   limit = { is_player = yes has_variable = sed_enabled NOT = { has_variable = sed_coord_active } }
@@ -2273,6 +2298,7 @@ sed_coord_enable = {
   if = { limit = { OR = { has_variable = advisor_enabled has_variable = advisor_auto_construction_enabled } } set_variable = { name = sed_coord_advisor_known value = yes } }
   if = { limit = { OR = { has_variable = zw_var_expand_building has_variable = zw_var_more_construction_sectors has_variable = zw_var_scsab_construct_railway has_variable = zw_var_scsab_construct_power_plant has_variable = zw_var_scsab_gov_admin has_variable = zw_var_scsab_gov_admin_for_tax has_variable = zw_var_scsab_gov_admin_for_institution has_variable = zw_var_added_constructions has_variable = zw_var_labor_threshold has_variable = zw_var_more_construction_sectors_gold_reserves has_variable = zw_var_develop_incorporated_states } } set_variable = { name = sed_coord_supply_known value = yes } }
   set_variable = { name = sed_coord_active value = yes }
+  sed_coord_capture_advisor_policy = yes
   remove_variable = sed_mode_manual
   remove_variable = sed_mode_assisted
   set_variable = { name = sed_mode_automatic value = yes }
@@ -2313,10 +2339,30 @@ sed_coord_restore = {
    set_variable = { name = zw_var_scsab_gov_admin_for_tax value = var:sed_coord_saved_tax }
   }
   else = { remove_variable = zw_var_scsab_gov_admin_for_tax }
+  if = { limit = { has_variable = sed_coord_policy_saved }
+   if = { limit = { has_variable = sed_coord_saved_goal_sol }
+    set_variable = { name = advisor_setting_sc_goal_sol value = var:sed_coord_saved_goal_sol }
+   }
+   else = { remove_variable = advisor_setting_sc_goal_sol }
+   if = { limit = { has_variable = sed_coord_saved_goal_treasury }
+    set_variable = { name = advisor_setting_sc_goal_treasury value = var:sed_coord_saved_goal_treasury }
+   }
+   else = { remove_variable = advisor_setting_sc_goal_treasury }
+   if = { limit = { has_variable = sed_coord_saved_treasury_off }
+    set_variable = { name = advisor_setting_treasury_off value = var:sed_coord_saved_treasury_off }
+   }
+   else = { remove_variable = advisor_setting_treasury_off }
+   if = { limit = { has_variable = sed_coord_saved_borrow }
+    set_variable = { name = advisor_setting_borrow value = var:sed_coord_saved_borrow }
+   }
+   else = { remove_variable = advisor_setting_borrow }
+  }
   remove_variable = sed_coord_active
   remove_variable = sed_coord_supply_known
   remove_variable = sed_coord_advisor_known
   remove_variable = sed_coord_executor
+  remove_variable = sed_coord_advisor_policy
+  remove_variable = sed_coord_policy_saved
   remove_variable = sed_coord_saved_advisor
   remove_variable = sed_coord_saved_chains
   remove_variable = sed_coord_saved_sectors
@@ -2324,6 +2370,10 @@ sed_coord_restore = {
   remove_variable = sed_coord_saved_power
   remove_variable = sed_coord_saved_admin
   remove_variable = sed_coord_saved_tax
+  remove_variable = sed_coord_saved_goal_sol
+  remove_variable = sed_coord_saved_goal_treasury
+  remove_variable = sed_coord_saved_treasury_off
+  remove_variable = sed_coord_saved_borrow
  }
 }
 
@@ -2337,6 +2387,7 @@ sed_coord_sync = {
   remove_variable = zw_var_scsab_gov_admin
   remove_variable = zw_var_scsab_gov_admin_for_tax
   set_variable = { name = sed_coord_executor value = 0 }
+  set_variable = { name = sed_coord_advisor_policy value = 0 }
   if = { limit = { has_variable = aroai_autobuild } set_variable = { name = sed_coord_executor value = 5 } }
   else_if = { limit = { sed_auto_fiscal_safe = yes NOT = { in_default = yes } is_construction_paused = no }
    if = { limit = { var:sed_plan_goal = 1 has_variable = sed_coord_supply_known }
@@ -2373,6 +2424,24 @@ else = { set_variable = { name = zw_var_scsab_construct_power_plant value = 1 } 
 }
 else = { set_variable = { name = advisor_auto_construction_enabled value = 1 } }
     set_variable = { name = sed_coord_executor value = 1 }
+    sed_coord_capture_advisor_policy = yes
+    remove_variable = advisor_setting_sc_goal_sol
+    remove_variable = advisor_setting_sc_goal_treasury
+    remove_variable = advisor_setting_treasury_off
+    remove_variable = advisor_setting_borrow
+    set_variable = { name = sed_coord_advisor_policy value = 1 }
+    if = { limit = { principal > 0 credit > 0 principal >= { value = credit multiply = 0.5 } }
+     set_variable = { name = advisor_setting_sc_goal_treasury value = yes }
+     set_variable = { name = advisor_setting_treasury_off value = yes }
+     set_variable = { name = sed_coord_advisor_policy value = 3 }
+    }
+    else_if = { limit = { OR = {
+     any_scope_state = { OR = { var:sed_plan_grain_rank = 1 var:sed_plan_groceries_rank = 1 var:sed_plan_clothes_rank = 1 } }
+     AND = { var:sed_plan_goal = 5 OR = { var:sed_plan_missing_grain = 1 var:sed_plan_missing_groceries = 1 var:sed_plan_missing_clothes = 1 } }
+    } }
+     set_variable = { name = advisor_setting_sc_goal_sol value = yes }
+     set_variable = { name = sed_coord_advisor_policy value = 2 }
+    }
    }
    else_if = { limit = { has_variable = sed_coord_supply_known OR = { var:sed_plan_goal = 2 var:sed_plan_goal = 5 var:sed_plan_goal = 8 } }
     if = { limit = { has_variable = sed_coord_saved_chains }

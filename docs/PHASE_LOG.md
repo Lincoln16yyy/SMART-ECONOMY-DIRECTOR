@@ -1035,3 +1035,28 @@ Conferência final da 0.6.0 inclui ocultação das listas vazias do plano,
 Backup dessa conferência em
 `sed_backups/mod_before_0.6.0_20261109_220620_787220`.
 O backup inicial `mod_before_0.6.0_20261109_220347_442062` conserva a 0.5.8.
+
+## Objetivo e orçamento do Advisor 0.6.1
+
+Integração de quatro opções verificadas do Advisor, além das sete de construção.
+Ao escolher Advisor, o Director aplica crescimento, padrão de vida quando bens
+essenciais lideram o plano ou retorno ao tesouro quando a dívida positiva chega
+a 50% do crédito. A orientação financeira tem prioridade. Crescimento/social
+usam orçamento equilibrado do Advisor, com sua reserva de doze semanas. Retorno
+ao tesouro preserva reservas. A opção de endividamento do Advisor fica desligada
+enquanto ele recebe essa orientação. O limiar de 50% é uma decisão inicial da
+implementação com calibração em campanha pendente.
+
+Snapshot e restauração incluem presença e valores das quatro opções. Migração
+de uma coordenação 0.6.0 ativa captura antes da primeira escrita. Liberar antes
+de capturar preserva as opções. Delegação ao Supply Chain mantém a política do
+Advisor. A autorização de escrita do validador cobre apenas as onze opções nos
+dois efeitos adaptadores existentes.
+
+120 testes aprovados, geração atual, validação estática e ZIP aprovados.
+A integração nova ainda aguarda confirmação de engine e save/reload. Fontes e
+política em PLANNING.md. Instalação e publicação registradas na entrega abaixo.
+
+Entrega local 0.6.1 instalada com jogo fechado, 13 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.1_20261109_222628_869777`.

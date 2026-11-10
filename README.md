@@ -1,6 +1,6 @@
 # Smart Economy Director — Victoria 3 1.15
 
-A versão 0.6.0 acrescenta planejamento nacional inicial e coordenação de
+A versão 0.6.1 acrescenta planejamento nacional inicial e coordenação de
 construção com Economy Advisor e Supply Chain Semi-Auto Builder. O diário
 mostra objetivo atual, situação fiscal, executor escolhido e até três
 prioridades entre estados e setores.
@@ -11,9 +11,11 @@ capacidade administrativa, energia, oferta e crescimento/diversificação têm
 rotas próprias. Sair para **Assistido** ou **Manual**, restaurar opções ou
 desativar devolve os valores originais aos outros mods.
 
-Os adaptadores controlam sete opções verificadas nos arquivos instalados.
-O Economy Advisor continua escolhendo prédios e estados pela sua própria
-política. O Supply Chain mantém suas categorias e filtros internos. Revisões
+Os adaptadores controlam sete opções de construção e quatro opções de objetivo
+e orçamento do Advisor, verificadas nos arquivos instalados.
+O Director escolhe entre crescimento, padrão de vida e retorno ao tesouro,
+e aplica orçamento equilibrado ou preservação das reservas. O Economy Advisor
+avalia prédios e estados usando o objetivo configurado. O Supply Chain mantém suas categorias e filtros internos. Revisões
 ocorrem no pulso mensal e no evento agendado do Director. O painel distingue
 orientação aplicada de inclusão de obra.
 
@@ -52,7 +54,7 @@ investimentos além do escopo das expansões próprias do Director.
 O desenvolvimento está parcial. Custo incremental completo, projeção de
 trabalhadores e insumos futuros, controle de impostos/gastos, identidade de
 projetos, aprendizado com obras concluídas e estratégia plurianual seguem
-pendentes. As integrações e o layout 0.6.0 ainda precisam de verificação na
+pendentes. As integrações e o layout 0.6.1 ainda precisam de verificação na
 engine e de save/reload. ARoAI construtor é detectado e suspende a delegação
 pelos dois adaptadores. Autoexpansões nativas têm cobertura pendente.
 
@@ -66,7 +68,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.6.0.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.6.1.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 
@@ -76,6 +78,6 @@ e o [contexto de continuidade](docs/AI_CONTEXT.md). O briefing original está em
 [PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md). A [auditoria de 09/11](docs/AUDIT_2026-11-09.md)
 registra o estado histórico da 0.4.1.
 
-A 0.6.0 foi instalada localmente com backup, 13 outputs conferidos e ordem
-dos mods preservada. Os 115 testes sintéticos e a validação estática passaram.
+A 0.6.1 foi instalada localmente com backup, 13 outputs conferidos e ordem
+dos mods preservada. Os 120 testes sintéticos e a validação estática passaram.
 A verificação do novo fluxo na engine segue pendente.

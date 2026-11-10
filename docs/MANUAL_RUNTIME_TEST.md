@@ -444,3 +444,13 @@ de teste deve separar alteração de opção, execução externa e inclusão na 
 No upgrade de 0.5.x, selecionar Automático novamente aplica a tomada de controle
 pelos adaptadores. O modo salvo por si só preserva a escolha anterior até essa
 seleção. Remover o mod exige restaurar opções antes de desabilitar seus arquivos.
+
+## Objetivo e orçamento do Advisor 0.6.1
+
+Registrar as quatro opções de objetivo/orçamento antes de escolher Automático.
+Conferir o objetivo escolhido no Director e no Advisor nos cenários de
+crescimento, bens essenciais e dívida entre 50% e 75% do crédito. Conferir
+restauração ao sair e depois de salvar/recarregar. Em save 0.6.0 com coordenação
+ativa, registrar a captura no primeiro uso do Advisor. A política social e a
+financeira precisam ser comparadas à seleção real de candidatos do Advisor.
+Os casos permanecem pendentes na engine.

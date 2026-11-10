@@ -4,7 +4,7 @@ from pathlib import Path
 import unittest
 
 from tools.build_mod import outputs
-from tools.coordination import OPTIONS
+from tools.coordination import OPTIONS, ADVISOR_POLICY_OPTIONS
 from tools.validate import validate
 from test_diagnostics import script_definitions
 from script_harness import Country, railway, state
@@ -183,6 +183,76 @@ class CoordinationTests(unittest.TestCase):
         c.readings['net_total_income'] = -100
         c.run('sed_coord_sync')
         self.assertEqual(self.external(), before)
+
+    def advisor_policy(self):
+        return {option: self.c.variables[option] for _, option in ADVISOR_POLICY_OPTIONS
+                if option in self.c.variables}
+
+    def test_growth_applies_balanced_budget_and_restores_all_original_policy_values(self):
+        c = self.c
+        c.states.clear()
+        originals = {option: index + 4 for index, (_, option) in enumerate(ADVISOR_POLICY_OPTIONS)}
+        c.variables.update(originals)
+        c.run('sed_set_mode_automatic')
+        self.assertEqual(c.variables['sed_coord_advisor_policy'], 1)
+        self.assertEqual(self.advisor_policy(), {})
+        saved = {k: v for k, v in c.variables.items() if k.startswith('sed_coord_saved_')}
+        c.run('sed_coord_sync')
+        self.assertEqual({k: v for k, v in c.variables.items() if k.startswith('sed_coord_saved_')}, saved)
+        c.run('sed_set_mode_assisted')
+        self.assertEqual(self.advisor_policy(), originals)
+        self.assertEqual(self.external(), self.original)
+
+    def test_essentials_and_debt_choose_different_advisor_objectives(self):
+        c = self.c
+        c.states.clear()
+        c.market_goods['grain'] = {'market_goods_has_goods_shortage': True}
+        c.run('sed_set_mode_automatic')
+        self.assertEqual(c.variables['sed_coord_advisor_policy'], 2)
+        self.assertEqual(self.advisor_policy(), {'advisor_setting_sc_goal_sol': True})
+        c.readings['principal'] = 500
+        c.run('sed_monthly_update')
+        self.assertEqual(c.variables['sed_coord_advisor_policy'], 3)
+        self.assertEqual(self.advisor_policy(), {'advisor_setting_sc_goal_treasury': True,
+                                                'advisor_setting_treasury_off': True})
+        c.readings['principal'] = 499
+        c.run('sed_monthly_update')
+        self.assertEqual(c.variables['sed_coord_advisor_policy'], 2)
+        c.run('sed_disable_country')
+        self.assertEqual(self.advisor_policy(), {})
+
+    def test_legacy_active_coordination_captures_policy_before_first_write(self):
+        c = self.c
+        c.run('sed_set_mode_automatic')  # Railways selected, no Advisor authorization.
+        for name, _ in ADVISOR_POLICY_OPTIONS:
+            c.variables.pop('sed_coord_saved_' + name, None)
+        c.variables.pop('sed_coord_policy_saved', None)
+        original = {'advisor_setting_borrow': 7, 'advisor_setting_sc_goal_sol': 3}
+        c.variables.update(original)
+        c.states.clear()
+        c.run('sed_monthly_update')
+        self.assertEqual(c.variables['sed_coord_advisor_policy'], 1)
+        self.assertEqual(self.advisor_policy(), {})
+        c.run('sed_set_mode_manual')
+        self.assertEqual(self.advisor_policy(), original)
+
+    def test_legacy_release_without_new_policy_snapshot_preserves_policy(self):
+        c = self.c
+        c.run('sed_set_mode_automatic')
+        c.variables.pop('sed_coord_policy_saved', None)
+        original = {'advisor_setting_borrow': 7, 'advisor_setting_sc_goal_sol': 3}
+        c.variables.update(original)
+        c.run('sed_set_mode_manual')
+        self.assertEqual(self.advisor_policy(), original)
+
+    def test_supply_executor_does_not_change_advisor_policy(self):
+        c = self.c
+        original = {'advisor_setting_borrow': 2, 'advisor_setting_treasury_off': 5}
+        c.variables.update(original)
+        c.run('sed_set_mode_automatic')
+        self.assertEqual(c.variables['sed_coord_executor'], 2)
+        self.assertEqual(self.advisor_policy(), original)
+        self.assertEqual(c.variables['sed_coord_advisor_policy'], 0)
 
     def test_validator_rejects_foreign_write_outside_adapter_and_unlisted_option(self):
         for replacement in (

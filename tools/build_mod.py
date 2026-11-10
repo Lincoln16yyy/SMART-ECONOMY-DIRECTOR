@@ -11,7 +11,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.6.0'
+VERSION = '0.6.1'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -351,6 +351,8 @@ def widget():
     body += button('sed_coord_release', 'sed_coord_release_sgui')
     for executor in range(9):
         body += textbox(f'sed_coord_executor_{executor}', f'sed_coord_executor_{executor}_visible_sgui')
+    for policy in (1, 2, 3):
+        body += textbox(f'sed_coord_advisor_policy_{policy}', f'sed_coord_advisor_policy_{policy}_visible_sgui')
     body += 'flowcontainer = { direction = horizontal spacing = 10\n'
     for mode in ('manual', 'assisted', 'automatic'):
         body += mode_button(f'sed_mode_{mode}_button', f'sed_set_mode_{mode}_sgui')
@@ -1046,6 +1048,8 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
     result += 'sed_auto_status_delegated_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 18 } }\n'
     for executor in range(9):
         result += f'sed_coord_executor_{executor}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = {executor} }} }}\n'
+    for policy in (1, 2, 3):
+        result += f'sed_coord_advisor_policy_{policy}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 1 has_variable = sed_coord_advisor_policy var:sed_coord_advisor_policy = {policy} }} }}\n'
     result += 'sed_auto_status_fiscal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 17 } }\n'
     for status in range(1, 5):
         result += f'sed_fiscal_{status}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = {status} }} }}\n'
@@ -1385,17 +1389,22 @@ def localization(language):
     for name in ACTION_NAMES:
         key = f'sed_{name}_approve' if name not in ('railway', 'construction') else f'sed_approve_{name}'
         pairs[key] = ('Aprovar expansão: +1 nível', 'Approve expansion: +1 level')
+    pairs.update({
+        'sed_coord_advisor_policy_1': ('Orientação do Advisor aplicada para crescimento, orçamento equilibrado e endividamento desabilitado pela opção dele. O plano interno do Advisor reserva doze semanas de despesas fixas.', 'Advisor guidance applied for growth, balanced budget and borrowing disabled through its setting. The Advisor internal plan reserves twelve weeks of fixed expenses.'),
+        'sed_coord_advisor_policy_2': ('Orientação do Advisor aplicada para padrão de vida, com orçamento equilibrado e opção de endividamento desabilitada. Bens essenciais lideram o plano.', 'Advisor guidance applied for standard of living, balanced budget and borrowing disabled. Essential goods lead the plan.'),
+        'sed_coord_advisor_policy_3': ('Orientação do Advisor aplicada para retorno ao tesouro e preservação das reservas, com opção de endividamento desabilitada. A dívida atingiu ao menos 50% do crédito.', 'Advisor guidance applied for treasury return and reserve protection, with borrowing disabled. Debt reached at least 50% of credit.'),
+    })
     pairs['sed_mode_automatic_button_tt'] = (
-        'Com Economy Advisor ou Supply Chain detectados, guarda as sete opções verificadas e assume a coordenação de construção: um executor externo por objetivo, sujeito à política fiscal inicial. Sair do Automático restaura as opções anteriores. Sem ferramenta detectada, usa o executor próprio limitado a uma tentativa mensal. Não controla PMs, impostos ou ARoAI.',
-        'When Economy Advisor or Supply Chain is detected, saves seven verified options and takes construction coordination: one external executor per objective, subject to initial fiscal policy. Leaving Automatic restores previous options. Without detected tools, uses its own executor limited to one monthly attempt. Does not control PMs, taxes or ARoAI.')
+        'Com Economy Advisor ou Supply Chain detectados, guarda as opções verificadas de construção, objetivo e orçamento e assume a coordenação de construção: um executor externo por objetivo, sujeito à política fiscal inicial. Sair do Automático restaura as opções anteriores. Sem ferramenta detectada, usa o executor próprio limitado a uma tentativa mensal. Não controla PMs, impostos ou ARoAI.',
+        'When Economy Advisor or Supply Chain is detected, saves verified construction, objective and budget options and takes construction coordination: one external executor per objective, subject to initial fiscal policy. Leaving Automatic restores previous options. Without detected tools, uses its own executor limited to one monthly attempt. Does not control PMs, taxes or ARoAI.')
     pairs.update({
         'sed_coord_intro': ('Ao escolher Automático, o Director guarda as opções verificadas e coordena os construtores externos detectados conforme o plano. Adaptadores iniciais para Economy Advisor e Supply Chain; PMs, impostos e outros executores continuam fora deste controle.', 'Choosing Automatic saves verified options and coordinates detected external builders according to the plan. Initial adapters for Economy Advisor and Supply Chain; PMs, taxes and other executors remain outside this control.'),
         'sed_coord_enable': ('Coordenar construtores externos', 'Coordinate external builders'),
-        'sed_coord_enable_tt': ('Guarda as sete opções verificadas, entra no Automático e configura um executor. Pode suspender rotinas de energia e administração que o plano ainda não cobre. Não inicia obra neste clique. Sair do Automático, desativar ou liberar restaura as opções originais, inclusive valores numéricos. Não controla PMs ou outros construtores.', 'Saves seven verified options, enters Automatic mode and configures one executor. May suspend power and administration routines not yet covered by the plan. Does not start construction on click. Leaving Automatic, disabling or releasing restores original options, including numeric values. Does not control PMs or other builders.'),
+        'sed_coord_enable_tt': ('Guarda as opções verificadas de construção, objetivo e orçamento, entra no Automático e configura um executor. Pode suspender rotinas de energia e administração que o plano ainda não cobre. Não inicia obra neste clique. Sair do Automático, desativar ou liberar restaura as opções originais, inclusive valores numéricos. Não controla PMs ou outros construtores.', 'Saves verified construction, objective and budget options, enters Automatic mode and configures one executor. May suspend power and administration routines not yet covered by the plan. Does not start construction on click. Leaving Automatic, disabling or releasing restores original options, including numeric values. Does not control PMs or other builders.'),
         'sed_coord_release': ('Restaurar opções e voltar ao Assistido', 'Restore options and return to Assisted'),
-        'sed_coord_release_tt': ('Restaura as opções guardadas ao assumir o controle. Mudanças manuais feitas nessas sete opções durante a coordenação serão substituídas pelas opções originais. Obras já na fila permanecem.', 'Restores options saved when taking control. Manual changes to these seven options during coordination will be replaced by the original options. Existing queued projects remain.'),
+        'sed_coord_release_tt': ('Restaura as opções guardadas ao assumir o controle. Mudanças manuais feitas nessas opções coordenadas durante a coordenação serão substituídas pelas opções originais. Obras já na fila permanecem.', 'Restores options saved when taking control. Manual changes to these coordinated options during coordination will be replaced by the original options. Existing queued projects remain.'),
         'sed_coord_executor_0': ('Coordenação ativa: novas construções externas suspensas por finanças, ausência de prioridade ou executor disponível. Projetos existentes continuam. ARoAI e autoexpansões nativas não são controlados.', 'Coordination active: new external construction suspended for finances, lack of priority or available executor. Existing projects continue. ARoAI and native autoexpansion are not controlled.'),
-        'sed_coord_executor_1': ('Executor escolhido: Economy Advisor. Sua construção inteligente usa a política interna dele; o Director controla a autorização, não transmite um alvo exato.', 'Selected executor: Economy Advisor. Its smart construction uses its own internal policy; the Director controls authorization and does not transmit an exact target.'),
+        'sed_coord_executor_1': ('Executor escolhido pelo Director é o Economy Advisor. O Director aplica o objetivo e a política financeira mostrados abaixo. O Advisor avalia prédios e estados com esses critérios.', 'The Director selected Economy Advisor as executor. The Director applies the objective and financial policy shown below. The Advisor evaluates buildings and states using these criteria.'),
         'sed_coord_executor_2': ('Executor escolhido: Supply Chain, somente ferrovias, para aliviar infraestrutura. Aguarda a agenda e os filtros do Supply Chain.', 'Selected executor: Supply Chain, railways only, to relieve infrastructure. Waits for Supply Chain scheduling and filters.'),
         'sed_coord_executor_3': ('Executor escolhido: Supply Chain, cadeias produtivas. Categorias internas preservadas; o Director não força um prédio ou estado.', 'Selected executor: Supply Chain, production chains. Internal categories preserved; the Director does not force a building or state.'),
         'sed_coord_executor_5': ('Coordenação suspensa: construção do ARoAI detectada. Este adaptador controla somente Economy Advisor e Supply Chain; desligue o construtor do ARoAI para delegar com estes controles.', 'Coordination suspended: ARoAI construction detected. This adapter controls only Economy Advisor and Supply Chain; turn off the ARoAI builder to delegate using these controls.'),
