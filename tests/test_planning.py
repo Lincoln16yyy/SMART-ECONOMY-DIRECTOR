@@ -41,6 +41,96 @@ class PlanningTests(unittest.TestCase):
                                         market_goods_sell_orders=sell)
         return target
 
+    def test_queued_railway_keeps_goal_until_cancellation_or_completion(self):
+        c = self.c
+        rail = railway(queued_levels=1)
+        target = state(-10, buildings=[rail])
+        c.states = [target]
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_goal'], 1)
+        self.assertEqual(c.variables['sed_plan_waiting'], 1)
+        self.assertEqual(c.variables['sed_plan_count'], 0)
+        rail['level_after_queued_constructions'] = rail['level']
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_goal'], 1)
+        self.assertEqual(c.variables['sed_plan_waiting'], 0)
+        self.assertEqual(c.variables['sed_plan_count'], 1)
+        target['infrastructure_delta'] = 5
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_goal'], 8)
+        self.assertEqual(c.variables['sed_plan_waiting'], 0)
+
+    def test_queued_supply_waits_only_for_verified_output_and_current_shortage(self):
+        c = self.c
+        target = self.producer('fabric')
+        producer = target['buildings'][0]
+        producer['level_after_queued_constructions'] = 2
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_goal'], 2)
+        self.assertEqual(c.variables['sed_plan_waiting'], 1)
+        producer['production_methods'] = []
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_waiting'], 0)
+        producer['production_methods'] = ['default_building_cotton_plantation']
+        c.market_goods['fabric']['market_goods_has_goods_shortage'] = False
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_waiting'], 0)
+
+    def test_other_eligible_priority_takes_over_from_queued_bottleneck(self):
+        c = self.c
+        c.states = [state(-10, buildings=[railway(queued_levels=1)])]
+        self.producer('grain')
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_goal'], 2)
+        self.assertEqual(c.variables['sed_plan_waiting'], 0)
+        self.assertEqual(self.ranked()[0][1], 'grain')
+
+    def test_queued_administration_waits_only_in_an_affected_incorporated_state(self):
+        c = self.c
+        admin = building('building_government_administration', queued_levels=1)
+        target = state(tax_capacity_usage=200, tax_capacity=100, buildings=[admin])
+        c.states = [target]
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_goal'], 7)
+        self.assertEqual(c.variables['sed_plan_waiting'], 1)
+        target['tax_capacity'] = 200
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_goal'], 8)
+        self.assertEqual(c.variables['sed_plan_waiting'], 0)
+        c.readings['bureaucracy'] = -10
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_goal'], 6)
+        self.assertEqual(c.variables['sed_plan_waiting'], 1)
+        target['is_incorporated'] = False
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_waiting'], 0)
+
+    def test_power_waiting_requires_queued_plant_in_the_expensive_state(self):
+        c = self.c
+        plant = building('building_power_plant', queued_levels=1)
+        expensive = state(state_goods={'electricity': {'state_goods_pricier': 0.3}})
+        cheap = state(buildings=[plant])
+        c.states = [expensive, cheap]
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_goal'], 9)
+        self.assertEqual(c.variables['sed_plan_waiting'], 0)
+        expensive['buildings'] = [plant]
+        cheap['buildings'] = []
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_waiting'], 1)
+        expensive['state_goods']['electricity']['state_goods_pricier'] = 0.1
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_goal'], 8)
+        self.assertEqual(c.variables['sed_plan_waiting'], 0)
+
+    def test_fiscal_crisis_overrides_waiting_construction(self):
+        c = self.c
+        c.states = [state(-10, buildings=[railway(queued_levels=1)])]
+        c.readings.update(net_total_income=-100, gold_reserves=0)
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_goal'], 4)
+        self.assertEqual(c.variables['sed_plan_waiting'], 0)
+
     def ranked(self):
         result = []
         for rank in (1, 2, 3):

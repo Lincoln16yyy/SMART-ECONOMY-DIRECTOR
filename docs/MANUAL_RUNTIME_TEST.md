@@ -1,6 +1,6 @@
 # Plano de teste da campanha — interface 0.5.3
 
-## Teste conjunto da 0.6.11
+## Teste conjunto da 0.6.12
 
 Realizar quando o jogador decidir retomar os testes. Registrar uma captura
 inicial do orçamento, opções dos construtores e fila, e guardar um save.
@@ -21,6 +21,11 @@ inicial do orçamento, opções dos construtores e fila, e guardar um save.
 6. Voltar ao Assistido, depois testar desativar. Comparar as opções dos outros
    mods e níveis fiscais com a captura inicial. As opções originais podem
    reativar construtores que o jogador mantinha ligados antes da coordenação.
+
+7. Com escassez ou falta de infraestrutura e expansão correspondente na fila,
+   observar acompanhamento de obra quando não há outra prioridade elegível.
+   Confirmar suspensão das opções externas e reavaliação após conclusão ou
+   cancelamento. Uma obra em outro estado sem o gargalo não comprova resolução.
 
 Guardar capturas de um caso saudável, um caso de crise e a restauração. Obras
 existentes e investimentos privados não comprovam autoria do Director.

@@ -273,6 +273,7 @@ sed_disable_country = {
  remove_variable = sed_plan_year
  remove_variable = sed_plan_month
  remove_variable = sed_plan_missing_count
+ remove_variable = sed_plan_waiting
  remove_variable = sed_plan_pressure_wood
  remove_variable = sed_plan_pressure_iron
  remove_variable = sed_plan_pressure_coal
@@ -2298,7 +2299,8 @@ sed_auto_apply_monthly = {
   limit = { has_variable = sed_coord_active }
   sed_coord_sync = yes
   set_variable = { name = sed_auto_action_status value = 18 }
-  if = { limit = { var:sed_coord_executor = 9 } set_variable = { name = sed_auto_action_status value = 19 } }
+  if = { limit = { var:sed_coord_executor = 10 } set_variable = { name = sed_auto_action_status value = 20 } }
+  else_if = { limit = { var:sed_coord_executor = 9 } set_variable = { name = sed_auto_action_status value = 19 } }
   else_if = { limit = { var:sed_coord_executor = 5 } set_variable = { name = sed_auto_action_status value = 13 } }
   else_if = { limit = { var:sed_coord_executor = 0 }
    set_variable = { name = sed_auto_action_status value = 2 }
@@ -2533,6 +2535,7 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_plan_count value = 0 }
   set_variable = { name = sed_plan_missing_count value = 0 }
   set_variable = { name = sed_plan_goal value = 0 }
+  set_variable = { name = sed_plan_waiting value = 0 }
   set_variable = { name = sed_plan_year value = year }
   set_variable = { name = sed_plan_month value = { value = month add = 1 } }
   set_variable = { name = sed_fiscal_status value = 1 }
@@ -3362,12 +3365,85 @@ sed_refresh_national_plan = {
     }
    }
   }
-  if = { limit = { var:sed_plan_count = 0 var:sed_plan_missing_count > 0 } set_variable = { name = sed_plan_goal value = 5 } }
+  if = { limit = { var:sed_plan_goal = 0 any_scope_state = {
+   is_incorporated = yes infrastructure_delta < 0 NOT = { has_variable = sed_railway_ignored } has_building = building_railway
+   b:building_railway = { level_after_queued_constructions > level }
+  } }
+   set_variable = { name = sed_plan_goal value = 1 }
+   set_variable = { name = sed_plan_waiting value = 1 }
+  }
+  if = { limit = { var:sed_plan_goal = 0
+   market = { mg:wood ?= { market_goods_has_goods_shortage = yes } }
+   any_scope_state = { is_incorporated = yes NOT = { has_variable = sed_wood_ignored } sed_wood_queued_supply = yes }
+  }
+   set_variable = { name = sed_plan_goal value = 2 }
+   set_variable = { name = sed_plan_waiting value = 1 }
+  }
+  if = { limit = { var:sed_plan_goal = 0
+   market = { mg:iron ?= { market_goods_has_goods_shortage = yes } }
+   any_scope_state = { is_incorporated = yes NOT = { has_variable = sed_iron_ignored } sed_iron_queued_supply = yes }
+  }
+   set_variable = { name = sed_plan_goal value = 2 }
+   set_variable = { name = sed_plan_waiting value = 1 }
+  }
+  if = { limit = { var:sed_plan_goal = 0
+   market = { mg:coal ?= { market_goods_has_goods_shortage = yes } }
+   any_scope_state = { is_incorporated = yes NOT = { has_variable = sed_coal_ignored } sed_coal_queued_supply = yes }
+  }
+   set_variable = { name = sed_plan_goal value = 2 }
+   set_variable = { name = sed_plan_waiting value = 1 }
+  }
+  if = { limit = { var:sed_plan_goal = 0
+   market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
+   any_scope_state = { is_incorporated = yes NOT = { has_variable = sed_grain_ignored } sed_grain_queued_supply = yes }
+  }
+   set_variable = { name = sed_plan_goal value = 2 }
+   set_variable = { name = sed_plan_waiting value = 1 }
+  }
+  if = { limit = { var:sed_plan_goal = 0
+   market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } }
+   any_scope_state = { is_incorporated = yes NOT = { has_variable = sed_fabric_ignored } sed_fabric_queued_supply = yes }
+  }
+   set_variable = { name = sed_plan_goal value = 2 }
+   set_variable = { name = sed_plan_waiting value = 1 }
+  }
+  if = { limit = { var:sed_plan_goal = 0
+   market = { mg:tools ?= { market_goods_has_goods_shortage = yes } }
+   any_scope_state = { is_incorporated = yes NOT = { has_variable = sed_tools_ignored } sed_tools_queued_supply = yes }
+  }
+   set_variable = { name = sed_plan_goal value = 2 }
+   set_variable = { name = sed_plan_waiting value = 1 }
+  }
+  if = { limit = { var:sed_plan_goal = 0
+   market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } }
+   any_scope_state = { is_incorporated = yes NOT = { has_variable = sed_groceries_ignored } sed_groceries_queued_supply = yes }
+  }
+   set_variable = { name = sed_plan_goal value = 2 }
+   set_variable = { name = sed_plan_waiting value = 1 }
+  }
+  if = { limit = { var:sed_plan_goal = 0
+   market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } }
+   any_scope_state = { is_incorporated = yes NOT = { has_variable = sed_clothes_ignored } sed_clothes_queued_supply = yes }
+  }
+   set_variable = { name = sed_plan_goal value = 2 }
+   set_variable = { name = sed_plan_waiting value = 1 }
+  }
+  if = { limit = { var:sed_plan_goal = 0 var:sed_plan_missing_count > 0 } set_variable = { name = sed_plan_goal value = 5 } }
   if = { limit = { var:sed_plan_goal = 0 sed_coord_fiscal_safe = yes } set_variable = { name = sed_plan_goal value = 8 } }
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } bureaucracy < 0 } set_variable = { name = sed_plan_goal value = 6 } }
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } any_scope_state = { is_incorporated = yes tax_capacity_usage > tax_capacity } } set_variable = { name = sed_plan_goal value = 7 } }
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } any_scope_state = { sg:electricity ?= { state_goods_pricier >= 0.2 } } } set_variable = { name = sed_plan_goal value = 9 } }
-  if = { limit = { OR = { var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } } set_variable = { name = sed_plan_goal value = 4 } }
+  if = { limit = {
+   OR = {
+    AND = { var:sed_plan_goal = 6 any_scope_state = { is_incorporated = yes has_building = building_government_administration b:building_government_administration = { level_after_queued_constructions > level } } }
+    AND = { var:sed_plan_goal = 7 any_scope_state = { is_incorporated = yes tax_capacity_usage > tax_capacity has_building = building_government_administration b:building_government_administration = { level_after_queued_constructions > level } } }
+    AND = { var:sed_plan_goal = 9 any_scope_state = { is_incorporated = yes sg:electricity ?= { state_goods_pricier >= 0.2 } has_building = building_power_plant b:building_power_plant = { level_after_queued_constructions > level } } }
+   }
+  } set_variable = { name = sed_plan_waiting value = 1 } }
+  if = { limit = { OR = { var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } }
+   set_variable = { name = sed_plan_goal value = 4 }
+   set_variable = { name = sed_plan_waiting value = 0 }
+  }
  }
 }
 # Country scope. TAX_LEVELS is ordered: very_low, low, medium, high, very_high.
@@ -3673,7 +3749,10 @@ sed_coord_sync = {
   set_variable = { name = sed_coord_advisor_policy value = 0 }
   if = { limit = { has_variable = aroai_autobuild } set_variable = { name = sed_coord_executor value = 5 } }
   else_if = { limit = { sed_coord_fiscal_safe = yes NOT = { in_default = yes } is_construction_paused = no }
-   if = { limit = { var:sed_plan_goal = 1 has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes }
+   if = { limit = { var:sed_plan_waiting = 1 }
+    set_variable = { name = sed_coord_executor value = 10 }
+   }
+   else_if = { limit = { var:sed_plan_goal = 1 has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes }
     set_variable = { name = zw_var_scsab_construct_railway value = 1 }
     set_variable = { name = sed_coord_executor value = 2 }
    }

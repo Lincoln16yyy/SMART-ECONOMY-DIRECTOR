@@ -342,6 +342,23 @@ class CoordinationTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_auto_review_status'], 17)
         self.assertEqual(self.external(), {})
 
+    def test_waiting_queue_suspends_delegation_and_resumes_after_cancellation(self):
+        c = self.c
+        rail = c.states[0]['buildings'][0]
+        rail['level_after_queued_constructions'] = rail['level'] + 1
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_plan_waiting'], 1)
+        self.assertEqual(c.variables['sed_coord_executor'], 10)
+        self.assertEqual(c.variables['sed_auto_review_status'], 20)
+        self.assertEqual(self.external(), {})
+        rail['level_after_queued_constructions'] = rail['level']
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_plan_waiting'], 0)
+        self.assertEqual(c.variables['sed_coord_executor'], 2)
+        self.assertEqual(c.variables['sed_auto_review_status'], 18)
+        self.assertEqual(self.external(), {'zw_var_scsab_construct_railway': 1})
+
     def supply_policy(self):
         return {option: self.c.variables[option] for _, option in SUPPLY_POLICY_OPTIONS
                 if option in self.c.variables}
