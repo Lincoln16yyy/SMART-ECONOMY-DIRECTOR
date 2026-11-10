@@ -1,5 +1,23 @@
 # Contexto de continuidade
 
+Entrega local 0.6.5 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.5_20261110_010449_284523`.
+
+## Política fiscal própria 0.6.5
+
+No Automático, `sed_apply_fiscal_policy` move o nível de imposto um passo por
+revisão mensal: sobe em cautela, crise ou default (até `very_high`) e desce com
+classificação 1/5, superávit, sem dívida e doze semanas de despesas fixas em
+ouro (até `low`). `sed_tax_level_saved` guarda o nível original e
+`sed_restore_fiscal_policy` o devolve ao sair do Automático ou desativar.
+Mudanças manuais durante o Automático são substituídas na revisão seguinte.
+O validador limita `set_tax_level` a esses dois efeitos e exige a guarda de modo.
+Salários, despesas, impostos de consumo e leis não são alterados; efeito real na
+receita e aceitação na engine não confirmados. 132 testes aprovados.
+
+## Entrega local 0.6.4
+
 Entrega local 0.6.4 instalada com jogo fechado, 14 outputs conferidos e
 content_load.json preservado. Backup em
 `sed_backups/mod_before_0.6.4_20261110_005319_526047`.

@@ -1,4 +1,4 @@
-# Planejamento e coordenação — 0.6.4
+# Planejamento e coordenação — 0.6.5
 
 Esta versão implementa política nacional inicial e adaptadores de opções de
 construção. Não é um controlador econômico completo nem comprova crescimento
@@ -295,3 +295,42 @@ alvo continuam pendentes.
 virada do ano, limpeza ao desativar e prioridade da meta sobre falta mais aguda
 mas recente. O comportamento na engine e em save/reload ainda não foi
 observado.
+
+## Política fiscal própria na 0.6.5
+
+O Director lia a situação fiscal e bloqueava ou coordenava construção, mas não
+agia sobre a receita. A 0.6.5 acrescenta uma alteração de nível de imposto por
+revisão mensal, somente no modo Automático e com o Director ativado:
+
+- Cautela, crise ou default (classificações 2, 3 e 4): sobe um nível, até
+  `very_high`.
+- Classificação 1 ou 5 com saldo total positivo, sem dívida e ouro cobrindo
+  doze semanas de despesas fixas: desce um nível, até `low`.
+- Nenhuma outra combinação altera o nível, e só uma alteração ocorre por
+  revisão mensal.
+
+O nível original é capturado na primeira alteração em `sed_tax_level_saved` e
+restaurado ao sair do Automático ou desativar. Mudanças manuais de imposto
+feitas durante o Automático são substituídas na revisão seguinte; para manter
+controle manual, use Manual ou Assistido. O snapshot segue o mesmo princípio já
+usado nas opções dos executores externos.
+
+Fontes vanilla 1.15: `common/effect_localization/00_country_effects_loc.txt:44`
+(`set_tax_level`), `common/trigger_localization/00_trigger_localization.txt:3242`
+(`tax_level`) e os níveis ordenados `very_low`–`very_high` usados em
+`common/history/countries/hai - haiti.txt:25` e
+`common/scripted_progress_bars/00_sepoy_mutiny_progress_bars.txt:250,271`.
+
+O validador autoriza `set_tax_level` somente em `sed_apply_fiscal_policy` e
+`sed_restore_fiscal_policy`, com valores do enum, e exige a guarda explícita de
+modo Automático no efeito de aplicação. A política não altera salários
+(militares ou civis), despesas, impostos de consumo, leis ou dívida; esses
+controles continuam pendentes. O passo único por mês e os limites `low` e
+`very_high` são decisões iniciais sem calibração em campanha, e a resposta da
+receita a cada passo não é estimada.
+
+132 testes sintéticos aprovados incluem subida em cautela, teto `very_high`,
+descida com reservas e superávit, ausência de alteração fora do Automático,
+restauração ao trocar de modo e ao desativar. Nada foi observado na engine: a
+aceitação de `set_tax_level` fora do histórico e o efeito real na receita
+continuam sem confirmação.

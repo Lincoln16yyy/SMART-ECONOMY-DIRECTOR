@@ -260,6 +260,46 @@ class PlanningTests(unittest.TestCase):
         self.assertNotIn('sed_grain_short_months', c.variables)
         self.assertNotIn('sed_grain_meta_year', c.variables)
 
+    def test_automatic_fiscal_policy_raises_tax_and_restores_on_mode_change(self):
+        c = self.c
+        c.readings['gold_reserves'] = 100  # Status 2: reserves under four weeks.
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_fiscal_status'], 2)
+        self.assertEqual(c.readings['tax_level'], 'high')
+        self.assertEqual(c.variables['sed_tax_level_saved'], 3)
+        c.run('sed_set_mode_assisted')
+        self.assertEqual(c.readings['tax_level'], 'medium')
+        self.assertNotIn('sed_tax_level_saved', c.variables)
+
+    def test_fiscal_policy_caps_at_very_high_and_disable_restores(self):
+        c = self.c
+        c.readings['gold_reserves'] = 100
+        c.run('sed_set_mode_automatic')
+        for _ in range(3):
+            c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.readings['tax_level'], 'very_high')
+        self.assertEqual(c.tax_changes, ['high', 'very_high'])
+        c.run('sed_disable_country')
+        self.assertEqual(c.readings['tax_level'], 'medium')
+        self.assertNotIn('sed_tax_level_saved', c.variables)
+
+    def test_fiscal_policy_lowers_one_step_only_when_healthy(self):
+        c = self.c
+        c.readings.update(principal=0, gold_reserves=1000, net_total_income=100)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_fiscal_status'], 1)
+        self.assertEqual(c.readings['tax_level'], 'low')
+        c.readings['principal'] = 1
+        c.run('sed_set_mode_manual')
+        self.assertEqual(c.readings['tax_level'], 'medium')
+        c.readings['gold_reserves'] = 100
+        c.run('sed_set_mode_assisted')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.readings['tax_level'], 'medium')
+        self.assertNotIn('sed_tax_level_saved', c.variables)
+
     def test_queue_wait_preserves_plan_but_never_calls_constructor(self):
         self.producer('grain')
         c = self.c

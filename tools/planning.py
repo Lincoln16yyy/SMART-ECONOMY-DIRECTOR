@@ -24,6 +24,70 @@ def lists(actions):
     return [f'sed_plan_{rank}_{name}' for rank in RANKS for name in actions]
 
 
+TAX_LEVELS = ('very_low', 'low', 'medium', 'high', 'very_high')
+
+
+def tax_policy_effects():
+    """One reviewed tax step per monthly review; the original level is restored."""
+    snapshot = []
+    for index, level in enumerate(TAX_LEVELS, 1):
+        branch = 'if' if index == 1 else 'else_if'
+        snapshot.append(f'''  {branch} = {{ limit = {{ tax_level = {level} }}
+   set_variable = {{ name = sed_tax_level_saved value = {index} }}
+  }}''')
+    raise_steps = []
+    lower_steps = []
+    restore_steps = []
+    for index, level in enumerate(TAX_LEVELS, 1):
+        if index < len(TAX_LEVELS):
+            branch = 'if' if index == 1 else 'else_if'
+            raise_steps.append(f'   {branch} = {{ limit = {{ tax_level = {level} }} set_tax_level = {TAX_LEVELS[index]} }}')
+        if index > 1:
+            branch = 'if' if index == 2 else 'else_if'
+            lower_steps.append(f'   {branch} = {{ limit = {{ tax_level = {level} }} set_tax_level = {TAX_LEVELS[index - 2]} }}')
+        branch = 'if' if index == 1 else 'else_if'
+        restore_steps.append(f'  {branch} = {{ limit = {{ var:sed_tax_level_saved = {index} }} set_tax_level = {level} }}')
+    return '''# Country scope. TAX_LEVELS is ordered: very_low, low, medium, high, very_high.
+# Snapshot before the first change so leaving Automatic or disabling can restore.
+sed_tax_policy_save = {
+ if = {
+  limit = { is_player = yes NOT = { has_variable = sed_tax_level_saved } }
+''' + '\n'.join(snapshot) + '''
+ }
+}
+
+sed_apply_fiscal_policy = {
+ if = {
+  limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic
+   has_variable = sed_fiscal_status
+  }
+  if = {
+   limit = { OR = { var:sed_fiscal_status = 2 var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } }
+   sed_tax_policy_save = yes
+''' + '\n'.join(raise_steps) + '''
+  }
+  else_if = {
+   limit = { OR = { var:sed_fiscal_status = 1 var:sed_fiscal_status = 5 }
+    gold_reserves >= { value = fixed_expenses min = 0 multiply = 12 }
+    principal <= 0
+    net_total_income > 0
+   }
+   sed_tax_policy_save = yes
+''' + '\n'.join(lower_steps) + '''
+  }
+ }
+}
+
+sed_restore_fiscal_policy = {
+ if = {
+  limit = { is_player = yes has_variable = sed_tax_level_saved }
+''' + '\n'.join(restore_steps) + '''
+  remove_variable = sed_tax_level_saved
+ }
+}
+'''
+
+
 def triggers():
     return '''# Initial proportional policy; not an incremental cost estimate.
 sed_auto_fiscal_safe = {

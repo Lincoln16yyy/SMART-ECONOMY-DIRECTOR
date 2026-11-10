@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.6.4
+# Estado dos requisitos — 0.6.5
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.
@@ -12,7 +12,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Setores estratégicos ausentes | Oito bens; cereais cobrem cinco tipos de fazenda e tecido cobre plantação e pecuária | Demais bens ainda têm um único produtor; considerar importações e objetivos industriais |
 | Emprego e insumos | Filtros atuais de ocupação, falha de contratação e escassez do prédio | Projetar disponibilidade futura de trabalhadores, qualificações e insumos |
 | Reserva, dívida e ritmo | Guarda proporcional inicial, classificações 1–4 e construção financiada por reservas (5) | Calibrar limiares, estimar custo incremental e serviço da dívida |
-| Impostos e gastos | Leituras e orientação de estabilização | Orçamento do Advisor coordenado. Política própria de alíquotas, salários e despesas permanece pendente |
+| Impostos e gastos | Nível de imposto próprio no Automático, com um passo mensal, snapshot e restauração | Calibrar limiares e confirmar na engine; salários, despesas e impostos de consumo permanecem pendentes |
 | Coordenação Advisor/Supply Chain | Adaptadores de sete opções de construção e quatro de objetivo/orçamento, com restauração | Verificar efeitos reais, save/reload e compatibilidade das versões instaladas |
 | Ativar somente caminho necessário | Automático assume controle de ferramentas detectadas e configura um caminho | A seleção interna de alvos permanece sob o algoritmo da ferramenta escolhida |
 | Construção própria automática | Consome a primeira prioridade, revalida guardas e limita tentativa mensal | Inclusão real e persistência ainda exigem evidência de engine |
@@ -25,7 +25,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Leis, guerra e diplomacia | Fora das mutações econômicas implementadas | Mantidas sob responsabilidade dos módulos e decisões previstos pelo briefing |
 | Haiti, país rico e crise | Cenários sintéticos fiscais e de seleção | Campanhas registradas e comparáveis permanecem pendentes |
 | Crescimento em campanha longa | Ainda sem evidência | Medir PIB, SoL, emprego, dívida, reservas e diversificação durante vários anos |
-| Entrega | Gerador, validador, testes, ZIP e instalador com backup | Instalação 0.6.4 com backup e 14 outputs conferidos. Publicação segue por PR |
+| Entrega | Gerador, validador, testes, ZIP e instalador com backup | Instalação 0.6.5 com backup e 14 outputs conferidos. Publicação segue por PR |
 
 O jogador relatou que seus testes anteriores produziram pouca mudança visível,
 pois outros construtores já atuavam. Esse relato motivou os adaptadores da 0.6.1.
@@ -42,6 +42,14 @@ adicionais no plano e uma linha própria no diário. A meta expira em janeiro ou
 se reativa se a falta continuar, não dispensa os filtros existentes e não
 altera objetivo macro, impostos ou orçamento externo. Três meses e 25 pontos
 são parâmetros iniciais sem calibração em campanha.
+
+A 0.6.5 acrescenta política fiscal própria: no Automático, o nível de imposto
+sobe um passo em cautela/crise/default e desce um passo quando há superávit,
+sem dívida e doze semanas de despesas fixas em ouro. O nível original é
+restaurado ao sair do Automático ou desativar. Salários, despesas, impostos de
+consumo e leis continuam fora do controle; o efeito real na receita e a
+aceitação de `set_tax_level` em scripted effects ainda não foram confirmados na
+engine.
 
 Os testes implementados ficam em `tests/test_planning.py`,
 `tests/test_coordination.py` e na suíte anterior. As fontes e decisões de

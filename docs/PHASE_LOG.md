@@ -1148,3 +1148,40 @@ content_load.json preservado. Backup em
 `sed_backups/mod_before_0.6.4_20261110_005319_526047`. ZIP em
 `dist/smart-economy-director-0.6.4.zip`. A meta ainda não foi observada na
 engine nem em campanha.
+
+## 2026-11-10 — Política fiscal própria 0.6.5
+
+Objetivo: agir sobre a receita, não apenas ler a situação fiscal e bloquear
+construção. O Director passa a ajustar o nível de imposto, preservando o
+controle reversível já usado nas opções externas.
+
+No Automático, `sed_apply_fiscal_policy` move um passo por revisão mensal:
+sobe em cautela, crise ou default (até `very_high`) e desce com classificação
+1/5, superávit, sem dívida e ouro cobrindo doze semanas de despesas fixas (até
+`low`). O nível original é guardado em `sed_tax_level_saved` na primeira
+alteração e restaurado por `sed_restore_fiscal_policy` ao sair do Automático ou
+desativar. Mudanças manuais durante o Automático são substituídas na revisão
+seguinte; Manual e Assistido não alteram impostos.
+
+Fontes vanilla 1.15: efeito `set_tax_level` em
+`common/effect_localization/00_country_effects_loc.txt:44`, trigger `tax_level`
+em `common/trigger_localization/00_trigger_localization.txt:3242` e níveis
+ordenados em `common/history/countries/hai - haiti.txt:25` e
+`common/scripted_progress_bars/00_sepoy_mutiny_progress_bars.txt:250,271`.
+
+O validador autoriza `set_tax_level` somente nos dois efeitos fiscais, com
+valores do enum, e exige guarda explícita de modo Automático. Salários,
+despesas, impostos de consumo, leis e dívida continuam fora do controle.
+Passo único, piso `low` e teto `very_high` são decisões iniciais sem calibração.
+
+132 testes sintéticos aprovados (três novos: subida e restauração por troca de
+modo, teto e restauração ao desativar, descida apenas com saúde fiscal).
+Geração, validação estática contra Victoria 3 1.15 e `git diff --check`
+aprovados.
+
+Entrega local 0.6.5 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.5_20261110_010449_284523`. ZIP em
+`dist/smart-economy-director-0.6.5.zip`. Nada observado na engine; a aceitação
+de `set_tax_level` em scripted effects e o efeito real na receita seguem sem
+confirmação.

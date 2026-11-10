@@ -51,7 +51,10 @@ def validate(root=ROOT, game=None):
                        'change_variable', 'root', 'prev', 'owner', 'every_scope_state',
                        'every_scope_building', 'ordered_scope_state', 'clear_variable_list',
                        'add_to_variable_list', 'add_journal_entry', 'start_building_construction',
-                       'trigger_event', 'order_by', 'max', 'check_range_bounds'}
+                       'trigger_event', 'order_by', 'max', 'check_range_bounds',
+                       'set_tax_level'}
+    tax_effects = {'sed_apply_fiscal_policy', 'sed_restore_fiscal_policy'}
+    tax_levels = {'very_low', 'low', 'medium', 'high', 'very_high'}
 
     # Narrow, reviewed exception: only two guarded adapter effects may change
     # these reviewed country options. All other foreign mutations stay rejected.
@@ -78,6 +81,9 @@ def validate(root=ROOT, game=None):
                     errors.append('Undefined effect: ' + entry.key)
             elif entry.key not in allowed_effects:
                 errors.append('Unexpected effect in diagnostics: ' + entry.key)
+            if entry.key == 'set_tax_level':
+                if effect_name not in tax_effects or entry.value not in tax_levels:
+                    errors.append('Tax level change outside the reviewed fiscal policy: ' + str(entry.value))
             if entry.key == 'remove_variable':
                 if not str(entry.value).startswith('sed_'):
                     if effect_name not in ('sed_coord_sync', 'sed_coord_restore') or entry.value not in coordinated_options:
@@ -106,8 +112,13 @@ def validate(root=ROOT, game=None):
             if entry.key.startswith('sed_') and entry.value == 'yes' and entry.key not in custom:
                 errors.append('Undefined scripted call: ' + entry.key)
     all_text = '\n'.join(p.read_text(encoding='utf-8-sig') for p in (root / 'common').rglob('*.txt'))
+    fiscal_guard = custom.get('sed_apply_fiscal_policy', [])
+    fiscal_outer = fiscal_guard[0] if len(fiscal_guard) == 1 else None
+    fiscal_limit = child(fiscal_outer.value, 'limit') if fiscal_outer and fiscal_outer.key == 'if' else []
+    if not any(e.key == 'has_variable' and e.value == 'sed_mode_automatic' for e in fiscal_limit):
+        errors.append('Fiscal policy lacks an explicit Automatic-mode guard')
     for mutation in ('activate_production_method', 'start_enactment', 'add_treasury',
-                     'set_tax_level', 'declare_war', 'add_modifier'):
+                     'declare_war', 'add_modifier'):
         if re.search(r'\b' + mutation + r'\s*=', all_text):
             errors.append('Unexpected economic/political mutation: ' + mutation)
     construction_calls = [(name, entry) for name, tree in trees.items() for entry in walk(tree)

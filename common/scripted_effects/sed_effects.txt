@@ -57,6 +57,7 @@ sed_disable_country = {
  clear_variable_list = sed_plan_3_groceries
  clear_variable_list = sed_plan_3_clothes
  sed_coord_restore = yes
+ sed_restore_fiscal_policy = yes
  remove_variable = sed_enabled
  remove_variable = sed_monthly_refresh
  remove_variable = sed_balance
@@ -114,6 +115,7 @@ sed_disable_country = {
  remove_variable = sed_auto_action_status
  remove_variable = sed_auto_event_pending
  remove_variable = sed_details_visible
+ remove_variable = sed_tax_level_saved
  remove_variable = sed_auto_review_status
  remove_variable = sed_auto_review_year
  remove_variable = sed_auto_review_month
@@ -1640,6 +1642,7 @@ sed_run_clothes_approval = {
 }
 sed_set_mode_manual = {
  sed_coord_restore = yes
+ sed_restore_fiscal_policy = yes
  remove_variable = sed_mode_manual remove_variable = sed_mode_assisted
  remove_variable = sed_mode_automatic
  set_variable = { name = sed_mode_manual value = yes }
@@ -1648,6 +1651,7 @@ sed_set_mode_manual = {
 }
 sed_set_mode_assisted = {
  sed_coord_restore = yes
+ sed_restore_fiscal_policy = yes
  remove_variable = sed_mode_assisted remove_variable = sed_mode_manual
  remove_variable = sed_mode_automatic
  set_variable = { name = sed_mode_assisted value = yes }
@@ -1671,6 +1675,7 @@ sed_schedule_auto_event = {
 }
 sed_auto_apply_monthly = {
  sed_refresh_national_plan = yes
+ sed_apply_fiscal_policy = yes
  set_variable = { name = sed_auto_action_status value = 2 }
  if = {
   limit = { has_variable = sed_coord_active }
@@ -2676,6 +2681,68 @@ sed_refresh_national_plan = {
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } any_scope_state = { tax_capacity_usage > tax_capacity } } set_variable = { name = sed_plan_goal value = 7 } }
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } any_scope_state = { sg:electricity ?= { state_goods_pricier >= 0.2 } } } set_variable = { name = sed_plan_goal value = 9 } }
   if = { limit = { OR = { var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } } set_variable = { name = sed_plan_goal value = 4 } }
+ }
+}
+# Country scope. TAX_LEVELS is ordered: very_low, low, medium, high, very_high.
+# Snapshot before the first change so leaving Automatic or disabling can restore.
+sed_tax_policy_save = {
+ if = {
+  limit = { is_player = yes NOT = { has_variable = sed_tax_level_saved } }
+  if = { limit = { tax_level = very_low }
+   set_variable = { name = sed_tax_level_saved value = 1 }
+  }
+  else_if = { limit = { tax_level = low }
+   set_variable = { name = sed_tax_level_saved value = 2 }
+  }
+  else_if = { limit = { tax_level = medium }
+   set_variable = { name = sed_tax_level_saved value = 3 }
+  }
+  else_if = { limit = { tax_level = high }
+   set_variable = { name = sed_tax_level_saved value = 4 }
+  }
+  else_if = { limit = { tax_level = very_high }
+   set_variable = { name = sed_tax_level_saved value = 5 }
+  }
+ }
+}
+
+sed_apply_fiscal_policy = {
+ if = {
+  limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic
+   has_variable = sed_fiscal_status
+  }
+  if = {
+   limit = { OR = { var:sed_fiscal_status = 2 var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } }
+   sed_tax_policy_save = yes
+   if = { limit = { tax_level = very_low } set_tax_level = low }
+   else_if = { limit = { tax_level = low } set_tax_level = medium }
+   else_if = { limit = { tax_level = medium } set_tax_level = high }
+   else_if = { limit = { tax_level = high } set_tax_level = very_high }
+  }
+  else_if = {
+   limit = { OR = { var:sed_fiscal_status = 1 var:sed_fiscal_status = 5 }
+    gold_reserves >= { value = fixed_expenses min = 0 multiply = 12 }
+    principal <= 0
+    net_total_income > 0
+   }
+   sed_tax_policy_save = yes
+   if = { limit = { tax_level = low } set_tax_level = very_low }
+   else_if = { limit = { tax_level = medium } set_tax_level = low }
+   else_if = { limit = { tax_level = high } set_tax_level = medium }
+   else_if = { limit = { tax_level = very_high } set_tax_level = high }
+  }
+ }
+}
+
+sed_restore_fiscal_policy = {
+ if = {
+  limit = { is_player = yes has_variable = sed_tax_level_saved }
+  if = { limit = { var:sed_tax_level_saved = 1 } set_tax_level = very_low }
+  else_if = { limit = { var:sed_tax_level_saved = 2 } set_tax_level = low }
+  else_if = { limit = { var:sed_tax_level_saved = 3 } set_tax_level = medium }
+  else_if = { limit = { var:sed_tax_level_saved = 4 } set_tax_level = high }
+  else_if = { limit = { var:sed_tax_level_saved = 5 } set_tax_level = very_high }
+  remove_variable = sed_tax_level_saved
  }
 }
 sed_coord_capture_advisor_policy = {

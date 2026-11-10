@@ -9,6 +9,7 @@ from tools.pdx_script import child
 
 COUNTRY = 'country'
 STATE = 'state'
+TAX_LEVELS = ('very_low', 'low', 'medium', 'high', 'very_high')
 BUILDING = 'building'
 
 
@@ -59,6 +60,7 @@ class Country:
                              construction_queue_num_queued_government_levels=2,
                              construction_queue_num_queued_private_levels=0,
                              bureaucracy=0, year=1836, month=0, is_player=True, in_default=False,
+                             tax_level='medium',
                              is_game_paused=True, is_construction_paused=False)
         self.readings.update(readings)
         self.variables = {}
@@ -67,6 +69,7 @@ class Country:
         self.journals_added = 0
         self.active_journal = False
         self.constructions = []
+        self.tax_changes = []
         self.construction_accepted = True
         self.market_goods = {}
         self.scheduled_events = []
@@ -84,6 +87,10 @@ class Country:
         return scope.setdefault('variables', {})
 
     def lookup(self, name, scope):
+        if name == 'tax_level':
+            return self.tax_level_rank(scope.get('tax_level', self.readings['tax_level']))
+        if name in TAX_LEVELS:
+            return TAX_LEVELS.index(name) + 1
         if name.startswith('owner.var:'):
             return self.variables[name[len('owner.var:'):]]
         if name.startswith('var:'):
@@ -109,6 +116,10 @@ class Country:
                     'infrastructure_delta': 0, 'market_access': 1,
                     'state_population': 0, 'tax_capacity_usage': 0, 'tax_capacity': 0}[name]
         raise AssertionError('Unsupported reading in harness: ' + name)
+
+    @staticmethod
+    def tax_level_rank(level):
+        return TAX_LEVELS.index(level) + 1
 
     def number(self, value, scope):
         if not isinstance(value, list):
@@ -268,6 +279,9 @@ class Country:
                     candidates = candidates[:maximum]
                 for target in candidates:
                     self.execute(rest, target, previous=scope)
+            elif key == 'set_tax_level':
+                self.readings['tax_level'] = value
+                self.tax_changes.append(value)
             elif key == 'start_building_construction':
                 target = scope if scope.get('__scope__') == STATE else None
                 self.constructions.append(dict(building=value, state=target))
