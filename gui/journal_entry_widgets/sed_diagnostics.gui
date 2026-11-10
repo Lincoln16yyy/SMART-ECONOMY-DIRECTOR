@@ -1765,7 +1765,7 @@ button = {
  text = "sed_open_queue" tooltip = "sed_open_queue_tt"
  visible = "[GetScriptedGui('sed_refresh_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  enabled = "[GetScriptedGui('sed_refresh_sgui').IsValid(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
- onclick = "[InformationPanelBar.OpenPanelTab('production_methods', 'construction_queues')]"
+ onclick = "[InformationPanelBar.OpenConstructionPanelTab( GetPlayer.Self, 'default' )]"
 }
 button = {
  using = default_button

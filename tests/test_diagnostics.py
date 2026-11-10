@@ -386,7 +386,7 @@ class DiagnosisTests(unittest.TestCase):
         self.assertGreaterEqual(len(buttons), 30)
         queue = next(block for block in buttons if child(block, 'text') == 'sed_open_queue')
         self.assertEqual(child(queue, 'onclick'),
-                         "[InformationPanelBar.OpenPanelTab('production_methods', 'construction_queues')]")
+                         "[InformationPanelBar.OpenConstructionPanelTab( GetPlayer.Self, 'default' )]")
         for block in buttons:
             styles = [entry.value for entry in block if entry.key == 'using']
             self.assertIn('default_button', styles)

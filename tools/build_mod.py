@@ -483,7 +483,7 @@ def widget():
     body += button('sed_use_monthly', 'sed_monthly_updates_sgui')
     body += textbox('sed_last_refresh')
     body += textbox('sed_dashboard_budget') + textbox('sed_dashboard_queue')
-    body += button('sed_open_queue', 'sed_refresh_sgui', native_action="InformationPanelBar.OpenPanelTab('production_methods', 'construction_queues')")
+    body += button('sed_open_queue', 'sed_refresh_sgui', native_action="InformationPanelBar.OpenConstructionPanelTab( GetPlayer.Self, 'default' )")
     body += button('sed_show_details', 'sed_show_details_sgui')
     body += button('sed_hide_details', 'sed_hide_details_sgui')
     body += button('sed_restore_ignored', 'sed_restore_ignored_sgui')
