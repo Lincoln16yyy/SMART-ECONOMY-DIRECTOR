@@ -1507,3 +1507,35 @@ tratados para evitar divisão por zero e reservas mínimas negativas.
 retomada, fila privada, sincronização sem execução/histórico alterado e contas
 de reservas. Geração e validação estática local aprovadas. Novas transições e
 layout ainda aguardam campanha.
+
+## 2026-11-10 — Referência de materiais no executor direto
+
+A proteção direta agora inclui referência conservadora de materiais para o
+próximo projeto. Os quatro métodos de `13_construction.txt`, seus insumos,
+pontos de construção e nove preços-base foram conferidos na instalação local.
+O módulo `construction_budget.py` calcula materiais por ponto com preços-base
+acrescidos de 75%, usando o maior custo entre métodos ativos dos setores.
+O número de pontos é limitado pela capacidade nacional e pelo limite semanal
+por projeto fornecido pelo jogo. Setor ativo com método desconhecido torna a
+referência indisponível. Ausência de setores resulta em referência material
+zero para a capacidade restante, sujeita às demais guardas.
+
+A obra automática precisa de saldo cobrindo a referência semanal ou, sem
+dívida, ouro cobrindo quatro semanas de despesas fixas mais 26 semanas da
+diferença entre referência e saldo. As guardas fiscais anteriores continuam
+obrigatórias. O cálculo é atualizado no plano, no executor direto e antes de
+cada aprovação automática. Bloqueio de orçamento registra resultado 22 e
+não consome tentativa. Assistido mantém aprovação explícita.
+
+Esse cálculo é uma referência de estresse e pode superestimar o gasto. Ele
+cobra todos os pontos potenciais pelo método ativo mais caro, inclusive quando
+há capacidade gratuita ou métodos mistos. Não prevê duração, salários futuros,
+subsídios, preços locais, modificadores de custo ou custos operacionais do
+prédio concluído. Expansão de setores de construção ainda precisa de um modelo
+separado de seu custo recorrente. Rotas externas continuam com seus orçamentos.
+
+205 testes sintéticos aprovados. Nove regressões cobrem os perfis, capacidade,
+limites de renda/reservas, dívida, método desconhecido, revalidação e limpeza.
+A validação adversarial também verifica remoção da guarda de orçamento e da
+atualização antes da execução. Geração e validação estática local aprovadas.
+Referência e bloqueios precisam de calibração e observação em campanha.

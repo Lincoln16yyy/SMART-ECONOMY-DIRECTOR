@@ -1,10 +1,10 @@
 # Smart Economy Director — Victoria 3 1.15
 
-Na 0.6.16, o Director explica a cobertura por reservas, aguarda a fila pública
-durante déficit financiado por ouro e sincroniza o executor no diagnóstico.
-A suíte atual tem 196 testes aprovados; novas transições aguardam campanha.
+Na 0.6.17, o executor direto verifica cobertura de uma referência conservadora
+de materiais antes de autorizar obra. A suíte atual tem 205 testes aprovados;
+o modelo inicial e os novos bloqueios aguardam calibração em campanha.
 
-A versão 0.6.16 acrescenta planejamento nacional inicial e coordenação de
+A versão 0.6.17 acrescenta planejamento nacional inicial e coordenação de
 construção com Economy Advisor e Supply Chain Semi-Auto Builder. O diário
 mostra objetivo atual, situação fiscal, executor escolhido e até três
 prioridades entre estados e setores.
@@ -75,7 +75,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.6.16.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.6.17.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 

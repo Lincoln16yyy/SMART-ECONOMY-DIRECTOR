@@ -422,6 +422,7 @@ class DiagnosisTests(unittest.TestCase):
             producer = railway()
         elif name == 'construction':
             producer = construction_sector()
+            c.readings.update(net_total_income=20000, net_fixed_income=20000)
         else:
             item = next(item for item in SUPPLY_TARGETS if item['good'] == name)
             producer = building(item['building'])

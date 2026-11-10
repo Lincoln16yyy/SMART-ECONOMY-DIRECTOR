@@ -384,6 +384,7 @@ def effects(actions, buildings):
    set_variable = { name = sed_plan_goal value = 4 }
    set_variable = { name = sed_plan_waiting value = 0 }
   }
+  sed_refresh_direct_budget = yes
   sed_refresh_military_plan = yes
  }
 }

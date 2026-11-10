@@ -425,6 +425,11 @@ sed_disable_country = {
  remove_variable = sed_coord_saved_supply_incorporated
  remove_variable = sed_coord_saved_supply_tax_incorporated
  remove_variable = sed_coord_saved_supply_institutions
+ remove_variable = sed_build_budget_known
+ remove_variable = sed_build_budget_points
+ remove_variable = sed_build_budget_point_cost
+ remove_variable = sed_build_budget_weekly
+ remove_variable = sed_build_budget_required_gold
  clear_variable_list = sed_railway_candidates
  clear_variable_list = sed_construction_candidates
  clear_variable_list = sed_wood_candidates
@@ -717,6 +722,7 @@ sed_refresh_railway_candidates = {
 }
 
 sed_run_railway_approval = {
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
  if = {
   limit = { sed_railway_approval_valid = yes }
   owner = {
@@ -843,6 +849,7 @@ sed_refresh_construction_candidates = {
 }
 
 sed_run_construction_approval = {
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
  if = {
   limit = { sed_construction_approval_valid = yes }
   owner = {
@@ -2133,6 +2140,7 @@ sed_refresh_supply_candidates = {
  }
 }
 sed_run_wood_approval = {
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
  if = {
   limit = { sed_wood_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2191,6 +2199,7 @@ sed_wood_record_abandoned = {
  remove_variable = sed_wood_intent_variant
 }
 sed_run_iron_approval = {
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
  if = {
   limit = { sed_iron_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2249,6 +2258,7 @@ sed_iron_record_abandoned = {
  remove_variable = sed_iron_intent_variant
 }
 sed_run_coal_approval = {
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
  if = {
   limit = { sed_coal_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2307,6 +2317,7 @@ sed_coal_record_abandoned = {
  remove_variable = sed_coal_intent_variant
 }
 sed_run_grain_approval = {
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
  if = {
   limit = { sed_grain_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2393,6 +2404,7 @@ sed_grain_record_abandoned = {
  remove_variable = sed_grain_intent_variant
 }
 sed_run_fabric_approval = {
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
  if = {
   limit = { sed_fabric_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2458,6 +2470,7 @@ sed_fabric_record_abandoned = {
  remove_variable = sed_fabric_intent_variant
 }
 sed_run_tools_approval = {
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
  if = {
   limit = { sed_tools_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2516,6 +2529,7 @@ sed_tools_record_abandoned = {
  remove_variable = sed_tools_intent_variant
 }
 sed_run_groceries_approval = {
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
  if = {
   limit = { sed_groceries_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2574,6 +2588,7 @@ sed_groceries_record_abandoned = {
  remove_variable = sed_groceries_intent_variant
 }
 sed_run_clothes_approval = {
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
  if = {
   limit = { sed_clothes_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2632,6 +2647,7 @@ sed_clothes_record_abandoned = {
  remove_variable = sed_clothes_intent_variant
 }
 sed_run_small_arms_approval = {
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
  if = {
   limit = { sed_small_arms_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2690,6 +2706,7 @@ sed_small_arms_record_abandoned = {
  remove_variable = sed_small_arms_intent_variant
 }
 sed_run_artillery_approval = {
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
  if = {
   limit = { sed_artillery_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2748,6 +2765,7 @@ sed_artillery_record_abandoned = {
  remove_variable = sed_artillery_intent_variant
 }
 sed_run_ammunition_approval = {
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
  if = {
   limit = { sed_ammunition_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2869,6 +2887,7 @@ sed_auto_apply_monthly = {
 }
 
 sed_auto_run_direct = {
+ sed_refresh_direct_budget = yes
  if = {
   limit = { sed_auto_executor_safe = yes }
 
@@ -3023,6 +3042,7 @@ sed_auto_run_direct = {
  else_if = { limit = { is_construction_paused = yes } set_variable = { name = sed_auto_action_status value = 12 } }
  else_if = { limit = { sed_competing_builder_configured = yes } set_variable = { name = sed_auto_action_status value = 13 } }
  else_if = { limit = { NOT = { sed_auto_fiscal_safe = yes } } set_variable = { name = sed_auto_action_status value = 17 } }
+ else_if = { limit = { NOT = { sed_direct_budget_safe = yes } } set_variable = { name = sed_auto_action_status value = 22 } }
  else = { set_variable = { name = sed_auto_action_status value = 14 } }
 }
 sed_ignore_railway = {
@@ -4370,7 +4390,49 @@ sed_refresh_national_plan = {
    set_variable = { name = sed_plan_goal value = 4 }
    set_variable = { name = sed_plan_waiting value = 0 }
   }
+  sed_refresh_direct_budget = yes
   sed_refresh_military_plan = yes
+ }
+}
+sed_refresh_direct_budget = {
+ if = { limit = { is_player = yes has_variable = sed_enabled }
+  set_variable = { name = sed_build_budget_known value = 1 }
+  set_variable = { name = sed_build_budget_point_cost value = 0 }
+  set_variable = { name = sed_build_budget_points value = {
+   value = modifier:country_construction_add min = 0
+   max = { value = modifier:country_max_weekly_construction_progress_add min = 0 }
+  } }
+
+  if = { limit = { any_scope_state = { has_building = building_construction_sector
+   b:building_construction_sector = { level > 0 occupancy > 0 has_active_production_method = pm_wooden_buildings }
+  } }
+   set_variable = { name = sed_build_budget_point_cost value = { value = var:sed_build_budget_point_cost min = 1750.000000 } }
+  }
+  if = { limit = { any_scope_state = { has_building = building_construction_sector
+   b:building_construction_sector = { level > 0 occupancy > 0 has_active_production_method = pm_iron_frame_buildings }
+  } }
+   set_variable = { name = sed_build_budget_point_cost value = { value = var:sed_build_budget_point_cost min = 1260.000000 } }
+  }
+  if = { limit = { any_scope_state = { has_building = building_construction_sector
+   b:building_construction_sector = { level > 0 occupancy > 0 has_active_production_method = pm_steel_frame_buildings }
+  } }
+   set_variable = { name = sed_build_budget_point_cost value = { value = var:sed_build_budget_point_cost min = 945.000000 } }
+  }
+  if = { limit = { any_scope_state = { has_building = building_construction_sector
+   b:building_construction_sector = { level > 0 occupancy > 0 has_active_production_method = pm_arc_welded_buildings }
+  } }
+   set_variable = { name = sed_build_budget_point_cost value = { value = var:sed_build_budget_point_cost min = 921.666667 } }
+  }
+  if = { limit = { any_scope_state = { has_building = building_construction_sector
+   b:building_construction_sector = { level > 0 occupancy > 0 NOT = { OR = { has_active_production_method = pm_wooden_buildings has_active_production_method = pm_iron_frame_buildings has_active_production_method = pm_steel_frame_buildings has_active_production_method = pm_arc_welded_buildings } } }
+  } } set_variable = { name = sed_build_budget_known value = 0 } }
+  set_variable = { name = sed_build_budget_weekly value = {
+   value = var:sed_build_budget_points multiply = var:sed_build_budget_point_cost
+  } }
+  set_variable = { name = sed_build_budget_required_gold value = {
+   value = fixed_expenses min = 0 multiply = 4
+   add = { value = var:sed_build_budget_weekly subtract = net_total_income min = 0 multiply = 26 }
+  } }
  }
 }
 # Country scope; read-only military-economic assessment.
