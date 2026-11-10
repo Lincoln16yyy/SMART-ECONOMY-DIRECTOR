@@ -237,7 +237,7 @@ class DiagnosisTests(unittest.TestCase):
                     producer['production_methods'] = [item['methods'][0]]
                     return state(buildings=[producer])
 
-                targets = [producer_state() for _ in range(10)]
+                targets = [producer_state() for _ in range(11)]
                 targets[0]['buildings'][0]['level_after_queued_constructions'] = 2
                 # Also fails incorporation; only the preceding queue reason counts.
                 targets[0]['is_incorporated'] = False
@@ -255,9 +255,11 @@ class DiagnosisTests(unittest.TestCase):
                 targets[8]['variables']['sed_' + good + '_ignored'] = True
                 targets[8]['is_incorporated'] = False
                 targets[9]['infrastructure_delta'] = -2
+                targets[10]['state_unemployment_rate'] = 0
+                targets[10]['pop_type_percent_state(pop_type:peasants)'] = 0
                 c.states = targets + [state()]  # States without this producer are excluded.
                 c.run('sed_refresh_supply_candidates')
-                self.assertEqual(c.variables['sed_' + good + '_producer_states'], 10)
+                self.assertEqual(c.variables['sed_' + good + '_producer_states'], 11)
                 for reason in SUPPLY_DIAGNOSTICS[1:]:
                     self.assertEqual(c.variables['sed_' + good + '_' + reason], 1, reason)
                 self.assertEqual(c.variable_lists['sed_' + good + '_candidates'], [targets[7]])

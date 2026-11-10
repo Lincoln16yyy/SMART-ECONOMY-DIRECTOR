@@ -86,6 +86,7 @@ sed_wood_logging_camp_eligible = {
   has_active_production_method = pm_simple_forestry
   }
  }
+ sed_state_labor_available >= 5000
  can_construct_building = building_logging_camp
 }
 
@@ -136,6 +137,7 @@ sed_iron_iron_mine_eligible = {
   has_active_production_method = pm_picks_and_shovels_building_iron_mine
   }
  }
+ sed_state_labor_available >= 5250
  can_construct_building = building_iron_mine
 }
 
@@ -186,6 +188,7 @@ sed_coal_coal_mine_eligible = {
   has_active_production_method = pm_picks_and_shovels_building_coal_mine
   }
  }
+ sed_state_labor_available >= 5250
  can_construct_building = building_coal_mine
 }
 
@@ -247,6 +250,7 @@ sed_grain_wheat_farm_eligible = {
   has_active_production_method = pm_soil_enriching_farming
   }
  }
+ sed_state_labor_available >= 5000
  can_construct_building = building_wheat_farm
 }
 
@@ -266,6 +270,7 @@ sed_grain_rye_farm_eligible = {
   has_active_production_method = pm_soil_enriching_farming
   }
  }
+ sed_state_labor_available >= 5000
  can_construct_building = building_rye_farm
 }
 
@@ -286,6 +291,7 @@ sed_grain_rice_farm_eligible = {
   has_active_production_method = pm_soil_enriching_farming_building_rice_farm
   }
  }
+ sed_state_labor_available >= 10000
  can_construct_building = building_rice_farm
 }
 
@@ -305,6 +311,7 @@ sed_grain_maize_farm_eligible = {
   has_active_production_method = pm_soil_enriching_farming
   }
  }
+ sed_state_labor_available >= 5000
  can_construct_building = building_maize_farm
 }
 
@@ -324,6 +331,7 @@ sed_grain_millet_farm_eligible = {
   has_active_production_method = pm_soil_enriching_farming
   }
  }
+ sed_state_labor_available >= 5000
  can_construct_building = building_millet_farm
 }
 
@@ -372,6 +380,7 @@ sed_fabric_cotton_plantation_eligible = {
   has_active_production_method = worker_exploitation_cotton
   }
  }
+ sed_state_labor_available >= 8000
  can_construct_building = building_cotton_plantation
 }
 
@@ -390,6 +399,7 @@ sed_fabric_livestock_ranch_eligible = {
   has_active_production_method = pm_simple_ranch
   }
  }
+ sed_state_labor_available >= 5000
  can_construct_building = building_livestock_ranch
 }
 
@@ -436,6 +446,7 @@ sed_tools_tooling_workshop_eligible = {
   has_active_production_method = pm_steel
   }
  }
+ sed_state_labor_available >= 5000
  can_construct_building = building_tooling_workshop
 }
 
@@ -488,6 +499,7 @@ sed_groceries_food_industry_eligible = {
   has_active_production_method = pm_vacuum_canning_principle_3
   }
  }
+ sed_state_labor_available >= 6600
  can_construct_building = building_food_industry
 }
 
@@ -534,6 +546,7 @@ sed_clothes_textile_mill_eligible = {
   has_active_production_method = pm_sewing_machines
   }
  }
+ sed_state_labor_available >= 6000
  can_construct_building = building_textile_mill
 }
 
@@ -580,6 +593,7 @@ sed_small_arms_arms_industry_eligible = {
   has_active_production_method = pm_bolt_action_rifles
   }
  }
+ sed_state_labor_available >= 5000
  can_construct_building = building_arms_industry
 }
 
@@ -630,6 +644,7 @@ sed_artillery_artillery_foundry_eligible = {
   has_active_production_method = pm_recoiled_barrels
   }
  }
+ sed_state_labor_available >= 5250
  can_construct_building = building_artillery_foundry
 }
 
@@ -672,6 +687,7 @@ sed_ammunition_munition_plant_eligible = {
   has_active_production_method = pm_explosive_shells
   }
  }
+ sed_state_labor_available >= 5000
  can_construct_building = building_munition_plant
 }
 

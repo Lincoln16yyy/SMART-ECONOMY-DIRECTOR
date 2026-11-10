@@ -1,0 +1,20 @@
+{
+  "building_railway": 1200,
+  "building_construction_sector": 1000,
+  "building_logging_camp": 5000,
+  "building_iron_mine": 5250,
+  "building_coal_mine": 5250,
+  "building_wheat_farm": 5000,
+  "building_rye_farm": 5000,
+  "building_rice_farm": 10000,
+  "building_maize_farm": 5000,
+  "building_millet_farm": 5000,
+  "building_cotton_plantation": 8000,
+  "building_livestock_ranch": 5000,
+  "building_tooling_workshop": 5000,
+  "building_food_industry": 6600,
+  "building_textile_mill": 6000,
+  "building_arms_industry": 5000,
+  "building_artillery_foundry": 5250,
+  "building_munition_plant": 5000
+}

@@ -14,12 +14,14 @@ BUILDING = 'building'
 
 
 def state(infrastructure_delta=0, market_access=1, incorporated=True,
-          can_construct=True, buildings=None, population=1000, **readings):
+          can_construct=True, buildings=None, population=200000, **readings):
     """Build the reading shape used by state-scoped scripts in this harness."""
     result = dict(infrastructure_delta=infrastructure_delta,
                   market_access=market_access, is_incorporated=incorporated,
                   can_construct_building=can_construct,
-                  state_population=population,
+                  state_population=population, state_unemployment_rate=0.1,
+                  **{'pop_type_percent_state(pop_type:peasants)': 0.5,
+                     'modifier:state_working_adult_ratio_add': 0},
                   buildings=buildings or [], variables={})
     result.update(readings)
     result['__scope__'] = STATE
@@ -123,7 +125,10 @@ class Country:
             # State triggers omitted by a fixture use the engine's neutral value.
             return {'is_incorporated': True, 'can_construct_building': True,
                     'infrastructure_delta': 0, 'market_access': 1,
-                    'state_population': 0, 'tax_capacity_usage': 0, 'tax_capacity': 0}[name]
+                    'state_population': 0, 'tax_capacity_usage': 0, 'tax_capacity': 0,
+                    'state_unemployment_rate': 0,
+                    'pop_type_percent_state(pop_type:peasants)': 0,
+                    'modifier:state_working_adult_ratio_add': 0}[name]
         raise AssertionError('Unsupported reading in harness: ' + name)
 
     @staticmethod
@@ -220,8 +225,9 @@ class Country:
             return building is not None and self.condition(entry.value, building)
         if key == 'owner':
             return self.condition(entry.value, self.country_scope())
-        if key in self.definitions:
-            return self.condition(self.definitions[key], scope)
+        if key in self.definitions and entry.op == '=' and entry.value in ('yes', 'no'):
+            matches = self.condition(self.definitions[key], scope)
+            return matches if entry.value == 'yes' else not matches
         left, right = self.lookup(key, scope), self.number(entry.value, scope)
         return {'=': lambda: left == right, '<': lambda: left < right,
                 '>': lambda: left > right, '>=': lambda: left >= right,
