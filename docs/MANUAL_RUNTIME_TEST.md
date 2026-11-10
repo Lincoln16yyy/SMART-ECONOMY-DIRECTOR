@@ -1,5 +1,31 @@
 # Plano de teste da campanha — interface 0.5.3
 
+## Teste conjunto da 0.6.11
+
+Realizar quando o jogador decidir retomar os testes. Registrar uma captura
+inicial do orçamento, opções dos construtores e fila, e guardar um save.
+
+1. País com superávit e reservas, Automático por seis a doze meses. Registrar
+   objetivo, executor e última revisão. Comparar projetos novos e seus estados.
+2. Se o objetivo for tributação, observar junho/dezembro. Se for capacidade de
+   construção, fevereiro/agosto. Uma revisão do Director pode anteceder a
+   execução da ferramenta externa.
+3. Na política do Supply Chain, conferir estados incorporados, meta antecipada
+   de instituições suspensa e limite numérico em um nível. Esses limites são
+   por local da rotina externa, sem teto nacional de uma obra.
+4. Em país deficitário, conferir ausência de novas autorizações externas e o
+   registro fiscal. Comparar mês e níveis solicitados com impostos e salários
+   no orçamento. Atualizar várias vezes no mesmo mês e verificar estabilidade.
+5. Salvar/recarregar no Automático. Conferir continuidade da revisão, política e
+   ausência de redefinição dos snapshots originais.
+6. Voltar ao Assistido, depois testar desativar. Comparar as opções dos outros
+   mods e níveis fiscais com a captura inicial. As opções originais podem
+   reativar construtores que o jogador mantinha ligados antes da coordenação.
+
+Guardar capturas de um caso saudável, um caso de crise e a restauração. Obras
+existentes e investimentos privados não comprovam autoria do Director.
+
+
 Estado atual: [auditoria de 09/11/2026](AUDIT_2026-11-09.md). Os roteiros abaixo
 não são resultados executados. Não iniciar novas funcionalidades até fechar
 fila/reconciliação/opções do país. Usar cópia dedicada e registrar build, commit,

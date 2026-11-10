@@ -94,6 +94,8 @@ class DiagnosisTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_coord_executor'], 2)
         self.assertEqual(c.variables['zw_var_scsab_construct_railway'], 1)
         self.assertNotIn('zw_var_scsab_gov_admin', c.variables)
+        self.assertNotIn('zw_var_scsab_gov_admin_for_institution', c.variables)
+        c.run('sed_set_mode_assisted')
         self.assertEqual(c.variables['zw_var_scsab_gov_admin_for_institution'], 35)
 
     def test_builder_configuration_does_not_block_assisted_or_mutate_foreign_options(self):
@@ -952,8 +954,8 @@ class DiagnosisTests(unittest.TestCase):
         c.variable_lists['sed_construction_candidates'] = [pending]
         c.run('sed_disable_country')
         # Seeded snapshots are restored before the Director's own state is removed.
-        from tools.coordination import OPTIONS, ADVISOR_POLICY_OPTIONS
-        foreign_options = [option for _, option, _ in OPTIONS] + [option for _, option in ADVISOR_POLICY_OPTIONS]
+        from tools.coordination import OPTIONS, ADVISOR_POLICY_OPTIONS, SUPPLY_POLICY_OPTIONS
+        foreign_options = [option for _, option, _ in OPTIONS] + [option for _, option in ADVISOR_POLICY_OPTIONS] + [option for _, option in SUPPLY_POLICY_OPTIONS]
         expected = {'sed_schema_version': 1, **{option: 123 for option in foreign_options}}
         self.assertEqual(c.variables, expected)
         self.assertEqual(pending['variables'], {})

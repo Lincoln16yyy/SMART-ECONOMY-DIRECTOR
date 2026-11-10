@@ -64,6 +64,8 @@ def validate(root=ROOT, game=None):
         'zw_var_more_construction_sectors', 'zw_var_scsab_construct_railway',
         'zw_var_scsab_construct_power_plant', 'zw_var_scsab_gov_admin',
         'zw_var_scsab_gov_admin_for_tax',
+        'zw_var_develop_incorporated_states', 'zw_var_ip_incorporated',
+        'zw_var_scsab_gov_admin_for_institution',
         'advisor_setting_sc_goal_sol', 'advisor_setting_sc_goal_treasury',
         'advisor_setting_treasury_off', 'advisor_setting_borrow',
     }

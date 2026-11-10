@@ -11,7 +11,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.6.10'
+VERSION = '0.6.11'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -86,6 +86,8 @@ sed_queue_levels_before'''.split() + [
     'sed_mode_manual', 'sed_mode_assisted', 'sed_mode_automatic',
     'sed_auto_action_status', 'sed_auto_event_pending', 'sed_details_visible',
     'sed_tax_level_saved', 'sed_gov_wage_saved',
+    *[f'sed_{policy}_last_{field}' for policy in ('tax', 'wage')
+      for field in ('from', 'to', 'year', 'month')],
     'sed_auto_review_status', 'sed_auto_review_year', 'sed_auto_review_month',
     *[f"sed_{item['good']}_action_status" for item in SUPPLY_TARGETS],
     *[f"sed_{item['good']}_{field}" for item in SUPPLY_TARGETS
@@ -463,6 +465,7 @@ def widget():
     body += button('sed_coord_release', 'sed_coord_release_sgui')
     for executor in range(10):
         body += textbox(f'sed_coord_executor_{executor}', f'sed_coord_executor_{executor}_visible_sgui')
+    body += textbox('sed_coord_supply_policy', 'sed_coord_supply_policy_visible_sgui')
     for policy in (1, 2, 3):
         body += textbox(f'sed_coord_advisor_policy_{policy}', f'sed_coord_advisor_policy_{policy}_visible_sgui')
     body += 'flowcontainer = { direction = horizontal spacing = 10\n'
@@ -479,6 +482,8 @@ def widget():
     for name, option, pt, en in COMPETING_BUILDERS:
         body += textbox(f'sed_auto_builder_{name}', f'sed_auto_builder_{name}_visible_sgui')
     body += textbox('sed_auto_builders_help', 'sed_auto_builders_visible_sgui')
+    for policy in ('tax', 'wage'):
+        body += textbox(f'sed_{policy}_last_command', f'sed_{policy}_last_command_visible_sgui')
     body += textbox('sed_auto_last_review', 'sed_auto_last_review_visible_sgui')
     for status in ('success', 'no_action', 'default', 'queue', 'paused', 'competing', 'safety', 'unconfirmed', 'month_limit', 'fiscal', 'delegated', 'unsupported'):
         body += textbox(f'sed_auto_status_{status}', f'sed_auto_status_{status}_visible_sgui')
@@ -1269,6 +1274,9 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
     for policy in (1, 2, 3):
         result += f'sed_coord_advisor_policy_{policy}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 1 has_variable = sed_coord_advisor_policy var:sed_coord_advisor_policy = {policy} }} }}\n'
     result += 'sed_auto_status_unsupported_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 19 } }\n'
+    result += 'sed_coord_supply_policy_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_supply_policy_saved } }\n'
+    for policy in ('tax', 'wage'):
+        result += f'sed_{policy}_last_command_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_{policy}_last_from has_variable = sed_{policy}_last_to has_variable = sed_{policy}_last_month has_variable = sed_{policy}_last_year }} }}\n'
     result += 'sed_auto_status_fiscal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 17 } }\n'
     for status in range(1, 6):
         result += f'sed_fiscal_{status}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = {status} }} }}\n'
@@ -1702,12 +1710,19 @@ def localization(language):
         'sed_goal_7': ('Objetivo atual: recuperar capacidade tributária em estados incorporados. A ação depende da rotina tributária do Supply Chain.', 'Current objective: restore tax capacity in incorporated states. Action depends on the Supply Chain tax routine.'),
         'sed_goal_8': ('Objetivo atual: buscar crescimento e diversificação. Sem gargalo elegível no escopo direto, o executor externo avalia novos investimentos com seus próprios filtros.', 'Current objective: seek growth and diversification. With no eligible bottleneck in direct scope, the external executor evaluates new investment using its own filters.'),
         'sed_goal_9': ('Objetivo atual: investigar energia local cara, com preço ao menos 20% acima da base em algum estado. A ferramenta externa verifica viabilidade.', 'Current objective: investigate costly local power, priced at least 20% above base in a state. The external tool checks feasibility.'),
+        'sed_coord_supply_policy': ('Política do Supply Chain sob o Director. Expansões em estados incorporados; administração trata o déficit atual de burocracia. Limites numéricos de construção em um nível por local escolhido, conforme a rotina externa. A soma nacional pode superar um nível. Tributação é avaliada em junho/dezembro e setores em fevereiro/agosto. Opções anteriores são restauradas ao sair do Automático.', 'Supply Chain policy under the Director. Expansion in incorporated states; administration addresses the current bureaucracy deficit. Numeric construction limits are one level per selected location, according to the external routine. The national total may exceed one level. Tax capacity is evaluated in June/December and construction sectors in February/August. Previous settings are restored when leaving Automatic.'),
         'sed_coord_executor_9': ('Objetivo identificado, execução pendente. Administração, capacidade tributária e energia exigem uma rotina específica do Supply Chain e condições fiscais próprias. A rotina necessária está indisponível ou bloqueada nesta leitura. Confira o objetivo no plano nacional.', 'Objective identified, execution pending. Administration, tax capacity and power require a dedicated Supply Chain routine and its fiscal conditions. The required routine is unavailable or blocked in this reading. See the national plan for the objective.'),
         'sed_auto_status_unsupported': ('Última revisão: objetivo identificado sem executor específico autorizado. A coordenação aguarda uma rotina compatível e condições fiscais para essa ação.', 'Last review: objective identified without an authorized dedicated executor. Coordination awaits a compatible routine and fiscal conditions for this action.'),
         'sed_coord_executor_6': ('Executor escolhido: Supply Chain, administração geral. Aguarda a agenda e os filtros de burocracia do Supply Chain.', 'Selected executor: Supply Chain, general administration. Waits for Supply Chain scheduling and bureaucracy filters.'),
         'sed_coord_executor_7': ('Executor escolhido: Supply Chain, administração tributária. Não altera impostos; busca capacidade administrativa conforme os filtros externos.', 'Selected executor: Supply Chain, tax administration. Does not change taxes; seeks administrative capacity using external filters.'),
         'sed_coord_executor_8': ('Executor escolhido: Supply Chain, energia. Preço local alto é sinal de investigação, não garantia de lucro ou falta física de oferta.', 'Selected executor: Supply Chain, power. High local price is a signal to investigate, not a guarantee of profit or physical shortage.'),
     })
+    for policy, pt, en in (('tax', 'impostos', 'taxes'), ('wage', 'salários civis', 'civilian wages')):
+        command_date = v(f'{policy}_last_month', '0') + '/' + v(f'{policy}_last_year', '0')
+        levels = v(f'{policy}_last_from', '0') + ' → ' + v(f'{policy}_last_to', '0')
+        pairs[f'sed_{policy}_last_command'] = (
+            f'Último comando do Director para {pt}: ' + command_date + ', nível ' + levels + '. Escala de 1 (muito baixo) a 5 (muito alto). Confira o resultado no orçamento.',
+            f'Last Director command for {en}: ' + command_date + ', level ' + levels + '. Scale from 1 (very low) to 5 (very high). Check the outcome in the budget.')
     pairs['sed_goal_5'] = ('Objetivo atual: investigar ausência dos produtores atendidos pelo protótipo para bens em escassez. A construção direta do Director ainda exige produtor existente; a ferramenta externa mantém sua própria seleção.', 'Current objective: investigate missing prototype-supported producers for scarce goods. Direct Director construction still requires an existing producer; the external tool keeps its own selection.')
     for item in SUPPLY_TARGETS:
         name = item['good']

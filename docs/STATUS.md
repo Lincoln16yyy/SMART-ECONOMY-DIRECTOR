@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.6.10
+# Estado dos requisitos — 0.6.11
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.
@@ -13,7 +13,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Emprego e insumos | Filtros atuais de ocupação, falha de contratação e escassez do prédio | Projetar disponibilidade futura de trabalhadores, qualificações e insumos |
 | Reserva, dívida e ritmo | Guarda proporcional inicial, classificações 1–4 e construção financiada por reservas (5) | Calibrar limiares, estimar custo incremental e serviço da dívida |
 | Impostos e gastos | Nível de imposto e salário civil do governo no Automático, com um passo mensal, snapshot e restauração | Leitura das rotinas aceita no menu da engine. Observar alterações em campanha e calibrar limiares |
-| Coordenação Advisor/Supply Chain | Adaptadores de sete opções de construção e quatro de objetivo/orçamento, com restauração | Verificar efeitos reais, save/reload e compatibilidade das versões instaladas |
+| Coordenação Advisor/Supply Chain | Adaptadores de sete opções de construção, quatro de objetivo/orçamento e três de política do Supply Chain, com restauração | Verificar efeitos reais, save/reload e compatibilidade das versões instaladas |
 | Ativar somente caminho necessário | Automático usa rotinas específicas para administração, tributação, energia e, preferencialmente, setores de construção | A seleção interna de alvos permanece sob o algoritmo da ferramenta escolhida |
 | Construção própria automática | Consome a primeira prioridade, revalida guardas e limita tentativa mensal | Inclusão real e persistência ainda exigem evidência de engine |
 | Evitar executor próprio em paralelo | Bloqueio explícito durante coordenação | ARoAI detectado suspende delegação, autoexpansões nativas continuam sem controle |

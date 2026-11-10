@@ -1326,3 +1326,34 @@ regressões. Cinco testes novos, 151 testes aprovados no total, geração e
 validação estática contra os arquivos locais 1.15 aprovadas. A UI e as novas
 transições ainda aguardam confirmação na campanha. A fila nativa e os níveis
 fiscais foram vistos em capturas anteriores, sem comprovação causal das mudanças.
+
+## 2026-11-10 — Política de delegação e histórico fiscal
+
+O Director guarda e controla três opções adicionais do Supply Chain. Expansões
+ficam restritas a estados incorporados pelas opções verificadas
+`zw_var_develop_incorporated_states` e `zw_var_ip_incorporated`. A meta de
+instituições `zw_var_scsab_gov_admin_for_institution` fica suspensa durante a
+coordenação para que administração responda à burocracia atual. Os valores e
+a ausência originais são restaurados ao sair do Automático ou desativar.
+Snapshots são capturados uma vez antes da primeira alteração, inclusive em
+coordenações salvas por versões anteriores. Sair de um save antigo sem uma nova
+sincronização preserva as opções ainda não capturadas.
+
+Limites numéricos de administração, tributação, energia, ferrovia e setores
+passam a um nível por local selecionado pela rotina externa. A soma nacional
+pode superar um nível. Advisor e cadeias gerais mantêm a semântica anterior.
+Essa escolha é um ritmo inicial conservador, ainda sem calibração de campanha.
+
+O painel informa a agenda verificada no `zw_scsab_je.txt` instalado. A rotina
+tributária roda nos meses de script 5/11 (junho/dezembro), e setores em 1/7
+(fevereiro/agosto). Agenda e algoritmo continuam pertencendo ao Supply Chain.
+
+Impostos e salários civis mostram o último comando do Director, com mês,
+ano e níveis anterior/solicitado. Esse registro comprova a passagem pelo efeito,
+mas o resultado deve ser conferido no orçamento. Reavaliações sem alteração
+não criam histórico; restauração de modo não reescreve o último comando
+automático; desativar remove o histórico e preserva as travas mensais.
+
+158 testes sintéticos aprovados, gerador e validação estática local aprovados.
+A nova interface, o efeito das opções externas e save/reload continuam pendentes
+do teste conjunto do jogador. Nenhuma nova inicialização de engine nesta etapa.

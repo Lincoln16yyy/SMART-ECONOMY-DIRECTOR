@@ -1,10 +1,11 @@
 # Smart Economy Director — Victoria 3 1.15
 
-Na 0.6.10, administração, tributação e energia usam executores específicos
-do Supply Chain. Objetivos sem rotina autorizada aparecem como execução pendente.
-A suíte atual tem 151 testes aprovados; as novas transições aguardam campanha.
+Na 0.6.11, o Director limita o ritmo das rotinas específicas do Supply Chain,
+coordena incorporação e metas administrativas e registra os comandos fiscais.
+Objetivos sem rotina autorizada aparecem como execução pendente.
+A suíte atual tem 158 testes aprovados; as novas transições aguardam campanha.
 
-A versão 0.6.10 acrescenta planejamento nacional inicial e coordenação de
+A versão 0.6.11 acrescenta planejamento nacional inicial e coordenação de
 construção com Economy Advisor e Supply Chain Semi-Auto Builder. O diário
 mostra objetivo atual, situação fiscal, executor escolhido e até três
 prioridades entre estados e setores.
@@ -75,7 +76,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.6.10.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.6.11.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 

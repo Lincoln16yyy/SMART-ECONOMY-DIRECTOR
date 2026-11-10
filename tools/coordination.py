@@ -12,6 +12,11 @@ OPTIONS = (
     ('admin', 'zw_var_scsab_gov_admin', 10),
     ('tax', 'zw_var_scsab_gov_admin_for_tax', 1),
 )
+SUPPLY_POLICY_OPTIONS = (
+    ('incorporated', 'zw_var_develop_incorporated_states'),
+    ('tax_incorporated', 'zw_var_ip_incorporated'),
+    ('institutions', 'zw_var_scsab_gov_admin_for_institution'),
+)
 ADVISOR_POLICY_OPTIONS = (
     ('goal_sol', 'advisor_setting_sc_goal_sol'),
     ('goal_treasury', 'advisor_setting_sc_goal_treasury'),
@@ -25,12 +30,20 @@ SUPPLY_HINTS = (
     'zw_var_labor_threshold', 'zw_var_more_construction_sectors_gold_reserves',
     'zw_var_develop_incorporated_states',
 )
-VARIABLES = ['sed_coord_active', 'sed_coord_supply_known', 'sed_coord_advisor_known',
-             'sed_coord_executor', 'sed_coord_advisor_policy', 'sed_coord_policy_saved'] + [f'sed_coord_saved_{name}' for name, _, _ in OPTIONS] + [f'sed_coord_saved_{name}' for name, _ in ADVISOR_POLICY_OPTIONS]
+VARIABLES = (
+    ['sed_coord_active', 'sed_coord_supply_known', 'sed_coord_advisor_known',
+     'sed_coord_executor', 'sed_coord_advisor_policy', 'sed_coord_policy_saved',
+     'sed_coord_supply_policy_saved']
+    + [f'sed_coord_saved_{name}' for name, _, _ in OPTIONS]
+    + [f'sed_coord_saved_{name}' for name, _ in ADVISOR_POLICY_OPTIONS]
+    + [f'sed_coord_saved_supply_{name}' for name, _ in SUPPLY_POLICY_OPTIONS]
+)
 
 
 def enable_option(name):
     _, option, default = next(x for x in OPTIONS if x[0] == name)
+    if name not in ('advisor', 'chains'):
+        return f'set_variable = {{ name = {option} value = 1 }}'
     return f'''if = {{ limit = {{ has_variable = sed_coord_saved_{name} }}
  set_variable = {{ name = {option} value = var:sed_coord_saved_{name} }}
 }}
@@ -53,11 +66,26 @@ def effects():
     set_variable = {{ name = {option} value = var:sed_coord_saved_{name} }}
    }}
    else = {{ remove_variable = {option} }}''' for name, option in ADVISOR_POLICY_OPTIONS)
+    supply_snapshot = '\n'.join(f'''  if = {{ limit = {{ has_variable = {option} }}
+   set_variable = {{ name = sed_coord_saved_supply_{name} value = var:{option} }}
+  }}''' for name, option in SUPPLY_POLICY_OPTIONS)
+    supply_restore = '\n'.join(f'''   if = {{ limit = {{ has_variable = sed_coord_saved_supply_{name} }}
+    set_variable = {{ name = {option} value = var:sed_coord_saved_supply_{name} }}
+   }}
+   else = {{ remove_variable = {option} }}''' for name, option in SUPPLY_POLICY_OPTIONS)
     cleanup = '\n'.join('  remove_variable = ' + name for name in VARIABLES)
     supply_options = [option for name, option, _ in OPTIONS if name != 'advisor']
     supply = ' '.join('has_variable = ' + option for option in supply_options + list(SUPPLY_HINTS))
     # No foreign write is permitted outside these two checked effects.
-    return f'''sed_coord_capture_advisor_policy = {{
+    return f'''sed_coord_capture_supply_policy = {{
+ if = {{ limit = {{ is_player = yes has_variable = sed_enabled has_variable = sed_coord_active
+  has_variable = sed_coord_supply_known NOT = {{ has_variable = sed_coord_supply_policy_saved }} }}
+{supply_snapshot}
+  set_variable = {{ name = sed_coord_supply_policy_saved value = yes }}
+ }}
+}}
+
+sed_coord_capture_advisor_policy = {{
  if = {{ limit = {{ is_player = yes has_variable = sed_enabled has_variable = sed_coord_active
   has_variable = sed_coord_advisor_known NOT = {{ has_variable = sed_coord_policy_saved }} }}
 {policy_snapshot}
@@ -89,12 +117,21 @@ sed_coord_restore = {{
   if = {{ limit = {{ has_variable = sed_coord_policy_saved }}
 {policy_restore}
   }}
+  if = {{ limit = {{ has_variable = sed_coord_supply_policy_saved }}
+{supply_restore}
+  }}
 {cleanup}
  }}
 }}
 
 sed_coord_sync = {{
  if = {{ limit = {{ is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic NOT = {{ has_variable = sed_mode_manual }} NOT = {{ has_variable = sed_mode_assisted }} has_variable = sed_coord_active }}
+  sed_coord_capture_supply_policy = yes
+  if = {{ limit = {{ has_variable = sed_coord_supply_policy_saved }}
+   set_variable = {{ name = zw_var_develop_incorporated_states value = yes }}
+   set_variable = {{ name = zw_var_ip_incorporated value = yes }}
+   remove_variable = zw_var_scsab_gov_admin_for_institution
+  }}
 {remove}
   set_variable = {{ name = sed_coord_executor value = 0 }}
   set_variable = {{ name = sed_coord_advisor_policy value = 0 }}

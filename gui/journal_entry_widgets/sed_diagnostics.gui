@@ -1407,6 +1407,13 @@ textbox = {
  text = "sed_coord_executor_9"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_coord_supply_policy_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_coord_supply_policy"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_coord_advisor_policy_1_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -1619,6 +1626,20 @@ textbox = {
  using = fontsize_large
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_auto_builders_help"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_tax_last_command_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_tax_last_command"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_wage_last_command_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_wage_last_command"
 }
 textbox = {
  visible = "[GetScriptedGui('sed_auto_last_review_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
