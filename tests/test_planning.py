@@ -171,6 +171,18 @@ class PlanningTests(unittest.TestCase):
         self.assertFalse(c.condition(child(c.definitions['sed_plan_1_grain_visible_sgui'],
                                            'is_shown'), c.country_scope()))
 
+    def test_reserve_drawdown_guard_scales_and_rejects_operating_deficit(self):
+        c = self.c
+        for scale in (0.01, 1, 1000):
+            with self.subTest(scale=scale):
+                c.readings.update(net_total_income=-10 * scale, net_fixed_income=100 * scale,
+                                  fixed_expenses=50 * scale, gold_reserves=860 * scale,
+                                  principal=0)
+                self.assertTrue(c.condition(c.definitions['sed_coord_reserve_drawdown_safe'], c.country_scope()))
+                self.assertFalse(c.condition(c.definitions['sed_auto_fiscal_safe'], c.country_scope()))
+                c.readings['net_fixed_income'] = -1
+                self.assertFalse(c.condition(c.definitions['sed_coord_reserve_drawdown_safe'], c.country_scope()))
+
     def test_queue_wait_preserves_plan_but_never_calls_constructor(self):
         self.producer('grain')
         c = self.c

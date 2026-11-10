@@ -1,4 +1,4 @@
-# Planejamento e coordenação — 0.6.1
+# Planejamento e coordenação — 0.6.2
 
 Esta versão implementa política nacional inicial e adaptadores de opções de
 construção. Não é um controlador econômico completo nem comprova crescimento
@@ -191,3 +191,38 @@ flags social/tesouro para atribuir a pontuação do objetivo.
 restauração de valores, configuração original ausente, limites da dívida,
 prioridade social/financeira e preservação da política durante delegação ao
 Supply Chain. A integração das novas opções ainda aguarda confirmação na engine.
+
+## Construção financiada por reservas na 0.6.2
+
+A guarda fiscal 1–4 exige saldo semanal não negativo. Isso impedia a
+coordenação sempre que o déficit operacional era coberto por reservas, mesmo
+com ouro suficiente para o horizonte do Advisor. A 0.6.2 acrescenta a
+classificação 5, aplicada antes das classificações 2–4:
+
+- `net_fixed_income` não negativo (o déficit não vem de despesas fixas).
+- `net_total_income` negativo (há déficit observado a financiar).
+- Sem dívida (`principal <= 0`).
+- Ouro maior ou igual a doze semanas de despesas fixas mais 26 semanas do
+déficit observado: `12 × max(fixed_expenses, 0) + 26 × (−net_total_income)`.
+
+A guarda escala com as leituras e não aprova sem ouro nem com despesa fixa
+acima da receita fixa. Os fatores doze e 26 são decisões desta implementação
+e exigem calibração em campanha; não são previsão de falência nem custo
+incremental.
+
+`sed_coord_fiscal_safe` aceita a guarda inicial 1–4 ou, com Advisor detectado,
+a classificação 5. A entrada da coordenação usa essa guarda mais ampla. Os
+caminhos do Supply Chain mantêm `sed_auto_fiscal_safe` em cada ramo, portanto a
+classificação 5 delega somente ao Advisor, que avalia o investimento com o
+próprio orçamento. O crescimento/diversificação (objetivo 8) também usa a
+guarda ampla; apenas as classificações 3 e 4 substituem o objetivo por
+estabilização. Sem Advisor, a classificação 5 não altera a coordenação.
+
+O limite automático de uma tentativa por mês passou a comparar a variável com
+o script value `sed_live_month_key` (ano × 12 + mês), em vez de aritmética
+embutida na igualdade, que a engine não avalia. O validador rejeita essa forma
+em qualquer igualdade `var:`.
+
+124 testes sintéticos aprovados incluem escala da nova guarda, autorização do
+Advisor até o piso de ouro, bloqueio com dívida e ausência de construções
+próprias. A classificação 5 ainda não foi observada em campanha.

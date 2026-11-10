@@ -99,20 +99,20 @@ sed_coord_sync = {{
   set_variable = {{ name = sed_coord_executor value = 0 }}
   set_variable = {{ name = sed_coord_advisor_policy value = 0 }}
   if = {{ limit = {{ has_variable = aroai_autobuild }} set_variable = {{ name = sed_coord_executor value = 5 }} }}
-  else_if = {{ limit = {{ sed_auto_fiscal_safe = yes NOT = {{ in_default = yes }} is_construction_paused = no }}
-   if = {{ limit = {{ var:sed_plan_goal = 1 has_variable = sed_coord_supply_known }}
+  else_if = {{ limit = {{ sed_coord_fiscal_safe = yes NOT = {{ in_default = yes }} is_construction_paused = no }}
+   if = {{ limit = {{ var:sed_plan_goal = 1 has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes }}
     {enable_option('railways')}
     set_variable = {{ name = sed_coord_executor value = 2 }}
    }}
-   else_if = {{ limit = {{ has_variable = sed_coord_supply_known var:sed_plan_goal = 6 }}
+   else_if = {{ limit = {{ has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 6 }}
     {enable_option('admin')}
     set_variable = {{ name = sed_coord_executor value = 6 }}
    }}
-   else_if = {{ limit = {{ has_variable = sed_coord_supply_known var:sed_plan_goal = 7 }}
+   else_if = {{ limit = {{ has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 7 }}
     {enable_option('tax')}
     set_variable = {{ name = sed_coord_executor value = 7 }}
    }}
-   else_if = {{ limit = {{ has_variable = sed_coord_supply_known var:sed_plan_goal = 9 }}
+   else_if = {{ limit = {{ has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 9 }}
     {enable_option('power')}
     set_variable = {{ name = sed_coord_executor value = 8 }}
    }}
@@ -138,11 +138,11 @@ sed_coord_sync = {{
      set_variable = {{ name = sed_coord_advisor_policy value = 2 }}
     }}
    }}
-   else_if = {{ limit = {{ has_variable = sed_coord_supply_known OR = {{ var:sed_plan_goal = 2 var:sed_plan_goal = 5 var:sed_plan_goal = 8 }} }}
+   else_if = {{ limit = {{ has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes OR = {{ var:sed_plan_goal = 2 var:sed_plan_goal = 5 var:sed_plan_goal = 8 }} }}
     {enable_option('chains')}
     set_variable = {{ name = sed_coord_executor value = 3 }}
    }}
-   else_if = {{ limit = {{ has_variable = sed_coord_supply_known var:sed_plan_goal = 3 }}
+   else_if = {{ limit = {{ has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 3 }}
     {enable_option('sectors')}
     set_variable = {{ name = sed_coord_executor value = 4 }}
    }}

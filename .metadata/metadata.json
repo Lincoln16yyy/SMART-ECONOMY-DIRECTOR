@@ -1,7 +1,7 @@
 {
   "name": "Smart Economy Director",
   "id": "sed.smart_economy_director",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "supported_game_version": "1.15.*",
   "short_description": "Economic recommendations with individually approved construction actions.",
   "tags": [

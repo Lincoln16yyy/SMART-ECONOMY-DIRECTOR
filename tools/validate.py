@@ -99,6 +99,10 @@ def validate(root=ROOT, game=None):
                 check_effects(entry.value)
             if '/events/' in name and entry.key == 'immediate' and isinstance(entry.value, list):
                 check_effects(entry.value)
+            if entry.key.startswith('var:') and entry.op == '=' and isinstance(entry.value, list):
+                numeric_ops = {'value', 'add', 'subtract', 'multiply', 'divide'}
+                if any(item.key in numeric_ops for item in entry.value):
+                    errors.append('Inline arithmetic in variable equality requires a named script value: ' + entry.key)
             if entry.key.startswith('sed_') and entry.value == 'yes' and entry.key not in custom:
                 errors.append('Undefined scripted call: ' + entry.key)
     all_text = '\n'.join(p.read_text(encoding='utf-8-sig') for p in (root / 'common').rglob('*.txt'))

@@ -336,7 +336,7 @@ sed_clothes_approval_valid = {
 # Supply Chain independent options remain enabled without its chains toggle.
 sed_auto_month_limit_reached = {
  has_variable = sed_auto_last_attempt_month
- var:sed_auto_last_attempt_month = { value = year multiply = 12 add = month }
+ var:sed_auto_last_attempt_month = sed_live_month_key
 }
 
 # Require an explicit execution mode even when the effect is called directly.
@@ -384,6 +384,21 @@ sed_auto_fiscal_safe = {
   principal <= 0
   AND = { credit > 0 principal <= { value = credit multiply = 0.75 } }
  }
+}
+
+# Keep a reserve floor plus six months of the currently observed deficit.
+sed_coord_reserve_drawdown_safe = {
+ net_fixed_income >= 0
+ net_total_income < 0
+ principal <= 0
+ gold_reserves >= {
+  value = fixed_expenses min = 0 multiply = 12
+  add = { value = net_total_income multiply = -26 }
+ }
+}
+
+sed_coord_fiscal_safe = {
+ OR = { sed_auto_fiscal_safe = yes AND = { has_variable = sed_coord_advisor_known sed_coord_reserve_drawdown_safe = yes } }
 }
 sed_coord_tools_available = {
  OR = {

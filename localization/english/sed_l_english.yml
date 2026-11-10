@@ -206,6 +206,7 @@
  sed_coord_advisor_policy_1:0 "Advisor guidance applied for growth, balanced budget and borrowing disabled through its setting. The Advisor internal plan reserves twelve weeks of fixed expenses."
  sed_coord_advisor_policy_2:0 "Advisor guidance applied for standard of living, balanced budget and borrowing disabled. Essential goods lead the plan."
  sed_coord_advisor_policy_3:0 "Advisor guidance applied for treasury return and reserve protection, with borrowing disabled. Debt reached at least 50% of credit."
+ sed_fiscal_5:0 "Fiscal state with reserve-funded construction. Nonnegative operating balance, no debt and gold covering twelve weeks of fixed expenses plus 26 weeks of the observed deficit. The Advisor can assess investment using its own budget. Supply Chain paths require the nonnegative-balance guard."
  sed_coord_intro:0 "Choosing Automatic saves verified options and coordinates detected external builders according to the plan. Initial adapters for Economy Advisor and Supply Chain; PMs, taxes and other executors remain outside this control."
  sed_coord_enable:0 "Coordinate external builders"
  sed_coord_enable_tt:0 "Saves verified construction, objective and budget options, enters Automatic mode and configures one executor. May suspend power and administration routines not yet covered by the plan. Does not start construction on click. Leaving Automatic, disabling or releasing restores original options, including numeric values. Does not control PMs or other builders."

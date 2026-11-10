@@ -1,8 +1,25 @@
 # Contexto de continuidade
 
-Entrega local 0.6.1 instalada com jogo fechado, 13 outputs conferidos e
+Entrega local 0.6.2 instalada com jogo fechado, 14 outputs conferidos e
 content_load.json preservado. Backup em
-`sed_backups/mod_before_0.6.1_20261109_222628_869777`.
+`sed_backups/mod_before_0.6.2_20261109_235909_180351`.
+
+## Construção financiada por reservas 0.6.2
+
+A classificação fiscal 5 permite coordenação quando o déficit operacional é
+coberto por reservas: receita fixa não negativa, déficit total observado, sem
+dívida e ouro cobrindo doze semanas de despesas fixas mais 26 semanas do
+déficit. `sed_coord_fiscal_safe` aceita a guarda antiga ou a 5 com Advisor
+detectado; os ramos do Supply Chain continuam exigindo saldo não negativo. A
+classificação 5 permite crescimento e não força estabilização. O limite
+mensal automático passou a usar o script value `sed_live_month_key`, e o
+validador rejeita aritmética embutida em igualdades `var:`. 124 testes
+aprovados; instalação e comportamento em campanha ainda não confirmados.
+
+## Entrega local 0.6.1
+
+Instalada com jogo fechado, 13 outputs conferidos e content_load.json
+preservado. Backup em `sed_backups/mod_before_0.6.1_20261109_222628_869777`.
 
 ## Objetivo e orçamento do Advisor 0.6.1
 

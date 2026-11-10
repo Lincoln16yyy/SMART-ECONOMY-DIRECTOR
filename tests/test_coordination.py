@@ -254,6 +254,41 @@ class CoordinationTests(unittest.TestCase):
         self.assertEqual(self.advisor_policy(), original)
         self.assertEqual(c.variables['sed_coord_advisor_policy'], 0)
 
+    def test_reserve_funded_construction_keeps_advisor_authorized_until_floor(self):
+        c = self.c
+        c.states.clear()
+        c.readings.update(net_total_income=-10, net_fixed_income=100,
+                          fixed_expenses=50, gold_reserves=860, principal=0)
+        c.run('sed_set_mode_automatic')
+        self.assertEqual(c.variables['sed_fiscal_status'], 5)
+        self.assertEqual(c.variables['sed_plan_goal'], 8)
+        self.assertEqual(c.variables['sed_coord_executor'], 1)
+        self.assertEqual(self.external(), {'advisor_auto_construction_enabled': 1})
+        c.readings['gold_reserves'] = 859
+        c.run('sed_monthly_update')
+        self.assertEqual(c.variables['sed_coord_executor'], 0)
+        self.assertEqual(self.external(), {})
+        c.readings['gold_reserves'] = 1000
+        c.readings['principal'] = 1
+        c.run('sed_monthly_update')
+        self.assertEqual(self.external(), {})
+        self.assertEqual(c.constructions, [])
+
+    def test_reserve_drawdown_routes_infrastructure_to_advisor_and_not_supply(self):
+        c = self.c
+        c.readings.update(net_total_income=-10, net_fixed_income=100,
+                          fixed_expenses=50, gold_reserves=860, principal=0)
+        c.run('sed_set_mode_automatic')
+        self.assertEqual(c.variables['sed_plan_goal'], 1)
+        self.assertEqual(c.variables['sed_coord_executor'], 1)
+        self.assertEqual(self.external(), {'advisor_auto_construction_enabled': 1})
+        c.run('sed_set_mode_assisted')
+        c.variables.pop('advisor_enabled')
+        c.variables.pop('advisor_auto_construction_enabled')
+        c.run('sed_set_mode_automatic')
+        self.assertEqual(c.variables['sed_coord_executor'], 0)
+        self.assertEqual(self.external(), {})
+
     def test_validator_rejects_foreign_write_outside_adapter_and_unlisted_option(self):
         for replacement in (
             ('sed_coord_sync = {', 'sed_bad_adapter = {'),

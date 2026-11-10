@@ -11,7 +11,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.6.1'
+VERSION = '0.6.2'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -55,7 +55,6 @@ sed_railway_not_ready_states sed_railway_blocked_states
 sed_construction_sector_states sed_construction_not_ready_states
 sed_construction_blocked_states sed_construction_infrastructure_states
 sed_queue_levels_before'''.split() + [
-    'sed_supply_action_status',
     'sed_mode_manual', 'sed_mode_assisted', 'sed_mode_automatic',
     'sed_auto_action_status', 'sed_auto_event_pending', 'sed_details_visible',
     'sed_auto_review_status', 'sed_auto_review_year', 'sed_auto_review_month',
@@ -386,7 +385,7 @@ def widget():
     body += textbox('sed_deficit_warning', 'sed_deficit_visible_sgui')
     body += textbox('sed_plan_title', heading=True)
     body += textbox('sed_plan_date')
-    for status in range(1, 5):
+    for status in range(1, 6):
         body += textbox(f'sed_fiscal_{status}', f'sed_fiscal_{status}_visible_sgui')
     for goal in range(10):
         body += textbox(f'sed_goal_{goal}', f'sed_goal_{goal}_visible_sgui')
@@ -1040,7 +1039,7 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
         ('queue', 'OR = { construction_queue_num_queued_government_levels > 0 construction_queue_num_queued_private_levels > 0 }'),
         ('paused', 'is_construction_paused = yes'),
         ('competing', 'AND = { sed_competing_builder_configured = yes NOT = { has_variable = sed_coord_active } }'),
-        ('fiscal', 'NOT = { sed_auto_fiscal_safe = yes }'),
+        ('fiscal', 'OR = { AND = { has_variable = sed_coord_active NOT = { sed_coord_fiscal_safe = yes } } AND = { NOT = { has_variable = sed_coord_active } NOT = { sed_auto_fiscal_safe = yes } } }'),
     ]:
         result += f'sed_auto_current_{name}_visible_sgui = {{ scope = country is_shown = {{ {base} {previous} {condition} }} }}\n'
         previous += f' NOT = {{ {condition} }}'
@@ -1051,7 +1050,7 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
     for policy in (1, 2, 3):
         result += f'sed_coord_advisor_policy_{policy}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 1 has_variable = sed_coord_advisor_policy var:sed_coord_advisor_policy = {policy} }} }}\n'
     result += 'sed_auto_status_fiscal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 17 } }\n'
-    for status in range(1, 5):
+    for status in range(1, 6):
         result += f'sed_fiscal_{status}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = {status} }} }}\n'
     for goal in range(10):
         result += f'sed_goal_{goal}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_plan_goal var:sed_plan_goal = {goal} }} }}\n'
@@ -1171,7 +1170,7 @@ sed_{good}_approval_valid = {{
 # Supply Chain independent options remain enabled without its chains toggle.
 sed_auto_month_limit_reached = {
  has_variable = sed_auto_last_attempt_month
- var:sed_auto_last_attempt_month = { value = year multiply = 12 add = month }
+ var:sed_auto_last_attempt_month = sed_live_month_key
 }
 
 # Require an explicit execution mode even when the effect is called directly.
@@ -1394,6 +1393,9 @@ def localization(language):
         'sed_coord_advisor_policy_2': ('Orientação do Advisor aplicada para padrão de vida, com orçamento equilibrado e opção de endividamento desabilitada. Bens essenciais lideram o plano.', 'Advisor guidance applied for standard of living, balanced budget and borrowing disabled. Essential goods lead the plan.'),
         'sed_coord_advisor_policy_3': ('Orientação do Advisor aplicada para retorno ao tesouro e preservação das reservas, com opção de endividamento desabilitada. A dívida atingiu ao menos 50% do crédito.', 'Advisor guidance applied for treasury return and reserve protection, with borrowing disabled. Debt reached at least 50% of credit.'),
     })
+    pairs['sed_fiscal_5'] = (
+        'Fiscal com construção financiada por reservas. Saldo operacional não negativo, sem dívida e ouro cobrindo doze semanas de despesas fixas mais 26 semanas do déficit observado. O Advisor pode avaliar investimentos com seu próprio orçamento. Os caminhos do Supply Chain exigem a guarda de saldo não negativo.',
+        'Fiscal state with reserve-funded construction. Nonnegative operating balance, no debt and gold covering twelve weeks of fixed expenses plus 26 weeks of the observed deficit. The Advisor can assess investment using its own budget. Supply Chain paths require the nonnegative-balance guard.')
     pairs['sed_mode_automatic_button_tt'] = (
         'Com Economy Advisor ou Supply Chain detectados, guarda as opções verificadas de construção, objetivo e orçamento e assume a coordenação de construção: um executor externo por objetivo, sujeito à política fiscal inicial. Sair do Automático restaura as opções anteriores. Sem ferramenta detectada, usa o executor próprio limitado a uma tentativa mensal. Não controla PMs, impostos ou ARoAI.',
         'When Economy Advisor or Supply Chain is detected, saves verified construction, objective and budget options and takes construction coordination: one external executor per objective, subject to initial fiscal policy. Leaving Automatic restores previous options. Without detected tools, uses its own executor limited to one monthly attempt. Does not control PMs, taxes or ARoAI.')
@@ -1546,6 +1548,7 @@ sed_pulse.1 = {
         'common/scripted_effects/sed_effects.txt': effects(),
         'common/scripted_guis/sed_scripted_guis.txt': scripted_guis(),
         'common/scripted_triggers/sed_triggers.txt': scripted_triggers(),
+        'common/script_values/sed_values.txt': '# Current calendar, independent of diagnostic refresh.\nsed_live_month_key = { value = year multiply = 12 add = month }\n',
         'gui/journal_entry_widgets/sed_diagnostics.gui': widget(),
         'localization/braz_por/sed_l_braz_por.yml': localization('braz_por'),
         'localization/english/sed_l_english.yml': localization('english'),

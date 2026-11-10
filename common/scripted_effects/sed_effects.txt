@@ -108,7 +108,6 @@ sed_disable_country = {
  remove_variable = sed_construction_blocked_states
  remove_variable = sed_construction_infrastructure_states
  remove_variable = sed_queue_levels_before
- remove_variable = sed_supply_action_status
  remove_variable = sed_mode_manual
  remove_variable = sed_mode_assisted
  remove_variable = sed_mode_automatic
@@ -1635,6 +1634,7 @@ sed_refresh_national_plan = {
    } }
    set_variable = { name = sed_fiscal_status value = 3 }
   }
+  else_if = { limit = { sed_coord_reserve_drawdown_safe = yes } set_variable = { name = sed_fiscal_status value = 5 } }
   else_if = { limit = { NOT = { sed_auto_fiscal_safe = yes } } set_variable = { name = sed_fiscal_status value = 2 } }
   clear_variable_list = sed_plan_1_railway
   clear_variable_list = sed_plan_1_construction
@@ -2245,11 +2245,11 @@ sed_refresh_national_plan = {
    }
   }
   if = { limit = { var:sed_plan_count = 0 var:sed_plan_missing_count > 0 } set_variable = { name = sed_plan_goal value = 5 } }
-  if = { limit = { var:sed_plan_goal = 0 sed_auto_fiscal_safe = yes } set_variable = { name = sed_plan_goal value = 8 } }
+  if = { limit = { var:sed_plan_goal = 0 sed_coord_fiscal_safe = yes } set_variable = { name = sed_plan_goal value = 8 } }
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } bureaucracy < 0 } set_variable = { name = sed_plan_goal value = 6 } }
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } any_scope_state = { tax_capacity_usage > tax_capacity } } set_variable = { name = sed_plan_goal value = 7 } }
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } any_scope_state = { sg:electricity ?= { state_goods_pricier >= 0.2 } } } set_variable = { name = sed_plan_goal value = 9 } }
-  if = { limit = { var:sed_fiscal_status >= 3 } set_variable = { name = sed_plan_goal value = 4 } }
+  if = { limit = { OR = { var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } } set_variable = { name = sed_plan_goal value = 4 } }
  }
 }
 sed_coord_capture_advisor_policy = {
@@ -2389,29 +2389,29 @@ sed_coord_sync = {
   set_variable = { name = sed_coord_executor value = 0 }
   set_variable = { name = sed_coord_advisor_policy value = 0 }
   if = { limit = { has_variable = aroai_autobuild } set_variable = { name = sed_coord_executor value = 5 } }
-  else_if = { limit = { sed_auto_fiscal_safe = yes NOT = { in_default = yes } is_construction_paused = no }
-   if = { limit = { var:sed_plan_goal = 1 has_variable = sed_coord_supply_known }
+  else_if = { limit = { sed_coord_fiscal_safe = yes NOT = { in_default = yes } is_construction_paused = no }
+   if = { limit = { var:sed_plan_goal = 1 has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes }
     if = { limit = { has_variable = sed_coord_saved_railways }
  set_variable = { name = zw_var_scsab_construct_railway value = var:sed_coord_saved_railways }
 }
 else = { set_variable = { name = zw_var_scsab_construct_railway value = 1 } }
     set_variable = { name = sed_coord_executor value = 2 }
    }
-   else_if = { limit = { has_variable = sed_coord_supply_known var:sed_plan_goal = 6 }
+   else_if = { limit = { has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 6 }
     if = { limit = { has_variable = sed_coord_saved_admin }
  set_variable = { name = zw_var_scsab_gov_admin value = var:sed_coord_saved_admin }
 }
 else = { set_variable = { name = zw_var_scsab_gov_admin value = 10 } }
     set_variable = { name = sed_coord_executor value = 6 }
    }
-   else_if = { limit = { has_variable = sed_coord_supply_known var:sed_plan_goal = 7 }
+   else_if = { limit = { has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 7 }
     if = { limit = { has_variable = sed_coord_saved_tax }
  set_variable = { name = zw_var_scsab_gov_admin_for_tax value = var:sed_coord_saved_tax }
 }
 else = { set_variable = { name = zw_var_scsab_gov_admin_for_tax value = 1 } }
     set_variable = { name = sed_coord_executor value = 7 }
    }
-   else_if = { limit = { has_variable = sed_coord_supply_known var:sed_plan_goal = 9 }
+   else_if = { limit = { has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 9 }
     if = { limit = { has_variable = sed_coord_saved_power }
  set_variable = { name = zw_var_scsab_construct_power_plant value = var:sed_coord_saved_power }
 }
@@ -2443,14 +2443,14 @@ else = { set_variable = { name = advisor_auto_construction_enabled value = 1 } }
      set_variable = { name = sed_coord_advisor_policy value = 2 }
     }
    }
-   else_if = { limit = { has_variable = sed_coord_supply_known OR = { var:sed_plan_goal = 2 var:sed_plan_goal = 5 var:sed_plan_goal = 8 } }
+   else_if = { limit = { has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes OR = { var:sed_plan_goal = 2 var:sed_plan_goal = 5 var:sed_plan_goal = 8 } }
     if = { limit = { has_variable = sed_coord_saved_chains }
  set_variable = { name = zw_var_expand_building value = var:sed_coord_saved_chains }
 }
 else = { set_variable = { name = zw_var_expand_building value = 0 } }
     set_variable = { name = sed_coord_executor value = 3 }
    }
-   else_if = { limit = { has_variable = sed_coord_supply_known var:sed_plan_goal = 3 }
+   else_if = { limit = { has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 3 }
     if = { limit = { has_variable = sed_coord_saved_sectors }
  set_variable = { name = zw_var_more_construction_sectors value = var:sed_coord_saved_sectors }
 }

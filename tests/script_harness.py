@@ -98,6 +98,8 @@ class Country:
             return scope.get(name, 0)  # Explicit synthetic zero-orders default; never engine evidence.
         if name in scope:
             return scope[name]
+        if name in self.definitions:
+            return self.number(self.definitions[name], scope)
         # Global triggers such as is_game_paused remain readable from any scope.
         if name in self.readings:
             return self.readings[name]
