@@ -6,7 +6,18 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.5.8'
+VERSION = '0.5.9'
+# Observed country options; this registry also drives the live explanation.
+COMPETING_BUILDERS = (
+    ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
+    ('chains', 'zw_var_expand_building', 'Supply Chain: cadeias produtivas', 'Supply Chain: production chains'),
+    ('sectors', 'zw_var_more_construction_sectors', 'Supply Chain: setores de construção', 'Supply Chain: construction sectors'),
+    ('railways', 'zw_var_scsab_construct_railway', 'Supply Chain: ferrovias', 'Supply Chain: railways'),
+    ('power', 'zw_var_scsab_construct_power_plant', 'Supply Chain: energia', 'Supply Chain: power plants'),
+    ('admin', 'zw_var_scsab_gov_admin', 'Supply Chain: administração geral', 'Supply Chain: general administration'),
+    ('tax', 'zw_var_scsab_gov_admin_for_tax', 'Supply Chain: administração tributária', 'Supply Chain: tax administration'),
+    ('aroai', 'aroai_autobuild', 'ARoAI: construção automática', 'ARoAI: automatic construction'),
+)
 SUPPLY_TARGETS = [
     {'good': 'wood', 'building': 'building_logging_camp', 'methods': ['pm_electric_saw_mills', 'pm_saw_mills', 'pm_simple_forestry'], 'label_pt': 'madeira', 'label_en': 'wood', 'building_pt': 'acampamento madeireiro', 'building_en': 'logging camp'},
     {'good': 'iron', 'building': 'building_iron_mine', 'methods': ['pm_atmospheric_engine_pump_building_iron_mine', 'pm_condensing_engine_pump_building_iron_mine', 'pm_diesel_pump_building_iron_mine', 'pm_dynamite_building_iron_mine', 'pm_nitroglycerin_building_iron_mine', 'pm_picks_and_shovels_building_iron_mine'], 'label_pt': 'ferro', 'label_en': 'iron', 'building_pt': 'mina de ferro', 'building_en': 'iron mine'},
@@ -324,6 +335,10 @@ def widget():
         body += textbox(f'sed_auto_{state}', f'sed_auto_{state}_visible_sgui')
     for blocker in ('default', 'month_limit', 'queue', 'paused', 'competing', 'clear'):
         body += textbox(f'sed_auto_current_{blocker}', f'sed_auto_current_{blocker}_visible_sgui')
+    body += textbox('sed_auto_builders_title', 'sed_auto_builders_visible_sgui')
+    for name, option, pt, en in COMPETING_BUILDERS:
+        body += textbox(f'sed_auto_builder_{name}', f'sed_auto_builder_{name}_visible_sgui')
+    body += textbox('sed_auto_builders_help', 'sed_auto_builders_visible_sgui')
     body += textbox('sed_auto_last_review', 'sed_auto_last_review_visible_sgui')
     for status in ('success', 'no_action', 'default', 'queue', 'paused', 'competing', 'safety', 'unconfirmed', 'month_limit'):
         body += textbox(f'sed_auto_status_{status}', f'sed_auto_status_{status}_visible_sgui')
@@ -951,6 +966,9 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
     }.items():
         result += f'sed_auto_{name}_visible_sgui = {{ scope = country is_shown = {{ {base} {condition} }} }}\n'
     result += 'sed_auto_last_review_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status has_variable = sed_auto_review_year has_variable = sed_auto_review_month } }\n'
+    result += f'sed_auto_builders_visible_sgui = {{ scope = country is_shown = {{ {base} sed_competing_builder_configured = yes }} }}\n'
+    for name, option, pt, en in COMPETING_BUILDERS:
+        result += f'sed_auto_builder_{name}_visible_sgui = {{ scope = country is_shown = {{ {base} has_variable = {option} }} }}\n'
     previous = ''
     for name, condition in [
         ('default', 'in_default = yes'),
@@ -1065,19 +1083,6 @@ sed_{good}_approval_valid = {{
     result.append('''# Country scope: prevent this executor from competing with known construction automations.
 # Configuration guard, not a prediction that the other mod will build this tick.
 # Supply Chain independent options remain enabled without its chains toggle.
-sed_competing_builder_configured = {
- OR = {
-  has_variable = advisor_auto_construction_enabled
-  has_variable = zw_var_expand_building
-  has_variable = zw_var_more_construction_sectors
-  has_variable = zw_var_scsab_construct_railway
-  has_variable = zw_var_scsab_construct_power_plant
-  has_variable = zw_var_scsab_gov_admin
-  has_variable = zw_var_scsab_gov_admin_for_tax
-  has_variable = aroai_autobuild
- }
-}
-
 sed_auto_month_limit_reached = {
  has_variable = sed_auto_last_attempt_month
  var:sed_auto_last_attempt_month = { value = year multiply = 12 add = month }
@@ -1105,6 +1110,8 @@ sed_auto_executor_safe = {
  is_construction_paused = no
  NOT = { sed_competing_builder_configured = yes }
 }''')
+    options = '\n'.join(f'  has_variable = {option}' for name, option, pt, en in COMPETING_BUILDERS)
+    result.append('sed_competing_builder_configured = {\n OR = {\n' + options + '\n }\n}')
     return '\n'.join(result).rstrip() + '\n'
 
 
@@ -1294,6 +1301,12 @@ def localization(language):
     for name in ACTION_NAMES:
         key = f'sed_{name}_approve' if name not in ('railway', 'construction') else f'sed_approve_{name}'
         pairs[key] = ('Aprovar expansão: +1 nível', 'Approve expansion: +1 level')
+    pairs['sed_auto_builders_title'] = ('Opções externas detectadas agora:', 'External options detected now:')
+    pairs['sed_auto_builders_help'] = (
+        'Opção ligada já suspende o Automático, mesmo sem obra neste mês. O Director não desliga essas opções. Use Assistido para aprovar individualmente ou ajuste o outro mod para usar o Automático do Director. Esta lista não confirma execução externa.',
+        'An enabled option suspends Automatic mode even without construction this month. The Director does not disable these options. Use Assisted to approve individually or adjust the other mod to use the Director’s Automatic mode. This list does not confirm external execution.')
+    for name, option, pt_label, en_label in COMPETING_BUILDERS:
+        pairs[f'sed_auto_builder_{name}'] = (pt_label, en_label)
     pairs['sed_railway_candidate_reason'] = ('Ferrovia operante em estado com déficit de infraestrutura. Custo e retorno não estimados.', 'Operating railway in a state with an infrastructure deficit. Cost and return not estimated.')
     pairs['sed_construction_candidate_reason'] = ('Setor operante e fila pública com demanda. Custo e contratação futura não estimados.', 'Operating sector with demand in the government queue. Cost and future hiring not estimated.')
     for item in SUPPLY_TARGETS:

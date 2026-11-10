@@ -500,6 +500,50 @@ class DiagnosisTests(unittest.TestCase):
         return c.condition(child(self.definitions[f'sed_auto_{suffix}_visible_sgui'],
                                  'is_shown'), c.country_scope())
 
+    def test_live_external_options_list_reports_each_option_without_mutating_state(self):
+        options = {
+            'advisor': 'advisor_auto_construction_enabled',
+            'chains': 'zw_var_expand_building',
+            'sectors': 'zw_var_more_construction_sectors',
+            'railways': 'zw_var_scsab_construct_railway',
+            'power': 'zw_var_scsab_construct_power_plant',
+            'admin': 'zw_var_scsab_gov_admin',
+            'tax': 'zw_var_scsab_gov_admin_for_tax',
+            'aroai': 'aroai_autobuild',
+        }
+        c = self.country()
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')  # Archived queue blocker, independent of options.
+        self.assertFalse(self.auto_panel_shown(c, 'builders'))
+        for name, option in options.items():
+            with self.subTest(option=option):
+                c.variables[option] = 1
+                before = c.variables.copy()
+                self.assertTrue(self.auto_panel_shown(c, 'builders'))
+                self.assertTrue(self.auto_panel_shown(c, 'current_queue'))
+                self.assertFalse(self.auto_panel_shown(c, 'current_competing'))
+                for shown_name in options:
+                    self.assertEqual(self.auto_panel_shown(c, 'builder_' + shown_name),
+                                     shown_name == name)
+                self.assertEqual(c.variables, before)
+                self.assertEqual(c.constructions, [])
+                del c.variables[option]
+                self.assertFalse(self.auto_panel_shown(c, 'builders'))
+                self.assertFalse(self.auto_panel_shown(c, 'builder_' + name))
+        c.variables.update({option: 1 for option in options.values()})
+        for name in options:
+            self.assertTrue(self.auto_panel_shown(c, 'builder_' + name))
+        for mode in ('manual', 'assisted'):
+            c.run('sed_set_mode_' + mode)
+            self.assertFalse(self.auto_panel_shown(c, 'builders'))
+            for name in options:
+                self.assertFalse(self.auto_panel_shown(c, 'builder_' + name))
+        c.run('sed_set_mode_automatic')
+        c.run('sed_disable_country')
+        self.assertFalse(self.auto_panel_shown(c, 'builders'))
+        for name in options:
+            self.assertFalse(self.auto_panel_shown(c, 'builder_' + name))
+
     def test_auto_panel_explains_pending_review_before_any_execution(self):
         c = self.country()
         c.run('sed_set_mode_automatic')

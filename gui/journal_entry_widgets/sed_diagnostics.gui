@@ -1357,6 +1357,76 @@ textbox = {
  text = "sed_auto_current_clear"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_auto_builders_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_builders_title"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_builder_advisor_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_builder_advisor"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_builder_chains_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_builder_chains"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_builder_sectors_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_builder_sectors"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_builder_railways_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_builder_railways"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_builder_power_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_builder_power"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_builder_admin_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_builder_admin"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_builder_tax_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_builder_tax"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_builder_aroai_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_builder_aroai"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_builders_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_builders_help"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_auto_last_review_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large

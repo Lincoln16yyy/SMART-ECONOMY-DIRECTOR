@@ -334,19 +334,6 @@ sed_clothes_approval_valid = {
 # Country scope: prevent this executor from competing with known construction automations.
 # Configuration guard, not a prediction that the other mod will build this tick.
 # Supply Chain independent options remain enabled without its chains toggle.
-sed_competing_builder_configured = {
- OR = {
-  has_variable = advisor_auto_construction_enabled
-  has_variable = zw_var_expand_building
-  has_variable = zw_var_more_construction_sectors
-  has_variable = zw_var_scsab_construct_railway
-  has_variable = zw_var_scsab_construct_power_plant
-  has_variable = zw_var_scsab_gov_admin
-  has_variable = zw_var_scsab_gov_admin_for_tax
-  has_variable = aroai_autobuild
- }
-}
-
 sed_auto_month_limit_reached = {
  has_variable = sed_auto_last_attempt_month
  var:sed_auto_last_attempt_month = { value = year multiply = 12 add = month }
@@ -373,4 +360,16 @@ sed_auto_executor_safe = {
  construction_queue_num_queued_private_levels = 0
  is_construction_paused = no
  NOT = { sed_competing_builder_configured = yes }
+}
+sed_competing_builder_configured = {
+ OR = {
+  has_variable = advisor_auto_construction_enabled
+  has_variable = zw_var_expand_building
+  has_variable = zw_var_more_construction_sectors
+  has_variable = zw_var_scsab_construct_railway
+  has_variable = zw_var_scsab_construct_power_plant
+  has_variable = zw_var_scsab_gov_admin
+  has_variable = zw_var_scsab_gov_admin_for_tax
+  has_variable = aroai_autobuild
+ }
 }
