@@ -60,6 +60,7 @@ sed_wood_candidate_eligible = {
  infrastructure_delta >= 0
  NOT = { has_variable = sed_wood_ignored }
  NOT = { has_variable = sed_wood_request_pending }
+
  owner = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } }
  OR = { sed_wood_logging_camp_eligible = yes }
 }
@@ -102,6 +103,7 @@ sed_iron_candidate_eligible = {
  infrastructure_delta >= 0
  NOT = { has_variable = sed_iron_ignored }
  NOT = { has_variable = sed_iron_request_pending }
+
  owner = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
  OR = { sed_iron_iron_mine_eligible = yes }
 }
@@ -150,6 +152,7 @@ sed_coal_candidate_eligible = {
  infrastructure_delta >= 0
  NOT = { has_variable = sed_coal_ignored }
  NOT = { has_variable = sed_coal_request_pending }
+
  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
  OR = { sed_coal_coal_mine_eligible = yes }
 }
@@ -198,6 +201,7 @@ sed_grain_candidate_eligible = {
  infrastructure_delta >= 0
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_request_pending }
+
  owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
  OR = { sed_grain_wheat_farm_eligible = yes sed_grain_rye_farm_eligible = yes sed_grain_rice_farm_eligible = yes sed_grain_maize_farm_eligible = yes sed_grain_millet_farm_eligible = yes }
 }
@@ -334,6 +338,7 @@ sed_fabric_candidate_eligible = {
  infrastructure_delta >= 0
  NOT = { has_variable = sed_fabric_ignored }
  NOT = { has_variable = sed_fabric_request_pending }
+
  owner = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
  OR = { sed_fabric_cotton_plantation_eligible = yes sed_fabric_livestock_ranch_eligible = yes }
 }
@@ -398,6 +403,7 @@ sed_tools_candidate_eligible = {
  infrastructure_delta >= 0
  NOT = { has_variable = sed_tools_ignored }
  NOT = { has_variable = sed_tools_request_pending }
+
  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
  OR = { sed_tools_tooling_workshop_eligible = yes }
 }
@@ -442,6 +448,7 @@ sed_groceries_candidate_eligible = {
  infrastructure_delta >= 0
  NOT = { has_variable = sed_groceries_ignored }
  NOT = { has_variable = sed_groceries_request_pending }
+
  owner = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } }
  OR = { sed_groceries_food_industry_eligible = yes }
 }
@@ -492,6 +499,7 @@ sed_clothes_candidate_eligible = {
  infrastructure_delta >= 0
  NOT = { has_variable = sed_clothes_ignored }
  NOT = { has_variable = sed_clothes_request_pending }
+
  owner = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } }
  OR = { sed_clothes_textile_mill_eligible = yes }
 }
@@ -522,6 +530,141 @@ sed_clothes_textile_mill_eligible = {
 
 sed_clothes_approval_valid = {
  sed_clothes_candidate_eligible = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+  sed_execution_mode_permits_approval = yes
+ }
+}
+# State scope: expand an operating local producer only while its market good is scarce.
+sed_small_arms_candidate_eligible = {
+ is_incorporated = yes
+ infrastructure_delta >= 0
+ NOT = { has_variable = sed_small_arms_ignored }
+ NOT = { has_variable = sed_small_arms_request_pending }
+owner = { military_expenses > 0 market = { mg:small_arms ?= { market_goods_buy_orders > 0 } } }
+ owner = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } } }
+ OR = { sed_small_arms_arms_industry_eligible = yes }
+}
+
+sed_small_arms_queued_supply = { OR = { AND = { has_building = building_arms_industry b:building_arms_industry = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_muskets
+  has_active_production_method = pm_rifles
+  has_active_production_method = pm_repeaters
+  has_active_production_method = pm_bolt_action_rifles } } } } }
+
+# State scope: one verified producer type for small_arms; output checked by active method.
+sed_small_arms_arms_industry_eligible = {
+ has_building = building_arms_industry
+ b:building_arms_industry = {
+  level > 0
+  occupancy >= 0.8
+  has_failed_hires = no
+  building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  OR = {
+  has_active_production_method = pm_muskets
+  has_active_production_method = pm_rifles
+  has_active_production_method = pm_repeaters
+  has_active_production_method = pm_bolt_action_rifles
+  }
+ }
+ can_construct_building = building_arms_industry
+}
+
+sed_small_arms_approval_valid = {
+ sed_small_arms_candidate_eligible = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+  sed_execution_mode_permits_approval = yes
+ }
+}
+# State scope: expand an operating local producer only while its market good is scarce.
+sed_artillery_candidate_eligible = {
+ is_incorporated = yes
+ infrastructure_delta >= 0
+ NOT = { has_variable = sed_artillery_ignored }
+ NOT = { has_variable = sed_artillery_request_pending }
+owner = { military_expenses > 0 market = { mg:artillery ?= { market_goods_buy_orders > 0 } } }
+ owner = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } } }
+ OR = { sed_artillery_artillery_foundry_eligible = yes }
+}
+
+sed_artillery_queued_supply = { OR = { AND = { has_building = building_artillery_foundry b:building_artillery_foundry = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_cannons
+  has_active_production_method = pm_bronze_cannons
+  has_active_production_method = pm_smoothbores
+  has_active_production_method = pm_bronze_smoothbores
+  has_active_production_method = pm_breech_loaders
+  has_active_production_method = pm_recoiled_barrels } } } } }
+
+# State scope: one verified producer type for artillery; output checked by active method.
+sed_artillery_artillery_foundry_eligible = {
+ has_building = building_artillery_foundry
+ b:building_artillery_foundry = {
+  level > 0
+  occupancy >= 0.8
+  has_failed_hires = no
+  building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  OR = {
+  has_active_production_method = pm_cannons
+  has_active_production_method = pm_bronze_cannons
+  has_active_production_method = pm_smoothbores
+  has_active_production_method = pm_bronze_smoothbores
+  has_active_production_method = pm_breech_loaders
+  has_active_production_method = pm_recoiled_barrels
+  }
+ }
+ can_construct_building = building_artillery_foundry
+}
+
+sed_artillery_approval_valid = {
+ sed_artillery_candidate_eligible = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+  sed_execution_mode_permits_approval = yes
+ }
+}
+# State scope: expand an operating local producer only while its market good is scarce.
+sed_ammunition_candidate_eligible = {
+ is_incorporated = yes
+ infrastructure_delta >= 0
+ NOT = { has_variable = sed_ammunition_ignored }
+ NOT = { has_variable = sed_ammunition_request_pending }
+owner = { military_expenses > 0 market = { mg:ammunition ?= { market_goods_buy_orders > 0 } } }
+ owner = { market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } } }
+ OR = { sed_ammunition_munition_plant_eligible = yes }
+}
+
+sed_ammunition_queued_supply = { OR = { AND = { has_building = building_munition_plant b:building_munition_plant = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_percussion_caps
+  has_active_production_method = pm_explosive_shells } } } } }
+
+# State scope: one verified producer type for ammunition; output checked by active method.
+sed_ammunition_munition_plant_eligible = {
+ has_building = building_munition_plant
+ b:building_munition_plant = {
+  level > 0
+  occupancy >= 0.8
+  has_failed_hires = no
+  building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  OR = {
+  has_active_production_method = pm_percussion_caps
+  has_active_production_method = pm_explosive_shells
+  }
+ }
+ can_construct_building = building_munition_plant
+}
+
+sed_ammunition_approval_valid = {
+ sed_ammunition_candidate_eligible = yes
  owner = {
   is_player = yes
   has_variable = sed_enabled

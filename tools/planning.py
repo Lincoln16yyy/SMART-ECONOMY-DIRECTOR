@@ -8,6 +8,7 @@ MILITARY_GOODS = (
     ('manowars', 'navios de guerra à vela', 'sailing warships'),
     ('ironclads', 'navios de guerra blindados', 'ironclads'),
 )
+MILITARY_INDUSTRY_GOODS = ('small_arms', 'artillery', 'ammunition')
 COUNTRY_VARIABLES = ['sed_plan_count', 'sed_plan_goal', 'sed_fiscal_status',
                      'sed_plan_year', 'sed_plan_month', 'sed_plan_missing_count',
                      'sed_plan_waiting', 'sed_military_posture', 'sed_military_at_war',
@@ -240,8 +241,11 @@ def effects(actions, buildings):
         result.append(f'  clear_variable_list = {name}')
     for name in supply:
         producers = ' '.join(f'has_building = {building}' for building in buildings[name])
+        military_demand = (f'military_expenses > 0 market = {{ mg:{name} ?= {{ market_goods_buy_orders > 0 }} }}'
+                           if name in MILITARY_INDUSTRY_GOODS else '')
         result.append(f'''  set_variable = {{ name = sed_plan_missing_{name} value = 0 }}
   if = {{ limit = {{
+   {military_demand}
    market = {{ mg:{name} ?= {{ market_goods_has_goods_shortage = yes }} }}
    NOT = {{ any_scope_state = {{ OR = {{ {producers} }} }} }}
   }}
@@ -264,7 +268,7 @@ def effects(actions, buildings):
    remove_variable = sed_{name}_short_months
    remove_variable = sed_{name}_meta_year
   }}
-  if = {{ limit = {{ market = {{ mg:{name} ?= {{ market_goods_has_goods_shortage = yes }} }} }}
+  if = {{ limit = {{ {military_demand} market = {{ mg:{name} ?= {{ market_goods_has_goods_shortage = yes }} }} }}
    if = {{ limit = {{ NOT = {{ has_variable = sed_{name}_short_sample_month var:sed_{name}_short_sample_month = sed_live_month_key }} }}
     set_variable = {{ name = sed_short_sample_gap value = 0 }}
     if = {{ limit = {{ has_variable = sed_{name}_short_sample_month }}
@@ -300,6 +304,8 @@ def effects(actions, buildings):
             bonus = 20 if name in ('grain', 'groceries', 'clothes') else 10
             score = f'''value = owner.var:sed_plan_pressure_{name} add = {80 + bonus}
     if = {{ limit = {{ owner = {{ has_variable = sed_{name}_meta_year var:sed_{name}_meta_year = year }} }} add = 25 }}'''
+            if name in MILITARY_INDUSTRY_GOODS:
+                score += '\n    if = { limit = { owner = { is_at_war = yes } } add = 20 }'
         result.append(f'''   if = {{ limit = {{ {eligibility} }}
     set_variable = {{ name = sed_plan_{name}_score value = {{ {score} }} }}
    }}''')
@@ -343,7 +349,9 @@ def effects(actions, buildings):
    set_variable = { name = sed_plan_waiting value = 1 }
   }''')
     for name in supply:
-        result.append(f'''  if = {{ limit = {{ var:sed_plan_goal = 0
+        military_demand = (f'military_expenses > 0 market = {{ mg:{name} ?= {{ market_goods_buy_orders > 0 }} }}'
+                           if name in MILITARY_INDUSTRY_GOODS else '')
+        result.append(f'''  if = {{ limit = {{ var:sed_plan_goal = 0 {military_demand}
    market = {{ mg:{name} ?= {{ market_goods_has_goods_shortage = yes }} }}
    any_scope_state = {{ is_incorporated = yes NOT = {{ has_variable = sed_{name}_ignored }} sed_{name}_queued_supply = yes }}
   }}

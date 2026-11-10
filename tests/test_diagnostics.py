@@ -23,6 +23,7 @@ class DiagnosisTests(unittest.TestCase):
         self.definitions = script_definitions()
 
     def country(self, **readings):
+        readings.setdefault('military_expenses', 10)
         country = Country(self.definitions, **readings)
         country.run('sed_enable_country')
         return country
@@ -132,7 +133,7 @@ class DiagnosisTests(unittest.TestCase):
                 key = 'sed_' + item['good'] + '_candidates'
                 c.run(effect)
                 self.assertNotIn(key, c.variable_lists)
-                c.market_goods[item['good']] = {'market_goods_has_goods_shortage': True}
+                c.market_goods[item['good']] = {'market_goods_has_goods_shortage': True, 'market_goods_buy_orders': 100}
                 c.run(effect)
                 self.assertEqual(c.variable_lists[key], [target])
                 for field, invalid in [('production_methods', []), ('occupancy', 0.79),
@@ -193,7 +194,7 @@ class DiagnosisTests(unittest.TestCase):
                     item = next(item for item in SUPPLY_TARGETS if item['good'] == action)
                     producer = building(item['building'])
                     producer['production_methods'] = [item['methods'][0]]
-                    c.market_goods[action] = {'market_goods_has_goods_shortage': True}
+                    c.market_goods[action] = {'market_goods_has_goods_shortage': True, 'market_goods_buy_orders': 100}
                 c.states = [state(-2 if action == 'railway' else 0, buildings=[producer]),
                             state(-3 if action == 'railway' else 0, buildings=[producer.copy()])]
                 c.run('sed_auto_apply_monthly')
@@ -229,7 +230,7 @@ class DiagnosisTests(unittest.TestCase):
             good = item['good']
             with self.subTest(good=good):
                 c = self.country()
-                c.market_goods[good] = {'market_goods_has_goods_shortage': True}
+                c.market_goods[good] = {'market_goods_has_goods_shortage': True, 'market_goods_buy_orders': 100}
 
                 def producer_state():
                     producer = building(item['building'])
@@ -272,7 +273,7 @@ class DiagnosisTests(unittest.TestCase):
             good = item['good']
             shown = child(self.definitions['sed_' + good + '_no_candidates_visible_sgui'], 'is_shown')
             self.assertFalse(c.condition(shown, c.country_scope()))
-            c.market_goods[good] = {'market_goods_has_goods_shortage': True}
+            c.market_goods[good] = {'market_goods_has_goods_shortage': True, 'market_goods_buy_orders': 100}
             self.assertTrue(c.condition(shown, c.country_scope()))
             c.variable_lists['sed_' + good + '_candidates'] = [state()]
             self.assertFalse(c.condition(shown, c.country_scope()))
@@ -295,7 +296,7 @@ class DiagnosisTests(unittest.TestCase):
                         item = next(item for item in SUPPLY_TARGETS if item['good'] == name)
                         producer = building(item['building'])
                         producer['production_methods'] = [item['methods'][0]]
-                        c.market_goods[name] = {'market_goods_has_goods_shortage': True}
+                        c.market_goods[name] = {'market_goods_has_goods_shortage': True, 'market_goods_buy_orders': 100}
                     target = state(-2 if name == 'railway' else 0, buildings=[producer])
                     c.states = [target]
                     c.run('sed_refresh_diagnostics')
@@ -324,7 +325,7 @@ class DiagnosisTests(unittest.TestCase):
         c = self.country(num_queued_government_constructions=3)
         wood = building('building_logging_camp')
         wood['production_methods'] = ['pm_simple_forestry']
-        c.market_goods['wood'] = {'market_goods_has_goods_shortage': True}
+        c.market_goods['wood'] = {'market_goods_has_goods_shortage': True, 'market_goods_buy_orders': 100}
         target = state(0, buildings=[wood, construction_sector()])
         other = state(-3, buildings=[railway(queued_levels=1)])
         other['variables']['sed_railway_request_pending'] = True
@@ -425,7 +426,7 @@ class DiagnosisTests(unittest.TestCase):
             item = next(item for item in SUPPLY_TARGETS if item['good'] == name)
             producer = building(item['building'])
             producer['production_methods'] = [item['methods'][0]]
-            c.market_goods[name] = {'market_goods_has_goods_shortage': True}
+            c.market_goods[name] = {'market_goods_has_goods_shortage': True, 'market_goods_buy_orders': 100}
         target = state(-2 if name == 'railway' else 0, buildings=[producer])
         c.states = [target]
         return c, target, producer

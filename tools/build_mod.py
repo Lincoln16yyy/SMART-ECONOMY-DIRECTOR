@@ -11,7 +11,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.6.13'
+VERSION = '0.6.14'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -41,6 +41,9 @@ SUPPLY_TARGETS = [
     {'good': 'tools', 'building': 'building_tooling_workshop', 'methods': ['pm_crude_tools', 'pm_pig_iron', 'pm_rubber_grips', 'pm_steel'], 'label_pt': 'ferramentas', 'label_en': 'tools', 'building_pt': 'oficina de ferramentas', 'building_en': 'tooling workshop'},
     {'good': 'groceries', 'building': 'building_food_industry', 'methods': ['pm_bakery', 'pm_baking_powder', 'pm_cannery', 'pm_cannery_fish', 'pm_sweeteners', 'pm_vacuum_canning', 'pm_vacuum_canning_principle_3'], 'label_pt': 'mantimentos', 'label_en': 'groceries', 'building_pt': 'indústria alimentícia', 'building_en': 'food industry'},
     {'good': 'clothes', 'building': 'building_textile_mill', 'methods': ['pm_dye_workshops', 'pm_electric_sewing_machines', 'pm_handsewn_clothes', 'pm_sewing_machines'], 'label_pt': 'roupas', 'label_en': 'clothes', 'building_pt': 'fábrica têxtil', 'building_en': 'textile mill'},
+    {'good': 'small_arms', 'building': 'building_arms_industry', 'methods': ['pm_muskets', 'pm_rifles', 'pm_repeaters', 'pm_bolt_action_rifles'], 'label_pt': 'armas leves', 'label_en': 'small arms', 'building_pt': 'indústria de armas', 'building_en': 'arms industry'},
+    {'good': 'artillery', 'building': 'building_artillery_foundry', 'methods': ['pm_cannons', 'pm_bronze_cannons', 'pm_smoothbores', 'pm_bronze_smoothbores', 'pm_breech_loaders', 'pm_recoiled_barrels'], 'label_pt': 'artilharia', 'label_en': 'artillery', 'building_pt': 'fundição de artilharia', 'building_en': 'artillery foundry'},
+    {'good': 'ammunition', 'building': 'building_munition_plant', 'methods': ['pm_percussion_caps', 'pm_explosive_shells'], 'label_pt': 'munição', 'label_en': 'ammunition', 'building_pt': 'fábrica de munição', 'building_en': 'munition plant'},
 ]
 PERSISTENT_VARIABLES = ['sed_schema_version', 'sed_auto_last_attempt_month',
                         'sed_tax_last_change_month', 'sed_wage_last_change_month']
@@ -1391,12 +1394,15 @@ def supply_triggers():
         good = item['good']
         vs = variants(item)
         alternatives = ' '.join(f'sed_{good}_{variant_id(variant)}_eligible = yes' for variant in vs)
+        military_gate = ('owner = { military_expenses > 0 market = { mg:' + good + ' ?= { market_goods_buy_orders > 0 } } }'
+                         if good in planning.MILITARY_INDUSTRY_GOODS else '')
         result.append(f'''# State scope: expand an operating local producer only while its market good is scarce.
 sed_{good}_candidate_eligible = {{
  is_incorporated = yes
  infrastructure_delta >= 0
  NOT = {{ has_variable = sed_{good}_ignored }}
  NOT = {{ has_variable = sed_{good}_request_pending }}
+{military_gate}
  owner = {{ market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }} }}
  OR = {{ {alternatives} }}
 }}
@@ -1796,7 +1802,7 @@ def localization(language):
         'sed_military_posture_2': ('Diretriz militar: investigar abastecimento antes de ampliar compromissos. Há bens militares com demanda e escassez no mercado.', 'Military guidance: investigate supply before increasing commitments. Military goods have market demand and shortages.'),
         'sed_military_posture_3': ('Diretriz militar: estabilizar o orçamento e preservar o abastecimento da força atual. A avaliação fiscal está em crise ou o saldo operacional é negativo.', 'Military guidance: stabilize the budget and preserve current force supply. Fiscal assessment is in crisis or operating balance is negative.'),
         'sed_military_posture_4': ('Diretriz militar: orçamento permite estudar modernização. Há superávit, ausência de dívida e doze semanas de despesas fixas em reservas. Custo de uma modernização específica ainda precisa ser avaliado.', 'Military guidance: budget permits studying modernization. Positive balance, no debt and twelve weeks of fixed expenses in reserves. A specific modernization cost still requires assessment.'),
-        'sed_military_scope': ('Avaliação econômica de apoio. Escassez é do mercado compartilhado; demanda das tropas nacionais ainda requer diagnóstico próprio. A execução de modernização e de investimentos militares dirigidos permanece pendente.', 'Supporting economic assessment. Shortages refer to the shared market; national troop demand still requires dedicated diagnosis. Modernization and targeted military investment execution remain pending.'),
+        'sed_military_scope': ('Avaliação econômica de apoio. Escassez é do mercado compartilhado; demanda das tropas nacionais ainda requer diagnóstico próprio. Armas, artilharia e munição podem gerar expansão de produtor existente com filtros de operação, insumos e orçamento. O executor externo mantém a própria seleção. Modernização das forças permanece pendente.', 'Supporting economic assessment. Shortages refer to the shared market; national troop demand still requires dedicated diagnosis. Arms, artillery and ammunition can yield existing-producer expansion with operation, input and budget filters. The external executor retains its own selection. Force modernization remains pending.'),
     })
     for good, pt, en in planning.MILITARY_GOODS:
         pairs[f'sed_military_short_{good}'] = (f'Abastecimento militar a investigar: {pt}, com demanda positiva e escassez no mercado.', f'Military supply to investigate: {en}, with positive demand and a market shortage.')

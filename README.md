@@ -1,10 +1,10 @@
 # Smart Economy Director — Victoria 3 1.15
 
-Na 0.6.13, o plano inclui avaliação econômico-militar, custos e escassez de
-cinco bens militares. A execução de modernização dirigida permanece pendente.
-A suíte atual tem 172 testes aprovados; os novos dados aguardam campanha.
+Na 0.6.14, armas leves, artilharia e munição entram nas expansões elegíveis,
+com filtros de demanda, operação e insumos. Modernização das forças segue pendente.
+A suíte atual tem 180 testes aprovados; execução e novos cartões aguardam campanha.
 
-A versão 0.6.13 acrescenta planejamento nacional inicial e coordenação de
+A versão 0.6.14 acrescenta planejamento nacional inicial e coordenação de
 construção com Economy Advisor e Supply Chain Semi-Auto Builder. O diário
 mostra objetivo atual, situação fiscal, executor escolhido e até três
 prioridades entre estados e setores.
@@ -75,7 +75,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.6.13.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.6.14.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 

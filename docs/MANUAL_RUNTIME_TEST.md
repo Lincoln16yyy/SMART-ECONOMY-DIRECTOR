@@ -1,6 +1,6 @@
 # Plano de teste da campanha — interface 0.5.3
 
-## Teste conjunto da 0.6.13
+## Teste conjunto da 0.6.14
 
 Realizar quando o jogador decidir retomar os testes. Registrar uma captura
 inicial do orçamento, opções dos construtores e fila, e guardar um save.
@@ -32,6 +32,12 @@ inicial do orçamento, opções dos construtores e fila, e guardar um save.
    Em país com dívida ou reservas insuficientes, a diretriz não deve dizer que
    há condições para estudar modernização. Escassez militar deve manter o
    aviso de abastecimento mesmo se a diretriz geral for estabilizar finanças.
+
+9. Se houver escassez de armas, artilharia ou munição e produtor existente,
+   conferir o cartão, estado, ocupação e insumos. Em Assistido, aprovar uma
+   expansão e conferir um nível na fila. Sem candidata, registrar o motivo.
+   No Automático coordenado, observar o executor externo e sua seleção. A
+   ausência de obra militar específica nessa rota ainda é uma limitação.
 
 Guardar capturas de um caso saudável, um caso de crise e a restauração. Obras
 existentes e investimentos privados não comprovam autoria do Director.

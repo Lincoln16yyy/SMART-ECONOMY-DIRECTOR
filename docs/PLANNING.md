@@ -1,5 +1,36 @@
 # Planejamento e coordenação — 0.6.8
 
+## 0.6.14 — Expansões da indústria bélica
+
+O catálogo passa de oito para onze bens com armas leves, artilharia e munição.
+Doze métodos ativos e seus outputs foram conferidos no `01_industry.txt`
+vanilla local. Os novos alvos reutilizam elegibilidade, aprovação, limite
+mensal, fila, histórico de resultado, ignorar/restaurar e metas anuais.
+
+Candidatas militares exigem despesa militar positiva, demanda de mercado
+positiva e escassez atual. O produtor deve existir, produzir o bem pelo método
+ativo, estar em estado incorporado, com ocupação mínima de 80%, sem falha de
+contratação, falta de insumos, déficit de infraestrutura ou expansão na fila.
+Isso ainda usa despesa nacional como sinal parcial de necessidade. Demanda
+do mercado compartilhado não identifica precisamente consumo das tropas.
+
+A pontuação recebe bônus de 20 durante guerra. A regra é inicial e não foi
+calibrada em campanha. Prioridades civis continuam concorrendo pela pontuação;
+crise fiscal continua prevalecendo no objetivo macro e na proteção automática.
+
+Assistido permite aprovar um nível de produtor militar elegível. Automático
+próprio aplica os limites fiscais e de fila já existentes. Com coordenação
+externa ativa, o Director preserva a delegação geral e não executa em paralelo.
+O Advisor/Supply Chain ainda seleciona os próprios projetos, sem garantia de
+executar o alvo militar específico. Navios continuam no diagnóstico; nova
+fábrica, PMs das tropas e recrutamento seguem pendentes.
+
+180 testes sintéticos aprovados. As oito novas regressões militares cobrem
+aprovação, demanda, trabalhadores, insumos, ranking, proteção fiscal,
+coordenação e livro de resultados. Geração, ZIP e validação estática local
+aprovados. Inclusão real de obra e layout ainda exigem teste de campanha.
+
+
 ## 0.6.13 — Avaliação econômico-militar
 
 O briefing inclui financiamento do exército, indústria bélica e marinha.
