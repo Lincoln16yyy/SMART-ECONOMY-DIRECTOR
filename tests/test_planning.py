@@ -292,6 +292,39 @@ class PlanningTests(unittest.TestCase):
         self.assertEqual(c.readings['tax_level'], 'medium')
         self.assertNotIn('sed_tax_level_saved', c.variables)
 
+    def test_fiscal_commands_record_date_and_levels_without_rewriting_on_noop(self):
+        c = self.c
+        c.readings.update(gold_reserves=0, net_total_income=-100, month=4,
+                          tax_level='medium', government_wage_level='medium')
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        for policy, expected_to in (('tax', 4), ('wage', 2)):
+            self.assertEqual(c.variables[f'sed_{policy}_last_from'], 3)
+            self.assertEqual(c.variables[f'sed_{policy}_last_to'], expected_to)
+            self.assertEqual(c.variables[f'sed_{policy}_last_year'], 1836)
+            self.assertEqual(c.variables[f'sed_{policy}_last_month'], 5)
+        receipt = {k: v for k, v in c.variables.items()
+                   if k.startswith(('sed_tax_last_', 'sed_wage_last_'))}
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual({k: v for k, v in c.variables.items() if k in receipt}, receipt)
+        c.run('sed_set_mode_assisted')
+        self.assertEqual(c.variables['sed_tax_last_to'], 4)
+        self.assertEqual(c.variables['sed_wage_last_to'], 2)
+        c.run('sed_disable_country')
+        self.assertNotIn('sed_tax_last_from', c.variables)
+        self.assertNotIn('sed_wage_last_from', c.variables)
+        self.assertIn('sed_tax_last_change_month', c.variables)
+        self.assertIn('sed_wage_last_change_month', c.variables)
+
+    def test_fiscal_commands_at_limits_do_not_fabricate_history(self):
+        c = self.c
+        c.readings.update(gold_reserves=0, net_total_income=-100,
+                          tax_level='very_high', government_wage_level='low')
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertNotIn('sed_tax_last_from', c.variables)
+        self.assertNotIn('sed_wage_last_from', c.variables)
+
     def test_fiscal_policy_caps_at_very_high_and_disable_restores(self):
         c = self.c
         c.readings['gold_reserves'] = 100

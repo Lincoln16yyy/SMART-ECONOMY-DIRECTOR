@@ -28,8 +28,13 @@ def lists(actions):
 TAX_LEVELS = ('very_low', 'low', 'medium', 'high', 'very_high')
 
 
-def policy_step(effect, level, month_marker):
+def policy_step(effect, level, month_marker, previous_index):
+    prefix = month_marker.removesuffix('_change_month')
     return (f'set_variable = {{ name = {month_marker} value = sed_live_month_key }} '
+            f'set_variable = {{ name = {prefix}_from value = {previous_index} }} '
+            f'set_variable = {{ name = {prefix}_to value = {TAX_LEVELS.index(level) + 1} }} '
+            f'set_variable = {{ name = {prefix}_year value = year }} '
+            f'set_variable = {{ name = {prefix}_month value = {{ value = month add = 1 }} }} '
             f'{effect} = {level}')
 
 
@@ -47,10 +52,10 @@ def tax_policy_effects():
     for index, level in enumerate(TAX_LEVELS, 1):
         if index < len(TAX_LEVELS):
             branch = 'if' if index == 1 else 'else_if'
-            raise_steps.append(f'   {branch} = {{ limit = {{ tax_level = {level} }} {policy_step('set_tax_level', TAX_LEVELS[index], 'sed_tax_last_change_month')} }}')
+            raise_steps.append(f'   {branch} = {{ limit = {{ tax_level = {level} }} {policy_step('set_tax_level', TAX_LEVELS[index], 'sed_tax_last_change_month', index)} }}')
         if index > 2:
             branch = 'if' if index == 3 else 'else_if'
-            lower_steps.append(f'   {branch} = {{ limit = {{ tax_level = {level} }} {policy_step('set_tax_level', TAX_LEVELS[index - 2], 'sed_tax_last_change_month')} }}')
+            lower_steps.append(f'   {branch} = {{ limit = {{ tax_level = {level} }} {policy_step('set_tax_level', TAX_LEVELS[index - 2], 'sed_tax_last_change_month', index)} }}')
         branch = 'if' if index == 1 else 'else_if'
         restore_steps.append(f'  {branch} = {{ limit = {{ var:sed_tax_level_saved = {index} }} set_tax_level = {level} }}')
     return '''# Country scope. TAX_LEVELS is ordered: very_low, low, medium, high, very_high.
@@ -111,10 +116,10 @@ def wage_policy_effects():
         if index > 2:
             previous = TAX_LEVELS[index - 2]
             branch = 'if' if index == 3 else 'else_if'
-            cut_steps.append(f'   {branch} = {{ limit = {{ government_wage_level = {level} }} {policy_step('set_government_wage_level', previous, 'sed_wage_last_change_month')} }}')
+            cut_steps.append(f'   {branch} = {{ limit = {{ government_wage_level = {level} }} {policy_step('set_government_wage_level', previous, 'sed_wage_last_change_month', index)} }}')
         if index < 3:
             branch = 'if' if index == 1 else 'else_if'
-            raise_steps.append(f'   {branch} = {{ limit = {{ government_wage_level = {level} }} {policy_step('set_government_wage_level', TAX_LEVELS[index], 'sed_wage_last_change_month')} }}')
+            raise_steps.append(f'   {branch} = {{ limit = {{ government_wage_level = {level} }} {policy_step('set_government_wage_level', TAX_LEVELS[index], 'sed_wage_last_change_month', index)} }}')
         branch = 'if' if index == 1 else 'else_if'
         restore_steps.append(f'  {branch} = {{ limit = {{ var:sed_gov_wage_saved = {index} }} set_government_wage_level = {level} }}')
     return '''# Country scope; civilian government wages only, one step per monthly review.

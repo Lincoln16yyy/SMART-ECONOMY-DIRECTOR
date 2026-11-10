@@ -118,6 +118,14 @@ sed_disable_country = {
  remove_variable = sed_details_visible
  remove_variable = sed_tax_level_saved
  remove_variable = sed_gov_wage_saved
+ remove_variable = sed_tax_last_from
+ remove_variable = sed_tax_last_to
+ remove_variable = sed_tax_last_year
+ remove_variable = sed_tax_last_month
+ remove_variable = sed_wage_last_from
+ remove_variable = sed_wage_last_to
+ remove_variable = sed_wage_last_year
+ remove_variable = sed_wage_last_month
  remove_variable = sed_auto_review_status
  remove_variable = sed_auto_review_year
  remove_variable = sed_auto_review_month
@@ -312,6 +320,7 @@ sed_disable_country = {
  remove_variable = sed_coord_executor
  remove_variable = sed_coord_advisor_policy
  remove_variable = sed_coord_policy_saved
+ remove_variable = sed_coord_supply_policy_saved
  remove_variable = sed_coord_saved_advisor
  remove_variable = sed_coord_saved_chains
  remove_variable = sed_coord_saved_sectors
@@ -323,6 +332,9 @@ sed_disable_country = {
  remove_variable = sed_coord_saved_goal_treasury
  remove_variable = sed_coord_saved_treasury_off
  remove_variable = sed_coord_saved_borrow
+ remove_variable = sed_coord_saved_supply_incorporated
+ remove_variable = sed_coord_saved_supply_tax_incorporated
+ remove_variable = sed_coord_saved_supply_institutions
  clear_variable_list = sed_railway_candidates
  clear_variable_list = sed_construction_candidates
  clear_variable_list = sed_wood_candidates
@@ -3392,10 +3404,10 @@ sed_apply_fiscal_policy = {
   if = {
    limit = { OR = { var:sed_fiscal_status = 2 var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } }
    sed_tax_policy_save = yes
-   if = { limit = { tax_level = very_low } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_tax_level = low }
-   else_if = { limit = { tax_level = low } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_tax_level = medium }
-   else_if = { limit = { tax_level = medium } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_tax_level = high }
-   else_if = { limit = { tax_level = high } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_tax_level = very_high }
+   if = { limit = { tax_level = very_low } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 1 } set_variable = { name = sed_tax_last_to value = 2 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = low }
+   else_if = { limit = { tax_level = low } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 2 } set_variable = { name = sed_tax_last_to value = 3 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = medium }
+   else_if = { limit = { tax_level = medium } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 3 } set_variable = { name = sed_tax_last_to value = 4 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = high }
+   else_if = { limit = { tax_level = high } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 4 } set_variable = { name = sed_tax_last_to value = 5 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = very_high }
   }
   else_if = {
    limit = { OR = { var:sed_fiscal_status = 1 var:sed_fiscal_status = 5 }
@@ -3404,9 +3416,9 @@ sed_apply_fiscal_policy = {
     net_total_income > 0
    }
    sed_tax_policy_save = yes
-   if = { limit = { tax_level = medium } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_tax_level = low }
-   else_if = { limit = { tax_level = high } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_tax_level = medium }
-   else_if = { limit = { tax_level = very_high } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_tax_level = high }
+   if = { limit = { tax_level = medium } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 3 } set_variable = { name = sed_tax_last_to value = 2 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = low }
+   else_if = { limit = { tax_level = high } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 4 } set_variable = { name = sed_tax_last_to value = 3 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = medium }
+   else_if = { limit = { tax_level = very_high } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 5 } set_variable = { name = sed_tax_last_to value = 4 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = high }
   }
  }
 }
@@ -3455,9 +3467,9 @@ sed_apply_wage_policy = {
   if = {
    limit = { OR = { var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } }
    sed_wage_policy_save = yes
-   if = { limit = { government_wage_level = medium } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_government_wage_level = low }
-   else_if = { limit = { government_wage_level = high } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_government_wage_level = medium }
-   else_if = { limit = { government_wage_level = very_high } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_government_wage_level = high }
+   if = { limit = { government_wage_level = medium } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_wage_last_from value = 3 } set_variable = { name = sed_wage_last_to value = 2 } set_variable = { name = sed_wage_last_year value = year } set_variable = { name = sed_wage_last_month value = { value = month add = 1 } } set_government_wage_level = low }
+   else_if = { limit = { government_wage_level = high } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_wage_last_from value = 4 } set_variable = { name = sed_wage_last_to value = 3 } set_variable = { name = sed_wage_last_year value = year } set_variable = { name = sed_wage_last_month value = { value = month add = 1 } } set_government_wage_level = medium }
+   else_if = { limit = { government_wage_level = very_high } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_wage_last_from value = 5 } set_variable = { name = sed_wage_last_to value = 4 } set_variable = { name = sed_wage_last_year value = year } set_variable = { name = sed_wage_last_month value = { value = month add = 1 } } set_government_wage_level = high }
   }
   else_if = {
    limit = { OR = { var:sed_fiscal_status = 1 var:sed_fiscal_status = 5 }
@@ -3466,8 +3478,8 @@ sed_apply_wage_policy = {
     net_total_income > 0
    }
    sed_wage_policy_save = yes
-   if = { limit = { government_wage_level = very_low } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_government_wage_level = low }
-   else_if = { limit = { government_wage_level = low } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_government_wage_level = medium }
+   if = { limit = { government_wage_level = very_low } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_wage_last_from value = 1 } set_variable = { name = sed_wage_last_to value = 2 } set_variable = { name = sed_wage_last_year value = year } set_variable = { name = sed_wage_last_month value = { value = month add = 1 } } set_government_wage_level = low }
+   else_if = { limit = { government_wage_level = low } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_wage_last_from value = 2 } set_variable = { name = sed_wage_last_to value = 3 } set_variable = { name = sed_wage_last_year value = year } set_variable = { name = sed_wage_last_month value = { value = month add = 1 } } set_government_wage_level = medium }
   }
  }
 }
@@ -3483,6 +3495,22 @@ sed_restore_wage_policy = {
   remove_variable = sed_gov_wage_saved
  }
 }
+sed_coord_capture_supply_policy = {
+ if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_coord_active
+  has_variable = sed_coord_supply_known NOT = { has_variable = sed_coord_supply_policy_saved } }
+  if = { limit = { has_variable = zw_var_develop_incorporated_states }
+   set_variable = { name = sed_coord_saved_supply_incorporated value = var:zw_var_develop_incorporated_states }
+  }
+  if = { limit = { has_variable = zw_var_ip_incorporated }
+   set_variable = { name = sed_coord_saved_supply_tax_incorporated value = var:zw_var_ip_incorporated }
+  }
+  if = { limit = { has_variable = zw_var_scsab_gov_admin_for_institution }
+   set_variable = { name = sed_coord_saved_supply_institutions value = var:zw_var_scsab_gov_admin_for_institution }
+  }
+  set_variable = { name = sed_coord_supply_policy_saved value = yes }
+ }
+}
+
 sed_coord_capture_advisor_policy = {
  if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_coord_active
   has_variable = sed_coord_advisor_known NOT = { has_variable = sed_coord_policy_saved } }
@@ -3588,12 +3616,27 @@ sed_coord_restore = {
    }
    else = { remove_variable = advisor_setting_borrow }
   }
+  if = { limit = { has_variable = sed_coord_supply_policy_saved }
+   if = { limit = { has_variable = sed_coord_saved_supply_incorporated }
+    set_variable = { name = zw_var_develop_incorporated_states value = var:sed_coord_saved_supply_incorporated }
+   }
+   else = { remove_variable = zw_var_develop_incorporated_states }
+   if = { limit = { has_variable = sed_coord_saved_supply_tax_incorporated }
+    set_variable = { name = zw_var_ip_incorporated value = var:sed_coord_saved_supply_tax_incorporated }
+   }
+   else = { remove_variable = zw_var_ip_incorporated }
+   if = { limit = { has_variable = sed_coord_saved_supply_institutions }
+    set_variable = { name = zw_var_scsab_gov_admin_for_institution value = var:sed_coord_saved_supply_institutions }
+   }
+   else = { remove_variable = zw_var_scsab_gov_admin_for_institution }
+  }
   remove_variable = sed_coord_active
   remove_variable = sed_coord_supply_known
   remove_variable = sed_coord_advisor_known
   remove_variable = sed_coord_executor
   remove_variable = sed_coord_advisor_policy
   remove_variable = sed_coord_policy_saved
+  remove_variable = sed_coord_supply_policy_saved
   remove_variable = sed_coord_saved_advisor
   remove_variable = sed_coord_saved_chains
   remove_variable = sed_coord_saved_sectors
@@ -3605,11 +3648,20 @@ sed_coord_restore = {
   remove_variable = sed_coord_saved_goal_treasury
   remove_variable = sed_coord_saved_treasury_off
   remove_variable = sed_coord_saved_borrow
+  remove_variable = sed_coord_saved_supply_incorporated
+  remove_variable = sed_coord_saved_supply_tax_incorporated
+  remove_variable = sed_coord_saved_supply_institutions
  }
 }
 
 sed_coord_sync = {
  if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic NOT = { has_variable = sed_mode_manual } NOT = { has_variable = sed_mode_assisted } has_variable = sed_coord_active }
+  sed_coord_capture_supply_policy = yes
+  if = { limit = { has_variable = sed_coord_supply_policy_saved }
+   set_variable = { name = zw_var_develop_incorporated_states value = yes }
+   set_variable = { name = zw_var_ip_incorporated value = yes }
+   remove_variable = zw_var_scsab_gov_admin_for_institution
+  }
   remove_variable = advisor_auto_construction_enabled
   remove_variable = zw_var_expand_building
   remove_variable = zw_var_more_construction_sectors
@@ -3622,38 +3674,23 @@ sed_coord_sync = {
   if = { limit = { has_variable = aroai_autobuild } set_variable = { name = sed_coord_executor value = 5 } }
   else_if = { limit = { sed_coord_fiscal_safe = yes NOT = { in_default = yes } is_construction_paused = no }
    if = { limit = { var:sed_plan_goal = 1 has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes }
-    if = { limit = { has_variable = sed_coord_saved_railways }
- set_variable = { name = zw_var_scsab_construct_railway value = var:sed_coord_saved_railways }
-}
-else = { set_variable = { name = zw_var_scsab_construct_railway value = 1 } }
+    set_variable = { name = zw_var_scsab_construct_railway value = 1 }
     set_variable = { name = sed_coord_executor value = 2 }
    }
    else_if = { limit = { has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 6 }
-    if = { limit = { has_variable = sed_coord_saved_admin }
- set_variable = { name = zw_var_scsab_gov_admin value = var:sed_coord_saved_admin }
-}
-else = { set_variable = { name = zw_var_scsab_gov_admin value = 10 } }
+    set_variable = { name = zw_var_scsab_gov_admin value = 1 }
     set_variable = { name = sed_coord_executor value = 6 }
    }
    else_if = { limit = { has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 7 }
-    if = { limit = { has_variable = sed_coord_saved_tax }
- set_variable = { name = zw_var_scsab_gov_admin_for_tax value = var:sed_coord_saved_tax }
-}
-else = { set_variable = { name = zw_var_scsab_gov_admin_for_tax value = 1 } }
+    set_variable = { name = zw_var_scsab_gov_admin_for_tax value = 1 }
     set_variable = { name = sed_coord_executor value = 7 }
    }
    else_if = { limit = { has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 9 }
-    if = { limit = { has_variable = sed_coord_saved_power }
- set_variable = { name = zw_var_scsab_construct_power_plant value = var:sed_coord_saved_power }
-}
-else = { set_variable = { name = zw_var_scsab_construct_power_plant value = 1 } }
+    set_variable = { name = zw_var_scsab_construct_power_plant value = 1 }
     set_variable = { name = sed_coord_executor value = 8 }
    }
    else_if = { limit = { has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 3 }
-    if = { limit = { has_variable = sed_coord_saved_sectors }
- set_variable = { name = zw_var_more_construction_sectors value = var:sed_coord_saved_sectors }
-}
-else = { set_variable = { name = zw_var_more_construction_sectors value = 5 } }
+    set_variable = { name = zw_var_more_construction_sectors value = 1 }
     set_variable = { name = sed_coord_executor value = 4 }
    }
    else_if = { limit = { OR = { var:sed_plan_goal = 6 var:sed_plan_goal = 7 var:sed_plan_goal = 9 } }

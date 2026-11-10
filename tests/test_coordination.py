@@ -4,7 +4,7 @@ from pathlib import Path
 import unittest
 
 from tools.build_mod import outputs
-from tools.coordination import OPTIONS, ADVISOR_POLICY_OPTIONS
+from tools.coordination import OPTIONS, ADVISOR_POLICY_OPTIONS, SUPPLY_POLICY_OPTIONS
 from tools.validate import validate
 from test_diagnostics import script_definitions
 from script_harness import Country, railway, state
@@ -26,7 +26,7 @@ class CoordinationTests(unittest.TestCase):
         c = self.c
         c.run('sed_set_mode_automatic')
         self.assertIn('sed_coord_active', c.variables)
-        self.assertEqual(self.external(), {'zw_var_scsab_construct_railway': 11})
+        self.assertEqual(self.external(), {'zw_var_scsab_construct_railway': 1})
         self.assertEqual(c.variables['sed_coord_executor'], 2)
         self.assertEqual(c.constructions, [])
         self.assertEqual(len(c.scheduled_events), 1)
@@ -82,7 +82,7 @@ class CoordinationTests(unittest.TestCase):
         self.assertEqual(c.constructions, [])
         c.readings['net_total_income'] = 100
         c.run('sed_monthly_update')
-        self.assertEqual(self.external(), {'zw_var_scsab_construct_railway': 11})
+        self.assertEqual(self.external(), {'zw_var_scsab_construct_railway': 1})
         c.readings['is_construction_paused'] = True
         c.run('sed_monthly_update')
         self.assertEqual(self.external(), {})
@@ -93,7 +93,6 @@ class CoordinationTests(unittest.TestCase):
         c.market_goods['grain'] = {'market_goods_has_goods_shortage': True,
                                     'market_goods_buy_orders': 100, 'market_goods_sell_orders': 0}
         unrelated = {'advisor_pm_balance_enabled': 1, 'advisor_labor_auto_enabled': 1,
-                     'zw_var_scsab_gov_admin_for_institution': 25,
                      'zw_var_expand_building_food': 0, 'gora_auto_export_enabled': 1}
         c.variables.update(unrelated)
         c.run('sed_set_mode_automatic')
@@ -149,17 +148,17 @@ class CoordinationTests(unittest.TestCase):
         c.readings['bureaucracy'] = -10
         c.run('sed_monthly_update')
         self.assertEqual(c.variables['sed_plan_goal'], 6)
-        self.assertEqual(self.external(), {'zw_var_scsab_gov_admin': 100})
+        self.assertEqual(self.external(), {'zw_var_scsab_gov_admin': 1})
         c.readings['bureaucracy'] = 0
         c.states[0].update(tax_capacity_usage=200, tax_capacity=100)
         c.run('sed_monthly_update')
         self.assertEqual(c.variables['sed_plan_goal'], 7)
-        self.assertEqual(self.external(), {'zw_var_scsab_gov_admin_for_tax': 6})
+        self.assertEqual(self.external(), {'zw_var_scsab_gov_admin_for_tax': 1})
         c.states[0].update(tax_capacity_usage=100, tax_capacity=100,
                            state_goods={'electricity': {'state_goods_pricier': 0.3}})
         c.run('sed_monthly_update')
         self.assertEqual(c.variables['sed_plan_goal'], 9)
-        self.assertEqual(self.external(), {'zw_var_scsab_construct_power_plant': 3})
+        self.assertEqual(self.external(), {'zw_var_scsab_construct_power_plant': 1})
         c.states[0]['state_goods']['electricity']['state_goods_pricier'] = 0.19
         c.run('sed_monthly_update')
         self.assertEqual(c.variables['sed_plan_goal'], 8)
@@ -303,7 +302,7 @@ class CoordinationTests(unittest.TestCase):
                 c.variables['sed_plan_goal'] = goal
                 c.run('sed_coord_sync')
                 self.assertEqual(c.variables['sed_coord_executor'], executor)
-                self.assertEqual(self.external(), {option: self.original[option]})
+                self.assertEqual(self.external(), {option: 1})
 
     def test_specific_goal_without_supply_waits_and_restores_original_options(self):
         for goal in (6, 7, 9):
@@ -333,7 +332,7 @@ class CoordinationTests(unittest.TestCase):
         c.run('sed_auto_apply_monthly')
         self.assertEqual(c.variables['sed_coord_executor'], 7)
         self.assertEqual(c.variables['sed_auto_review_status'], 18)
-        self.assertEqual(self.external(), {'zw_var_scsab_gov_admin_for_tax': 6})
+        self.assertEqual(self.external(), {'zw_var_scsab_gov_admin_for_tax': 1})
 
     def test_fiscally_blocked_coordination_does_not_report_delegation(self):
         c = self.c
@@ -342,6 +341,71 @@ class CoordinationTests(unittest.TestCase):
         c.run('sed_auto_apply_monthly')
         self.assertEqual(c.variables['sed_auto_review_status'], 17)
         self.assertEqual(self.external(), {})
+
+    def supply_policy(self):
+        return {option: self.c.variables[option] for _, option in SUPPLY_POLICY_OPTIONS
+                if option in self.c.variables}
+
+    def test_supply_policy_is_bounded_and_restores_all_original_values(self):
+        c = self.c
+        originals = {option: index for index, (_, option) in enumerate(SUPPLY_POLICY_OPTIONS)}
+        c.variables.update(originals)
+        c.run('sed_set_mode_automatic')
+        expected = {'zw_var_develop_incorporated_states': True,
+                    'zw_var_ip_incorporated': True}
+        self.assertEqual(self.supply_policy(), expected)
+        c.run('sed_monthly_update')
+        self.assertEqual(self.supply_policy(), expected)
+        c.run('sed_set_mode_assisted')
+        self.assertEqual(self.supply_policy(), originals)
+        self.assertFalse(any(k.startswith('sed_coord_saved_supply_') for k in c.variables))
+
+    def test_supply_policy_restores_absent_options_on_disable(self):
+        c = self.c
+        c.run('sed_set_mode_automatic')
+        self.assertEqual(len(self.supply_policy()), 2)
+        c.run('sed_disable_country')
+        self.assertEqual(self.supply_policy(), {})
+        self.assertNotIn('sed_coord_supply_policy_saved', c.variables)
+
+    def test_legacy_coordination_captures_new_policy_once_before_mutation(self):
+        c = self.c
+        c.run('sed_set_mode_automatic')
+        c.variables.pop('sed_coord_supply_policy_saved')
+        for name, option in SUPPLY_POLICY_OPTIONS:
+            c.variables.pop('sed_coord_saved_supply_' + name, None)
+            c.variables.pop(option, None)
+        originals = {'zw_var_scsab_gov_admin_for_institution': 35,
+                     'zw_var_ip_incorporated': 0}
+        c.variables.update(originals)
+        c.run('sed_coord_sync')
+        c.run('sed_coord_sync')
+        c.run('sed_set_mode_manual')
+        self.assertEqual(self.supply_policy(), originals)
+
+    def test_legacy_release_without_new_snapshot_preserves_supply_policy(self):
+        c = self.c
+        c.run('sed_set_mode_automatic')
+        c.variables.pop('sed_coord_supply_policy_saved')
+        original = {'zw_var_scsab_gov_admin_for_institution': 35}
+        for _, option in SUPPLY_POLICY_OPTIONS:
+            c.variables.pop(option, None)
+        c.variables.update(original)
+        c.run('sed_set_mode_manual')
+        self.assertEqual(self.supply_policy(), original)
+
+    def test_advisor_only_does_not_modify_supply_policy(self):
+        c = self.c
+        for _, option, _ in OPTIONS:
+            if option != 'advisor_auto_construction_enabled':
+                c.variables.pop(option, None)
+        c.states.clear()
+        c.variables['zw_var_ip_incorporated'] = 0
+        c.run('sed_set_mode_automatic')
+        self.assertNotIn('sed_coord_supply_policy_saved', c.variables)
+        self.assertEqual(self.supply_policy(), {'zw_var_ip_incorporated': 0})
+        c.run('sed_set_mode_assisted')
+        self.assertEqual(self.supply_policy(), {'zw_var_ip_incorporated': 0})
 
     def test_validator_rejects_foreign_write_outside_adapter_and_unlisted_option(self):
         for replacement in (
