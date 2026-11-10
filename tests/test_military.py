@@ -181,14 +181,16 @@ class MilitaryEconomyTests(unittest.TestCase):
         c.run('sed_auto_apply_monthly')
         self.assertEqual(len(c.constructions), 1)
 
-    def test_coordinated_military_priority_does_not_launch_parallel_direct_builder(self):
+    def test_coordinated_military_priority_uses_one_direct_executor(self):
         c = self.c
         self.producer('ammunition')
         c.variables['advisor_enabled'] = True
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')
-        self.assertEqual(c.variables['sed_coord_executor'], 1)
-        self.assertEqual(c.constructions, [])
+        self.assertEqual(c.variables['sed_coord_executor'], 11)
+        self.assertEqual(len(c.constructions), 1)
+        self.assertEqual(c.constructions[0]['building'], 'building_munition_plant')
+        self.assertNotIn('advisor_auto_construction_enabled', c.variables)
 
     def test_military_request_result_and_new_state_are_cleaned_on_disable(self):
         c = self.c

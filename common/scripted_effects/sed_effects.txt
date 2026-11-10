@@ -2843,16 +2843,27 @@ sed_auto_apply_monthly = {
  if = {
   limit = { has_variable = sed_coord_active }
   sed_coord_sync = yes
-  set_variable = { name = sed_auto_action_status value = 18 }
-  if = { limit = { var:sed_coord_executor = 10 } set_variable = { name = sed_auto_action_status value = 20 } }
-  else_if = { limit = { var:sed_coord_executor = 9 } set_variable = { name = sed_auto_action_status value = 19 } }
-  else_if = { limit = { var:sed_coord_executor = 5 } set_variable = { name = sed_auto_action_status value = 13 } }
-  else_if = { limit = { var:sed_coord_executor = 0 }
-   set_variable = { name = sed_auto_action_status value = 2 }
-   if = { limit = { NOT = { sed_coord_fiscal_safe = yes } } set_variable = { name = sed_auto_action_status value = 17 } }
+  if = { limit = { var:sed_coord_executor = 11 } sed_auto_run_direct = yes }
+  else = {
+   set_variable = { name = sed_auto_action_status value = 18 }
+   if = { limit = { var:sed_coord_executor = 10 } set_variable = { name = sed_auto_action_status value = 20 } }
+   else_if = { limit = { var:sed_coord_executor = 9 } set_variable = { name = sed_auto_action_status value = 19 } }
+   else_if = { limit = { var:sed_coord_executor = 5 } set_variable = { name = sed_auto_action_status value = 13 } }
+   else_if = { limit = { var:sed_coord_executor = 0 }
+    set_variable = { name = sed_auto_action_status value = 2 }
+    if = { limit = { NOT = { sed_coord_fiscal_safe = yes } } set_variable = { name = sed_auto_action_status value = 17 } }
+   }
   }
  }
- else_if = {
+ else = { sed_auto_run_direct = yes }
+ # Store the actual result after either direct execution or delegation.
+ set_variable = { name = sed_auto_review_status value = var:sed_auto_action_status }
+ set_variable = { name = sed_auto_review_year value = year }
+ set_variable = { name = sed_auto_review_month value = { value = month add = 1 } }
+}
+
+sed_auto_run_direct = {
+ if = {
   limit = { sed_auto_executor_safe = yes }
 
   if = {
@@ -3007,10 +3018,6 @@ sed_auto_apply_monthly = {
  else_if = { limit = { sed_competing_builder_configured = yes } set_variable = { name = sed_auto_action_status value = 13 } }
  else_if = { limit = { NOT = { sed_auto_fiscal_safe = yes } } set_variable = { name = sed_auto_action_status value = 17 } }
  else = { set_variable = { name = sed_auto_action_status value = 14 } }
- # Preserve the result independently from mode controls and diagnostic refreshes.
- set_variable = { name = sed_auto_review_status value = var:sed_auto_action_status }
- set_variable = { name = sed_auto_review_year value = year }
- set_variable = { name = sed_auto_review_month value = { value = month add = 1 } }
 }
 sed_ignore_railway = {
  if = {
@@ -4706,6 +4713,9 @@ sed_coord_sync = {
   else_if = { limit = { sed_coord_fiscal_safe = yes NOT = { in_default = yes } is_construction_paused = no }
    if = { limit = { var:sed_plan_waiting = 1 }
     set_variable = { name = sed_coord_executor value = 10 }
+   }
+   else_if = { limit = { var:sed_plan_goal = 2 sed_auto_fiscal_safe = yes sed_direct_supply_priority_exists = yes }
+    set_variable = { name = sed_coord_executor value = 11 }
    }
    else_if = { limit = { var:sed_plan_goal = 1 has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes }
     set_variable = { name = zw_var_scsab_construct_railway value = 1 }

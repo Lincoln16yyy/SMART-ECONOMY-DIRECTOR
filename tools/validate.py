@@ -172,6 +172,27 @@ def validate(root=ROOT, game=None):
         errors.append('Cleanup must preserve the schema and monthly safety markers')
     if set(runtime_variables()) != cleaned:
         errors.append('Runtime variable registry differs from cleanup')
+    # Coordinated direct execution is a narrow exception for the ranked supply target.
+    direct_authority = parse("""guard = {
+        NOT = { has_variable = sed_coord_active }
+        AND = { has_variable = sed_coord_active var:sed_coord_executor = 11
+                var:sed_plan_goal = 2 sed_direct_supply_priority_exists = yes }
+    }""")[0].value
+    if child(custom.get('sed_auto_executor_safe', []), 'OR') != direct_authority:
+        errors.append('Direct execution requires the restricted coordination authority')
+    direct_effect = custom.get('sed_auto_run_direct', [])
+    first_direct = direct_effect[0] if direct_effect else None
+    direct_limit = child(first_direct.value, 'limit') if first_direct and first_direct.key == 'if' else []
+    if direct_limit != parse('guard = { sed_auto_executor_safe = yes }')[0].value:
+        errors.append('Direct execution helper lacks its safety guard')
+    for action in approved_actions:
+        name = action.removeprefix('sed_run_').removesuffix('_approval')
+        target_authority = parse(f"""guard = {{
+            owner = {{ NOT = {{ has_variable = sed_coord_active }} }}
+            var:sed_plan_{name}_rank = 1
+        }}""")[0].value
+        if child(custom.get(f'sed_{name}_approval_valid', []), 'OR') != target_authority:
+            errors.append('Coordinated approval must match the first-ranked target: ' + name)
     keys = {}
     for language in ('braz_por', 'english'):
         path = root / f'localization/{language}/sed_l_{language}.yml'

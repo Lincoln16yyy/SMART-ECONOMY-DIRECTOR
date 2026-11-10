@@ -140,6 +140,9 @@ sed_coord_sync = {{
    if = {{ limit = {{ var:sed_plan_waiting = 1 }}
     set_variable = {{ name = sed_coord_executor value = 10 }}
    }}
+   else_if = {{ limit = {{ var:sed_plan_goal = 2 sed_auto_fiscal_safe = yes sed_direct_supply_priority_exists = yes }}
+    set_variable = {{ name = sed_coord_executor value = 11 }}
+   }}
    else_if = {{ limit = {{ var:sed_plan_goal = 1 has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes }}
     {enable_option('railways')}
     set_variable = {{ name = sed_coord_executor value = 2 }}

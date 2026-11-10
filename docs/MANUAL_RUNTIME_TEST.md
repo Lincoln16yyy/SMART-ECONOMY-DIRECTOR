@@ -1,6 +1,6 @@
 # Plano de teste da campanha — interface 0.5.3
 
-## Teste conjunto da 0.6.14
+## Teste conjunto da 0.6.15
 
 Realizar quando o jogador decidir retomar os testes. Registrar uma captura
 inicial do orçamento, opções dos construtores e fila, e guardar um save.
@@ -36,8 +36,16 @@ inicial do orçamento, opções dos construtores e fila, e guardar um save.
 9. Se houver escassez de armas, artilharia ou munição e produtor existente,
    conferir o cartão, estado, ocupação e insumos. Em Assistido, aprovar uma
    expansão e conferir um nível na fila. Sem candidata, registrar o motivo.
-   No Automático coordenado, observar o executor externo e sua seleção. A
-   ausência de obra militar específica nessa rota ainda é uma limitação.
+   No Automático coordenado, oferta com primeira prioridade viável deve
+   selecionar Director. Outras rotas ainda usam os filtros do executor externo.
+
+10. Teste principal da 0.6.15. Com país solvente, filas livres e um produtor
+    elegível para bem em escassez, fotografar a primeira prioridade e o executor.
+    No Automático, aguardar a próxima revisão. Confirmar executor Director,
+    opções verificadas dos outros construtores suspensas e um nível do prédio
+    no estado da primeira prioridade na fila. Fotografar resultado da revisão.
+    Repetir no mesmo mês para conferir ausência de uma segunda tentativa.
+    Voltar ao Assistido e comparar as opções restauradas com a captura inicial.
 
 Guardar capturas de um caso saudável, um caso de crise e a restauração. Obras
 existentes e investimentos privados não comprovam autoria do Director.

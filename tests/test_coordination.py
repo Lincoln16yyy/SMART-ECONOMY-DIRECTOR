@@ -3,11 +3,11 @@ import tempfile
 from pathlib import Path
 import unittest
 
-from tools.build_mod import outputs
+from tools.build_mod import outputs, SUPPLY_TARGETS
 from tools.coordination import OPTIONS, ADVISOR_POLICY_OPTIONS, SUPPLY_POLICY_OPTIONS
 from tools.validate import validate
 from test_diagnostics import script_definitions
-from script_harness import Country, railway, state
+from script_harness import Country, railway, state, building
 
 
 class CoordinationTests(unittest.TestCase):
@@ -359,6 +359,124 @@ class CoordinationTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_auto_review_status'], 18)
         self.assertEqual(self.external(), {'zw_var_scsab_construct_railway': 1})
 
+    def direct_supply_fixture(self):
+        c = self.c
+        item = next(item for item in SUPPLY_TARGETS if item['good'] == 'wood')
+        producer = building(item['building'])
+        producer['production_methods'] = [item['methods'][0]]
+        target = state(buildings=[producer])
+        c.states = [target]
+        c.market_goods['wood'] = dict(market_goods_buy_orders=100, market_goods_sell_orders=20,
+                                     market_goods_has_goods_shortage=True)
+        c.run('sed_set_mode_automatic')
+        return target, producer
+
+    def test_coordinated_direct_supply_queues_the_ranked_target_and_restores_options(self):
+        c = self.c
+        target, _ = self.direct_supply_fixture()
+        self.assertEqual(c.variables['sed_coord_executor'], 11)
+        self.assertEqual(self.external(), {})
+        self.assertEqual(c.constructions, [])  # Selecting a mode only selects the executor.
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.constructions, [{'building': 'building_logging_camp', 'state': target}])
+        self.assertEqual(c.variables['sed_auto_review_status'], 1)
+        c.run('sed_set_mode_assisted')
+        self.assertEqual(self.external(), self.original)
+
+    def test_coordinated_direct_supply_keeps_month_limit_after_modes_are_toggled(self):
+        c = self.c
+        _, producer = self.direct_supply_fixture()
+        c.run('sed_auto_apply_monthly')
+        c.states.append(state(buildings=[producer.copy()]))
+        c.readings['construction_queue_num_queued_government_levels'] = 0
+        c.run('sed_set_mode_assisted')
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(len(c.constructions), 1)
+        self.assertEqual(c.variables['sed_auto_review_status'], 16)
+
+    def test_coordinated_direct_supply_waits_for_either_queue_to_clear(self):
+        for queue in ('construction_queue_num_queued_government_levels',
+                      'construction_queue_num_queued_private_levels'):
+            with self.subTest(queue=queue):
+                self.setUp()
+                c = self.c
+                self.direct_supply_fixture()
+                c.readings[queue] = 1
+                c.run('sed_auto_apply_monthly')
+                self.assertEqual(c.constructions, [])
+                self.assertEqual(self.external(), {})
+                self.assertEqual(c.variables['sed_auto_review_status'], 11)
+                c.readings[queue] = 0
+                c.run('sed_auto_apply_monthly')
+                self.assertEqual(len(c.constructions), 1)
+
+    def test_stale_coordinated_target_and_competing_switch_are_revalidated(self):
+        c = self.c
+        target, producer = self.direct_supply_fixture()
+        producer['building_has_goods_shortage'] = True
+        c.run('sed_auto_run_direct')
+        self.assertEqual(c.constructions, [])
+        producer['building_has_goods_shortage'] = False
+        c.variables['advisor_auto_construction_enabled'] = True
+        c.run('sed_auto_run_direct')
+        self.assertEqual(c.constructions, [])
+        c.variables.pop('advisor_auto_construction_enabled')
+        c.run('sed_auto_run_direct')
+        self.assertEqual(c.constructions, [{'building': 'building_logging_camp', 'state': target}])
+
+    def test_coordinated_approval_cannot_build_a_different_type_in_the_ranked_state(self):
+        c = self.c
+        target, _ = self.direct_supply_fixture()
+        item = next(item for item in SUPPLY_TARGETS if item['good'] == 'iron')
+        iron = building(item['building'])
+        iron['production_methods'] = [item['methods'][0]]
+        target['buildings'].append(iron)
+        c.market_goods['iron'] = dict(market_goods_buy_orders=100, market_goods_sell_orders=90,
+                                     market_goods_has_goods_shortage=True)
+        c.run('sed_refresh_national_plan')
+        c.run('sed_coord_sync')
+        self.assertEqual(target['variables']['sed_plan_wood_rank'], 1)
+        c.run('sed_run_iron_approval', target)
+        self.assertEqual(c.constructions, [])
+        c.run('sed_run_wood_approval', target)
+        self.assertEqual(len(c.constructions), 1)
+
+    def test_coordinated_direct_execution_rejects_fiscal_failure_and_mode_conflicts(self):
+        for readings, variables in (({'net_total_income': -100, 'gold_reserves': 0}, {}),
+                                    ({}, {'sed_mode_manual': True}),
+                                    ({}, {'sed_mode_assisted': True}),
+                                    ({'is_player': False}, {})):
+            with self.subTest(readings=readings, variables=variables):
+                self.setUp()
+                c = self.c
+                self.direct_supply_fixture()
+                c.readings.update(readings)
+                c.variables.update(variables)
+                c.run('sed_auto_run_direct')
+                self.assertEqual(c.constructions, [])
+
+    def test_direct_failure_consumes_attempt_and_never_claims_delegation(self):
+        c = self.c
+        self.direct_supply_fixture()
+        c.construction_accepted = False
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_auto_review_status'], 15)
+        self.assertEqual(len(c.constructions), 1)
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_auto_review_status'], 16)
+        self.assertEqual(len(c.constructions), 1)
+
+    def test_aroai_blocks_direct_supply_even_when_priority_is_eligible(self):
+        c = self.c
+        self.direct_supply_fixture()
+        c.variables['aroai_autobuild'] = True
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_coord_executor'], 5)
+        self.assertEqual(c.variables['sed_auto_review_status'], 13)
+        self.assertEqual(c.constructions, [])
+        self.assertEqual(self.external(), {})
+
     def supply_policy(self):
         return {option: self.c.variables[option] for _, option in SUPPLY_POLICY_OPTIONS
                 if option in self.c.variables}
@@ -423,6 +541,29 @@ class CoordinationTests(unittest.TestCase):
         self.assertEqual(self.supply_policy(), {'zw_var_ip_incorporated': 0})
         c.run('sed_set_mode_assisted')
         self.assertEqual(self.supply_policy(), {'zw_var_ip_incorporated': 0})
+
+    def test_validator_rejects_broadened_coordinated_direct_authority(self):
+        for filename, old, new in (
+            ('common/scripted_triggers/sed_triggers.txt',
+             'var:sed_coord_executor = 11', 'var:sed_coord_executor = 1'),
+            ('common/scripted_triggers/sed_triggers.txt',
+             'var:sed_plan_wood_rank = 1 }', 'var:sed_plan_wood_rank >= 1 }'),
+            ('common/scripted_effects/sed_effects.txt',
+             'limit = { sed_auto_executor_safe = yes }', 'limit = { always = yes }'),
+        ):
+            with self.subTest(filename=filename, old=old), tempfile.TemporaryDirectory() as temp:
+                root = Path(temp)
+                for name, data in outputs().items():
+                    target = root / name
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_bytes(data)
+                target = root / filename
+                text = target.read_text(encoding='utf-8-sig')
+                self.assertIn(old, text)
+                target.write_text(text.replace(old, new, 1), encoding='utf-8-sig')
+                errors = validate(root)
+                self.assertTrue(any('authority' in error or 'safety guard' in error
+                                    or 'first-ranked target' in error for error in errors), errors)
 
     def test_validator_rejects_foreign_write_outside_adapter_and_unlisted_option(self):
         for replacement in (

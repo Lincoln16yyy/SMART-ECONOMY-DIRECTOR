@@ -1,5 +1,37 @@
 # Planejamento e coordenação — 0.6.8
 
+## 0.6.15 — Execução direta da prioridade de oferta na coordenação
+
+A coordenação agora escolhe o Director (executor 11) quando o objetivo de
+oferta tem uma primeira prioridade elegível e passa pela guarda fiscal
+normal. As sete opções verificadas de construção externa são suspensas antes
+da execução. Infraestrutura e demais objetivos mantêm as rotas anteriores;
+a delegação geral permanece para casos sem alvo direto viável.
+
+O modo apenas seleciona a rota; a inclusão ocorre na revisão automática.
+`sed_auto_run_direct` é compartilhado pelo Automático próprio e pelo novo
+executor coordenado. Exige jogador, mod habilitado, Automático exclusivo,
+filas pública e privada vazias, construção ativa, proteção fiscal e limite
+mensal. Conflito com ARoAI ou outro switch conhecido impede execução.
+A exceção de coordenação exige executor 11, objetivo 2 e primeira prioridade
+atualmente elegível. Cada aprovação também exige o rank 1 daquele tipo/estado
+quando a coordenação está ativa. Um candidato de outro tipo no mesmo estado
+não pode aproveitar a autorização.
+
+O resultado mensal registra a inclusão observada na fila, falha, bloqueio de
+fila ou limite mensal. Continua sendo uma tentativa por mês; falha consome a
+tentativa. A política de restauração permanece intacta. Obras existentes,
+construtores desconhecidos e autoexpansões nativas continuam fora do controle.
+A guarda ainda usa a política fiscal inicial, sem previsão completa de custo
+incremental, trabalhadores e insumos futuros.
+
+189 testes sintéticos aprovados. Oito regressões exercitam execução direta,
+restauração, limite, filas, revalidação, tipo/estado, finanças e ARoAI. Um teste
+de validação adversarial rejeita autoridade ampliada, remoção da guarda e rank
+menos restritivo. Validação estática e gerador aprovados. Inclusão real e UI
+permanecem pendentes de campanha.
+
+
 ## 0.6.14 — Expansões da indústria bélica
 
 O catálogo passa de oito para onze bens com armas leves, artilharia e munição.

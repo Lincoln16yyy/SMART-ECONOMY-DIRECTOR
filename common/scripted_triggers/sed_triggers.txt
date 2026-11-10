@@ -17,6 +17,7 @@ sed_railway_candidate_eligible = {
 
 sed_railway_approval_valid = {
  sed_railway_candidate_eligible = yes
+ OR = { owner = { NOT = { has_variable = sed_coord_active } } var:sed_plan_railway_rank = 1 }
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -45,6 +46,7 @@ sed_construction_candidate_eligible = {
 
 sed_construction_approval_valid = {
  sed_construction_candidate_eligible = yes
+ OR = { owner = { NOT = { has_variable = sed_coord_active } } var:sed_plan_construction_rank = 1 }
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -89,6 +91,7 @@ sed_wood_logging_camp_eligible = {
 
 sed_wood_approval_valid = {
  sed_wood_candidate_eligible = yes
+ OR = { owner = { NOT = { has_variable = sed_coord_active } } var:sed_plan_wood_rank = 1 }
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -138,6 +141,7 @@ sed_iron_iron_mine_eligible = {
 
 sed_iron_approval_valid = {
  sed_iron_candidate_eligible = yes
+ OR = { owner = { NOT = { has_variable = sed_coord_active } } var:sed_plan_iron_rank = 1 }
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -187,6 +191,7 @@ sed_coal_coal_mine_eligible = {
 
 sed_coal_approval_valid = {
  sed_coal_candidate_eligible = yes
+ OR = { owner = { NOT = { has_variable = sed_coord_active } } var:sed_plan_coal_rank = 1 }
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -324,6 +329,7 @@ sed_grain_millet_farm_eligible = {
 
 sed_grain_approval_valid = {
  sed_grain_candidate_eligible = yes
+ OR = { owner = { NOT = { has_variable = sed_coord_active } } var:sed_plan_grain_rank = 1 }
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -389,6 +395,7 @@ sed_fabric_livestock_ranch_eligible = {
 
 sed_fabric_approval_valid = {
  sed_fabric_candidate_eligible = yes
+ OR = { owner = { NOT = { has_variable = sed_coord_active } } var:sed_plan_fabric_rank = 1 }
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -434,6 +441,7 @@ sed_tools_tooling_workshop_eligible = {
 
 sed_tools_approval_valid = {
  sed_tools_candidate_eligible = yes
+ OR = { owner = { NOT = { has_variable = sed_coord_active } } var:sed_plan_tools_rank = 1 }
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -485,6 +493,7 @@ sed_groceries_food_industry_eligible = {
 
 sed_groceries_approval_valid = {
  sed_groceries_candidate_eligible = yes
+ OR = { owner = { NOT = { has_variable = sed_coord_active } } var:sed_plan_groceries_rank = 1 }
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -530,6 +539,7 @@ sed_clothes_textile_mill_eligible = {
 
 sed_clothes_approval_valid = {
  sed_clothes_candidate_eligible = yes
+ OR = { owner = { NOT = { has_variable = sed_coord_active } } var:sed_plan_clothes_rank = 1 }
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -575,6 +585,7 @@ sed_small_arms_arms_industry_eligible = {
 
 sed_small_arms_approval_valid = {
  sed_small_arms_candidate_eligible = yes
+ OR = { owner = { NOT = { has_variable = sed_coord_active } } var:sed_plan_small_arms_rank = 1 }
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -624,6 +635,7 @@ sed_artillery_artillery_foundry_eligible = {
 
 sed_artillery_approval_valid = {
  sed_artillery_candidate_eligible = yes
+ OR = { owner = { NOT = { has_variable = sed_coord_active } } var:sed_plan_artillery_rank = 1 }
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -665,6 +677,7 @@ sed_ammunition_munition_plant_eligible = {
 
 sed_ammunition_approval_valid = {
  sed_ammunition_candidate_eligible = yes
+ OR = { owner = { NOT = { has_variable = sed_coord_active } } var:sed_plan_ammunition_rank = 1 }
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -695,7 +708,14 @@ sed_execution_mode_permits_approval = {
 }
 
 sed_auto_executor_safe = {
- NOT = { has_variable = sed_coord_active }
+ is_player = yes
+ has_variable = sed_enabled
+ NOT = { has_variable = sed_mode_manual }
+ NOT = { has_variable = sed_mode_assisted }
+ OR = {
+  NOT = { has_variable = sed_coord_active }
+  AND = { has_variable = sed_coord_active var:sed_coord_executor = 11 var:sed_plan_goal = 2 sed_direct_supply_priority_exists = yes }
+ }
  has_variable = sed_mode_automatic
  NOT = { sed_auto_month_limit_reached = yes }
  NOT = { in_default = yes }
@@ -704,6 +724,21 @@ sed_auto_executor_safe = {
  is_construction_paused = no
  NOT = { sed_competing_builder_configured = yes }
  sed_auto_fiscal_safe = yes
+}
+sed_direct_supply_priority_exists = {
+ OR = {
+  any_scope_state = { var:sed_plan_wood_rank = 1 sed_wood_candidate_eligible = yes }
+  any_scope_state = { var:sed_plan_iron_rank = 1 sed_iron_candidate_eligible = yes }
+  any_scope_state = { var:sed_plan_coal_rank = 1 sed_coal_candidate_eligible = yes }
+  any_scope_state = { var:sed_plan_grain_rank = 1 sed_grain_candidate_eligible = yes }
+  any_scope_state = { var:sed_plan_fabric_rank = 1 sed_fabric_candidate_eligible = yes }
+  any_scope_state = { var:sed_plan_tools_rank = 1 sed_tools_candidate_eligible = yes }
+  any_scope_state = { var:sed_plan_groceries_rank = 1 sed_groceries_candidate_eligible = yes }
+  any_scope_state = { var:sed_plan_clothes_rank = 1 sed_clothes_candidate_eligible = yes }
+  any_scope_state = { var:sed_plan_small_arms_rank = 1 sed_small_arms_candidate_eligible = yes }
+  any_scope_state = { var:sed_plan_artillery_rank = 1 sed_artillery_candidate_eligible = yes }
+  any_scope_state = { var:sed_plan_ammunition_rank = 1 sed_ammunition_candidate_eligible = yes }
+ }
 }
 sed_competing_builder_configured = {
  OR = {
