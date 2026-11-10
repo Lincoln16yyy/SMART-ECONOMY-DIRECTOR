@@ -928,9 +928,11 @@ sed_coord_executor_5_visible_sgui = { scope = country is_shown = { has_variable 
 sed_coord_executor_6_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 6 } }
 sed_coord_executor_7_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 7 } }
 sed_coord_executor_8_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 8 } }
+sed_coord_executor_9_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 9 } }
 sed_coord_advisor_policy_1_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 1 has_variable = sed_coord_advisor_policy var:sed_coord_advisor_policy = 1 } }
 sed_coord_advisor_policy_2_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 1 has_variable = sed_coord_advisor_policy var:sed_coord_advisor_policy = 2 } }
 sed_coord_advisor_policy_3_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 1 has_variable = sed_coord_advisor_policy var:sed_coord_advisor_policy = 3 } }
+sed_auto_status_unsupported_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 19 } }
 sed_auto_status_fiscal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 17 } }
 sed_fiscal_1_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = 1 } }
 sed_fiscal_2_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = 2 } }

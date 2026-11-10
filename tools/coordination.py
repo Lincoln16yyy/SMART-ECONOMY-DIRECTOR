@@ -116,7 +116,14 @@ sed_coord_sync = {{
     {enable_option('power')}
     set_variable = {{ name = sed_coord_executor value = 8 }}
    }}
-   else_if = {{ limit = {{ has_variable = sed_coord_advisor_known OR = {{ var:sed_plan_goal = 1 var:sed_plan_goal = 2 var:sed_plan_goal = 3 var:sed_plan_goal = 5 var:sed_plan_goal = 6 var:sed_plan_goal = 7 var:sed_plan_goal = 8 var:sed_plan_goal = 9 }} }}
+   else_if = {{ limit = {{ has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 3 }}
+    {enable_option('sectors')}
+    set_variable = {{ name = sed_coord_executor value = 4 }}
+   }}
+   else_if = {{ limit = {{ OR = {{ var:sed_plan_goal = 6 var:sed_plan_goal = 7 var:sed_plan_goal = 9 }} }}
+    set_variable = {{ name = sed_coord_executor value = 9 }}
+   }}
+   else_if = {{ limit = {{ has_variable = sed_coord_advisor_known OR = {{ var:sed_plan_goal = 1 var:sed_plan_goal = 2 var:sed_plan_goal = 3 var:sed_plan_goal = 5 var:sed_plan_goal = 8 }} }}
     {enable_option('advisor')}
     set_variable = {{ name = sed_coord_executor value = 1 }}
     sed_coord_capture_advisor_policy = yes
@@ -141,10 +148,6 @@ sed_coord_sync = {{
    else_if = {{ limit = {{ has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes OR = {{ var:sed_plan_goal = 2 var:sed_plan_goal = 5 var:sed_plan_goal = 8 }} }}
     {enable_option('chains')}
     set_variable = {{ name = sed_coord_executor value = 3 }}
-   }}
-   else_if = {{ limit = {{ has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 3 }}
-    {enable_option('sectors')}
-    set_variable = {{ name = sed_coord_executor value = 4 }}
    }}
   }}
  }}

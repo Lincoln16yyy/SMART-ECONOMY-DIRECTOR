@@ -289,6 +289,60 @@ class CoordinationTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_coord_executor'], 0)
         self.assertEqual(self.external(), {})
 
+    def test_specific_goals_use_only_the_matching_supply_routine(self):
+        for goal, option, executor in (
+            (6, 'zw_var_scsab_gov_admin', 6),
+            (7, 'zw_var_scsab_gov_admin_for_tax', 7),
+            (9, 'zw_var_scsab_construct_power_plant', 8),
+            (3, 'zw_var_more_construction_sectors', 4),
+        ):
+            with self.subTest(goal=goal):
+                self.setUp()
+                c = self.c
+                c.run('sed_set_mode_automatic')
+                c.variables['sed_plan_goal'] = goal
+                c.run('sed_coord_sync')
+                self.assertEqual(c.variables['sed_coord_executor'], executor)
+                self.assertEqual(self.external(), {option: self.original[option]})
+
+    def test_specific_goal_without_supply_waits_and_restores_original_options(self):
+        for goal in (6, 7, 9):
+            with self.subTest(goal=goal):
+                self.setUp()
+                c = self.c
+                c.run('sed_set_mode_automatic')
+                c.variables.pop('sed_coord_supply_known')
+                c.variables['sed_plan_goal'] = goal
+                c.run('sed_coord_sync')
+                self.assertEqual(c.variables['sed_coord_executor'], 9)
+                self.assertEqual(self.external(), {})
+                c.run('sed_set_mode_assisted')
+                self.assertEqual(self.external(), self.original)
+
+    def test_tax_shortfall_without_supply_records_unavailable_execution(self):
+        c = self.c
+        c.states = [state(tax_capacity_usage=200, tax_capacity=100)]
+        c.run('sed_set_mode_automatic')
+        c.variables.pop('sed_coord_supply_known')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_plan_goal'], 7)
+        self.assertEqual(c.variables['sed_coord_executor'], 9)
+        self.assertEqual(c.variables['sed_auto_review_status'], 19)
+        self.assertEqual(self.external(), {})
+        c.variables['sed_coord_supply_known'] = True
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_coord_executor'], 7)
+        self.assertEqual(c.variables['sed_auto_review_status'], 18)
+        self.assertEqual(self.external(), {'zw_var_scsab_gov_admin_for_tax': 6})
+
+    def test_fiscally_blocked_coordination_does_not_report_delegation(self):
+        c = self.c
+        c.run('sed_set_mode_automatic')
+        c.readings['net_total_income'] = -100
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_auto_review_status'], 17)
+        self.assertEqual(self.external(), {})
+
     def test_validator_rejects_foreign_write_outside_adapter_and_unlisted_option(self):
         for replacement in (
             ('sed_coord_sync = {', 'sed_bad_adapter = {'),
