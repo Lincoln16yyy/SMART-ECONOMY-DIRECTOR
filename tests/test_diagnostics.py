@@ -3,7 +3,7 @@ from pathlib import Path
 import unittest
 import zipfile
 
-from tools.build_mod import ROOT, ACTION_NAMES, STATE_VARIABLES, SUPPLY_DIAGNOSTICS, SUPPLY_TARGETS, country_variables, outputs, runtime_variables
+from tools.build_mod import ROOT, ACTION_NAMES, INPUT_DEPENDENCIES, STATE_VARIABLES, SUPPLY_DIAGNOSTICS, SUPPLY_TARGETS, country_variables, outputs, runtime_variables
 from tools.package_mod import package
 from tools.pdx_script import parse, child, walk
 from tools.validate import validate
@@ -413,7 +413,13 @@ class DiagnosisTests(unittest.TestCase):
         tree = parse(text)
         # The former fixed row height clipped enlarged text and status messages.
         self.assertFalse(any(entry.key in ('fixedgridbox', 'addrow') for entry in walk(tree)))
-        self.assertEqual(sum(entry.key == 'datamodel' for entry in walk(tree)), 4 * len(ACTION_NAMES))
+        models = [entry.value for entry in walk(tree) if entry.key == 'datamodel']
+        blocker_models = [model for model in models if "GetList('sed_input_blocked_" in model]
+        self.assertCountEqual(blocker_models, [
+            f"[JournalEntry.GetCountry.MakeScope.GetList('sed_input_blocked_{good}')]"
+            for good in INPUT_DEPENDENCIES
+        ])
+        self.assertEqual(len(models) - len(blocker_models), 4 * len(ACTION_NAMES))
         self.assertLess(text.index('text = "sed_recommendations_title"'),
                         text.index('text = "sed_metric_operating_balance"'))
         self.assertEqual(sum(entry.key == 'text' and entry.value == 'sed_supply_no_candidate'

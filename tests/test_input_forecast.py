@@ -42,12 +42,17 @@ class InputForecastTests(unittest.TestCase):
         c.run('sed_refresh_diagnostics')
         self.assertFalse(self.eligible())
         self.assertIn('sed_input_priority_wood', c.variables)
+        self.assertEqual(c.variable_lists['sed_input_blocked_wood'], [self.target])
+        blocker = c.definitions['sed_input_blocks_wood_tools_tooling_workshop']
+        self.assertTrue(c.condition(blocker, self.target))
+        self.assertFalse(c.condition(blocker, upstream))
         self.assertEqual(c.variable_lists['sed_wood_candidates'], [upstream])
         self.assertEqual(upstream['variables']['sed_plan_wood_rank'], 1)
 
         logging['level_after_queued_constructions'] = 2
         c.run('sed_refresh_diagnostics')
         self.assertNotIn('sed_wood_candidates', c.variable_lists)
+        self.assertEqual(c.variable_lists['sed_input_blocked_wood'], [self.target])
         self.assertEqual(c.variables['sed_plan_waiting'], 1)
 
         logging['level_after_queued_constructions'] = 1
@@ -55,11 +60,61 @@ class InputForecastTests(unittest.TestCase):
         c.run('sed_run_wood_approval', upstream)
         self.assertEqual(c.constructions, [])
         self.assertNotIn('sed_input_priority_wood', c.variables)
+        self.assertNotIn('sed_input_blocked_wood', c.variable_lists)
 
         self.wood(100, 68.74)
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')
         self.assertEqual([order['building'] for order in c.constructions], ['building_logging_camp'])
+
+    def test_automatic_picks_the_largest_eligible_supplier_across_states(self):
+        low = building('building_logging_camp')
+        low['production_methods'] = ['pm_simple_forestry', 'pm_hardwood']
+        high = building('building_logging_camp')
+        high['production_methods'] = ['pm_simple_forestry']
+        blocked = building('building_logging_camp', occupancy=0.5)
+        blocked['production_methods'] = ['pm_electric_saw_mills']
+        high_state = state(buildings=[high])
+        self.c.states.extend([state(buildings=[low]), high_state, state(buildings=[blocked])])
+        self.wood(100, 68.74)
+        self.c.run('sed_set_mode_automatic')
+        self.c.run('sed_auto_apply_monthly')
+        self.assertEqual(self.c.variable_lists['sed_plan_1_wood'], [high_state])
+        self.assertEqual(self.c.constructions, [
+            {'building': 'building_logging_camp', 'state': high_state}
+        ])
+
+    def test_automatic_queues_the_higher_output_variant_in_the_same_state(self):
+        bakery = building('building_food_industry')
+        bakery['production_methods'] = ['pm_bakery']
+        wheat = building('building_wheat_farm')
+        wheat['production_methods'] = ['pm_simple_farming']
+        rice = building('building_rice_farm')
+        rice['production_methods'] = ['pm_simple_farming_building_rice_farm']
+        farms = state(buildings=[wheat, rice])
+        c = self.c
+        c.states = [state(buildings=[bakery]), farms]
+        c.market_goods['tools']['market_goods_has_goods_shortage'] = False
+        c.market_goods['groceries'] = dict(market_goods_buy_orders=100,
+                                           market_goods_sell_orders=40,
+                                           market_goods_has_goods_shortage=True)
+        c.market_goods['grain'] = dict(market_goods_buy_orders=100,
+                                       market_goods_sell_orders=70,
+                                       market_goods_has_goods_shortage=False)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.constructions, [{'building': 'building_rice_farm', 'state': farms}])
+        self.assertEqual(farms['variables']['sed_grain_intent_variant'], 3)
+
+    def test_blocker_list_shows_three_most_populous_affected_states_and_clears_on_disable(self):
+        self.wood(100, 68.74)
+        states = [state(buildings=[self.producer.copy()], population=200000 + i * 10000)
+                  for i in range(4)]
+        self.c.states = states
+        self.c.run('sed_refresh_diagnostics')
+        self.assertEqual(self.c.variable_lists['sed_input_blocked_wood'], states[:0:-1])
+        self.c.run('sed_disable_country')
+        self.assertNotIn('sed_input_blocked_wood', self.c.variable_lists)
 
     def test_inoperable_downstream_producer_does_not_create_input_priority(self):
         self.wood(100, 68.74)
