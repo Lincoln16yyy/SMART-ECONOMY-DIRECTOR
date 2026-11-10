@@ -11,7 +11,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.6.15'
+VERSION = '0.6.16'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -312,7 +312,8 @@ sed_refresh_supply_candidates = {''']
   if = { limit = { var:sed_coord_executor = 11 } sed_auto_run_direct = yes }
   else = {
    set_variable = { name = sed_auto_action_status value = 18 }
-   if = { limit = { var:sed_coord_executor = 10 } set_variable = { name = sed_auto_action_status value = 20 } }
+   if = { limit = { var:sed_coord_executor = 12 } set_variable = { name = sed_auto_action_status value = 21 } }
+   else_if = { limit = { var:sed_coord_executor = 10 } set_variable = { name = sed_auto_action_status value = 20 } }
    else_if = { limit = { var:sed_coord_executor = 9 } set_variable = { name = sed_auto_action_status value = 19 } }
    else_if = { limit = { var:sed_coord_executor = 5 } set_variable = { name = sed_auto_action_status value = 13 } }
    else_if = { limit = { var:sed_coord_executor = 0 }
@@ -474,7 +475,7 @@ def widget():
     body += textbox('sed_coord_intro')
     body += button('sed_coord_enable', 'sed_coord_enable_sgui')
     body += button('sed_coord_release', 'sed_coord_release_sgui')
-    for executor in range(12):
+    for executor in range(13):
         body += textbox(f'sed_coord_executor_{executor}', f'sed_coord_executor_{executor}_visible_sgui')
     body += textbox('sed_coord_supply_policy', 'sed_coord_supply_policy_visible_sgui')
     for policy in (1, 2, 3):
@@ -496,7 +497,7 @@ def widget():
     for policy in ('tax', 'wage'):
         body += textbox(f'sed_{policy}_last_command', f'sed_{policy}_last_command_visible_sgui')
     body += textbox('sed_auto_last_review', 'sed_auto_last_review_visible_sgui')
-    for status in ('success', 'no_action', 'default', 'queue', 'paused', 'competing', 'safety', 'unconfirmed', 'month_limit', 'fiscal', 'delegated', 'unsupported', 'waiting'):
+    for status in ('success', 'no_action', 'default', 'queue', 'paused', 'competing', 'safety', 'unconfirmed', 'month_limit', 'fiscal', 'delegated', 'unsupported', 'waiting', 'reserve_queue'):
         body += textbox(f'sed_auto_status_{status}', f'sed_auto_status_{status}_visible_sgui')
     body += 'flowcontainer = { direction = horizontal spacing = 12\n'
     body += button('sed_refresh', 'sed_refresh_sgui', width=244)
@@ -515,6 +516,7 @@ def widget():
     body += textbox('sed_plan_title', heading=True)
     body += textbox('sed_plan_date')
     body += textbox('sed_plan_waiting', 'sed_plan_waiting_visible_sgui')
+    body += textbox('sed_reserve_budget', 'sed_reserve_budget_visible_sgui')
     for status in range(1, 6):
         body += textbox(f'sed_fiscal_{status}', f'sed_fiscal_{status}_visible_sgui')
     for goal in range(10):
@@ -1059,7 +1061,7 @@ sed_update_growth = {
             f'    set_variable = {{ name = sed_{good}_action_status value = 1 }}\n'
             '    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }')
     script = script.replace('  sed_refresh_supply_candidates = yes\n }\n}',
-                            '  sed_refresh_supply_candidates = yes\n  sed_refresh_national_plan = yes\n }\n}', 1)
+                            '  sed_refresh_supply_candidates = yes\n  sed_refresh_national_plan = yes\n  if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }\n }\n}', 1)
     cleanup = '\n'.join(' clear_variable_list = ' + name for name in planning.lists(ACTION_NAMES))
     script = script.replace('sed_disable_country = {', 'sed_disable_country = {\n' + cleanup, 1)
     # All state-scoped planner variables are removed on deactivation.
@@ -1290,7 +1292,7 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
         previous += f' NOT = {{ {condition} }}'
     result += f'sed_auto_current_clear_visible_sgui = {{ scope = country is_shown = {{ {base} sed_auto_executor_safe = yes }} }}\n'
     result += 'sed_auto_status_delegated_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 18 } }\n'
-    for executor in range(12):
+    for executor in range(13):
         result += f'sed_coord_executor_{executor}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = {executor} }} }}\n'
     for policy in (1, 2, 3):
         result += f'sed_coord_advisor_policy_{policy}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 1 has_variable = sed_coord_advisor_policy var:sed_coord_advisor_policy = {policy} }} }}\n'
@@ -1306,6 +1308,8 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
         result += f'sed_military_posture_{posture}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_military_posture var:sed_military_posture = {posture} }} }}\n'
     for good, _, _ in planning.MILITARY_GOODS:
         result += f'sed_military_short_{good}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_military_short_{good} var:sed_military_short_{good} = 1 }} }}\n'
+    result += 'sed_auto_status_reserve_queue_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 21 } }\n'
+    result += 'sed_reserve_budget_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_year net_total_income < 0 } }\n'
     result += 'sed_auto_status_fiscal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 17 } }\n'
     for status in range(1, 6):
         result += f'sed_fiscal_{status}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = {status} }} }}\n'
@@ -1715,8 +1719,8 @@ def localization(language):
         'sed_coord_advisor_policy_3': ('Orientação do Advisor aplicada para retorno ao tesouro e preservação das reservas, com opção de endividamento desabilitada. A dívida atingiu ao menos 50% do crédito.', 'Advisor guidance applied for treasury return and reserve protection, with borrowing disabled. Debt reached at least 50% of credit.'),
     })
     pairs['sed_fiscal_5'] = (
-        'Fiscal com construção financiada por reservas. Saldo operacional não negativo, sem dívida e ouro cobrindo doze semanas de despesas fixas mais 26 semanas do déficit observado. O Advisor pode avaliar investimentos com seu próprio orçamento. Os caminhos do Supply Chain exigem a guarda de saldo não negativo.',
-        'Fiscal state with reserve-funded construction. Nonnegative operating balance, no debt and gold covering twelve weeks of fixed expenses plus 26 weeks of the observed deficit. The Advisor can assess investment using its own budget. Supply Chain paths require the nonnegative-balance guard.')
+        'Fiscal com construção financiada por reservas. Saldo operacional não negativo, sem dívida e ouro cobrindo doze semanas de despesas fixas mais 26 semanas do déficit observado. O Advisor pode avaliar investimentos com seu próprio orçamento quando a fila pública estiver livre. Os caminhos diretos e do Supply Chain exigem a guarda de saldo não negativo.',
+        'Fiscal state with reserve-funded construction. Nonnegative operating balance, no debt and gold covering twelve weeks of fixed expenses plus 26 weeks of the observed deficit. The Advisor can assess investment using its own budget when the government queue is empty. Direct and Supply Chain paths require the nonnegative-balance guard.')
     pairs['sed_mode_automatic_button_tt'] = (
         'Coordena os construtores detectados e aplica a política fiscal. Impostos e salários civis admitem um ajuste por mês de calendário. Sair do Automático restaura as opções e níveis anteriores. O executor próprio admite uma tentativa de obra por mês. As ferramentas externas seguem seus próprios limites.',
         'Coordinates detected builders and applies fiscal policy. Taxes and civilian government wages allow one adjustment per calendar month. Leaving Automatic restores previous options and levels. The direct executor allows one construction attempt per month. External tools follow their own limits.')
@@ -1762,6 +1766,9 @@ def localization(language):
         'sed_goal_8': ('Objetivo atual: buscar crescimento e diversificação. Sem gargalo elegível no escopo direto, o executor externo avalia novos investimentos com seus próprios filtros.', 'Current objective: seek growth and diversification. With no eligible bottleneck in direct scope, the external executor evaluates new investment using its own filters.'),
         'sed_goal_9': ('Objetivo atual: investigar energia local cara, com preço ao menos 20% acima da base em algum estado. A ferramenta externa verifica viabilidade.', 'Current objective: investigate costly local power, priced at least 20% above base in a state. The external tool checks feasibility.'),
         'sed_coord_supply_policy': ('Política do Supply Chain sob o Director. Expansões em estados incorporados; administração trata o déficit atual de burocracia. Limites numéricos de construção em um nível por local escolhido, conforme a rotina externa. A soma nacional pode superar um nível. Tributação é avaliada em junho/dezembro e setores em fevereiro/agosto. Opções anteriores são restauradas ao sair do Automático.', 'Supply Chain policy under the Director. Expansion in incorporated states; administration addresses the current bureaucracy deficit. Numeric construction limits are one level per selected location, according to the external routine. The national total may exceed one level. Tax capacity is evaluated in June/December and construction sectors in February/August. Previous settings are restored when leaving Automatic.'),
+        'sed_coord_executor_12': ('Ritmo por reservas: aguardando a fila pública existente. Com déficit financiado por ouro, novas autorizações externas ficam suspensas enquanto houver níveis públicos enfileirados. A política fiscal continua ativa e o orçamento é reavaliado nas revisões.', 'Reserve-funded pace: waiting for the existing government queue. While gold funds a deficit, new external authorizations remain suspended while government levels are queued. Fiscal policy remains active and the budget is reassessed on reviews.'),
+        'sed_auto_status_reserve_queue': ('Última revisão: preservação de reservas, aguardando obras públicas já enfileiradas antes de autorizar novos investimentos.', 'Last review: preserving reserves, waiting for already queued government projects before authorizing new investment.'),
+        'sed_reserve_budget': ('Orçamento por reservas nesta leitura. Piso de doze semanas de despesas fixas: @money!' + v('reserve_floor', 'K') + '. Ouro acima do piso: @money!' + v('reserve_spare', 'K') + '. Cobertura do déficit atual acima do piso: ' + v('reserve_runway', '1') + ' semanas. Ouro exigido pela regra de 26 semanas: @money!' + v('reserve_required', 'K') + '. Estimativa com despesas e déficit atuais; custo de novas obras ainda precisa ser avaliado.', 'Reserve budget in this reading. Twelve-week fixed-expense floor: @money!' + v('reserve_floor', 'K') + '. Gold above the floor: @money!' + v('reserve_spare', 'K') + '. Current deficit coverage above the floor: ' + v('reserve_runway', '1') + ' weeks. Gold required by the 26-week rule: @money!' + v('reserve_required', 'K') + '. Estimate using current expenses and deficit; new construction costs still require assessment.'),
         'sed_coord_executor_11': ('Executor escolhido: Director, expansão da primeira prioridade de oferta. As opções verificadas de construção do Advisor e Supply Chain ficam suspensas. Aguarda orçamento e filas livres; no máximo uma tentativa por mês. O resultado da revisão confirma se houve inclusão.', 'Selected executor: Director, expansion of the first supply priority. Verified Advisor and Supply Chain construction options remain suspended. Waits for budget and empty queues; at most one attempt per month. The review outcome confirms insertion.'),
         'sed_coord_executor_10': ('Coordenação em espera. Há expansão enfileirada de um prédio relacionado ao objetivo atual. Novas opções externas ficam suspensas até reavaliar a fila ou surgir outra prioridade elegível.', 'Coordination waiting. A building related to the current objective has a queued expansion. New external options remain suspended until queue reassessment or another eligible priority appears.'),
         'sed_plan_waiting': ('Plano em acompanhamento de obra relacionada. A fila ainda não comprova resolução do gargalo. A autoria e o efeito futuro do projeto não foram identificados.', 'Plan monitoring related construction. The queue does not yet prove resolution of the bottleneck. Project origin and future impact have not been identified.'),

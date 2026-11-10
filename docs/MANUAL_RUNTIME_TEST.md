@@ -1,6 +1,17 @@
 # Plano de teste da campanha — interface 0.5.3
 
-## Teste conjunto da 0.6.15
+## Evidência parcial recebida em 10/11/2026
+
+Capturas da campanha de março–maio de 1842 mostram escassez de ferro, dois
+estados produtores rejeitados por fila e ocupação, expansão de mina em Sinai
+na fila, plano em acompanhamento e retorno a crescimento/diversificação após
+fim do aviso de escassez. A autoria da obra e sua conclusão não foram
+identificadas diretamente. O caminho direto coordenado permanece pendente.
+Leitura manual corrigiu snapshot fiscal desatualizado. O controle por reservas
+continuava ativo com déficit e fila pública, motivando a pausa da 0.6.16.
+
+
+## Teste conjunto da 0.6.16
 
 Realizar quando o jogador decidir retomar os testes. Registrar uma captura
 inicial do orçamento, opções dos construtores e fila, e guardar um save.
@@ -46,6 +57,13 @@ inicial do orçamento, opções dos construtores e fila, e guardar um save.
     no estado da primeira prioridade na fila. Fotografar resultado da revisão.
     Repetir no mesmo mês para conferir ausência de uma segunda tentativa.
     Voltar ao Assistido e comparar as opções restauradas com a captura inicial.
+
+11. Com déficit, reservas e obra pública na fila, atualizar o diagnóstico.
+    Conferir seleção de espera por reservas e opções externas suspensas.
+    Comparar piso, ouro disponível acima do piso e semanas de cobertura com
+    orçamento. Após esvaziar a fila, atualizar e conferir nova seleção, sem
+    inclusão de obra pelo clique. A última revisão automática deve conservar
+    sua data e resultado anteriores até a revisão efetiva.
 
 Guardar capturas de um caso saudável, um caso de crise e a restauração. Obras
 existentes e investimentos privados não comprovam autoria do Director.

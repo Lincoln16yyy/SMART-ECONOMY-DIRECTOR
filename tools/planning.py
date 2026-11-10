@@ -11,7 +11,8 @@ MILITARY_GOODS = (
 MILITARY_INDUSTRY_GOODS = ('small_arms', 'artillery', 'ammunition')
 COUNTRY_VARIABLES = ['sed_plan_count', 'sed_plan_goal', 'sed_fiscal_status',
                      'sed_plan_year', 'sed_plan_month', 'sed_plan_missing_count',
-                     'sed_plan_waiting', 'sed_military_posture', 'sed_military_at_war',
+                     'sed_plan_waiting', 'sed_reserve_floor', 'sed_reserve_required',
+                     'sed_reserve_spare', 'sed_reserve_runway', 'sed_military_posture', 'sed_military_at_war',
                      'sed_military_shortage_count'] + [f'sed_military_short_{good}' for good, _, _ in MILITARY_GOODS]
 STATE_VARIABLES = ['sed_plan_score', 'sed_plan_type']
 
@@ -225,6 +226,15 @@ def effects(actions, buildings):
   set_variable = { name = sed_plan_waiting value = 0 }
   set_variable = { name = sed_plan_year value = year }
   set_variable = { name = sed_plan_month value = { value = month add = 1 } }
+  set_variable = { name = sed_reserve_floor value = { value = fixed_expenses min = 0 multiply = 12 } }
+  set_variable = { name = sed_reserve_required value = {
+   value = var:sed_reserve_floor add = { value = net_total_income max = 0 multiply = -26 }
+  } }
+  set_variable = { name = sed_reserve_spare value = { value = gold_reserves subtract = var:sed_reserve_floor min = 0 } }
+  set_variable = { name = sed_reserve_runway value = 0 }
+  if = { limit = { net_total_income < 0 }
+   set_variable = { name = sed_reserve_runway value = { value = var:sed_reserve_spare divide = { value = net_total_income multiply = -1 } } }
+  }
   set_variable = { name = sed_fiscal_status value = 1 }
   if = { limit = { in_default = yes } set_variable = { name = sed_fiscal_status value = 4 } }
   else_if = {

@@ -131,6 +131,45 @@ class PlanningTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_plan_goal'], 4)
         self.assertEqual(c.variables['sed_plan_waiting'], 0)
 
+    def test_reserve_budget_coverage_matches_the_existing_fiscal_threshold(self):
+        c = self.c
+        c.readings.update(fixed_expenses=50, gold_reserves=860,
+                          net_total_income=-10, principal=0)
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_reserve_floor'], 600)
+        self.assertEqual(c.variables['sed_reserve_required'], 860)
+        self.assertEqual(c.variables['sed_reserve_spare'], 260)
+        self.assertEqual(c.variables['sed_reserve_runway'], 26)
+        self.assertEqual(c.variables['sed_fiscal_status'], 5)
+        c.readings['gold_reserves'] = 859
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_fiscal_status'], 2)
+        self.assertAlmostEqual(c.variables['sed_reserve_runway'], 25.9)
+
+    def test_reserve_budget_clamps_negative_expenses_and_gold_below_floor(self):
+        c = self.c
+        c.readings.update(fixed_expenses=50, gold_reserves=100, net_total_income=-10)
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_reserve_spare'], 0)
+        self.assertEqual(c.variables['sed_reserve_runway'], 0)
+        c.readings.update(fixed_expenses=-5, gold_reserves=100)
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_reserve_floor'], 0)
+        self.assertEqual(c.variables['sed_reserve_required'], 260)
+
+    def test_reserve_budget_zero_deficit_does_not_divide_by_zero_or_keep_old_runway(self):
+        c = self.c
+        c.readings.update(fixed_expenses=50, gold_reserves=860, net_total_income=-10)
+        c.run('sed_refresh_national_plan')
+        c.readings['net_total_income'] = 0
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_reserve_runway'], 0)
+        self.assertEqual(c.variables['sed_reserve_required'], 600)
+        c.readings['net_total_income'] = 100
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_reserve_runway'], 0)
+        self.assertEqual(c.variables['sed_reserve_required'], 600)
+
     def ranked(self):
         result = []
         for rank in (1, 2, 3):
