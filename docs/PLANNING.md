@@ -413,3 +413,16 @@ cancelamento seguido de obra externa no mesmo estado pode contar como
 conclusão. Desativar limpa os marcadores estaduais e os contadores nacionais.
 137 testes sintéticos aprovados incluem ferrovia concluída e setor abandonado
 no mesmo cenário. Continua sem confirmação na engine.
+
+## Calendário e limites corrigidos na 0.6.9
+
+Metas exigem três observações em meses consecutivos de calendário. Atualizações
+no mesmo mês preservam a idade. Um mês sem observação reinicia a sequência.
+Contadores legados sem data são reiniciados para reconstruir a evidência.
+
+Imposto e salário civil permitem um ajuste automático por mês, cada qual com
+marcador próprio que persiste após sair do modo ou desativar. As restaurações
+explícitas devolvem o nível original. A redução de imposto termina em baixo.
+O livro acompanha a variante solicitada e verifica presença do produtor antes
+de inferir o resultado. Fontes, defeitos corrigidos e limites da verificação
+estão em [REVIEW_2026-11-10.md](REVIEW_2026-11-10.md).

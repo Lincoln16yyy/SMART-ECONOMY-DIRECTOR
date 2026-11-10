@@ -1,8 +1,11 @@
 """National planning policy scenarios; script simulation, not engine evidence."""
 import unittest
+import tempfile
+from pathlib import Path
 
-from tools.build_mod import ACTION_NAMES, SUPPLY_TARGETS
+from tools.build_mod import ACTION_NAMES, SUPPLY_TARGETS, outputs
 from tools.pdx_script import child, parse, walk
+from tools.validate import validate
 from test_diagnostics import script_definitions
 from script_harness import Country, building, construction_sector, railway, state
 
@@ -218,9 +221,11 @@ class PlanningTests(unittest.TestCase):
         c = self.c
         visible = c.definitions['sed_meta_grain_visible_sgui']
         for expected_months in (1, 2):
+            c.readings['month'] = expected_months - 1
             c.run('sed_refresh_national_plan')
             self.assertEqual(c.variables['sed_grain_short_months'], expected_months)
             self.assertFalse(c.condition(child(visible, 'is_shown'), c.country_scope()))
+        c.readings['month'] = 2
         c.run('sed_refresh_national_plan')
         self.assertEqual(c.variables['sed_grain_short_months'], 3)
         self.assertEqual(c.variables['sed_grain_meta_year'], 1836)
@@ -238,7 +243,8 @@ class PlanningTests(unittest.TestCase):
         clothes = self.producer('clothes', buy=100, sell=30)
         self.c.market_goods['clothes']['market_goods_has_goods_shortage'] = False
         c = self.c
-        for _ in range(3):
+        for month in range(3):
+            c.readings['month'] = month
             c.run('sed_refresh_national_plan')
         self.assertEqual([x[1] for x in self.ranked()], ['grain'])
         self.c.market_goods['clothes']['market_goods_has_goods_shortage'] = True
@@ -254,7 +260,8 @@ class PlanningTests(unittest.TestCase):
     def test_disable_clears_shortage_counters_and_annual_goal(self):
         self.producer('grain')
         c = self.c
-        for _ in range(3):
+        for month in range(3):
+            c.readings['month'] = month
             c.run('sed_refresh_national_plan')
         c.run('sed_disable_country')
         self.assertNotIn('sed_grain_short_months', c.variables)
@@ -276,7 +283,8 @@ class PlanningTests(unittest.TestCase):
         c = self.c
         c.readings['gold_reserves'] = 100
         c.run('sed_set_mode_automatic')
-        for _ in range(3):
+        for month in range(3):
+            c.readings['month'] = month
             c.run('sed_auto_apply_monthly')
         self.assertEqual(c.readings['tax_level'], 'very_high')
         self.assertEqual(c.tax_changes, ['high', 'very_high'])
@@ -336,6 +344,151 @@ class PlanningTests(unittest.TestCase):
         self.assertEqual(c.readings['tax_level'], 'high')
         self.assertEqual(c.wage_changes, [])
         self.assertNotIn('sed_gov_wage_saved', c.variables)
+
+    def test_shortage_samples_ignore_repeated_refreshes_and_reset_across_gaps(self):
+        self.producer('grain')
+        c = self.c
+        for _ in range(8):
+            c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_grain_short_months'], 1)
+        self.assertNotIn('sed_grain_meta_year', c.variables)
+        c.readings['month'] = 1
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_grain_short_months'], 2)
+        c.readings['month'] = 3
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_grain_short_months'], 1)
+        self.assertNotIn('sed_grain_meta_year', c.variables)
+        for month in (4, 5):
+            c.readings['month'] = month
+            c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_grain_meta_year'], 1836)
+
+    def test_shortage_legacy_counters_without_dates_do_not_create_a_goal(self):
+        self.producer('grain')
+        c = self.c
+        c.variables['sed_grain_short_months'] = 100
+        c.variables['sed_grain_meta_year'] = 1836
+        c.variables.pop('sed_grain_short_sample_month', None)
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_grain_short_months'], 1)
+        self.assertNotIn('sed_grain_meta_year', c.variables)
+        c.readings.update(year=1836, month=11)
+        c.run('sed_refresh_national_plan')
+        c.readings.update(year=1837, month=0)
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_grain_short_months'], 2)
+        c.readings['month'] = 1
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_grain_meta_year'], 1837)
+
+    def test_tax_changes_once_per_month_across_mode_changes_and_reactivation(self):
+        c = self.c
+        c.readings['gold_reserves'] = 100
+        c.run('sed_set_mode_automatic')
+        for _ in range(4):
+            c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.tax_changes, ['high'])
+        marker = c.variables['sed_tax_last_change_month']
+        c.run('sed_set_mode_assisted')
+        self.assertEqual(c.readings['tax_level'], 'medium')
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.readings['tax_level'], 'medium')
+        c.run('sed_disable_country')
+        self.assertEqual(c.variables['sed_tax_last_change_month'], marker)
+        c.run('sed_enable_country')
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.readings['tax_level'], 'medium')
+        c.readings['month'] = 1
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.readings['tax_level'], 'high')
+
+    def test_healthy_tax_policy_stops_at_low_and_keeps_month_available_at_floor(self):
+        c = self.c
+        c.readings.update(principal=0, gold_reserves=1000, tax_level='low')
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.readings['tax_level'], 'low')
+        self.assertEqual(c.tax_changes, [])
+        self.assertNotIn('sed_tax_last_change_month', c.variables)
+        c.readings['gold_reserves'] = 100
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.readings['tax_level'], 'medium')
+
+    def test_wages_change_once_per_calendar_month_and_restore_original_level(self):
+        c = self.c
+        c.readings.update(government_wage_level='very_high', gold_reserves=100,
+                          net_total_income=-100, year=1836, month=11)
+        c.run('sed_set_mode_automatic')
+        for _ in range(4):
+            c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.wage_changes, ['high'])
+        c.run('sed_set_mode_manual')
+        self.assertEqual(c.readings['government_wage_level'], 'very_high')
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.readings['government_wage_level'], 'very_high')
+        c.readings.update(year=1837, month=0)
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.readings['government_wage_level'], 'high')
+        c.run('sed_disable_country')
+        self.assertEqual(c.readings['government_wage_level'], 'very_high')
+        self.assertIn('sed_wage_last_change_month', c.variables)
+
+    def test_conflicting_manual_mode_blocks_tax_and_wage_effects(self):
+        c = self.c
+        c.readings.update(gold_reserves=100, net_total_income=-100)
+        c.run('sed_refresh_national_plan')
+        c.variables.update(sed_mode_automatic=1, sed_mode_manual=1)
+        c.run('sed_apply_fiscal_policy')
+        c.run('sed_apply_wage_policy')
+        self.assertEqual(c.tax_changes, [])
+        self.assertEqual(c.wage_changes, [])
+
+    def test_tracked_grain_request_does_not_wait_for_another_variant_queue(self):
+        target = self.producer('grain')
+        wheat = target['buildings'][0]
+        rye = building('building_rye_farm', queued_levels=1)
+        rye['production_methods'] = ['pm_simple_farming']
+        target['buildings'].append(rye)
+        c = self.c
+        c.run('sed_run_grain_approval', target)
+        wheat['level_after_queued_constructions'] = wheat['level']
+        c.run('sed_refresh_supply_candidates')
+        self.assertNotIn('sed_grain_request_pending', target['variables'])
+        self.assertEqual(c.variables['sed_grain_abandoned'], 1)
+        self.assertEqual(c.variables['sed_grain_intents'], 1)
+
+    def test_destroyed_tracked_producer_closes_request_without_fabricating_completion(self):
+        target = self.producer('grain')
+        c = self.c
+        c.run('sed_run_grain_approval', target)
+        target['buildings'].clear()
+        c.run('sed_refresh_supply_candidates')
+        self.assertNotIn('sed_grain_request_pending', target['variables'])
+        self.assertEqual(c.variables['sed_grain_abandoned'], 1)
+        self.assertNotIn('sed_grain_completed', c.variables)
+
+    def test_validator_rejects_fiscal_monthly_guard_bypass_and_marker_cleanup(self):
+        for policy, marker in [('tax', 'sed_tax_last_change_month'),
+                               ('wage', 'sed_wage_last_change_month')]:
+            with self.subTest(policy=policy), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                for name, data in outputs().items():
+                    path = root / name
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    path.write_bytes(data)
+                path = root / 'common/scripted_effects/sed_effects.txt'
+                text = path.read_text(encoding='utf-8-sig').replace(
+                    f'NOT = {{ sed_{policy}_month_limit_reached = yes }}', '', 1)
+                text = text.replace('sed_disable_country = {',
+                                    f'sed_disable_country = {{\n remove_variable = {marker}', 1)
+                path.write_text(text, encoding='utf-8-sig')
+                errors = validate(root)
+                self.assertTrue(any('monthly or mode exclusion' in error for error in errors))
+                self.assertTrue(any('monthly safety marker' in error for error in errors))
 
     def test_supply_book_records_completed_and_abandoned_outcomes(self):
         target = self.producer('grain')

@@ -1,6 +1,6 @@
 # Smart Economy Director — Victoria 3 1.15
 
-A versão 0.6.1 acrescenta planejamento nacional inicial e coordenação de
+A versão 0.6.9 acrescenta planejamento nacional inicial e coordenação de
 construção com Economy Advisor e Supply Chain Semi-Auto Builder. O diário
 mostra objetivo atual, situação fiscal, executor escolhido e até três
 prioridades entre estados e setores.
@@ -39,11 +39,14 @@ até três prioridades.
 
 ## Política inicial e cobertura
 
-Novas tentativas próprias e autorizações externas exigem saldos semanal e
-operacional não negativos, ouro cobrindo quatro semanas de despesas fixas e
+A guarda básica exige saldos semanal e operacional não negativos, ouro
+cobrindo quatro semanas de despesas fixas e
 dívida até 75% do crédito, quando houver dívida. Inadimplência e pausa suspendem
 a coordenação de construção. Esses limiares são parâmetros iniciais avaliados
-em cenários sintéticos e ainda precisam de calibração em campanha.
+em cenários sintéticos e ainda precisam de calibração em campanha. O caminho
+do Advisor admite também financiamento por reservas com a cobertura descrita
+em PLANNING.md. Impostos e salários civis têm um ajuste automático por mês
+de calendário e restauração dos níveis anteriores ao sair do modo.
 
 O plano compara infraestrutura e produtores existentes de madeira, ferro,
 carvão, cereais, tecido, ferramentas, mantimentos e roupas. Também identifica
@@ -52,9 +55,9 @@ ou de energia. A autorização do executor externo permite que ele avalie
 investimentos além do escopo das expansões próprias do Director.
 
 O desenvolvimento está parcial. Custo incremental completo, projeção de
-trabalhadores e insumos futuros, controle de impostos/gastos, identidade de
-projetos, aprendizado com obras concluídas e estratégia plurianual seguem
-pendentes. As integrações e o layout 0.6.1 ainda precisam de verificação na
+trabalhadores e insumos futuros, outras despesas, identidade de projetos,
+avaliação causal dos resultados e estratégia plurianual seguem
+pendentes. As integrações e o layout 0.6.9 ainda precisam de verificação na
 engine e de save/reload. ARoAI construtor é detectado e suspende a delegação
 pelos dois adaptadores. Autoexpansões nativas têm cobertura pendente.
 
@@ -68,7 +71,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.6.1.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.6.9.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 
@@ -78,6 +81,13 @@ e o [contexto de continuidade](docs/AI_CONTEXT.md). O briefing original está em
 [PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md). A [auditoria de 09/11](docs/AUDIT_2026-11-09.md)
 registra o estado histórico da 0.4.1.
 
-A 0.6.1 foi instalada localmente com backup, 13 outputs conferidos e ordem
-dos mods preservada. Os 120 testes sintéticos e a validação estática passaram.
-A verificação do novo fluxo na engine segue pendente.
+A 0.6.9 foi instalada localmente com backup, 14 outputs conferidos e ordem
+dos mods preservada. Os 146 testes sintéticos e a validação estática passaram.
+A leitura das rotinas foi verificada até o menu da engine. Alterações fiscais
+em campanha e restauração após save/reload seguem pendentes.
+
+A revisão 0.6.9 corrige amostragem mensal de metas, limite fiscal por mês,
+piso de imposto e acompanhamento da variante solicitada. Contadores antigos
+sem data são reconstruídos com novas observações. A suíte tem 146 testes
+aprovados e a inicialização da engine chegou ao menu com as rotinas carregadas.
+O relatório está em [REVIEW_2026-11-10.md](docs/REVIEW_2026-11-10.md).

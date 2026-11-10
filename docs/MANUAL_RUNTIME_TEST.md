@@ -454,3 +454,15 @@ restauração ao sair e depois de salvar/recarregar. Em save 0.6.0 com coordena�
 ativa, registrar a captura no primeiro uso do Advisor. A política social e a
 financeira precisam ser comparadas à seleção real de candidatos do Advisor.
 Os casos permanecem pendentes na engine.
+
+## Conferência curta 0.6.9
+
+Abrir o Director em cópia de save e selecionar Automático. Registrar uma
+captura do modo, executor, situação fiscal e última revisão. Avançar até a
+revisão do mês seguinte e registrar a mesma área, junto dos níveis de imposto
+e salário civil no orçamento. Repetir Atualizar diagnóstico no mesmo mês
+permite conferir que a idade das metas permanece estável. Ao voltar para
+Assistido, conferir a restauração dos níveis originais.
+
+O teste de inicialização já chegou ao menu com as rotinas carregadas. A
+conferência acima verifica o comportamento em campanha e permanece pendente.

@@ -297,6 +297,15 @@ sed_disable_country = {
  remove_variable = sed_tools_meta_year
  remove_variable = sed_groceries_meta_year
  remove_variable = sed_clothes_meta_year
+ remove_variable = sed_wood_short_sample_month
+ remove_variable = sed_iron_short_sample_month
+ remove_variable = sed_coal_short_sample_month
+ remove_variable = sed_grain_short_sample_month
+ remove_variable = sed_fabric_short_sample_month
+ remove_variable = sed_tools_short_sample_month
+ remove_variable = sed_groceries_short_sample_month
+ remove_variable = sed_clothes_short_sample_month
+ remove_variable = sed_short_sample_gap
  remove_variable = sed_coord_active
  remove_variable = sed_coord_supply_known
  remove_variable = sed_coord_advisor_known
@@ -834,12 +843,13 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_wood_request_pending
-    NOT = { OR = { AND = { has_building = building_logging_camp b:building_logging_camp = { level_after_queued_constructions > level } } } }
+    NOT = { OR = { AND = { has_variable = sed_wood_intent_variant OR = { AND = { var:sed_wood_intent_variant = 1 has_building = building_logging_camp b:building_logging_camp = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_wood_intent_variant } OR = { AND = { has_building = building_logging_camp b:building_logging_camp = { level_after_queued_constructions > level } } } } } }
    }
    if = {
-    limit = { has_variable = sed_wood_intent_variant }
+    limit = { has_variable = sed_wood_intent_variant has_variable = sed_wood_intent_level }
     if = {
      limit = { var:sed_wood_intent_variant = 1
+      has_building = building_logging_camp
       b:building_logging_camp.level > var:sed_wood_intent_level
      }
      sed_wood_record_completed = yes
@@ -919,12 +929,13 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_iron_request_pending
-    NOT = { OR = { AND = { has_building = building_iron_mine b:building_iron_mine = { level_after_queued_constructions > level } } } }
+    NOT = { OR = { AND = { has_variable = sed_iron_intent_variant OR = { AND = { var:sed_iron_intent_variant = 1 has_building = building_iron_mine b:building_iron_mine = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_iron_intent_variant } OR = { AND = { has_building = building_iron_mine b:building_iron_mine = { level_after_queued_constructions > level } } } } } }
    }
    if = {
-    limit = { has_variable = sed_iron_intent_variant }
+    limit = { has_variable = sed_iron_intent_variant has_variable = sed_iron_intent_level }
     if = {
      limit = { var:sed_iron_intent_variant = 1
+      has_building = building_iron_mine
       b:building_iron_mine.level > var:sed_iron_intent_level
      }
      sed_iron_record_completed = yes
@@ -1004,12 +1015,13 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_coal_request_pending
-    NOT = { OR = { AND = { has_building = building_coal_mine b:building_coal_mine = { level_after_queued_constructions > level } } } }
+    NOT = { OR = { AND = { has_variable = sed_coal_intent_variant OR = { AND = { var:sed_coal_intent_variant = 1 has_building = building_coal_mine b:building_coal_mine = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_coal_intent_variant } OR = { AND = { has_building = building_coal_mine b:building_coal_mine = { level_after_queued_constructions > level } } } } } }
    }
    if = {
-    limit = { has_variable = sed_coal_intent_variant }
+    limit = { has_variable = sed_coal_intent_variant has_variable = sed_coal_intent_level }
     if = {
      limit = { var:sed_coal_intent_variant = 1
+      has_building = building_coal_mine
       b:building_coal_mine.level > var:sed_coal_intent_level
      }
      sed_coal_record_completed = yes
@@ -1089,36 +1101,41 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_grain_request_pending
-    NOT = { OR = { AND = { has_building = building_wheat_farm b:building_wheat_farm = { level_after_queued_constructions > level } } AND = { has_building = building_rye_farm b:building_rye_farm = { level_after_queued_constructions > level } } AND = { has_building = building_rice_farm b:building_rice_farm = { level_after_queued_constructions > level } } AND = { has_building = building_maize_farm b:building_maize_farm = { level_after_queued_constructions > level } } AND = { has_building = building_millet_farm b:building_millet_farm = { level_after_queued_constructions > level } } } }
+    NOT = { OR = { AND = { has_variable = sed_grain_intent_variant OR = { AND = { var:sed_grain_intent_variant = 1 has_building = building_wheat_farm b:building_wheat_farm = { level_after_queued_constructions > level } } AND = { var:sed_grain_intent_variant = 2 has_building = building_rye_farm b:building_rye_farm = { level_after_queued_constructions > level } } AND = { var:sed_grain_intent_variant = 3 has_building = building_rice_farm b:building_rice_farm = { level_after_queued_constructions > level } } AND = { var:sed_grain_intent_variant = 4 has_building = building_maize_farm b:building_maize_farm = { level_after_queued_constructions > level } } AND = { var:sed_grain_intent_variant = 5 has_building = building_millet_farm b:building_millet_farm = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_grain_intent_variant } OR = { AND = { has_building = building_wheat_farm b:building_wheat_farm = { level_after_queued_constructions > level } } AND = { has_building = building_rye_farm b:building_rye_farm = { level_after_queued_constructions > level } } AND = { has_building = building_rice_farm b:building_rice_farm = { level_after_queued_constructions > level } } AND = { has_building = building_maize_farm b:building_maize_farm = { level_after_queued_constructions > level } } AND = { has_building = building_millet_farm b:building_millet_farm = { level_after_queued_constructions > level } } } } } }
    }
    if = {
-    limit = { has_variable = sed_grain_intent_variant }
+    limit = { has_variable = sed_grain_intent_variant has_variable = sed_grain_intent_level }
     if = {
      limit = { var:sed_grain_intent_variant = 1
+      has_building = building_wheat_farm
       b:building_wheat_farm.level > var:sed_grain_intent_level
      }
      sed_grain_record_completed = yes
     }
     else_if = {
      limit = { var:sed_grain_intent_variant = 2
+      has_building = building_rye_farm
       b:building_rye_farm.level > var:sed_grain_intent_level
      }
      sed_grain_record_completed = yes
     }
     else_if = {
      limit = { var:sed_grain_intent_variant = 3
+      has_building = building_rice_farm
       b:building_rice_farm.level > var:sed_grain_intent_level
      }
      sed_grain_record_completed = yes
     }
     else_if = {
      limit = { var:sed_grain_intent_variant = 4
+      has_building = building_maize_farm
       b:building_maize_farm.level > var:sed_grain_intent_level
      }
      sed_grain_record_completed = yes
     }
     else_if = {
      limit = { var:sed_grain_intent_variant = 5
+      has_building = building_millet_farm
       b:building_millet_farm.level > var:sed_grain_intent_level
      }
      sed_grain_record_completed = yes
@@ -1350,18 +1367,20 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_fabric_request_pending
-    NOT = { OR = { AND = { has_building = building_cotton_plantation b:building_cotton_plantation = { level_after_queued_constructions > level } } AND = { has_building = building_livestock_ranch b:building_livestock_ranch = { level_after_queued_constructions > level } } } }
+    NOT = { OR = { AND = { has_variable = sed_fabric_intent_variant OR = { AND = { var:sed_fabric_intent_variant = 1 has_building = building_cotton_plantation b:building_cotton_plantation = { level_after_queued_constructions > level } } AND = { var:sed_fabric_intent_variant = 2 has_building = building_livestock_ranch b:building_livestock_ranch = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_fabric_intent_variant } OR = { AND = { has_building = building_cotton_plantation b:building_cotton_plantation = { level_after_queued_constructions > level } } AND = { has_building = building_livestock_ranch b:building_livestock_ranch = { level_after_queued_constructions > level } } } } } }
    }
    if = {
-    limit = { has_variable = sed_fabric_intent_variant }
+    limit = { has_variable = sed_fabric_intent_variant has_variable = sed_fabric_intent_level }
     if = {
      limit = { var:sed_fabric_intent_variant = 1
+      has_building = building_cotton_plantation
       b:building_cotton_plantation.level > var:sed_fabric_intent_level
      }
      sed_fabric_record_completed = yes
     }
     else_if = {
      limit = { var:sed_fabric_intent_variant = 2
+      has_building = building_livestock_ranch
       b:building_livestock_ranch.level > var:sed_fabric_intent_level
      }
      sed_fabric_record_completed = yes
@@ -1479,12 +1498,13 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_tools_request_pending
-    NOT = { OR = { AND = { has_building = building_tooling_workshop b:building_tooling_workshop = { level_after_queued_constructions > level } } } }
+    NOT = { OR = { AND = { has_variable = sed_tools_intent_variant OR = { AND = { var:sed_tools_intent_variant = 1 has_building = building_tooling_workshop b:building_tooling_workshop = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_tools_intent_variant } OR = { AND = { has_building = building_tooling_workshop b:building_tooling_workshop = { level_after_queued_constructions > level } } } } } }
    }
    if = {
-    limit = { has_variable = sed_tools_intent_variant }
+    limit = { has_variable = sed_tools_intent_variant has_variable = sed_tools_intent_level }
     if = {
      limit = { var:sed_tools_intent_variant = 1
+      has_building = building_tooling_workshop
       b:building_tooling_workshop.level > var:sed_tools_intent_level
      }
      sed_tools_record_completed = yes
@@ -1564,12 +1584,13 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_groceries_request_pending
-    NOT = { OR = { AND = { has_building = building_food_industry b:building_food_industry = { level_after_queued_constructions > level } } } }
+    NOT = { OR = { AND = { has_variable = sed_groceries_intent_variant OR = { AND = { var:sed_groceries_intent_variant = 1 has_building = building_food_industry b:building_food_industry = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_groceries_intent_variant } OR = { AND = { has_building = building_food_industry b:building_food_industry = { level_after_queued_constructions > level } } } } } }
    }
    if = {
-    limit = { has_variable = sed_groceries_intent_variant }
+    limit = { has_variable = sed_groceries_intent_variant has_variable = sed_groceries_intent_level }
     if = {
      limit = { var:sed_groceries_intent_variant = 1
+      has_building = building_food_industry
       b:building_food_industry.level > var:sed_groceries_intent_level
      }
      sed_groceries_record_completed = yes
@@ -1649,12 +1670,13 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_clothes_request_pending
-    NOT = { OR = { AND = { has_building = building_textile_mill b:building_textile_mill = { level_after_queued_constructions > level } } } }
+    NOT = { OR = { AND = { has_variable = sed_clothes_intent_variant OR = { AND = { var:sed_clothes_intent_variant = 1 has_building = building_textile_mill b:building_textile_mill = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_clothes_intent_variant } OR = { AND = { has_building = building_textile_mill b:building_textile_mill = { level_after_queued_constructions > level } } } } } }
    }
    if = {
-    limit = { has_variable = sed_clothes_intent_variant }
+    limit = { has_variable = sed_clothes_intent_variant has_variable = sed_clothes_intent_level }
     if = {
      limit = { var:sed_clothes_intent_variant = 1
+      has_building = building_textile_mill
       b:building_textile_mill.level > var:sed_clothes_intent_level
      }
      sed_clothes_record_completed = yes
@@ -2553,23 +2575,31 @@ sed_refresh_national_plan = {
     }
    } }
   } }
-  if = { limit = {
-   market = { mg:wood ?= { market_goods_has_goods_shortage = yes } }
+  if = { limit = { NOT = { has_variable = sed_wood_short_sample_month } }
+   remove_variable = sed_wood_short_months
+   remove_variable = sed_wood_meta_year
   }
-   if = { limit = { has_variable = sed_wood_short_months }
-    change_variable = { name = sed_wood_short_months add = 1 }
+  if = { limit = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } }
+   if = { limit = { NOT = { has_variable = sed_wood_short_sample_month var:sed_wood_short_sample_month = sed_live_month_key } }
+    set_variable = { name = sed_short_sample_gap value = 0 }
+    if = { limit = { has_variable = sed_wood_short_sample_month }
+     set_variable = { name = sed_short_sample_gap value = { value = sed_live_month_key subtract = var:sed_wood_short_sample_month } }
+    }
+    if = { limit = { var:sed_short_sample_gap = 1 has_variable = sed_wood_short_months }
+     change_variable = { name = sed_wood_short_months add = 1 }
+    }
+    else = { set_variable = { name = sed_wood_short_months value = 1 } }
+    remove_variable = sed_short_sample_gap
    }
-   else = { set_variable = { name = sed_wood_short_months value = 1 } }
+   else_if = { limit = { NOT = { has_variable = sed_wood_short_months } }
+    set_variable = { name = sed_wood_short_months value = 1 }
+   }
    if = { limit = { var:sed_wood_short_months >= 3 }
-    if = { limit = { NOT = { has_variable = sed_wood_meta_year } }
-     set_variable = { name = sed_wood_meta_year value = year }
-    }
-    else_if = { limit = { NOT = { var:sed_wood_meta_year = year } }
-     set_variable = { name = sed_wood_meta_year value = year }
-    }
+    set_variable = { name = sed_wood_meta_year value = year }
    }
   }
   else = { remove_variable = sed_wood_short_months }
+  set_variable = { name = sed_wood_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_iron value = 0 }
   if = { limit = {
    market = { mg:iron ?= { market_goods_has_goods_shortage = yes } }
@@ -2587,23 +2617,31 @@ sed_refresh_national_plan = {
     }
    } }
   } }
-  if = { limit = {
-   market = { mg:iron ?= { market_goods_has_goods_shortage = yes } }
+  if = { limit = { NOT = { has_variable = sed_iron_short_sample_month } }
+   remove_variable = sed_iron_short_months
+   remove_variable = sed_iron_meta_year
   }
-   if = { limit = { has_variable = sed_iron_short_months }
-    change_variable = { name = sed_iron_short_months add = 1 }
+  if = { limit = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
+   if = { limit = { NOT = { has_variable = sed_iron_short_sample_month var:sed_iron_short_sample_month = sed_live_month_key } }
+    set_variable = { name = sed_short_sample_gap value = 0 }
+    if = { limit = { has_variable = sed_iron_short_sample_month }
+     set_variable = { name = sed_short_sample_gap value = { value = sed_live_month_key subtract = var:sed_iron_short_sample_month } }
+    }
+    if = { limit = { var:sed_short_sample_gap = 1 has_variable = sed_iron_short_months }
+     change_variable = { name = sed_iron_short_months add = 1 }
+    }
+    else = { set_variable = { name = sed_iron_short_months value = 1 } }
+    remove_variable = sed_short_sample_gap
    }
-   else = { set_variable = { name = sed_iron_short_months value = 1 } }
+   else_if = { limit = { NOT = { has_variable = sed_iron_short_months } }
+    set_variable = { name = sed_iron_short_months value = 1 }
+   }
    if = { limit = { var:sed_iron_short_months >= 3 }
-    if = { limit = { NOT = { has_variable = sed_iron_meta_year } }
-     set_variable = { name = sed_iron_meta_year value = year }
-    }
-    else_if = { limit = { NOT = { var:sed_iron_meta_year = year } }
-     set_variable = { name = sed_iron_meta_year value = year }
-    }
+    set_variable = { name = sed_iron_meta_year value = year }
    }
   }
   else = { remove_variable = sed_iron_short_months }
+  set_variable = { name = sed_iron_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_coal value = 0 }
   if = { limit = {
    market = { mg:coal ?= { market_goods_has_goods_shortage = yes } }
@@ -2621,23 +2659,31 @@ sed_refresh_national_plan = {
     }
    } }
   } }
-  if = { limit = {
-   market = { mg:coal ?= { market_goods_has_goods_shortage = yes } }
+  if = { limit = { NOT = { has_variable = sed_coal_short_sample_month } }
+   remove_variable = sed_coal_short_months
+   remove_variable = sed_coal_meta_year
   }
-   if = { limit = { has_variable = sed_coal_short_months }
-    change_variable = { name = sed_coal_short_months add = 1 }
+  if = { limit = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+   if = { limit = { NOT = { has_variable = sed_coal_short_sample_month var:sed_coal_short_sample_month = sed_live_month_key } }
+    set_variable = { name = sed_short_sample_gap value = 0 }
+    if = { limit = { has_variable = sed_coal_short_sample_month }
+     set_variable = { name = sed_short_sample_gap value = { value = sed_live_month_key subtract = var:sed_coal_short_sample_month } }
+    }
+    if = { limit = { var:sed_short_sample_gap = 1 has_variable = sed_coal_short_months }
+     change_variable = { name = sed_coal_short_months add = 1 }
+    }
+    else = { set_variable = { name = sed_coal_short_months value = 1 } }
+    remove_variable = sed_short_sample_gap
    }
-   else = { set_variable = { name = sed_coal_short_months value = 1 } }
+   else_if = { limit = { NOT = { has_variable = sed_coal_short_months } }
+    set_variable = { name = sed_coal_short_months value = 1 }
+   }
    if = { limit = { var:sed_coal_short_months >= 3 }
-    if = { limit = { NOT = { has_variable = sed_coal_meta_year } }
-     set_variable = { name = sed_coal_meta_year value = year }
-    }
-    else_if = { limit = { NOT = { var:sed_coal_meta_year = year } }
-     set_variable = { name = sed_coal_meta_year value = year }
-    }
+    set_variable = { name = sed_coal_meta_year value = year }
    }
   }
   else = { remove_variable = sed_coal_short_months }
+  set_variable = { name = sed_coal_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_grain value = 0 }
   if = { limit = {
    market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -2655,23 +2701,31 @@ sed_refresh_national_plan = {
     }
    } }
   } }
-  if = { limit = {
-   market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
+  if = { limit = { NOT = { has_variable = sed_grain_short_sample_month } }
+   remove_variable = sed_grain_short_months
+   remove_variable = sed_grain_meta_year
   }
-   if = { limit = { has_variable = sed_grain_short_months }
-    change_variable = { name = sed_grain_short_months add = 1 }
+  if = { limit = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
+   if = { limit = { NOT = { has_variable = sed_grain_short_sample_month var:sed_grain_short_sample_month = sed_live_month_key } }
+    set_variable = { name = sed_short_sample_gap value = 0 }
+    if = { limit = { has_variable = sed_grain_short_sample_month }
+     set_variable = { name = sed_short_sample_gap value = { value = sed_live_month_key subtract = var:sed_grain_short_sample_month } }
+    }
+    if = { limit = { var:sed_short_sample_gap = 1 has_variable = sed_grain_short_months }
+     change_variable = { name = sed_grain_short_months add = 1 }
+    }
+    else = { set_variable = { name = sed_grain_short_months value = 1 } }
+    remove_variable = sed_short_sample_gap
    }
-   else = { set_variable = { name = sed_grain_short_months value = 1 } }
+   else_if = { limit = { NOT = { has_variable = sed_grain_short_months } }
+    set_variable = { name = sed_grain_short_months value = 1 }
+   }
    if = { limit = { var:sed_grain_short_months >= 3 }
-    if = { limit = { NOT = { has_variable = sed_grain_meta_year } }
-     set_variable = { name = sed_grain_meta_year value = year }
-    }
-    else_if = { limit = { NOT = { var:sed_grain_meta_year = year } }
-     set_variable = { name = sed_grain_meta_year value = year }
-    }
+    set_variable = { name = sed_grain_meta_year value = year }
    }
   }
   else = { remove_variable = sed_grain_short_months }
+  set_variable = { name = sed_grain_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_fabric value = 0 }
   if = { limit = {
    market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } }
@@ -2689,23 +2743,31 @@ sed_refresh_national_plan = {
     }
    } }
   } }
-  if = { limit = {
-   market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } }
+  if = { limit = { NOT = { has_variable = sed_fabric_short_sample_month } }
+   remove_variable = sed_fabric_short_months
+   remove_variable = sed_fabric_meta_year
   }
-   if = { limit = { has_variable = sed_fabric_short_months }
-    change_variable = { name = sed_fabric_short_months add = 1 }
+  if = { limit = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
+   if = { limit = { NOT = { has_variable = sed_fabric_short_sample_month var:sed_fabric_short_sample_month = sed_live_month_key } }
+    set_variable = { name = sed_short_sample_gap value = 0 }
+    if = { limit = { has_variable = sed_fabric_short_sample_month }
+     set_variable = { name = sed_short_sample_gap value = { value = sed_live_month_key subtract = var:sed_fabric_short_sample_month } }
+    }
+    if = { limit = { var:sed_short_sample_gap = 1 has_variable = sed_fabric_short_months }
+     change_variable = { name = sed_fabric_short_months add = 1 }
+    }
+    else = { set_variable = { name = sed_fabric_short_months value = 1 } }
+    remove_variable = sed_short_sample_gap
    }
-   else = { set_variable = { name = sed_fabric_short_months value = 1 } }
+   else_if = { limit = { NOT = { has_variable = sed_fabric_short_months } }
+    set_variable = { name = sed_fabric_short_months value = 1 }
+   }
    if = { limit = { var:sed_fabric_short_months >= 3 }
-    if = { limit = { NOT = { has_variable = sed_fabric_meta_year } }
-     set_variable = { name = sed_fabric_meta_year value = year }
-    }
-    else_if = { limit = { NOT = { var:sed_fabric_meta_year = year } }
-     set_variable = { name = sed_fabric_meta_year value = year }
-    }
+    set_variable = { name = sed_fabric_meta_year value = year }
    }
   }
   else = { remove_variable = sed_fabric_short_months }
+  set_variable = { name = sed_fabric_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_tools value = 0 }
   if = { limit = {
    market = { mg:tools ?= { market_goods_has_goods_shortage = yes } }
@@ -2723,23 +2785,31 @@ sed_refresh_national_plan = {
     }
    } }
   } }
-  if = { limit = {
-   market = { mg:tools ?= { market_goods_has_goods_shortage = yes } }
+  if = { limit = { NOT = { has_variable = sed_tools_short_sample_month } }
+   remove_variable = sed_tools_short_months
+   remove_variable = sed_tools_meta_year
   }
-   if = { limit = { has_variable = sed_tools_short_months }
-    change_variable = { name = sed_tools_short_months add = 1 }
+  if = { limit = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+   if = { limit = { NOT = { has_variable = sed_tools_short_sample_month var:sed_tools_short_sample_month = sed_live_month_key } }
+    set_variable = { name = sed_short_sample_gap value = 0 }
+    if = { limit = { has_variable = sed_tools_short_sample_month }
+     set_variable = { name = sed_short_sample_gap value = { value = sed_live_month_key subtract = var:sed_tools_short_sample_month } }
+    }
+    if = { limit = { var:sed_short_sample_gap = 1 has_variable = sed_tools_short_months }
+     change_variable = { name = sed_tools_short_months add = 1 }
+    }
+    else = { set_variable = { name = sed_tools_short_months value = 1 } }
+    remove_variable = sed_short_sample_gap
    }
-   else = { set_variable = { name = sed_tools_short_months value = 1 } }
+   else_if = { limit = { NOT = { has_variable = sed_tools_short_months } }
+    set_variable = { name = sed_tools_short_months value = 1 }
+   }
    if = { limit = { var:sed_tools_short_months >= 3 }
-    if = { limit = { NOT = { has_variable = sed_tools_meta_year } }
-     set_variable = { name = sed_tools_meta_year value = year }
-    }
-    else_if = { limit = { NOT = { var:sed_tools_meta_year = year } }
-     set_variable = { name = sed_tools_meta_year value = year }
-    }
+    set_variable = { name = sed_tools_meta_year value = year }
    }
   }
   else = { remove_variable = sed_tools_short_months }
+  set_variable = { name = sed_tools_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_groceries value = 0 }
   if = { limit = {
    market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } }
@@ -2757,23 +2827,31 @@ sed_refresh_national_plan = {
     }
    } }
   } }
-  if = { limit = {
-   market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } }
+  if = { limit = { NOT = { has_variable = sed_groceries_short_sample_month } }
+   remove_variable = sed_groceries_short_months
+   remove_variable = sed_groceries_meta_year
   }
-   if = { limit = { has_variable = sed_groceries_short_months }
-    change_variable = { name = sed_groceries_short_months add = 1 }
+  if = { limit = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } }
+   if = { limit = { NOT = { has_variable = sed_groceries_short_sample_month var:sed_groceries_short_sample_month = sed_live_month_key } }
+    set_variable = { name = sed_short_sample_gap value = 0 }
+    if = { limit = { has_variable = sed_groceries_short_sample_month }
+     set_variable = { name = sed_short_sample_gap value = { value = sed_live_month_key subtract = var:sed_groceries_short_sample_month } }
+    }
+    if = { limit = { var:sed_short_sample_gap = 1 has_variable = sed_groceries_short_months }
+     change_variable = { name = sed_groceries_short_months add = 1 }
+    }
+    else = { set_variable = { name = sed_groceries_short_months value = 1 } }
+    remove_variable = sed_short_sample_gap
    }
-   else = { set_variable = { name = sed_groceries_short_months value = 1 } }
+   else_if = { limit = { NOT = { has_variable = sed_groceries_short_months } }
+    set_variable = { name = sed_groceries_short_months value = 1 }
+   }
    if = { limit = { var:sed_groceries_short_months >= 3 }
-    if = { limit = { NOT = { has_variable = sed_groceries_meta_year } }
-     set_variable = { name = sed_groceries_meta_year value = year }
-    }
-    else_if = { limit = { NOT = { var:sed_groceries_meta_year = year } }
-     set_variable = { name = sed_groceries_meta_year value = year }
-    }
+    set_variable = { name = sed_groceries_meta_year value = year }
    }
   }
   else = { remove_variable = sed_groceries_short_months }
+  set_variable = { name = sed_groceries_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_clothes value = 0 }
   if = { limit = {
    market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } }
@@ -2791,23 +2869,31 @@ sed_refresh_national_plan = {
     }
    } }
   } }
-  if = { limit = {
-   market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } }
+  if = { limit = { NOT = { has_variable = sed_clothes_short_sample_month } }
+   remove_variable = sed_clothes_short_months
+   remove_variable = sed_clothes_meta_year
   }
-   if = { limit = { has_variable = sed_clothes_short_months }
-    change_variable = { name = sed_clothes_short_months add = 1 }
+  if = { limit = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } }
+   if = { limit = { NOT = { has_variable = sed_clothes_short_sample_month var:sed_clothes_short_sample_month = sed_live_month_key } }
+    set_variable = { name = sed_short_sample_gap value = 0 }
+    if = { limit = { has_variable = sed_clothes_short_sample_month }
+     set_variable = { name = sed_short_sample_gap value = { value = sed_live_month_key subtract = var:sed_clothes_short_sample_month } }
+    }
+    if = { limit = { var:sed_short_sample_gap = 1 has_variable = sed_clothes_short_months }
+     change_variable = { name = sed_clothes_short_months add = 1 }
+    }
+    else = { set_variable = { name = sed_clothes_short_months value = 1 } }
+    remove_variable = sed_short_sample_gap
    }
-   else = { set_variable = { name = sed_clothes_short_months value = 1 } }
+   else_if = { limit = { NOT = { has_variable = sed_clothes_short_months } }
+    set_variable = { name = sed_clothes_short_months value = 1 }
+   }
    if = { limit = { var:sed_clothes_short_months >= 3 }
-    if = { limit = { NOT = { has_variable = sed_clothes_meta_year } }
-     set_variable = { name = sed_clothes_meta_year value = year }
-    }
-    else_if = { limit = { NOT = { var:sed_clothes_meta_year = year } }
-     set_variable = { name = sed_clothes_meta_year value = year }
-    }
+    set_variable = { name = sed_clothes_meta_year value = year }
    }
   }
   else = { remove_variable = sed_clothes_short_months }
+  set_variable = { name = sed_clothes_short_sample_month value = sed_live_month_key }
   every_scope_state = {
    set_variable = { name = sed_plan_railway_rank value = 0 }
    set_variable = { name = sed_plan_railway_score value = 0 }
@@ -3293,14 +3379,17 @@ sed_apply_fiscal_policy = {
  if = {
   limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic
    has_variable = sed_fiscal_status
+   NOT = { has_variable = sed_mode_manual }
+   NOT = { has_variable = sed_mode_assisted }
+   NOT = { sed_tax_month_limit_reached = yes }
   }
   if = {
    limit = { OR = { var:sed_fiscal_status = 2 var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } }
    sed_tax_policy_save = yes
-   if = { limit = { tax_level = very_low } set_tax_level = low }
-   else_if = { limit = { tax_level = low } set_tax_level = medium }
-   else_if = { limit = { tax_level = medium } set_tax_level = high }
-   else_if = { limit = { tax_level = high } set_tax_level = very_high }
+   if = { limit = { tax_level = very_low } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_tax_level = low }
+   else_if = { limit = { tax_level = low } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_tax_level = medium }
+   else_if = { limit = { tax_level = medium } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_tax_level = high }
+   else_if = { limit = { tax_level = high } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_tax_level = very_high }
   }
   else_if = {
    limit = { OR = { var:sed_fiscal_status = 1 var:sed_fiscal_status = 5 }
@@ -3309,10 +3398,9 @@ sed_apply_fiscal_policy = {
     net_total_income > 0
    }
    sed_tax_policy_save = yes
-   if = { limit = { tax_level = low } set_tax_level = very_low }
-   else_if = { limit = { tax_level = medium } set_tax_level = low }
-   else_if = { limit = { tax_level = high } set_tax_level = medium }
-   else_if = { limit = { tax_level = very_high } set_tax_level = high }
+   if = { limit = { tax_level = medium } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_tax_level = low }
+   else_if = { limit = { tax_level = high } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_tax_level = medium }
+   else_if = { limit = { tax_level = very_high } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_tax_level = high }
   }
  }
 }
@@ -3354,13 +3442,16 @@ sed_apply_wage_policy = {
  if = {
   limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic
    has_variable = sed_fiscal_status
+   NOT = { has_variable = sed_mode_manual }
+   NOT = { has_variable = sed_mode_assisted }
+   NOT = { sed_wage_month_limit_reached = yes }
   }
   if = {
    limit = { OR = { var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } }
    sed_wage_policy_save = yes
-   if = { limit = { government_wage_level = medium } set_government_wage_level = low }
-   else_if = { limit = { government_wage_level = high } set_government_wage_level = medium }
-   else_if = { limit = { government_wage_level = very_high } set_government_wage_level = high }
+   if = { limit = { government_wage_level = medium } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_government_wage_level = low }
+   else_if = { limit = { government_wage_level = high } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_government_wage_level = medium }
+   else_if = { limit = { government_wage_level = very_high } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_government_wage_level = high }
   }
   else_if = {
    limit = { OR = { var:sed_fiscal_status = 1 var:sed_fiscal_status = 5 }
@@ -3369,8 +3460,8 @@ sed_apply_wage_policy = {
     net_total_income > 0
    }
    sed_wage_policy_save = yes
-   if = { limit = { government_wage_level = very_low } set_government_wage_level = low }
-   else_if = { limit = { government_wage_level = low } set_government_wage_level = medium }
+   if = { limit = { government_wage_level = very_low } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_government_wage_level = low }
+   else_if = { limit = { government_wage_level = low } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_government_wage_level = medium }
   }
  }
 }

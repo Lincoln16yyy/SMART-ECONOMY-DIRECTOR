@@ -1273,3 +1273,34 @@ Entrega local 0.6.8 instalada com jogo fechado, 14 outputs conferidos e
 content_load.json preservado. Backup em
 `sed_backups/mod_before_0.6.8_20261110_013400_273582`. ZIP em
 `dist/smart-economy-director-0.6.8.zip`. Nada observado na engine.
+
+## Revisão da continuação 0.6.9
+
+Revisados os commits 03aa0a6 a d0fca76. Metas contavam chamadas como meses e
+políticas fiscais podiam executar múltiplos passos no mesmo mês. A amostragem
+agora usa meses de calendário consecutivos observados. Histórico sem data de
+amostragem é reiniciado na primeira leitura. Imposto e salário civil têm
+marcadores mensais persistentes independentes, preservados em troca de modo e
+desativação. O imposto para no piso baixo e marcas conflitantes com Manual ou
+Assistido impedem alterações.
+
+O livro acompanha a variante solicitada e verifica presença e linha de base do
+produtor. Uma fila de outro produtor do mesmo bem deixa de reter o pedido.
+Pedidos antigos sem variante conservam a aproximação anterior. O livro continua
+inferindo resultados por nível/fila e não identifica projetos.
+
+146 testes aprovados, geração e validação estática local 1.15.0 aprovadas.
+Uma inicialização isolada de três minutos com os mods da campanha chegou ao
+menu, sem erros atribuídos ao Director nos logs rotacionados. Leitura dos
+efeitos de imposto e salário aceita na engine. Mudanças em campanha e
+save/reload ainda aguardam observação. O jogador ofereceu capturas para essa
+etapa. Detalhes e evidências em REVIEW_2026-11-10.md.
+
+PERSISTENT_VARIABLES passa a conter schema, limite de construção e os dois
+marcadores de ajuste fiscal. Snapshots continuam sendo restaurados e removidos
+na saída. Instalação e publicação da 0.6.9 registradas na entrega abaixo.
+
+Entrega 0.6.9 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.9_20261110_101047_639382`.
+146 testes aprovados, validação estática local e pacote aprovados.
