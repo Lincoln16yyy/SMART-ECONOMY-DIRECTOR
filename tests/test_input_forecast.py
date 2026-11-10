@@ -42,12 +42,17 @@ class InputForecastTests(unittest.TestCase):
         c.run('sed_refresh_diagnostics')
         self.assertFalse(self.eligible())
         self.assertIn('sed_input_priority_wood', c.variables)
+        self.assertEqual(c.variable_lists['sed_input_blocked_wood'], [self.target])
+        blocker = c.definitions['sed_input_blocks_wood_tools_tooling_workshop']
+        self.assertTrue(c.condition(blocker, self.target))
+        self.assertFalse(c.condition(blocker, upstream))
         self.assertEqual(c.variable_lists['sed_wood_candidates'], [upstream])
         self.assertEqual(upstream['variables']['sed_plan_wood_rank'], 1)
 
         logging['level_after_queued_constructions'] = 2
         c.run('sed_refresh_diagnostics')
         self.assertNotIn('sed_wood_candidates', c.variable_lists)
+        self.assertEqual(c.variable_lists['sed_input_blocked_wood'], [self.target])
         self.assertEqual(c.variables['sed_plan_waiting'], 1)
 
         logging['level_after_queued_constructions'] = 1
@@ -55,11 +60,22 @@ class InputForecastTests(unittest.TestCase):
         c.run('sed_run_wood_approval', upstream)
         self.assertEqual(c.constructions, [])
         self.assertNotIn('sed_input_priority_wood', c.variables)
+        self.assertNotIn('sed_input_blocked_wood', c.variable_lists)
 
         self.wood(100, 68.74)
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')
         self.assertEqual([order['building'] for order in c.constructions], ['building_logging_camp'])
+
+    def test_blocker_list_shows_three_most_populous_affected_states_and_clears_on_disable(self):
+        self.wood(100, 68.74)
+        states = [state(buildings=[self.producer.copy()], population=200000 + i * 10000)
+                  for i in range(4)]
+        self.c.states = states
+        self.c.run('sed_refresh_diagnostics')
+        self.assertEqual(self.c.variable_lists['sed_input_blocked_wood'], states[:0:-1])
+        self.c.run('sed_disable_country')
+        self.assertNotIn('sed_input_blocked_wood', self.c.variable_lists)
 
     def test_inoperable_downstream_producer_does_not_create_input_priority(self):
         self.wood(100, 68.74)

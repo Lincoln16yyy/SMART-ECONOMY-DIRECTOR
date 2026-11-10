@@ -894,7 +894,8 @@ sed_construction_action_failed_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_construction_action_status = 2 }
 }
-sed_wood_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_input_priority_wood sed_wood_supply_demand = yes } }
+sed_wood_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_input_blocked_wood } }
+sed_input_blocks_wood_tools_tooling_workshop_visible_sgui = { scope = state is_shown = { sed_input_blocks_wood_tools_tooling_workshop = yes } }
 sed_wood_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_wood_candidates }
@@ -915,7 +916,12 @@ sed_wood_action_failed_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_wood_action_status = 2 }
 }
-sed_iron_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_input_priority_iron sed_iron_supply_demand = yes } }
+sed_iron_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_input_blocked_iron } }
+sed_input_blocks_iron_fabric_livestock_ranch_visible_sgui = { scope = state is_shown = { sed_input_blocks_iron_fabric_livestock_ranch = yes } }
+sed_input_blocks_iron_tools_tooling_workshop_visible_sgui = { scope = state is_shown = { sed_input_blocks_iron_tools_tooling_workshop = yes } }
+sed_input_blocks_iron_groceries_food_industry_visible_sgui = { scope = state is_shown = { sed_input_blocks_iron_groceries_food_industry = yes } }
+sed_input_blocks_iron_small_arms_arms_industry_visible_sgui = { scope = state is_shown = { sed_input_blocks_iron_small_arms_arms_industry = yes } }
+sed_input_blocks_iron_artillery_artillery_foundry_visible_sgui = { scope = state is_shown = { sed_input_blocks_iron_artillery_artillery_foundry = yes } }
 sed_iron_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_iron_candidates }
@@ -936,7 +942,19 @@ sed_iron_action_failed_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_iron_action_status = 2 }
 }
-sed_coal_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_input_priority_coal sed_coal_supply_demand = yes } }
+sed_coal_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_input_blocked_coal } }
+sed_input_blocks_coal_wood_logging_camp_visible_sgui = { scope = state is_shown = { sed_input_blocks_coal_wood_logging_camp = yes } }
+sed_input_blocks_coal_iron_iron_mine_visible_sgui = { scope = state is_shown = { sed_input_blocks_coal_iron_iron_mine = yes } }
+sed_input_blocks_coal_grain_wheat_farm_visible_sgui = { scope = state is_shown = { sed_input_blocks_coal_grain_wheat_farm = yes } }
+sed_input_blocks_coal_grain_rye_farm_visible_sgui = { scope = state is_shown = { sed_input_blocks_coal_grain_rye_farm = yes } }
+sed_input_blocks_coal_grain_rice_farm_visible_sgui = { scope = state is_shown = { sed_input_blocks_coal_grain_rice_farm = yes } }
+sed_input_blocks_coal_grain_maize_farm_visible_sgui = { scope = state is_shown = { sed_input_blocks_coal_grain_maize_farm = yes } }
+sed_input_blocks_coal_grain_millet_farm_visible_sgui = { scope = state is_shown = { sed_input_blocks_coal_grain_millet_farm = yes } }
+sed_input_blocks_coal_fabric_livestock_ranch_visible_sgui = { scope = state is_shown = { sed_input_blocks_coal_fabric_livestock_ranch = yes } }
+sed_input_blocks_coal_tools_tooling_workshop_visible_sgui = { scope = state is_shown = { sed_input_blocks_coal_tools_tooling_workshop = yes } }
+sed_input_blocks_coal_small_arms_arms_industry_visible_sgui = { scope = state is_shown = { sed_input_blocks_coal_small_arms_arms_industry = yes } }
+sed_input_blocks_coal_artillery_artillery_foundry_visible_sgui = { scope = state is_shown = { sed_input_blocks_coal_artillery_artillery_foundry = yes } }
+sed_input_blocks_coal_ammunition_munition_plant_visible_sgui = { scope = state is_shown = { sed_input_blocks_coal_ammunition_munition_plant = yes } }
 sed_coal_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_coal_candidates }
@@ -957,7 +975,9 @@ sed_coal_action_failed_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_coal_action_status = 2 }
 }
-sed_grain_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_input_priority_grain sed_grain_supply_demand = yes } }
+sed_grain_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_input_blocked_grain } }
+sed_input_blocks_grain_fabric_livestock_ranch_visible_sgui = { scope = state is_shown = { sed_input_blocks_grain_fabric_livestock_ranch = yes } }
+sed_input_blocks_grain_groceries_food_industry_visible_sgui = { scope = state is_shown = { sed_input_blocks_grain_groceries_food_industry = yes } }
 sed_grain_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_grain_candidates }
@@ -978,7 +998,8 @@ sed_grain_action_failed_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_grain_action_status = 2 }
 }
-sed_fabric_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_input_priority_fabric sed_fabric_supply_demand = yes } }
+sed_fabric_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_input_blocked_fabric } }
+sed_input_blocks_fabric_clothes_textile_mill_visible_sgui = { scope = state is_shown = { sed_input_blocks_fabric_clothes_textile_mill = yes } }
 sed_fabric_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_fabric_candidates }
@@ -999,7 +1020,21 @@ sed_fabric_action_failed_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_fabric_action_status = 2 }
 }
-sed_tools_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_input_priority_tools sed_tools_supply_demand = yes } }
+sed_tools_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_input_blocked_tools } }
+sed_input_blocks_tools_wood_logging_camp_visible_sgui = { scope = state is_shown = { sed_input_blocks_tools_wood_logging_camp = yes } }
+sed_input_blocks_tools_iron_iron_mine_visible_sgui = { scope = state is_shown = { sed_input_blocks_tools_iron_iron_mine = yes } }
+sed_input_blocks_tools_coal_coal_mine_visible_sgui = { scope = state is_shown = { sed_input_blocks_tools_coal_coal_mine = yes } }
+sed_input_blocks_tools_grain_wheat_farm_visible_sgui = { scope = state is_shown = { sed_input_blocks_tools_grain_wheat_farm = yes } }
+sed_input_blocks_tools_grain_rye_farm_visible_sgui = { scope = state is_shown = { sed_input_blocks_tools_grain_rye_farm = yes } }
+sed_input_blocks_tools_grain_rice_farm_visible_sgui = { scope = state is_shown = { sed_input_blocks_tools_grain_rice_farm = yes } }
+sed_input_blocks_tools_grain_maize_farm_visible_sgui = { scope = state is_shown = { sed_input_blocks_tools_grain_maize_farm = yes } }
+sed_input_blocks_tools_grain_millet_farm_visible_sgui = { scope = state is_shown = { sed_input_blocks_tools_grain_millet_farm = yes } }
+sed_input_blocks_tools_fabric_livestock_ranch_visible_sgui = { scope = state is_shown = { sed_input_blocks_tools_fabric_livestock_ranch = yes } }
+sed_input_blocks_tools_groceries_food_industry_visible_sgui = { scope = state is_shown = { sed_input_blocks_tools_groceries_food_industry = yes } }
+sed_input_blocks_tools_clothes_textile_mill_visible_sgui = { scope = state is_shown = { sed_input_blocks_tools_clothes_textile_mill = yes } }
+sed_input_blocks_tools_small_arms_arms_industry_visible_sgui = { scope = state is_shown = { sed_input_blocks_tools_small_arms_arms_industry = yes } }
+sed_input_blocks_tools_artillery_artillery_foundry_visible_sgui = { scope = state is_shown = { sed_input_blocks_tools_artillery_artillery_foundry = yes } }
+sed_input_blocks_tools_ammunition_munition_plant_visible_sgui = { scope = state is_shown = { sed_input_blocks_tools_ammunition_munition_plant = yes } }
 sed_tools_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_tools_candidates }
