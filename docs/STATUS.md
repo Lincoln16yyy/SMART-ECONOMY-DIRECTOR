@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.6.0
+# Estado dos requisitos — 0.6.1
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.
@@ -7,17 +7,17 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Requisito | Código e teste sintético | Verificação de campanha e trabalho restante |
 | --- | --- | --- |
 | Diagnóstico econômico e diário | Implementados, com métricas, data e atualização manual/mensal | Indicadores e UI de versões anteriores tiveram confirmação visual parcial |
-| Objetivo nacional atual | Implementado para gargalos, fiscal e crescimento/diversificação | Validar seleção e transições na 0.6.0 |
+| Objetivo nacional atual | Implementado para gargalos, fiscal e crescimento/diversificação | Validar seleção e transições na 0.6.1 |
 | Até três prioridades nacionais | Implementado sobre pares estado/tipo elegíveis | Validar layout e dados das novas prioridades na engine |
 | Setores estratégicos ausentes | Parcial, escassez de oito bens sem o tipo de produtor atendido | Ampliar catálogo e considerar produtores alternativos, importações e objetivos industriais |
 | Emprego e insumos | Filtros atuais de ocupação, falha de contratação e escassez do prédio | Projetar disponibilidade futura de trabalhadores, qualificações e insumos |
 | Reserva, dívida e ritmo | Guarda proporcional inicial e classificações fiscais | Calibrar limiares, estimar custo incremental e serviço da dívida |
-| Impostos e gastos | Leituras e orientação de estabilização | Política e execução próprias de alíquotas, salários e despesas permanecem pendentes |
-| Coordenação Advisor/Supply Chain | Adaptadores de sete opções, seleção por objetivo e restauração | Verificar efeitos reais, save/reload e compatibilidade das versões instaladas |
+| Impostos e gastos | Leituras e orientação de estabilização | Orçamento do Advisor coordenado. Política própria de alíquotas, salários e despesas permanece pendente |
+| Coordenação Advisor/Supply Chain | Adaptadores de sete opções de construção e quatro de objetivo/orçamento, com restauração | Verificar efeitos reais, save/reload e compatibilidade das versões instaladas |
 | Ativar somente caminho necessário | Automático assume controle de ferramentas detectadas e configura um caminho | A seleção interna de alvos permanece sob o algoritmo da ferramenta escolhida |
 | Construção própria automática | Consome a primeira prioridade, revalida guardas e limita tentativa mensal | Inclusão real e persistência ainda exigem evidência de engine |
 | Evitar executor próprio em paralelo | Bloqueio explícito durante coordenação | ARoAI detectado suspende delegação, autoexpansões nativas continuam sem controle |
-| Desativar e devolver opções | Restaura presença e valor original das sete opções, com testes de idempotência | Confirmar restauração após save/reload e atualização de versão |
+| Desativar e devolver opções | Restaura presença e valor original das onze opções, com testes de idempotência | Confirmar restauração após save/reload e atualização de versão |
 | Manual e Assistido | Autorizações e trocas de modo testadas | Restauração pode reativar opções externas originalmente ligadas |
 | Histórico | Resultado mensal datado e status de orientação externa | Acrescentar livro de intenções e resultados por alvo |
 | Fila sem duplicação | Guardas agregadas, nível após fila e marcas por tipo/estado | Identidade, lado, investidor, conclusão/cancelamento e reconciliação completa |
@@ -25,10 +25,10 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Leis, guerra e diplomacia | Fora das mutações econômicas implementadas | Mantidas sob responsabilidade dos módulos e decisões previstos pelo briefing |
 | Haiti, país rico e crise | Cenários sintéticos fiscais e de seleção | Campanhas registradas e comparáveis permanecem pendentes |
 | Crescimento em campanha longa | Ainda sem evidência | Medir PIB, SoL, emprego, dívida, reservas e diversificação durante vários anos |
-| Entrega | Gerador, validador, testes, ZIP e instalador com backup | Instalação 0.6.0 com backup e 13 outputs conferidos. Publicação segue por PR |
+| Entrega | Gerador, validador, testes, ZIP e instalador com backup | Instalação 0.6.1 com backup e 13 outputs conferidos. Publicação segue por PR |
 
 O jogador relatou que seus testes anteriores produziram pouca mudança visível,
-pois outros construtores já atuavam. Esse relato motivou os adaptadores da 0.6.0.
+pois outros construtores já atuavam. Esse relato motivou os adaptadores da 0.6.1.
 Ele ainda não confirma os novos fluxos de coordenação, aprovação, persistência
 ou resultados de crescimento desta versão.
 

@@ -1,4 +1,4 @@
-# Planejamento e coordenação — 0.6.0
+# Planejamento e coordenação — 0.6.1
 
 Esta versão implementa política nacional inicial e adaptadores de opções de
 construção. Não é um controlador econômico completo nem comprova crescimento
@@ -113,9 +113,10 @@ Opções verificadas: `advisor_auto_construction_enabled`, `zw_var_expand_buildi
 necessária estava ausente, padrões são respectivamente 1, 0, 5, 1, 1, 10 e 1.
 Zero em cadeias significa presente/ligado, não desligado.
 
-O adaptador só altera autorização de construção. O Advisor continua escolhendo
-alvos pela sua política interna (a rotina observada usa `advisor_scan_goal = 10`);
-não recebe o par estado/prédio do Director. Supply Chain conserva categorias,
+O adaptador altera autorização, objetivo de investimento e política de orçamento
+do Advisor. O scan mensal usa `advisor_scan_goal = 10` e consulta as opções de
+objetivo configuradas para ordenar os candidatos. A seleção do par estado/prédio
+é executada pelo algoritmo do Advisor. Supply Chain conserva categorias,
 metas institucionais e outros parâmetros internos. Um deles pode não construir
 por seus próprios filtros, agenda ou indisponibilidade. O resultado 18 significa
 orientação atualizada, nunca inclusão confirmada. PMs, comércio, diplomacia e
@@ -148,3 +149,45 @@ São fontes de script, não verificação de que os adaptadores funcionaram em
 campanha. Os testes executam os scripts gerados em fixtures, não os outros mods
 nem a engine. Guardas, dados e limites de [QUEUE_CONTRACT.md](QUEUE_CONTRACT.md)
 continuam relevantes.
+
+## Objetivo e orçamento do Advisor na 0.6.1
+
+Quatro opções adicionais são coordenadas e restauradas.
+
+| Opção | Controle aplicado |
+| --- | --- |
+| `advisor_setting_sc_goal_sol` | Priorizar padrão de vida quando cereais, mantimentos ou roupas lideram o plano ou aparecem como lacuna prioritária |
+| `advisor_setting_sc_goal_treasury` | Priorizar retorno ao tesouro quando há dívida positiva atingindo pelo menos 50% do crédito |
+| `advisor_setting_treasury_off` | Preservar reservas na orientação de retorno ao tesouro |
+| `advisor_setting_borrow` | Remover autorização de endividamento enquanto o Advisor recebe orientação do Director |
+
+A prioridade financeira antecede a social. Nas demais condições o objetivo é
+crescimento, com orçamento equilibrado. O orçamento equilibrado do Advisor
+reserva doze semanas de despesas fixas pelo cálculo próprio dele. Isso se
+combina com a guarda inicial do Director de quatro semanas. O limiar de 50%
+foi escolhido nesta implementação e precisa de calibração em campanha.
+
+A desativação da opção de endividamento orienta o planejamento do Advisor. A
+fila existente e outras decisões do jogo continuam podendo consumir reservas
+e crédito. O controle das alíquotas e de gastos públicos segue na matriz de
+trabalho pendente.
+
+O snapshot das quatro opções usa `sed_coord_policy_saved` e conserva presença
+e valores exatos. Ao iniciar uma coordenação nova, as opções são guardadas
+quando o Advisor foi detectado. Para saves com coordenação 0.6.0 já ativa, a
+captura ocorre na primeira seleção do Advisor, antes de qualquer alteração.
+Liberar uma coordenação antiga antes dessa captura preserva as quatro opções
+atuais. As opções só recebem a política nova quando o Advisor é o executor
+selecionado.
+
+Fontes adicionais do Advisor instalado são
+`common/scripted_guis/advisor_scripted_guis.txt:492–530,550–557`,
+`common/script_values/advisor_core_values.txt:1390–1465` e
+`common/scripted_effects/advisor_generated_candidate_effects.txt:4375–4376`.
+Os toggles verificam presença das opções, e a geração de candidatos lê as
+flags social/tesouro para atribuir a pontuação do objetivo.
+
+120 testes sintéticos aprovados incluem migração de coordenação ativa,
+restauração de valores, configuração original ausente, limites da dívida,
+prioridade social/financeira e preservação da política durante delegação ao
+Supply Chain. A integração das novas opções ainda aguarda confirmação na engine.

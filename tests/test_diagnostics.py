@@ -937,8 +937,9 @@ class DiagnosisTests(unittest.TestCase):
         c.variable_lists['sed_construction_candidates'] = [pending]
         c.run('sed_disable_country')
         # Seeded snapshots are restored before the Director's own state is removed.
-        from tools.coordination import OPTIONS
-        expected = {'sed_schema_version': 1, **{option: 123 for _, option, _ in OPTIONS}}
+        from tools.coordination import OPTIONS, ADVISOR_POLICY_OPTIONS
+        foreign_options = [option for _, option, _ in OPTIONS] + [option for _, option in ADVISOR_POLICY_OPTIONS]
+        expected = {'sed_schema_version': 1, **{option: 123 for option in foreign_options}}
         self.assertEqual(c.variables, expected)
         self.assertEqual(pending['variables'], {})
         self.assertNotIn('sed_railway_candidates', c.variable_lists)
