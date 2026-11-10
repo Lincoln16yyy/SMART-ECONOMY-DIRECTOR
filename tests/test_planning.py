@@ -15,6 +15,19 @@ class PlanningTests(unittest.TestCase):
         self.c = Country(script_definitions(), construction_queue_num_queued_government_levels=0)
         self.c.run('sed_enable_country')
 
+    def test_tax_goal_requires_an_incorporated_state(self):
+        c = self.c
+        target = state(incorporated=False, tax_capacity_usage=200, tax_capacity=100)
+        c.states = [target]
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_goal'], 8)
+        target['is_incorporated'] = True
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_goal'], 7)
+        target['tax_capacity'] = 200
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_goal'], 8)
+
     def producer(self, good, target=None, buy=100, sell=40):
         item = next(x for x in SUPPLY_TARGETS if x['good'] == good)
         b = building(item['building'])

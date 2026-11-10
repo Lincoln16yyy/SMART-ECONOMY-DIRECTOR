@@ -2286,6 +2286,12 @@ sed_auto_apply_monthly = {
   limit = { has_variable = sed_coord_active }
   sed_coord_sync = yes
   set_variable = { name = sed_auto_action_status value = 18 }
+  if = { limit = { var:sed_coord_executor = 9 } set_variable = { name = sed_auto_action_status value = 19 } }
+  else_if = { limit = { var:sed_coord_executor = 5 } set_variable = { name = sed_auto_action_status value = 13 } }
+  else_if = { limit = { var:sed_coord_executor = 0 }
+   set_variable = { name = sed_auto_action_status value = 2 }
+   if = { limit = { NOT = { sed_coord_fiscal_safe = yes } } set_variable = { name = sed_auto_action_status value = 17 } }
+  }
  }
  else_if = {
   limit = { sed_auto_executor_safe = yes }
@@ -3347,7 +3353,7 @@ sed_refresh_national_plan = {
   if = { limit = { var:sed_plan_count = 0 var:sed_plan_missing_count > 0 } set_variable = { name = sed_plan_goal value = 5 } }
   if = { limit = { var:sed_plan_goal = 0 sed_coord_fiscal_safe = yes } set_variable = { name = sed_plan_goal value = 8 } }
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } bureaucracy < 0 } set_variable = { name = sed_plan_goal value = 6 } }
-  if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } any_scope_state = { tax_capacity_usage > tax_capacity } } set_variable = { name = sed_plan_goal value = 7 } }
+  if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } any_scope_state = { is_incorporated = yes tax_capacity_usage > tax_capacity } } set_variable = { name = sed_plan_goal value = 7 } }
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } any_scope_state = { sg:electricity ?= { state_goods_pricier >= 0.2 } } } set_variable = { name = sed_plan_goal value = 9 } }
   if = { limit = { OR = { var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } } set_variable = { name = sed_plan_goal value = 4 } }
  }
@@ -3643,7 +3649,17 @@ else = { set_variable = { name = zw_var_scsab_gov_admin_for_tax value = 1 } }
 else = { set_variable = { name = zw_var_scsab_construct_power_plant value = 1 } }
     set_variable = { name = sed_coord_executor value = 8 }
    }
-   else_if = { limit = { has_variable = sed_coord_advisor_known OR = { var:sed_plan_goal = 1 var:sed_plan_goal = 2 var:sed_plan_goal = 3 var:sed_plan_goal = 5 var:sed_plan_goal = 6 var:sed_plan_goal = 7 var:sed_plan_goal = 8 var:sed_plan_goal = 9 } }
+   else_if = { limit = { has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 3 }
+    if = { limit = { has_variable = sed_coord_saved_sectors }
+ set_variable = { name = zw_var_more_construction_sectors value = var:sed_coord_saved_sectors }
+}
+else = { set_variable = { name = zw_var_more_construction_sectors value = 5 } }
+    set_variable = { name = sed_coord_executor value = 4 }
+   }
+   else_if = { limit = { OR = { var:sed_plan_goal = 6 var:sed_plan_goal = 7 var:sed_plan_goal = 9 } }
+    set_variable = { name = sed_coord_executor value = 9 }
+   }
+   else_if = { limit = { has_variable = sed_coord_advisor_known OR = { var:sed_plan_goal = 1 var:sed_plan_goal = 2 var:sed_plan_goal = 3 var:sed_plan_goal = 5 var:sed_plan_goal = 8 } }
     if = { limit = { has_variable = sed_coord_saved_advisor }
  set_variable = { name = advisor_auto_construction_enabled value = var:sed_coord_saved_advisor }
 }
@@ -3674,13 +3690,6 @@ else = { set_variable = { name = advisor_auto_construction_enabled value = 1 } }
 }
 else = { set_variable = { name = zw_var_expand_building value = 0 } }
     set_variable = { name = sed_coord_executor value = 3 }
-   }
-   else_if = { limit = { has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes var:sed_plan_goal = 3 }
-    if = { limit = { has_variable = sed_coord_saved_sectors }
- set_variable = { name = zw_var_more_construction_sectors value = var:sed_coord_saved_sectors }
-}
-else = { set_variable = { name = zw_var_more_construction_sectors value = 5 } }
-    set_variable = { name = sed_coord_executor value = 4 }
    }
   }
  }

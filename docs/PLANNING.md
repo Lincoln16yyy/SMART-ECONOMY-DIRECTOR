@@ -1,5 +1,28 @@
 # Planejamento e coordenação — 0.6.8
 
+## 0.6.10 — Objetivo e executor
+
+Capturas do jogador confirmaram revisão automática de outubro a dezembro de
+1837 no Uruguai. No teste otomano, o objetivo de capacidade tributária coexistia
+com orientação geral de crescimento ao Advisor. Obras novas foram observadas,
+mas sua autoria e relação causal com o Director não foram comprovadas.
+
+Administração, tributação e energia agora exigem os adaptadores específicos do
+Supply Chain. Sem ferramenta disponível ou sem a proteção fiscal específica,
+a coordenação suspende novas opções e mostra execução pendente. O Advisor
+continua recebendo orientação geral para os demais objetivos compatíveis.
+A rotina específica de setores de construção tem preferência sobre o Advisor.
+O diagnóstico tributário só considera estados incorporados. Isso não altera os
+filtros internos do Supply Chain, incluindo sua seleção de estados.
+
+A última revisão distingue delegação, falta de executor específico, bloqueio
+fiscal e conflito com ARoAI. Snapshots e restauração permanecem cobertos por
+regressões. Cinco testes novos, 151 testes aprovados no total, geração e
+validação estática contra os arquivos locais 1.15 aprovadas. A UI e as novas
+transições ainda aguardam confirmação na campanha. A fila nativa e os níveis
+fiscais foram vistos em capturas anteriores, sem comprovação causal das mudanças.
+
+
 Esta versão implementa política nacional inicial e adaptadores de opções de
 construção. Não é um controlador econômico completo nem comprova crescimento
 em campanha. O briefing permanece o objetivo; o estado vivo está em

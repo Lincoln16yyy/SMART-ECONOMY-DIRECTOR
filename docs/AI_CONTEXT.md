@@ -1,5 +1,31 @@
 # Contexto de continuidade
 
+Entrega 0.6.10 instalada com jogo fechado, 14 outputs conferidos e ordem de mods
+preservada. Backup `sed_backups/mod_before_0.6.10_20261110_105919_917684`.
+
+## 0.6.10 — Objetivo e executor
+
+Capturas do jogador confirmaram revisão automática de outubro a dezembro de
+1837 no Uruguai. No teste otomano, o objetivo de capacidade tributária coexistia
+com orientação geral de crescimento ao Advisor. Obras novas foram observadas,
+mas sua autoria e relação causal com o Director não foram comprovadas.
+
+Administração, tributação e energia agora exigem os adaptadores específicos do
+Supply Chain. Sem ferramenta disponível ou sem a proteção fiscal específica,
+a coordenação suspende novas opções e mostra execução pendente. O Advisor
+continua recebendo orientação geral para os demais objetivos compatíveis.
+A rotina específica de setores de construção tem preferência sobre o Advisor.
+O diagnóstico tributário só considera estados incorporados. Isso não altera os
+filtros internos do Supply Chain, incluindo sua seleção de estados.
+
+A última revisão distingue delegação, falta de executor específico, bloqueio
+fiscal e conflito com ARoAI. Snapshots e restauração permanecem cobertos por
+regressões. Cinco testes novos, 151 testes aprovados no total, geração e
+validação estática contra os arquivos locais 1.15 aprovadas. A UI e as novas
+transições ainda aguardam confirmação na campanha. A fila nativa e os níveis
+fiscais foram vistos em capturas anteriores, sem comprovação causal das mudanças.
+
+
 Entrega 0.6.9 instalada com jogo fechado, 14 outputs conferidos e
 content_load.json preservado. Backup em
 `sed_backups/mod_before_0.6.9_20261110_101047_639382`.

@@ -1400,6 +1400,13 @@ textbox = {
  text = "sed_coord_executor_8"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_coord_executor_9_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_coord_executor_9"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_coord_advisor_policy_1_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -1697,6 +1704,13 @@ textbox = {
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_auto_status_delegated"
 }
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_status_unsupported_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_status_unsupported"
+}
 flowcontainer = { direction = horizontal spacing = 12
 button = {
  using = default_button
@@ -1765,7 +1779,7 @@ button = {
  text = "sed_open_queue" tooltip = "sed_open_queue_tt"
  visible = "[GetScriptedGui('sed_refresh_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  enabled = "[GetScriptedGui('sed_refresh_sgui').IsValid(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
- onclick = "[InformationPanelBar.OpenPanelTab('production_methods', 'construction_queues')]"
+ onclick = "[InformationPanelBar.OpenConstructionPanelTab( GetPlayer.Self, 'default' )]"
 }
 button = {
  using = default_button
