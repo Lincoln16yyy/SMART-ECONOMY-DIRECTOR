@@ -405,3 +405,12 @@ não permite aprová-la nem executar evento automático pendente. Voltar para
 Assistido deve permitir aprovação somente quando as guardas atuais passarem.
 Testes sintéticos de chamadas diretas não substituem essa verificação de engine.
 Não executado nesta etapa; sem solicitação imediata ao jogador.
+
+## Lista externa 0.5.9 (pendente, ainda não instalada)
+
+Quando houver instalação posterior com o jogo fechado, conferir a lista no
+Automático com cada opção do Supply Chain e depois todas juntas; manter uma
+fila ocupada para confirmar que a lista não some por prioridade do bloqueio.
+Remover opções deve retirar suas linhas. Manual/Assistido/desativado ocultam
+a lista. Verificar altura natural, legibilidade e ausência de cortes.
+Não altera o teste em andamento da 0.5.8.

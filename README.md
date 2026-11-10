@@ -7,7 +7,7 @@ locais e a validação estática passaram, mas construção bem-sucedida,
 reconciliação de projetos e save/reload ainda não foram comprovados na engine.
 A automação não está certificada como segura para campanha sem supervisão.
 
-Versão de desenvolvimento **0.5.8 — interface legível e botões nativos**. O mod tem diário próprio, leituras manuais ou
+Versão de desenvolvimento **0.5.9 — interface legível e botões nativos**. O mod tem diário próprio, leituras manuais ou
 mensais, recomendações limitadas de infraestrutura e capacidade de construção,
 além de produtores locais para oito bens em escassez. Os três modos aparecem em
 botões no topo do diário. Manual só diagnostica; Assistido mostra botões para
@@ -20,11 +20,11 @@ botão de aprovação está bloqueado, o painel indica a guarda que bloqueia a a
 Saldo semanal negativo aparece como alerta, sem bloquear a aprovação. O modo
 Automático pode agir apenas em ferrovias elegíveis e produtores existentes
 para madeira, ferro, carvão, cereais, tecido, ferramentas, mantimentos e roupas
-em escassez; não altera PMs nem leis. A 0.5.8 passou validação estática; modos,
+em escassez; não altera PMs nem leis. A 0.5.9 passou validação estática; modos,
 botões e execução agendada ainda precisam de confirmação na campanha antes de
 serem considerados validados na engine.
 
-A interface 0.5.8 usa fonte de 20 pontos no corpo e 26 nos títulos, botões
+A interface 0.5.9 usa fonte de 20 pontos no corpo e 26 nos títulos, botões
 nativos de 52 pixels de altura com fundo/borda e cartões de altura variável.
 As recomendações vêm antes dos indicadores completos. **Mostrar indicadores
 e detalhes** abre as leituras e motivos extensos; **Ocultar** recolhe essa
@@ -67,7 +67,7 @@ O crescimento do PIB requer amostras em meses distintos.
 ## Instalação e uso
 
 Consulte [instalação e geração do ZIP](docs/INSTALL.md). O pacote gerado em
-`dist/smart-economy-director-0.5.8.zip` contém a pasta do mod e o descritor
+`dist/smart-economy-director-0.5.9.zip` contém a pasta do mod e o descritor
 externo. Ative no launcher e use a decisão **Ativar Smart Economy Director**.
 O modo inicial é Assistido; a automação só começa se o jogador selecionar
 Automático no diário.
@@ -118,7 +118,7 @@ inadimplência, construção pausada ou flags conhecidas de outros construtores.
 A recomendação do setor de construção exige fila pública com pelo menos três
 projetos e não promete contratação futura.
 
-## Proteção de infraestrutura — 0.5.8
+## Proteção de infraestrutura — 0.5.9
 
 Produtores dos oito bens atendidos e setores de construção exigem saldo atual
 de infraestrutura maior ou igual a zero. A aprovação revalida essa condição;
@@ -135,15 +135,19 @@ A guarda considera déficit atual, sem projetar consumo do próximo nível nem
 reservar capacidade para projetos concorrentes. Reconciliação completa das
 filas e planejamento fiscal incremental continuam pendentes.
 
-Na 0.5.8, opções independentes do Supply Chain para ferrovias, energia e
+Na 0.5.9, opções independentes do Supply Chain para ferrovias, energia e
 setores de construção também suspendem o Automático. A guarda detecta
 configuração, mesmo quando o outro mod não construiria naquele mês. Aprovação
 Assistida permanece explícita. Administração geral e tributária também são detectadas; meta institucional
 isolada não habilita construção no Supply Chain.
-Pacote 0.5.8 disponível em `dist/`; instalação local atualizada para 0.5.8.
+Pacote 0.5.9 disponível em `dist/`; instalação local permanece 0.5.8 durante o teste do jogador.
 
-Na 0.5.8, os efeitos de construção revalidam toda a guarda do Automático
+Na 0.5.9, os efeitos de construção revalidam toda a guarda do Automático
 antes de tentar incluir a obra; Assistido preserva as regras anteriores.
 
-Na 0.5.8, os efeitos internos também recusam construção em Manual ou sem
+Na 0.5.9, os efeitos internos também recusam construção em Manual ou sem
 modo de execução definido. Assistido e Automático mantêm suas guardas próprias.
+
+A 0.5.9 mostra quais opções externas estão configuradas e explica por que
+bloqueiam o Automático mesmo sem obra. Preparada e empacotada; não instalada
+durante o teste atual, que usa 0.5.8.

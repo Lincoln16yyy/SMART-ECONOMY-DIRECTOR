@@ -970,3 +970,22 @@ Os 13 outputs foram conferidos byte a byte; `content_load.json` preservado.
 A pasta antiga foi retirada antes de gerar a nova, sem arquivos remanescentes.
 Isso atualiza as notas anteriores de instalação 0.5.4; engine e save/reload
 continuam sem teste nesta etapa.
+
+
+## Explicação das opções externas — 0.5.9
+
+O painel Automático lista ao vivo as oito opções externas detectadas, com
+nomes de mod e função, mesmo quando default, limite mensal, pausa ou fila
+aparecem como primeiro bloqueio. Sem opções, em Manual/Assistido ou desativado,
+a lista fica oculta. O texto explica que configuração ligada já suspende o
+Director sem esperar obra, e orienta usar Assistido ou ajustar o outro mod.
+Não altera opções externas, regras econômicas, dispatcher ou histórico.
+Uma tabela no gerador alimenta guarda, linhas e traduções para manter cobertura
+coerente. A meta institucional isolada continua fora da detecção.
+
+91 testes aprovados, incluindo cada opção isolada, todas juntas, retirada ao
+vivo, coexistência com fila ocupada, modos, desativação e leitura sem mutação.
+Geração, validação estática local 1.15.0 e pacote aprovados. Layout novo não foi
+verificado na engine. Preparada enquanto o jogador testa: NÃO instalada;
+a instalação usada pelo jogador permanece 0.5.8. Não atualizar durante a
+sessão nem interpretar capturas da 0.5.8 como confirmação da lista nova.
