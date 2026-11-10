@@ -1185,3 +1185,35 @@ content_load.json preservado. Backup em
 `dist/smart-economy-director-0.6.5.zip`. Nada observado na engine; a aceitação
 de `set_tax_level` em scripted effects e o efeito real na receita seguem sem
 confirmação.
+
+## 2026-11-10 — Salários do governo 0.6.6
+
+Objetivo: começar o controle de gastos pelo salário civil do governo, com a
+mesma reversibilidade dos impostos. Em crise ou default, o Director desce um
+nível (piso `low`); com classificação 1/5, superávit, sem dívida e doze semanas
+de despesas fixas em ouro, sobe um nível (teto `medium`). Cautela, Manual e
+Assistido não alteram salários. O nível original é guardado em
+`sed_gov_wage_saved` e restaurado ao sair do Automático ou desativar.
+
+Fontes vanilla 1.15: `set_government_wage_level` em
+`common/effect_localization/00_country_effects_loc.txt:279`, trigger
+`government_wage_level` em
+`common/trigger_localization/00_trigger_localization.txt:3269` e níveis em
+`common/static_modifiers/00_code_static_modifiers.txt:366–393`. O efeito não é
+usado por scripts ou históricos vanilla, apenas pela localização; a aceitação
+na engine é a principal incerteza, maior que no `set_tax_level`.
+
+O validador autoriza `set_government_wage_level` somente em
+`sed_apply_wage_policy` e `sed_restore_wage_policy`, com valores do enum, e
+exige guarda de modo Automático. Salários militares, despesas, subsídios e
+impostos de consumo seguem fora do controle.
+
+135 testes sintéticos aprovados (três novos: corte até o piso e restauração,
+subida até o teto e restauração ao desativar, ausência de mudança em cautela).
+Geração, validação estática contra Victoria 3 1.15 e `git diff --check`
+aprovados.
+
+Entrega local 0.6.6 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.6_20261110_011134_926784`. ZIP em
+`dist/smart-economy-director-0.6.6.zip`. Nada observado na engine.

@@ -52,8 +52,9 @@ def validate(root=ROOT, game=None):
                        'every_scope_building', 'ordered_scope_state', 'clear_variable_list',
                        'add_to_variable_list', 'add_journal_entry', 'start_building_construction',
                        'trigger_event', 'order_by', 'max', 'check_range_bounds',
-                       'set_tax_level'}
+                       'set_tax_level', 'set_government_wage_level'}
     tax_effects = {'sed_apply_fiscal_policy', 'sed_restore_fiscal_policy'}
+    wage_effects = {'sed_apply_wage_policy', 'sed_restore_wage_policy'}
     tax_levels = {'very_low', 'low', 'medium', 'high', 'very_high'}
 
     # Narrow, reviewed exception: only two guarded adapter effects may change
@@ -84,6 +85,9 @@ def validate(root=ROOT, game=None):
             if entry.key == 'set_tax_level':
                 if effect_name not in tax_effects or entry.value not in tax_levels:
                     errors.append('Tax level change outside the reviewed fiscal policy: ' + str(entry.value))
+            if entry.key == 'set_government_wage_level':
+                if effect_name not in wage_effects or entry.value not in tax_levels:
+                    errors.append('Wage level change outside the reviewed wage policy: ' + str(entry.value))
             if entry.key == 'remove_variable':
                 if not str(entry.value).startswith('sed_'):
                     if effect_name not in ('sed_coord_sync', 'sed_coord_restore') or entry.value not in coordinated_options:
@@ -117,6 +121,11 @@ def validate(root=ROOT, game=None):
     fiscal_limit = child(fiscal_outer.value, 'limit') if fiscal_outer and fiscal_outer.key == 'if' else []
     if not any(e.key == 'has_variable' and e.value == 'sed_mode_automatic' for e in fiscal_limit):
         errors.append('Fiscal policy lacks an explicit Automatic-mode guard')
+    wage_guard = custom.get('sed_apply_wage_policy', [])
+    wage_outer = wage_guard[0] if len(wage_guard) == 1 else None
+    wage_limit = child(wage_outer.value, 'limit') if wage_outer and wage_outer.key == 'if' else []
+    if not any(e.key == 'has_variable' and e.value == 'sed_mode_automatic' for e in wage_limit):
+        errors.append('Wage policy lacks an explicit Automatic-mode guard')
     for mutation in ('activate_production_method', 'start_enactment', 'add_treasury',
                      'declare_war', 'add_modifier'):
         if re.search(r'\b' + mutation + r'\s*=', all_text):

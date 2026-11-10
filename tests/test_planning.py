@@ -300,6 +300,43 @@ class PlanningTests(unittest.TestCase):
         self.assertEqual(c.readings['tax_level'], 'medium')
         self.assertNotIn('sed_tax_level_saved', c.variables)
 
+    def test_wage_policy_cuts_in_crisis_to_floor_and_restores(self):
+        c = self.c
+        c.readings.update(gold_reserves=100, net_total_income=-100)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_fiscal_status'], 3)
+        self.assertEqual(c.readings['government_wage_level'], 'low')
+        self.assertEqual(c.variables['sed_gov_wage_saved'], 3)
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.wage_changes, ['low'])
+        c.run('sed_set_mode_manual')
+        self.assertEqual(c.readings['government_wage_level'], 'medium')
+        self.assertNotIn('sed_gov_wage_saved', c.variables)
+
+    def test_wage_policy_raises_with_health_up_to_medium(self):
+        c = self.c
+        c.readings.update(government_wage_level='low', principal=0,
+                          net_total_income=100, gold_reserves=1000)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.readings['government_wage_level'], 'medium')
+        self.assertEqual(c.variables['sed_gov_wage_saved'], 2)
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.wage_changes, ['medium'])
+        c.run('sed_disable_country')
+        self.assertEqual(c.readings['government_wage_level'], 'low')
+
+    def test_wage_policy_stays_put_under_caution(self):
+        c = self.c
+        c.readings.update(gold_reserves=100, net_total_income=100)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_fiscal_status'], 2)
+        self.assertEqual(c.readings['tax_level'], 'high')
+        self.assertEqual(c.wage_changes, [])
+        self.assertNotIn('sed_gov_wage_saved', c.variables)
+
     def test_queue_wait_preserves_plan_but_never_calls_constructor(self):
         self.producer('grain')
         c = self.c

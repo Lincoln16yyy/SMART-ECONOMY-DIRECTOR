@@ -1,4 +1,4 @@
-# Planejamento e coordenação — 0.6.5
+# Planejamento e coordenação — 0.6.6
 
 Esta versão implementa política nacional inicial e adaptadores de opções de
 construção. Não é um controlador econômico completo nem comprova crescimento
@@ -334,3 +334,35 @@ descida com reservas e superávit, ausência de alteração fora do Automático,
 restauração ao trocar de modo e ao desativar. Nada foi observado na engine: a
 aceitação de `set_tax_level` fora do histórico e o efeito real na receita
 continuam sem confirmação.
+
+## Salários do governo na 0.6.6
+
+O controle de gastos começa pelo salário civil do governo, com a mesma
+reversibilidade dos impostos:
+
+- Crise ou default (classificações 3 e 4): desce um nível, com piso `low`.
+- Classificação 1 ou 5 com superávit, sem dívida e doze semanas de despesas
+  fixas em ouro: sobe um nível, com teto `medium`.
+- Cautela (2), Manual e Assistido não alteram salários.
+
+`sed_gov_wage_saved` guarda o nível original na primeira alteração e
+`sed_restore_wage_policy` o devolve ao sair do Automático ou desativar. A
+revisão mensal aplica no máximo um passo de imposto e um de salário. Salários
+militares, despesas discricionárias, subsídios e impostos de consumo continuam
+fora do controle; não há estimativa do efeito de um passo no orçamento nem na
+burocracia.
+
+Fonte vanilla 1.15: `set_government_wage_level` em
+`common/effect_localization/00_country_effects_loc.txt:279`, trigger
+`government_wage_level` em
+`common/trigger_localization/00_trigger_localization.txt:3269` e níveis
+`very_low`–`very_high` em `common/static_modifiers/00_code_static_modifiers.txt:366–393`.
+O efeito aparece apenas na localização de efeitos, sem uso nos scripts e
+históricos vanilla; por isso a aceitação na engine é a principal incerteza
+desta etapa, mais do que no `set_tax_level`, que é usado no histórico.
+
+O validador permite `set_government_wage_level` somente em
+`sed_apply_wage_policy` e `sed_restore_wage_policy`, com valores do enum, e
+exige guarda explícita de modo Automático. 135 testes sintéticos aprovados
+incluem corte até o piso, subida até o teto, ausência de mudança em cautela e
+restauração por troca de modo e desativação.

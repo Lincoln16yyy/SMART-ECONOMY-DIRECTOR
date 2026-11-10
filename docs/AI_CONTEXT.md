@@ -1,5 +1,22 @@
 # Contexto de continuidade
 
+Entrega local 0.6.6 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.6_20261110_011134_926784`.
+
+## Salários do governo 0.6.6
+
+`sed_apply_wage_policy` move o salário civil do governo um passo por revisão no
+Automático: desce em crise/default (piso `low`) e sobe com classificação 1/5,
+superávit, sem dívida e doze semanas de despesas fixas em ouro (teto `medium`).
+`sed_gov_wage_saved` guarda o original e `sed_restore_wage_policy` o devolve ao
+sair do Automático ou desativar. Cautela, Manual e Assistido não alteram
+salários; militares e despesas ficam fora. O efeito
+`set_government_wage_level` só aparece na localização vanilla, sem uso em
+scripts: aceitação na engine é a principal incerteza. 135 testes aprovados.
+
+## Entrega local 0.6.5
+
 Entrega local 0.6.5 instalada com jogo fechado, 14 outputs conferidos e
 content_load.json preservado. Backup em
 `sed_backups/mod_before_0.6.5_20261110_010449_284523`.

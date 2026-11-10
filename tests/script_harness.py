@@ -60,7 +60,7 @@ class Country:
                              construction_queue_num_queued_government_levels=2,
                              construction_queue_num_queued_private_levels=0,
                              bureaucracy=0, year=1836, month=0, is_player=True, in_default=False,
-                             tax_level='medium',
+                             tax_level='medium', government_wage_level='medium',
                              is_game_paused=True, is_construction_paused=False)
         self.readings.update(readings)
         self.variables = {}
@@ -70,6 +70,7 @@ class Country:
         self.active_journal = False
         self.constructions = []
         self.tax_changes = []
+        self.wage_changes = []
         self.construction_accepted = True
         self.market_goods = {}
         self.scheduled_events = []
@@ -87,8 +88,8 @@ class Country:
         return scope.setdefault('variables', {})
 
     def lookup(self, name, scope):
-        if name == 'tax_level':
-            return self.tax_level_rank(scope.get('tax_level', self.readings['tax_level']))
+        if name in ('tax_level', 'government_wage_level'):
+            return self.tax_level_rank(scope.get(name, self.readings[name]))
         if name in TAX_LEVELS:
             return TAX_LEVELS.index(name) + 1
         if name.startswith('owner.var:'):
@@ -282,6 +283,9 @@ class Country:
             elif key == 'set_tax_level':
                 self.readings['tax_level'] = value
                 self.tax_changes.append(value)
+            elif key == 'set_government_wage_level':
+                self.readings['government_wage_level'] = value
+                self.wage_changes.append(value)
             elif key == 'start_building_construction':
                 target = scope if scope.get('__scope__') == STATE else None
                 self.constructions.append(dict(building=value, state=target))
