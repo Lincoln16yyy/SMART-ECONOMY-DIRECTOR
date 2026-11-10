@@ -3969,6 +3969,13 @@ textbox = {
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_wood_section_title"
 }
+textbox = {
+ visible = "[GetScriptedGui('sed_wood_input_priority_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_input_priority_notice"
+}
 flowcontainer = {
  visible = "[GetScriptedGui('sed_wood_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  direction = vertical spacing = 16 ignoreinvisible = yes
@@ -4019,6 +4026,13 @@ textbox = {
  using = fontsize_xxl
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_iron_section_title"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_iron_input_priority_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_input_priority_notice"
 }
 flowcontainer = {
  visible = "[GetScriptedGui('sed_iron_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
@@ -4071,6 +4085,13 @@ textbox = {
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_coal_section_title"
 }
+textbox = {
+ visible = "[GetScriptedGui('sed_coal_input_priority_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_input_priority_notice"
+}
 flowcontainer = {
  visible = "[GetScriptedGui('sed_coal_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  direction = vertical spacing = 16 ignoreinvisible = yes
@@ -4121,6 +4142,13 @@ textbox = {
  using = fontsize_xxl
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_grain_section_title"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_grain_input_priority_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_input_priority_notice"
 }
 flowcontainer = {
  visible = "[GetScriptedGui('sed_grain_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
@@ -4173,6 +4201,13 @@ textbox = {
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_fabric_section_title"
 }
+textbox = {
+ visible = "[GetScriptedGui('sed_fabric_input_priority_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_input_priority_notice"
+}
 flowcontainer = {
  visible = "[GetScriptedGui('sed_fabric_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  direction = vertical spacing = 16 ignoreinvisible = yes
@@ -4223,6 +4258,13 @@ textbox = {
  using = fontsize_xxl
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_tools_section_title"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_tools_input_priority_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_input_priority_notice"
 }
 flowcontainer = {
  visible = "[GetScriptedGui('sed_tools_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"

@@ -75,15 +75,20 @@ sed_input_headroom_{good} = {{ value = owner.var:sed_input_market_margin_{good} 
     return '\n'.join(result) + '\n'
 
 
+def blocked_input(building, good):
+    amount = amount_name(building, good)
+    return f""" {amount} > 0
+     sed_input_headroom_{good} < {{ value = {amount} multiply = 1.25 }}"""
+
+
 def triggers():
     result = []
     for building in PROFILES:
         name = building.removeprefix('building_')
         result.append(f'sed_input_{name}_safe = {{')
         for good in building_goods(building):
-            result.append(f''' OR = {{
-  {amount_name(building, good)} <= 0
-  sed_input_headroom_{good} >= {{ value = {amount_name(building, good)} multiply = 1.25 }}
+            result.append(f''' NOT = {{
+ {blocked_input(building, good)}
  }}''')
         result.append('}')
     return '\n'.join(result) + '\n'
@@ -96,5 +101,5 @@ def effects():
     result.append('  every_scope_state = {')
     for good in sorted(LOCAL_GOODS & set(GOODS)):
         result.append(f'   set_variable = {{ name = sed_input_local_margin_{good} value = sed_input_local_headroom_{good} }}')
-    result.append('  }\n }\n}\n')
+    result.append('  }\n  sed_refresh_input_priorities = yes\n }\n}\n')
     return '\n'.join(result)

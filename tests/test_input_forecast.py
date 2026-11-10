@@ -32,6 +32,41 @@ class InputForecastTests(unittest.TestCase):
     def eligible(self):
         return self.c.condition(self.c.definitions['sed_tools_candidate_eligible'], self.target)
 
+    def test_projected_wood_shortfall_prioritizes_a_viable_logging_camp(self):
+        c = self.c
+        logging = building('building_logging_camp')
+        logging['production_methods'] = ['pm_simple_forestry']
+        upstream = state(buildings=[logging])
+        c.states.append(upstream)
+        self.wood(100, 68.74)
+        c.run('sed_refresh_diagnostics')
+        self.assertFalse(self.eligible())
+        self.assertIn('sed_input_priority_wood', c.variables)
+        self.assertEqual(c.variable_lists['sed_wood_candidates'], [upstream])
+        self.assertEqual(upstream['variables']['sed_plan_wood_rank'], 1)
+
+        logging['level_after_queued_constructions'] = 2
+        c.run('sed_refresh_diagnostics')
+        self.assertNotIn('sed_wood_candidates', c.variable_lists)
+        self.assertEqual(c.variables['sed_plan_waiting'], 1)
+
+        logging['level_after_queued_constructions'] = 1
+        self.wood(100, 68.75)
+        c.run('sed_run_wood_approval', upstream)
+        self.assertEqual(c.constructions, [])
+        self.assertNotIn('sed_input_priority_wood', c.variables)
+
+        self.wood(100, 68.74)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual([order['building'] for order in c.constructions], ['building_logging_camp'])
+
+    def test_inoperable_downstream_producer_does_not_create_input_priority(self):
+        self.wood(100, 68.74)
+        self.producer['has_failed_hires'] = True
+        self.c.run('sed_refresh_diagnostics')
+        self.assertNotIn('sed_input_priority_wood', self.c.variables)
+
     def test_profiles_cover_known_producers_and_labels(self):
         self.assertEqual(set(PROFILES), set(REQUIREMENTS))
         self.assertEqual(set(GOODS), set(LABELS_PT))
@@ -139,7 +174,8 @@ class InputForecastTests(unittest.TestCase):
         c = self.c
         c.run('sed_refresh_diagnostics')
         self.producer['production_methods'] = ['pm_pig_iron']
-        c.market_goods['iron'] = dict(market_goods_buy_orders=100, market_goods_sell_orders=50)
+        c.market_goods['iron'] = dict(market_goods_buy_orders=100, market_goods_sell_orders=50,
+                                     market_goods_has_goods_shortage=False)
         c.run('sed_run_tools_approval', self.target)
         self.assertEqual(c.constructions, [])
 

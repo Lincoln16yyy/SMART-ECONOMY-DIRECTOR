@@ -894,17 +894,18 @@ sed_construction_action_failed_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_construction_action_status = 2 }
 }
+sed_wood_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_input_priority_wood sed_wood_supply_demand = yes } }
 sed_wood_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_wood_candidates }
 }
 sed_wood_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_wood_supply_demand = yes }
 }
 sed_wood_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_wood_candidates } }
+ is_shown = { has_variable = sed_enabled sed_wood_supply_demand = yes NOT = { has_variable_list = sed_wood_candidates } }
 }
 sed_wood_action_success_visible_sgui = {
  scope = country
@@ -914,17 +915,18 @@ sed_wood_action_failed_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_wood_action_status = 2 }
 }
+sed_iron_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_input_priority_iron sed_iron_supply_demand = yes } }
 sed_iron_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_iron_candidates }
 }
 sed_iron_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_iron_supply_demand = yes }
 }
 sed_iron_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_iron_candidates } }
+ is_shown = { has_variable = sed_enabled sed_iron_supply_demand = yes NOT = { has_variable_list = sed_iron_candidates } }
 }
 sed_iron_action_success_visible_sgui = {
  scope = country
@@ -934,17 +936,18 @@ sed_iron_action_failed_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_iron_action_status = 2 }
 }
+sed_coal_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_input_priority_coal sed_coal_supply_demand = yes } }
 sed_coal_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_coal_candidates }
 }
 sed_coal_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_coal_supply_demand = yes }
 }
 sed_coal_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_coal_candidates } }
+ is_shown = { has_variable = sed_enabled sed_coal_supply_demand = yes NOT = { has_variable_list = sed_coal_candidates } }
 }
 sed_coal_action_success_visible_sgui = {
  scope = country
@@ -954,17 +957,18 @@ sed_coal_action_failed_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_coal_action_status = 2 }
 }
+sed_grain_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_input_priority_grain sed_grain_supply_demand = yes } }
 sed_grain_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_grain_candidates }
 }
 sed_grain_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_grain_supply_demand = yes }
 }
 sed_grain_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_grain_candidates } }
+ is_shown = { has_variable = sed_enabled sed_grain_supply_demand = yes NOT = { has_variable_list = sed_grain_candidates } }
 }
 sed_grain_action_success_visible_sgui = {
  scope = country
@@ -974,17 +978,18 @@ sed_grain_action_failed_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_grain_action_status = 2 }
 }
+sed_fabric_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_input_priority_fabric sed_fabric_supply_demand = yes } }
 sed_fabric_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_fabric_candidates }
 }
 sed_fabric_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_fabric_supply_demand = yes }
 }
 sed_fabric_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_fabric_candidates } }
+ is_shown = { has_variable = sed_enabled sed_fabric_supply_demand = yes NOT = { has_variable_list = sed_fabric_candidates } }
 }
 sed_fabric_action_success_visible_sgui = {
  scope = country
@@ -994,17 +999,18 @@ sed_fabric_action_failed_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_fabric_action_status = 2 }
 }
+sed_tools_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_input_priority_tools sed_tools_supply_demand = yes } }
 sed_tools_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_tools_candidates }
 }
 sed_tools_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_tools_supply_demand = yes }
 }
 sed_tools_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_tools_candidates } }
+ is_shown = { has_variable = sed_enabled sed_tools_supply_demand = yes NOT = { has_variable_list = sed_tools_candidates } }
 }
 sed_tools_action_success_visible_sgui = {
  scope = country
@@ -1020,11 +1026,11 @@ sed_groceries_recommendations_visible_sgui = {
 }
 sed_groceries_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_groceries_supply_demand = yes }
 }
 sed_groceries_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_groceries_candidates } }
+ is_shown = { has_variable = sed_enabled sed_groceries_supply_demand = yes NOT = { has_variable_list = sed_groceries_candidates } }
 }
 sed_groceries_action_success_visible_sgui = {
  scope = country
@@ -1040,11 +1046,11 @@ sed_clothes_recommendations_visible_sgui = {
 }
 sed_clothes_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_clothes_supply_demand = yes }
 }
 sed_clothes_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_clothes_candidates } }
+ is_shown = { has_variable = sed_enabled sed_clothes_supply_demand = yes NOT = { has_variable_list = sed_clothes_candidates } }
 }
 sed_clothes_action_success_visible_sgui = {
  scope = country
@@ -1060,11 +1066,11 @@ sed_small_arms_recommendations_visible_sgui = {
 }
 sed_small_arms_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_small_arms_supply_demand = yes }
 }
 sed_small_arms_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_small_arms_candidates } }
+ is_shown = { has_variable = sed_enabled sed_small_arms_supply_demand = yes NOT = { has_variable_list = sed_small_arms_candidates } }
 }
 sed_small_arms_action_success_visible_sgui = {
  scope = country
@@ -1080,11 +1086,11 @@ sed_artillery_recommendations_visible_sgui = {
 }
 sed_artillery_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_artillery_supply_demand = yes }
 }
 sed_artillery_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_artillery_candidates } }
+ is_shown = { has_variable = sed_enabled sed_artillery_supply_demand = yes NOT = { has_variable_list = sed_artillery_candidates } }
 }
 sed_artillery_action_success_visible_sgui = {
  scope = country
@@ -1100,11 +1106,11 @@ sed_ammunition_recommendations_visible_sgui = {
 }
 sed_ammunition_section_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } } }
+ is_shown = { has_variable = sed_enabled sed_ammunition_supply_demand = yes }
 }
 sed_ammunition_no_candidates_visible_sgui = {
  scope = country
- is_shown = { has_variable = sed_enabled market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } } NOT = { has_variable_list = sed_ammunition_candidates } }
+ is_shown = { has_variable = sed_enabled sed_ammunition_supply_demand = yes NOT = { has_variable_list = sed_ammunition_candidates } }
 }
 sed_ammunition_action_success_visible_sgui = {
  scope = country

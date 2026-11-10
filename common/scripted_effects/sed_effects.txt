@@ -474,6 +474,12 @@ sed_disable_country = {
  remove_variable = sed_input_market_margin_sugar
  remove_variable = sed_input_market_margin_tools
  remove_variable = sed_input_market_margin_wood
+ remove_variable = sed_input_priority_wood
+ remove_variable = sed_input_priority_iron
+ remove_variable = sed_input_priority_coal
+ remove_variable = sed_input_priority_grain
+ remove_variable = sed_input_priority_fabric
+ remove_variable = sed_input_priority_tools
  clear_variable_list = sed_railway_candidates
  clear_variable_list = sed_construction_candidates
  clear_variable_list = sed_wood_candidates
@@ -1103,7 +1109,7 @@ sed_refresh_supply_candidates = {
  }
  if = {
   limit = { is_player = yes has_variable = sed_enabled
-   market = { mg:wood ?= { market_goods_has_goods_shortage = yes } }
+   sed_wood_supply_demand = yes
   }
   ordered_scope_state = {
    limit = { sed_wood_candidate_eligible = yes }
@@ -1199,7 +1205,7 @@ sed_refresh_supply_candidates = {
  }
  if = {
   limit = { is_player = yes has_variable = sed_enabled
-   market = { mg:iron ?= { market_goods_has_goods_shortage = yes } }
+   sed_iron_supply_demand = yes
   }
   ordered_scope_state = {
    limit = { sed_iron_candidate_eligible = yes }
@@ -1295,7 +1301,7 @@ sed_refresh_supply_candidates = {
  }
  if = {
   limit = { is_player = yes has_variable = sed_enabled
-   market = { mg:coal ?= { market_goods_has_goods_shortage = yes } }
+   sed_coal_supply_demand = yes
   }
   ordered_scope_state = {
    limit = { sed_coal_candidate_eligible = yes }
@@ -1603,7 +1609,7 @@ sed_refresh_supply_candidates = {
  }
  if = {
   limit = { is_player = yes has_variable = sed_enabled
-   market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
+   sed_grain_supply_demand = yes
   }
   ordered_scope_state = {
    limit = { sed_grain_candidate_eligible = yes }
@@ -1752,7 +1758,7 @@ sed_refresh_supply_candidates = {
  }
  if = {
   limit = { is_player = yes has_variable = sed_enabled
-   market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } }
+   sed_fabric_supply_demand = yes
   }
   ordered_scope_state = {
    limit = { sed_fabric_candidate_eligible = yes }
@@ -1848,7 +1854,7 @@ sed_refresh_supply_candidates = {
  }
  if = {
   limit = { is_player = yes has_variable = sed_enabled
-   market = { mg:tools ?= { market_goods_has_goods_shortage = yes } }
+   sed_tools_supply_demand = yes
   }
   ordered_scope_state = {
    limit = { sed_tools_candidate_eligible = yes }
@@ -1944,7 +1950,7 @@ sed_refresh_supply_candidates = {
  }
  if = {
   limit = { is_player = yes has_variable = sed_enabled
-   market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } }
+   sed_groceries_supply_demand = yes
   }
   ordered_scope_state = {
    limit = { sed_groceries_candidate_eligible = yes }
@@ -2040,7 +2046,7 @@ sed_refresh_supply_candidates = {
  }
  if = {
   limit = { is_player = yes has_variable = sed_enabled
-   market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } }
+   sed_clothes_supply_demand = yes
   }
   ordered_scope_state = {
    limit = { sed_clothes_candidate_eligible = yes }
@@ -2136,7 +2142,7 @@ sed_refresh_supply_candidates = {
  }
  if = {
   limit = { is_player = yes has_variable = sed_enabled
-   market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }
+   sed_small_arms_supply_demand = yes
   }
   ordered_scope_state = {
    limit = { sed_small_arms_candidate_eligible = yes }
@@ -2232,7 +2238,7 @@ sed_refresh_supply_candidates = {
  }
  if = {
   limit = { is_player = yes has_variable = sed_enabled
-   market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }
+   sed_artillery_supply_demand = yes
   }
   ordered_scope_state = {
    limit = { sed_artillery_candidate_eligible = yes }
@@ -2328,7 +2334,7 @@ sed_refresh_supply_candidates = {
  }
  if = {
   limit = { is_player = yes has_variable = sed_enabled
-   market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } }
+   sed_ammunition_supply_demand = yes
   }
   ordered_scope_state = {
    limit = { sed_ammunition_candidate_eligible = yes }
@@ -3928,37 +3934,43 @@ sed_refresh_national_plan = {
    set_variable = { name = sed_plan_wood_score value = 0 }
    if = { limit = { sed_wood_candidate_eligible = yes }
     set_variable = { name = sed_plan_wood_score value = { value = owner.var:sed_plan_pressure_wood add = 90
-    if = { limit = { owner = { has_variable = sed_wood_meta_year var:sed_wood_meta_year = year } } add = 25 } } }
+    if = { limit = { owner = { has_variable = sed_wood_meta_year var:sed_wood_meta_year = year } } add = 25 }
+    if = { limit = { owner = { has_variable = sed_input_priority_wood } } add = 75 } } }
    }
    set_variable = { name = sed_plan_iron_rank value = 0 }
    set_variable = { name = sed_plan_iron_score value = 0 }
    if = { limit = { sed_iron_candidate_eligible = yes }
     set_variable = { name = sed_plan_iron_score value = { value = owner.var:sed_plan_pressure_iron add = 90
-    if = { limit = { owner = { has_variable = sed_iron_meta_year var:sed_iron_meta_year = year } } add = 25 } } }
+    if = { limit = { owner = { has_variable = sed_iron_meta_year var:sed_iron_meta_year = year } } add = 25 }
+    if = { limit = { owner = { has_variable = sed_input_priority_iron } } add = 75 } } }
    }
    set_variable = { name = sed_plan_coal_rank value = 0 }
    set_variable = { name = sed_plan_coal_score value = 0 }
    if = { limit = { sed_coal_candidate_eligible = yes }
     set_variable = { name = sed_plan_coal_score value = { value = owner.var:sed_plan_pressure_coal add = 90
-    if = { limit = { owner = { has_variable = sed_coal_meta_year var:sed_coal_meta_year = year } } add = 25 } } }
+    if = { limit = { owner = { has_variable = sed_coal_meta_year var:sed_coal_meta_year = year } } add = 25 }
+    if = { limit = { owner = { has_variable = sed_input_priority_coal } } add = 75 } } }
    }
    set_variable = { name = sed_plan_grain_rank value = 0 }
    set_variable = { name = sed_plan_grain_score value = 0 }
    if = { limit = { sed_grain_candidate_eligible = yes }
     set_variable = { name = sed_plan_grain_score value = { value = owner.var:sed_plan_pressure_grain add = 100
-    if = { limit = { owner = { has_variable = sed_grain_meta_year var:sed_grain_meta_year = year } } add = 25 } } }
+    if = { limit = { owner = { has_variable = sed_grain_meta_year var:sed_grain_meta_year = year } } add = 25 }
+    if = { limit = { owner = { has_variable = sed_input_priority_grain } } add = 75 } } }
    }
    set_variable = { name = sed_plan_fabric_rank value = 0 }
    set_variable = { name = sed_plan_fabric_score value = 0 }
    if = { limit = { sed_fabric_candidate_eligible = yes }
     set_variable = { name = sed_plan_fabric_score value = { value = owner.var:sed_plan_pressure_fabric add = 90
-    if = { limit = { owner = { has_variable = sed_fabric_meta_year var:sed_fabric_meta_year = year } } add = 25 } } }
+    if = { limit = { owner = { has_variable = sed_fabric_meta_year var:sed_fabric_meta_year = year } } add = 25 }
+    if = { limit = { owner = { has_variable = sed_input_priority_fabric } } add = 75 } } }
    }
    set_variable = { name = sed_plan_tools_rank value = 0 }
    set_variable = { name = sed_plan_tools_score value = 0 }
    if = { limit = { sed_tools_candidate_eligible = yes }
     set_variable = { name = sed_plan_tools_score value = { value = owner.var:sed_plan_pressure_tools add = 90
-    if = { limit = { owner = { has_variable = sed_tools_meta_year var:sed_tools_meta_year = year } } add = 25 } } }
+    if = { limit = { owner = { has_variable = sed_tools_meta_year var:sed_tools_meta_year = year } } add = 25 }
+    if = { limit = { owner = { has_variable = sed_input_priority_tools } } add = 75 } } }
    }
    set_variable = { name = sed_plan_groceries_rank value = 0 }
    set_variable = { name = sed_plan_groceries_score value = 0 }
@@ -4500,42 +4512,42 @@ sed_refresh_national_plan = {
    set_variable = { name = sed_plan_waiting value = 1 }
   }
   if = { limit = { var:sed_plan_goal = 0
-   market = { mg:wood ?= { market_goods_has_goods_shortage = yes } }
+   OR = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_wood }
    any_scope_state = { is_incorporated = yes NOT = { has_variable = sed_wood_ignored } sed_wood_queued_supply = yes }
   }
    set_variable = { name = sed_plan_goal value = 2 }
    set_variable = { name = sed_plan_waiting value = 1 }
   }
   if = { limit = { var:sed_plan_goal = 0
-   market = { mg:iron ?= { market_goods_has_goods_shortage = yes } }
+   OR = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_iron }
    any_scope_state = { is_incorporated = yes NOT = { has_variable = sed_iron_ignored } sed_iron_queued_supply = yes }
   }
    set_variable = { name = sed_plan_goal value = 2 }
    set_variable = { name = sed_plan_waiting value = 1 }
   }
   if = { limit = { var:sed_plan_goal = 0
-   market = { mg:coal ?= { market_goods_has_goods_shortage = yes } }
+   OR = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_coal }
    any_scope_state = { is_incorporated = yes NOT = { has_variable = sed_coal_ignored } sed_coal_queued_supply = yes }
   }
    set_variable = { name = sed_plan_goal value = 2 }
    set_variable = { name = sed_plan_waiting value = 1 }
   }
   if = { limit = { var:sed_plan_goal = 0
-   market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
+   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_grain }
    any_scope_state = { is_incorporated = yes NOT = { has_variable = sed_grain_ignored } sed_grain_queued_supply = yes }
   }
    set_variable = { name = sed_plan_goal value = 2 }
    set_variable = { name = sed_plan_waiting value = 1 }
   }
   if = { limit = { var:sed_plan_goal = 0
-   market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } }
+   OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_fabric }
    any_scope_state = { is_incorporated = yes NOT = { has_variable = sed_fabric_ignored } sed_fabric_queued_supply = yes }
   }
    set_variable = { name = sed_plan_goal value = 2 }
    set_variable = { name = sed_plan_waiting value = 1 }
   }
   if = { limit = { var:sed_plan_goal = 0
-   market = { mg:tools ?= { market_goods_has_goods_shortage = yes } }
+   OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_tools }
    any_scope_state = { is_incorporated = yes NOT = { has_variable = sed_tools_ignored } sed_tools_queued_supply = yes }
   }
    set_variable = { name = sed_plan_goal value = 2 }
@@ -4624,6 +4636,290 @@ sed_refresh_input_readings = {
    set_variable = { name = sed_input_local_margin_electricity value = sed_input_local_headroom_electricity }
    set_variable = { name = sed_input_local_margin_transportation value = sed_input_local_headroom_transportation }
   }
+  sed_refresh_input_priorities = yes
+ }
+}
+sed_refresh_input_priorities = {
+ remove_variable = sed_input_priority_wood
+ if = {
+  limit = { any_scope_state = { OR = {
+    AND = {
+     sed_tools_candidate_site = yes
+     owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+     sed_tools_tooling_workshop_operable = yes
+      sed_input_tooling_workshop_wood > 0
+     sed_input_headroom_wood < { value = sed_input_tooling_workshop_wood multiply = 1.25 }
+    }
+  } } }
+  set_variable = { name = sed_input_priority_wood value = yes }
+ }
+ remove_variable = sed_input_priority_iron
+ if = {
+  limit = { any_scope_state = { OR = {
+    AND = {
+     sed_fabric_candidate_site = yes
+     owner = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
+     sed_fabric_livestock_ranch_operable = yes
+      sed_input_livestock_ranch_iron > 0
+     sed_input_headroom_iron < { value = sed_input_livestock_ranch_iron multiply = 1.25 }
+    }
+    AND = {
+     sed_tools_candidate_site = yes
+     owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+     sed_tools_tooling_workshop_operable = yes
+      sed_input_tooling_workshop_iron > 0
+     sed_input_headroom_iron < { value = sed_input_tooling_workshop_iron multiply = 1.25 }
+    }
+    AND = {
+     sed_groceries_candidate_site = yes
+     owner = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } }
+     sed_groceries_food_industry_operable = yes
+      sed_input_food_industry_iron > 0
+     sed_input_headroom_iron < { value = sed_input_food_industry_iron multiply = 1.25 }
+    }
+    AND = {
+     sed_small_arms_candidate_site = yes
+     owner = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } } }
+     sed_small_arms_arms_industry_operable = yes
+      sed_input_arms_industry_iron > 0
+     sed_input_headroom_iron < { value = sed_input_arms_industry_iron multiply = 1.25 }
+    }
+    AND = {
+     sed_artillery_candidate_site = yes
+     owner = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } } }
+     sed_artillery_artillery_foundry_operable = yes
+      sed_input_artillery_foundry_iron > 0
+     sed_input_headroom_iron < { value = sed_input_artillery_foundry_iron multiply = 1.25 }
+    }
+  } } }
+  set_variable = { name = sed_input_priority_iron value = yes }
+ }
+ remove_variable = sed_input_priority_coal
+ if = {
+  limit = { any_scope_state = { OR = {
+    AND = {
+     sed_wood_candidate_site = yes
+     owner = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } }
+     sed_wood_logging_camp_operable = yes
+      sed_input_logging_camp_coal > 0
+     sed_input_headroom_coal < { value = sed_input_logging_camp_coal multiply = 1.25 }
+    }
+    AND = {
+     sed_iron_candidate_site = yes
+     owner = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
+     sed_iron_iron_mine_operable = yes
+      sed_input_iron_mine_coal > 0
+     sed_input_headroom_coal < { value = sed_input_iron_mine_coal multiply = 1.25 }
+    }
+    AND = {
+     sed_grain_candidate_site = yes
+     owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
+     sed_grain_wheat_farm_operable = yes
+      sed_input_wheat_farm_coal > 0
+     sed_input_headroom_coal < { value = sed_input_wheat_farm_coal multiply = 1.25 }
+    }
+    AND = {
+     sed_grain_candidate_site = yes
+     owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
+     sed_grain_rye_farm_operable = yes
+      sed_input_rye_farm_coal > 0
+     sed_input_headroom_coal < { value = sed_input_rye_farm_coal multiply = 1.25 }
+    }
+    AND = {
+     sed_grain_candidate_site = yes
+     owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
+     sed_grain_rice_farm_operable = yes
+      sed_input_rice_farm_coal > 0
+     sed_input_headroom_coal < { value = sed_input_rice_farm_coal multiply = 1.25 }
+    }
+    AND = {
+     sed_grain_candidate_site = yes
+     owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
+     sed_grain_maize_farm_operable = yes
+      sed_input_maize_farm_coal > 0
+     sed_input_headroom_coal < { value = sed_input_maize_farm_coal multiply = 1.25 }
+    }
+    AND = {
+     sed_grain_candidate_site = yes
+     owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
+     sed_grain_millet_farm_operable = yes
+      sed_input_millet_farm_coal > 0
+     sed_input_headroom_coal < { value = sed_input_millet_farm_coal multiply = 1.25 }
+    }
+    AND = {
+     sed_fabric_candidate_site = yes
+     owner = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
+     sed_fabric_livestock_ranch_operable = yes
+      sed_input_livestock_ranch_coal > 0
+     sed_input_headroom_coal < { value = sed_input_livestock_ranch_coal multiply = 1.25 }
+    }
+    AND = {
+     sed_tools_candidate_site = yes
+     owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+     sed_tools_tooling_workshop_operable = yes
+      sed_input_tooling_workshop_coal > 0
+     sed_input_headroom_coal < { value = sed_input_tooling_workshop_coal multiply = 1.25 }
+    }
+    AND = {
+     sed_small_arms_candidate_site = yes
+     owner = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } } }
+     sed_small_arms_arms_industry_operable = yes
+      sed_input_arms_industry_coal > 0
+     sed_input_headroom_coal < { value = sed_input_arms_industry_coal multiply = 1.25 }
+    }
+    AND = {
+     sed_artillery_candidate_site = yes
+     owner = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } } }
+     sed_artillery_artillery_foundry_operable = yes
+      sed_input_artillery_foundry_coal > 0
+     sed_input_headroom_coal < { value = sed_input_artillery_foundry_coal multiply = 1.25 }
+    }
+    AND = {
+     sed_ammunition_candidate_site = yes
+     owner = { market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } } }
+     sed_ammunition_munition_plant_operable = yes
+      sed_input_munition_plant_coal > 0
+     sed_input_headroom_coal < { value = sed_input_munition_plant_coal multiply = 1.25 }
+    }
+  } } }
+  set_variable = { name = sed_input_priority_coal value = yes }
+ }
+ remove_variable = sed_input_priority_grain
+ if = {
+  limit = { any_scope_state = { OR = {
+    AND = {
+     sed_fabric_candidate_site = yes
+     owner = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
+     sed_fabric_livestock_ranch_operable = yes
+      sed_input_livestock_ranch_grain > 0
+     sed_input_headroom_grain < { value = sed_input_livestock_ranch_grain multiply = 1.25 }
+    }
+    AND = {
+     sed_groceries_candidate_site = yes
+     owner = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } }
+     sed_groceries_food_industry_operable = yes
+      sed_input_food_industry_grain > 0
+     sed_input_headroom_grain < { value = sed_input_food_industry_grain multiply = 1.25 }
+    }
+  } } }
+  set_variable = { name = sed_input_priority_grain value = yes }
+ }
+ remove_variable = sed_input_priority_fabric
+ if = {
+  limit = { any_scope_state = { OR = {
+    AND = {
+     sed_clothes_candidate_site = yes
+     owner = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } }
+     sed_clothes_textile_mill_operable = yes
+      sed_input_textile_mill_fabric > 0
+     sed_input_headroom_fabric < { value = sed_input_textile_mill_fabric multiply = 1.25 }
+    }
+  } } }
+  set_variable = { name = sed_input_priority_fabric value = yes }
+ }
+ remove_variable = sed_input_priority_tools
+ if = {
+  limit = { any_scope_state = { OR = {
+    AND = {
+     sed_wood_candidate_site = yes
+     owner = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } }
+     sed_wood_logging_camp_operable = yes
+      sed_input_logging_camp_tools > 0
+     sed_input_headroom_tools < { value = sed_input_logging_camp_tools multiply = 1.25 }
+    }
+    AND = {
+     sed_iron_candidate_site = yes
+     owner = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
+     sed_iron_iron_mine_operable = yes
+      sed_input_iron_mine_tools > 0
+     sed_input_headroom_tools < { value = sed_input_iron_mine_tools multiply = 1.25 }
+    }
+    AND = {
+     sed_coal_candidate_site = yes
+     owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+     sed_coal_coal_mine_operable = yes
+      sed_input_coal_mine_tools > 0
+     sed_input_headroom_tools < { value = sed_input_coal_mine_tools multiply = 1.25 }
+    }
+    AND = {
+     sed_grain_candidate_site = yes
+     owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
+     sed_grain_wheat_farm_operable = yes
+      sed_input_wheat_farm_tools > 0
+     sed_input_headroom_tools < { value = sed_input_wheat_farm_tools multiply = 1.25 }
+    }
+    AND = {
+     sed_grain_candidate_site = yes
+     owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
+     sed_grain_rye_farm_operable = yes
+      sed_input_rye_farm_tools > 0
+     sed_input_headroom_tools < { value = sed_input_rye_farm_tools multiply = 1.25 }
+    }
+    AND = {
+     sed_grain_candidate_site = yes
+     owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
+     sed_grain_rice_farm_operable = yes
+      sed_input_rice_farm_tools > 0
+     sed_input_headroom_tools < { value = sed_input_rice_farm_tools multiply = 1.25 }
+    }
+    AND = {
+     sed_grain_candidate_site = yes
+     owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
+     sed_grain_maize_farm_operable = yes
+      sed_input_maize_farm_tools > 0
+     sed_input_headroom_tools < { value = sed_input_maize_farm_tools multiply = 1.25 }
+    }
+    AND = {
+     sed_grain_candidate_site = yes
+     owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
+     sed_grain_millet_farm_operable = yes
+      sed_input_millet_farm_tools > 0
+     sed_input_headroom_tools < { value = sed_input_millet_farm_tools multiply = 1.25 }
+    }
+    AND = {
+     sed_fabric_candidate_site = yes
+     owner = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
+     sed_fabric_livestock_ranch_operable = yes
+      sed_input_livestock_ranch_tools > 0
+     sed_input_headroom_tools < { value = sed_input_livestock_ranch_tools multiply = 1.25 }
+    }
+    AND = {
+     sed_groceries_candidate_site = yes
+     owner = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } }
+     sed_groceries_food_industry_operable = yes
+      sed_input_food_industry_tools > 0
+     sed_input_headroom_tools < { value = sed_input_food_industry_tools multiply = 1.25 }
+    }
+    AND = {
+     sed_clothes_candidate_site = yes
+     owner = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } }
+     sed_clothes_textile_mill_operable = yes
+      sed_input_textile_mill_tools > 0
+     sed_input_headroom_tools < { value = sed_input_textile_mill_tools multiply = 1.25 }
+    }
+    AND = {
+     sed_small_arms_candidate_site = yes
+     owner = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } } }
+     sed_small_arms_arms_industry_operable = yes
+      sed_input_arms_industry_tools > 0
+     sed_input_headroom_tools < { value = sed_input_arms_industry_tools multiply = 1.25 }
+    }
+    AND = {
+     sed_artillery_candidate_site = yes
+     owner = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } } }
+     sed_artillery_artillery_foundry_operable = yes
+      sed_input_artillery_foundry_tools > 0
+     sed_input_headroom_tools < { value = sed_input_artillery_foundry_tools multiply = 1.25 }
+    }
+    AND = {
+     sed_ammunition_candidate_site = yes
+     owner = { market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } } }
+     sed_ammunition_munition_plant_operable = yes
+      sed_input_munition_plant_tools > 0
+     sed_input_headroom_tools < { value = sed_input_munition_plant_tools multiply = 1.25 }
+    }
+  } } }
+  set_variable = { name = sed_input_priority_tools value = yes }
  }
 }
 sed_refresh_labor_readings = {

@@ -1,6 +1,6 @@
-# Instalação e uso — versão 0.6.20
+# Instalação e uso — versão 0.6.21
 
-Requer Victoria 3 1.15.x. A versão 0.6.20 mantém o diagnóstico e os protótipos
+Requer Victoria 3 1.15.x. A versão 0.6.21 mantém o diagnóstico e os protótipos
 de expansão ferroviária e de capacidade de construção. Acrescenta recomendações
 e botões de aprovação para expandir produtores locais de madeira, ferro,
 carvão, cereais, tecido, ferramentas, mantimentos e roupas quando o mercado
@@ -24,7 +24,7 @@ python3 tools/validate.py --game "/caminho/Victoria 3/game"
 python3 tools/package_mod.py
 ```
 
-O resultado fica em `dist/smart-economy-director-0.6.20.zip`. O pacote contém
+O resultado fica em `dist/smart-economy-director-0.6.21.zip`. O pacote contém
 somente os arquivos carregáveis; não inclui saves, fontes do jogo, pesquisa,
 testes ou outro mod. A geração é determinística e não modifica a instalação.
 
