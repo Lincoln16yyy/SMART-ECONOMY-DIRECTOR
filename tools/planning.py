@@ -10,7 +10,9 @@ def country_variables(actions):
     supply = [name for name in actions if name not in ('railway', 'construction')]
     pressure = [f'sed_plan_pressure_{name}' for name in supply]
     missing = [f'sed_plan_missing_{name}' for name in supply]
-    return COUNTRY_VARIABLES + pressure + missing
+    months = [f'sed_{name}_short_months' for name in supply]
+    meta = [f'sed_{name}_meta_year' for name in supply]
+    return COUNTRY_VARIABLES + pressure + missing + months + meta
 
 
 def state_variables(actions):
@@ -95,6 +97,25 @@ def effects(actions, buildings):
     }}
    }} }}
   }} }}''')
+        # Three consecutive months of shortage define an annual industrial goal.
+        # The year marker expires in January; a lasting shortage activates it again.
+        result.append(f'''  if = {{ limit = {{
+   market = {{ mg:{name} ?= {{ market_goods_has_goods_shortage = yes }} }}
+  }}
+   if = {{ limit = {{ has_variable = sed_{name}_short_months }}
+    change_variable = {{ name = sed_{name}_short_months add = 1 }}
+   }}
+   else = {{ set_variable = {{ name = sed_{name}_short_months value = 1 }} }}
+   if = {{ limit = {{ var:sed_{name}_short_months >= 3 }}
+    if = {{ limit = {{ NOT = {{ has_variable = sed_{name}_meta_year }} }}
+     set_variable = {{ name = sed_{name}_meta_year value = year }}
+    }}
+    else_if = {{ limit = {{ NOT = {{ var:sed_{name}_meta_year = year }} }}
+     set_variable = {{ name = sed_{name}_meta_year value = year }}
+    }}
+   }}
+  }}
+  else = {{ remove_variable = sed_{name}_short_months }}''')
     result.append('  every_scope_state = {')
     for name in actions:
         result.append(f'   set_variable = {{ name = sed_plan_{name}_rank value = 0 }}')
@@ -108,7 +129,8 @@ def effects(actions, buildings):
             score = 'value = 40'
         else:
             bonus = 20 if name in ('grain', 'groceries', 'clothes') else 10
-            score = f'value = owner.var:sed_plan_pressure_{name} add = {80 + bonus}'
+            score = f'''value = owner.var:sed_plan_pressure_{name} add = {80 + bonus}
+    if = {{ limit = {{ owner = {{ has_variable = sed_{name}_meta_year var:sed_{name}_meta_year = year }} }} add = 25 }}'''
         result.append(f'''   if = {{ limit = {{ {eligibility} }}
     set_variable = {{ name = sed_plan_{name}_score value = {{ {score} }} }}
    }}''')

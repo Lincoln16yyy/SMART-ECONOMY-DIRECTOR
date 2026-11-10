@@ -213,6 +213,53 @@ class PlanningTests(unittest.TestCase):
             self.assertEqual(c.variables['sed_fabric_' + reason], 0, reason)
         self.assertEqual(c.variable_lists['sed_fabric_candidates'], [target])
 
+    def test_persistent_shortage_defines_an_annual_industrial_goal(self):
+        grain = self.producer('grain', buy=100, sell=30)
+        c = self.c
+        visible = c.definitions['sed_meta_grain_visible_sgui']
+        for expected_months in (1, 2):
+            c.run('sed_refresh_national_plan')
+            self.assertEqual(c.variables['sed_grain_short_months'], expected_months)
+            self.assertFalse(c.condition(child(visible, 'is_shown'), c.country_scope()))
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_grain_short_months'], 3)
+        self.assertEqual(c.variables['sed_grain_meta_year'], 1836)
+        self.assertTrue(c.condition(child(visible, 'is_shown'), c.country_scope()))
+        # A cleared shortage removes the counter but the annual goal lasts to January.
+        c.market_goods.clear()
+        c.run('sed_refresh_national_plan')
+        self.assertNotIn('sed_grain_short_months', c.variables)
+        self.assertTrue(c.condition(child(visible, 'is_shown'), c.country_scope()))
+        c.readings['year'] = 1837
+        self.assertFalse(c.condition(child(visible, 'is_shown'), c.country_scope()))
+
+    def test_annual_goal_keeps_priority_over_a_newer_higher_gap(self):
+        grain = self.producer('grain', buy=100, sell=40)
+        clothes = self.producer('clothes', buy=100, sell=30)
+        self.c.market_goods['clothes']['market_goods_has_goods_shortage'] = False
+        c = self.c
+        for _ in range(3):
+            c.run('sed_refresh_national_plan')
+        self.assertEqual([x[1] for x in self.ranked()], ['grain'])
+        self.c.market_goods['clothes']['market_goods_has_goods_shortage'] = True
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_pressure_grain'], 60)
+        self.assertEqual(c.variables['sed_plan_pressure_clothes'], 70)
+        self.assertEqual(c.variables['sed_clothes_short_months'], 1)
+        self.assertEqual(grain['variables']['sed_plan_grain_score'], 185)
+        self.assertEqual(clothes['variables']['sed_plan_clothes_score'], 170)
+        self.assertEqual([x[1] for x in self.ranked()], ['grain', 'clothes'])
+        self.assertEqual([x[2] for x in self.ranked()], [grain, clothes])
+
+    def test_disable_clears_shortage_counters_and_annual_goal(self):
+        self.producer('grain')
+        c = self.c
+        for _ in range(3):
+            c.run('sed_refresh_national_plan')
+        c.run('sed_disable_country')
+        self.assertNotIn('sed_grain_short_months', c.variables)
+        self.assertNotIn('sed_grain_meta_year', c.variables)
+
     def test_queue_wait_preserves_plan_but_never_calls_constructor(self):
         self.producer('grain')
         c = self.c

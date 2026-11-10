@@ -11,7 +11,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.6.3'
+VERSION = '0.6.4'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -434,6 +434,9 @@ def widget():
     for goal in range(10):
         body += textbox(f'sed_goal_{goal}', f'sed_goal_{goal}_visible_sgui')
     body += textbox('sed_plan_policy')
+    for item in SUPPLY_TARGETS:
+        name = item['good']
+        body += textbox(f'sed_meta_{name}', f'sed_meta_{name}_visible_sgui')
     for item in SUPPLY_TARGETS:
         name = item['good']
         body += textbox(f'sed_plan_missing_{name}', f'sed_plan_missing_{name}_visible_sgui')
@@ -1102,6 +1105,9 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
         result += f'sed_goal_{goal}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_plan_goal var:sed_plan_goal = {goal} }} }}\n'
     for item in SUPPLY_TARGETS:
         name = item['good']
+        result += f'sed_meta_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_{name}_meta_year var:sed_{name}_meta_year = year }} }}\n'
+    for item in SUPPLY_TARGETS:
+        name = item['good']
         result += f'sed_plan_missing_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_plan_missing_{name} var:sed_plan_missing_{name} = 1 }} }}\n'
     result += 'sed_plan_empty_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_count var:sed_plan_count = 0 } }\n'
     for rank in planning.RANKS:
@@ -1521,7 +1527,12 @@ def localization(language):
     pairs['sed_goal_5'] = ('Objetivo atual: investigar ausência dos produtores atendidos pelo protótipo para bens em escassez. A construção direta do Director ainda exige produtor existente; a ferramenta externa mantém sua própria seleção.', 'Current objective: investigate missing prototype-supported producers for scarce goods. Direct Director construction still requires an existing producer; the external tool keeps its own selection.')
     for item in SUPPLY_TARGETS:
         name = item['good']
-        pairs[f'sed_plan_missing_{name}'] = (f"Setor a investigar: {item['label_pt']} em escassez no mercado, sem {item['building_pt']} nos estados do país. Importação ou outros produtores podem suprir o bem; não é ordem de autossuficiência.", f"Sector to investigate: market shortage of {item['label_en']}, with no {item['building_en']} in the country's states. Imports or other producers may supply it; this is not a self-sufficiency mandate.")
+        names_pt = [variant['building_pt'] for variant in variants(item)]
+        names_en = [variant['building_en'] for variant in variants(item)]
+        producers_pt = ', '.join(names_pt[:-1]) + (' ou ' if len(names_pt) > 1 else '') + names_pt[-1]
+        producers_en = ', '.join(names_en[:-1]) + (' or ' if len(names_en) > 1 else '') + names_en[-1]
+        pairs[f'sed_plan_missing_{name}'] = (f"Setor a investigar: {item['label_pt']} em escassez no mercado, sem produtor verificado ({producers_pt}) nos estados do país. Importação ou outros produtores podem suprir o bem; não é ordem de autossuficiência.", f"Sector to investigate: market shortage of {item['label_en']}, with no verified producer ({producers_en}) in the country's states. Imports or other producers may supply it; this is not a self-sufficiency mandate.")
+        pairs[f'sed_meta_{name}'] = (f"Meta industrial anual: ampliar a oferta de {item['label_pt']}. A escassez desse bem durou três meses ou mais; ele mantém prioridade no plano até o fim do ano. A meta não dispensa os filtros de trabalhadores, insumos, fila, infraestrutura e proteção fiscal.", f"Annual industrial goal: expand the supply of {item['label_en']}. The shortage lasted three months or more; it keeps priority in the plan until the end of the year. The goal does not bypass the worker, input, queue, infrastructure and fiscal guards.")
     for rank in planning.RANKS:
         pairs[f'sed_plan_rank_{rank}'] = (f'Prioridade {rank}', f'Priority {rank}')
     for name in ACTION_NAMES:

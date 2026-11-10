@@ -1118,3 +1118,33 @@ content_load.json preservado. Backup em
 `sed_backups/mod_before_0.6.3_20261110_002209_786280`. ZIP em
 `dist/smart-economy-director-0.6.3.zip`. As novas combinações ainda não foram
 observadas em campanha nem na engine.
+
+## 2026-11-10 — Metas industriais anuais 0.6.4
+
+Objetivo: definir metas econômicas a partir da observação, em vez de apenas
+reagir à escassez do mês corrente, sem criar candidatos fora dos filtros.
+
+O plano passou a contar meses consecutivos de escassez de mercado por bem
+estratégico (`sed_<bem>_short_months`). No terceiro mês, o Director grava a meta
+anual (`sed_<bem>_meta_year`) correspondente ao ano civil. Enquanto a meta vale,
+o bem recebe 25 pontos adicionais na pontuação e uma linha própria no diário
+("Meta industrial anual: ampliar a oferta de ..."). A meta expira em janeiro;
+se a falta continuar, os três meses seguintes a reativam. Ela não cria
+candidato e não dispensa trabalhadores, insumos, fila, infraestrutura,
+permissão ou proteção fiscal, nem altera objetivo macro, impostos, gastos ou
+orçamento externo.
+
+O texto do setor ausente também passou a listar todos os produtores verificados,
+em vez de nomear apenas o prédio principal. Três meses e 25 pontos são decisões
+desta implementação, sem calibração em campanha.
+
+129 testes sintéticos aprovados (três novos: ativação no terceiro mês e
+expiração anual, prioridade sobre falta mais aguda mas recente, limpeza ao
+desativar). Geração atual, validação estática contra Victoria 3 1.15 e
+`git diff --check` aprovados.
+
+Entrega local 0.6.4 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.4_20261110_005319_526047`. ZIP em
+`dist/smart-economy-director-0.6.4.zip`. A meta ainda não foi observada na
+engine nem em campanha.

@@ -1,5 +1,23 @@
 # Contexto de continuidade
 
+Entrega local 0.6.4 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.4_20261110_005319_526047`.
+
+## Metas industriais anuais 0.6.4
+
+Escassez de mercado por três meses consecutivos define uma meta industrial
+anual para o bem: `sed_<bem>_short_months` conta a sequência e
+`sed_<bem>_meta_year` grava o ano. A meta vale até a virada do ano civil, recebe
+25 pontos adicionais no plano e aparece em linha própria no diário. Não cria
+candidato: elegibilidade, fila, insumos, trabalhadores, infraestrutura,
+permissão e política fiscal continuam obrigatórias. Desativar limpa contadores
+e marcadores. Três meses e 25 pontos são parâmetros iniciais sem calibração em
+campanha. Metas plurianuais, cadeias completas e feedback por alvo continuam
+pendentes. 129 testes aprovados; comportamento na engine não confirmado.
+
+## Entrega local 0.6.3
+
 Entrega local 0.6.3 instalada com jogo fechado, 14 outputs conferidos e
 content_load.json preservado. Backup em
 `sed_backups/mod_before_0.6.3_20261110_002209_786280`.

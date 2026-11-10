@@ -1,4 +1,4 @@
-# Planejamento e coordenação — 0.6.3
+# Planejamento e coordenação — 0.6.4
 
 Esta versão implementa política nacional inicial e adaptadores de opções de
 construção. Não é um controlador econômico completo nem comprova crescimento
@@ -261,3 +261,37 @@ fora do denominador.
 126 testes sintéticos aprovados incluem fazenda de milho planejada e
 enfileirada, fazenda de gado elegível para tecido e ausência de falso produtor
 para cereais. Nenhuma dessas combinações foi observada em campanha.
+
+## Metas industriais anuais na 0.6.4
+
+O plano mensal reagia à escassez do mês. Um pico passageiro de outro bem podia
+deslocar uma falta recorrente, e o diário não distinguia escassez estrutural de
+oscilação. A 0.6.4 acrescenta uma meta anual de oferta derivada da observação:
+
+- `sed_<bem>_short_months` conta meses consecutivos com escassez de mercado;
+  sem escassez, o contador é removido.
+- Ao atingir três meses consecutivos, o Director grava
+  `sed_<bem>_meta_year = ano` e declara a meta industrial anual daquele bem.
+- A meta vale até a virada do ano civil. Se a escassez persistir, os três meses
+  seguintes a reativam no novo ano; se tiver acabado, ela expira em janeiro.
+- Enquanto a meta vale, o bem recebe 25 pontos adicionais na pontuação do plano.
+  Isso mantém prioridade sobre uma falta mais aguda, mas recente, sem criar
+  candidato: a elegibilidade continua exigindo mercado em escassez, produtor
+  verificado, ocupação, insumos, fila, infraestrutura, permissão e política
+  fiscal.
+
+O diário mostra uma linha por bem com meta ativa: "Meta industrial anual:
+ampliar a oferta de ...". O texto informa que a meta não dispensa os filtros e
+não promete obra, custo ou resultado. Desativar o Director remove contadores e
+marcadores anuais.
+
+Três meses e 25 pontos são decisões desta implementação, escolhidas para
+separar recorrência de ruído mensal; não foram calibradas em campanha. A meta
+não altera o objetivo macro, impostos, gastos ou o orçamento dos executores
+externos. Metas plurianuais, cadeias completas e feedback de resultados por
+alvo continuam pendentes.
+
+129 testes sintéticos aprovados incluem ativação no terceiro mês, expiração na
+virada do ano, limpeza ao desativar e prioridade da meta sobre falta mais aguda
+mas recente. O comportamento na engine e em save/reload ainda não foi
+observado.
