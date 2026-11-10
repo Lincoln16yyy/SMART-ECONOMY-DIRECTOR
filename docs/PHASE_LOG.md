@@ -1647,3 +1647,47 @@ limiar, ausência de insumo, filas, vagas, energia local, revalidação, retomad
 limpeza e proteção do validador. Geração e validação estática local aprovadas.
 Interface, desempenho e decisões novas ainda aguardam campanha. Manter a
 preferência do jogador por testes agrupados após mudanças relevantes.
+
+## 2026-11-10 — Setor de construção e segunda revisão no Automático (0.6.26)
+
+O jogador pediu que o Automático aja por conta própria, sem depender de
+explicações. Além da fila pública ocupada liberada na 0.6.25, o dispatcher
+automático passou a aceitar o setor de construção quando ele é a primeira
+prioridade do plano. A elegibilidade continua exigindo fila pública de ao
+menos três projetos, setor com nível positivo, ocupação de 90%, sem falha de
+contratação, falta de insumos ou expansão enfileirada, e guardas fiscais e de
+materiais aprovadas.
+
+Uma revisão bloqueada pela fila privada ou pela construção pausada agenda uma
+segunda tentativa sete dias depois. Só uma segunda revisão é agendada por mês
+de calendário, controlada por `sed_auto_retry_month`. A tentativa mensal só é
+consumida quando há inclusão confirmada, como antes.
+
+241 testes sintéticos aprovados, incluindo setor ranqueado e não ranqueado,
+fila pública ocupada e a segunda revisão única. Geração, validação estática e
+verificação de artefatos aprovadas. Sem instalação, engine ou campanha nesta
+etapa.
+
+## 2026-11-10 — Automático age com a fila pública ocupada (0.6.25)
+
+O jogador pediu que o modo Automático aja sozinho, sem depender de explicações
+ou de filas livres. A revisão mensal parava sempre que a fila pública tinha
+qualquer projeto, inclusive obras de outros construtores, e por isso quase não
+enfileirava nada em campanha.
+
+A guarda do executor próprio agora exige apenas a fila privada vazia. A fila
+pública pode estar ocupada e recebe no máximo um nível por revisão. Limite
+mensal, inadimplência, construção pausada, construtores conhecidos, proteção
+fiscal, referência de materiais, elegibilidade do prédio e
+`level_after_queued_constructions` por prédio permanecem. O status 11 e o painel
+passaram a descrever somente a fila privada. Manual, Assistido e a expansão
+manual de setores de construção não mudaram.
+
+A 0.6.24, ainda não documentada, escolhe o fornecedor de maior saída estimada e
+marca o insumo que bloqueia uma expansão.
+
+238 testes sintéticos aprovados, incluindo fila pública ocupada com inclusão
+confirmada, bloqueio da segunda tentativa no mesmo mês e fila privada ainda
+bloqueando. Geração e validação estática locais aprovadas. Sem instalação,
+execução na engine ou campanha nesta etapa; custo incremental de fila longa e
+concorrência real seguem sem confirmação.

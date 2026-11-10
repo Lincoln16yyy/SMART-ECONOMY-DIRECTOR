@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.6.23'
+VERSION = '0.6.26'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -125,6 +125,51 @@ def input_priority_effect():
   limit = {{ has_variable_list = sed_input_blocked_{good} }}
   set_variable = {{ name = sed_input_priority_{good} value = yes }}
  }}''')
+    result.append(' if = { limit = { has_variable = sed_mode_automatic }')
+    for good, links in INPUT_DEPENDENCIES.items():
+        downstream_checks = []
+        for downstream in dict.fromkeys(name for name, _ in links if name in INPUT_DEPENDENCIES):
+            blockers = []
+            for name, variant in links:
+                if name != downstream:
+                    continue
+                building = variant['building']
+                other_inputs = '\n'.join(
+                    f'      NOT = {{ {input_forecast.blocked_input(building, other)} }}'
+                    for other in input_forecast.building_goods(building) if other != good
+                )
+                blockers.append(f'''     AND = {{
+      sed_{downstream}_{variant_id(variant)}_operable = yes
+      {input_forecast.blocked_input(building, good)}
+{other_inputs}
+     }}''')
+            conditions = '\n'.join(blockers)
+            # The lists are the original direct blockers, so this pass cannot recurse.
+            downstream_checks.append(f'''   AND = {{
+    has_variable_list = sed_input_blocked_{downstream}
+    NOT = {{ any_scope_state = {{ sed_{downstream}_supplier_available = yes }} }}
+    NOT = {{ any_scope_state = {{ sed_{downstream}_queued_supply = yes }} }}
+    any_scope_state = {{
+     sed_{downstream}_candidate_site = yes
+     OR = {{
+{conditions}
+     }}
+    }}
+   }}''')
+        if downstream_checks:
+            conditions = '\n'.join(downstream_checks)
+            result.append(f'''  if = {{
+   limit = {{
+    NOT = {{ has_variable = sed_input_priority_{good} }}
+    NOT = {{ any_scope_state = {{ sed_{good}_queued_supply = yes }} }}
+    OR = {{
+{conditions}
+    }}
+    any_scope_state = {{ sed_{good}_supplier_available = yes }}
+   }}
+   set_variable = {{ name = sed_input_priority_{good} value = yes }}
+  }}''')
+    result.append(' }')
     return '\n'.join(result) + '\n}\n'
 
 
@@ -159,6 +204,7 @@ sed_queue_levels_before'''.split() + [
       for field in ('from', 'to', 'year', 'month')],
     'sed_auto_review_status', 'sed_auto_review_year', 'sed_auto_review_month',
     *[f"sed_{item['good']}_action_status" for item in SUPPLY_TARGETS],
+    'sed_auto_retry_month',
     *[f"sed_{item['good']}_{field}" for item in SUPPLY_TARGETS
       for field in ('intents', 'completed', 'abandoned', 'result', 'result_month')],
     *[f"sed_{name}_{field}" for name in ('railway', 'construction')
@@ -378,6 +424,16 @@ sed_refresh_supply_candidates = {
   trigger_event = { id = sed_pulse.1 days = 23 }
  }
 }''')
+    result.append('''sed_schedule_auto_retry = {
+ if = {
+  limit = { has_variable = sed_mode_automatic NOT = { has_variable = sed_auto_event_pending }
+   NOT = { AND = { has_variable = sed_auto_retry_month var:sed_auto_retry_month = sed_live_month_key } }
+  }
+  set_variable = { name = sed_auto_event_pending value = yes }
+  set_variable = { name = sed_auto_retry_month value = sed_live_month_key }
+  trigger_event = { id = sed_pulse.1 days = 7 }
+ }
+}''')
     result.append('''sed_auto_apply_monthly = {
  sed_refresh_national_plan = yes
  sed_apply_fiscal_policy = yes
@@ -404,6 +460,10 @@ sed_refresh_supply_candidates = {
  set_variable = { name = sed_auto_review_status value = var:sed_auto_action_status }
  set_variable = { name = sed_auto_review_year value = year }
  set_variable = { name = sed_auto_review_month value = { value = month add = 1 } }
+ # One late second look per month when a transient queue pause clears.
+ if = { limit = { OR = { var:sed_auto_review_status = 11 var:sed_auto_review_status = 12 } }
+  sed_schedule_auto_retry = yes
+ }
 }
 
 sed_auto_run_direct = {
@@ -414,6 +474,8 @@ sed_auto_run_direct = {
 ''')
     choices = [('railway', 'sed_railway_candidate_eligible')]
     choices.extend((item['good'], f"sed_{item['good']}_candidate_eligible") for item in SUPPLY_TARGETS)
+    # The construction sector joins the automatic dispatcher only as a ranked target.
+    choices.append(('construction', 'sed_construction_candidate_eligible'))
     for index, (name, eligibility) in enumerate(choices):
         start = 'if' if index == 0 else 'else_if'
         order = 'infrastructure_delta' if name == 'railway' else 'state_population'
@@ -433,7 +495,7 @@ sed_auto_run_direct = {
     result.append(''' }
  else_if = { limit = { in_default = yes } set_variable = { name = sed_auto_action_status value = 10 } }
  else_if = { limit = { sed_auto_month_limit_reached = yes } set_variable = { name = sed_auto_action_status value = 16 } }
- else_if = { limit = { OR = { construction_queue_num_queued_government_levels > 0 construction_queue_num_queued_private_levels > 0 } } set_variable = { name = sed_auto_action_status value = 11 } }
+ else_if = { limit = { construction_queue_num_queued_private_levels > 0 } set_variable = { name = sed_auto_action_status value = 11 } }
  else_if = { limit = { is_construction_paused = yes } set_variable = { name = sed_auto_action_status value = 12 } }
  else_if = { limit = { sed_competing_builder_configured = yes } set_variable = { name = sed_auto_action_status value = 13 } }
  else_if = { limit = { NOT = { sed_auto_fiscal_safe = yes } } set_variable = { name = sed_auto_action_status value = 17 } }
@@ -1165,10 +1227,11 @@ sed_update_growth = {
         '__SUPPLY_STATE_CLEANUP__',
         supply_state_cleanup + '\n'
         + '\n'.join('  remove_variable = ' + name for name in IGNORED_VARIABLES))
-    script = script.replace(
-        '    set_variable = { name = sed_railway_action_status value = 1 }',
-        '    set_variable = { name = sed_railway_action_status value = 1 }\n'
-        '    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }')
+    for action in ('railway', 'construction'):
+        script = script.replace(
+            f'    set_variable = {{ name = sed_{action}_action_status value = 1 }}',
+            f'    set_variable = {{ name = sed_{action}_action_status value = 1 }}\n'
+            '    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }')
     for item in SUPPLY_TARGETS:
         good = item['good']
         script = script.replace(
@@ -1405,7 +1468,7 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
     for name, condition in [
         ('default', 'in_default = yes'),
         ('month_limit', 'sed_auto_month_limit_reached = yes'),
-        ('queue', 'OR = { construction_queue_num_queued_government_levels > 0 construction_queue_num_queued_private_levels > 0 }'),
+        ('queue', 'construction_queue_num_queued_private_levels > 0'),
         ('paused', 'is_construction_paused = yes'),
         ('competing', 'AND = { sed_competing_builder_configured = yes NOT = { has_variable = sed_coord_active } }'),
         ('fiscal', 'OR = { AND = { has_variable = sed_coord_active NOT = { sed_coord_fiscal_safe = yes } } AND = { NOT = { has_variable = sed_coord_active } NOT = { sed_auto_fiscal_safe = yes } } }'),
@@ -1564,10 +1627,13 @@ sed_{good}_candidate_site = {{
  NOT = {{ has_variable = sed_{good}_request_pending }}
 {military_gate}
 }}
-sed_{good}_candidate_eligible = {{
+sed_{good}_supplier_available = {{
  sed_{good}_candidate_site = yes
- owner = {{ sed_{good}_supply_demand = yes }}
  OR = {{ {alternatives} }}
+}}
+sed_{good}_candidate_eligible = {{
+ owner = {{ sed_{good}_supply_demand = yes }}
+ sed_{good}_supplier_available = yes
 }}
 ''')
         queued_variants = ' '.join(
@@ -1658,7 +1724,6 @@ sed_auto_executor_safe = {
  has_variable = sed_mode_automatic
  NOT = { sed_auto_month_limit_reached = yes }
  NOT = { in_default = yes }
- construction_queue_num_queued_government_levels = 0
  construction_queue_num_queued_private_levels = 0
  is_construction_paused = no
  NOT = { sed_competing_builder_configured = yes }
@@ -1703,15 +1768,15 @@ def localization(language):
         'sed_mode_assisted_button': ('Assistido', 'Assisted'),
         'sed_mode_assisted_button_tt': ('Mostra botões visíveis para você aprovar individualmente cada nível recomendado. Nenhuma ação econômica automática.', 'Shows visible buttons so you can approve each recommended level individually. No automatic economic action.'),
         'sed_mode_automatic_button': ('Automático', 'Automatic'),
-        'sed_mode_automatic_button_tt': ('Revisa uma vez por mês e pode enfileirar no máximo um nível se houver escassez ou déficit de infraestrutura, a fila pública e privada estiverem vazias, o país não estiver em inadimplência e nenhum dos construtores conhecidos estiver ativo. Você pode voltar a Assistido ou Manual a qualquer momento.', 'Reviews once a month and may queue at most one level if a shortage or infrastructure deficit exists, both queues are empty, the country is not in default, and no known construction automation is active. You can switch back to Assisted or Manual at any time.'),
+        'sed_mode_automatic_button_tt': ('Revisa uma vez por mês e pode enfileirar no máximo um nível se houver escassez ou déficit de infraestrutura, a fila privada estiver vazia, o país não estiver em inadimplência e nenhum dos construtores conhecidos estiver ativo. A fila pública pode continuar ocupada. Você pode voltar a Assistido ou Manual a qualquer momento.', 'Reviews once a month and may queue at most one level if a shortage or infrastructure deficit exists, the private queue is empty, the country is not in default, and no known construction automation is active. The government queue may remain busy. You can switch back to Assisted or Manual at any time.'),
         'sed_mode_manual_status': ('Modo Manual ativo. O Director só atualiza diagnóstico e recomendações; os botões de ação ficam visíveis, mas desativados.', 'Manual mode is active. The Director only updates diagnosis and recommendations; action buttons remain visible but disabled.'),
         'sed_mode_assisted_status': ('Modo Assistido ativo. Você decide pelo botão visível de cada recomendação; a condição do país e a fila são revalidadas no clique.', 'Assisted mode is active. You decide with the visible button on each recommendation; country conditions and queues are rechecked on click.'),
-        'sed_mode_automatic_status': ('Modo Automático ativo. Uma revisão mensal pode enfileirar no máximo um nível. A aprovação individual fica desativada enquanto este modo estiver ativo.', 'Automatic mode is active. A monthly review may queue at most one level. Individual approval is disabled while this mode is active.'),
+        'sed_mode_automatic_status': ('Modo Automático ativo. Uma revisão mensal pode enfileirar no máximo um nível, mesmo com a fila pública ocupada; a fila privada precisa estar vazia. A aprovação individual fica desativada enquanto este modo estiver ativo.', 'Automatic mode is active. A monthly review may queue at most one level even while the government queue is busy; the private queue must be empty. Individual approval is disabled while this mode is active.'),
         'sed_mode_approval_blocked': ('Ação individual disponível no modo Assistido. Os botões continuam visíveis nos outros modos.', 'Individual actions are available in Assisted mode. Buttons remain visible in the other modes.'),
         'sed_auto_status_success': ('A revisão automática adicionou um nível à fila pública. Confira o prédio e o prazo na fila do jogo.', 'The automatic review added one level to the government queue. Review the building and timing in the game queue.'),
         'sed_auto_status_no_action': ('A revisão mensal terminou sem uma ação elegível. Nenhuma construção foi enfileirada.', 'The monthly review found no eligible action. No construction was queued.'),
         'sed_auto_status_default': ('A revisão automática foi suspensa porque o país está em inadimplência.', 'The automatic review was suspended because the country is in default.'),
-        'sed_auto_status_queue': ('A revisão automática não enfileirou obra: a fila pública ou privada já está ocupada.', 'The automatic review did not queue construction because the government or private queue is already occupied.'),
+        'sed_auto_status_queue': ('A revisão automática não enfileirou obra: a fila privada já está ocupada.', 'The automatic review did not queue construction because the private queue is already occupied.'),
         'sed_auto_status_paused': ('A revisão automática não enfileirou obra porque a construção está pausada.', 'The automatic review did not queue construction because construction is paused.'),
         'sed_auto_status_competing': ('A revisão automática foi suspensa porque outra automação de construção conhecida está configurada.', 'The automatic review was suspended because another known construction automation is configured.'),
         'sed_auto_status_safety': ('A revisão automática foi suspensa por uma condição de segurança não classificada. Nenhuma obra foi enfileirada.', 'The automatic review was suspended by an unclassified safety condition. No construction was queued.'),
@@ -1855,7 +1920,7 @@ def localization(language):
         'sed_auto_unrecorded': ('Última revisão: sem registro nesta ativação.', 'Last review: no record in this activation.'),
         'sed_auto_last_review': ('Última revisão automática: ' + v('auto_review_month', '0') + '/' + v('auto_review_year', '0') + '. Resultado:', 'Last automatic review: ' + v('auto_review_month', '0') + '/' + v('auto_review_year', '0') + '. Result:'),
         'sed_auto_current_default': ('Agora: país em inadimplência. A execução automática está bloqueada.', 'Now: the country is in default. Automatic execution is blocked.'),
-        'sed_auto_current_queue': ('Agora: filas ocupadas. O Automático aguarda.', 'Now: queues occupied. Automatic mode waits.'),
+        'sed_auto_current_queue': ('Agora: fila privada ocupada. O Automático aguarda.', 'Now: the private queue is occupied. Automatic mode waits.'),
         'sed_auto_current_paused': ('Agora: a construção está pausada. A execução automática está bloqueada.', 'Now: construction is paused. Automatic execution is blocked.'),
         'sed_auto_current_competing': ('Agora: outro construtor conhecido está configurado. A execução automática está bloqueada.', 'Now: another known builder is configured. Automatic execution is blocked.'),
         'sed_auto_current_clear': ('Agora: sem trava operacional conhecida. Falta avaliar candidatos.', 'Now: no known operational blocker. Candidates still need evaluation.'),
@@ -1897,11 +1962,11 @@ def localization(language):
         'Fiscal com construção financiada por reservas. Saldo operacional não negativo, sem dívida e ouro cobrindo doze semanas de despesas fixas mais 26 semanas do déficit observado. O Advisor pode avaliar investimentos com seu próprio orçamento quando a fila pública estiver livre. Os caminhos diretos e do Supply Chain exigem a guarda de saldo não negativo.',
         'Fiscal state with reserve-funded construction. Nonnegative operating balance, no debt and gold covering twelve weeks of fixed expenses plus 26 weeks of the observed deficit. The Advisor can assess investment using its own budget when the government queue is empty. Direct and Supply Chain paths require the nonnegative-balance guard.')
     pairs['sed_mode_automatic_button_tt'] = (
-        'Coordena os construtores detectados e aplica a política fiscal. Impostos e salários civis admitem um ajuste por mês de calendário. Sair do Automático restaura as opções e níveis anteriores. O executor próprio admite uma tentativa de obra por mês. As ferramentas externas seguem seus próprios limites.',
-        'Coordinates detected builders and applies fiscal policy. Taxes and civilian government wages allow one adjustment per calendar month. Leaving Automatic restores previous options and levels. The direct executor allows one construction attempt per month. External tools follow their own limits.')
+        'Coordena os construtores detectados e aplica a política fiscal. Impostos e salários civis admitem um ajuste por mês de calendário. Sair do Automático restaura as opções e níveis anteriores. O executor próprio admite uma tentativa de obra por mês, mesmo com a fila pública ocupada; a fila privada precisa estar vazia. As ferramentas externas seguem seus próprios limites.',
+        'Coordinates detected builders and applies fiscal policy. Taxes and civilian government wages allow one adjustment per calendar month. Leaving Automatic restores previous options and levels. The direct executor allows one construction attempt per month even while the government queue is busy; the private queue must be empty. External tools follow their own limits.')
     pairs['sed_mode_automatic_status'] = (
-        'Automático ativo. As revisões periódicas atualizam plano, executor e política fiscal.',
-        'Automatic is active. Periodic reviews update the plan, executor and fiscal policy.')
+        'Automático ativo. As revisões periódicas atualizam plano, executor e política fiscal e podem enfileirar um nível por mês com a fila pública ocupada, desde que a fila privada esteja vazia.',
+        'Automatic is active. Periodic reviews update the plan, executor and fiscal policy and may queue one level per month while the government queue is busy, as long as the private queue is empty.')
     pairs.update({
         'sed_coord_intro': ('No Automático, o Director coordena os construtores detectados e aplica a política fiscal. Voltar para Assistido ou Manual restaura suas opções e níveis originais.', 'In Automatic, the Director coordinates detected builders and applies fiscal policy. Returning to Assisted or Manual restores your original options and levels.'),
         'sed_coord_enable': ('Coordenar construtores externos', 'Coordinate external builders'),
@@ -1949,7 +2014,7 @@ def localization(language):
         'sed_coord_executor_12': ('Ritmo por reservas: aguardando a fila pública existente. Com déficit financiado por ouro, novas autorizações externas ficam suspensas enquanto houver níveis públicos enfileirados. A política fiscal continua ativa e o orçamento é reavaliado nas revisões.', 'Reserve-funded pace: waiting for the existing government queue. While gold funds a deficit, new external authorizations remain suspended while government levels are queued. Fiscal policy remains active and the budget is reassessed on reviews.'),
         'sed_auto_status_reserve_queue': ('Última revisão: preservação de reservas, aguardando obras públicas já enfileiradas antes de autorizar novos investimentos.', 'Last review: preserving reserves, waiting for already queued government projects before authorizing new investment.'),
         'sed_reserve_budget': ('Orçamento por reservas nesta leitura. Piso de doze semanas de despesas fixas: @money!' + v('reserve_floor', 'K') + '. Ouro acima do piso: @money!' + v('reserve_spare', 'K') + '. Cobertura do déficit atual acima do piso: ' + v('reserve_runway', '1') + ' semanas. Ouro exigido pela regra de 26 semanas: @money!' + v('reserve_required', 'K') + '. Estimativa com despesas e déficit atuais; custo de novas obras ainda precisa ser avaliado.', 'Reserve budget in this reading. Twelve-week fixed-expense floor: @money!' + v('reserve_floor', 'K') + '. Gold above the floor: @money!' + v('reserve_spare', 'K') + '. Current deficit coverage above the floor: ' + v('reserve_runway', '1') + ' weeks. Gold required by the 26-week rule: @money!' + v('reserve_required', 'K') + '. Estimate using current expenses and deficit; new construction costs still require assessment.'),
-        'sed_coord_executor_11': ('Executor escolhido: Director, expansão da primeira prioridade de oferta. As opções verificadas de construção do Advisor e Supply Chain ficam suspensas. Aguarda orçamento e filas livres; no máximo uma tentativa por mês. O resultado da revisão confirma se houve inclusão.', 'Selected executor: Director, expansion of the first supply priority. Verified Advisor and Supply Chain construction options remain suspended. Waits for budget and empty queues; at most one attempt per month. The review outcome confirms insertion.'),
+        'sed_coord_executor_11': ('Executor escolhido: Director, expansão da primeira prioridade de oferta. As opções verificadas de construção do Advisor e Supply Chain ficam suspensas. Aguarda orçamento e fila privada livre; a fila pública pode estar ocupada. No máximo uma tentativa por mês. O resultado da revisão confirma se houve inclusão.', 'Selected executor: Director, expansion of the first supply priority. Verified Advisor and Supply Chain construction options remain suspended. Waits for budget and an empty private queue; the government queue may be busy. At most one attempt per month. The review outcome confirms insertion.'),
         'sed_coord_executor_10': ('Coordenação em espera. Há expansão enfileirada de um prédio relacionado ao objetivo atual. Novas opções externas ficam suspensas até reavaliar a fila ou surgir outra prioridade elegível.', 'Coordination waiting. A building related to the current objective has a queued expansion. New external options remain suspended until queue reassessment or another eligible priority appears.'),
         'sed_plan_waiting': ('Plano em acompanhamento de obra relacionada. A fila ainda não comprova resolução do gargalo. A autoria e o efeito futuro do projeto não foram identificados.', 'Plan monitoring related construction. The queue does not yet prove resolution of the bottleneck. Project origin and future impact have not been identified.'),
         'sed_auto_status_waiting': ('Última revisão: aguardando expansão relacionada ao objetivo. Reavalia após mudança da fila; nenhuma nova rotina externa autorizada nesta revisão.', 'Last review: waiting for an expansion related to the objective. Reassesses after queue changes; no new external routine authorized in this review.'),

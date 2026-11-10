@@ -1,5 +1,11 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.6.26, o Automático age com a fila pública ocupada, pode expandir o setor
+de construção quando ele é a primeira prioridade do plano e agenda uma segunda
+revisão no mesmo mês quando a fila privada bloqueia a primeira. A expansão
+automática do setor continua sujeita às guardas fiscais e de materiais, e o
+resultado não é explicado na interface além do status mensal.
+
 Na 0.6.23, ao construir para suprir um insumo prioritário, o Automático
 seleciona o fornecedor elegível de maior produção-base por nível, estimada
 pelos métodos de produção ativos do jogo base.

@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.6.20
+# Estado dos requisitos — 0.6.26
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.
@@ -15,12 +15,12 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Impostos e gastos | Nível de imposto e salário civil do governo no Automático, com um passo mensal, snapshot e restauração | Leitura das rotinas aceita no menu da engine. Observar alterações em campanha e calibrar limiares |
 | Coordenação Advisor/Supply Chain | Adaptadores de sete opções de construção, quatro de objetivo/orçamento e três de política do Supply Chain, com restauração | Verificar efeitos reais, save/reload e compatibilidade das versões instaladas |
 | Ativar somente caminho necessário | Automático usa rotinas específicas para administração, tributação, energia e, preferencialmente, setores de construção | Oferta elegível pode usar alvo direto do plano. Nas rotas externas, a seleção continua sob o algoritmo da ferramenta escolhida |
-| Construção própria automática | Consome a primeira prioridade, revalida guardas e limita tentativa mensal | Inclusão direta e persistência ainda exigem evidência de campanha. Espera por obra e transição após fim da escassez tiveram confirmação visual parcial |
+| Construção própria automática | Consome a primeira prioridade, revalida guardas e limita tentativa mensal. Desde a 0.6.25 atua com a fila pública ocupada; só a fila privada precisa estar vazia. Desde a 0.6.26 expande também o setor de construção quando ele lidera o plano e agenda uma segunda revisão no mês após bloqueio por fila privada ou pausa | Inclusão direta e persistência ainda exigem evidência de campanha. Espera por obra e transição após fim da escassez tiveram confirmação visual parcial. Custo incremental de uma fila longa não é estimado. Agenda da segunda revisão não observada na engine |
 | Evitar executor próprio em paralelo | Executor próprio exclusivo para primeira prioridade de oferta na 0.6.15; opções externas suspensas | ARoAI detectado suspende delegação, autoexpansões nativas continuam sem controle |
 | Desativar e devolver opções | Restaura presença e valor original das onze opções, com testes de idempotência | Limites fiscais preservados por mês. Confirmar restauração após save/reload e atualização de versão |
 | Manual e Assistido | Autorizações e trocas de modo testadas | Restauração pode reativar opções externas originalmente ligadas |
 | Histórico | Resultado mensal datado, status externo e livro dos oito bens, ferrovia e setor de construção | Conclusão é inferida pela fila e nível; reduzir ambiguidade de cancelamento |
-| Fila sem duplicação | Guardas agregadas, nível após fila e marcas por tipo/estado | Acompanhamento relacionado na 0.6.12. Identidade, lado, investidor e reconciliação completa permanecem pendentes |
+| Fila sem duplicação | Guardas agregadas, nível após fila e marcas por tipo/estado | Acompanhamento relacionado na 0.6.12. Identidade, lado, investidor e reconciliação completa permanecem pendentes. Com a fila pública ocupada (0.6.25), a não duplicação depende de `level_after_queued_constructions` e das marcas por estado |
 | Planejamento de longo prazo | Direção atual, reavaliação periódica e meta anual de oferta para escassez persistente | Metas plurianuais, cadeias completas, diversificação medida e feedback de resultados |
 | Economia militar | Custos, participação das despesas, guerra e cinco bens monitorados. Expansões de armas, artilharia e munição na 0.6.14, com bônus de prioridade em guerra | Confirmar leituras na engine, identificar consumo nacional, planejar indústria bélica, modernização e coordenação do recrutamento |
 | Leis, guerra e diplomacia | Fora das mutações econômicas implementadas | Mantidas sob responsabilidade dos módulos e decisões previstos pelo briefing |
@@ -74,6 +74,19 @@ Os testes implementados ficam em `tests/test_planning.py`,
 `tests/test_coordination.py` e na suíte anterior. As fontes e decisões de
 política estão em [PLANNING.md](PLANNING.md). O roteiro de engine permanece em
 [MANUAL_RUNTIME_TEST.md](MANUAL_RUNTIME_TEST.md).
+
+A 0.6.26 acrescenta o setor de construção ao dispatcher automático quando ele
+lidera o plano, com as mesmas guardas fiscais, de materiais e de fila, além de
+uma segunda revisão por mês após bloqueio pela fila privada ou pela pausa da
+construção. A execução automática do setor usa a mesma elegibilidade da
+aprovação manual; a diferença é o limite de uma tentativa mensal.
+
+A 0.6.25 remove a exigência de fila pública vazia do executor próprio. O
+Automático passa a poder enfileirar seu único nível mensal mesmo com obras de
+outros construtores na fila; a fila privada continua bloqueando. O limite
+mensal, a proteção fiscal, a referência de materiais e a checagem por prédio
+permanecem. Custo incremental de uma fila longa e concorrência real ainda
+precisam de observação em campanha.
 
 A revisão de calendário, política fiscal e acompanhamento de variantes está
 registrada em [REVIEW_2026-11-10.md](REVIEW_2026-11-10.md).
