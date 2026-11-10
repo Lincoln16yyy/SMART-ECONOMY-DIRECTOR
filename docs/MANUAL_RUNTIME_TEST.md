@@ -11,7 +11,7 @@ Leitura manual corrigiu snapshot fiscal desatualizado. O controle por reservas
 continuava ativo com déficit e fila pública, motivando a pausa da 0.6.16.
 
 
-## Teste conjunto da 0.6.19
+## Teste conjunto da 0.6.20
 
 Realizar quando o jogador decidir retomar os testes. Registrar uma captura
 inicial do orçamento, opções dos construtores e fila, e guardar um save.
@@ -81,6 +81,13 @@ inicial do orçamento, opções dos construtores e fila, e guardar um save.
     bloqueio excessivo, especialmente onde migração ou mudança de emprego
     permitiriam expansão. A referência não prevê qualificações. Conferir se
     liberar uma obra ou vagas altera a reserva na leitura seguinte.
+
+14. Na próxima rodada significativa, conferir as referências de insumos nos
+    cartões. Comparar PMs ativos, demanda adicional e margem ao limiar de
+    escassez com o mercado. Testar um caso de nova demanda sem cobertura e um
+    com cobertura. Conferir energia/transporte no estado específico e uma
+    mudança de PM antes da aprovação. Registrar bloqueios excessivos. A
+    projeção mantém a oferta atual, sem antecipar produção das obras da fila.
 
 Guardar capturas de um caso saudável, um caso de crise e a restauração. Obras
 existentes e investimentos privados não comprovam autoria do Director.

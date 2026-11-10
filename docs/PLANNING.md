@@ -1,5 +1,44 @@
 # Planejamento e coordenação — 0.6.8
 
+## 0.6.20 — Previsão de insumos das expansões de oferta
+
+A recomendação e a aprovação dos onze bens agora verificam a demanda adicional
+pelos PMs ativos do produtor. O registro `data/input_profiles.json` contém
+coeficientes verificados para 18 tipos de prédio e 124 entradas de métodos.
+A demanda de um nível completo recebe margem inicial de 25%.
+
+O modelo mantém a oferta atual e desconta vagas e expansões enfileiradas dos
+tipos conhecidos. Bens de mercado usam oferta/demanda agregadas e compromissos
+dos estados do país, incluindo não incorporados. Eletricidade e transporte
+usam produção/consumo e compromissos do próprio estado. A previsão aguarda
+quando a nova demanda levaria a oferta/demanda abaixo de 50%, conforme o limiar
+verificado nos defines vanilla locais. Na igualdade, a candidata é permitida.
+
+As margens são calculadas por leitura e armazenadas, evitando varredura
+nacional por candidata. A aprovação recalcula antes de validar. Métodos ativos
+são lidos ao vivo. Falta de dados do insumo produz margem zero. Insumo com
+quantidade ativa zero não exige margem. Desativar remove snapshots. Os
+cartões usam ScriptValue, padrão verificado nos widgets vanilla, para mostrar
+referências e margens por insumo; há motivo próprio de rejeição por previsão.
+
+A oferta de projetos futuros não é creditada. Mudanças futuras de preços,
+comércio, emprego, PMs, produção e modificadores de throughput/consumo ainda
+podem alterar o resultado. Tipos e métodos fora do registro e compromissos de
+outros países permanecem fora da projeção adicional. O modelo é uma referência
+que precisa de calibração. Construtores externos mantêm seus próprios filtros.
+
+O exemplo de autoconsumo de carvão citado durante o desenvolvimento foi
+corrigido após conferir os arquivos. Os perfis atuais da mina de carvão usam
+outros insumos conforme o PM, sem crédito especial de produção no modelo.
+Nenhuma exceção de carvão foi incluída no código.
+
+231 testes sintéticos aprovados, com 14 regressões adicionais de coeficientes,
+limiar, ausência de insumo, filas, vagas, energia local, revalidação, retomada,
+limpeza e proteção do validador. Geração e validação estática local aprovadas.
+Interface, desempenho e decisões novas ainda aguardam campanha. Manter a
+preferência do jogador por testes agrupados após mudanças relevantes.
+
+
 ## 0.6.19 — Reserva estimada de mão de obra nas expansões de oferta
 
 As candidatas dos onze bens agora exigem reserva estimada de trabalhadores

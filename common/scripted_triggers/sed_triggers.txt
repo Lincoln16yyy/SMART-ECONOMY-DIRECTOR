@@ -87,6 +87,7 @@ sed_wood_logging_camp_eligible = {
   }
  }
  sed_state_labor_available >= 5000
+ sed_input_logging_camp_safe = yes
  can_construct_building = building_logging_camp
 }
 
@@ -138,6 +139,7 @@ sed_iron_iron_mine_eligible = {
   }
  }
  sed_state_labor_available >= 5250
+ sed_input_iron_mine_safe = yes
  can_construct_building = building_iron_mine
 }
 
@@ -189,6 +191,7 @@ sed_coal_coal_mine_eligible = {
   }
  }
  sed_state_labor_available >= 5250
+ sed_input_coal_mine_safe = yes
  can_construct_building = building_coal_mine
 }
 
@@ -251,6 +254,7 @@ sed_grain_wheat_farm_eligible = {
   }
  }
  sed_state_labor_available >= 5000
+ sed_input_wheat_farm_safe = yes
  can_construct_building = building_wheat_farm
 }
 
@@ -271,6 +275,7 @@ sed_grain_rye_farm_eligible = {
   }
  }
  sed_state_labor_available >= 5000
+ sed_input_rye_farm_safe = yes
  can_construct_building = building_rye_farm
 }
 
@@ -292,6 +297,7 @@ sed_grain_rice_farm_eligible = {
   }
  }
  sed_state_labor_available >= 10000
+ sed_input_rice_farm_safe = yes
  can_construct_building = building_rice_farm
 }
 
@@ -312,6 +318,7 @@ sed_grain_maize_farm_eligible = {
   }
  }
  sed_state_labor_available >= 5000
+ sed_input_maize_farm_safe = yes
  can_construct_building = building_maize_farm
 }
 
@@ -332,6 +339,7 @@ sed_grain_millet_farm_eligible = {
   }
  }
  sed_state_labor_available >= 5000
+ sed_input_millet_farm_safe = yes
  can_construct_building = building_millet_farm
 }
 
@@ -381,6 +389,7 @@ sed_fabric_cotton_plantation_eligible = {
   }
  }
  sed_state_labor_available >= 8000
+ sed_input_cotton_plantation_safe = yes
  can_construct_building = building_cotton_plantation
 }
 
@@ -400,6 +409,7 @@ sed_fabric_livestock_ranch_eligible = {
   }
  }
  sed_state_labor_available >= 5000
+ sed_input_livestock_ranch_safe = yes
  can_construct_building = building_livestock_ranch
 }
 
@@ -447,6 +457,7 @@ sed_tools_tooling_workshop_eligible = {
   }
  }
  sed_state_labor_available >= 5000
+ sed_input_tooling_workshop_safe = yes
  can_construct_building = building_tooling_workshop
 }
 
@@ -500,6 +511,7 @@ sed_groceries_food_industry_eligible = {
   }
  }
  sed_state_labor_available >= 6600
+ sed_input_food_industry_safe = yes
  can_construct_building = building_food_industry
 }
 
@@ -547,6 +559,7 @@ sed_clothes_textile_mill_eligible = {
   }
  }
  sed_state_labor_available >= 6000
+ sed_input_textile_mill_safe = yes
  can_construct_building = building_textile_mill
 }
 
@@ -594,6 +607,7 @@ sed_small_arms_arms_industry_eligible = {
   }
  }
  sed_state_labor_available >= 5000
+ sed_input_arms_industry_safe = yes
  can_construct_building = building_arms_industry
 }
 
@@ -645,6 +659,7 @@ sed_artillery_artillery_foundry_eligible = {
   }
  }
  sed_state_labor_available >= 5250
+ sed_input_artillery_foundry_safe = yes
  can_construct_building = building_artillery_foundry
 }
 
@@ -688,6 +703,7 @@ sed_ammunition_munition_plant_eligible = {
   }
  }
  sed_state_labor_available >= 5000
+ sed_input_munition_plant_safe = yes
  can_construct_building = building_munition_plant
 }
 
@@ -812,6 +828,494 @@ sed_direct_budget_safe = {
  OR = {
   net_total_income >= var:sed_build_budget_weekly
   AND = { principal <= 0 gold_reserves >= var:sed_build_budget_required_gold }
+ }
+}
+sed_input_railway_safe = {
+ OR = {
+  sed_input_railway_coal <= 0
+  sed_input_headroom_coal >= { value = sed_input_railway_coal multiply = 1.25 }
+ }
+ OR = {
+  sed_input_railway_electricity <= 0
+  sed_input_headroom_electricity >= { value = sed_input_railway_electricity multiply = 1.25 }
+ }
+ OR = {
+  sed_input_railway_engines <= 0
+  sed_input_headroom_engines >= { value = sed_input_railway_engines multiply = 1.25 }
+ }
+ OR = {
+  sed_input_railway_oil <= 0
+  sed_input_headroom_oil >= { value = sed_input_railway_oil multiply = 1.25 }
+ }
+ OR = {
+  sed_input_railway_steel <= 0
+  sed_input_headroom_steel >= { value = sed_input_railway_steel multiply = 1.25 }
+ }
+ OR = {
+  sed_input_railway_wood <= 0
+  sed_input_headroom_wood >= { value = sed_input_railway_wood multiply = 1.25 }
+ }
+}
+sed_input_construction_sector_safe = {
+ OR = {
+  sed_input_construction_sector_copper <= 0
+  sed_input_headroom_copper >= { value = sed_input_construction_sector_copper multiply = 1.25 }
+ }
+ OR = {
+  sed_input_construction_sector_electricity <= 0
+  sed_input_headroom_electricity >= { value = sed_input_construction_sector_electricity multiply = 1.25 }
+ }
+ OR = {
+  sed_input_construction_sector_explosives <= 0
+  sed_input_headroom_explosives >= { value = sed_input_construction_sector_explosives multiply = 1.25 }
+ }
+ OR = {
+  sed_input_construction_sector_fabric <= 0
+  sed_input_headroom_fabric >= { value = sed_input_construction_sector_fabric multiply = 1.25 }
+ }
+ OR = {
+  sed_input_construction_sector_glass <= 0
+  sed_input_headroom_glass >= { value = sed_input_construction_sector_glass multiply = 1.25 }
+ }
+ OR = {
+  sed_input_construction_sector_iron <= 0
+  sed_input_headroom_iron >= { value = sed_input_construction_sector_iron multiply = 1.25 }
+ }
+ OR = {
+  sed_input_construction_sector_steel <= 0
+  sed_input_headroom_steel >= { value = sed_input_construction_sector_steel multiply = 1.25 }
+ }
+ OR = {
+  sed_input_construction_sector_tools <= 0
+  sed_input_headroom_tools >= { value = sed_input_construction_sector_tools multiply = 1.25 }
+ }
+ OR = {
+  sed_input_construction_sector_wood <= 0
+  sed_input_headroom_wood >= { value = sed_input_construction_sector_wood multiply = 1.25 }
+ }
+}
+sed_input_logging_camp_safe = {
+ OR = {
+  sed_input_logging_camp_coal <= 0
+  sed_input_headroom_coal >= { value = sed_input_logging_camp_coal multiply = 1.25 }
+ }
+ OR = {
+  sed_input_logging_camp_electricity <= 0
+  sed_input_headroom_electricity >= { value = sed_input_logging_camp_electricity multiply = 1.25 }
+ }
+ OR = {
+  sed_input_logging_camp_engines <= 0
+  sed_input_headroom_engines >= { value = sed_input_logging_camp_engines multiply = 1.25 }
+ }
+ OR = {
+  sed_input_logging_camp_oil <= 0
+  sed_input_headroom_oil >= { value = sed_input_logging_camp_oil multiply = 1.25 }
+ }
+ OR = {
+  sed_input_logging_camp_tools <= 0
+  sed_input_headroom_tools >= { value = sed_input_logging_camp_tools multiply = 1.25 }
+ }
+ OR = {
+  sed_input_logging_camp_transportation <= 0
+  sed_input_headroom_transportation >= { value = sed_input_logging_camp_transportation multiply = 1.25 }
+ }
+}
+sed_input_iron_mine_safe = {
+ OR = {
+  sed_input_iron_mine_coal <= 0
+  sed_input_headroom_coal >= { value = sed_input_iron_mine_coal multiply = 1.25 }
+ }
+ OR = {
+  sed_input_iron_mine_engines <= 0
+  sed_input_headroom_engines >= { value = sed_input_iron_mine_engines multiply = 1.25 }
+ }
+ OR = {
+  sed_input_iron_mine_explosives <= 0
+  sed_input_headroom_explosives >= { value = sed_input_iron_mine_explosives multiply = 1.25 }
+ }
+ OR = {
+  sed_input_iron_mine_oil <= 0
+  sed_input_headroom_oil >= { value = sed_input_iron_mine_oil multiply = 1.25 }
+ }
+ OR = {
+  sed_input_iron_mine_tools <= 0
+  sed_input_headroom_tools >= { value = sed_input_iron_mine_tools multiply = 1.25 }
+ }
+ OR = {
+  sed_input_iron_mine_transportation <= 0
+  sed_input_headroom_transportation >= { value = sed_input_iron_mine_transportation multiply = 1.25 }
+ }
+}
+sed_input_coal_mine_safe = {
+ OR = {
+  sed_input_coal_mine_engines <= 0
+  sed_input_headroom_engines >= { value = sed_input_coal_mine_engines multiply = 1.25 }
+ }
+ OR = {
+  sed_input_coal_mine_explosives <= 0
+  sed_input_headroom_explosives >= { value = sed_input_coal_mine_explosives multiply = 1.25 }
+ }
+ OR = {
+  sed_input_coal_mine_oil <= 0
+  sed_input_headroom_oil >= { value = sed_input_coal_mine_oil multiply = 1.25 }
+ }
+ OR = {
+  sed_input_coal_mine_tools <= 0
+  sed_input_headroom_tools >= { value = sed_input_coal_mine_tools multiply = 1.25 }
+ }
+ OR = {
+  sed_input_coal_mine_transportation <= 0
+  sed_input_headroom_transportation >= { value = sed_input_coal_mine_transportation multiply = 1.25 }
+ }
+}
+sed_input_wheat_farm_safe = {
+ OR = {
+  sed_input_wheat_farm_coal <= 0
+  sed_input_headroom_coal >= { value = sed_input_wheat_farm_coal multiply = 1.25 }
+ }
+ OR = {
+  sed_input_wheat_farm_engines <= 0
+  sed_input_headroom_engines >= { value = sed_input_wheat_farm_engines multiply = 1.25 }
+ }
+ OR = {
+  sed_input_wheat_farm_fertilizer <= 0
+  sed_input_headroom_fertilizer >= { value = sed_input_wheat_farm_fertilizer multiply = 1.25 }
+ }
+ OR = {
+  sed_input_wheat_farm_fish <= 0
+  sed_input_headroom_fish >= { value = sed_input_wheat_farm_fish multiply = 1.25 }
+ }
+ OR = {
+  sed_input_wheat_farm_oil <= 0
+  sed_input_headroom_oil >= { value = sed_input_wheat_farm_oil multiply = 1.25 }
+ }
+ OR = {
+  sed_input_wheat_farm_tools <= 0
+  sed_input_headroom_tools >= { value = sed_input_wheat_farm_tools multiply = 1.25 }
+ }
+}
+sed_input_rye_farm_safe = {
+ OR = {
+  sed_input_rye_farm_coal <= 0
+  sed_input_headroom_coal >= { value = sed_input_rye_farm_coal multiply = 1.25 }
+ }
+ OR = {
+  sed_input_rye_farm_engines <= 0
+  sed_input_headroom_engines >= { value = sed_input_rye_farm_engines multiply = 1.25 }
+ }
+ OR = {
+  sed_input_rye_farm_fertilizer <= 0
+  sed_input_headroom_fertilizer >= { value = sed_input_rye_farm_fertilizer multiply = 1.25 }
+ }
+ OR = {
+  sed_input_rye_farm_oil <= 0
+  sed_input_headroom_oil >= { value = sed_input_rye_farm_oil multiply = 1.25 }
+ }
+ OR = {
+  sed_input_rye_farm_tools <= 0
+  sed_input_headroom_tools >= { value = sed_input_rye_farm_tools multiply = 1.25 }
+ }
+}
+sed_input_rice_farm_safe = {
+ OR = {
+  sed_input_rice_farm_coal <= 0
+  sed_input_headroom_coal >= { value = sed_input_rice_farm_coal multiply = 1.25 }
+ }
+ OR = {
+  sed_input_rice_farm_fertilizer <= 0
+  sed_input_headroom_fertilizer >= { value = sed_input_rice_farm_fertilizer multiply = 1.25 }
+ }
+ OR = {
+  sed_input_rice_farm_fish <= 0
+  sed_input_headroom_fish >= { value = sed_input_rice_farm_fish multiply = 1.25 }
+ }
+ OR = {
+  sed_input_rice_farm_tools <= 0
+  sed_input_headroom_tools >= { value = sed_input_rice_farm_tools multiply = 1.25 }
+ }
+}
+sed_input_maize_farm_safe = {
+ OR = {
+  sed_input_maize_farm_coal <= 0
+  sed_input_headroom_coal >= { value = sed_input_maize_farm_coal multiply = 1.25 }
+ }
+ OR = {
+  sed_input_maize_farm_engines <= 0
+  sed_input_headroom_engines >= { value = sed_input_maize_farm_engines multiply = 1.25 }
+ }
+ OR = {
+  sed_input_maize_farm_fertilizer <= 0
+  sed_input_headroom_fertilizer >= { value = sed_input_maize_farm_fertilizer multiply = 1.25 }
+ }
+ OR = {
+  sed_input_maize_farm_oil <= 0
+  sed_input_headroom_oil >= { value = sed_input_maize_farm_oil multiply = 1.25 }
+ }
+ OR = {
+  sed_input_maize_farm_tools <= 0
+  sed_input_headroom_tools >= { value = sed_input_maize_farm_tools multiply = 1.25 }
+ }
+}
+sed_input_millet_farm_safe = {
+ OR = {
+  sed_input_millet_farm_coal <= 0
+  sed_input_headroom_coal >= { value = sed_input_millet_farm_coal multiply = 1.25 }
+ }
+ OR = {
+  sed_input_millet_farm_engines <= 0
+  sed_input_headroom_engines >= { value = sed_input_millet_farm_engines multiply = 1.25 }
+ }
+ OR = {
+  sed_input_millet_farm_fertilizer <= 0
+  sed_input_headroom_fertilizer >= { value = sed_input_millet_farm_fertilizer multiply = 1.25 }
+ }
+ OR = {
+  sed_input_millet_farm_oil <= 0
+  sed_input_headroom_oil >= { value = sed_input_millet_farm_oil multiply = 1.25 }
+ }
+ OR = {
+  sed_input_millet_farm_tools <= 0
+  sed_input_headroom_tools >= { value = sed_input_millet_farm_tools multiply = 1.25 }
+ }
+}
+sed_input_cotton_plantation_safe = {
+ OR = {
+  sed_input_cotton_plantation_engines <= 0
+  sed_input_headroom_engines >= { value = sed_input_cotton_plantation_engines multiply = 1.25 }
+ }
+ OR = {
+  sed_input_cotton_plantation_transportation <= 0
+  sed_input_headroom_transportation >= { value = sed_input_cotton_plantation_transportation multiply = 1.25 }
+ }
+}
+sed_input_livestock_ranch_safe = {
+ OR = {
+  sed_input_livestock_ranch_coal <= 0
+  sed_input_headroom_coal >= { value = sed_input_livestock_ranch_coal multiply = 1.25 }
+ }
+ OR = {
+  sed_input_livestock_ranch_electricity <= 0
+  sed_input_headroom_electricity >= { value = sed_input_livestock_ranch_electricity multiply = 1.25 }
+ }
+ OR = {
+  sed_input_livestock_ranch_grain <= 0
+  sed_input_headroom_grain >= { value = sed_input_livestock_ranch_grain multiply = 1.25 }
+ }
+ OR = {
+  sed_input_livestock_ranch_iron <= 0
+  sed_input_headroom_iron >= { value = sed_input_livestock_ranch_iron multiply = 1.25 }
+ }
+ OR = {
+  sed_input_livestock_ranch_tools <= 0
+  sed_input_headroom_tools >= { value = sed_input_livestock_ranch_tools multiply = 1.25 }
+ }
+ OR = {
+  sed_input_livestock_ranch_transportation <= 0
+  sed_input_headroom_transportation >= { value = sed_input_livestock_ranch_transportation multiply = 1.25 }
+ }
+}
+sed_input_tooling_workshop_safe = {
+ OR = {
+  sed_input_tooling_workshop_coal <= 0
+  sed_input_headroom_coal >= { value = sed_input_tooling_workshop_coal multiply = 1.25 }
+ }
+ OR = {
+  sed_input_tooling_workshop_copper <= 0
+  sed_input_headroom_copper >= { value = sed_input_tooling_workshop_copper multiply = 1.25 }
+ }
+ OR = {
+  sed_input_tooling_workshop_electricity <= 0
+  sed_input_headroom_electricity >= { value = sed_input_tooling_workshop_electricity multiply = 1.25 }
+ }
+ OR = {
+  sed_input_tooling_workshop_iron <= 0
+  sed_input_headroom_iron >= { value = sed_input_tooling_workshop_iron multiply = 1.25 }
+ }
+ OR = {
+  sed_input_tooling_workshop_oil <= 0
+  sed_input_headroom_oil >= { value = sed_input_tooling_workshop_oil multiply = 1.25 }
+ }
+ OR = {
+  sed_input_tooling_workshop_rubber <= 0
+  sed_input_headroom_rubber >= { value = sed_input_tooling_workshop_rubber multiply = 1.25 }
+ }
+ OR = {
+  sed_input_tooling_workshop_steel <= 0
+  sed_input_headroom_steel >= { value = sed_input_tooling_workshop_steel multiply = 1.25 }
+ }
+ OR = {
+  sed_input_tooling_workshop_wood <= 0
+  sed_input_headroom_wood >= { value = sed_input_tooling_workshop_wood multiply = 1.25 }
+ }
+}
+sed_input_food_industry_safe = {
+ OR = {
+  sed_input_food_industry_copper <= 0
+  sed_input_headroom_copper >= { value = sed_input_food_industry_copper multiply = 1.25 }
+ }
+ OR = {
+  sed_input_food_industry_electricity <= 0
+  sed_input_headroom_electricity >= { value = sed_input_food_industry_electricity multiply = 1.25 }
+ }
+ OR = {
+  sed_input_food_industry_fish <= 0
+  sed_input_headroom_fish >= { value = sed_input_food_industry_fish multiply = 1.25 }
+ }
+ OR = {
+  sed_input_food_industry_glass <= 0
+  sed_input_headroom_glass >= { value = sed_input_food_industry_glass multiply = 1.25 }
+ }
+ OR = {
+  sed_input_food_industry_grain <= 0
+  sed_input_headroom_grain >= { value = sed_input_food_industry_grain multiply = 1.25 }
+ }
+ OR = {
+  sed_input_food_industry_iron <= 0
+  sed_input_headroom_iron >= { value = sed_input_food_industry_iron multiply = 1.25 }
+ }
+ OR = {
+  sed_input_food_industry_meat <= 0
+  sed_input_headroom_meat >= { value = sed_input_food_industry_meat multiply = 1.25 }
+ }
+ OR = {
+  sed_input_food_industry_oil <= 0
+  sed_input_headroom_oil >= { value = sed_input_food_industry_oil multiply = 1.25 }
+ }
+ OR = {
+  sed_input_food_industry_sugar <= 0
+  sed_input_headroom_sugar >= { value = sed_input_food_industry_sugar multiply = 1.25 }
+ }
+ OR = {
+  sed_input_food_industry_tools <= 0
+  sed_input_headroom_tools >= { value = sed_input_food_industry_tools multiply = 1.25 }
+ }
+}
+sed_input_textile_mill_safe = {
+ OR = {
+  sed_input_textile_mill_copper <= 0
+  sed_input_headroom_copper >= { value = sed_input_textile_mill_copper multiply = 1.25 }
+ }
+ OR = {
+  sed_input_textile_mill_dye <= 0
+  sed_input_headroom_dye >= { value = sed_input_textile_mill_dye multiply = 1.25 }
+ }
+ OR = {
+  sed_input_textile_mill_electricity <= 0
+  sed_input_headroom_electricity >= { value = sed_input_textile_mill_electricity multiply = 1.25 }
+ }
+ OR = {
+  sed_input_textile_mill_fabric <= 0
+  sed_input_headroom_fabric >= { value = sed_input_textile_mill_fabric multiply = 1.25 }
+ }
+ OR = {
+  sed_input_textile_mill_rubber <= 0
+  sed_input_headroom_rubber >= { value = sed_input_textile_mill_rubber multiply = 1.25 }
+ }
+ OR = {
+  sed_input_textile_mill_silk <= 0
+  sed_input_headroom_silk >= { value = sed_input_textile_mill_silk multiply = 1.25 }
+ }
+ OR = {
+  sed_input_textile_mill_tools <= 0
+  sed_input_headroom_tools >= { value = sed_input_textile_mill_tools multiply = 1.25 }
+ }
+}
+sed_input_arms_industry_safe = {
+ OR = {
+  sed_input_arms_industry_coal <= 0
+  sed_input_headroom_coal >= { value = sed_input_arms_industry_coal multiply = 1.25 }
+ }
+ OR = {
+  sed_input_arms_industry_copper <= 0
+  sed_input_headroom_copper >= { value = sed_input_arms_industry_copper multiply = 1.25 }
+ }
+ OR = {
+  sed_input_arms_industry_electricity <= 0
+  sed_input_headroom_electricity >= { value = sed_input_arms_industry_electricity multiply = 1.25 }
+ }
+ OR = {
+  sed_input_arms_industry_hardwood <= 0
+  sed_input_headroom_hardwood >= { value = sed_input_arms_industry_hardwood multiply = 1.25 }
+ }
+ OR = {
+  sed_input_arms_industry_iron <= 0
+  sed_input_headroom_iron >= { value = sed_input_arms_industry_iron multiply = 1.25 }
+ }
+ OR = {
+  sed_input_arms_industry_oil <= 0
+  sed_input_headroom_oil >= { value = sed_input_arms_industry_oil multiply = 1.25 }
+ }
+ OR = {
+  sed_input_arms_industry_steel <= 0
+  sed_input_headroom_steel >= { value = sed_input_arms_industry_steel multiply = 1.25 }
+ }
+ OR = {
+  sed_input_arms_industry_tools <= 0
+  sed_input_headroom_tools >= { value = sed_input_arms_industry_tools multiply = 1.25 }
+ }
+}
+sed_input_artillery_foundry_safe = {
+ OR = {
+  sed_input_artillery_foundry_coal <= 0
+  sed_input_headroom_coal >= { value = sed_input_artillery_foundry_coal multiply = 1.25 }
+ }
+ OR = {
+  sed_input_artillery_foundry_copper <= 0
+  sed_input_headroom_copper >= { value = sed_input_artillery_foundry_copper multiply = 1.25 }
+ }
+ OR = {
+  sed_input_artillery_foundry_electricity <= 0
+  sed_input_headroom_electricity >= { value = sed_input_artillery_foundry_electricity multiply = 1.25 }
+ }
+ OR = {
+  sed_input_artillery_foundry_hardwood <= 0
+  sed_input_headroom_hardwood >= { value = sed_input_artillery_foundry_hardwood multiply = 1.25 }
+ }
+ OR = {
+  sed_input_artillery_foundry_iron <= 0
+  sed_input_headroom_iron >= { value = sed_input_artillery_foundry_iron multiply = 1.25 }
+ }
+ OR = {
+  sed_input_artillery_foundry_oil <= 0
+  sed_input_headroom_oil >= { value = sed_input_artillery_foundry_oil multiply = 1.25 }
+ }
+ OR = {
+  sed_input_artillery_foundry_steel <= 0
+  sed_input_headroom_steel >= { value = sed_input_artillery_foundry_steel multiply = 1.25 }
+ }
+ OR = {
+  sed_input_artillery_foundry_tools <= 0
+  sed_input_headroom_tools >= { value = sed_input_artillery_foundry_tools multiply = 1.25 }
+ }
+}
+sed_input_munition_plant_safe = {
+ OR = {
+  sed_input_munition_plant_coal <= 0
+  sed_input_headroom_coal >= { value = sed_input_munition_plant_coal multiply = 1.25 }
+ }
+ OR = {
+  sed_input_munition_plant_copper <= 0
+  sed_input_headroom_copper >= { value = sed_input_munition_plant_copper multiply = 1.25 }
+ }
+ OR = {
+  sed_input_munition_plant_electricity <= 0
+  sed_input_headroom_electricity >= { value = sed_input_munition_plant_electricity multiply = 1.25 }
+ }
+ OR = {
+  sed_input_munition_plant_explosives <= 0
+  sed_input_headroom_explosives >= { value = sed_input_munition_plant_explosives multiply = 1.25 }
+ }
+ OR = {
+  sed_input_munition_plant_lead <= 0
+  sed_input_headroom_lead >= { value = sed_input_munition_plant_lead multiply = 1.25 }
+ }
+ OR = {
+  sed_input_munition_plant_oil <= 0
+  sed_input_headroom_oil >= { value = sed_input_munition_plant_oil multiply = 1.25 }
+ }
+ OR = {
+  sed_input_munition_plant_tools <= 0
+  sed_input_headroom_tools >= { value = sed_input_munition_plant_tools multiply = 1.25 }
  }
 }
 sed_coord_tools_available = {

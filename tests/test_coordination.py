@@ -606,7 +606,7 @@ class CoordinationTests(unittest.TestCase):
             ('common/scripted_triggers/sed_triggers.txt',
              ' sed_direct_budget_safe = yes\n}', ' # material guard removed\n}'),
             ('common/scripted_effects/sed_effects.txt',
-             'sed_auto_run_direct = {\n sed_refresh_direct_budget = yes', 'sed_auto_run_direct = {'),
+             'sed_auto_run_direct = {\n sed_refresh_input_readings = yes\n sed_refresh_direct_budget = yes', 'sed_auto_run_direct = {\n sed_refresh_input_readings = yes'),
             ('common/scripted_triggers/sed_triggers.txt',
              'var:sed_plan_wood_rank = 1 }', 'var:sed_plan_wood_rank >= 1 }'),
             ('common/scripted_effects/sed_effects.txt',

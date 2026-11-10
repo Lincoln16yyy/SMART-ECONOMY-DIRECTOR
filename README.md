@@ -1,10 +1,10 @@
 # Smart Economy Director — Victoria 3 1.15
 
-Na 0.6.19, as expansões de oferta verificam uma reserva estimada de mão de obra,
-descontando vagas e filas dos tipos conhecidos. A suíte tem 217 testes aprovados;
-a referência demográfica e os novos bloqueios ainda requerem calibração.
+Na 0.6.20, expansões de oferta projetam insumos adicionais e compromissos
+conhecidos, com tratamento estadual de energia e transporte. A suíte tem 231
+testes aprovados; o novo modelo requer calibração em campanha.
 
-A versão 0.6.19 acrescenta planejamento nacional inicial e coordenação de
+A versão 0.6.20 acrescenta planejamento nacional inicial e coordenação de
 construção com Economy Advisor e Supply Chain Semi-Auto Builder. O diário
 mostra objetivo atual, situação fiscal, executor escolhido e até três
 prioridades entre estados e setores.
@@ -75,7 +75,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.6.19.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.6.20.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 

@@ -191,6 +191,18 @@ def validate(root=ROOT, game=None):
     if not any(entry.key == 'sed_refresh_direct_budget' and entry.value == 'yes'
                for entry in direct_effect):
         errors.append('Direct execution lacks a fresh material budget')
+    if not any(entry.key == 'sed_refresh_input_readings' and entry.value == 'yes'
+               for entry in direct_effect):
+        errors.append('Direct execution lacks an input forecast refresh')
+    for item in SUPPLY_TARGETS:
+        for variant in variants(item):
+            name = variant['building'].removeprefix('building_')
+            candidate = custom.get(f'sed_{item["good"]}_{name}_eligible', [])
+            if not any(entry.key == f'sed_input_{name}_safe' and entry.value == 'yes' for entry in candidate):
+                errors.append('Input forecast guard missing from candidate: ' + name)
+        action = custom.get(f'sed_run_{item["good"]}_approval', [])
+        if not any(entry.key == 'sed_refresh_input_readings' for entry in walk(action)):
+            errors.append('Approval lacks an input forecast refresh: ' + item['good'])
     for action in approved_actions:
         name = action.removeprefix('sed_run_').removesuffix('_approval')
         if not any(entry.key == 'sed_refresh_direct_budget' for entry in walk(custom.get(action, []))):

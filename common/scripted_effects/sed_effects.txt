@@ -230,6 +230,7 @@ sed_disable_country = {
  remove_variable = sed_wood_permission_states
  remove_variable = sed_wood_infrastructure_states
  remove_variable = sed_wood_labor_states
+ remove_variable = sed_wood_forecast_states
  remove_variable = sed_iron_producer_states
  remove_variable = sed_iron_ignored_states
  remove_variable = sed_iron_pending_states
@@ -241,6 +242,7 @@ sed_disable_country = {
  remove_variable = sed_iron_permission_states
  remove_variable = sed_iron_infrastructure_states
  remove_variable = sed_iron_labor_states
+ remove_variable = sed_iron_forecast_states
  remove_variable = sed_coal_producer_states
  remove_variable = sed_coal_ignored_states
  remove_variable = sed_coal_pending_states
@@ -252,6 +254,7 @@ sed_disable_country = {
  remove_variable = sed_coal_permission_states
  remove_variable = sed_coal_infrastructure_states
  remove_variable = sed_coal_labor_states
+ remove_variable = sed_coal_forecast_states
  remove_variable = sed_grain_producer_states
  remove_variable = sed_grain_ignored_states
  remove_variable = sed_grain_pending_states
@@ -263,6 +266,7 @@ sed_disable_country = {
  remove_variable = sed_grain_permission_states
  remove_variable = sed_grain_infrastructure_states
  remove_variable = sed_grain_labor_states
+ remove_variable = sed_grain_forecast_states
  remove_variable = sed_fabric_producer_states
  remove_variable = sed_fabric_ignored_states
  remove_variable = sed_fabric_pending_states
@@ -274,6 +278,7 @@ sed_disable_country = {
  remove_variable = sed_fabric_permission_states
  remove_variable = sed_fabric_infrastructure_states
  remove_variable = sed_fabric_labor_states
+ remove_variable = sed_fabric_forecast_states
  remove_variable = sed_tools_producer_states
  remove_variable = sed_tools_ignored_states
  remove_variable = sed_tools_pending_states
@@ -285,6 +290,7 @@ sed_disable_country = {
  remove_variable = sed_tools_permission_states
  remove_variable = sed_tools_infrastructure_states
  remove_variable = sed_tools_labor_states
+ remove_variable = sed_tools_forecast_states
  remove_variable = sed_groceries_producer_states
  remove_variable = sed_groceries_ignored_states
  remove_variable = sed_groceries_pending_states
@@ -296,6 +302,7 @@ sed_disable_country = {
  remove_variable = sed_groceries_permission_states
  remove_variable = sed_groceries_infrastructure_states
  remove_variable = sed_groceries_labor_states
+ remove_variable = sed_groceries_forecast_states
  remove_variable = sed_clothes_producer_states
  remove_variable = sed_clothes_ignored_states
  remove_variable = sed_clothes_pending_states
@@ -307,6 +314,7 @@ sed_disable_country = {
  remove_variable = sed_clothes_permission_states
  remove_variable = sed_clothes_infrastructure_states
  remove_variable = sed_clothes_labor_states
+ remove_variable = sed_clothes_forecast_states
  remove_variable = sed_small_arms_producer_states
  remove_variable = sed_small_arms_ignored_states
  remove_variable = sed_small_arms_pending_states
@@ -318,6 +326,7 @@ sed_disable_country = {
  remove_variable = sed_small_arms_permission_states
  remove_variable = sed_small_arms_infrastructure_states
  remove_variable = sed_small_arms_labor_states
+ remove_variable = sed_small_arms_forecast_states
  remove_variable = sed_artillery_producer_states
  remove_variable = sed_artillery_ignored_states
  remove_variable = sed_artillery_pending_states
@@ -329,6 +338,7 @@ sed_disable_country = {
  remove_variable = sed_artillery_permission_states
  remove_variable = sed_artillery_infrastructure_states
  remove_variable = sed_artillery_labor_states
+ remove_variable = sed_artillery_forecast_states
  remove_variable = sed_ammunition_producer_states
  remove_variable = sed_ammunition_ignored_states
  remove_variable = sed_ammunition_pending_states
@@ -340,6 +350,7 @@ sed_disable_country = {
  remove_variable = sed_ammunition_permission_states
  remove_variable = sed_ammunition_infrastructure_states
  remove_variable = sed_ammunition_labor_states
+ remove_variable = sed_ammunition_forecast_states
  remove_variable = sed_plan_count
  remove_variable = sed_plan_goal
  remove_variable = sed_fiscal_status
@@ -442,6 +453,27 @@ sed_disable_country = {
  remove_variable = sed_build_budget_weekly
  remove_variable = sed_build_budget_required_gold
  remove_variable = sed_build_budget_material_capacity
+ remove_variable = sed_input_market_margin_coal
+ remove_variable = sed_input_market_margin_copper
+ remove_variable = sed_input_market_margin_dye
+ remove_variable = sed_input_market_margin_engines
+ remove_variable = sed_input_market_margin_explosives
+ remove_variable = sed_input_market_margin_fabric
+ remove_variable = sed_input_market_margin_fertilizer
+ remove_variable = sed_input_market_margin_fish
+ remove_variable = sed_input_market_margin_glass
+ remove_variable = sed_input_market_margin_grain
+ remove_variable = sed_input_market_margin_hardwood
+ remove_variable = sed_input_market_margin_iron
+ remove_variable = sed_input_market_margin_lead
+ remove_variable = sed_input_market_margin_meat
+ remove_variable = sed_input_market_margin_oil
+ remove_variable = sed_input_market_margin_rubber
+ remove_variable = sed_input_market_margin_silk
+ remove_variable = sed_input_market_margin_steel
+ remove_variable = sed_input_market_margin_sugar
+ remove_variable = sed_input_market_margin_tools
+ remove_variable = sed_input_market_margin_wood
  clear_variable_list = sed_railway_candidates
  clear_variable_list = sed_construction_candidates
  clear_variable_list = sed_wood_candidates
@@ -539,6 +571,8 @@ sed_disable_country = {
   remove_variable = sed_labor_pool
   remove_variable = sed_labor_committed
   remove_variable = sed_labor_available
+  remove_variable = sed_input_local_margin_electricity
+  remove_variable = sed_input_local_margin_transportation
  }
  # Schema and automatic attempt month persist; disabling cannot reset the monthly cap.
 }
@@ -982,6 +1016,7 @@ sed_record_auto_attempt = {
 }
 
 sed_refresh_supply_candidates = {
+ sed_refresh_input_readings = yes
  set_variable = { name = sed_wood_producer_states value = 0 }
  set_variable = { name = sed_wood_ignored_states value = 0 }
  set_variable = { name = sed_wood_pending_states value = 0 }
@@ -993,6 +1028,7 @@ sed_refresh_supply_candidates = {
  set_variable = { name = sed_wood_permission_states value = 0 }
  set_variable = { name = sed_wood_infrastructure_states value = 0 }
  set_variable = { name = sed_wood_labor_states value = 0 }
+ set_variable = { name = sed_wood_forecast_states value = 0 }
  clear_variable_list = sed_wood_candidates
  every_scope_state = {
   if = {
@@ -1048,6 +1084,10 @@ sed_refresh_supply_candidates = {
     root = { change_variable = { name = sed_wood_input_states add = 1 } }
    }
    else_if = {
+    limit = { NOT = { sed_input_logging_camp_safe = yes } }
+    root = { change_variable = { name = sed_wood_forecast_states add = 1 } }
+   }
+   else_if = {
     limit = { b:building_logging_camp = { NOT = { OR = { has_active_production_method = pm_electric_saw_mills has_active_production_method = pm_saw_mills has_active_production_method = pm_simple_forestry } } } }
     root = { change_variable = { name = sed_wood_method_states add = 1 } }
    }
@@ -1084,6 +1124,7 @@ sed_refresh_supply_candidates = {
  set_variable = { name = sed_iron_permission_states value = 0 }
  set_variable = { name = sed_iron_infrastructure_states value = 0 }
  set_variable = { name = sed_iron_labor_states value = 0 }
+ set_variable = { name = sed_iron_forecast_states value = 0 }
  clear_variable_list = sed_iron_candidates
  every_scope_state = {
   if = {
@@ -1139,6 +1180,10 @@ sed_refresh_supply_candidates = {
     root = { change_variable = { name = sed_iron_input_states add = 1 } }
    }
    else_if = {
+    limit = { NOT = { sed_input_iron_mine_safe = yes } }
+    root = { change_variable = { name = sed_iron_forecast_states add = 1 } }
+   }
+   else_if = {
     limit = { b:building_iron_mine = { NOT = { OR = { has_active_production_method = pm_atmospheric_engine_pump_building_iron_mine has_active_production_method = pm_condensing_engine_pump_building_iron_mine has_active_production_method = pm_diesel_pump_building_iron_mine has_active_production_method = pm_dynamite_building_iron_mine has_active_production_method = pm_nitroglycerin_building_iron_mine has_active_production_method = pm_picks_and_shovels_building_iron_mine } } } }
     root = { change_variable = { name = sed_iron_method_states add = 1 } }
    }
@@ -1175,6 +1220,7 @@ sed_refresh_supply_candidates = {
  set_variable = { name = sed_coal_permission_states value = 0 }
  set_variable = { name = sed_coal_infrastructure_states value = 0 }
  set_variable = { name = sed_coal_labor_states value = 0 }
+ set_variable = { name = sed_coal_forecast_states value = 0 }
  clear_variable_list = sed_coal_candidates
  every_scope_state = {
   if = {
@@ -1230,6 +1276,10 @@ sed_refresh_supply_candidates = {
     root = { change_variable = { name = sed_coal_input_states add = 1 } }
    }
    else_if = {
+    limit = { NOT = { sed_input_coal_mine_safe = yes } }
+    root = { change_variable = { name = sed_coal_forecast_states add = 1 } }
+   }
+   else_if = {
     limit = { b:building_coal_mine = { NOT = { OR = { has_active_production_method = pm_atmospheric_engine_pump_building_coal_mine has_active_production_method = pm_condensing_engine_pump_building_coal_mine has_active_production_method = pm_diesel_pump_building_coal_mine has_active_production_method = pm_dynamite_building_coal_mine has_active_production_method = pm_nitroglycerin_building_coal_mine has_active_production_method = pm_picks_and_shovels_building_coal_mine } } } }
     root = { change_variable = { name = sed_coal_method_states add = 1 } }
    }
@@ -1266,6 +1316,7 @@ sed_refresh_supply_candidates = {
  set_variable = { name = sed_grain_permission_states value = 0 }
  set_variable = { name = sed_grain_infrastructure_states value = 0 }
  set_variable = { name = sed_grain_labor_states value = 0 }
+ set_variable = { name = sed_grain_forecast_states value = 0 }
  clear_variable_list = sed_grain_candidates
  every_scope_state = {
   if = {
@@ -1349,6 +1400,10 @@ sed_refresh_supply_candidates = {
     root = { change_variable = { name = sed_grain_input_states add = 1 } }
    }
    else_if = {
+    limit = { NOT = { sed_input_wheat_farm_safe = yes } }
+    root = { change_variable = { name = sed_grain_forecast_states add = 1 } }
+   }
+   else_if = {
     limit = { b:building_wheat_farm = { NOT = { OR = { has_active_production_method = pm_chemical_fertilizer has_active_production_method = pm_fertilization has_active_production_method = pm_herring_meal_farming has_active_production_method = pm_simple_farming has_active_production_method = pm_soil_enriching_farming } } } }
     root = { change_variable = { name = sed_grain_method_states add = 1 } }
    }
@@ -1389,6 +1444,10 @@ sed_refresh_supply_candidates = {
    else_if = {
     limit = { b:building_rye_farm = { building_has_goods_shortage = yes } }
     root = { change_variable = { name = sed_grain_input_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { sed_input_rye_farm_safe = yes } }
+    root = { change_variable = { name = sed_grain_forecast_states add = 1 } }
    }
    else_if = {
     limit = { b:building_rye_farm = { NOT = { OR = { has_active_production_method = pm_chemical_fertilizer has_active_production_method = pm_fertilization has_active_production_method = pm_simple_farming has_active_production_method = pm_soil_enriching_farming } } } }
@@ -1433,6 +1492,10 @@ sed_refresh_supply_candidates = {
     root = { change_variable = { name = sed_grain_input_states add = 1 } }
    }
    else_if = {
+    limit = { NOT = { sed_input_rice_farm_safe = yes } }
+    root = { change_variable = { name = sed_grain_forecast_states add = 1 } }
+   }
+   else_if = {
     limit = { b:building_rice_farm = { NOT = { OR = { has_active_production_method = pm_chemical_fertilizer_building_rice_farm has_active_production_method = pm_fertilization_building_rice_farm has_active_production_method = pm_herring_meal_farming_building_rice_farm has_active_production_method = pm_simple_farming_building_rice_farm has_active_production_method = pm_soil_enriching_farming_building_rice_farm } } } }
     root = { change_variable = { name = sed_grain_method_states add = 1 } }
    }
@@ -1473,6 +1536,10 @@ sed_refresh_supply_candidates = {
    else_if = {
     limit = { b:building_maize_farm = { building_has_goods_shortage = yes } }
     root = { change_variable = { name = sed_grain_input_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { sed_input_maize_farm_safe = yes } }
+    root = { change_variable = { name = sed_grain_forecast_states add = 1 } }
    }
    else_if = {
     limit = { b:building_maize_farm = { NOT = { OR = { has_active_production_method = pm_chemical_fertilizer has_active_production_method = pm_fertilization has_active_production_method = pm_simple_farming has_active_production_method = pm_soil_enriching_farming } } } }
@@ -1517,6 +1584,10 @@ sed_refresh_supply_candidates = {
     root = { change_variable = { name = sed_grain_input_states add = 1 } }
    }
    else_if = {
+    limit = { NOT = { sed_input_millet_farm_safe = yes } }
+    root = { change_variable = { name = sed_grain_forecast_states add = 1 } }
+   }
+   else_if = {
     limit = { b:building_millet_farm = { NOT = { OR = { has_active_production_method = pm_chemical_fertilizer has_active_production_method = pm_fertilization has_active_production_method = pm_simple_farming has_active_production_method = pm_soil_enriching_farming } } } }
     root = { change_variable = { name = sed_grain_method_states add = 1 } }
    }
@@ -1553,6 +1624,7 @@ sed_refresh_supply_candidates = {
  set_variable = { name = sed_fabric_permission_states value = 0 }
  set_variable = { name = sed_fabric_infrastructure_states value = 0 }
  set_variable = { name = sed_fabric_labor_states value = 0 }
+ set_variable = { name = sed_fabric_forecast_states value = 0 }
  clear_variable_list = sed_fabric_candidates
  every_scope_state = {
   if = {
@@ -1615,6 +1687,10 @@ sed_refresh_supply_candidates = {
     root = { change_variable = { name = sed_fabric_input_states add = 1 } }
    }
    else_if = {
+    limit = { NOT = { sed_input_cotton_plantation_safe = yes } }
+    root = { change_variable = { name = sed_fabric_forecast_states add = 1 } }
+   }
+   else_if = {
     limit = { b:building_cotton_plantation = { NOT = { OR = { has_active_production_method = automatic_irrigation_building_cotton_plantation has_active_production_method = default_building_cotton_plantation has_active_production_method = slave_exploitation_cotton has_active_production_method = worker_exploitation_cotton } } } }
     root = { change_variable = { name = sed_fabric_method_states add = 1 } }
    }
@@ -1657,6 +1733,10 @@ sed_refresh_supply_candidates = {
     root = { change_variable = { name = sed_fabric_input_states add = 1 } }
    }
    else_if = {
+    limit = { NOT = { sed_input_livestock_ranch_safe = yes } }
+    root = { change_variable = { name = sed_fabric_forecast_states add = 1 } }
+   }
+   else_if = {
     limit = { b:building_livestock_ranch = { NOT = { OR = { has_active_production_method = pm_intensive_grazing_ranch has_active_production_method = pm_sheep_farms has_active_production_method = pm_simple_ranch } } } }
     root = { change_variable = { name = sed_fabric_method_states add = 1 } }
    }
@@ -1693,6 +1773,7 @@ sed_refresh_supply_candidates = {
  set_variable = { name = sed_tools_permission_states value = 0 }
  set_variable = { name = sed_tools_infrastructure_states value = 0 }
  set_variable = { name = sed_tools_labor_states value = 0 }
+ set_variable = { name = sed_tools_forecast_states value = 0 }
  clear_variable_list = sed_tools_candidates
  every_scope_state = {
   if = {
@@ -1748,6 +1829,10 @@ sed_refresh_supply_candidates = {
     root = { change_variable = { name = sed_tools_input_states add = 1 } }
    }
    else_if = {
+    limit = { NOT = { sed_input_tooling_workshop_safe = yes } }
+    root = { change_variable = { name = sed_tools_forecast_states add = 1 } }
+   }
+   else_if = {
     limit = { b:building_tooling_workshop = { NOT = { OR = { has_active_production_method = pm_crude_tools has_active_production_method = pm_pig_iron has_active_production_method = pm_rubber_grips has_active_production_method = pm_steel } } } }
     root = { change_variable = { name = sed_tools_method_states add = 1 } }
    }
@@ -1784,6 +1869,7 @@ sed_refresh_supply_candidates = {
  set_variable = { name = sed_groceries_permission_states value = 0 }
  set_variable = { name = sed_groceries_infrastructure_states value = 0 }
  set_variable = { name = sed_groceries_labor_states value = 0 }
+ set_variable = { name = sed_groceries_forecast_states value = 0 }
  clear_variable_list = sed_groceries_candidates
  every_scope_state = {
   if = {
@@ -1839,6 +1925,10 @@ sed_refresh_supply_candidates = {
     root = { change_variable = { name = sed_groceries_input_states add = 1 } }
    }
    else_if = {
+    limit = { NOT = { sed_input_food_industry_safe = yes } }
+    root = { change_variable = { name = sed_groceries_forecast_states add = 1 } }
+   }
+   else_if = {
     limit = { b:building_food_industry = { NOT = { OR = { has_active_production_method = pm_bakery has_active_production_method = pm_baking_powder has_active_production_method = pm_cannery has_active_production_method = pm_cannery_fish has_active_production_method = pm_sweeteners has_active_production_method = pm_vacuum_canning has_active_production_method = pm_vacuum_canning_principle_3 } } } }
     root = { change_variable = { name = sed_groceries_method_states add = 1 } }
    }
@@ -1875,6 +1965,7 @@ sed_refresh_supply_candidates = {
  set_variable = { name = sed_clothes_permission_states value = 0 }
  set_variable = { name = sed_clothes_infrastructure_states value = 0 }
  set_variable = { name = sed_clothes_labor_states value = 0 }
+ set_variable = { name = sed_clothes_forecast_states value = 0 }
  clear_variable_list = sed_clothes_candidates
  every_scope_state = {
   if = {
@@ -1930,6 +2021,10 @@ sed_refresh_supply_candidates = {
     root = { change_variable = { name = sed_clothes_input_states add = 1 } }
    }
    else_if = {
+    limit = { NOT = { sed_input_textile_mill_safe = yes } }
+    root = { change_variable = { name = sed_clothes_forecast_states add = 1 } }
+   }
+   else_if = {
     limit = { b:building_textile_mill = { NOT = { OR = { has_active_production_method = pm_dye_workshops has_active_production_method = pm_electric_sewing_machines has_active_production_method = pm_handsewn_clothes has_active_production_method = pm_sewing_machines } } } }
     root = { change_variable = { name = sed_clothes_method_states add = 1 } }
    }
@@ -1966,6 +2061,7 @@ sed_refresh_supply_candidates = {
  set_variable = { name = sed_small_arms_permission_states value = 0 }
  set_variable = { name = sed_small_arms_infrastructure_states value = 0 }
  set_variable = { name = sed_small_arms_labor_states value = 0 }
+ set_variable = { name = sed_small_arms_forecast_states value = 0 }
  clear_variable_list = sed_small_arms_candidates
  every_scope_state = {
   if = {
@@ -2021,6 +2117,10 @@ sed_refresh_supply_candidates = {
     root = { change_variable = { name = sed_small_arms_input_states add = 1 } }
    }
    else_if = {
+    limit = { NOT = { sed_input_arms_industry_safe = yes } }
+    root = { change_variable = { name = sed_small_arms_forecast_states add = 1 } }
+   }
+   else_if = {
     limit = { b:building_arms_industry = { NOT = { OR = { has_active_production_method = pm_muskets has_active_production_method = pm_rifles has_active_production_method = pm_repeaters has_active_production_method = pm_bolt_action_rifles } } } }
     root = { change_variable = { name = sed_small_arms_method_states add = 1 } }
    }
@@ -2057,6 +2157,7 @@ sed_refresh_supply_candidates = {
  set_variable = { name = sed_artillery_permission_states value = 0 }
  set_variable = { name = sed_artillery_infrastructure_states value = 0 }
  set_variable = { name = sed_artillery_labor_states value = 0 }
+ set_variable = { name = sed_artillery_forecast_states value = 0 }
  clear_variable_list = sed_artillery_candidates
  every_scope_state = {
   if = {
@@ -2112,6 +2213,10 @@ sed_refresh_supply_candidates = {
     root = { change_variable = { name = sed_artillery_input_states add = 1 } }
    }
    else_if = {
+    limit = { NOT = { sed_input_artillery_foundry_safe = yes } }
+    root = { change_variable = { name = sed_artillery_forecast_states add = 1 } }
+   }
+   else_if = {
     limit = { b:building_artillery_foundry = { NOT = { OR = { has_active_production_method = pm_cannons has_active_production_method = pm_bronze_cannons has_active_production_method = pm_smoothbores has_active_production_method = pm_bronze_smoothbores has_active_production_method = pm_breech_loaders has_active_production_method = pm_recoiled_barrels } } } }
     root = { change_variable = { name = sed_artillery_method_states add = 1 } }
    }
@@ -2148,6 +2253,7 @@ sed_refresh_supply_candidates = {
  set_variable = { name = sed_ammunition_permission_states value = 0 }
  set_variable = { name = sed_ammunition_infrastructure_states value = 0 }
  set_variable = { name = sed_ammunition_labor_states value = 0 }
+ set_variable = { name = sed_ammunition_forecast_states value = 0 }
  clear_variable_list = sed_ammunition_candidates
  every_scope_state = {
   if = {
@@ -2203,6 +2309,10 @@ sed_refresh_supply_candidates = {
     root = { change_variable = { name = sed_ammunition_input_states add = 1 } }
    }
    else_if = {
+    limit = { NOT = { sed_input_munition_plant_safe = yes } }
+    root = { change_variable = { name = sed_ammunition_forecast_states add = 1 } }
+   }
+   else_if = {
     limit = { b:building_munition_plant = { NOT = { OR = { has_active_production_method = pm_percussion_caps has_active_production_method = pm_explosive_shells } } } }
     root = { change_variable = { name = sed_ammunition_method_states add = 1 } }
    }
@@ -2230,7 +2340,7 @@ sed_refresh_supply_candidates = {
  }
 }
 sed_run_wood_approval = {
- owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled } sed_refresh_input_readings = yes if = { limit = { has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } } }
  if = {
   limit = { sed_wood_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2289,7 +2399,7 @@ sed_wood_record_abandoned = {
  remove_variable = sed_wood_intent_variant
 }
 sed_run_iron_approval = {
- owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled } sed_refresh_input_readings = yes if = { limit = { has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } } }
  if = {
   limit = { sed_iron_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2348,7 +2458,7 @@ sed_iron_record_abandoned = {
  remove_variable = sed_iron_intent_variant
 }
 sed_run_coal_approval = {
- owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled } sed_refresh_input_readings = yes if = { limit = { has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } } }
  if = {
   limit = { sed_coal_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2407,7 +2517,7 @@ sed_coal_record_abandoned = {
  remove_variable = sed_coal_intent_variant
 }
 sed_run_grain_approval = {
- owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled } sed_refresh_input_readings = yes if = { limit = { has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } } }
  if = {
   limit = { sed_grain_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2494,7 +2604,7 @@ sed_grain_record_abandoned = {
  remove_variable = sed_grain_intent_variant
 }
 sed_run_fabric_approval = {
- owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled } sed_refresh_input_readings = yes if = { limit = { has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } } }
  if = {
   limit = { sed_fabric_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2560,7 +2670,7 @@ sed_fabric_record_abandoned = {
  remove_variable = sed_fabric_intent_variant
 }
 sed_run_tools_approval = {
- owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled } sed_refresh_input_readings = yes if = { limit = { has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } } }
  if = {
   limit = { sed_tools_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2619,7 +2729,7 @@ sed_tools_record_abandoned = {
  remove_variable = sed_tools_intent_variant
 }
 sed_run_groceries_approval = {
- owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled } sed_refresh_input_readings = yes if = { limit = { has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } } }
  if = {
   limit = { sed_groceries_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2678,7 +2788,7 @@ sed_groceries_record_abandoned = {
  remove_variable = sed_groceries_intent_variant
 }
 sed_run_clothes_approval = {
- owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled } sed_refresh_input_readings = yes if = { limit = { has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } } }
  if = {
   limit = { sed_clothes_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2737,7 +2847,7 @@ sed_clothes_record_abandoned = {
  remove_variable = sed_clothes_intent_variant
 }
 sed_run_small_arms_approval = {
- owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled } sed_refresh_input_readings = yes if = { limit = { has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } } }
  if = {
   limit = { sed_small_arms_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2796,7 +2906,7 @@ sed_small_arms_record_abandoned = {
  remove_variable = sed_small_arms_intent_variant
 }
 sed_run_artillery_approval = {
- owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled } sed_refresh_input_readings = yes if = { limit = { has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } } }
  if = {
   limit = { sed_artillery_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2855,7 +2965,7 @@ sed_artillery_record_abandoned = {
  remove_variable = sed_artillery_intent_variant
 }
 sed_run_ammunition_approval = {
- owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled } sed_refresh_input_readings = yes if = { limit = { has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } } }
  if = {
   limit = { sed_ammunition_approval_valid = yes }
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
@@ -2977,6 +3087,7 @@ sed_auto_apply_monthly = {
 }
 
 sed_auto_run_direct = {
+ sed_refresh_input_readings = yes
  sed_refresh_direct_budget = yes
  if = {
   limit = { sed_auto_executor_safe = yes }
@@ -3263,6 +3374,7 @@ sed_restore_ignored = {
 sed_refresh_national_plan = {
  if = {
   limit = { is_player = yes has_variable = sed_enabled }
+  sed_refresh_input_readings = yes
   set_variable = { name = sed_plan_count value = 0 }
   set_variable = { name = sed_plan_missing_count value = 0 }
   set_variable = { name = sed_plan_goal value = 0 }
@@ -4483,6 +4595,35 @@ sed_refresh_national_plan = {
   sed_refresh_labor_readings = yes
   sed_refresh_direct_budget = yes
   sed_refresh_military_plan = yes
+ }
+}
+sed_refresh_input_readings = {
+ if = { limit = { is_player = yes has_variable = sed_enabled }
+  set_variable = { name = sed_input_market_margin_coal value = sed_input_country_headroom_coal }
+  set_variable = { name = sed_input_market_margin_copper value = sed_input_country_headroom_copper }
+  set_variable = { name = sed_input_market_margin_dye value = sed_input_country_headroom_dye }
+  set_variable = { name = sed_input_market_margin_engines value = sed_input_country_headroom_engines }
+  set_variable = { name = sed_input_market_margin_explosives value = sed_input_country_headroom_explosives }
+  set_variable = { name = sed_input_market_margin_fabric value = sed_input_country_headroom_fabric }
+  set_variable = { name = sed_input_market_margin_fertilizer value = sed_input_country_headroom_fertilizer }
+  set_variable = { name = sed_input_market_margin_fish value = sed_input_country_headroom_fish }
+  set_variable = { name = sed_input_market_margin_glass value = sed_input_country_headroom_glass }
+  set_variable = { name = sed_input_market_margin_grain value = sed_input_country_headroom_grain }
+  set_variable = { name = sed_input_market_margin_hardwood value = sed_input_country_headroom_hardwood }
+  set_variable = { name = sed_input_market_margin_iron value = sed_input_country_headroom_iron }
+  set_variable = { name = sed_input_market_margin_lead value = sed_input_country_headroom_lead }
+  set_variable = { name = sed_input_market_margin_meat value = sed_input_country_headroom_meat }
+  set_variable = { name = sed_input_market_margin_oil value = sed_input_country_headroom_oil }
+  set_variable = { name = sed_input_market_margin_rubber value = sed_input_country_headroom_rubber }
+  set_variable = { name = sed_input_market_margin_silk value = sed_input_country_headroom_silk }
+  set_variable = { name = sed_input_market_margin_steel value = sed_input_country_headroom_steel }
+  set_variable = { name = sed_input_market_margin_sugar value = sed_input_country_headroom_sugar }
+  set_variable = { name = sed_input_market_margin_tools value = sed_input_country_headroom_tools }
+  set_variable = { name = sed_input_market_margin_wood value = sed_input_country_headroom_wood }
+  every_scope_state = {
+   set_variable = { name = sed_input_local_margin_electricity value = sed_input_local_headroom_electricity }
+   set_variable = { name = sed_input_local_margin_transportation value = sed_input_local_headroom_transportation }
+  }
  }
 }
 sed_refresh_labor_readings = {
