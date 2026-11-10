@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.5.4'
+VERSION = '0.5.8'
 SUPPLY_TARGETS = [
     {'good': 'wood', 'building': 'building_logging_camp', 'methods': ['pm_electric_saw_mills', 'pm_saw_mills', 'pm_simple_forestry'], 'label_pt': 'madeira', 'label_en': 'wood', 'building_pt': 'acampamento madeireiro', 'building_en': 'logging camp'},
     {'good': 'iron', 'building': 'building_iron_mine', 'methods': ['pm_atmospheric_engine_pump_building_iron_mine', 'pm_condensing_engine_pump_building_iron_mine', 'pm_diesel_pump_building_iron_mine', 'pm_dynamite_building_iron_mine', 'pm_nitroglycerin_building_iron_mine', 'pm_picks_and_shovels_building_iron_mine'], 'label_pt': 'ferro', 'label_en': 'iron', 'building_pt': 'mina de ferro', 'building_en': 'iron mine'},
@@ -196,7 +196,7 @@ sed_refresh_supply_candidates = {''']
  else_if = { limit = { sed_auto_month_limit_reached = yes } set_variable = { name = sed_auto_action_status value = 16 } }
  else_if = { limit = { OR = { construction_queue_num_queued_government_levels > 0 construction_queue_num_queued_private_levels > 0 } } set_variable = { name = sed_auto_action_status value = 11 } }
  else_if = { limit = { is_construction_paused = yes } set_variable = { name = sed_auto_action_status value = 12 } }
- else_if = { limit = { OR = { has_variable = advisor_auto_construction_enabled has_variable = zw_var_expand_building has_variable = aroai_autobuild } } set_variable = { name = sed_auto_action_status value = 13 } }
+ else_if = { limit = { sed_competing_builder_configured = yes } set_variable = { name = sed_auto_action_status value = 13 } }
  else = { set_variable = { name = sed_auto_action_status value = 14 } }
  # Preserve the result independently from mode controls and diagnostic refreshes.
  set_variable = { name = sed_auto_review_status value = var:sed_auto_action_status }
@@ -957,7 +957,7 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
         ('month_limit', 'sed_auto_month_limit_reached = yes'),
         ('queue', 'OR = { construction_queue_num_queued_government_levels > 0 construction_queue_num_queued_private_levels > 0 }'),
         ('paused', 'is_construction_paused = yes'),
-        ('competing', 'OR = { has_variable = advisor_auto_construction_enabled has_variable = zw_var_expand_building has_variable = aroai_autobuild }'),
+        ('competing', 'sed_competing_builder_configured = yes'),
     ]:
         result += f'sed_auto_current_{name}_visible_sgui = {{ scope = country is_shown = {{ {base} {previous} {condition} }} }}\n'
         previous += f' NOT = {{ {condition} }}'
@@ -991,7 +991,7 @@ sed_railway_approval_valid = {
   has_variable = sed_enabled
   NOT = { in_default = yes }
   construction_queue_num_queued_private_levels = 0
-  OR = { NOT = { has_variable = sed_mode_automatic } NOT = { sed_auto_month_limit_reached = yes } }
+  sed_execution_mode_permits_approval = yes
  }
 }
 
@@ -1020,7 +1020,7 @@ sed_construction_approval_valid = {
   NOT = { in_default = yes }
   num_queued_government_constructions >= 3
   construction_queue_num_queued_private_levels = 0
-  OR = { NOT = { has_variable = sed_mode_automatic } NOT = { sed_auto_month_limit_reached = yes } }
+  sed_execution_mode_permits_approval = yes
  }
 }
 ''' + supply_triggers()
@@ -1059,13 +1059,41 @@ sed_{good}_approval_valid = {{
   has_variable = sed_enabled
   NOT = {{ in_default = yes }}
   construction_queue_num_queued_private_levels = 0
-  OR = {{ NOT = {{ has_variable = sed_mode_automatic }} NOT = {{ sed_auto_month_limit_reached = yes }} }}
+  sed_execution_mode_permits_approval = yes
  }}
 }}''')
     result.append('''# Country scope: prevent this executor from competing with known construction automations.
+# Configuration guard, not a prediction that the other mod will build this tick.
+# Supply Chain independent options remain enabled without its chains toggle.
+sed_competing_builder_configured = {
+ OR = {
+  has_variable = advisor_auto_construction_enabled
+  has_variable = zw_var_expand_building
+  has_variable = zw_var_more_construction_sectors
+  has_variable = zw_var_scsab_construct_railway
+  has_variable = zw_var_scsab_construct_power_plant
+  has_variable = zw_var_scsab_gov_admin
+  has_variable = zw_var_scsab_gov_admin_for_tax
+  has_variable = aroai_autobuild
+ }
+}
+
 sed_auto_month_limit_reached = {
  has_variable = sed_auto_last_attempt_month
  var:sed_auto_last_attempt_month = { value = year multiply = 12 add = month }
+}
+
+# Require an explicit execution mode even when the effect is called directly.
+# Manual wins if an inconsistent save contains multiple mode markers.
+sed_execution_mode_permits_approval = {
+ NOT = { has_variable = sed_mode_manual }
+ OR = {
+  AND = {
+   has_variable = sed_mode_assisted
+   NOT = { has_variable = sed_mode_automatic }
+  }
+  sed_auto_executor_safe = yes
+ }
 }
 
 sed_auto_executor_safe = {
@@ -1075,9 +1103,7 @@ sed_auto_executor_safe = {
  construction_queue_num_queued_government_levels = 0
  construction_queue_num_queued_private_levels = 0
  is_construction_paused = no
- NOT = { has_variable = advisor_auto_construction_enabled }
- NOT = { has_variable = zw_var_expand_building }
- NOT = { has_variable = aroai_autobuild }
+ NOT = { sed_competing_builder_configured = yes }
 }''')
     return '\n'.join(result).rstrip() + '\n'
 
@@ -1121,7 +1147,7 @@ def localization(language):
         'sed_auto_status_default': ('A revisão automática foi suspensa porque o país está em inadimplência.', 'The automatic review was suspended because the country is in default.'),
         'sed_auto_status_queue': ('A revisão automática não enfileirou obra: a fila pública ou privada já está ocupada.', 'The automatic review did not queue construction because the government or private queue is already occupied.'),
         'sed_auto_status_paused': ('A revisão automática não enfileirou obra porque a construção está pausada.', 'The automatic review did not queue construction because construction is paused.'),
-        'sed_auto_status_competing': ('A revisão automática foi suspensa porque outra automação de construção conhecida está ativa.', 'The automatic review was suspended because another known construction automation is active.'),
+        'sed_auto_status_competing': ('A revisão automática foi suspensa porque outra automação de construção conhecida está configurada.', 'The automatic review was suspended because another known construction automation is configured.'),
         'sed_auto_status_safety': ('A revisão automática foi suspensa por uma condição de segurança não classificada. Nenhuma obra foi enfileirada.', 'The automatic review was suspended by an unclassified safety condition. No construction was queued.'),
         'sed_auto_status_unconfirmed': ('A revisão automática selecionou uma expansão, mas não confirmou a inclusão na fila pública. Confira a fila do jogo. Esta revisão não tentou outra expansão.', 'The automatic review selected an expansion but did not confirm its addition to the government queue. Check the game queue. This review did not attempt another expansion.'),
         'sed_refresh': ('Atualizar diagnóstico', 'Refresh diagnosis'),
@@ -1237,7 +1263,7 @@ def localization(language):
         'sed_auto_current_default': ('Agora: país em inadimplência. A execução automática está bloqueada.', 'Now: the country is in default. Automatic execution is blocked.'),
         'sed_auto_current_queue': ('Agora: filas ocupadas. O Automático aguarda.', 'Now: queues occupied. Automatic mode waits.'),
         'sed_auto_current_paused': ('Agora: a construção está pausada. A execução automática está bloqueada.', 'Now: construction is paused. Automatic execution is blocked.'),
-        'sed_auto_current_competing': ('Agora: outro construtor conhecido foi detectado. A execução automática está bloqueada.', 'Now: another known builder was detected. Automatic execution is blocked.'),
+        'sed_auto_current_competing': ('Agora: outro construtor conhecido está configurado. A execução automática está bloqueada.', 'Now: another known builder is configured. Automatic execution is blocked.'),
         'sed_auto_current_clear': ('Agora: sem trava operacional conhecida. Falta avaliar candidatos.', 'Now: no known operational blocker. Candidates still need evaluation.'),
         'sed_candidate_infrastructure': ('Saldo atual de infraestrutura: [State.GetInfrastructureBalance|1+=]', 'Current infrastructure balance: [State.GetInfrastructureBalance|1+=]'),
         'sed_expansion_infrastructure_blocked': ('Infraestrutura em déficit. Resolva o gargalo antes de expandir neste estado.', 'Infrastructure is in deficit. Resolve the bottleneck before expanding in this state.'),
