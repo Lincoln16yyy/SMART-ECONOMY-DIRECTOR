@@ -53,7 +53,23 @@ def validate(root=ROOT, game=None):
                        'add_to_variable_list', 'add_journal_entry', 'start_building_construction',
                        'trigger_event', 'order_by', 'max', 'check_range_bounds'}
 
-    def check_effects(entries):
+    # Narrow, reviewed exception: only two guarded adapter effects may change
+    # these seven country options. All other foreign mutations stay rejected.
+    coordinated_options = {
+        'advisor_auto_construction_enabled', 'zw_var_expand_building',
+        'zw_var_more_construction_sectors', 'zw_var_scsab_construct_railway',
+        'zw_var_scsab_construct_power_plant', 'zw_var_scsab_gov_admin',
+        'zw_var_scsab_gov_admin_for_tax',
+    }
+    for effect_name in ('sed_coord_sync', 'sed_coord_restore'):
+        top = custom.get(effect_name, [])
+        outer = top[0] if len(top) == 1 else None
+        guard = child(outer.value, 'limit') if outer and outer.key == 'if' else []
+        required = {'is_player': 'yes', 'has_variable': 'sed_coord_active'}
+        if not all(any(e.key == key and e.value == value for e in guard)
+                   for key, value in required.items()):
+            errors.append('External adapter lacks explicit player/coordination guard: ' + effect_name)
+    def check_effects(entries, effect_name=None):
         for entry in entries:
             if entry.key.startswith('sed_'):
                 if entry.key not in custom:
@@ -62,17 +78,20 @@ def validate(root=ROOT, game=None):
                 errors.append('Unexpected effect in diagnostics: ' + entry.key)
             if entry.key == 'remove_variable':
                 if not str(entry.value).startswith('sed_'):
-                    errors.append('Foreign variable removed: ' + str(entry.value))
+                    if effect_name not in ('sed_coord_sync', 'sed_coord_restore') or entry.value not in coordinated_options:
+                        errors.append('Foreign variable removed: ' + str(entry.value))
             elif entry.key in ('set_variable', 'change_variable'):
-                if not child(entry.value, 'name').startswith('sed_'):
-                    errors.append('Foreign variable written')
+                target_name = child(entry.value, 'name')
+                if not target_name.startswith('sed_'):
+                    if effect_name not in ('sed_coord_sync', 'sed_coord_restore') or target_name not in coordinated_options:
+                        errors.append('Foreign variable written')
             elif entry.key in ('if', 'else_if', 'else', 'root', 'prev', 'owner',
                                'every_scope_state', 'every_scope_building', 'ordered_scope_state'):
-                check_effects([e for e in entry.value if e.key != 'limit'])
+                check_effects([e for e in entry.value if e.key != 'limit'], effect_name)
     for name, tree in trees.items():
         if '/scripted_effects/' in name:
             for entry in tree:
-                check_effects(entry.value)
+                check_effects(entry.value, entry.key)
         for entry in walk(tree):
             if entry.key == 'effect' and isinstance(entry.value, list):
                 check_effects(entry.value)
@@ -107,7 +126,7 @@ def validate(root=ROOT, game=None):
     cleaned = {entry.value for entry in walk(custom.get('sed_disable_country', []))
                if entry.key == 'remove_variable'}
     assigned = {child(entry.value, 'name') for tree in trees.values() for entry in walk(tree)
-                if entry.key == 'set_variable'}
+                if entry.key == 'set_variable' and str(child(entry.value, 'name')).startswith('sed_')}
     if assigned - cleaned != set(PERSISTENT_VARIABLES):
         errors.append('Cleanup must retain only declared persistent safety state: ' + str(sorted(assigned - cleaned)))
     if cleaned & set(PERSISTENT_VARIABLES):

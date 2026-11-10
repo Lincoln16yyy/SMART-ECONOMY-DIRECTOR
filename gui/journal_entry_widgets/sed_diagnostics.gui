@@ -20,6 +20,13 @@ textbox = {
  text = "sed_railway_candidate_reason"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_plan_railway_score_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_plan_railway_score"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_railway_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -128,6 +135,13 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_construction_candidate_reason"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_plan_construction_score_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_plan_construction_score"
 }
 textbox = {
  autoresize = yes multiline = yes align = left|nobaseline
@@ -260,6 +274,13 @@ textbox = {
  text = "sed_wood_candidate_reason"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_plan_wood_score_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_plan_wood_score"
+}
+textbox = {
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
@@ -381,6 +402,13 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_iron_candidate_reason"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_plan_iron_score_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_plan_iron_score"
 }
 textbox = {
  autoresize = yes multiline = yes align = left|nobaseline
@@ -506,6 +534,13 @@ textbox = {
  text = "sed_coal_candidate_reason"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_plan_coal_score_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_plan_coal_score"
+}
+textbox = {
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
@@ -627,6 +662,13 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_grain_candidate_reason"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_plan_grain_score_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_plan_grain_score"
 }
 textbox = {
  autoresize = yes multiline = yes align = left|nobaseline
@@ -752,6 +794,13 @@ textbox = {
  text = "sed_fabric_candidate_reason"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_plan_fabric_score_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_plan_fabric_score"
+}
+textbox = {
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
@@ -873,6 +922,13 @@ textbox = {
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
  text = "sed_tools_candidate_reason"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_plan_tools_score_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_plan_tools_score"
 }
 textbox = {
  autoresize = yes multiline = yes align = left|nobaseline
@@ -998,6 +1054,13 @@ textbox = {
  text = "sed_groceries_candidate_reason"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_plan_groceries_score_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_plan_groceries_score"
+}
+textbox = {
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
@@ -1121,6 +1184,13 @@ textbox = {
  text = "sed_clothes_candidate_reason"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_plan_clothes_score_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_plan_clothes_score"
+}
+textbox = {
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
  minimumsize = { 468 -1 } maximumsize = { 468 -1 }
@@ -1240,6 +1310,95 @@ textbox = {
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_mode_title"
 }
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_coord_intro"
+}
+button = {
+ using = default_button
+ using = fontsize_large
+ using = tooltip_se
+ size = { 500 52 }
+ text = "sed_coord_enable" tooltip = "sed_coord_enable_tt"
+ visible = "[GetScriptedGui('sed_coord_enable_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_coord_enable_sgui').IsValid(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_coord_enable_sgui').Execute(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+}
+button = {
+ using = default_button
+ using = fontsize_large
+ using = tooltip_se
+ size = { 500 52 }
+ text = "sed_coord_release" tooltip = "sed_coord_release_tt"
+ visible = "[GetScriptedGui('sed_coord_release_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_coord_release_sgui').IsValid(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_coord_release_sgui').Execute(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_coord_executor_0_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_coord_executor_0"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_coord_executor_1_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_coord_executor_1"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_coord_executor_2_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_coord_executor_2"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_coord_executor_3_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_coord_executor_3"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_coord_executor_4_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_coord_executor_4"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_coord_executor_5_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_coord_executor_5"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_coord_executor_6_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_coord_executor_6"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_coord_executor_7_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_coord_executor_7"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_coord_executor_8_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_coord_executor_8"
+}
 flowcontainer = { direction = horizontal spacing = 10
 button = {
  using = default_button
@@ -1348,6 +1507,13 @@ textbox = {
  using = fontsize_large
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_auto_current_competing"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_current_fiscal_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_current_fiscal"
 }
 textbox = {
  visible = "[GetScriptedGui('sed_auto_current_clear_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
@@ -1496,6 +1662,20 @@ textbox = {
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_auto_status_month_limit"
 }
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_status_fiscal_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_status_fiscal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_status_delegated_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_status_delegated"
+}
 flowcontainer = { direction = horizontal spacing = 12
 button = {
  using = default_button
@@ -1617,6 +1797,388 @@ textbox = {
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_deficit_warning"
 }
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_xxl
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_plan_title"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_plan_date"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_fiscal_1_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_fiscal_1"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_fiscal_2_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_fiscal_2"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_fiscal_3_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_fiscal_3"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_fiscal_4_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_fiscal_4"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_goal_0_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_goal_0"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_goal_1_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_goal_1"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_goal_2_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_goal_2"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_goal_3_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_goal_3"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_goal_4_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_goal_4"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_goal_5_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_goal_5"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_goal_6_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_goal_6"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_goal_7_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_goal_7"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_goal_8_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_goal_8"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_goal_9_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_goal_9"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_plan_policy"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_plan_missing_wood_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_plan_missing_wood"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_plan_missing_iron_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_plan_missing_iron"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_plan_missing_coal_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_plan_missing_coal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_plan_missing_grain_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_plan_missing_grain"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_plan_missing_fabric_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_plan_missing_fabric"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_plan_missing_tools_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_plan_missing_tools"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_plan_missing_groceries_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_plan_missing_groceries"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_plan_missing_clothes_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_plan_missing_clothes"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_plan_empty_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_plan_empty"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_plan_rank_1_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_xxl
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_plan_rank_1"
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_1_railway_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_1_railway')]"
+ item = { sed_railway_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_1_construction_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_1_construction')]"
+ item = { sed_construction_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_1_wood_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_1_wood')]"
+ item = { sed_wood_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_1_iron_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_1_iron')]"
+ item = { sed_iron_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_1_coal_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_1_coal')]"
+ item = { sed_coal_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_1_grain_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_1_grain')]"
+ item = { sed_grain_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_1_fabric_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_1_fabric')]"
+ item = { sed_fabric_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_1_tools_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_1_tools')]"
+ item = { sed_tools_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_1_groceries_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_1_groceries')]"
+ item = { sed_groceries_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_1_clothes_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_1_clothes')]"
+ item = { sed_clothes_candidate_item = {} }
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_plan_rank_2_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_xxl
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_plan_rank_2"
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_2_railway_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_2_railway')]"
+ item = { sed_railway_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_2_construction_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_2_construction')]"
+ item = { sed_construction_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_2_wood_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_2_wood')]"
+ item = { sed_wood_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_2_iron_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_2_iron')]"
+ item = { sed_iron_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_2_coal_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_2_coal')]"
+ item = { sed_coal_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_2_grain_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_2_grain')]"
+ item = { sed_grain_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_2_fabric_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_2_fabric')]"
+ item = { sed_fabric_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_2_tools_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_2_tools')]"
+ item = { sed_tools_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_2_groceries_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_2_groceries')]"
+ item = { sed_groceries_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_2_clothes_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_2_clothes')]"
+ item = { sed_clothes_candidate_item = {} }
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_plan_rank_3_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_xxl
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_plan_rank_3"
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_3_railway_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_3_railway')]"
+ item = { sed_railway_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_3_construction_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_3_construction')]"
+ item = { sed_construction_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_3_wood_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_3_wood')]"
+ item = { sed_wood_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_3_iron_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_3_iron')]"
+ item = { sed_iron_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_3_coal_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_3_coal')]"
+ item = { sed_coal_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_3_grain_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_3_grain')]"
+ item = { sed_grain_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_3_fabric_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_3_fabric')]"
+ item = { sed_fabric_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_3_tools_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_3_tools')]"
+ item = { sed_tools_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_3_groceries_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_3_groceries')]"
+ item = { sed_groceries_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_3_clothes_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_3_clothes')]"
+ item = { sed_clothes_candidate_item = {} }
+}
+flowcontainer = { direction = vertical spacing = 10 ignoreinvisible = yes
+ visible = "[GetScriptedGui('sed_details_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 textbox = {
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_xxl
@@ -2148,6 +2710,7 @@ textbox = {
  using = fontsize_large
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_clothes_action_failed"
+}
 }
 flowcontainer = { direction = vertical spacing = 10 ignoreinvisible = yes
  visible = "[GetScriptedGui('sed_details_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"

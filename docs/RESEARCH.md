@@ -1,5 +1,12 @@
 # Fase 0 — pesquisa técnica
 
+Estado atual da 0.6.0 em [PLANNING.md](PLANNING.md) e [STATUS.md](STATUS.md).
+A implementação inclui plano nacional inicial e coordenação de sete opções
+externas com snapshot e restauração. A autorização do jogador para coordenar
+Economy Advisor e Supply Chain nesta sessão amplia o escopo dos adaptadores.
+As seções anteriores abaixo preservam a evolução histórica das versões.
+
+
 Atualização de auditoria (2026-11-09): a implementação chegou à 0.4.1, mas a
 pesquisa crítica da Fase 0 não está completa. Os parágrafos de introdução
 referem-se à entrega inicial 0.1.0. A [auditoria atual](AUDIT_2026-11-09.md)

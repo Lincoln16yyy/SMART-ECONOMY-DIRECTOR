@@ -58,7 +58,7 @@ class Country:
                              num_queued_government_constructions=2, num_queued_private_constructions=1,
                              construction_queue_num_queued_government_levels=2,
                              construction_queue_num_queued_private_levels=0,
-                             year=1836, month=0, is_player=True, in_default=False,
+                             bureaucracy=0, year=1836, month=0, is_player=True, in_default=False,
                              is_game_paused=True, is_construction_paused=False)
         self.readings.update(readings)
         self.variables = {}
@@ -84,6 +84,8 @@ class Country:
         return scope.setdefault('variables', {})
 
     def lookup(self, name, scope):
+        if name.startswith('owner.var:'):
+            return self.variables[name[len('owner.var:'):]]
         if name.startswith('var:'):
             return self.variables_for(scope)[name[4:]]
         if name in ('yes', 'no'):
@@ -92,6 +94,8 @@ class Country:
             return float(name)
         except ValueError:
             pass
+        if name in ('market_goods_buy_orders', 'market_goods_sell_orders'):
+            return scope.get(name, 0)  # Explicit synthetic zero-orders default; never engine evidence.
         if name in scope:
             return scope[name]
         # Global triggers such as is_game_paused remain readable from any scope.
@@ -101,7 +105,7 @@ class Country:
             # State triggers omitted by a fixture use the engine's neutral value.
             return {'is_incorporated': True, 'can_construct_building': True,
                     'infrastructure_delta': 0, 'market_access': 1,
-                    'state_population': 0}[name]
+                    'state_population': 0, 'tax_capacity_usage': 0, 'tax_capacity': 0}[name]
         raise AssertionError('Unsupported reading in harness: ' + name)
 
     def number(self, value, scope):
@@ -109,6 +113,18 @@ class Country:
             return self.lookup(value, scope)
         result = 0
         for entry in value:
+            if entry.key == 'market':
+                result += self.number(entry.value, {'goods': self.market_goods})
+                continue
+            if entry.key.startswith('mg:'):
+                good = scope['goods'].get(entry.key[3:])
+                if good is not None:
+                    result += self.number(entry.value, good)
+                continue
+            if entry.key == 'if':
+                if self.condition(child(entry.value, 'limit'), scope):
+                    result += self.number([e for e in entry.value if e.key != 'limit'], scope)
+                continue
             n = self.number(entry.value, scope)
             if entry.key == 'value':
                 result = n
@@ -147,6 +163,9 @@ class Country:
             return any(self.single_condition(e, scope) for e in entry.value)
         if key == 'market':
             return self.condition(entry.value, {'goods': self.market_goods})
+        if key.startswith('sg:'):
+            good = scope.get('state_goods', {}).get(key[3:])
+            return good is not None and self.condition(entry.value, good)
         if key.startswith('mg:'):
             good = scope['goods'].get(key[3:])
             return good is not None and self.condition(entry.value, good)

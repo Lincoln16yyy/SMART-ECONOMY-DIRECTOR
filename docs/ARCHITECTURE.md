@@ -1,5 +1,12 @@
 # Arquitetura por fases
 
+Estado atual da 0.6.0 em [PLANNING.md](PLANNING.md) e [STATUS.md](STATUS.md).
+A implementação inclui plano nacional inicial e coordenação de sete opções
+externas com snapshot e restauração. A autorização do jogador para coordenar
+Economy Advisor e Supply Chain nesta sessão amplia o escopo dos adaptadores.
+As seções anteriores abaixo preservam a evolução histórica das versões.
+
+
 Atualização 0.5.3: há uma guarda persistente de uma tentativa automática por
 mês, não uma reconciliação de projetos. Desativar remove runtime e conserva
 schema + sed_auto_last_attempt_month quando existente, impedindo reinício

@@ -989,3 +989,49 @@ Geração, validação estática local 1.15.0 e pacote aprovados. Layout novo n�
 verificado na engine. Preparada enquanto o jogador testa: NÃO instalada;
 a instalação usada pelo jogador permanece 0.5.8. Não atualizar durante a
 sessão nem interpretar capturas da 0.5.8 como confirmação da lista nova.
+
+
+## Planejamento e coordenação 0.6.0
+
+Direção confirmada pelo jogador em 09/11. O Director deve definir objetivos e
+ativar somente caminhos necessários de Economy Advisor e Supply Chain. A versão
+implementa plano nacional inicial, três prioridades globais e adaptadores
+reversíveis de sete opções. Selecionar Automático guarda as opções de ferramentas
+detectadas, escolhe executor por objetivo e impede construção própria em paralelo.
+Sair para Manual/Assistido, liberar ou desativar restaura presença e valores.
+
+Plano cobre infraestrutura, oferta e ausência de tipos de produtor atendidos,
+capacidade, crescimento/diversificação, burocracia, tributos e energia local.
+A classificação fiscal usa saldos, quatro semanas de despesas fixas em ouro e
+dívida até 75% do crédito. São parâmetros iniciais escolhidos na implementação,
+com testes por escala. Calibração em campanha e custo incremental ficam abertos.
+
+A seleção interna do Advisor permanece sob sua política própria. O adaptador
+controla autorização, sem transmitir estado/prédio. Os executores externos
+conservam agendas e quantidades. O resultado 18 registra orientação aplicada.
+ARoAI construtor detectado suspende a delegação. Autoexpansões nativas ainda
+têm cobertura pendente. Impostos/gastos próprios, projeção futura de emprego e
+insumos, reconciliação por projeto e estratégia plurianual continuam parciais.
+
+Código em tools/planning.py e tools/coordination.py, integrado ao gerador.
+O validador admite as sete opções externas apenas nos dois efeitos adaptadores
+com guardas de jogador e coordenação ativa. Testes negativos cobrem escrita
+fora desse limite. A política, fontes e roteiro estão em PLANNING.md e STATUS.md.
+O relato dos testes anteriores foi pouca mudança visível enquanto outros mods
+construíam. Ainda falta confirmação dos novos fluxos na engine e save/reload.
+
+## Entrega local 0.6.0
+
+Instalada com jogo fechado. Os 13 outputs conferem byte a byte com o gerador,
+e content_load.json foi preservado. Backup em
+`sed_backups/mod_before_0.6.0_20261109_220347_442062`.
+115 testes sintéticos aprovados, geração atual, validação estática contra
+Victoria 3 1.15.0 e ZIP aprovados. A instalação substitui a 0.5.8.
+Selecionar Automático novamente aplica os adaptadores em save da 0.5.x.
+Coordenação, novo layout e save/reload ainda aguardam verificação na engine.
+
+Conferência final da 0.6.0 inclui ocultação das listas vazias do plano,
+115 testes aprovados e reinstalação dos 13 outputs com jogo fechado.
+Backup dessa conferência em
+`sed_backups/mod_before_0.6.0_20261109_220620_787220`.
+O backup inicial `mod_before_0.6.0_20261109_220347_442062` conserva a 0.5.8.

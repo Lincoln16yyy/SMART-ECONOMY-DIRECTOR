@@ -1,0 +1,206 @@
+"""Version-specific option adapter tests; not cross-mod engine integration."""
+import tempfile
+from pathlib import Path
+import unittest
+
+from tools.build_mod import outputs
+from tools.coordination import OPTIONS
+from tools.validate import validate
+from test_diagnostics import script_definitions
+from script_harness import Country, railway, state
+
+
+class CoordinationTests(unittest.TestCase):
+    def setUp(self):
+        self.c = Country(script_definitions(), construction_queue_num_queued_government_levels=0)
+        self.c.run('sed_enable_country')
+        self.original = {option: value for (_, option, _), value in zip(OPTIONS, (1, 0, 25, 11, 3, 100, 6))}
+        self.c.variables.update(self.original)
+        self.c.variables['advisor_enabled'] = True
+        self.c.states = [state(-12, buildings=[railway()])]
+
+    def external(self):
+        return {option: self.c.variables[option] for _, option, _ in OPTIONS if option in self.c.variables}
+
+    def test_automatic_takes_control_and_chooses_only_supply_railways(self):
+        c = self.c
+        c.run('sed_set_mode_automatic')
+        self.assertIn('sed_coord_active', c.variables)
+        self.assertEqual(self.external(), {'zw_var_scsab_construct_railway': 11})
+        self.assertEqual(c.variables['sed_coord_executor'], 2)
+        self.assertEqual(c.constructions, [])
+        self.assertEqual(len(c.scheduled_events), 1)
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_auto_review_status'], 18)
+        self.assertEqual(c.constructions, [])
+        self.assertNotIn('sed_auto_last_attempt_month', c.variables)
+        c.run('sed_run_railway_approval', c.states[0])
+        self.assertEqual(c.constructions, [])  # Never run both own and delegated executor.
+
+    def test_repeated_enable_or_automatic_does_not_overwrite_original_options(self):
+        c = self.c
+        c.run('sed_set_mode_automatic')
+        saved = {name: value for name, value in c.variables.items() if name.startswith('sed_coord_saved_')}
+        c.run('sed_coord_enable')
+        c.run('sed_set_mode_automatic')
+        self.assertEqual({name: value for name, value in c.variables.items() if name.startswith('sed_coord_saved_')}, saved)
+        c.run('sed_coord_restore')
+        self.assertEqual(self.external(), self.original)
+        c.run('sed_coord_restore')
+        self.assertEqual(self.external(), self.original)
+
+    def test_manual_assisted_and_disable_restore_exact_values(self):
+        for action in ('sed_set_mode_manual', 'sed_set_mode_assisted', 'sed_disable_country'):
+            with self.subTest(action=action):
+                c = self.c
+                c.run('sed_set_mode_automatic')
+                c.run(action)
+                self.assertEqual(self.external(), self.original)
+                self.assertNotIn('sed_coord_active', c.variables)
+                self.assertFalse(any(k.startswith('sed_coord_saved_') for k in c.variables))
+                if action == 'sed_disable_country':
+                    c.run('sed_enable_country')
+
+    def test_missing_original_options_remain_absent_after_restore(self):
+        c = self.c
+        for _, option, _ in OPTIONS:
+            c.variables.pop(option, None)
+        c.variables['zw_var_scsab_gov_admin_for_institution'] = 2
+        c.run('sed_set_mode_automatic')
+        self.assertEqual(self.external(), {'zw_var_scsab_construct_railway': 1})
+        c.run('sed_set_mode_assisted')
+        self.assertEqual(self.external(), {})
+        self.assertTrue(c.variables['advisor_enabled'])
+
+    def test_critical_fiscal_readings_pause_both_builders_then_recover(self):
+        c = self.c
+        c.run('sed_set_mode_automatic')
+        c.readings['net_total_income'] = -100
+        c.run('sed_monthly_update')
+        self.assertEqual(self.external(), {})
+        self.assertEqual(c.variables['sed_coord_executor'], 0)
+        self.assertEqual(c.constructions, [])
+        c.readings['net_total_income'] = 100
+        c.run('sed_monthly_update')
+        self.assertEqual(self.external(), {'zw_var_scsab_construct_railway': 11})
+        c.readings['is_construction_paused'] = True
+        c.run('sed_monthly_update')
+        self.assertEqual(self.external(), {})
+
+    def test_no_producer_shortage_delegates_to_advisor_and_preserves_unrelated_options(self):
+        c = self.c
+        c.states.clear()
+        c.market_goods['grain'] = {'market_goods_has_goods_shortage': True,
+                                    'market_goods_buy_orders': 100, 'market_goods_sell_orders': 0}
+        unrelated = {'advisor_pm_balance_enabled': 1, 'advisor_labor_auto_enabled': 1,
+                     'zw_var_scsab_gov_admin_for_institution': 25,
+                     'zw_var_expand_building_food': 0, 'gora_auto_export_enabled': 1}
+        c.variables.update(unrelated)
+        c.run('sed_set_mode_automatic')
+        self.assertEqual(c.variables['sed_plan_goal'], 5)
+        self.assertEqual(c.variables['sed_plan_missing_grain'], 1)
+        self.assertEqual(self.external(), {'advisor_auto_construction_enabled': 1})
+        self.assertEqual(c.variables['sed_coord_executor'], 1)
+        for key, value in unrelated.items():
+            self.assertEqual(c.variables[key], value)
+        self.assertEqual(c.constructions, [])
+
+    def test_supply_chain_fallback_only_enables_chains_and_preserves_zero_value(self):
+        c = self.c
+        c.variables.pop('advisor_enabled')
+        c.variables.pop('advisor_auto_construction_enabled')
+        c.states.clear()
+        c.market_goods['tools'] = {'market_goods_has_goods_shortage': True}
+        c.run('sed_set_mode_automatic')
+        self.assertEqual(self.external(), {'zw_var_expand_building': 0})
+        self.assertEqual(c.variables['sed_coord_executor'], 3)
+        c.run('sed_coord_restore')
+        expected = {k: v for k, v in self.original.items() if k != 'advisor_auto_construction_enabled'}
+        self.assertEqual(self.external(), expected)
+
+    def test_aroai_unknown_adapter_does_not_enable_another_concurrent_builder(self):
+        c = self.c
+        c.variables['aroai_autobuild'] = 1
+        c.run('sed_set_mode_automatic')
+        self.assertEqual(c.variables['sed_coord_executor'], 5)
+        self.assertEqual(self.external(), {})
+        self.assertEqual(c.variables['aroai_autobuild'], 1)
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.constructions, [])
+
+    def test_player_activation_guards_and_unknown_tools(self):
+        c = self.c
+        c.readings['is_player'] = False
+        c.run('sed_coord_enable')
+        self.assertEqual(self.external(), self.original)
+        self.assertNotIn('sed_coord_active', c.variables)
+        c.readings['is_player'] = True
+        c.run('sed_disable_country')
+        c.run('sed_coord_enable')
+        self.assertEqual(self.external(), self.original)
+        self.assertNotIn('sed_coord_active', c.variables)
+
+    def test_administration_power_and_growth_goals_select_their_domain_only(self):
+        c = self.c
+        c.states = [state()]
+        c.run('sed_set_mode_automatic')
+        self.assertEqual(c.variables['sed_plan_goal'], 8)
+        self.assertEqual(self.external(), {'advisor_auto_construction_enabled': 1})
+        c.readings['bureaucracy'] = -10
+        c.run('sed_monthly_update')
+        self.assertEqual(c.variables['sed_plan_goal'], 6)
+        self.assertEqual(self.external(), {'zw_var_scsab_gov_admin': 100})
+        c.readings['bureaucracy'] = 0
+        c.states[0].update(tax_capacity_usage=200, tax_capacity=100)
+        c.run('sed_monthly_update')
+        self.assertEqual(c.variables['sed_plan_goal'], 7)
+        self.assertEqual(self.external(), {'zw_var_scsab_gov_admin_for_tax': 6})
+        c.states[0].update(tax_capacity_usage=100, tax_capacity=100,
+                           state_goods={'electricity': {'state_goods_pricier': 0.3}})
+        c.run('sed_monthly_update')
+        self.assertEqual(c.variables['sed_plan_goal'], 9)
+        self.assertEqual(self.external(), {'zw_var_scsab_construct_power_plant': 3})
+        c.states[0]['state_goods']['electricity']['state_goods_pricier'] = 0.19
+        c.run('sed_monthly_update')
+        self.assertEqual(c.variables['sed_plan_goal'], 8)
+        self.assertEqual(self.external(), {'advisor_auto_construction_enabled': 1})
+
+    def test_manual_diagnostic_schedule_does_not_disable_coordination_reviews(self):
+        c = self.c
+        c.run('sed_set_mode_automatic')
+        c.variables.pop('sed_monthly_refresh')
+        c.readings['net_total_income'] = -100
+        c.run('sed_monthly_update')
+        self.assertEqual(self.external(), {})
+        c.run('sed_set_mode_assisted')
+        self.assertEqual(self.external(), self.original)
+
+    def test_sync_refuses_conflicting_manual_mode_and_does_not_override_options(self):
+        c = self.c
+        c.run('sed_set_mode_automatic')
+        before = self.external()
+        c.variables['sed_mode_manual'] = 1
+        c.readings['net_total_income'] = -100
+        c.run('sed_coord_sync')
+        self.assertEqual(self.external(), before)
+
+    def test_validator_rejects_foreign_write_outside_adapter_and_unlisted_option(self):
+        for replacement in (
+            ('sed_coord_sync = {', 'sed_bad_adapter = {'),
+            ('remove_variable = zw_var_expand_building', 'remove_variable = unrelated_mod_variable'),
+        ):
+            with self.subTest(replacement=replacement), tempfile.TemporaryDirectory() as temp:
+                root = Path(temp)
+                for name, data in outputs().items():
+                    target = root / name
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_bytes(data)
+                effect = root / 'common/scripted_effects/sed_effects.txt'
+                text = effect.read_text(encoding='utf-8-sig').replace(*replacement, 1)
+                effect.write_text(text, encoding='utf-8-sig')
+                errors = validate(root)
+                self.assertTrue(any('Foreign variable' in e for e in errors), errors)
+
+
+if __name__ == '__main__':
+    unittest.main()

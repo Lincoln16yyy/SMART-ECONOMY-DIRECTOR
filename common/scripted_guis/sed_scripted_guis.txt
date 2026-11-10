@@ -17,6 +17,18 @@ sed_hide_details_sgui = {
  is_valid = { is_player = yes has_variable = sed_enabled has_variable = sed_details_visible }
  effect = { remove_variable = sed_details_visible }
 }
+sed_coord_enable_sgui = {
+ scope = country
+ is_shown = { is_player = yes has_variable = sed_enabled NOT = { has_variable = sed_coord_active } sed_coord_tools_available = yes }
+ is_valid = { is_player = yes has_variable = sed_enabled NOT = { has_variable = sed_coord_active } sed_coord_tools_available = yes }
+ effect = { sed_coord_enable = yes }
+}
+sed_coord_release_sgui = {
+ scope = country
+ is_shown = { is_player = yes has_variable = sed_enabled has_variable = sed_coord_active }
+ is_valid = { is_player = yes has_variable = sed_enabled has_variable = sed_coord_active }
+ effect = { sed_coord_restore = yes sed_set_mode_assisted = yes }
+}
 sed_disable_sgui = {
  scope = country
  is_shown = { is_player = yes has_variable = sed_enabled }
@@ -903,6 +915,84 @@ sed_auto_current_default_visible_sgui = { scope = country is_shown = { is_player
 sed_auto_current_month_limit_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic  NOT = { in_default = yes } sed_auto_month_limit_reached = yes } }
 sed_auto_current_queue_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic  NOT = { in_default = yes } NOT = { sed_auto_month_limit_reached = yes } OR = { construction_queue_num_queued_government_levels > 0 construction_queue_num_queued_private_levels > 0 } } }
 sed_auto_current_paused_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic  NOT = { in_default = yes } NOT = { sed_auto_month_limit_reached = yes } NOT = { OR = { construction_queue_num_queued_government_levels > 0 construction_queue_num_queued_private_levels > 0 } } is_construction_paused = yes } }
-sed_auto_current_competing_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic  NOT = { in_default = yes } NOT = { sed_auto_month_limit_reached = yes } NOT = { OR = { construction_queue_num_queued_government_levels > 0 construction_queue_num_queued_private_levels > 0 } } NOT = { is_construction_paused = yes } sed_competing_builder_configured = yes } }
+sed_auto_current_competing_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic  NOT = { in_default = yes } NOT = { sed_auto_month_limit_reached = yes } NOT = { OR = { construction_queue_num_queued_government_levels > 0 construction_queue_num_queued_private_levels > 0 } } NOT = { is_construction_paused = yes } AND = { sed_competing_builder_configured = yes NOT = { has_variable = sed_coord_active } } } }
+sed_auto_current_fiscal_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic  NOT = { in_default = yes } NOT = { sed_auto_month_limit_reached = yes } NOT = { OR = { construction_queue_num_queued_government_levels > 0 construction_queue_num_queued_private_levels > 0 } } NOT = { is_construction_paused = yes } NOT = { AND = { sed_competing_builder_configured = yes NOT = { has_variable = sed_coord_active } } } NOT = { sed_auto_fiscal_safe = yes } } }
 sed_auto_current_clear_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic sed_auto_executor_safe = yes } }
+sed_auto_status_delegated_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 18 } }
+sed_coord_executor_0_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 0 } }
+sed_coord_executor_1_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 1 } }
+sed_coord_executor_2_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 2 } }
+sed_coord_executor_3_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 3 } }
+sed_coord_executor_4_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 4 } }
+sed_coord_executor_5_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 5 } }
+sed_coord_executor_6_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 6 } }
+sed_coord_executor_7_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 7 } }
+sed_coord_executor_8_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 8 } }
+sed_auto_status_fiscal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 17 } }
+sed_fiscal_1_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = 1 } }
+sed_fiscal_2_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = 2 } }
+sed_fiscal_3_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = 3 } }
+sed_fiscal_4_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = 4 } }
+sed_goal_0_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_goal var:sed_plan_goal = 0 } }
+sed_goal_1_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_goal var:sed_plan_goal = 1 } }
+sed_goal_2_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_goal var:sed_plan_goal = 2 } }
+sed_goal_3_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_goal var:sed_plan_goal = 3 } }
+sed_goal_4_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_goal var:sed_plan_goal = 4 } }
+sed_goal_5_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_goal var:sed_plan_goal = 5 } }
+sed_goal_6_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_goal var:sed_plan_goal = 6 } }
+sed_goal_7_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_goal var:sed_plan_goal = 7 } }
+sed_goal_8_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_goal var:sed_plan_goal = 8 } }
+sed_goal_9_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_goal var:sed_plan_goal = 9 } }
+sed_plan_missing_wood_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_missing_wood var:sed_plan_missing_wood = 1 } }
+sed_plan_missing_iron_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_missing_iron var:sed_plan_missing_iron = 1 } }
+sed_plan_missing_coal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_missing_coal var:sed_plan_missing_coal = 1 } }
+sed_plan_missing_grain_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_missing_grain var:sed_plan_missing_grain = 1 } }
+sed_plan_missing_fabric_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_missing_fabric var:sed_plan_missing_fabric = 1 } }
+sed_plan_missing_tools_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_missing_tools var:sed_plan_missing_tools = 1 } }
+sed_plan_missing_groceries_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_missing_groceries var:sed_plan_missing_groceries = 1 } }
+sed_plan_missing_clothes_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_missing_clothes var:sed_plan_missing_clothes = 1 } }
+sed_plan_empty_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_count var:sed_plan_count = 0 } }
+sed_plan_rank_1_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_count var:sed_plan_count >= 1 } }
+sed_plan_rank_2_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_count var:sed_plan_count >= 2 } }
+sed_plan_rank_3_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_count var:sed_plan_count >= 3 } }
+sed_plan_1_railway_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_1_railway } }
+sed_plan_1_construction_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_1_construction } }
+sed_plan_1_wood_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_1_wood } }
+sed_plan_1_iron_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_1_iron } }
+sed_plan_1_coal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_1_coal } }
+sed_plan_1_grain_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_1_grain } }
+sed_plan_1_fabric_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_1_fabric } }
+sed_plan_1_tools_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_1_tools } }
+sed_plan_1_groceries_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_1_groceries } }
+sed_plan_1_clothes_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_1_clothes } }
+sed_plan_2_railway_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_2_railway } }
+sed_plan_2_construction_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_2_construction } }
+sed_plan_2_wood_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_2_wood } }
+sed_plan_2_iron_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_2_iron } }
+sed_plan_2_coal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_2_coal } }
+sed_plan_2_grain_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_2_grain } }
+sed_plan_2_fabric_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_2_fabric } }
+sed_plan_2_tools_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_2_tools } }
+sed_plan_2_groceries_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_2_groceries } }
+sed_plan_2_clothes_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_2_clothes } }
+sed_plan_3_railway_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_3_railway } }
+sed_plan_3_construction_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_3_construction } }
+sed_plan_3_wood_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_3_wood } }
+sed_plan_3_iron_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_3_iron } }
+sed_plan_3_coal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_3_coal } }
+sed_plan_3_grain_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_3_grain } }
+sed_plan_3_fabric_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_3_fabric } }
+sed_plan_3_tools_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_3_tools } }
+sed_plan_3_groceries_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_3_groceries } }
+sed_plan_3_clothes_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_3_clothes } }
+sed_plan_railway_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_railway_score var:sed_plan_railway_score > 0 } }
+sed_plan_construction_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_construction_score var:sed_plan_construction_score > 0 } }
+sed_plan_wood_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_wood_score var:sed_plan_wood_score > 0 } }
+sed_plan_iron_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_iron_score var:sed_plan_iron_score > 0 } }
+sed_plan_coal_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_coal_score var:sed_plan_coal_score > 0 } }
+sed_plan_grain_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_grain_score var:sed_plan_grain_score > 0 } }
+sed_plan_fabric_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_fabric_score var:sed_plan_fabric_score > 0 } }
+sed_plan_tools_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_tools_score var:sed_plan_tools_score > 0 } }
+sed_plan_groceries_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_groceries_score var:sed_plan_groceries_score > 0 } }
+sed_plan_clothes_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_clothes_score var:sed_plan_clothes_score > 0 } }
 sed_details_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_details_visible } }
