@@ -1,5 +1,24 @@
 # Contexto de continuidade
 
+Entrega local 0.6.7 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.7_20261110_012225_626750`.
+
+## Livro de resultados por alvo 0.6.7
+
+Cada aprovação dos oito bens grava no estado `sed_<bem>_intent_level` (nível do
+produtor antes da fila) e `sed_<bem>_intent_variant`. A confirmação incrementa
+`sed_<bem>_intents`. Quando o pedido sai da fila, o nível atual é comparado à
+linha de base: maior conta `sed_<bem>_completed`, igual ou menor conta
+`sed_<bem>_abandoned`; `sed_<bem>_result` e `_result_month` guardam o último
+desfecho. O plano mostra pedidos/concluídos/abandonados só quando há histórico.
+É inferência por fila e nível, não identidade de projeto; cancelamento com obra
+externa pode distorcer. Ferrovia e setor ainda sem registro. A captura usa
+`b:<prédio>.level` como valor (forma do Advisor instalado,
+`advisor_core_values.txt:1040`). 136 testes aprovados; sem confirmação na engine.
+
+## Entrega local 0.6.6
+
 Entrega local 0.6.6 instalada com jogo fechado, 14 outputs conferidos e
 content_load.json preservado. Backup em
 `sed_backups/mod_before_0.6.6_20261110_011134_926784`.

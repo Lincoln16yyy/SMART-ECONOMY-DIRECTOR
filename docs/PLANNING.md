@@ -1,4 +1,4 @@
-# Planejamento e coordenação — 0.6.6
+# Planejamento e coordenação — 0.6.7
 
 Esta versão implementa política nacional inicial e adaptadores de opções de
 construção. Não é um controlador econômico completo nem comprova crescimento
@@ -366,3 +366,34 @@ O validador permite `set_government_wage_level` somente em
 exige guarda explícita de modo Automático. 135 testes sintéticos aprovados
 incluem corte até o piso, subida até o teto, ausência de mudança em cautela e
 restauração por troca de modo e desativação.
+
+## Livro de resultados por alvo na 0.6.7
+
+O Director registrava apenas que uma obra foi enfileirada, sem medir o que
+acontecia depois. A 0.6.7 relaciona cada pedido confirmado dos oito bens
+estratégicos a um desfecho observado:
+
+- Na aprovação, o estado guarda `sed_<bem>_intent_level` (nível do produtor
+  antes da fila) e `sed_<bem>_intent_variant` (qual variante foi enfileirada).
+- A confirmação incrementa `sed_<bem>_intents` no país.
+- Quando o pedido sai da fila, o nível atual é comparado com a linha de base.
+  Nível maior conta `sed_<bem>_completed`; nível igual ou menor conta
+  `sed_<bem>_abandoned`; `sed_<bem>_result` guarda 1 ou 2 e
+  `sed_<bem>_result_month` registra o mês civil pelo `sed_live_month_key`.
+- A leitura é exibida no plano somente depois do primeiro pedido, com pedidos,
+  concluídos e abandonados por bem.
+
+A conclusão é **inferida** pela saída da fila e pelo nível do produtor, não por
+uma identidade de projeto. Cancelamento seguido de obra externa no mesmo estado
+e prédio, rebaixamento ou remoção podem distorcer a contagem. O livro cobre os
+oito bens; ferrovia e setor de construção continuam sem esse registro.
+
+A captura de nível usa `b:<prédio>.level` como valor de script, forma presente
+no Advisor instalado (`common/script_values/advisor_core_values.txt:1040` e
+`:1579–1580`), além das comparações de nível já usadas pelo Director.
+
+136 testes sintéticos aprovados incluem captura de linha de base e variante,
+conclusão quando o nível sobe, abandono quando a fila esvazia sem novo nível e
+contagem acumulada de dois pedidos. Nada foi observado na engine: a leitura de
+`b:<prédio>.level` em valor e a ordem exata entre conclusão, cancelamento e
+limpeza mensal ainda não foram confirmadas.

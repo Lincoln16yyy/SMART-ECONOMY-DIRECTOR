@@ -1217,3 +1217,35 @@ Entrega local 0.6.6 instalada com jogo fechado, 14 outputs conferidos e
 content_load.json preservado. Backup em
 `sed_backups/mod_before_0.6.6_20261110_011134_926784`. ZIP em
 `dist/smart-economy-director-0.6.6.zip`. Nada observado na engine.
+
+## 2026-11-10 — Livro de resultados por alvo 0.6.7
+
+Objetivo: medir o que acontece depois da aprovação, em vez de registrar apenas
+que a obra entrou na fila. Cada pedido confirmado dos oito bens estratégicos
+guarda no estado o nível do produtor antes da fila (`sed_<bem>_intent_level`) e
+a variante enfileirada (`sed_<bem>_intent_variant`). A confirmação incrementa
+`sed_<bem>_intents`.
+
+Quando o pedido sai da fila, o nível atual é comparado à linha de base: nível
+maior conta `sed_<bem>_completed`, igual ou menor conta `sed_<bem>_abandoned`.
+`sed_<bem>_result` (1/2) e `sed_<bem>_result_month` guardam o último desfecho.
+O plano exibe pedidos, concluídos e abandonados somente após o primeiro pedido.
+
+A conclusão é inferida por fila e nível, não por identidade de projeto;
+cancelamento seguido de obra externa no mesmo estado/prédio pode distorcer a
+contagem. Ferrovia e setor de construção continuam sem registro. A captura usa
+`b:<prédio>.level` como valor de script, forma presente no Advisor instalado
+(`advisor_core_values.txt:1040`; `:1579–1580`), além das comparações de nível
+já usadas pelo Director.
+
+136 testes sintéticos aprovados (um novo: linha de base e variante, conclusão
+por nível maior, abandono por fila vazia sem novo nível e acumulação de dois
+pedidos). Geração, validação estática contra Victoria 3 1.15 e
+`git diff --check` aprovados.
+
+Entrega local 0.6.7 instalada com jogo fechado, 14 outputs conferidos e
+content_load.json preservado. Backup em
+`sed_backups/mod_before_0.6.7_20261110_012225_626750`. ZIP em
+`dist/smart-economy-director-0.6.7.zip`. Nada observado na engine: a leitura de
+`b:<prédio>.level` em valor e a ordem entre conclusão, cancelamento e limpeza
+mensal seguem sem confirmação.

@@ -337,6 +337,34 @@ class PlanningTests(unittest.TestCase):
         self.assertEqual(c.wage_changes, [])
         self.assertNotIn('sed_gov_wage_saved', c.variables)
 
+    def test_supply_book_records_completed_and_abandoned_outcomes(self):
+        target = self.producer('grain')
+        building = target['buildings'][0]
+        c = self.c
+        c.run('sed_set_mode_assisted')
+        c.run('sed_run_grain_approval', target)
+        self.assertEqual(target['variables']['sed_grain_intent_level'], 1)
+        self.assertEqual(target['variables']['sed_grain_intent_variant'], 1)
+        self.assertEqual(c.variables['sed_grain_intents'], 1)
+        building['level_after_queued_constructions'] = 2
+        c.run('sed_refresh_supply_candidates')
+        self.assertIn('sed_grain_request_pending', target['variables'])
+        building['level'] = 2
+        c.run('sed_refresh_supply_candidates')
+        self.assertNotIn('sed_grain_request_pending', target['variables'])
+        self.assertEqual(c.variables['sed_grain_completed'], 1)
+        self.assertEqual(c.variables['sed_grain_result'], 1)
+        self.assertNotIn('sed_grain_intent_level', target['variables'])
+        # A request that leaves the queue without a higher level is abandoned.
+        c.run('sed_run_grain_approval', target)
+        building['level_after_queued_constructions'] = 3
+        c.run('sed_refresh_supply_candidates')
+        building['level_after_queued_constructions'] = 2
+        c.run('sed_refresh_supply_candidates')
+        self.assertEqual(c.variables['sed_grain_abandoned'], 1)
+        self.assertEqual(c.variables['sed_grain_result'], 2)
+        self.assertEqual(c.variables['sed_grain_intents'], 2)
+
     def test_queue_wait_preserves_plan_but_never_calls_constructor(self):
         self.producer('grain')
         c = self.c

@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.6.6
+# Estado dos requisitos — 0.6.7
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.
@@ -19,13 +19,13 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Evitar executor próprio em paralelo | Bloqueio explícito durante coordenação | ARoAI detectado suspende delegação, autoexpansões nativas continuam sem controle |
 | Desativar e devolver opções | Restaura presença e valor original das onze opções, com testes de idempotência | Confirmar restauração após save/reload e atualização de versão |
 | Manual e Assistido | Autorizações e trocas de modo testadas | Restauração pode reativar opções externas originalmente ligadas |
-| Histórico | Resultado mensal datado e status de orientação externa | Acrescentar livro de intenções e resultados por alvo |
+| Histórico | Resultado mensal datado, status externo e livro de pedidos/concluídos/abandonados dos oito bens | Conclusão é inferida pela fila e nível; ampliar a ferrovia/setor e reduzir ambiguidade de cancelamento |
 | Fila sem duplicação | Guardas agregadas, nível após fila e marcas por tipo/estado | Identidade, lado, investidor, conclusão/cancelamento e reconciliação completa |
 | Planejamento de longo prazo | Direção atual, reavaliação periódica e meta anual de oferta para escassez persistente | Metas plurianuais, cadeias completas, diversificação medida e feedback de resultados |
 | Leis, guerra e diplomacia | Fora das mutações econômicas implementadas | Mantidas sob responsabilidade dos módulos e decisões previstos pelo briefing |
 | Haiti, país rico e crise | Cenários sintéticos fiscais e de seleção | Campanhas registradas e comparáveis permanecem pendentes |
 | Crescimento em campanha longa | Ainda sem evidência | Medir PIB, SoL, emprego, dívida, reservas e diversificação durante vários anos |
-| Entrega | Gerador, validador, testes, ZIP e instalador com backup | Instalação 0.6.6 com backup e 14 outputs conferidos. Publicação segue por PR |
+| Entrega | Gerador, validador, testes, ZIP e instalador com backup | Instalação 0.6.7 com backup e 14 outputs conferidos. Publicação segue por PR |
 
 O jogador relatou que seus testes anteriores produziram pouca mudança visível,
 pois outros construtores já atuavam. Esse relato motivou os adaptadores da 0.6.1.
@@ -58,6 +58,13 @@ alteram salários. O efeito `set_government_wage_level` só aparece na
 localização de efeitos vanilla, sem uso em scripts; a aceitação na engine é a
 principal incerteza. Salários militares, despesas e impostos de consumo
 continuam fora do controle.
+
+A 0.6.7 acrescenta o livro de resultados dos oito bens: na aprovação o estado
+guarda nível e variante do produtor; ao sair da fila, nível maior conta como
+concluído e nível igual ou menor como abandonado. A leitura é inferida, não
+usa identidade de projeto, e pode ser distorcida por cancelamento seguido de
+obra externa. Ferrovia e setor de construção ainda não têm registro. A captura
+usa `b:<prédio>.level` como valor, forma presente no Advisor instalado.
 
 Os testes implementados ficam em `tests/test_planning.py`,
 `tests/test_coordination.py` e na suíte anterior. As fontes e decisões de

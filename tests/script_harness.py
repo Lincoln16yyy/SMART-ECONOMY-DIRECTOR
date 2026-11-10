@@ -90,6 +90,10 @@ class Country:
     def lookup(self, name, scope):
         if name in ('tax_level', 'government_wage_level'):
             return self.tax_level_rank(scope.get(name, self.readings[name]))
+        if name.startswith('b:') and '.' in name:
+            building_name, attribute = name[2:].split('.', 1)
+            target = self.building(scope, building_name)
+            return target.get(attribute, 0) if target else 0
         if name in TAX_LEVELS:
             return TAX_LEVELS.index(name) + 1
         if name.startswith('owner.var:'):
@@ -201,7 +205,7 @@ class Country:
             return scope.get('building') == entry.value
         if key == 'can_construct_building':
             return bool(scope.get('can_construct_building'))
-        if key.startswith('b:'):
+        if key.startswith('b:') and '.' not in key:
             building = self.building(scope, key[2:])
             return building is not None and self.condition(entry.value, building)
         if key == 'owner':

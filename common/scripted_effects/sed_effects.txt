@@ -129,6 +129,46 @@ sed_disable_country = {
  remove_variable = sed_tools_action_status
  remove_variable = sed_groceries_action_status
  remove_variable = sed_clothes_action_status
+ remove_variable = sed_wood_intents
+ remove_variable = sed_wood_completed
+ remove_variable = sed_wood_abandoned
+ remove_variable = sed_wood_result
+ remove_variable = sed_wood_result_month
+ remove_variable = sed_iron_intents
+ remove_variable = sed_iron_completed
+ remove_variable = sed_iron_abandoned
+ remove_variable = sed_iron_result
+ remove_variable = sed_iron_result_month
+ remove_variable = sed_coal_intents
+ remove_variable = sed_coal_completed
+ remove_variable = sed_coal_abandoned
+ remove_variable = sed_coal_result
+ remove_variable = sed_coal_result_month
+ remove_variable = sed_grain_intents
+ remove_variable = sed_grain_completed
+ remove_variable = sed_grain_abandoned
+ remove_variable = sed_grain_result
+ remove_variable = sed_grain_result_month
+ remove_variable = sed_fabric_intents
+ remove_variable = sed_fabric_completed
+ remove_variable = sed_fabric_abandoned
+ remove_variable = sed_fabric_result
+ remove_variable = sed_fabric_result_month
+ remove_variable = sed_tools_intents
+ remove_variable = sed_tools_completed
+ remove_variable = sed_tools_abandoned
+ remove_variable = sed_tools_result
+ remove_variable = sed_tools_result_month
+ remove_variable = sed_groceries_intents
+ remove_variable = sed_groceries_completed
+ remove_variable = sed_groceries_abandoned
+ remove_variable = sed_groceries_result
+ remove_variable = sed_groceries_result_month
+ remove_variable = sed_clothes_intents
+ remove_variable = sed_clothes_completed
+ remove_variable = sed_clothes_abandoned
+ remove_variable = sed_clothes_result
+ remove_variable = sed_clothes_result_month
  remove_variable = sed_wood_producer_states
  remove_variable = sed_wood_ignored_states
  remove_variable = sed_wood_pending_states
@@ -278,13 +318,29 @@ sed_disable_country = {
   remove_variable = sed_railway_request_pending
   remove_variable = sed_construction_request_pending
   remove_variable = sed_wood_request_pending
+  remove_variable = sed_wood_intent_level
+  remove_variable = sed_wood_intent_variant
   remove_variable = sed_iron_request_pending
+  remove_variable = sed_iron_intent_level
+  remove_variable = sed_iron_intent_variant
   remove_variable = sed_coal_request_pending
+  remove_variable = sed_coal_intent_level
+  remove_variable = sed_coal_intent_variant
   remove_variable = sed_grain_request_pending
+  remove_variable = sed_grain_intent_level
+  remove_variable = sed_grain_intent_variant
   remove_variable = sed_fabric_request_pending
+  remove_variable = sed_fabric_intent_level
+  remove_variable = sed_fabric_intent_variant
   remove_variable = sed_tools_request_pending
+  remove_variable = sed_tools_intent_level
+  remove_variable = sed_tools_intent_variant
   remove_variable = sed_groceries_request_pending
+  remove_variable = sed_groceries_intent_level
+  remove_variable = sed_groceries_intent_variant
   remove_variable = sed_clothes_request_pending
+  remove_variable = sed_clothes_intent_level
+  remove_variable = sed_clothes_intent_variant
   remove_variable = sed_railway_ignored
   remove_variable = sed_construction_ignored
   remove_variable = sed_wood_ignored
@@ -679,6 +735,16 @@ sed_refresh_supply_candidates = {
    limit = { has_variable = sed_wood_request_pending
     NOT = { OR = { AND = { has_building = building_logging_camp b:building_logging_camp = { level_after_queued_constructions > level } } } }
    }
+   if = {
+    limit = { has_variable = sed_wood_intent_variant }
+    if = {
+     limit = { var:sed_wood_intent_variant = 1
+      b:building_logging_camp.level > var:sed_wood_intent_level
+     }
+     sed_wood_record_completed = yes
+    }
+    else = { sed_wood_record_abandoned = yes }
+   }
    remove_variable = sed_wood_request_pending
   }
   if = {
@@ -753,6 +819,16 @@ sed_refresh_supply_candidates = {
   if = {
    limit = { has_variable = sed_iron_request_pending
     NOT = { OR = { AND = { has_building = building_iron_mine b:building_iron_mine = { level_after_queued_constructions > level } } } }
+   }
+   if = {
+    limit = { has_variable = sed_iron_intent_variant }
+    if = {
+     limit = { var:sed_iron_intent_variant = 1
+      b:building_iron_mine.level > var:sed_iron_intent_level
+     }
+     sed_iron_record_completed = yes
+    }
+    else = { sed_iron_record_abandoned = yes }
    }
    remove_variable = sed_iron_request_pending
   }
@@ -829,6 +905,16 @@ sed_refresh_supply_candidates = {
    limit = { has_variable = sed_coal_request_pending
     NOT = { OR = { AND = { has_building = building_coal_mine b:building_coal_mine = { level_after_queued_constructions > level } } } }
    }
+   if = {
+    limit = { has_variable = sed_coal_intent_variant }
+    if = {
+     limit = { var:sed_coal_intent_variant = 1
+      b:building_coal_mine.level > var:sed_coal_intent_level
+     }
+     sed_coal_record_completed = yes
+    }
+    else = { sed_coal_record_abandoned = yes }
+   }
    remove_variable = sed_coal_request_pending
   }
   if = {
@@ -903,6 +989,40 @@ sed_refresh_supply_candidates = {
   if = {
    limit = { has_variable = sed_grain_request_pending
     NOT = { OR = { AND = { has_building = building_wheat_farm b:building_wheat_farm = { level_after_queued_constructions > level } } AND = { has_building = building_rye_farm b:building_rye_farm = { level_after_queued_constructions > level } } AND = { has_building = building_rice_farm b:building_rice_farm = { level_after_queued_constructions > level } } AND = { has_building = building_maize_farm b:building_maize_farm = { level_after_queued_constructions > level } } AND = { has_building = building_millet_farm b:building_millet_farm = { level_after_queued_constructions > level } } } }
+   }
+   if = {
+    limit = { has_variable = sed_grain_intent_variant }
+    if = {
+     limit = { var:sed_grain_intent_variant = 1
+      b:building_wheat_farm.level > var:sed_grain_intent_level
+     }
+     sed_grain_record_completed = yes
+    }
+    else_if = {
+     limit = { var:sed_grain_intent_variant = 2
+      b:building_rye_farm.level > var:sed_grain_intent_level
+     }
+     sed_grain_record_completed = yes
+    }
+    else_if = {
+     limit = { var:sed_grain_intent_variant = 3
+      b:building_rice_farm.level > var:sed_grain_intent_level
+     }
+     sed_grain_record_completed = yes
+    }
+    else_if = {
+     limit = { var:sed_grain_intent_variant = 4
+      b:building_maize_farm.level > var:sed_grain_intent_level
+     }
+     sed_grain_record_completed = yes
+    }
+    else_if = {
+     limit = { var:sed_grain_intent_variant = 5
+      b:building_millet_farm.level > var:sed_grain_intent_level
+     }
+     sed_grain_record_completed = yes
+    }
+    else = { sed_grain_record_abandoned = yes }
    }
    remove_variable = sed_grain_request_pending
   }
@@ -1131,6 +1251,22 @@ sed_refresh_supply_candidates = {
    limit = { has_variable = sed_fabric_request_pending
     NOT = { OR = { AND = { has_building = building_cotton_plantation b:building_cotton_plantation = { level_after_queued_constructions > level } } AND = { has_building = building_livestock_ranch b:building_livestock_ranch = { level_after_queued_constructions > level } } } }
    }
+   if = {
+    limit = { has_variable = sed_fabric_intent_variant }
+    if = {
+     limit = { var:sed_fabric_intent_variant = 1
+      b:building_cotton_plantation.level > var:sed_fabric_intent_level
+     }
+     sed_fabric_record_completed = yes
+    }
+    else_if = {
+     limit = { var:sed_fabric_intent_variant = 2
+      b:building_livestock_ranch.level > var:sed_fabric_intent_level
+     }
+     sed_fabric_record_completed = yes
+    }
+    else = { sed_fabric_record_abandoned = yes }
+   }
    remove_variable = sed_fabric_request_pending
   }
   if = {
@@ -1244,6 +1380,16 @@ sed_refresh_supply_candidates = {
    limit = { has_variable = sed_tools_request_pending
     NOT = { OR = { AND = { has_building = building_tooling_workshop b:building_tooling_workshop = { level_after_queued_constructions > level } } } }
    }
+   if = {
+    limit = { has_variable = sed_tools_intent_variant }
+    if = {
+     limit = { var:sed_tools_intent_variant = 1
+      b:building_tooling_workshop.level > var:sed_tools_intent_level
+     }
+     sed_tools_record_completed = yes
+    }
+    else = { sed_tools_record_abandoned = yes }
+   }
    remove_variable = sed_tools_request_pending
   }
   if = {
@@ -1318,6 +1464,16 @@ sed_refresh_supply_candidates = {
   if = {
    limit = { has_variable = sed_groceries_request_pending
     NOT = { OR = { AND = { has_building = building_food_industry b:building_food_industry = { level_after_queued_constructions > level } } } }
+   }
+   if = {
+    limit = { has_variable = sed_groceries_intent_variant }
+    if = {
+     limit = { var:sed_groceries_intent_variant = 1
+      b:building_food_industry.level > var:sed_groceries_intent_level
+     }
+     sed_groceries_record_completed = yes
+    }
+    else = { sed_groceries_record_abandoned = yes }
    }
    remove_variable = sed_groceries_request_pending
   }
@@ -1394,6 +1550,16 @@ sed_refresh_supply_candidates = {
    limit = { has_variable = sed_clothes_request_pending
     NOT = { OR = { AND = { has_building = building_textile_mill b:building_textile_mill = { level_after_queued_constructions > level } } } }
    }
+   if = {
+    limit = { has_variable = sed_clothes_intent_variant }
+    if = {
+     limit = { var:sed_clothes_intent_variant = 1
+      b:building_textile_mill.level > var:sed_clothes_intent_level
+     }
+     sed_clothes_record_completed = yes
+    }
+    else = { sed_clothes_record_abandoned = yes }
+   }
    remove_variable = sed_clothes_request_pending
   }
   if = {
@@ -1461,6 +1627,9 @@ sed_run_wood_approval = {
   owner = { sed_record_auto_attempt = yes }
   if = {
    limit = { sed_wood_logging_camp_eligible = yes }
+   # Baseline level before queuing; the monthly review compares it after the queue.
+   set_variable = { name = sed_wood_intent_level value = b:building_logging_camp.level }
+   set_variable = { name = sed_wood_intent_variant value = 1 }
    start_building_construction = building_logging_camp
   }
   owner = {
@@ -1468,12 +1637,46 @@ sed_run_wood_approval = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_wood_action_status value = 1 }
     if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
+    if = { limit = { has_variable = sed_wood_intents }
+     change_variable = { name = sed_wood_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_wood_intents value = 1 } }
     prev = { set_variable = { name = sed_wood_request_pending value = yes } }
    }
-   else = { set_variable = { name = sed_wood_action_status value = 2 } }
+   else = {
+    set_variable = { name = sed_wood_action_status value = 2 }
+    prev = {
+     remove_variable = sed_wood_intent_level
+     remove_variable = sed_wood_intent_variant
+    }
+   }
    remove_variable = sed_queue_levels_before
   }
  }
+}
+sed_wood_record_completed = {
+ owner = {
+  if = { limit = { has_variable = sed_wood_completed }
+   change_variable = { name = sed_wood_completed add = 1 }
+  }
+  else = { set_variable = { name = sed_wood_completed value = 1 } }
+  set_variable = { name = sed_wood_result value = 1 }
+  set_variable = { name = sed_wood_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_wood_intent_level
+ remove_variable = sed_wood_intent_variant
+}
+sed_wood_record_abandoned = {
+ owner = {
+  if = { limit = { has_variable = sed_wood_abandoned }
+   change_variable = { name = sed_wood_abandoned add = 1 }
+  }
+  else = { set_variable = { name = sed_wood_abandoned value = 1 } }
+  set_variable = { name = sed_wood_result value = 2 }
+  set_variable = { name = sed_wood_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_wood_intent_level
+ remove_variable = sed_wood_intent_variant
 }
 sed_run_iron_approval = {
  if = {
@@ -1482,6 +1685,9 @@ sed_run_iron_approval = {
   owner = { sed_record_auto_attempt = yes }
   if = {
    limit = { sed_iron_iron_mine_eligible = yes }
+   # Baseline level before queuing; the monthly review compares it after the queue.
+   set_variable = { name = sed_iron_intent_level value = b:building_iron_mine.level }
+   set_variable = { name = sed_iron_intent_variant value = 1 }
    start_building_construction = building_iron_mine
   }
   owner = {
@@ -1489,12 +1695,46 @@ sed_run_iron_approval = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_iron_action_status value = 1 }
     if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
+    if = { limit = { has_variable = sed_iron_intents }
+     change_variable = { name = sed_iron_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_iron_intents value = 1 } }
     prev = { set_variable = { name = sed_iron_request_pending value = yes } }
    }
-   else = { set_variable = { name = sed_iron_action_status value = 2 } }
+   else = {
+    set_variable = { name = sed_iron_action_status value = 2 }
+    prev = {
+     remove_variable = sed_iron_intent_level
+     remove_variable = sed_iron_intent_variant
+    }
+   }
    remove_variable = sed_queue_levels_before
   }
  }
+}
+sed_iron_record_completed = {
+ owner = {
+  if = { limit = { has_variable = sed_iron_completed }
+   change_variable = { name = sed_iron_completed add = 1 }
+  }
+  else = { set_variable = { name = sed_iron_completed value = 1 } }
+  set_variable = { name = sed_iron_result value = 1 }
+  set_variable = { name = sed_iron_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_iron_intent_level
+ remove_variable = sed_iron_intent_variant
+}
+sed_iron_record_abandoned = {
+ owner = {
+  if = { limit = { has_variable = sed_iron_abandoned }
+   change_variable = { name = sed_iron_abandoned add = 1 }
+  }
+  else = { set_variable = { name = sed_iron_abandoned value = 1 } }
+  set_variable = { name = sed_iron_result value = 2 }
+  set_variable = { name = sed_iron_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_iron_intent_level
+ remove_variable = sed_iron_intent_variant
 }
 sed_run_coal_approval = {
  if = {
@@ -1503,6 +1743,9 @@ sed_run_coal_approval = {
   owner = { sed_record_auto_attempt = yes }
   if = {
    limit = { sed_coal_coal_mine_eligible = yes }
+   # Baseline level before queuing; the monthly review compares it after the queue.
+   set_variable = { name = sed_coal_intent_level value = b:building_coal_mine.level }
+   set_variable = { name = sed_coal_intent_variant value = 1 }
    start_building_construction = building_coal_mine
   }
   owner = {
@@ -1510,12 +1753,46 @@ sed_run_coal_approval = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_coal_action_status value = 1 }
     if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
+    if = { limit = { has_variable = sed_coal_intents }
+     change_variable = { name = sed_coal_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_coal_intents value = 1 } }
     prev = { set_variable = { name = sed_coal_request_pending value = yes } }
    }
-   else = { set_variable = { name = sed_coal_action_status value = 2 } }
+   else = {
+    set_variable = { name = sed_coal_action_status value = 2 }
+    prev = {
+     remove_variable = sed_coal_intent_level
+     remove_variable = sed_coal_intent_variant
+    }
+   }
    remove_variable = sed_queue_levels_before
   }
  }
+}
+sed_coal_record_completed = {
+ owner = {
+  if = { limit = { has_variable = sed_coal_completed }
+   change_variable = { name = sed_coal_completed add = 1 }
+  }
+  else = { set_variable = { name = sed_coal_completed value = 1 } }
+  set_variable = { name = sed_coal_result value = 1 }
+  set_variable = { name = sed_coal_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_coal_intent_level
+ remove_variable = sed_coal_intent_variant
+}
+sed_coal_record_abandoned = {
+ owner = {
+  if = { limit = { has_variable = sed_coal_abandoned }
+   change_variable = { name = sed_coal_abandoned add = 1 }
+  }
+  else = { set_variable = { name = sed_coal_abandoned value = 1 } }
+  set_variable = { name = sed_coal_result value = 2 }
+  set_variable = { name = sed_coal_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_coal_intent_level
+ remove_variable = sed_coal_intent_variant
 }
 sed_run_grain_approval = {
  if = {
@@ -1524,22 +1801,37 @@ sed_run_grain_approval = {
   owner = { sed_record_auto_attempt = yes }
   if = {
    limit = { sed_grain_wheat_farm_eligible = yes }
+   # Baseline level before queuing; the monthly review compares it after the queue.
+   set_variable = { name = sed_grain_intent_level value = b:building_wheat_farm.level }
+   set_variable = { name = sed_grain_intent_variant value = 1 }
    start_building_construction = building_wheat_farm
   }
   else_if = {
    limit = { sed_grain_rye_farm_eligible = yes }
+   # Baseline level before queuing; the monthly review compares it after the queue.
+   set_variable = { name = sed_grain_intent_level value = b:building_rye_farm.level }
+   set_variable = { name = sed_grain_intent_variant value = 2 }
    start_building_construction = building_rye_farm
   }
   else_if = {
    limit = { sed_grain_rice_farm_eligible = yes }
+   # Baseline level before queuing; the monthly review compares it after the queue.
+   set_variable = { name = sed_grain_intent_level value = b:building_rice_farm.level }
+   set_variable = { name = sed_grain_intent_variant value = 3 }
    start_building_construction = building_rice_farm
   }
   else_if = {
    limit = { sed_grain_maize_farm_eligible = yes }
+   # Baseline level before queuing; the monthly review compares it after the queue.
+   set_variable = { name = sed_grain_intent_level value = b:building_maize_farm.level }
+   set_variable = { name = sed_grain_intent_variant value = 4 }
    start_building_construction = building_maize_farm
   }
   else_if = {
    limit = { sed_grain_millet_farm_eligible = yes }
+   # Baseline level before queuing; the monthly review compares it after the queue.
+   set_variable = { name = sed_grain_intent_level value = b:building_millet_farm.level }
+   set_variable = { name = sed_grain_intent_variant value = 5 }
    start_building_construction = building_millet_farm
   }
   owner = {
@@ -1547,12 +1839,46 @@ sed_run_grain_approval = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_grain_action_status value = 1 }
     if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
+    if = { limit = { has_variable = sed_grain_intents }
+     change_variable = { name = sed_grain_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_grain_intents value = 1 } }
     prev = { set_variable = { name = sed_grain_request_pending value = yes } }
    }
-   else = { set_variable = { name = sed_grain_action_status value = 2 } }
+   else = {
+    set_variable = { name = sed_grain_action_status value = 2 }
+    prev = {
+     remove_variable = sed_grain_intent_level
+     remove_variable = sed_grain_intent_variant
+    }
+   }
    remove_variable = sed_queue_levels_before
   }
  }
+}
+sed_grain_record_completed = {
+ owner = {
+  if = { limit = { has_variable = sed_grain_completed }
+   change_variable = { name = sed_grain_completed add = 1 }
+  }
+  else = { set_variable = { name = sed_grain_completed value = 1 } }
+  set_variable = { name = sed_grain_result value = 1 }
+  set_variable = { name = sed_grain_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_grain_intent_level
+ remove_variable = sed_grain_intent_variant
+}
+sed_grain_record_abandoned = {
+ owner = {
+  if = { limit = { has_variable = sed_grain_abandoned }
+   change_variable = { name = sed_grain_abandoned add = 1 }
+  }
+  else = { set_variable = { name = sed_grain_abandoned value = 1 } }
+  set_variable = { name = sed_grain_result value = 2 }
+  set_variable = { name = sed_grain_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_grain_intent_level
+ remove_variable = sed_grain_intent_variant
 }
 sed_run_fabric_approval = {
  if = {
@@ -1561,10 +1887,16 @@ sed_run_fabric_approval = {
   owner = { sed_record_auto_attempt = yes }
   if = {
    limit = { sed_fabric_cotton_plantation_eligible = yes }
+   # Baseline level before queuing; the monthly review compares it after the queue.
+   set_variable = { name = sed_fabric_intent_level value = b:building_cotton_plantation.level }
+   set_variable = { name = sed_fabric_intent_variant value = 1 }
    start_building_construction = building_cotton_plantation
   }
   else_if = {
    limit = { sed_fabric_livestock_ranch_eligible = yes }
+   # Baseline level before queuing; the monthly review compares it after the queue.
+   set_variable = { name = sed_fabric_intent_level value = b:building_livestock_ranch.level }
+   set_variable = { name = sed_fabric_intent_variant value = 2 }
    start_building_construction = building_livestock_ranch
   }
   owner = {
@@ -1572,12 +1904,46 @@ sed_run_fabric_approval = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_fabric_action_status value = 1 }
     if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
+    if = { limit = { has_variable = sed_fabric_intents }
+     change_variable = { name = sed_fabric_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_fabric_intents value = 1 } }
     prev = { set_variable = { name = sed_fabric_request_pending value = yes } }
    }
-   else = { set_variable = { name = sed_fabric_action_status value = 2 } }
+   else = {
+    set_variable = { name = sed_fabric_action_status value = 2 }
+    prev = {
+     remove_variable = sed_fabric_intent_level
+     remove_variable = sed_fabric_intent_variant
+    }
+   }
    remove_variable = sed_queue_levels_before
   }
  }
+}
+sed_fabric_record_completed = {
+ owner = {
+  if = { limit = { has_variable = sed_fabric_completed }
+   change_variable = { name = sed_fabric_completed add = 1 }
+  }
+  else = { set_variable = { name = sed_fabric_completed value = 1 } }
+  set_variable = { name = sed_fabric_result value = 1 }
+  set_variable = { name = sed_fabric_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_fabric_intent_level
+ remove_variable = sed_fabric_intent_variant
+}
+sed_fabric_record_abandoned = {
+ owner = {
+  if = { limit = { has_variable = sed_fabric_abandoned }
+   change_variable = { name = sed_fabric_abandoned add = 1 }
+  }
+  else = { set_variable = { name = sed_fabric_abandoned value = 1 } }
+  set_variable = { name = sed_fabric_result value = 2 }
+  set_variable = { name = sed_fabric_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_fabric_intent_level
+ remove_variable = sed_fabric_intent_variant
 }
 sed_run_tools_approval = {
  if = {
@@ -1586,6 +1952,9 @@ sed_run_tools_approval = {
   owner = { sed_record_auto_attempt = yes }
   if = {
    limit = { sed_tools_tooling_workshop_eligible = yes }
+   # Baseline level before queuing; the monthly review compares it after the queue.
+   set_variable = { name = sed_tools_intent_level value = b:building_tooling_workshop.level }
+   set_variable = { name = sed_tools_intent_variant value = 1 }
    start_building_construction = building_tooling_workshop
   }
   owner = {
@@ -1593,12 +1962,46 @@ sed_run_tools_approval = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_tools_action_status value = 1 }
     if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
+    if = { limit = { has_variable = sed_tools_intents }
+     change_variable = { name = sed_tools_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_tools_intents value = 1 } }
     prev = { set_variable = { name = sed_tools_request_pending value = yes } }
    }
-   else = { set_variable = { name = sed_tools_action_status value = 2 } }
+   else = {
+    set_variable = { name = sed_tools_action_status value = 2 }
+    prev = {
+     remove_variable = sed_tools_intent_level
+     remove_variable = sed_tools_intent_variant
+    }
+   }
    remove_variable = sed_queue_levels_before
   }
  }
+}
+sed_tools_record_completed = {
+ owner = {
+  if = { limit = { has_variable = sed_tools_completed }
+   change_variable = { name = sed_tools_completed add = 1 }
+  }
+  else = { set_variable = { name = sed_tools_completed value = 1 } }
+  set_variable = { name = sed_tools_result value = 1 }
+  set_variable = { name = sed_tools_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_tools_intent_level
+ remove_variable = sed_tools_intent_variant
+}
+sed_tools_record_abandoned = {
+ owner = {
+  if = { limit = { has_variable = sed_tools_abandoned }
+   change_variable = { name = sed_tools_abandoned add = 1 }
+  }
+  else = { set_variable = { name = sed_tools_abandoned value = 1 } }
+  set_variable = { name = sed_tools_result value = 2 }
+  set_variable = { name = sed_tools_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_tools_intent_level
+ remove_variable = sed_tools_intent_variant
 }
 sed_run_groceries_approval = {
  if = {
@@ -1607,6 +2010,9 @@ sed_run_groceries_approval = {
   owner = { sed_record_auto_attempt = yes }
   if = {
    limit = { sed_groceries_food_industry_eligible = yes }
+   # Baseline level before queuing; the monthly review compares it after the queue.
+   set_variable = { name = sed_groceries_intent_level value = b:building_food_industry.level }
+   set_variable = { name = sed_groceries_intent_variant value = 1 }
    start_building_construction = building_food_industry
   }
   owner = {
@@ -1614,12 +2020,46 @@ sed_run_groceries_approval = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_groceries_action_status value = 1 }
     if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
+    if = { limit = { has_variable = sed_groceries_intents }
+     change_variable = { name = sed_groceries_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_groceries_intents value = 1 } }
     prev = { set_variable = { name = sed_groceries_request_pending value = yes } }
    }
-   else = { set_variable = { name = sed_groceries_action_status value = 2 } }
+   else = {
+    set_variable = { name = sed_groceries_action_status value = 2 }
+    prev = {
+     remove_variable = sed_groceries_intent_level
+     remove_variable = sed_groceries_intent_variant
+    }
+   }
    remove_variable = sed_queue_levels_before
   }
  }
+}
+sed_groceries_record_completed = {
+ owner = {
+  if = { limit = { has_variable = sed_groceries_completed }
+   change_variable = { name = sed_groceries_completed add = 1 }
+  }
+  else = { set_variable = { name = sed_groceries_completed value = 1 } }
+  set_variable = { name = sed_groceries_result value = 1 }
+  set_variable = { name = sed_groceries_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_groceries_intent_level
+ remove_variable = sed_groceries_intent_variant
+}
+sed_groceries_record_abandoned = {
+ owner = {
+  if = { limit = { has_variable = sed_groceries_abandoned }
+   change_variable = { name = sed_groceries_abandoned add = 1 }
+  }
+  else = { set_variable = { name = sed_groceries_abandoned value = 1 } }
+  set_variable = { name = sed_groceries_result value = 2 }
+  set_variable = { name = sed_groceries_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_groceries_intent_level
+ remove_variable = sed_groceries_intent_variant
 }
 sed_run_clothes_approval = {
  if = {
@@ -1628,6 +2068,9 @@ sed_run_clothes_approval = {
   owner = { sed_record_auto_attempt = yes }
   if = {
    limit = { sed_clothes_textile_mill_eligible = yes }
+   # Baseline level before queuing; the monthly review compares it after the queue.
+   set_variable = { name = sed_clothes_intent_level value = b:building_textile_mill.level }
+   set_variable = { name = sed_clothes_intent_variant value = 1 }
    start_building_construction = building_textile_mill
   }
   owner = {
@@ -1635,12 +2078,46 @@ sed_run_clothes_approval = {
     limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
     set_variable = { name = sed_clothes_action_status value = 1 }
     if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
+    if = { limit = { has_variable = sed_clothes_intents }
+     change_variable = { name = sed_clothes_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_clothes_intents value = 1 } }
     prev = { set_variable = { name = sed_clothes_request_pending value = yes } }
    }
-   else = { set_variable = { name = sed_clothes_action_status value = 2 } }
+   else = {
+    set_variable = { name = sed_clothes_action_status value = 2 }
+    prev = {
+     remove_variable = sed_clothes_intent_level
+     remove_variable = sed_clothes_intent_variant
+    }
+   }
    remove_variable = sed_queue_levels_before
   }
  }
+}
+sed_clothes_record_completed = {
+ owner = {
+  if = { limit = { has_variable = sed_clothes_completed }
+   change_variable = { name = sed_clothes_completed add = 1 }
+  }
+  else = { set_variable = { name = sed_clothes_completed value = 1 } }
+  set_variable = { name = sed_clothes_result value = 1 }
+  set_variable = { name = sed_clothes_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_clothes_intent_level
+ remove_variable = sed_clothes_intent_variant
+}
+sed_clothes_record_abandoned = {
+ owner = {
+  if = { limit = { has_variable = sed_clothes_abandoned }
+   change_variable = { name = sed_clothes_abandoned add = 1 }
+  }
+  else = { set_variable = { name = sed_clothes_abandoned value = 1 } }
+  set_variable = { name = sed_clothes_result value = 2 }
+  set_variable = { name = sed_clothes_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_clothes_intent_level
+ remove_variable = sed_clothes_intent_variant
 }
 sed_set_mode_manual = {
  sed_coord_restore = yes
