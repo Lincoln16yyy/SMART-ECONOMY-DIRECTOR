@@ -1,6 +1,6 @@
-# Instalação e uso — versão 0.6.1
+# Instalação e uso — versão 0.6.9
 
-Requer Victoria 3 1.15.x. A versão 0.6.1 mantém o diagnóstico e os protótipos
+Requer Victoria 3 1.15.x. A versão 0.6.9 mantém o diagnóstico e os protótipos
 de expansão ferroviária e de capacidade de construção. Acrescenta recomendações
 e botões de aprovação para expandir produtores locais de madeira, ferro,
 carvão, cereais, tecido, ferramentas, mantimentos e roupas quando o mercado
@@ -9,7 +9,8 @@ operante, usar método de produção ativo que gere o bem, não ter falta de ins
 e não ter expansão já na fila. A operação continua limitada a um nível por
 aprovação. Saldo semanal negativo gera um alerta, mas não impede aprovação. Os modos
 Manual, Assistido e Automático têm botões visíveis no topo do diário. Automático é
-opt-in e pode enfileirar no máximo um nível elegível por mês. Após cada revisão,
+opt-in. O executor próprio tenta no máximo um nível elegível por mês e os
+executores externos seguem suas agendas e limites. Após cada revisão,
 o diário informa se houve ação, faltou candidato ou uma trava bloqueou a fila. Não altera métodos
 de produção nem leis.
 
@@ -23,7 +24,7 @@ python3 tools/validate.py --game "/caminho/Victoria 3/game"
 python3 tools/package_mod.py
 ```
 
-O resultado fica em `dist/smart-economy-director-0.6.1.zip`. O pacote contém
+O resultado fica em `dist/smart-economy-director-0.6.9.zip`. O pacote contém
 somente os arquivos carregáveis; não inclui saves, fontes do jogo, pesquisa,
 testes ou outro mod. A geração é determinística e não modifica a instalação.
 
@@ -121,28 +122,28 @@ e atualiza a análise. Ignorar vale nos três modos e não cancela obras;
 restaurar não aprova obras. Desativar o Director limpa essas preferências.
 
 
-Interface 0.6.1: fonte principal 20, títulos 26 e botões nativos de 52 pixels,
+Interface 0.6.9: fonte principal 20, títulos 26 e botões nativos de 52 pixels,
 com fundo/borda. As recomendações vêm primeiro e os indicadores completos
 podem ser abertos com Mostrar indicadores e detalhes. As listas de cartões
 crescem com o conteúdo em vez de usar uma altura de linha fixa. Os critérios
 econômicos, modos e travas de aprovação permanecem iguais.
 
 
-Na 0.6.1, cada cartão indica quando a aprovação está disponível. Em outro modo,
+Na 0.6.9, cada cartão indica quando a aprovação está disponível. Em outro modo,
 Passar para Assistido muda apenas o modo; depois o jogador decide se aprova.
 Atualizar recomendações aparece no cartão desatualizado e pode removê-lo da
 lista sem executar obras. Abrir fila de construção leva ao painel nativo.
 A fonte e os botões maiores da 0.5.0 foram mantidos.
 
 
-O painel Automático 0.6.1 mostra se há evento pendente e o bloqueio atual,
+O painel Automático 0.6.9 mostra se há evento pendente e o bloqueio atual,
 mesmo antes da próxima revisão. Registra o último resultado com mês/ano,
 separadamente dos indicadores. Atualizar diagnóstico não executa a revisão;
 trocar modo preserva esse registro e desativar limpa. Em save antigo sem dados
 da revisão, a versão informa ausência de registro em vez de atribuir data.
 
 
-Na 0.6.1 o Automático permite uma tentativa por mês, registrada antes da chamada
+Na 0.6.9 o executor próprio permite uma tentativa por mês, registrada antes da chamada
 de construção. Uma inclusão não confirmada também consome o limite; revisão
 bloqueada antes de tentar ou sem candidato não consome. O marcador não é
 apagado por atualizar, trocar modo, cancelar projeto ou desativar/reativar.
@@ -155,7 +156,7 @@ agenda ações, não guarda projetos e não interfere com o mod desabilitado.
 Não reconstrói tentativas antigas sem registro nem comprova persistência na
 engine; save/reload ainda exige verificação em cópia de campanha.
 
-## Atualização 0.6.1
+## Atualização 0.6.9
 
 Ao selecionar Automático com executores detectados, o Director guarda sete
 opções de construção e escolhe uma rota externa conforme o plano. Use
@@ -164,7 +165,7 @@ Restaure antes de remover o mod. Consulte PLANNING.md para as regras, limites
 e efeitos sobre configurações alteradas manualmente durante a coordenação.
 
 O instalador local atualiza uma instalação existente com jogo fechado, guarda
-a pasta anterior e confere os 13 outputs. O caminho é obrigatório.
+a pasta anterior e confere os 14 outputs. O caminho é obrigatório.
 
 ```bash
 python3 tools/install_mod.py --user-data "/caminho/dos/dados/Victoria 3" --dry-run
@@ -173,7 +174,12 @@ python3 tools/install_mod.py --user-data "/caminho/dos/dados/Victoria 3"
 
 Em save da 0.5.x, selecione Automático novamente para assumir a coordenação.
 
-Na 0.6.1, o Automático também coordena objetivo e orçamento do Advisor.
+Na 0.6.9, o Automático também coordena objetivo e orçamento do Advisor.
 O painel mostra a orientação aplicada. Restauração inclui essas quatro opções.
 Em coordenação 0.6.0 já ativa, a primeira seleção do Advisor captura as opções
 atuais antes de aplicar a política nova.
+
+A política fiscal permite um ajuste de imposto e um de salário civil por mês
+de calendário. Os marcadores mensais permanecem após troca de modo ou
+desativação. Metas antigas sem amostragem datada são recontadas. A revisão
+completa está em REVIEW_2026-11-10.md.
