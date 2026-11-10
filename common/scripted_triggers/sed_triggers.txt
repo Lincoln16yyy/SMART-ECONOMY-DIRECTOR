@@ -64,6 +64,10 @@ sed_wood_candidate_eligible = {
  OR = { sed_wood_logging_camp_eligible = yes }
 }
 
+sed_wood_queued_supply = { OR = { AND = { has_building = building_logging_camp b:building_logging_camp = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_electric_saw_mills
+  has_active_production_method = pm_saw_mills
+  has_active_production_method = pm_simple_forestry } } } } }
+
 # State scope: one verified producer type for wood; output checked by active method.
 sed_wood_logging_camp_eligible = {
  has_building = building_logging_camp
@@ -101,6 +105,13 @@ sed_iron_candidate_eligible = {
  owner = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
  OR = { sed_iron_iron_mine_eligible = yes }
 }
+
+sed_iron_queued_supply = { OR = { AND = { has_building = building_iron_mine b:building_iron_mine = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_atmospheric_engine_pump_building_iron_mine
+  has_active_production_method = pm_condensing_engine_pump_building_iron_mine
+  has_active_production_method = pm_diesel_pump_building_iron_mine
+  has_active_production_method = pm_dynamite_building_iron_mine
+  has_active_production_method = pm_nitroglycerin_building_iron_mine
+  has_active_production_method = pm_picks_and_shovels_building_iron_mine } } } } }
 
 # State scope: one verified producer type for iron; output checked by active method.
 sed_iron_iron_mine_eligible = {
@@ -143,6 +154,13 @@ sed_coal_candidate_eligible = {
  OR = { sed_coal_coal_mine_eligible = yes }
 }
 
+sed_coal_queued_supply = { OR = { AND = { has_building = building_coal_mine b:building_coal_mine = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_atmospheric_engine_pump_building_coal_mine
+  has_active_production_method = pm_condensing_engine_pump_building_coal_mine
+  has_active_production_method = pm_diesel_pump_building_coal_mine
+  has_active_production_method = pm_dynamite_building_coal_mine
+  has_active_production_method = pm_nitroglycerin_building_coal_mine
+  has_active_production_method = pm_picks_and_shovels_building_coal_mine } } } } }
+
 # State scope: one verified producer type for coal; output checked by active method.
 sed_coal_coal_mine_eligible = {
  has_building = building_coal_mine
@@ -183,6 +201,25 @@ sed_grain_candidate_eligible = {
  owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
  OR = { sed_grain_wheat_farm_eligible = yes sed_grain_rye_farm_eligible = yes sed_grain_rice_farm_eligible = yes sed_grain_maize_farm_eligible = yes sed_grain_millet_farm_eligible = yes }
 }
+
+sed_grain_queued_supply = { OR = { AND = { has_building = building_wheat_farm b:building_wheat_farm = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_chemical_fertilizer
+  has_active_production_method = pm_fertilization
+  has_active_production_method = pm_herring_meal_farming
+  has_active_production_method = pm_simple_farming
+  has_active_production_method = pm_soil_enriching_farming } } } AND = { has_building = building_rye_farm b:building_rye_farm = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_chemical_fertilizer
+  has_active_production_method = pm_fertilization
+  has_active_production_method = pm_simple_farming
+  has_active_production_method = pm_soil_enriching_farming } } } AND = { has_building = building_rice_farm b:building_rice_farm = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_chemical_fertilizer_building_rice_farm
+  has_active_production_method = pm_fertilization_building_rice_farm
+  has_active_production_method = pm_herring_meal_farming_building_rice_farm
+  has_active_production_method = pm_simple_farming_building_rice_farm
+  has_active_production_method = pm_soil_enriching_farming_building_rice_farm } } } AND = { has_building = building_maize_farm b:building_maize_farm = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_chemical_fertilizer
+  has_active_production_method = pm_fertilization
+  has_active_production_method = pm_simple_farming
+  has_active_production_method = pm_soil_enriching_farming } } } AND = { has_building = building_millet_farm b:building_millet_farm = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_chemical_fertilizer
+  has_active_production_method = pm_fertilization
+  has_active_production_method = pm_simple_farming
+  has_active_production_method = pm_soil_enriching_farming } } } } }
 
 # State scope: one verified producer type for grain; output checked by active method.
 sed_grain_wheat_farm_eligible = {
@@ -301,6 +338,13 @@ sed_fabric_candidate_eligible = {
  OR = { sed_fabric_cotton_plantation_eligible = yes sed_fabric_livestock_ranch_eligible = yes }
 }
 
+sed_fabric_queued_supply = { OR = { AND = { has_building = building_cotton_plantation b:building_cotton_plantation = { level_after_queued_constructions > level OR = {   has_active_production_method = automatic_irrigation_building_cotton_plantation
+  has_active_production_method = default_building_cotton_plantation
+  has_active_production_method = slave_exploitation_cotton
+  has_active_production_method = worker_exploitation_cotton } } } AND = { has_building = building_livestock_ranch b:building_livestock_ranch = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_intensive_grazing_ranch
+  has_active_production_method = pm_sheep_farms
+  has_active_production_method = pm_simple_ranch } } } } }
+
 # State scope: one verified producer type for fabric; output checked by active method.
 sed_fabric_cotton_plantation_eligible = {
  has_building = building_cotton_plantation
@@ -358,6 +402,11 @@ sed_tools_candidate_eligible = {
  OR = { sed_tools_tooling_workshop_eligible = yes }
 }
 
+sed_tools_queued_supply = { OR = { AND = { has_building = building_tooling_workshop b:building_tooling_workshop = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_crude_tools
+  has_active_production_method = pm_pig_iron
+  has_active_production_method = pm_rubber_grips
+  has_active_production_method = pm_steel } } } } }
+
 # State scope: one verified producer type for tools; output checked by active method.
 sed_tools_tooling_workshop_eligible = {
  has_building = building_tooling_workshop
@@ -396,6 +445,14 @@ sed_groceries_candidate_eligible = {
  owner = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } }
  OR = { sed_groceries_food_industry_eligible = yes }
 }
+
+sed_groceries_queued_supply = { OR = { AND = { has_building = building_food_industry b:building_food_industry = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_bakery
+  has_active_production_method = pm_baking_powder
+  has_active_production_method = pm_cannery
+  has_active_production_method = pm_cannery_fish
+  has_active_production_method = pm_sweeteners
+  has_active_production_method = pm_vacuum_canning
+  has_active_production_method = pm_vacuum_canning_principle_3 } } } } }
 
 # State scope: one verified producer type for groceries; output checked by active method.
 sed_groceries_food_industry_eligible = {
@@ -438,6 +495,11 @@ sed_clothes_candidate_eligible = {
  owner = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } }
  OR = { sed_clothes_textile_mill_eligible = yes }
 }
+
+sed_clothes_queued_supply = { OR = { AND = { has_building = building_textile_mill b:building_textile_mill = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_dye_workshops
+  has_active_production_method = pm_electric_sewing_machines
+  has_active_production_method = pm_handsewn_clothes
+  has_active_production_method = pm_sewing_machines } } } } }
 
 # State scope: one verified producer type for clothes; output checked by active method.
 sed_clothes_textile_mill_eligible = {

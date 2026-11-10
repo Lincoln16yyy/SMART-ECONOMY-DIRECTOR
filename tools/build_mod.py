@@ -11,7 +11,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
-VERSION = '0.6.11'
+VERSION = '0.6.12'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -307,7 +307,8 @@ sed_refresh_supply_candidates = {''']
   limit = { has_variable = sed_coord_active }
   sed_coord_sync = yes
   set_variable = { name = sed_auto_action_status value = 18 }
-  if = { limit = { var:sed_coord_executor = 9 } set_variable = { name = sed_auto_action_status value = 19 } }
+  if = { limit = { var:sed_coord_executor = 10 } set_variable = { name = sed_auto_action_status value = 20 } }
+  else_if = { limit = { var:sed_coord_executor = 9 } set_variable = { name = sed_auto_action_status value = 19 } }
   else_if = { limit = { var:sed_coord_executor = 5 } set_variable = { name = sed_auto_action_status value = 13 } }
   else_if = { limit = { var:sed_coord_executor = 0 }
    set_variable = { name = sed_auto_action_status value = 2 }
@@ -463,7 +464,7 @@ def widget():
     body += textbox('sed_coord_intro')
     body += button('sed_coord_enable', 'sed_coord_enable_sgui')
     body += button('sed_coord_release', 'sed_coord_release_sgui')
-    for executor in range(10):
+    for executor in range(11):
         body += textbox(f'sed_coord_executor_{executor}', f'sed_coord_executor_{executor}_visible_sgui')
     body += textbox('sed_coord_supply_policy', 'sed_coord_supply_policy_visible_sgui')
     for policy in (1, 2, 3):
@@ -485,7 +486,7 @@ def widget():
     for policy in ('tax', 'wage'):
         body += textbox(f'sed_{policy}_last_command', f'sed_{policy}_last_command_visible_sgui')
     body += textbox('sed_auto_last_review', 'sed_auto_last_review_visible_sgui')
-    for status in ('success', 'no_action', 'default', 'queue', 'paused', 'competing', 'safety', 'unconfirmed', 'month_limit', 'fiscal', 'delegated', 'unsupported'):
+    for status in ('success', 'no_action', 'default', 'queue', 'paused', 'competing', 'safety', 'unconfirmed', 'month_limit', 'fiscal', 'delegated', 'unsupported', 'waiting'):
         body += textbox(f'sed_auto_status_{status}', f'sed_auto_status_{status}_visible_sgui')
     body += 'flowcontainer = { direction = horizontal spacing = 12\n'
     body += button('sed_refresh', 'sed_refresh_sgui', width=244)
@@ -503,6 +504,7 @@ def widget():
     body += textbox('sed_deficit_warning', 'sed_deficit_visible_sgui')
     body += textbox('sed_plan_title', heading=True)
     body += textbox('sed_plan_date')
+    body += textbox('sed_plan_waiting', 'sed_plan_waiting_visible_sgui')
     for status in range(1, 6):
         body += textbox(f'sed_fiscal_{status}', f'sed_fiscal_{status}_visible_sgui')
     for goal in range(10):
@@ -1269,7 +1271,7 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
         previous += f' NOT = {{ {condition} }}'
     result += f'sed_auto_current_clear_visible_sgui = {{ scope = country is_shown = {{ {base} sed_auto_executor_safe = yes }} }}\n'
     result += 'sed_auto_status_delegated_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 18 } }\n'
-    for executor in range(10):
+    for executor in range(11):
         result += f'sed_coord_executor_{executor}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = {executor} }} }}\n'
     for policy in (1, 2, 3):
         result += f'sed_coord_advisor_policy_{policy}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 1 has_variable = sed_coord_advisor_policy var:sed_coord_advisor_policy = {policy} }} }}\n'
@@ -1277,6 +1279,8 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
     result += 'sed_coord_supply_policy_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_supply_policy_saved } }\n'
     for policy in ('tax', 'wage'):
         result += f'sed_{policy}_last_command_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_{policy}_last_from has_variable = sed_{policy}_last_to has_variable = sed_{policy}_last_month has_variable = sed_{policy}_last_year }} }}\n'
+    result += 'sed_auto_status_waiting_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 20 } }\n'
+    result += 'sed_plan_waiting_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_waiting var:sed_plan_waiting = 1 } }\n'
     result += 'sed_auto_status_fiscal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 17 } }\n'
     for status in range(1, 6):
         result += f'sed_fiscal_{status}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = {status} }} }}\n'
@@ -1382,6 +1386,11 @@ sed_{good}_candidate_eligible = {{
  OR = {{ {alternatives} }}
 }}
 ''')
+        queued_variants = ' '.join(
+            f"AND = {{ has_building = {variant['building']} b:{variant['building']} = {{ "
+            f"level_after_queued_constructions > level OR = {{ {variant_methods(variant)} }} }} }}"
+            for variant in vs)
+        result.append(f'sed_{good}_queued_supply = {{ OR = {{ {queued_variants} }} }}\n')
         for variant in vs:
             building = variant['building']
             methods = variant_methods(variant, '  ')
@@ -1711,6 +1720,9 @@ def localization(language):
         'sed_goal_8': ('Objetivo atual: buscar crescimento e diversificação. Sem gargalo elegível no escopo direto, o executor externo avalia novos investimentos com seus próprios filtros.', 'Current objective: seek growth and diversification. With no eligible bottleneck in direct scope, the external executor evaluates new investment using its own filters.'),
         'sed_goal_9': ('Objetivo atual: investigar energia local cara, com preço ao menos 20% acima da base em algum estado. A ferramenta externa verifica viabilidade.', 'Current objective: investigate costly local power, priced at least 20% above base in a state. The external tool checks feasibility.'),
         'sed_coord_supply_policy': ('Política do Supply Chain sob o Director. Expansões em estados incorporados; administração trata o déficit atual de burocracia. Limites numéricos de construção em um nível por local escolhido, conforme a rotina externa. A soma nacional pode superar um nível. Tributação é avaliada em junho/dezembro e setores em fevereiro/agosto. Opções anteriores são restauradas ao sair do Automático.', 'Supply Chain policy under the Director. Expansion in incorporated states; administration addresses the current bureaucracy deficit. Numeric construction limits are one level per selected location, according to the external routine. The national total may exceed one level. Tax capacity is evaluated in June/December and construction sectors in February/August. Previous settings are restored when leaving Automatic.'),
+        'sed_coord_executor_10': ('Coordenação em espera. Há expansão enfileirada de um prédio relacionado ao objetivo atual. Novas opções externas ficam suspensas até reavaliar a fila ou surgir outra prioridade elegível.', 'Coordination waiting. A building related to the current objective has a queued expansion. New external options remain suspended until queue reassessment or another eligible priority appears.'),
+        'sed_plan_waiting': ('Plano em acompanhamento de obra relacionada. A fila ainda não comprova resolução do gargalo. A autoria e o efeito futuro do projeto não foram identificados.', 'Plan monitoring related construction. The queue does not yet prove resolution of the bottleneck. Project origin and future impact have not been identified.'),
+        'sed_auto_status_waiting': ('Última revisão: aguardando expansão relacionada ao objetivo. Reavalia após mudança da fila; nenhuma nova rotina externa autorizada nesta revisão.', 'Last review: waiting for an expansion related to the objective. Reassesses after queue changes; no new external routine authorized in this review.'),
         'sed_coord_executor_9': ('Objetivo identificado, execução pendente. Administração, capacidade tributária e energia exigem uma rotina específica do Supply Chain e condições fiscais próprias. A rotina necessária está indisponível ou bloqueada nesta leitura. Confira o objetivo no plano nacional.', 'Objective identified, execution pending. Administration, tax capacity and power require a dedicated Supply Chain routine and its fiscal conditions. The required routine is unavailable or blocked in this reading. See the national plan for the objective.'),
         'sed_auto_status_unsupported': ('Última revisão: objetivo identificado sem executor específico autorizado. A coordenação aguarda uma rotina compatível e condições fiscais para essa ação.', 'Last review: objective identified without an authorized dedicated executor. Coordination awaits a compatible routine and fiscal conditions for this action.'),
         'sed_coord_executor_6': ('Executor escolhido: Supply Chain, administração geral. Aguarda a agenda e os filtros de burocracia do Supply Chain.', 'Selected executor: Supply Chain, general administration. Waits for Supply Chain scheduling and bureaucracy filters.'),

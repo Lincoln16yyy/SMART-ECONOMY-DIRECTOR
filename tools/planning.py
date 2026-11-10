@@ -2,7 +2,8 @@
 
 RANKS = (1, 2, 3)
 COUNTRY_VARIABLES = ['sed_plan_count', 'sed_plan_goal', 'sed_fiscal_status',
-                     'sed_plan_year', 'sed_plan_month', 'sed_plan_missing_count']
+                     'sed_plan_year', 'sed_plan_month', 'sed_plan_missing_count',
+                     'sed_plan_waiting']
 STATE_VARIABLES = ['sed_plan_score', 'sed_plan_type']
 
 
@@ -212,6 +213,7 @@ def effects(actions, buildings):
   set_variable = { name = sed_plan_count value = 0 }
   set_variable = { name = sed_plan_missing_count value = 0 }
   set_variable = { name = sed_plan_goal value = 0 }
+  set_variable = { name = sed_plan_waiting value = 0 }
   set_variable = { name = sed_plan_year value = year }
   set_variable = { name = sed_plan_month value = { value = month add = 1 } }
   set_variable = { name = sed_fiscal_status value = 1 }
@@ -325,12 +327,37 @@ def effects(actions, buildings):
     }}
    }}''')
         result.append('  }')
-    result.append('''  if = { limit = { var:sed_plan_count = 0 var:sed_plan_missing_count > 0 } set_variable = { name = sed_plan_goal value = 5 } }
+    result.append('''  if = { limit = { var:sed_plan_goal = 0 any_scope_state = {
+   is_incorporated = yes infrastructure_delta < 0 NOT = { has_variable = sed_railway_ignored } has_building = building_railway
+   b:building_railway = { level_after_queued_constructions > level }
+  } }
+   set_variable = { name = sed_plan_goal value = 1 }
+   set_variable = { name = sed_plan_waiting value = 1 }
+  }''')
+    for name in supply:
+        result.append(f'''  if = {{ limit = {{ var:sed_plan_goal = 0
+   market = {{ mg:{name} ?= {{ market_goods_has_goods_shortage = yes }} }}
+   any_scope_state = {{ is_incorporated = yes NOT = {{ has_variable = sed_{name}_ignored }} sed_{name}_queued_supply = yes }}
+  }}
+   set_variable = {{ name = sed_plan_goal value = 2 }}
+   set_variable = {{ name = sed_plan_waiting value = 1 }}
+  }}''')
+    result.append('''  if = { limit = { var:sed_plan_goal = 0 var:sed_plan_missing_count > 0 } set_variable = { name = sed_plan_goal value = 5 } }
   if = { limit = { var:sed_plan_goal = 0 sed_coord_fiscal_safe = yes } set_variable = { name = sed_plan_goal value = 8 } }
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } bureaucracy < 0 } set_variable = { name = sed_plan_goal value = 6 } }
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } any_scope_state = { is_incorporated = yes tax_capacity_usage > tax_capacity } } set_variable = { name = sed_plan_goal value = 7 } }
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } any_scope_state = { sg:electricity ?= { state_goods_pricier >= 0.2 } } } set_variable = { name = sed_plan_goal value = 9 } }
-  if = { limit = { OR = { var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } } set_variable = { name = sed_plan_goal value = 4 } }
+  if = { limit = {
+   OR = {
+    AND = { var:sed_plan_goal = 6 any_scope_state = { is_incorporated = yes has_building = building_government_administration b:building_government_administration = { level_after_queued_constructions > level } } }
+    AND = { var:sed_plan_goal = 7 any_scope_state = { is_incorporated = yes tax_capacity_usage > tax_capacity has_building = building_government_administration b:building_government_administration = { level_after_queued_constructions > level } } }
+    AND = { var:sed_plan_goal = 9 any_scope_state = { is_incorporated = yes sg:electricity ?= { state_goods_pricier >= 0.2 } has_building = building_power_plant b:building_power_plant = { level_after_queued_constructions > level } } }
+   }
+  } set_variable = { name = sed_plan_waiting value = 1 } }
+  if = { limit = { OR = { var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } }
+   set_variable = { name = sed_plan_goal value = 4 }
+   set_variable = { name = sed_plan_waiting value = 0 }
+  }
  }
 }
 ''')

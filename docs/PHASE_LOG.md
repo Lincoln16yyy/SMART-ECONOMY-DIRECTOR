@@ -1357,3 +1357,29 @@ automático; desativar remove o histórico e preserva as travas mensais.
 158 testes sintéticos aprovados, gerador e validação estática local aprovados.
 A nova interface, o efeito das opções externas e save/reload continuam pendentes
 do teste conjunto do jogador. Nenhuma nova inicialização de engine nesta etapa.
+
+## 2026-11-10 — Acompanhamento de gargalos na fila
+
+Quando não há outra expansão elegível, o plano mantém o objetivo de
+infraestrutura ou oferta se detectar expansão relacionada enfileirada.
+Para oferta, exige escassez atual, estado incorporado e método de produção
+verificado para o bem, incluindo produtores alternativos. Estados ignorados
+pelo jogador não mantêm essa espera. Para administração, tributação e energia,
+a espera exige expansão correspondente em estado incorporado afetado pelo
+problema. Crise fiscal mantém precedência sobre acompanhamento de obra.
+
+A coordenação mostra executor 10 e resultado mensal 20 enquanto aguarda.
+Nesse estado, as opções externas de novas obras permanecem suspensas.
+Cancelamento, conclusão, fim da escassez ou surgimento de outra prioridade
+provocam reavaliação pelos filtros normais. A detecção usa nível atual e nível
+após fila, sem atribuir autoria, identidade ou impacto previsto ao projeto.
+
+A espera é conservadora. Uma obra relacionada pode suspender a autorização
+nacional da rotina enquanto não houver outra prioridade elegível. A versão
+acompanha expansões de prédios reconhecidos pelas leituras existentes; novos
+prédios ainda não expostos nessas leituras podem ficar fora da detecção.
+
+165 testes sintéticos aprovados, geração e validação estática local aprovadas.
+Sete novas regressões cobrem fila, cancelamento, resolução, prioridade
+alternativa, métodos produtivos, localização da energia e precedência fiscal.
+Novas mensagens e transições ainda aguardam o teste conjunto em campanha.

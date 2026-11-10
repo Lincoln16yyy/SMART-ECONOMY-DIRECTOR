@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.6.11
+# Estado dos requisitos — 0.6.12
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.
@@ -20,7 +20,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Desativar e devolver opções | Restaura presença e valor original das onze opções, com testes de idempotência | Limites fiscais preservados por mês. Confirmar restauração após save/reload e atualização de versão |
 | Manual e Assistido | Autorizações e trocas de modo testadas | Restauração pode reativar opções externas originalmente ligadas |
 | Histórico | Resultado mensal datado, status externo e livro dos oito bens, ferrovia e setor de construção | Conclusão é inferida pela fila e nível; reduzir ambiguidade de cancelamento |
-| Fila sem duplicação | Guardas agregadas, nível após fila e marcas por tipo/estado | Identidade, lado, investidor, conclusão/cancelamento e reconciliação completa |
+| Fila sem duplicação | Guardas agregadas, nível após fila e marcas por tipo/estado | Acompanhamento relacionado na 0.6.12. Identidade, lado, investidor e reconciliação completa permanecem pendentes |
 | Planejamento de longo prazo | Direção atual, reavaliação periódica e meta anual de oferta para escassez persistente | Metas plurianuais, cadeias completas, diversificação medida e feedback de resultados |
 | Leis, guerra e diplomacia | Fora das mutações econômicas implementadas | Mantidas sob responsabilidade dos módulos e decisões previstos pelo briefing |
 | Haiti, país rico e crise | Cenários sintéticos fiscais e de seleção | Campanhas registradas e comparáveis permanecem pendentes |
