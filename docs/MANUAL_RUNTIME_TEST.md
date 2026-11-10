@@ -373,3 +373,35 @@ o motivo. Saldo exatamente zero permanece permitido; isso não garante margem
 para o próximo nível. Verificar ferrovia em déficit e seleção automática de
 outro produtor em estado elegível. Estes casos ainda não foram executados
 na engine nesta revisão.
+
+## Opções independentes do Supply Chain — 0.5.5 (pendente)
+
+Em cópia dedicada, desligar cadeias e habilitar separadamente ferrovias,
+energia e setores. Cada opção deve mostrar bloqueio atual no Automático e
+registrar resultado de concorrência sem tentativa do Director. Desligar a
+opção deve liberar a guarda, sujeito aos outros bloqueios. Registrar todas
+as opções; não inferir inclusão ou reconciliação pelo total agregado da fila.
+Este roteiro não foi executado e não solicita teste imediato ao jogador.
+
+## Administração do Supply Chain — 0.5.6 (pendente)
+
+Na mesma cópia de teste, verificar separadamente configuração geral e
+tributária: ambas devem bloquear o Automático e registrar concorrência, sem
+consumir tentativa mensal. Remover a configuração geral deixando apenas a meta
+institucional deve liberar essa guarda; outros bloqueios continuam aplicáveis.
+Não executado nesta etapa; sem solicitação de teste imediato ao jogador.
+
+## Revalidação 0.5.7 (pendente)
+
+Em cópia dedicada, confirmar que revisões automáticas bloqueadas por fila,
+pausa ou configuração concorrente não incluem obra e não consomem o mês.
+Confirmar que a aprovação Assistida mantém suas regras. Não executado nesta
+etapa; nenhuma solicitação de teste imediato ao jogador.
+
+## Autorização de modo 0.5.8 (pendente)
+
+Em cópia dedicada, confirmar que trocar para Manual após exibir recomendação
+não permite aprová-la nem executar evento automático pendente. Voltar para
+Assistido deve permitir aprovação somente quando as guardas atuais passarem.
+Testes sintéticos de chamadas diretas não substituem essa verificação de engine.
+Não executado nesta etapa; sem solicitação imediata ao jogador.

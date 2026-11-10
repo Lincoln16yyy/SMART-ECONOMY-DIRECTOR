@@ -109,3 +109,40 @@ dos agregados e de nível atual/após fila por prédio, em mod separado. Isso
 permite preparar a comparação de script versus UI, mas não executa os casos
 da matriz e não fornece identidade de projeto. Os casos acima continuam não
 executados até haver observação da engine registrada com build/mods/opções.
+
+
+## Detecção de opções independentes do Supply Chain — 0.5.5
+
+O Automático suspende tentativas quando encontra uma das configurações
+`zw_var_more_construction_sectors`, `zw_var_scsab_construct_railway` ou
+`zw_var_scsab_construct_power_plant`, mesmo sem `zw_var_expand_building`.
+A presença configura a opção; os botões do mod externo removem a variável ao
+desligá-la. Fonte: Supply Chain instalado, `zw_scsab_buttons.txt:90–153,
+383–479, 483–547`; efeitos 1, 3 e 4, limites iniciais; JE, pulso mensal.
+
+Política deliberadamente conservadora: detecta configuração, sem reproduzir
+tecnologia, calendário, orçamento ou seleção estadual do outro executor.
+Pode suspender o Director mesmo quando o outro mod não construiria neste mês.
+Não confirma que o diário externo esteja ativo. Não escreve em variáveis
+externas. Assistido preserva aprovação explícita com suas guardas existentes.
+Executor, resultado 13 e painel ao vivo consultam um único trigger
+`sed_competing_builder_configured`, evitando divergência entre UI e execução.
+
+86 testes passam, incluindo opções independentes com cadeias desligadas,
+bloqueio sem consumir o mês, liberação ao remover a opção, painel ao vivo e
+aprovação Assistida sem alterar configuração externa. Validação estática
+contra o jogo local 1.15.0 aprovada. Pacote 0.5.5 gerado; não instalado nesta
+etapa. Instalação permanece 0.5.4. Nenhum jogo foi iniciado.
+As opções de administração, reconciliação de projetos, save/reload e política
+fiscal incremental continuam pendentes. Não cobrar novo teste do jogador agora.
+
+## Atualização 0.5.6 — configurações de administração
+
+O Automático também suspende por `zw_var_scsab_gov_admin` ou
+`zw_var_scsab_gov_admin_for_tax`. Meta institucional isolada não bloqueia,
+pois depende da configuração geral. É detecção conservadora de configuração,
+sem previsão da execução externa. Fontes, condições e limites registrados em
+[RESEARCH.md](RESEARCH.md#administração-do-supply-chain--056).
+A lacuna administrativa descrita nas seções históricas foi investigada para
+essa versão instalada do Supply Chain; cobertura de outros executores e
+reconciliação por projeto continuam parciais.

@@ -59,6 +59,51 @@ class DiagnosisTests(unittest.TestCase):
                 self.assertEqual(c.constructions, [])
                 self.assertNotIn('sed_auto_last_attempt_month', c.variables)
 
+    def test_independent_supply_chain_options_block_auto_and_update_live_panel(self):
+        for option in ('zw_var_more_construction_sectors',
+                       'zw_var_scsab_construct_railway',
+                       'zw_var_scsab_construct_power_plant',
+                       'zw_var_scsab_gov_admin',
+                       'zw_var_scsab_gov_admin_for_tax'):
+            with self.subTest(option=option):
+                c = self.country(construction_queue_num_queued_government_levels=0)
+                c.states = [state(-5, buildings=[railway()])]
+                c.run('sed_set_mode_automatic')
+                c.variables[option] = 1
+                self.assertNotIn('zw_var_expand_building', c.variables)
+                self.assertTrue(self.auto_panel_shown(c, 'current_competing'))
+                self.assertFalse(self.auto_panel_shown(c, 'current_clear'))
+                c.run('sed_auto_apply_monthly')
+                self.assertEqual(c.variables['sed_auto_review_status'], 13)
+                self.assertEqual(c.constructions, [])
+                self.assertNotIn('sed_auto_last_attempt_month', c.variables)
+                del c.variables[option]
+                self.assertFalse(self.auto_panel_shown(c, 'current_competing'))
+                self.assertTrue(self.auto_panel_shown(c, 'current_clear'))
+                c.run('sed_auto_apply_monthly')
+                self.assertEqual(len(c.constructions), 1)
+
+    def test_institution_target_without_general_admin_does_not_block_auto(self):
+        c = self.country(construction_queue_num_queued_government_levels=0)
+        c.variables['zw_var_scsab_gov_admin_for_institution'] = 35
+        c.states = [state(-5, buildings=[railway()])]
+        c.run('sed_set_mode_automatic')
+        self.assertTrue(self.auto_panel_shown(c, 'current_clear'))
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(len(c.constructions), 1)
+        self.assertEqual(c.variables['zw_var_scsab_gov_admin_for_institution'], 35)
+
+    def test_builder_configuration_does_not_block_assisted_or_mutate_foreign_options(self):
+        c = self.country(construction_queue_num_queued_government_levels=0)
+        option = 'zw_var_scsab_construct_railway'
+        c.variables[option] = 3
+        target = state(-5, buildings=[railway()])
+        c.states = [target]
+        c.run('sed_run_railway_approval', target)
+        self.assertEqual(len(c.constructions), 1)
+        c.run('sed_disable_country')
+        self.assertEqual(c.variables[option], 3)
+
     def test_auto_review_queues_only_one_and_stops_at_month_limit(self):
         c = self.country(construction_queue_num_queued_government_levels=0)
         c.run('sed_set_mode_automatic')
@@ -530,6 +575,65 @@ class DiagnosisTests(unittest.TestCase):
         self.assertEqual(c.constructions, [])
         c.run('sed_monthly_update')
         self.assertTrue(self.auto_panel_shown(c, 'pending'))
+
+    def test_direct_effects_refuse_manual_missing_and_conflicting_modes(self):
+        for name in ACTION_NAMES:
+            for modes in (('manual',), (), ('manual', 'assisted'),
+                          ('manual', 'automatic'), ('manual', 'assisted', 'automatic')):
+                with self.subTest(action=name, modes=modes):
+                    c, target, producer = self.card_fixture(name)
+                    c.readings['construction_queue_num_queued_government_levels'] = 0
+                    for mode in ('manual', 'assisted', 'automatic'):
+                        c.variables.pop('sed_mode_' + mode, None)
+                    c.variables.update({'sed_mode_' + mode: True for mode in modes})
+                    c.run(f'sed_run_{name}_approval', target)
+                    self.assertEqual(c.constructions, [])
+                    self.assertNotIn('sed_auto_last_attempt_month', c.variables)
+                    self.assertNotIn(f'sed_{name}_request_pending', target['variables'])
+
+    def test_direct_effect_revalidates_switch_to_manual_after_analysis(self):
+        for name in ACTION_NAMES:
+            with self.subTest(action=name):
+                c, target, producer = self.card_fixture(name)
+                self.assertTrue(c.condition(self.definitions[f'sed_{name}_approval_valid'], target))
+                c.run('sed_set_mode_manual')
+                c.run(f'sed_run_{name}_approval', target)
+                self.assertEqual(c.constructions, [])
+                c.run('sed_set_mode_assisted')
+                c.run(f'sed_run_{name}_approval', target)
+                self.assertEqual(len(c.constructions), 1)
+                self.assertNotIn('sed_auto_last_attempt_month', c.variables)
+
+    def test_mutating_effects_revalidate_all_auto_guards_without_consuming_attempt(self):
+        blockers = [
+            ({'construction_queue_num_queued_government_levels': 1}, {}),
+            ({'construction_queue_num_queued_private_levels': 1}, {}),
+            ({'is_construction_paused': True}, {}),
+            ({'in_default': True}, {}),
+        ] + [({}, {option: 1}) for option in (
+            'advisor_auto_construction_enabled', 'aroai_autobuild',
+            'zw_var_expand_building', 'zw_var_more_construction_sectors',
+            'zw_var_scsab_construct_railway', 'zw_var_scsab_construct_power_plant',
+            'zw_var_scsab_gov_admin', 'zw_var_scsab_gov_admin_for_tax')]
+        for name in ACTION_NAMES:
+            for readings, variables in blockers:
+                with self.subTest(action=name, readings=readings, variables=variables):
+                    c, target, producer = self.card_fixture(name)
+                    c.readings['construction_queue_num_queued_government_levels'] = 0
+                    c.run('sed_set_mode_automatic')
+                    self.assertTrue(c.condition(self.definitions[f'sed_{name}_approval_valid'], target))
+                    c.readings.update(readings)
+                    c.variables.update(variables)
+                    c.run(f'sed_run_{name}_approval', target)
+                    self.assertEqual(c.constructions, [])
+                    self.assertNotIn('sed_auto_last_attempt_month', c.variables)
+                    self.assertNotIn(f'sed_{name}_request_pending', target['variables'])
+                    c.run('sed_set_mode_assisted')
+                    c.run(f'sed_run_{name}_approval', target)
+                    expected = 0 if readings.get('in_default') or readings.get(
+                        'construction_queue_num_queued_private_levels') else 1
+                    self.assertEqual(len(c.constructions), expected)
+                    self.assertNotIn('sed_auto_last_attempt_month', c.variables)
 
     def test_auto_month_limit_survives_empty_queue_mode_changes_and_reenable(self):
         for name in ACTION_NAMES:

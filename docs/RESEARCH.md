@@ -253,3 +253,57 @@ bg_agriculture (1), bg_plantations (1) e bg_light_industry (1.5).
 Esses valores motivam a guarda de déficit atual; não foram transformados em
 previsão de custo efetivo. Mods, modificadores e projetos podem mudar a margem.
 Validação estática e 84 testes sintéticos não comprovam execução na engine.
+
+
+## Detecção de opções independentes do Supply Chain — 0.5.5
+
+O Automático suspende tentativas quando encontra uma das configurações
+`zw_var_more_construction_sectors`, `zw_var_scsab_construct_railway` ou
+`zw_var_scsab_construct_power_plant`, mesmo sem `zw_var_expand_building`.
+A presença configura a opção; os botões do mod externo removem a variável ao
+desligá-la. Fonte: Supply Chain instalado, `zw_scsab_buttons.txt:90–153,
+383–479, 483–547`; efeitos 1, 3 e 4, limites iniciais; JE, pulso mensal.
+
+Política deliberadamente conservadora: detecta configuração, sem reproduzir
+tecnologia, calendário, orçamento ou seleção estadual do outro executor.
+Pode suspender o Director mesmo quando o outro mod não construiria neste mês.
+Não confirma que o diário externo esteja ativo. Não escreve em variáveis
+externas. Assistido preserva aprovação explícita com suas guardas existentes.
+Executor, resultado 13 e painel ao vivo consultam um único trigger
+`sed_competing_builder_configured`, evitando divergência entre UI e execução.
+
+86 testes passam, incluindo opções independentes com cadeias desligadas,
+bloqueio sem consumir o mês, liberação ao remover a opção, painel ao vivo e
+aprovação Assistida sem alterar configuração externa. Validação estática
+contra o jogo local 1.15.0 aprovada. Pacote 0.5.5 gerado; não instalado nesta
+etapa. Instalação permanece 0.5.4. Nenhum jogo foi iniciado.
+As opções de administração, reconciliação de projetos, save/reload e política
+fiscal incremental continuam pendentes. Não cobrar novo teste do jogador agora.
+
+
+## Administração do Supply Chain — 0.5.6
+
+A guarda de configuração agora inclui `zw_var_scsab_gov_admin` e
+`zw_var_scsab_gov_admin_for_tax`. A primeira habilita a rotina geral, que pode
+reagir à burocracia negativa mesmo sem meta institucional; a segunda habilita
+uma rotina tributária independente. `zw_var_scsab_gov_admin_for_institution`
+isolada não habilita nenhuma dessas rotinas e não bloqueia o Director.
+
+Fontes locais: Supply Chain instalado, efeito
+`common/scripted_effects/zw_scsab_effects_2_gov_admin.txt:1–185`, botões
+`common/scripted_buttons/zw_scsab_buttons.txt:215–383` e pulso
+`common/journal_entries/zw_scsab_je.txt:84–126`. O primeiro limite exige a
+configuração geral; o alvo institucional só altera o cálculo interno.
+O efeito tributário exige sua própria configuração e tecnologia; seleciona
+estados com capacidade tributária insuficiente. Os botões removem as opções
+ao desligar. A política do Director detecta configuração, sem reproduzir
+calendário, tecnologia, burocracia, orçamento ou seleção estadual externos.
+Isso pode suspender o Automático mesmo sem obra externa naquele mês.
+Não comprova ativação do diário externo nem resolve reconciliação da fila.
+
+87 testes aprovados: os casos das opções independentes agora incluem as duas
+configurações administrativas; novo cenário confirma que uma meta institucional
+isolada não bloqueia nem é alterada. Painel, resultado 13 e guarda de execução
+continuam usando o mesmo trigger. Validação estática local 1.15.0 e pacote
+0.5.6 aprovados. Nenhum jogo iniciado; engine e save/reload não verificados.
+Pacote não instalado: instalação local permanece 0.5.4.

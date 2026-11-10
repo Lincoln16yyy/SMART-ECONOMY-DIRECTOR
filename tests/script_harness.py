@@ -141,6 +141,8 @@ class Country:
         key = entry.key
         if key == 'NOT':
             return not self.condition(entry.value, scope)
+        if key == 'AND':
+            return self.condition(entry.value, scope)
         if key == 'OR':
             return any(self.single_condition(e, scope) for e in entry.value)
         if key == 'market':
