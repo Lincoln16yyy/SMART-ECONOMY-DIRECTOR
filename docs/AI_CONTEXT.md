@@ -1,23 +1,52 @@
 # Contexto de continuidade
 
-Última entrega do mod — 0.7.17 instalada com jogo fechado e 14 arquivos
-conferidos. Backup `sed_backups/mod_before_0.7.17_20261111_184820_865266`.
-Código — retorno de investimento passa a descontar a folha salarial observada.
-`earnings` menos `weekly_profit` por prédio saudável alimenta uma unidade
-salarial por emprego ponderado; `sed_investment_<tipo>_return` substitui a
-margem material nas elegibilidades, preferências e no plano.
-Teste sintético — 359 testes aprovados (7 novos em `tests/test_investment_wages.py`).
+Última entrega do mod — 0.7.18 instalada com jogo fechado e 14 arquivos
+conferidos. Backup `sed_backups/mod_before_0.7.18_20261111_190422_253541`.
+Código — modernização e recuperação de PMs descontam a folha salarial da
+mudança antes de escolher o candidato nacional. A 0.7.17 já usava a unidade
+salarial observada no retorno de oferta.
+Teste sintético — 361 testes aprovados (7 novos de salários na oferta e 2 de
+pontuação de PMs).
 Estático — geração consistente e validação local 1.15 aprovadas. Tiger 1.19.0
 executado: mesmos três campos de diário do vanilla 1.15 e 912 avisos de estilo.
-Carregou e Campanha — o novo retorno, o desvio de preferência e a unidade por
-estado seguem NÃO VERIFICADO. Gasto salarial real e calibragem pendentes.
+Carregou e Campanha — retorno com salários, unidade por estado e pontuação de
+PMs seguem NÃO VERIFICADO. Calibragem do valor esperado pendente.
 
 Ler `AGENTS.md`, `docs/agent/vic3-modding/SKILL.md` e suas referências.
 O ambiente registra o binário Tiger em `dist/tools/`, sua versão e o comando.
 A pasta de documentação exportada do jogo continua ausente.
-Próximo passo — confirmar em campanha os valores de `sed_investment_wage_unit`
-e a classificação resultante, e retomar as leituras fiscais, a restauração,
+Próximo passo — confirmar em campanha `sed_investment_wage_unit`, o desvio de
+preferência e a pontuação de PMs; retomar leituras fiscais, restauração,
 save/reload e a fundação básica da 0.7.15/0.7.16.
+
+## 0.7.18 — Salários na pontuação de modernização e recuperação
+
+Código — `tools/production_methods.py` calcula `wage_delta`, a diferença de
+`weighted_jobs` entre o método alvo e o atual de cada par estático. Na
+pontuação nacional de `sed_modernize_existing_industry` e de
+`sed_recover_existing_industry`, o ganho material continua escalado por nível
+e ocupação e passa a subtrair `wage_delta × nível × ocupação ×
+var:sed_investment_wage_unit` quando `sed_investment_wage_known = 1` e a troca
+adiciona emprego ponderado. A escolha global exige pontuação acima de zero,
+então um par materialmente positivo pode ser descartado. Sem amostra salarial
+do estado, a pontuação é a anterior.
+
+Não mudou — o filtro estático de pares, as guardas de ocupação, insumos,
+tecnologia, contratação, fila, pausa, limites mensais, reserva de insumos e
+o intervalo de três meses por prédio seguem iguais. A configuração inicial
+das fundações continua apenas material. Taxas por profissão e salário real
+pago não são modelados.
+
+Evidência — comparação com bloco de valor à direita é forma vanilla:
+`common/diplomatic_actions/30_fund_lobby.txt` usa `net_fixed_income >= { ... }`.
+`var:sed_investment_wage_unit` e `sed_investment_wage_known` são gerados pela
+0.7.17 em escopo de estado.
+
+Teste sintético — 2 regressões novas: unidade observada reduz a pontuação
+(200 − 250 × 0,2 = 150) e unidade alta zera a pontuação e impede a troca.
+
+Não verificado — ordem dos pares ainda é material; o ganho real da troca,
+o impacto em ocupação futura e a calibragem da unidade seguem pendentes.
 
 ## 0.7.17 — Folha salarial observada no retorno do investimento
 

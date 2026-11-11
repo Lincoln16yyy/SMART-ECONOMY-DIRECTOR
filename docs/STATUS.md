@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.17
+# Estado dos requisitos — 0.7.18
 
 ## Protocolo de evidência adotado
 
@@ -11,7 +11,8 @@ Restam três campos do diário apontados como desconhecidos, presentes no vanill
 1.15 e documentados no jogo. O Tiger declara suporte até 1.13.5. Os avisos de
 formatação e de OR de um item permanecem visíveis. A documentação exportada
 continua ausente. Carregou e Campanha das leituras fiscais, da prontidão e do
-novo retorno salarial seguem NÃO VERIFICADO. Teste sintético — 359 testes aprovados.
+novo retorno salarial e da pontuação de PMs seguem NÃO VERIFICADO. Teste
+sintético — 361 testes aprovados.
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.
@@ -35,7 +36,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Histórico | Resultado mensal datado, status externo e livro dos oito bens, ferrovia e setor de construção | Conclusão é inferida pela fila e nível; reduzir ambiguidade de cancelamento |
 | Fila sem duplicação | Guardas agregadas, nível após fila e marcas por tipo/estado | Acompanhamento relacionado na 0.6.12. Identidade, lado, investidor e reconciliação completa permanecem pendentes. Com a fila pública ocupada (0.6.25), a não duplicação depende de `level_after_queued_constructions` e das marcas por estado |
 | Planejamento de longo prazo | Direção atual, reavaliação periódica e meta anual de oferta para escassez persistente | Na 0.7.4, propagação por vários elos do catálogo, com espera por obra, alternativas e término de ciclos. Metas plurianuais, bens fora do catálogo, diversificação medida e feedback de resultados |
-| Métodos de produção | Configuração inicial em fundações acompanhadas desde a 0.7.7. Seleção inicial e, desde a 0.7.9, modernização contínua do grupo principal para gargalos, por saída e margem material estimada a preços-base, com reserva mensal de insumos. Desde a 0.7.10, recuperação de escassez por método com menor dependência de insumos e piso de saída nominal. A 0.7.17 fornece a unidade salarial observada aos filtros de oferta | Confirmar na engine. Preços reais, qualificações, salários por profissão, automação dos demais grupos e otimização por lucro real pendentes. A modernização ainda compara apenas margem material |
+| Métodos de produção | Configuração inicial em fundações acompanhadas desde a 0.7.7. Seleção inicial e, desde a 0.7.9, modernização contínua do grupo principal para gargalos, por saída e margem material estimada a preços-base, com reserva mensal de insumos. Desde a 0.7.10, recuperação de escassez por método com menor dependência de insumos e piso de saída nominal. A 0.7.17 fornece a unidade salarial observada aos filtros de oferta; a 0.7.18 desconta a folha da mudança na pontuação de modernização e recuperação | Confirmar na engine. Preços reais, qualificações, salários por profissão e automação dos demais grupos pendentes. A ordem dos pares e a configuração inicial seguem apenas materiais |
 | Economia militar | Custos, participação das despesas, guerra e cinco bens monitorados. Expansões de armas, artilharia e munição na 0.6.14, com bônus de prioridade em guerra | Confirmar leituras na engine, identificar consumo nacional, planejar indústria bélica, modernização e coordenação do recrutamento |
 | Leis, guerra e diplomacia | Fora das mutações econômicas implementadas | Mantidas sob responsabilidade dos módulos e decisões previstos pelo briefing |
 | Haiti, país rico e crise | Cenários sintéticos fiscais e de seleção | Campanhas registradas e comparáveis permanecem pendentes |

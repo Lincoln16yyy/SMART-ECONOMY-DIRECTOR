@@ -10133,216 +10133,424 @@ sed_modernize_existing_industry = {
    set_variable = { name = sed_pm_upgrade_score value = 0 }
    set_variable = { name = sed_pm_upgrade_choice value = 0 }
 
-   if = { limit = { sed_pm_upgrade_1_eligible = yes var:sed_pm_upgrade_score < { value = 200 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 200 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy } }
+   if = { limit = { sed_pm_upgrade_1_eligible = yes var:sed_pm_upgrade_score < { value = 200 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 250 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 200 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 250 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 1 }
    }
-   if = { limit = { sed_pm_upgrade_2_eligible = yes var:sed_pm_upgrade_score < { value = 362.5 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 362.5 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy } }
+   if = { limit = { sed_pm_upgrade_2_eligible = yes var:sed_pm_upgrade_score < { value = 362.5 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 362.5 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 2 }
    }
-   if = { limit = { sed_pm_upgrade_3_eligible = yes var:sed_pm_upgrade_score < { value = 162.5 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 162.5 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy } }
+   if = { limit = { sed_pm_upgrade_3_eligible = yes var:sed_pm_upgrade_score < { value = 162.5 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1250 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 162.5 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1250 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 3 }
    }
-   if = { limit = { sed_pm_upgrade_4_eligible = yes var:sed_pm_upgrade_score < { value = 137.5 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 137.5 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+   if = { limit = { sed_pm_upgrade_4_eligible = yes var:sed_pm_upgrade_score < { value = 137.5 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 137.5 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 4 }
    }
-   if = { limit = { sed_pm_upgrade_5_eligible = yes var:sed_pm_upgrade_score < { value = 750 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 750 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+   if = { limit = { sed_pm_upgrade_5_eligible = yes var:sed_pm_upgrade_score < { value = 750 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 2250 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 750 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 2250 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 5 }
    }
-   if = { limit = { sed_pm_upgrade_6_eligible = yes var:sed_pm_upgrade_score < { value = 162.5 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 162.5 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+   if = { limit = { sed_pm_upgrade_6_eligible = yes var:sed_pm_upgrade_score < { value = 162.5 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 750 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 162.5 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 750 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 6 }
    }
-   if = { limit = { sed_pm_upgrade_7_eligible = yes var:sed_pm_upgrade_score < { value = 775 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 775 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+   if = { limit = { sed_pm_upgrade_7_eligible = yes var:sed_pm_upgrade_score < { value = 775 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 775 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 7 }
    }
-   if = { limit = { sed_pm_upgrade_8_eligible = yes var:sed_pm_upgrade_score < { value = 612.5 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 612.5 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+   if = { limit = { sed_pm_upgrade_8_eligible = yes var:sed_pm_upgrade_score < { value = 612.5 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 750 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 612.5 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 750 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 8 }
    }
-   if = { limit = { sed_pm_upgrade_9_eligible = yes var:sed_pm_upgrade_score < { value = 87.5 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 87.5 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+   if = { limit = { sed_pm_upgrade_9_eligible = yes var:sed_pm_upgrade_score < { value = 87.5 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 750 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 87.5 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 750 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 9 }
    }
-   if = { limit = { sed_pm_upgrade_10_eligible = yes var:sed_pm_upgrade_score < { value = 287.5 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 287.5 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+   if = { limit = { sed_pm_upgrade_10_eligible = yes var:sed_pm_upgrade_score < { value = 287.5 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 287.5 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 10 }
    }
-   if = { limit = { sed_pm_upgrade_11_eligible = yes var:sed_pm_upgrade_score < { value = 712.5 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 712.5 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+   if = { limit = { sed_pm_upgrade_11_eligible = yes var:sed_pm_upgrade_score < { value = 712.5 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 2250 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 712.5 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 2250 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 11 }
    }
-   if = { limit = { sed_pm_upgrade_12_eligible = yes var:sed_pm_upgrade_score < { value = 200 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 200 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+   if = { limit = { sed_pm_upgrade_12_eligible = yes var:sed_pm_upgrade_score < { value = 200 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 750 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 200 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 750 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 12 }
    }
-   if = { limit = { sed_pm_upgrade_13_eligible = yes var:sed_pm_upgrade_score < { value = 625 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 625 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+   if = { limit = { sed_pm_upgrade_13_eligible = yes var:sed_pm_upgrade_score < { value = 625 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 625 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 13 }
    }
-   if = { limit = { sed_pm_upgrade_14_eligible = yes var:sed_pm_upgrade_score < { value = 425 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 425 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+   if = { limit = { sed_pm_upgrade_14_eligible = yes var:sed_pm_upgrade_score < { value = 425 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 750 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 425 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 750 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 14 }
    }
-   if = { limit = { sed_pm_upgrade_15_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+   if = { limit = { sed_pm_upgrade_15_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 15 }
    }
-   if = { limit = { sed_pm_upgrade_16_eligible = yes var:sed_pm_upgrade_score < { value = 12.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 12.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+   if = { limit = { sed_pm_upgrade_16_eligible = yes var:sed_pm_upgrade_score < { value = 12.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 12.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 16 }
    }
-   if = { limit = { sed_pm_upgrade_17_eligible = yes var:sed_pm_upgrade_score < { value = 50 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 50 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+   if = { limit = { sed_pm_upgrade_17_eligible = yes var:sed_pm_upgrade_score < { value = 50 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1000 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 50 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1000 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 17 }
    }
-   if = { limit = { sed_pm_upgrade_18_eligible = yes var:sed_pm_upgrade_score < { value = 87.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 87.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+   if = { limit = { sed_pm_upgrade_18_eligible = yes var:sed_pm_upgrade_score < { value = 87.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 87.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 18 }
    }
-   if = { limit = { sed_pm_upgrade_19_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+   if = { limit = { sed_pm_upgrade_19_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 19 }
    }
-   if = { limit = { sed_pm_upgrade_20_eligible = yes var:sed_pm_upgrade_score < { value = 75 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 75 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+   if = { limit = { sed_pm_upgrade_20_eligible = yes var:sed_pm_upgrade_score < { value = 75 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1000 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 75 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1000 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 20 }
    }
-   if = { limit = { sed_pm_upgrade_21_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+   if = { limit = { sed_pm_upgrade_21_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 21 }
    }
-   if = { limit = { sed_pm_upgrade_22_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
+   if = { limit = { sed_pm_upgrade_22_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 22 }
    }
-   if = { limit = { sed_pm_upgrade_23_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
+   if = { limit = { sed_pm_upgrade_23_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 23 }
    }
-   if = { limit = { sed_pm_upgrade_24_eligible = yes var:sed_pm_upgrade_score < { value = 75 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 75 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
+   if = { limit = { sed_pm_upgrade_24_eligible = yes var:sed_pm_upgrade_score < { value = 75 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1000 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 75 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1000 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 24 }
    }
-   if = { limit = { sed_pm_upgrade_25_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
+   if = { limit = { sed_pm_upgrade_25_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 25 }
    }
-   if = { limit = { sed_pm_upgrade_26_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
+   if = { limit = { sed_pm_upgrade_26_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 26 }
    }
-   if = { limit = { sed_pm_upgrade_27_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
+   if = { limit = { sed_pm_upgrade_27_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 27 }
    }
-   if = { limit = { sed_pm_upgrade_28_eligible = yes var:sed_pm_upgrade_score < { value = 75 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 75 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
+   if = { limit = { sed_pm_upgrade_28_eligible = yes var:sed_pm_upgrade_score < { value = 75 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1000 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 75 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1000 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 28 }
    }
-   if = { limit = { sed_pm_upgrade_29_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
+   if = { limit = { sed_pm_upgrade_29_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 29 }
    }
-   if = { limit = { sed_pm_upgrade_30_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
+   if = { limit = { sed_pm_upgrade_30_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 30 }
    }
-   if = { limit = { sed_pm_upgrade_31_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
+   if = { limit = { sed_pm_upgrade_31_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 31 }
    }
-   if = { limit = { sed_pm_upgrade_32_eligible = yes var:sed_pm_upgrade_score < { value = 75 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 75 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
+   if = { limit = { sed_pm_upgrade_32_eligible = yes var:sed_pm_upgrade_score < { value = 75 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1000 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 75 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1000 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 32 }
    }
-   if = { limit = { sed_pm_upgrade_33_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
+   if = { limit = { sed_pm_upgrade_33_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 33 }
    }
    if = { limit = { sed_pm_upgrade_34_eligible = yes var:sed_pm_upgrade_score < { value = 150 multiply = b:building_cotton_plantation.level multiply = b:building_cotton_plantation.occupancy } }
     set_variable = { name = sed_pm_upgrade_score value = { value = 150 multiply = b:building_cotton_plantation.level multiply = b:building_cotton_plantation.occupancy } }
     set_variable = { name = sed_pm_upgrade_choice value = 34 }
    }
-   if = { limit = { sed_pm_upgrade_35_eligible = yes var:sed_pm_upgrade_score < { value = 250 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 250 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
+   if = { limit = { sed_pm_upgrade_35_eligible = yes var:sed_pm_upgrade_score < { value = 250 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1250 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 250 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1250 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 35 }
    }
-   if = { limit = { sed_pm_upgrade_36_eligible = yes var:sed_pm_upgrade_score < { value = 775 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 775 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
+   if = { limit = { sed_pm_upgrade_36_eligible = yes var:sed_pm_upgrade_score < { value = 775 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 775 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 36 }
    }
-   if = { limit = { sed_pm_upgrade_37_eligible = yes var:sed_pm_upgrade_score < { value = 350 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 350 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
+   if = { limit = { sed_pm_upgrade_37_eligible = yes var:sed_pm_upgrade_score < { value = 350 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1000 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 350 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1000 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 37 }
    }
-   if = { limit = { sed_pm_upgrade_38_eligible = yes var:sed_pm_upgrade_score < { value = 875 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 875 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
+   if = { limit = { sed_pm_upgrade_38_eligible = yes var:sed_pm_upgrade_score < { value = 875 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1250 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 875 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1250 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 38 }
    }
-   if = { limit = { sed_pm_upgrade_39_eligible = yes var:sed_pm_upgrade_score < { value = 525 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 525 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
+   if = { limit = { sed_pm_upgrade_39_eligible = yes var:sed_pm_upgrade_score < { value = 525 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 250 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 525 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 250 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 39 }
    }
-   if = { limit = { sed_pm_upgrade_40_eligible = yes var:sed_pm_upgrade_score < { value = 87.5 multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 87.5 multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy } }
+   if = { limit = { sed_pm_upgrade_40_eligible = yes var:sed_pm_upgrade_score < { value = 87.5 multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 250 multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 87.5 multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 250 multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 40 }
    }
-   if = { limit = { sed_pm_upgrade_41_eligible = yes var:sed_pm_upgrade_score < { value = 525 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 525 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+   if = { limit = { sed_pm_upgrade_41_eligible = yes var:sed_pm_upgrade_score < { value = 525 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 250 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 525 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 250 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 41 }
    }
-   if = { limit = { sed_pm_upgrade_42_eligible = yes var:sed_pm_upgrade_score < { value = 550 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 550 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+   if = { limit = { sed_pm_upgrade_42_eligible = yes var:sed_pm_upgrade_score < { value = 550 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1250 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 550 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1250 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 42 }
    }
-   if = { limit = { sed_pm_upgrade_43_eligible = yes var:sed_pm_upgrade_score < { value = 900 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 900 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+   if = { limit = { sed_pm_upgrade_43_eligible = yes var:sed_pm_upgrade_score < { value = 900 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1875 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 900 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1875 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 43 }
    }
-   if = { limit = { sed_pm_upgrade_44_eligible = yes var:sed_pm_upgrade_score < { value = 25 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 25 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+   if = { limit = { sed_pm_upgrade_44_eligible = yes var:sed_pm_upgrade_score < { value = 25 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1000 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 25 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1000 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 44 }
    }
-   if = { limit = { sed_pm_upgrade_45_eligible = yes var:sed_pm_upgrade_score < { value = 375 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 375 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+   if = { limit = { sed_pm_upgrade_45_eligible = yes var:sed_pm_upgrade_score < { value = 375 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1625 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 375 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1625 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 45 }
    }
-   if = { limit = { sed_pm_upgrade_46_eligible = yes var:sed_pm_upgrade_score < { value = 350 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 350 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+   if = { limit = { sed_pm_upgrade_46_eligible = yes var:sed_pm_upgrade_score < { value = 350 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 625 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 350 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 625 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 46 }
    }
-   if = { limit = { sed_pm_upgrade_47_eligible = yes var:sed_pm_upgrade_score < { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy } }
+   if = { limit = { sed_pm_upgrade_47_eligible = yes var:sed_pm_upgrade_score < { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 47 }
    }
-   if = { limit = { sed_pm_upgrade_48_eligible = yes var:sed_pm_upgrade_score < { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy } }
+   if = { limit = { sed_pm_upgrade_48_eligible = yes var:sed_pm_upgrade_score < { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 48 }
    }
-   if = { limit = { sed_pm_upgrade_49_eligible = yes var:sed_pm_upgrade_score < { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy } }
+   if = { limit = { sed_pm_upgrade_49_eligible = yes var:sed_pm_upgrade_score < { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 49 }
    }
-   if = { limit = { sed_pm_upgrade_50_eligible = yes var:sed_pm_upgrade_score < { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy } }
+   if = { limit = { sed_pm_upgrade_50_eligible = yes var:sed_pm_upgrade_score < { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 500 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 50 }
    }
-   if = { limit = { sed_pm_upgrade_51_eligible = yes var:sed_pm_upgrade_score < { value = 50 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 50 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy } }
+   if = { limit = { sed_pm_upgrade_51_eligible = yes var:sed_pm_upgrade_score < { value = 50 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 250 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 50 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 250 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 51 }
    }
-   if = { limit = { sed_pm_upgrade_52_eligible = yes var:sed_pm_upgrade_score < { value = 225 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 225 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy } }
+   if = { limit = { sed_pm_upgrade_52_eligible = yes var:sed_pm_upgrade_score < { value = 225 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 225 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1500 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 52 }
    }
-   if = { limit = { sed_pm_upgrade_53_eligible = yes var:sed_pm_upgrade_score < { value = 175 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy } }
-    set_variable = { name = sed_pm_upgrade_score value = { value = 175 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy } }
+   if = { limit = { sed_pm_upgrade_53_eligible = yes var:sed_pm_upgrade_score < { value = 175 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1250 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy multiply = var:sed_investment_wage_unit } } } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 175 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy
+     if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+      subtract = { value = 1250 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy multiply = var:sed_investment_wage_unit } } } }
     set_variable = { name = sed_pm_upgrade_choice value = 53 }
    }
   }

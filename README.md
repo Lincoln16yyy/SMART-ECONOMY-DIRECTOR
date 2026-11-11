@@ -1,5 +1,9 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.18, a pontuação de modernização e de recuperação de PMs desconta a
+folha salarial da mudança. Um par materialmente positivo pode ser descartado
+quando a troca adiciona emprego ponderado.
+
 Na 0.7.17, a decisão de oferta desconta a folha salarial observada nos prédios
 saudáveis. A elegibilidade, a preferência entre fornecedores e o plano usam o
 retorno após salários, com a margem material como referência de reserva.

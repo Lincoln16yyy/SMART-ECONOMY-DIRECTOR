@@ -106,6 +106,19 @@ class ModernizationTests(unittest.TestCase):
         self.c.run('sed_modernize_existing_industry')
         self.assertEqual(self.c.production_method_changes, [])
 
+    def test_observed_wage_unit_reduces_the_upgrade_score(self):
+        self.target['variables'].update(sed_investment_wage_known=1, sed_investment_wage_unit=0.2)
+        self.c.run('sed_modernize_existing_industry')
+        self.assertIn('pm_saw_mills', self.producer['production_methods'])
+        # Scenario gain 200 and 250 extra wage-weighted jobs per level.
+        self.assertAlmostEqual(self.target['variables']['sed_pm_upgrade_score'], 150)
+
+    def test_wage_cost_can_block_a_materially_positive_upgrade(self):
+        self.target['variables'].update(sed_investment_wage_known=1, sed_investment_wage_unit=1)
+        self.c.run('sed_modernize_existing_industry')
+        self.assertEqual(self.c.production_method_changes, [])
+        self.assertEqual(self.target['variables']['sed_pm_upgrade_score'], 0)
+
     def test_coordinator_suspends_external_construction_after_the_upgrade(self):
         c = self.c
         c.variables.update(advisor_enabled=True, advisor_auto_construction_enabled=1)

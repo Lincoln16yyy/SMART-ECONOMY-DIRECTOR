@@ -2117,3 +2117,36 @@ localização), aderência da unidade ao salário pago por profissão, possívei
 bloqueios de obras viáveis por conservadorismo e comportamento em save/reload.
 Instalada a 0.7.17 com jogo fechado, 14 arquivos conferidos, ordem preservada e
 backup `mod_before_0.7.17_20261111_184820_865266`.
+
+## 2026-11-11 — 0.7.18: salários na pontuação de PMs
+
+Objetivo: a modernização ainda escolhia o candidato nacional só pelo ganho
+material, mesmo com a unidade salarial da 0.7.17 disponível por estado.
+
+Código:
+- `tools/production_methods.py` lê `data/employment_profiles.json` e calcula
+  `wage_delta` = `weighted_jobs` do método alvo menos o atual, por par estático
+  de modernização e de recuperação.
+- Na pontuação (`sed_pm_upgrade_score`), o ganho material continua escalado por
+  nível e ocupação; quando a troca adiciona emprego ponderado e
+  `sed_investment_wage_known = 1`, subtrai-se
+  `wage_delta × nível × ocupação × var:sed_investment_wage_unit`.
+- A seleção nacional já exige pontuação acima de zero, então um par
+  materialmente positivo pode ser descartado sem consumir tentativa.
+- Nada mais mudou: filtros de pares, ocupação, insumos, tecnologia, fila,
+  pausa, limites mensais, cooldown e reservas ficaram iguais.
+
+Evidência — bloco de valor à direita de comparação é forma vanilla usada em
+`common/diplomatic_actions/30_fund_lobby.txt` (`net_fixed_income >= { ... }`).
+As variáveis salariais vêm da 0.7.17, em escopo de estado.
+
+Teste sintético — 361 aprovados; as duas regressões novas cobrem a redução da
+pontuação (200 − 250 × 0,2 = 150) e o bloqueio por unidade alta.
+
+Estático — geração consistente, validação local 1.15, Tiger 1.19.0 com os
+mesmos três `unknown-field` de diário e 912 avisos.
+
+Não verificado: ordem dos pares segue material, ganho real da troca, efeito em
+ocupação futura e calibragem da unidade. Instalada a 0.7.18 com jogo fechado,
+14 arquivos conferidos, ordem preservada e backup
+`mod_before_0.7.18_20261111_190422_253541`.

@@ -1271,3 +1271,11 @@ elegibilidade, preferência entre variantes e `sed_plan_<ação>_margin`. Sem
 amostra saudável, `sed_investment_wage_known = 0` mantém o comportamento
 anterior. Coeficientes em `data/employment_profiles.json`. Comportamento real,
 aderência ao salário pago e calibragem seguem NÃO VERIFICADO.
+
+## 0.7.18 — Salários na pontuação de modernização e recuperação
+
+`wage_delta` (diferença de `weighted_jobs` entre alvo e atual) entra na
+pontuação nacional de modernização e recuperação quando o estado tem unidade
+salarial observada. Um par materialmente positivo pode ser descartado por
+pontuação zero. Filtros de pares, guardas operacionais, cooldown e reservas
+permanecem iguais; a configuração inicial das fundações segue material.

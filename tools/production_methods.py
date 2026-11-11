@@ -10,6 +10,7 @@ except ImportError:
 DATA = Path(__file__).resolve().parents[1] / 'data'
 PROFILES = json.loads((DATA / 'founding_production_methods.json').read_text())
 ECONOMICS = json.loads((DATA / 'founding_method_economics.json').read_text())
+EMPLOYMENT = json.loads((DATA / 'employment_profiles.json').read_text())
 COUNTRY_VARIABLES = ['sed_pm_upgrade_status']
 
 
@@ -24,6 +25,11 @@ def material_margin(profile):
     revenue = sum(amount * prices[good] for good, amount in profile['outputs'].items())
     inputs = sum(amount * prices[good] for good, amount in profile['inputs'].items())
     return revenue * 0.75 - inputs * 1.25
+
+
+def weighted_jobs(building, method):
+    """Wage-weighted employment per level of one vanilla production method."""
+    return EMPLOYMENT['buildings'].get(building, {}).get(method, {}).get('weighted_jobs', 0)
 
 
 def configurations(building, good):
@@ -161,7 +167,8 @@ def upgrades(targets, variants):
                     if (after['outputs'].get(good, 0) > before['outputs'].get(good, 0)
                             and after['workers'] <= before['workers'] and preserves_outputs
                             and material_margin(after) > 0 and gain > 0):
-                        result.append((good, building, current, target, gain))
+                        wage_delta = weighted_jobs(building, target) - weighted_jobs(building, current)
+                        result.append((good, building, current, target, gain, wage_delta))
     return result
 
 
@@ -187,7 +194,8 @@ def recoveries(targets, variants):
                             and no_new_inputs and preserves_outputs):
                         saving = sum((amount - after['inputs'].get(input_good, 0)) * ECONOMICS['prices'][input_good]
                                      for input_good, amount in before['inputs'].items())
-                        result.append((good, building, current, target, saving))
+                        wage_delta = weighted_jobs(building, target) - weighted_jobs(building, current)
+                        result.append((good, building, current, target, saving, wage_delta))
     return result
 
 
@@ -231,7 +239,7 @@ def upgrade_triggers(targets, variants, recovery=False):
     prefix = 'sed_pm_recovery' if recovery else 'sed_pm_upgrade'
     if recovery:
         result = []
-    for index, (good, building, current, target, gain) in enumerate(pairs, 1):
+    for index, (good, building, current, target, gain, wage_delta) in enumerate(pairs, 1):
         cooldown = 'sed_pm_cooldown_' + building.removeprefix('building_')
         technologies = ' '.join(f'has_technology_researched = {tech}'
                                 for tech in ECONOMICS['buildings'][building][target]['technologies'])
@@ -291,8 +299,14 @@ def upgrade_effects(targets, variants, recovery=False):
    set_variable = { name = sed_pm_upgrade_score value = 0 }
    set_variable = { name = sed_pm_upgrade_choice value = 0 }
 ''']
-    for index, (good, building, current, target, gain) in enumerate(pairs, 1):
-        score = f'{{ value = {gain:g} multiply = b:{building}.level multiply = b:{building}.occupancy }}'
+    for index, (good, building, current, target, gain, wage_delta) in enumerate(pairs, 1):
+        score = (f'{{ value = {gain:g} multiply = b:{building}.level multiply = b:{building}.occupancy')
+        if wage_delta > 0:
+            # Only a change that adds wage-weighted employment needs the observed unit.
+            score += (f'\n     if = {{ limit = {{ has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }}\n'
+                      f'      subtract = {{ value = {wage_delta:g} multiply = b:{building}.level'
+                      f' multiply = b:{building}.occupancy multiply = var:sed_investment_wage_unit }} }}')
+        score += ' }'
         result.append(f'''   if = {{ limit = {{ {prefix}_{index}_eligible = yes var:sed_pm_upgrade_score < {score} }}
     set_variable = {{ name = sed_pm_upgrade_score value = {score} }}
     set_variable = {{ name = sed_pm_upgrade_choice value = {index} }}
@@ -303,7 +317,7 @@ def upgrade_effects(targets, variants, recovery=False):
    order_by = { value = var:sed_pm_upgrade_score }
    max = 1 check_range_bounds = no
 ''')
-    for index, (good, building, current, target, gain) in enumerate(pairs, 1):
+    for index, (good, building, current, target, gain, wage_delta) in enumerate(pairs, 1):
         branch = 'if' if index == 1 else 'else_if'
         cooldown = 'sed_pm_cooldown_' + building.removeprefix('building_')
         reserves = '\n'.join('     ' + reserve_input(input_good,
