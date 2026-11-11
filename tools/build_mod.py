@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.9'
+VERSION = '0.7.10'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -88,8 +88,6 @@ def supplier_output_values():
     result = []
     for item in SUPPLY_TARGETS:
         good = item['good']
-        if good not in INPUT_DEPENDENCIES:
-            continue
         suppliers = variants(item)
         for supplier in suppliers:
             building = supplier['building']
@@ -98,6 +96,8 @@ def supplier_output_values():
             for method, amount in SUPPLIER_OUTPUT_PROFILES[building].items():
                 result.append(f' if = {{ limit = {{ b:{building} = {{ has_active_production_method = {method} }} }} add = {amount} }}')
             result.append(' min = 0\n}')
+        if good not in INPUT_DEPENDENCIES:
+            continue
         result.append(f'sed_supplier_{good}_output = {{\n value = 0')
         for supplier in suppliers:
             name = variant_id(supplier)
@@ -453,8 +453,9 @@ sed_refresh_supply_candidates = {
     result.append('''sed_auto_apply_monthly = {
  sed_configure_founded_industries = yes
  sed_refresh_national_plan = yes
+ sed_recover_existing_industry = yes
  sed_modernize_existing_industry = yes
- if = { limit = { sed_pm_upgrade_month_limit_reached = yes has_variable = sed_pm_upgrade_status var:sed_pm_upgrade_status = 1 }
+ if = { limit = { sed_pm_upgrade_month_limit_reached = yes has_variable = sed_pm_upgrade_status OR = { var:sed_pm_upgrade_status = 1 var:sed_pm_upgrade_status = 3 } }
   sed_refresh_national_plan = yes
  }
  sed_apply_fiscal_policy = yes
@@ -481,6 +482,7 @@ sed_refresh_supply_candidates = {
  if = { limit = { sed_pm_upgrade_month_limit_reached = yes has_variable = sed_pm_upgrade_status }
   set_variable = { name = sed_auto_action_status value = 24 }
   if = { limit = { var:sed_pm_upgrade_status = 1 } set_variable = { name = sed_auto_action_status value = 23 } }
+  else_if = { limit = { var:sed_pm_upgrade_status = 3 } set_variable = { name = sed_auto_action_status value = 25 } }
  }
  # Store the actual result after either direct execution or delegation.
  set_variable = { name = sed_auto_review_status value = var:sed_auto_action_status }
@@ -688,7 +690,7 @@ def widget():
     for policy in ('tax', 'wage'):
         body += textbox(f'sed_{policy}_last_command', f'sed_{policy}_last_command_visible_sgui')
     body += textbox('sed_auto_last_review', 'sed_auto_last_review_visible_sgui')
-    for status in ('success', 'no_action', 'default', 'queue', 'paused', 'competing', 'safety', 'unconfirmed', 'month_limit', 'fiscal', 'delegated', 'unsupported', 'waiting', 'reserve_queue', 'budget', 'modernized', 'pm_unconfirmed'):
+    for status in ('success', 'no_action', 'default', 'queue', 'paused', 'competing', 'safety', 'unconfirmed', 'month_limit', 'fiscal', 'delegated', 'unsupported', 'waiting', 'reserve_queue', 'budget', 'modernized', 'pm_unconfirmed', 'pm_recovered'):
         body += textbox(f'sed_auto_status_{status}', f'sed_auto_status_{status}_visible_sgui')
     body += 'flowcontainer = { direction = horizontal spacing = 12\n'
     body += button('sed_refresh', 'sed_refresh_sgui', width=244)
@@ -1290,7 +1292,7 @@ sed_update_growth = {
     state_cleanup = '\n'.join('  remove_variable = ' + name for name in planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES + production_methods.state_variables(SUPPLY_TARGETS))
     script = script.replace(' # Schema and automatic attempt month',
                             ' every_scope_state = {\n' + state_cleanup + '\n }\n # Schema and automatic attempt month', 1)
-    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, INPUT_DEPENDENCIES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + input_forecast.effects() + input_priority_effect() + labor.effects() + construction_budget.effects(founding_projects()) + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + planning.military_wage_policy_effects() + production_methods.effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants) + coordination.effects()
+    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, INPUT_DEPENDENCIES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + input_forecast.effects() + input_priority_effect() + labor.effects() + construction_budget.effects(founding_projects()) + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + planning.military_wage_policy_effects() + production_methods.effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants, recovery=True) + coordination.effects()
 
 
 def scripted_guis():
@@ -1496,7 +1498,7 @@ sed_auto_status_safety_visible_sgui = { scope = country is_shown = { has_variabl
 sed_auto_status_unconfirmed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 15 } }
 sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 16 } }
 '''
-    for status, number in [('modernized', 23), ('pm_unconfirmed', 24)]:
+    for status, number in [('modernized', 23), ('pm_unconfirmed', 24), ('pm_recovered', 25)]:
         result += f'sed_auto_status_{status}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = {number} }} }}\n'
     base = 'is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic'
     for name, condition in {
@@ -1831,7 +1833,7 @@ sed_auto_executor_safe = {
     result.append('sed_direct_supply_priority_exists = {\n OR = {\n' + priorities + '\n }\n}')
     options = '\n'.join(f'  has_variable = {option}' for name, option, pt, en in COMPETING_BUILDERS)
     result.append('sed_competing_builder_configured = {\n OR = {\n' + options + '\n }\n}')
-    return '\n'.join(result).rstrip() + '\n' + planning.triggers() + construction_budget.triggers() + input_forecast.triggers() + coordination.triggers() + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants)
+    return '\n'.join(result).rstrip() + '\n' + planning.triggers() + construction_budget.triggers() + input_forecast.triggers() + coordination.triggers() + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants) + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants, recovery=True)
 
 
 def value(name, fmt='1'):
@@ -2054,7 +2056,8 @@ def localization(language):
         'sed_coord_advisor_policy_2': ('Orientação do Advisor aplicada para padrão de vida, com orçamento equilibrado e opção de endividamento desabilitada. Bens essenciais lideram o plano.', 'Advisor guidance applied for standard of living, balanced budget and borrowing disabled. Essential goods lead the plan.'),
         'sed_coord_advisor_policy_3': ('Orientação do Advisor aplicada para retorno ao tesouro e preservação das reservas, com opção de endividamento desabilitada. A dívida atingiu ao menos 50% do crédito.', 'Advisor guidance applied for treasury return and reserve protection, with borrowing disabled. Debt reached at least 50% of credit.'),
     })
-    pairs['sed_coord_executor_13'] = ('Modernização avaliada neste mês. A próxima revisão mensal reavalia os investimentos.', 'Modernization reviewed this month. The next monthly review reassesses investment.')
+    pairs['sed_coord_executor_13'] = ('Método de produção reavaliado neste mês. A próxima revisão mensal reavalia os investimentos.', 'Production method reviewed this month. The next monthly review reassesses investment.')
+    pairs['sed_auto_status_pm_recovered'] = ('A revisão aplicou um método para reduzir a dependência de insumos em falta.', 'The review applied a method to reduce dependence on scarce inputs.')
     pairs['sed_auto_status_modernized'] = ('A revisão aplicou uma modernização de método de produção.', 'The review applied a production-method upgrade.')
     pairs['sed_auto_status_pm_unconfirmed'] = ('A troca de método avaliada nesta revisão aguarda confirmação.', 'The method change evaluated in this review awaits confirmation.')
     pairs['sed_fiscal_5'] = (

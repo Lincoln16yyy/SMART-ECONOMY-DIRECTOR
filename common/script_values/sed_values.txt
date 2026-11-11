@@ -4109,3 +4109,50 @@ sed_supplier_tools_output = {
  value = 0
  if = { limit = { sed_tools_tooling_workshop_eligible = yes } add = sed_supplier_tooling_workshop_output }
 }
+sed_supplier_food_industry_output = {
+ value = 0
+ if = { limit = { b:building_food_industry = { has_active_production_method = pm_bakery } } add = 45 }
+ if = { limit = { b:building_food_industry = { has_active_production_method = pm_sweeteners } } add = 65 }
+ if = { limit = { b:building_food_industry = { has_active_production_method = pm_baking_powder } } add = 120 }
+ if = { limit = { b:building_food_industry = { has_active_production_method = pm_cannery } } add = 30 }
+ if = { limit = { b:building_food_industry = { has_active_production_method = pm_cannery_fish } } add = 30 }
+ if = { limit = { b:building_food_industry = { has_active_production_method = pm_vacuum_canning } } add = 60 }
+ if = { limit = { b:building_food_industry = { has_active_production_method = pm_vacuum_canning_principle_3 } } add = 70 }
+ if = { limit = { b:building_food_industry = { has_active_production_method = pm_pot_stills } } add = -25 }
+ if = { limit = { b:building_food_industry = { has_active_production_method = pm_patent_stills } } add = -40 }
+ min = 0
+}
+sed_supplier_textile_mill_output = {
+ value = 0
+ if = { limit = { b:building_textile_mill = { has_active_production_method = pm_handsewn_clothes } } add = 45 }
+ if = { limit = { b:building_textile_mill = { has_active_production_method = pm_dye_workshops } } add = 60 }
+ if = { limit = { b:building_textile_mill = { has_active_production_method = pm_sewing_machines } } add = 100 }
+ if = { limit = { b:building_textile_mill = { has_active_production_method = pm_electric_sewing_machines } } add = 140 }
+ if = { limit = { b:building_textile_mill = { has_active_production_method = pm_craftsman_sewing } } add = -30 }
+ if = { limit = { b:building_textile_mill = { has_active_production_method = pm_elastics } } add = -70 }
+ min = 0
+}
+sed_supplier_arms_industry_output = {
+ value = 0
+ if = { limit = { b:building_arms_industry = { has_active_production_method = pm_muskets } } add = 30 }
+ if = { limit = { b:building_arms_industry = { has_active_production_method = pm_rifles } } add = 50 }
+ if = { limit = { b:building_arms_industry = { has_active_production_method = pm_repeaters } } add = 70 }
+ if = { limit = { b:building_arms_industry = { has_active_production_method = pm_bolt_action_rifles } } add = 100 }
+ min = 0
+}
+sed_supplier_artillery_foundry_output = {
+ value = 0
+ if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_cannons } } add = 25 }
+ if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_bronze_cannons } } add = 25 }
+ if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_smoothbores } } add = 45 }
+ if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_bronze_smoothbores } } add = 45 }
+ if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_breech_loaders } } add = 65 }
+ if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_recoiled_barrels } } add = 90 }
+ min = 0
+}
+sed_supplier_munition_plant_output = {
+ value = 0
+ if = { limit = { b:building_munition_plant = { has_active_production_method = pm_percussion_caps } } add = 50 }
+ if = { limit = { b:building_munition_plant = { has_active_production_method = pm_explosive_shells } } add = 90 }
+ min = 0
+}

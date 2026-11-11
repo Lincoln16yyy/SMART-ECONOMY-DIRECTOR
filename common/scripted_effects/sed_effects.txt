@@ -3301,8 +3301,9 @@ sed_schedule_auto_retry = {
 sed_auto_apply_monthly = {
  sed_configure_founded_industries = yes
  sed_refresh_national_plan = yes
+ sed_recover_existing_industry = yes
  sed_modernize_existing_industry = yes
- if = { limit = { sed_pm_upgrade_month_limit_reached = yes has_variable = sed_pm_upgrade_status var:sed_pm_upgrade_status = 1 }
+ if = { limit = { sed_pm_upgrade_month_limit_reached = yes has_variable = sed_pm_upgrade_status OR = { var:sed_pm_upgrade_status = 1 var:sed_pm_upgrade_status = 3 } }
   sed_refresh_national_plan = yes
  }
  sed_apply_fiscal_policy = yes
@@ -3329,6 +3330,7 @@ sed_auto_apply_monthly = {
  if = { limit = { sed_pm_upgrade_month_limit_reached = yes has_variable = sed_pm_upgrade_status }
   set_variable = { name = sed_auto_action_status value = 24 }
   if = { limit = { var:sed_pm_upgrade_status = 1 } set_variable = { name = sed_auto_action_status value = 23 } }
+  else_if = { limit = { var:sed_pm_upgrade_status = 3 } set_variable = { name = sed_auto_action_status value = 25 } }
  }
  # Store the actual result after either direct execution or delegation.
  set_variable = { name = sed_auto_review_status value = var:sed_auto_action_status }
@@ -8919,6 +8921,772 @@ sed_modernize_existing_industry = {
     if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_bronze_smoothbores } }
      set_variable = { name = sed_pm_cooldown_artillery_foundry value = { value = sed_live_month_key add = 3 } }
      owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+  }
+ }
+}
+sed_recover_existing_industry = {
+ if = { limit = {
+  is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic
+  NOT = { has_variable = sed_mode_manual }
+  NOT = { has_variable = sed_mode_assisted }
+  NOT = { sed_pm_upgrade_month_limit_reached = yes }
+  NOT = { sed_auto_month_limit_reached = yes }
+  NOT = { has_variable = aroai_autobuild }
+  NOT = { has_variable = advisor_pm_balance_enabled }
+  NOT = { has_variable = advisor_labor_auto_enabled }
+  OR = { has_variable = sed_coord_active NOT = { sed_competing_builder_configured = yes } }
+ }
+  sed_begin_pm_input_reservations = yes
+  every_scope_state = {
+   set_variable = { name = sed_pm_upgrade_score value = 0 }
+   set_variable = { name = sed_pm_upgrade_choice value = 0 }
+
+   if = { limit = { sed_pm_recovery_1_eligible = yes var:sed_pm_upgrade_score < { value = 200 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 200 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 1 }
+   }
+   if = { limit = { sed_pm_recovery_2_eligible = yes var:sed_pm_upgrade_score < { value = 550 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 550 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 2 }
+   }
+   if = { limit = { sed_pm_recovery_3_eligible = yes var:sed_pm_upgrade_score < { value = 350 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 350 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 3 }
+   }
+   if = { limit = { sed_pm_recovery_4_eligible = yes var:sed_pm_upgrade_score < { value = 500 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 500 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 4 }
+   }
+   if = { limit = { sed_pm_recovery_5_eligible = yes var:sed_pm_upgrade_score < { value = 850 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 850 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 5 }
+   }
+   if = { limit = { sed_pm_recovery_6_eligible = yes var:sed_pm_upgrade_score < { value = 600 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 600 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 6 }
+   }
+   if = { limit = { sed_pm_recovery_7_eligible = yes var:sed_pm_upgrade_score < { value = 600 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 600 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 7 }
+   }
+   if = { limit = { sed_pm_recovery_8_eligible = yes var:sed_pm_upgrade_score < { value = 400 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 400 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 8 }
+   }
+   if = { limit = { sed_pm_recovery_9_eligible = yes var:sed_pm_upgrade_score < { value = 200 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 200 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 9 }
+   }
+   if = { limit = { sed_pm_recovery_10_eligible = yes var:sed_pm_upgrade_score < { value = 100 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 100 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 10 }
+   }
+   if = { limit = { sed_pm_recovery_11_eligible = yes var:sed_pm_upgrade_score < { value = 150 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 150 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 11 }
+   }
+   if = { limit = { sed_pm_recovery_12_eligible = yes var:sed_pm_upgrade_score < { value = 300 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 300 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 12 }
+   }
+   if = { limit = { sed_pm_recovery_13_eligible = yes var:sed_pm_upgrade_score < { value = 450 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 450 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 13 }
+   }
+   if = { limit = { sed_pm_recovery_14_eligible = yes var:sed_pm_upgrade_score < { value = 150 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 150 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 14 }
+   }
+   if = { limit = { sed_pm_recovery_15_eligible = yes var:sed_pm_upgrade_score < { value = 300 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 300 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 15 }
+   }
+   if = { limit = { sed_pm_recovery_16_eligible = yes var:sed_pm_upgrade_score < { value = 450 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 450 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 16 }
+   }
+   if = { limit = { sed_pm_recovery_17_eligible = yes var:sed_pm_upgrade_score < { value = 200 multiply = b:building_rice_farm.level multiply = b:building_rice_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 200 multiply = b:building_rice_farm.level multiply = b:building_rice_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 17 }
+   }
+   if = { limit = { sed_pm_recovery_18_eligible = yes var:sed_pm_upgrade_score < { value = 300 multiply = b:building_rice_farm.level multiply = b:building_rice_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 300 multiply = b:building_rice_farm.level multiply = b:building_rice_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 18 }
+   }
+   if = { limit = { sed_pm_recovery_19_eligible = yes var:sed_pm_upgrade_score < { value = 600 multiply = b:building_rice_farm.level multiply = b:building_rice_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 600 multiply = b:building_rice_farm.level multiply = b:building_rice_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 19 }
+   }
+   if = { limit = { sed_pm_recovery_20_eligible = yes var:sed_pm_upgrade_score < { value = 900 multiply = b:building_rice_farm.level multiply = b:building_rice_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 900 multiply = b:building_rice_farm.level multiply = b:building_rice_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 20 }
+   }
+   if = { limit = { sed_pm_recovery_21_eligible = yes var:sed_pm_upgrade_score < { value = 150 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 150 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 21 }
+   }
+   if = { limit = { sed_pm_recovery_22_eligible = yes var:sed_pm_upgrade_score < { value = 300 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 300 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 22 }
+   }
+   if = { limit = { sed_pm_recovery_23_eligible = yes var:sed_pm_upgrade_score < { value = 450 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 450 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 23 }
+   }
+   if = { limit = { sed_pm_recovery_24_eligible = yes var:sed_pm_upgrade_score < { value = 150 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 150 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 24 }
+   }
+   if = { limit = { sed_pm_recovery_25_eligible = yes var:sed_pm_upgrade_score < { value = 300 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 300 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 25 }
+   }
+   if = { limit = { sed_pm_recovery_26_eligible = yes var:sed_pm_upgrade_score < { value = 450 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 450 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 26 }
+   }
+   if = { limit = { sed_pm_recovery_27_eligible = yes var:sed_pm_upgrade_score < { value = 800 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 800 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 27 }
+   }
+   if = { limit = { sed_pm_recovery_28_eligible = yes var:sed_pm_upgrade_score < { value = 1000 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 1000 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 28 }
+   }
+   if = { limit = { sed_pm_recovery_29_eligible = yes var:sed_pm_upgrade_score < { value = 450 multiply = b:building_food_industry.level multiply = b:building_food_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 450 multiply = b:building_food_industry.level multiply = b:building_food_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 29 }
+   }
+   if = { limit = { sed_pm_recovery_30_eligible = yes var:sed_pm_upgrade_score < { value = 1700 multiply = b:building_food_industry.level multiply = b:building_food_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 1700 multiply = b:building_food_industry.level multiply = b:building_food_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 30 }
+   }
+   if = { limit = { sed_pm_recovery_31_eligible = yes var:sed_pm_upgrade_score < { value = 200 multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 200 multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 31 }
+   }
+   if = { limit = { sed_pm_recovery_32_eligible = yes var:sed_pm_upgrade_score < { value = 1000 multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 1000 multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 32 }
+   }
+   if = { limit = { sed_pm_recovery_33_eligible = yes var:sed_pm_upgrade_score < { value = 800 multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 800 multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 33 }
+   }
+   if = { limit = { sed_pm_recovery_34_eligible = yes var:sed_pm_upgrade_score < { value = 1900 multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 1900 multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 34 }
+   }
+   if = { limit = { sed_pm_recovery_35_eligible = yes var:sed_pm_upgrade_score < { value = 1700 multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 1700 multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 35 }
+   }
+   if = { limit = { sed_pm_recovery_36_eligible = yes var:sed_pm_upgrade_score < { value = 1500 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 1500 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 36 }
+   }
+   if = { limit = { sed_pm_recovery_37_eligible = yes var:sed_pm_upgrade_score < { value = 800 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 800 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 37 }
+   }
+  }
+  ordered_scope_state = {
+   limit = { var:sed_pm_upgrade_score > 0 }
+   order_by = { value = var:sed_pm_upgrade_score }
+   max = 1 check_range_bounds = no
+
+   if = { limit = { var:sed_pm_upgrade_choice = 1 sed_pm_recovery_1_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_logging_camp.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_logging_camp production_method = pm_simple_forestry }
+
+    if = { limit = { b:building_logging_camp = { has_active_production_method = pm_simple_forestry } }
+     set_variable = { name = sed_pm_cooldown_logging_camp value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 2 sed_pm_recovery_2_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_logging_camp.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_logging_camp production_method = pm_simple_forestry }
+
+    if = { limit = { b:building_logging_camp = { has_active_production_method = pm_simple_forestry } }
+     set_variable = { name = sed_pm_cooldown_logging_camp value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 3 sed_pm_recovery_3_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_logging_camp.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_logging_camp production_method = pm_saw_mills }
+
+    if = { limit = { b:building_logging_camp = { has_active_production_method = pm_saw_mills } }
+     set_variable = { name = sed_pm_cooldown_logging_camp value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 4 sed_pm_recovery_4_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_iron_mine.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_iron_mine production_method = pm_picks_and_shovels_building_iron_mine }
+
+    if = { limit = { b:building_iron_mine = { has_active_production_method = pm_picks_and_shovels_building_iron_mine } }
+     set_variable = { name = sed_pm_cooldown_iron_mine value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 5 sed_pm_recovery_5_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_iron_mine.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_iron_mine production_method = pm_picks_and_shovels_building_iron_mine }
+
+    if = { limit = { b:building_iron_mine = { has_active_production_method = pm_picks_and_shovels_building_iron_mine } }
+     set_variable = { name = sed_pm_cooldown_iron_mine value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 6 sed_pm_recovery_6_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_iron_mine.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_iron_mine production_method = pm_picks_and_shovels_building_iron_mine }
+
+    if = { limit = { b:building_iron_mine = { has_active_production_method = pm_picks_and_shovels_building_iron_mine } }
+     set_variable = { name = sed_pm_cooldown_iron_mine value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 7 sed_pm_recovery_7_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_coal_mine.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_coal_mine production_method = pm_picks_and_shovels_building_coal_mine }
+
+    if = { limit = { b:building_coal_mine = { has_active_production_method = pm_picks_and_shovels_building_coal_mine } }
+     set_variable = { name = sed_pm_cooldown_coal_mine value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 8 sed_pm_recovery_8_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_coal_mine.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_coal_mine production_method = pm_atmospheric_engine_pump_building_coal_mine }
+
+    if = { limit = { b:building_coal_mine = { has_active_production_method = pm_atmospheric_engine_pump_building_coal_mine } }
+     set_variable = { name = sed_pm_cooldown_coal_mine value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 9 sed_pm_recovery_9_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_coal_mine.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_coal_mine production_method = pm_condensing_engine_pump_building_coal_mine }
+
+    if = { limit = { b:building_coal_mine = { has_active_production_method = pm_condensing_engine_pump_building_coal_mine } }
+     set_variable = { name = sed_pm_cooldown_coal_mine value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 10 sed_pm_recovery_10_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_wheat_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_wheat_farm production_method = pm_simple_farming }
+
+    if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_simple_farming } }
+     set_variable = { name = sed_pm_cooldown_wheat_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 11 sed_pm_recovery_11_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_wheat_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_wheat_farm production_method = pm_simple_farming }
+
+    if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_simple_farming } }
+     set_variable = { name = sed_pm_cooldown_wheat_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 12 sed_pm_recovery_12_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_wheat_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_wheat_farm production_method = pm_simple_farming }
+
+    if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_simple_farming } }
+     set_variable = { name = sed_pm_cooldown_wheat_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 13 sed_pm_recovery_13_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_wheat_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_wheat_farm production_method = pm_simple_farming }
+
+    if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_simple_farming } }
+     set_variable = { name = sed_pm_cooldown_wheat_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 14 sed_pm_recovery_14_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_rye_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_rye_farm production_method = pm_simple_farming }
+
+    if = { limit = { b:building_rye_farm = { has_active_production_method = pm_simple_farming } }
+     set_variable = { name = sed_pm_cooldown_rye_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 15 sed_pm_recovery_15_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_rye_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_rye_farm production_method = pm_simple_farming }
+
+    if = { limit = { b:building_rye_farm = { has_active_production_method = pm_simple_farming } }
+     set_variable = { name = sed_pm_cooldown_rye_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 16 sed_pm_recovery_16_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_rye_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_rye_farm production_method = pm_simple_farming }
+
+    if = { limit = { b:building_rye_farm = { has_active_production_method = pm_simple_farming } }
+     set_variable = { name = sed_pm_cooldown_rye_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 17 sed_pm_recovery_17_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_rice_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_rice_farm production_method = pm_simple_farming_building_rice_farm }
+
+    if = { limit = { b:building_rice_farm = { has_active_production_method = pm_simple_farming_building_rice_farm } }
+     set_variable = { name = sed_pm_cooldown_rice_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 18 sed_pm_recovery_18_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_rice_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_rice_farm production_method = pm_simple_farming_building_rice_farm }
+
+    if = { limit = { b:building_rice_farm = { has_active_production_method = pm_simple_farming_building_rice_farm } }
+     set_variable = { name = sed_pm_cooldown_rice_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 19 sed_pm_recovery_19_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_rice_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_rice_farm production_method = pm_simple_farming_building_rice_farm }
+
+    if = { limit = { b:building_rice_farm = { has_active_production_method = pm_simple_farming_building_rice_farm } }
+     set_variable = { name = sed_pm_cooldown_rice_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 20 sed_pm_recovery_20_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_rice_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_rice_farm production_method = pm_simple_farming_building_rice_farm }
+
+    if = { limit = { b:building_rice_farm = { has_active_production_method = pm_simple_farming_building_rice_farm } }
+     set_variable = { name = sed_pm_cooldown_rice_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 21 sed_pm_recovery_21_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_maize_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_maize_farm production_method = pm_simple_farming }
+
+    if = { limit = { b:building_maize_farm = { has_active_production_method = pm_simple_farming } }
+     set_variable = { name = sed_pm_cooldown_maize_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 22 sed_pm_recovery_22_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_maize_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_maize_farm production_method = pm_simple_farming }
+
+    if = { limit = { b:building_maize_farm = { has_active_production_method = pm_simple_farming } }
+     set_variable = { name = sed_pm_cooldown_maize_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 23 sed_pm_recovery_23_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_maize_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_maize_farm production_method = pm_simple_farming }
+
+    if = { limit = { b:building_maize_farm = { has_active_production_method = pm_simple_farming } }
+     set_variable = { name = sed_pm_cooldown_maize_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 24 sed_pm_recovery_24_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_millet_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_millet_farm production_method = pm_simple_farming }
+
+    if = { limit = { b:building_millet_farm = { has_active_production_method = pm_simple_farming } }
+     set_variable = { name = sed_pm_cooldown_millet_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 25 sed_pm_recovery_25_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_millet_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_millet_farm production_method = pm_simple_farming }
+
+    if = { limit = { b:building_millet_farm = { has_active_production_method = pm_simple_farming } }
+     set_variable = { name = sed_pm_cooldown_millet_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 26 sed_pm_recovery_26_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_millet_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_millet_farm production_method = pm_simple_farming }
+
+    if = { limit = { b:building_millet_farm = { has_active_production_method = pm_simple_farming } }
+     set_variable = { name = sed_pm_cooldown_millet_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 27 sed_pm_recovery_27_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_tooling_workshop.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_tooling_workshop production_method = pm_crude_tools }
+
+    if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_crude_tools } }
+     set_variable = { name = sed_pm_cooldown_tooling_workshop value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 28 sed_pm_recovery_28_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_tooling_workshop.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_tooling_workshop production_method = pm_crude_tools }
+
+    if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_crude_tools } }
+     set_variable = { name = sed_pm_cooldown_tooling_workshop value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 29 sed_pm_recovery_29_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_food_industry.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_food_industry production_method = pm_bakery }
+
+    if = { limit = { b:building_food_industry = { has_active_production_method = pm_bakery } }
+     set_variable = { name = sed_pm_cooldown_food_industry value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 30 sed_pm_recovery_30_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_food_industry.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_food_industry production_method = pm_bakery }
+
+    if = { limit = { b:building_food_industry = { has_active_production_method = pm_bakery } }
+     set_variable = { name = sed_pm_cooldown_food_industry value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 31 sed_pm_recovery_31_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_textile_mill.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_textile_mill production_method = pm_handsewn_clothes }
+
+    if = { limit = { b:building_textile_mill = { has_active_production_method = pm_handsewn_clothes } }
+     set_variable = { name = sed_pm_cooldown_textile_mill value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 32 sed_pm_recovery_32_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_textile_mill.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_textile_mill production_method = pm_handsewn_clothes }
+
+    if = { limit = { b:building_textile_mill = { has_active_production_method = pm_handsewn_clothes } }
+     set_variable = { name = sed_pm_cooldown_textile_mill value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 33 sed_pm_recovery_33_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_textile_mill.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_textile_mill production_method = pm_dye_workshops }
+
+    if = { limit = { b:building_textile_mill = { has_active_production_method = pm_dye_workshops } }
+     set_variable = { name = sed_pm_cooldown_textile_mill value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 34 sed_pm_recovery_34_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_textile_mill.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_textile_mill production_method = pm_handsewn_clothes }
+
+    if = { limit = { b:building_textile_mill = { has_active_production_method = pm_handsewn_clothes } }
+     set_variable = { name = sed_pm_cooldown_textile_mill value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 35 sed_pm_recovery_35_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_textile_mill.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_textile_mill production_method = pm_dye_workshops }
+
+    if = { limit = { b:building_textile_mill = { has_active_production_method = pm_dye_workshops } }
+     set_variable = { name = sed_pm_cooldown_textile_mill value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 36 sed_pm_recovery_36_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_arms_industry.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_arms_industry production_method = pm_rifles }
+
+    if = { limit = { b:building_arms_industry = { has_active_production_method = pm_rifles } }
+     set_variable = { name = sed_pm_cooldown_arms_industry value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 37 sed_pm_recovery_37_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_arms_industry.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_arms_industry production_method = pm_repeaters }
+
+    if = { limit = { b:building_arms_industry = { has_active_production_method = pm_repeaters } }
+     set_variable = { name = sed_pm_cooldown_arms_industry value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
     }
     remove_variable = sed_pm_upgrade_levels
    }

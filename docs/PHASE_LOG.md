@@ -1896,3 +1896,25 @@ ativação, prioridade dos gerentes externos e coordenação. Gerador, validaç�
 estática, pacote e whitespace aprovados. Instalada com backup
 `mod_before_0.7.9_20261111_005011_104622`, conferindo os 14 arquivos.
 Campanha, qualificações e lucro real ainda exigem verificação/desenvolvimento.
+
+
+## 2026-11-11 — Recuperação de escassez por PMs (0.7.10)
+
+A revisão avalia métodos de menor dependência de insumos antes de modernizar.
+A recuperação elimina um insumo com escassez confirmada, evita novas entradas,
+preserva outros produtos e exige saída nominal estimada de pelo menos metade
+da anterior, considerando todos os PMs ativos conhecidos. A margem material
+a preços-base precisa ser positiva. Insumos que restariam após a troca também
+precisam estar sem escassez observada.
+
+A operação pode ocorrer em default, com expansão enfileirada e em estados não
+incorporados, compartilhando a tentativa mensal e reiniciando a observação
+antes de modernizar novamente. Pode reduzir a produção nominal. Os controles
+externos e marcas de ignorar continuam sendo respeitados.
+
+313 testes sintéticos aprovados. Regressões incluem recuperação pela entrada
+normal, escassez local, PMs secundários, piso de saída, expansão enfileirada,
+default, intervalo, falha de ativação e gerentes externos. Gerador, validação
+estática, pacote e whitespace aprovados. Instalada com backup
+`mod_before_0.7.10_20261111_011143_486381`, conferindo os 14 arquivos.
+Produção efetiva, lucro real, qualificações e campanha seguem pendentes.

@@ -153,6 +153,56 @@ def upgrades(targets, variants):
     return result
 
 
+def recoveries(targets, variants):
+    result = []
+    for item in targets:
+        good = item['good']
+        for variant in variants(item):
+            building = variant['building']
+            profiles = ECONOMICS['buildings'][building]
+            for current, before in profiles.items():
+                for target, after in profiles.items():
+                    output = after['outputs'].get(good, 0)
+                    removes_input = any(amount > 0 and after['inputs'].get(input_good, 0) == 0
+                                     for input_good, amount in before['inputs'].items())
+                    no_new_inputs = all(amount <= before['inputs'].get(input_good, 0)
+                                        for input_good, amount in after['inputs'].items())
+                    preserves_outputs = all(after['outputs'].get(other, 0) >= amount
+                                            for other, amount in before['outputs'].items() if other != good)
+                    if (current != target and output > 0
+                            and after['workers'] <= before['workers'] and material_margin(after) > 0
+                            and removes_input
+                            and no_new_inputs and preserves_outputs):
+                        saving = sum((amount - after['inputs'].get(input_good, 0)) * ECONOMICS['prices'][input_good]
+                                     for input_good, amount in before['inputs'].items())
+                        result.append((good, building, current, target, saving))
+    return result
+
+
+def actual_input_shortage(good):
+    if good in input_forecast.LOCAL_GOODS:
+        return f'sg:{good} ?= {{ state_goods_consumption > {{ value = state_goods_production min = 0 multiply = 2 }} }}'
+    return f'owner = {{ market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }} }}'
+
+
+def recovery_constraints(building, current, target, good):
+    before = ECONOMICS['buildings'][building][current]['inputs']
+    after = ECONOMICS['buildings'][building][target]['inputs']
+    removed = '\n'.join('  ' + actual_input_shortage(good) for good, amount in before.items()
+                        if amount > 0 and after.get(good, 0) == 0)
+    lost_output = max(0, ECONOMICS['buildings'][building][current]['outputs'].get(good, 0)
+                      - ECONOMICS['buildings'][building][target]['outputs'].get(good, 0))
+    output_value = 'sed_supplier_' + building.removeprefix('building_') + '_output'
+    result = [f' {output_value} > 0', f' {output_value} >= {lost_output * 2:g}', ' OR = {', removed, ' }']
+    for input_good in input_forecast.building_goods(building):
+        reduction = before.get(input_good, 0) - after.get(input_good, 0)
+        result.append(f''' NOT = {{
+  {input_forecast.amount_name(building, input_good)} > {reduction:g}
+  {actual_input_shortage(input_good)}
+ }}''')
+    return '\n'.join(result)
+
+
 def upgrade_inputs(building, current, target):
     profiles = ECONOMICS['buildings'][building]
     before, after = profiles[current]['inputs'], profiles[target]['inputs']
@@ -160,43 +210,58 @@ def upgrade_inputs(building, current, target):
             if amount > before.get(good, 0)}
 
 
-def upgrade_triggers(targets, variants):
+def upgrade_triggers(targets, variants, recovery=False):
     result = ['''sed_pm_upgrade_month_limit_reached = {
  has_variable = sed_pm_upgrade_last_attempt_month
  var:sed_pm_upgrade_last_attempt_month = sed_live_month_key
 }''']
-    for index, (good, building, current, target, gain) in enumerate(upgrades(targets, variants), 1):
+    pairs = recoveries(targets, variants) if recovery else upgrades(targets, variants)
+    prefix = 'sed_pm_recovery' if recovery else 'sed_pm_upgrade'
+    if recovery:
+        result = []
+    for index, (good, building, current, target, gain) in enumerate(pairs, 1):
         cooldown = 'sed_pm_cooldown_' + building.removeprefix('building_')
         technologies = ' '.join(f'has_technology_researched = {tech}'
                                 for tech in ECONOMICS['buildings'][building][target]['technologies'])
         inputs = '\n'.join(f''' sed_input_headroom_{input_good} >= {{
   value = {amount * 1.25:g} multiply = b:{building}.level
  }}''' for input_good, amount in upgrade_inputs(building, current, target).items())
-        result.append(f'''sed_pm_upgrade_{index}_eligible = {{
- sed_{good}_candidate_site = yes
- NOT = {{ has_variable = sed_{good}_found_pm_pending }}
- OR = {{ NOT = {{ has_variable = {cooldown} }} var:{cooldown} <= sed_live_month_key }}
- owner = {{
-  OR = {{ market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }}
+        cooldown_guard = '' if recovery else f' OR = {{ NOT = {{ has_variable = {cooldown} }} var:{cooldown} <= sed_live_month_key }}'
+        demand_guard = '' if recovery else f'''  OR = {{ market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }}
    has_variable = sed_input_priority_{good}
-  }}
+  }}'''
+        operation_guard = ('occupancy >= 0.5 building_has_goods_shortage = yes' if recovery
+                           else 'occupancy >= 0.9 has_failed_hires = no building_has_goods_shortage = no')
+        if recovery:
+            inputs = recovery_constraints(building, current, target, good)
+        site_guard = f'NOT = {{ has_variable = sed_{good}_ignored }}' if recovery else f'sed_{good}_candidate_site = yes'
+        queue_guard = '' if recovery else 'level_after_queued_constructions <= level'
+        result.append(f'''{prefix}_{index}_eligible = {{
+ {site_guard}
+ NOT = {{ has_variable = sed_{good}_found_pm_pending }}
+{cooldown_guard}
+ owner = {{
+{demand_guard}
   {technologies}
  }}
  has_building = {building}
  b:{building} = {{
-  level > 0 occupancy >= 0.9 has_failed_hires = no building_has_goods_shortage = no
-  level_after_queued_constructions <= level
+  level > 0 {operation_guard}
+  {queue_guard}
   has_active_production_method = {current}
  }}
  can_activate_production_method = {{ building_type = {building} production_method = {target} }}
 {inputs}
 }}''')
-    return '\n'.join(result) + '\n'
+    rendered = '\n'.join(result)
+    return '\n'.join(line.rstrip() for line in rendered.splitlines()) + '\n'
 
 
-def upgrade_effects(targets, variants):
-    pairs = upgrades(targets, variants)
-    result = ['''sed_modernize_existing_industry = {
+def upgrade_effects(targets, variants, recovery=False):
+    pairs = recoveries(targets, variants) if recovery else upgrades(targets, variants)
+    prefix = 'sed_pm_recovery' if recovery else 'sed_pm_upgrade'
+    effect_name = 'sed_recover_existing_industry' if recovery else 'sed_modernize_existing_industry'
+    result = ['''__EFFECT_NAME__ = {
  if = { limit = {
   is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic
   NOT = { has_variable = sed_mode_manual }
@@ -216,7 +281,7 @@ def upgrade_effects(targets, variants):
 ''']
     for index, (good, building, current, target, gain) in enumerate(pairs, 1):
         score = f'{{ value = {gain:g} multiply = b:{building}.level multiply = b:{building}.occupancy }}'
-        result.append(f'''   if = {{ limit = {{ sed_pm_upgrade_{index}_eligible = yes var:sed_pm_upgrade_score < {score} }}
+        result.append(f'''   if = {{ limit = {{ {prefix}_{index}_eligible = yes var:sed_pm_upgrade_score < {score} }}
     set_variable = {{ name = sed_pm_upgrade_score value = {score} }}
     set_variable = {{ name = sed_pm_upgrade_choice value = {index} }}
    }}''')
@@ -232,7 +297,7 @@ def upgrade_effects(targets, variants):
         reserves = '\n'.join('     ' + reserve_input(input_good,
                                 f'{{ value = {amount * 1.25:g} multiply = var:sed_pm_upgrade_levels }}')
                              for input_good, amount in upgrade_inputs(building, current, target).items())
-        result.append(f'''   {branch} = {{ limit = {{ var:sed_pm_upgrade_choice = {index} sed_pm_upgrade_{index}_eligible = yes }}
+        result.append(f'''   {branch} = {{ limit = {{ var:sed_pm_upgrade_choice = {index} {prefix}_{index}_eligible = yes }}
     set_variable = {{ name = sed_pm_upgrade_levels value = b:{building}.level }}
     owner = {{
      set_variable = {{ name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }}
@@ -244,8 +309,11 @@ def upgrade_effects(targets, variants):
 {reserves}
     if = {{ limit = {{ b:{building} = {{ has_active_production_method = {target} }} }}
      set_variable = {{ name = {cooldown} value = {{ value = sed_live_month_key add = 3 }} }}
-     owner = {{ set_variable = {{ name = sed_pm_upgrade_status value = 1 }} }}
+     owner = {{ set_variable = {{ name = sed_pm_upgrade_status value = {3 if recovery else 1} }} }}
     }}
     remove_variable = sed_pm_upgrade_levels
    }}''')
-    return '\n'.join(result) + '\n  }\n }\n}\n'
+    script = '\n'.join(result) + '\n  }\n }\n}\n'
+    if recovery:
+        script = script.replace('  NOT = { in_default = yes }\n', '')
+    return script.replace('__EFFECT_NAME__', effect_name)

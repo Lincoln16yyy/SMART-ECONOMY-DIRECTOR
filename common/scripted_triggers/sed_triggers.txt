@@ -4105,3 +4105,1679 @@ sed_pm_upgrade_50_eligible = {
   value = 6.25 multiply = b:building_artillery_foundry.level
  }
 }
+sed_pm_recovery_1_eligible = {
+ NOT = { has_variable = sed_wood_ignored }
+ NOT = { has_variable = sed_wood_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_logging_camp
+ b:building_logging_camp = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_saw_mills
+ }
+ can_activate_production_method = { building_type = building_logging_camp production_method = pm_simple_forestry }
+ sed_supplier_logging_camp_output > 0
+ sed_supplier_logging_camp_output >= 60
+ OR = {
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_logging_camp_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_logging_camp_electricity > 0
+  sg:electricity ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+ NOT = {
+  sed_input_logging_camp_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_logging_camp_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_logging_camp_tools > 5
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_logging_camp_transportation > 0
+  sg:transportation ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+}
+sed_pm_recovery_2_eligible = {
+ NOT = { has_variable = sed_wood_ignored }
+ NOT = { has_variable = sed_wood_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_logging_camp
+ b:building_logging_camp = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_electric_saw_mills
+ }
+ can_activate_production_method = { building_type = building_logging_camp production_method = pm_simple_forestry }
+ sed_supplier_logging_camp_output > 0
+ sed_supplier_logging_camp_output >= 140
+ OR = {
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+  sg:electricity ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+ NOT = {
+  sed_input_logging_camp_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_logging_camp_electricity > 5
+  sg:electricity ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+ NOT = {
+  sed_input_logging_camp_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_logging_camp_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_logging_camp_tools > 10
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_logging_camp_transportation > 0
+  sg:transportation ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+}
+sed_pm_recovery_3_eligible = {
+ NOT = { has_variable = sed_wood_ignored }
+ NOT = { has_variable = sed_wood_found_pm_pending }
+
+ owner = {
+
+  has_technology_researched = steelworking
+ }
+ has_building = building_logging_camp
+ b:building_logging_camp = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_electric_saw_mills
+ }
+ can_activate_production_method = { building_type = building_logging_camp production_method = pm_saw_mills }
+ sed_supplier_logging_camp_output > 0
+ sed_supplier_logging_camp_output >= 80
+ OR = {
+  sg:electricity ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+ NOT = {
+  sed_input_logging_camp_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_logging_camp_electricity > 5
+  sg:electricity ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+ NOT = {
+  sed_input_logging_camp_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_logging_camp_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_logging_camp_tools > 5
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_logging_camp_transportation > 0
+  sg:transportation ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+}
+sed_pm_recovery_4_eligible = {
+ NOT = { has_variable = sed_iron_ignored }
+ NOT = { has_variable = sed_iron_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_iron_mine
+ b:building_iron_mine = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_atmospheric_engine_pump_building_iron_mine
+ }
+ can_activate_production_method = { building_type = building_iron_mine production_method = pm_picks_and_shovels_building_iron_mine }
+ sed_supplier_iron_mine_output > 0
+ sed_supplier_iron_mine_output >= 40
+ OR = {
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_iron_mine_coal > 10
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_iron_mine_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_iron_mine_explosives > 0
+  owner = { market = { mg:explosives ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_iron_mine_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_iron_mine_tools > 5
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_iron_mine_transportation > 0
+  sg:transportation ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+}
+sed_pm_recovery_5_eligible = {
+ NOT = { has_variable = sed_iron_ignored }
+ NOT = { has_variable = sed_iron_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_iron_mine
+ b:building_iron_mine = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_condensing_engine_pump_building_iron_mine
+ }
+ can_activate_production_method = { building_type = building_iron_mine production_method = pm_picks_and_shovels_building_iron_mine }
+ sed_supplier_iron_mine_output > 0
+ sed_supplier_iron_mine_output >= 80
+ OR = {
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_iron_mine_coal > 15
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_iron_mine_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_iron_mine_explosives > 0
+  owner = { market = { mg:explosives ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_iron_mine_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_iron_mine_tools > 10
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_iron_mine_transportation > 0
+  sg:transportation ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+}
+sed_pm_recovery_6_eligible = {
+ NOT = { has_variable = sed_iron_ignored }
+ NOT = { has_variable = sed_iron_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_iron_mine
+ b:building_iron_mine = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_diesel_pump_building_iron_mine
+ }
+ can_activate_production_method = { building_type = building_iron_mine production_method = pm_picks_and_shovels_building_iron_mine }
+ sed_supplier_iron_mine_output > 0
+ sed_supplier_iron_mine_output >= 100
+ OR = {
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_iron_mine_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_iron_mine_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_iron_mine_explosives > 0
+  owner = { market = { mg:explosives ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_iron_mine_oil > 5
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_iron_mine_tools > 10
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_iron_mine_transportation > 0
+  sg:transportation ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+}
+sed_pm_recovery_7_eligible = {
+ NOT = { has_variable = sed_coal_ignored }
+ NOT = { has_variable = sed_coal_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_coal_mine
+ b:building_coal_mine = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_diesel_pump_building_coal_mine
+ }
+ can_activate_production_method = { building_type = building_coal_mine production_method = pm_picks_and_shovels_building_coal_mine }
+ sed_supplier_coal_mine_output > 0
+ sed_supplier_coal_mine_output >= 130
+ OR = {
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_coal_mine_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_coal_mine_explosives > 0
+  owner = { market = { mg:explosives ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_coal_mine_oil > 5
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_coal_mine_tools > 10
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_coal_mine_transportation > 0
+  sg:transportation ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+}
+sed_pm_recovery_8_eligible = {
+ NOT = { has_variable = sed_coal_ignored }
+ NOT = { has_variable = sed_coal_found_pm_pending }
+
+ owner = {
+
+  has_technology_researched = atmospheric_engine
+ }
+ has_building = building_coal_mine
+ b:building_coal_mine = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_diesel_pump_building_coal_mine
+ }
+ can_activate_production_method = { building_type = building_coal_mine production_method = pm_atmospheric_engine_pump_building_coal_mine }
+ sed_supplier_coal_mine_output > 0
+ sed_supplier_coal_mine_output >= 100
+ OR = {
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_coal_mine_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_coal_mine_explosives > 0
+  owner = { market = { mg:explosives ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_coal_mine_oil > 5
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_coal_mine_tools > 5
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_coal_mine_transportation > 0
+  sg:transportation ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+}
+sed_pm_recovery_9_eligible = {
+ NOT = { has_variable = sed_coal_ignored }
+ NOT = { has_variable = sed_coal_found_pm_pending }
+
+ owner = {
+
+  has_technology_researched = watertube_boiler
+ }
+ has_building = building_coal_mine
+ b:building_coal_mine = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_diesel_pump_building_coal_mine
+ }
+ can_activate_production_method = { building_type = building_coal_mine production_method = pm_condensing_engine_pump_building_coal_mine }
+ sed_supplier_coal_mine_output > 0
+ sed_supplier_coal_mine_output >= 60
+ OR = {
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_coal_mine_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_coal_mine_explosives > 0
+  owner = { market = { mg:explosives ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_coal_mine_oil > 5
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_coal_mine_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_coal_mine_transportation > 0
+  sg:transportation ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+}
+sed_pm_recovery_10_eligible = {
+ NOT = { has_variable = sed_grain_ignored }
+ NOT = { has_variable = sed_grain_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_wheat_farm
+ b:building_wheat_farm = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_herring_meal_farming
+ }
+ can_activate_production_method = { building_type = building_wheat_farm production_method = pm_simple_farming }
+ sed_supplier_wheat_farm_output > 0
+ sed_supplier_wheat_farm_output >= 10
+ OR = {
+  owner = { market = { mg:fish ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_fertilizer > 0
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_fish > 5
+  owner = { market = { mg:fish ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_11_eligible = {
+ NOT = { has_variable = sed_grain_ignored }
+ NOT = { has_variable = sed_grain_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_wheat_farm
+ b:building_wheat_farm = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_soil_enriching_farming
+ }
+ can_activate_production_method = { building_type = building_wheat_farm production_method = pm_simple_farming }
+ sed_supplier_wheat_farm_output > 0
+ sed_supplier_wheat_farm_output >= 20
+ OR = {
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_fertilizer > 5
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_fish > 0
+  owner = { market = { mg:fish ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_12_eligible = {
+ NOT = { has_variable = sed_grain_ignored }
+ NOT = { has_variable = sed_grain_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_wheat_farm
+ b:building_wheat_farm = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_fertilization
+ }
+ can_activate_production_method = { building_type = building_wheat_farm production_method = pm_simple_farming }
+ sed_supplier_wheat_farm_output > 0
+ sed_supplier_wheat_farm_output >= 50
+ OR = {
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_fertilizer > 10
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_fish > 0
+  owner = { market = { mg:fish ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_13_eligible = {
+ NOT = { has_variable = sed_grain_ignored }
+ NOT = { has_variable = sed_grain_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_wheat_farm
+ b:building_wheat_farm = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_chemical_fertilizer
+ }
+ can_activate_production_method = { building_type = building_wheat_farm production_method = pm_simple_farming }
+ sed_supplier_wheat_farm_output > 0
+ sed_supplier_wheat_farm_output >= 80
+ OR = {
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_fertilizer > 15
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_fish > 0
+  owner = { market = { mg:fish ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_wheat_farm_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_14_eligible = {
+ NOT = { has_variable = sed_grain_ignored }
+ NOT = { has_variable = sed_grain_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_rye_farm
+ b:building_rye_farm = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_soil_enriching_farming
+ }
+ can_activate_production_method = { building_type = building_rye_farm production_method = pm_simple_farming }
+ sed_supplier_rye_farm_output > 0
+ sed_supplier_rye_farm_output >= 20
+ OR = {
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rye_farm_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rye_farm_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rye_farm_fertilizer > 5
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rye_farm_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rye_farm_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_15_eligible = {
+ NOT = { has_variable = sed_grain_ignored }
+ NOT = { has_variable = sed_grain_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_rye_farm
+ b:building_rye_farm = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_fertilization
+ }
+ can_activate_production_method = { building_type = building_rye_farm production_method = pm_simple_farming }
+ sed_supplier_rye_farm_output > 0
+ sed_supplier_rye_farm_output >= 50
+ OR = {
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rye_farm_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rye_farm_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rye_farm_fertilizer > 10
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rye_farm_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rye_farm_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_16_eligible = {
+ NOT = { has_variable = sed_grain_ignored }
+ NOT = { has_variable = sed_grain_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_rye_farm
+ b:building_rye_farm = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_chemical_fertilizer
+ }
+ can_activate_production_method = { building_type = building_rye_farm production_method = pm_simple_farming }
+ sed_supplier_rye_farm_output > 0
+ sed_supplier_rye_farm_output >= 80
+ OR = {
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rye_farm_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rye_farm_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rye_farm_fertilizer > 15
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rye_farm_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rye_farm_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_17_eligible = {
+ NOT = { has_variable = sed_grain_ignored }
+ NOT = { has_variable = sed_grain_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_rice_farm
+ b:building_rice_farm = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_herring_meal_farming_building_rice_farm
+ }
+ can_activate_production_method = { building_type = building_rice_farm production_method = pm_simple_farming_building_rice_farm }
+ sed_supplier_rice_farm_output > 0
+ sed_supplier_rice_farm_output >= 20
+ OR = {
+  owner = { market = { mg:fish ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rice_farm_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rice_farm_fertilizer > 0
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rice_farm_fish > 10
+  owner = { market = { mg:fish ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rice_farm_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_18_eligible = {
+ NOT = { has_variable = sed_grain_ignored }
+ NOT = { has_variable = sed_grain_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_rice_farm
+ b:building_rice_farm = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_soil_enriching_farming_building_rice_farm
+ }
+ can_activate_production_method = { building_type = building_rice_farm production_method = pm_simple_farming_building_rice_farm }
+ sed_supplier_rice_farm_output > 0
+ sed_supplier_rice_farm_output >= 30
+ OR = {
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rice_farm_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rice_farm_fertilizer > 10
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rice_farm_fish > 0
+  owner = { market = { mg:fish ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rice_farm_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_19_eligible = {
+ NOT = { has_variable = sed_grain_ignored }
+ NOT = { has_variable = sed_grain_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_rice_farm
+ b:building_rice_farm = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_fertilization_building_rice_farm
+ }
+ can_activate_production_method = { building_type = building_rice_farm production_method = pm_simple_farming_building_rice_farm }
+ sed_supplier_rice_farm_output > 0
+ sed_supplier_rice_farm_output >= 80
+ OR = {
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rice_farm_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rice_farm_fertilizer > 20
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rice_farm_fish > 0
+  owner = { market = { mg:fish ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rice_farm_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_20_eligible = {
+ NOT = { has_variable = sed_grain_ignored }
+ NOT = { has_variable = sed_grain_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_rice_farm
+ b:building_rice_farm = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_chemical_fertilizer_building_rice_farm
+ }
+ can_activate_production_method = { building_type = building_rice_farm production_method = pm_simple_farming_building_rice_farm }
+ sed_supplier_rice_farm_output > 0
+ sed_supplier_rice_farm_output >= 130
+ OR = {
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rice_farm_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rice_farm_fertilizer > 30
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rice_farm_fish > 0
+  owner = { market = { mg:fish ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_rice_farm_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_21_eligible = {
+ NOT = { has_variable = sed_grain_ignored }
+ NOT = { has_variable = sed_grain_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_maize_farm
+ b:building_maize_farm = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_soil_enriching_farming
+ }
+ can_activate_production_method = { building_type = building_maize_farm production_method = pm_simple_farming }
+ sed_supplier_maize_farm_output > 0
+ sed_supplier_maize_farm_output >= 20
+ OR = {
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_maize_farm_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_maize_farm_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_maize_farm_fertilizer > 5
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_maize_farm_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_maize_farm_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_22_eligible = {
+ NOT = { has_variable = sed_grain_ignored }
+ NOT = { has_variable = sed_grain_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_maize_farm
+ b:building_maize_farm = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_fertilization
+ }
+ can_activate_production_method = { building_type = building_maize_farm production_method = pm_simple_farming }
+ sed_supplier_maize_farm_output > 0
+ sed_supplier_maize_farm_output >= 50
+ OR = {
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_maize_farm_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_maize_farm_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_maize_farm_fertilizer > 10
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_maize_farm_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_maize_farm_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_23_eligible = {
+ NOT = { has_variable = sed_grain_ignored }
+ NOT = { has_variable = sed_grain_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_maize_farm
+ b:building_maize_farm = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_chemical_fertilizer
+ }
+ can_activate_production_method = { building_type = building_maize_farm production_method = pm_simple_farming }
+ sed_supplier_maize_farm_output > 0
+ sed_supplier_maize_farm_output >= 80
+ OR = {
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_maize_farm_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_maize_farm_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_maize_farm_fertilizer > 15
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_maize_farm_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_maize_farm_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_24_eligible = {
+ NOT = { has_variable = sed_grain_ignored }
+ NOT = { has_variable = sed_grain_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_millet_farm
+ b:building_millet_farm = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_soil_enriching_farming
+ }
+ can_activate_production_method = { building_type = building_millet_farm production_method = pm_simple_farming }
+ sed_supplier_millet_farm_output > 0
+ sed_supplier_millet_farm_output >= 20
+ OR = {
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_millet_farm_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_millet_farm_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_millet_farm_fertilizer > 5
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_millet_farm_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_millet_farm_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_25_eligible = {
+ NOT = { has_variable = sed_grain_ignored }
+ NOT = { has_variable = sed_grain_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_millet_farm
+ b:building_millet_farm = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_fertilization
+ }
+ can_activate_production_method = { building_type = building_millet_farm production_method = pm_simple_farming }
+ sed_supplier_millet_farm_output > 0
+ sed_supplier_millet_farm_output >= 50
+ OR = {
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_millet_farm_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_millet_farm_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_millet_farm_fertilizer > 10
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_millet_farm_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_millet_farm_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_26_eligible = {
+ NOT = { has_variable = sed_grain_ignored }
+ NOT = { has_variable = sed_grain_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_millet_farm
+ b:building_millet_farm = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_chemical_fertilizer
+ }
+ can_activate_production_method = { building_type = building_millet_farm production_method = pm_simple_farming }
+ sed_supplier_millet_farm_output > 0
+ sed_supplier_millet_farm_output >= 80
+ OR = {
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_millet_farm_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_millet_farm_engines > 0
+  owner = { market = { mg:engines ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_millet_farm_fertilizer > 15
+  owner = { market = { mg:fertilizer ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_millet_farm_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_millet_farm_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_27_eligible = {
+ NOT = { has_variable = sed_tools_ignored }
+ NOT = { has_variable = sed_tools_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_tooling_workshop
+ b:building_tooling_workshop = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_pig_iron
+ }
+ can_activate_production_method = { building_type = building_tooling_workshop production_method = pm_crude_tools }
+ sed_supplier_tooling_workshop_output > 0
+ sed_supplier_tooling_workshop_output >= 60
+ OR = {
+  owner = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_tooling_workshop_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_tooling_workshop_copper > 0
+  owner = { market = { mg:copper ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_tooling_workshop_electricity > 0
+  sg:electricity ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+ NOT = {
+  sed_input_tooling_workshop_iron > 20
+  owner = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_tooling_workshop_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_tooling_workshop_rubber > 0
+  owner = { market = { mg:rubber ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_tooling_workshop_steel > 0
+  owner = { market = { mg:steel ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_tooling_workshop_wood > 0
+  owner = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_28_eligible = {
+ NOT = { has_variable = sed_tools_ignored }
+ NOT = { has_variable = sed_tools_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_tooling_workshop
+ b:building_tooling_workshop = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_steel
+ }
+ can_activate_production_method = { building_type = building_tooling_workshop production_method = pm_crude_tools }
+ sed_supplier_tooling_workshop_output > 0
+ sed_supplier_tooling_workshop_output >= 100
+ OR = {
+  owner = { market = { mg:steel ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_tooling_workshop_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_tooling_workshop_copper > 0
+  owner = { market = { mg:copper ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_tooling_workshop_electricity > 0
+  sg:electricity ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+ NOT = {
+  sed_input_tooling_workshop_iron > 0
+  owner = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_tooling_workshop_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_tooling_workshop_rubber > 0
+  owner = { market = { mg:rubber ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_tooling_workshop_steel > 20
+  owner = { market = { mg:steel ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_tooling_workshop_wood > 0
+  owner = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_29_eligible = {
+ NOT = { has_variable = sed_groceries_ignored }
+ NOT = { has_variable = sed_groceries_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_food_industry
+ b:building_food_industry = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_sweeteners
+ }
+ can_activate_production_method = { building_type = building_food_industry production_method = pm_bakery }
+ sed_supplier_food_industry_output > 0
+ sed_supplier_food_industry_output >= 40
+ OR = {
+  owner = { market = { mg:sugar ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_food_industry_copper > 0
+  owner = { market = { mg:copper ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_food_industry_electricity > 0
+  sg:electricity ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+ NOT = {
+  sed_input_food_industry_fish > 0
+  owner = { market = { mg:fish ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_food_industry_glass > 0
+  owner = { market = { mg:glass ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_food_industry_grain > 0
+  owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_food_industry_iron > 0
+  owner = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_food_industry_meat > 0
+  owner = { market = { mg:meat ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_food_industry_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_food_industry_sugar > 15
+  owner = { market = { mg:sugar ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_food_industry_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_30_eligible = {
+ NOT = { has_variable = sed_groceries_ignored }
+ NOT = { has_variable = sed_groceries_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_food_industry
+ b:building_food_industry = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_baking_powder
+ }
+ can_activate_production_method = { building_type = building_food_industry production_method = pm_bakery }
+ sed_supplier_food_industry_output > 0
+ sed_supplier_food_industry_output >= 150
+ OR = {
+  owner = { market = { mg:sugar ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_food_industry_copper > 0
+  owner = { market = { mg:copper ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_food_industry_electricity > 0
+  sg:electricity ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+ NOT = {
+  sed_input_food_industry_fish > 0
+  owner = { market = { mg:fish ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_food_industry_glass > 0
+  owner = { market = { mg:glass ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_food_industry_grain > 40
+  owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_food_industry_iron > 0
+  owner = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_food_industry_meat > 0
+  owner = { market = { mg:meat ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_food_industry_oil > 0
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_food_industry_sugar > 30
+  owner = { market = { mg:sugar ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_food_industry_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_31_eligible = {
+ NOT = { has_variable = sed_clothes_ignored }
+ NOT = { has_variable = sed_clothes_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_textile_mill
+ b:building_textile_mill = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_dye_workshops
+ }
+ can_activate_production_method = { building_type = building_textile_mill production_method = pm_handsewn_clothes }
+ sed_supplier_textile_mill_output > 0
+ sed_supplier_textile_mill_output >= 30
+ OR = {
+  owner = { market = { mg:dye ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_copper > 0
+  owner = { market = { mg:copper ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_dye > 5
+  owner = { market = { mg:dye ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_electricity > 0
+  sg:electricity ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+ NOT = {
+  sed_input_textile_mill_fabric > 0
+  owner = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_rubber > 0
+  owner = { market = { mg:rubber ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_silk > 0
+  owner = { market = { mg:silk ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_32_eligible = {
+ NOT = { has_variable = sed_clothes_ignored }
+ NOT = { has_variable = sed_clothes_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_textile_mill
+ b:building_textile_mill = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_sewing_machines
+ }
+ can_activate_production_method = { building_type = building_textile_mill production_method = pm_handsewn_clothes }
+ sed_supplier_textile_mill_output > 0
+ sed_supplier_textile_mill_output >= 110
+ OR = {
+  owner = { market = { mg:dye ?= { market_goods_has_goods_shortage = yes } } }
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_copper > 0
+  owner = { market = { mg:copper ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_dye > 10
+  owner = { market = { mg:dye ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_electricity > 0
+  sg:electricity ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+ NOT = {
+  sed_input_textile_mill_fabric > 20
+  owner = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_rubber > 0
+  owner = { market = { mg:rubber ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_silk > 0
+  owner = { market = { mg:silk ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_tools > 5
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_33_eligible = {
+ NOT = { has_variable = sed_clothes_ignored }
+ NOT = { has_variable = sed_clothes_found_pm_pending }
+
+ owner = {
+
+  has_technology_researched = lathe
+ }
+ has_building = building_textile_mill
+ b:building_textile_mill = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_sewing_machines
+ }
+ can_activate_production_method = { building_type = building_textile_mill production_method = pm_dye_workshops }
+ sed_supplier_textile_mill_output > 0
+ sed_supplier_textile_mill_output >= 80
+ OR = {
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_copper > 0
+  owner = { market = { mg:copper ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_dye > 5
+  owner = { market = { mg:dye ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_electricity > 0
+  sg:electricity ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+ NOT = {
+  sed_input_textile_mill_fabric > 20
+  owner = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_rubber > 0
+  owner = { market = { mg:rubber ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_silk > 0
+  owner = { market = { mg:silk ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_tools > 5
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_34_eligible = {
+ NOT = { has_variable = sed_clothes_ignored }
+ NOT = { has_variable = sed_clothes_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_textile_mill
+ b:building_textile_mill = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_electric_sewing_machines
+ }
+ can_activate_production_method = { building_type = building_textile_mill production_method = pm_handsewn_clothes }
+ sed_supplier_textile_mill_output > 0
+ sed_supplier_textile_mill_output >= 190
+ OR = {
+  owner = { market = { mg:dye ?= { market_goods_has_goods_shortage = yes } } }
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+  owner = { market = { mg:copper ?= { market_goods_has_goods_shortage = yes } } }
+  sg:electricity ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+ NOT = {
+  sed_input_textile_mill_copper > 2
+  owner = { market = { mg:copper ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_dye > 20
+  owner = { market = { mg:dye ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_electricity > 10
+  sg:electricity ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+ NOT = {
+  sed_input_textile_mill_fabric > 20
+  owner = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_rubber > 0
+  owner = { market = { mg:rubber ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_silk > 0
+  owner = { market = { mg:silk ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_tools > 8
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_35_eligible = {
+ NOT = { has_variable = sed_clothes_ignored }
+ NOT = { has_variable = sed_clothes_found_pm_pending }
+
+ owner = {
+
+  has_technology_researched = lathe
+ }
+ has_building = building_textile_mill
+ b:building_textile_mill = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_electric_sewing_machines
+ }
+ can_activate_production_method = { building_type = building_textile_mill production_method = pm_dye_workshops }
+ sed_supplier_textile_mill_output > 0
+ sed_supplier_textile_mill_output >= 160
+ OR = {
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+  owner = { market = { mg:copper ?= { market_goods_has_goods_shortage = yes } } }
+  sg:electricity ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+ NOT = {
+  sed_input_textile_mill_copper > 2
+  owner = { market = { mg:copper ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_dye > 15
+  owner = { market = { mg:dye ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_electricity > 10
+  sg:electricity ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+ NOT = {
+  sed_input_textile_mill_fabric > 20
+  owner = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_rubber > 0
+  owner = { market = { mg:rubber ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_silk > 0
+  owner = { market = { mg:silk ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_textile_mill_tools > 8
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_36_eligible = {
+ NOT = { has_variable = sed_small_arms_ignored }
+ NOT = { has_variable = sed_small_arms_found_pm_pending }
+
+ owner = {
+
+  has_technology_researched = rifling
+ }
+ has_building = building_arms_industry
+ b:building_arms_industry = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_bolt_action_rifles
+ }
+ can_activate_production_method = { building_type = building_arms_industry production_method = pm_rifles }
+ sed_supplier_arms_industry_output > 0
+ sed_supplier_arms_industry_output >= 100
+ OR = {
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_arms_industry_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_arms_industry_copper > 0
+  owner = { market = { mg:copper ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_arms_industry_electricity > 0
+  sg:electricity ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+ NOT = {
+  sed_input_arms_industry_hardwood > 0
+  owner = { market = { mg:hardwood ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_arms_industry_iron > 0
+  owner = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_arms_industry_oil > 10
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_arms_industry_steel > 10
+  owner = { market = { mg:steel ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_arms_industry_tools > 15
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_37_eligible = {
+ NOT = { has_variable = sed_small_arms_ignored }
+ NOT = { has_variable = sed_small_arms_found_pm_pending }
+
+ owner = {
+
+  has_technology_researched = repeaters
+ }
+ has_building = building_arms_industry
+ b:building_arms_industry = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_bolt_action_rifles
+ }
+ can_activate_production_method = { building_type = building_arms_industry production_method = pm_repeaters }
+ sed_supplier_arms_industry_output > 0
+ sed_supplier_arms_industry_output >= 60
+ OR = {
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_arms_industry_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_arms_industry_copper > 0
+  owner = { market = { mg:copper ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_arms_industry_electricity > 0
+  sg:electricity ?= { state_goods_consumption > { value = state_goods_production min = 0 multiply = 2 } }
+ }
+ NOT = {
+  sed_input_arms_industry_hardwood > 0
+  owner = { market = { mg:hardwood ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_arms_industry_iron > 0
+  owner = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_arms_industry_oil > 10
+  owner = { market = { mg:oil ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_arms_industry_steel > 0
+  owner = { market = { mg:steel ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_arms_industry_tools > 10
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}

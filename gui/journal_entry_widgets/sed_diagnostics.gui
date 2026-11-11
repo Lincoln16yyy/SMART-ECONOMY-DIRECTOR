@@ -3232,6 +3232,13 @@ textbox = {
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_auto_status_pm_unconfirmed"
 }
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_status_pm_recovered_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_status_pm_recovered"
+}
 flowcontainer = { direction = horizontal spacing = 12
 button = {
  using = default_button

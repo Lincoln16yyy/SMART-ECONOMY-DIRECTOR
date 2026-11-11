@@ -6,6 +6,36 @@
 
 
 
+
+## 0.7.10 — Recuperação de produtores com insumos em falta
+
+A revisão automática avalia recuperação antes da modernização. O candidato
+precisa ter escassez de insumos no prédio e confirmação de escassez de um
+insumo que o método alvo elimine. A troca preserva os outros grupos de PMs,
+não introduz insumos nem aumenta quantidades de entrada ou empregos do grupo.
+A configuração alvo precisa ter margem material positiva a preços-base.
+
+A saída nominal estimada do bem-alvo precisa preservar pelo menos metade da
+saída atual e continuar positiva. Essa conta usa todos os PMs ativos conhecidos,
+incluindo mudanças de produção secundária. As quantidades dos demais produtos são
+preservadas. Todos os insumos que restariam após a troca precisam estar sem
+escassez observada, considerando também os outros grupos de PMs. O requisito de
+ocupação é de pelo menos 50%. O maior custo de insumos evitado, ponderado por
+nível e ocupação, seleciona o candidato nacional.
+
+Recuperação usa a tentativa mensal compartilhada com modernização e construção.
+Ela pode ocorrer em default, em estados não incorporados, com infraestrutura
+negativa e expansão já enfileirada, pois a mudança reduz as dependências do
+método e abrange os níveis existentes/futuros do mesmo tipo. O intervalo de
+observação anterior de uma modernização pode ser superado para tratar a
+escassez. A troca confirmada inicia novo intervalo de três meses antes de
+modernizar novamente. Controles externos e marcas de ignorar têm precedência.
+
+A recuperação pode reduzir a produção nominal. O piso e a margem são referências
+baseadas nos coeficientes vanilla. Preços locais, qualificações, remuneração e
+produção efetiva ainda exigem desenvolvimento e verificação. O resultado da
+revisão confirma a troca do método, com avaliação econômica posterior pendente.
+
 ## 0.7.9 — Modernização contínua dos produtores existentes
 
 O Automático avalia produtores de bens em escassez ou insumos priorizados.
