@@ -1896,7 +1896,7 @@ sed_auto_executor_safe = {
  construction_queue_num_queued_private_levels = 0
  is_construction_paused = no
  NOT = { sed_competing_builder_configured = yes }
- sed_auto_fiscal_safe = yes
+ sed_direct_fiscal_safe = yes
  sed_direct_budget_safe = yes
 }
 sed_direct_supply_priority_exists = {
@@ -1975,8 +1975,12 @@ sed_coord_reserve_drawdown_safe = {
  }
 }
 
+sed_direct_fiscal_safe = {
+ OR = { sed_auto_fiscal_safe = yes sed_coord_reserve_drawdown_safe = yes }
+}
+
 sed_coord_fiscal_safe = {
- OR = { sed_auto_fiscal_safe = yes AND = { has_variable = sed_coord_advisor_known sed_coord_reserve_drawdown_safe = yes } }
+ OR = { sed_auto_fiscal_safe = yes sed_coord_reserve_drawdown_safe = yes }
 }
 sed_direct_budget_safe = {
  has_variable = sed_build_budget_known var:sed_build_budget_known = 1

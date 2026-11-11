@@ -1822,3 +1822,21 @@ Gerador, validação estática, pacote e whitespace aprovados. Efeito e triggers
 verificados no executável, localização e scripts vanilla locais.
 Instalada com backup `mod_before_0.7.5_20261110_233730_175392` e conferência dos
 14 arquivos. Efeitos financeiros e funcionamento na engine ainda pendentes.
+
+
+## 2026-11-10 — Fila no orçamento e retomada por reservas (0.7.6)
+
+A referência de financiamento soma a fila identificada e o primeiro projeto,
+considera projetos simultâneos e remove o teto de 56 semanas. O catálogo de
+84 custos vanilla cobre níveis pendentes, com fallback de 6000 pontos para
+níveis agregados sem correspondência. Fundações próprias sem prédio recebem
+seu custo conhecido. A execução direta pode usar reservas com déficit semanal,
+saldo operacional não negativo e ausência de dívida, sob as guardas de caixa.
+A coordenação mantém os outros construtores suspensos durante essa execução.
+
+274 testes sintéticos aprovados. Regressões cobrem fila conhecida, fallback,
+capacidade zero, fundação, limpeza das leituras, simultaneidade e fronteiras
+exatas do financiamento, além da execução coordenada com fila ocupada.
+Gerador, validação estática 1.15, pacote e whitespace aprovados. Instalada com
+backup `mod_before_0.7.6_20261110_235444_968965` e conferência dos 14 arquivos.
+Prazo real, autoria dos projetos e resultado em campanha continuam pendentes.

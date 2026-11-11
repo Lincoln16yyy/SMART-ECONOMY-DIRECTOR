@@ -163,8 +163,92 @@ class ConstructionBudgetTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_build_budget_project_points'], 800)
         self.assertAlmostEqual(c.variables['sed_build_budget_project_weeks'], 80)
         self.assertEqual(c.variables['sed_build_budget_project_materials'], 1400000)
-        # The reserve window grows with the project but is capped at 56 weeks.
-        self.assertEqual(c.variables['sed_build_budget_required_gold'], 190600)
+        self.assertEqual(c.variables['sed_build_budget_funding_weeks'], 84)
+        self.assertEqual(c.variables['sed_build_budget_required_gold'], 285800)
+
+    def test_existing_queue_adds_work_and_extends_the_funding_horizon(self):
+        c = self.c
+        self.sector('pm_wooden_buildings')
+        self.target()
+        c.states.append(state(buildings=[building('building_iron_mine', queued_levels=2),
+                                        building('building_tooling_workshop', queued_levels=1)]))
+        c.readings['construction_queue_num_queued_government_levels'] = 3
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_build_budget_queue_levels_known'], 3)
+        self.assertEqual(c.variables['sed_build_budget_queue_points'], 1400)
+        self.assertEqual(c.variables['sed_build_budget_queue_weeks'], 140)
+        self.assertEqual(c.variables['sed_build_budget_funding_weeks'], 164)
+
+    def test_unknown_queue_work_and_zero_capacity_have_explicit_fallbacks(self):
+        c = self.c
+        c.readings['construction_queue_num_queued_government_levels'] = 1
+        c.run('sed_refresh_direct_budget')
+        self.assertEqual(c.variables['sed_build_budget_queue_levels_unknown'], 1)
+        self.assertEqual(c.variables['sed_build_budget_queue_points'], 6000)
+        self.assertEqual(c.variables['sed_build_budget_queue_weeks'], 600)
+        c.readings['modifier:country_construction_add'] = 0
+        c.run('sed_refresh_direct_budget')
+        self.assertEqual(c.variables['sed_build_budget_queue_weeks'], 0)
+        self.assertFalse(c.condition(c.definitions['sed_direct_budget_safe'], c.country_scope()))
+
+    def test_tracked_founding_is_budgeted_before_the_building_exists(self):
+        c = self.c
+        target = state()
+        target['variables'].update(sed_tools_request_pending=True, sed_tools_intent_level=0,
+                                   sed_tools_intent_variant=1)
+        c.states = [target]
+        c.readings['construction_queue_num_queued_government_levels'] = 1
+        c.run('sed_refresh_direct_budget')
+        self.assertEqual(c.variables['sed_build_budget_queue_points'], 600)
+        self.assertEqual(c.variables['sed_build_budget_queue_levels_unknown'], 0)
+        target['buildings'].append(building('building_tooling_workshop', queued_levels=1))
+        c.run('sed_refresh_direct_budget')
+        self.assertEqual(c.variables['sed_build_budget_queue_points'], 600)
+
+    def test_empty_government_queue_releases_old_work_estimates(self):
+        c = self.c
+        c.states = [state(buildings=[building('building_iron_mine', queued_levels=2)])]
+        c.readings['construction_queue_num_queued_government_levels'] = 2
+        c.run('sed_refresh_direct_budget')
+        self.assertEqual(c.variables['sed_build_budget_queue_points'], 800)
+        c.readings['construction_queue_num_queued_government_levels'] = 0
+        c.run('sed_refresh_direct_budget')
+        self.assertEqual(c.variables['sed_build_budget_queue_points'], 0)
+
+    def test_concurrent_public_projects_can_use_the_full_national_capacity(self):
+        c = self.c
+        sector = self.sector('pm_wooden_buildings')
+        sector['level'] = 100
+        c.readings.update(construction_queue_num_queued_government_levels=2,
+                          **{'modifier:country_construction_add': 100})
+        c.run('sed_refresh_direct_budget')
+        self.assertEqual(c.variables['sed_build_budget_active_points'], 75)
+        self.assertEqual(c.variables['sed_build_budget_weekly'], 131250)
+
+    def test_reserve_financing_can_resume_direct_investment_with_a_covered_deficit(self):
+        c = self.c
+        self.sector('pm_wooden_buildings')
+        self.target()
+        c.readings.update(net_total_income=-10, principal=0, gold_reserves=91459)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.constructions, [])
+        self.assertNotIn('sed_auto_last_attempt_month', c.variables)
+        c.readings['gold_reserves'] = 91460
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(len(c.constructions), 1)
+        self.assertEqual(c.variables['sed_auto_review_status'], 1)
+
+    def test_debt_or_operating_deficit_prevents_reserve_financing(self):
+        c = self.c
+        self.target()
+        c.readings.update(net_total_income=-10, principal=1, gold_reserves=1000000)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.constructions, [])
+        c.readings.update(principal=0, net_fixed_income=-1)
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.constructions, [])
 
     def test_project_cap_still_limits_large_sector_material_reference(self):
         c = self.c

@@ -469,6 +469,12 @@ sed_disable_country = {
  remove_variable = sed_build_budget_project_points
  remove_variable = sed_build_budget_project_weeks
  remove_variable = sed_build_budget_project_materials
+ remove_variable = sed_build_budget_queue_levels_known
+ remove_variable = sed_build_budget_queue_points
+ remove_variable = sed_build_budget_queue_weeks
+ remove_variable = sed_build_budget_queue_levels_unknown
+ remove_variable = sed_build_budget_funding_weeks
+ remove_variable = sed_build_budget_active_points
  remove_variable = sed_input_market_margin_coal
  remove_variable = sed_input_market_margin_copper
  remove_variable = sed_input_market_margin_dye
@@ -3355,7 +3361,7 @@ sed_auto_run_direct = {
  else_if = { limit = { construction_queue_num_queued_private_levels > 0 } set_variable = { name = sed_auto_action_status value = 11 } }
  else_if = { limit = { is_construction_paused = yes } set_variable = { name = sed_auto_action_status value = 12 } }
  else_if = { limit = { sed_competing_builder_configured = yes } set_variable = { name = sed_auto_action_status value = 13 } }
- else_if = { limit = { NOT = { sed_auto_fiscal_safe = yes } } set_variable = { name = sed_auto_action_status value = 17 } }
+ else_if = { limit = { NOT = { sed_direct_fiscal_safe = yes } } set_variable = { name = sed_auto_action_status value = 17 } }
  else_if = { limit = { NOT = { sed_direct_budget_safe = yes } } set_variable = { name = sed_auto_action_status value = 22 } }
  else = { set_variable = { name = sed_auto_action_status value = 14 } }
 }
@@ -5346,8 +5352,14 @@ sed_refresh_direct_budget = {
     }
    }
   } }
+  set_variable = { name = sed_build_budget_active_points value = {
+   value = modifier:country_construction_add min = 0
+   max = { value = construction_queue_num_queued_government_levels min = 0 add = 1
+    multiply = { value = modifier:country_max_weekly_construction_progress_add min = 0 }
+   }
+  } }
   set_variable = { name = sed_build_budget_weekly value = {
-   value = var:sed_build_budget_points multiply = var:sed_build_budget_point_cost
+   value = var:sed_build_budget_active_points multiply = var:sed_build_budget_point_cost
    max = var:sed_build_budget_material_capacity
   } }
   # Duration and full material reference for the plan's first priority.
@@ -5405,6 +5417,712 @@ sed_refresh_direct_budget = {
    any_scope_state = { has_variable = sed_plan_ammunition_rank var:sed_plan_ammunition_rank = 1 } }
    set_variable = { name = sed_build_budget_project_points value = 800 }
   }
+  set_variable = { name = sed_build_budget_queue_levels_known value = 0 }
+  if = { limit = { construction_queue_num_queued_government_levels > 0 }
+   set_variable = { name = sed_build_budget_queue_levels_known value = {
+    value = 0 every_scope_state = { limit = { }
+
+     if = { limit = { has_building = building_angkor_wat }
+      add = { value = b:building_angkor_wat.level_after_queued_constructions subtract = b:building_angkor_wat.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_arms_industry }
+      add = { value = b:building_arms_industry.level_after_queued_constructions subtract = b:building_arms_industry.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_art_academy }
+      add = { value = b:building_art_academy.level_after_queued_constructions subtract = b:building_art_academy.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_artillery_foundry }
+      add = { value = b:building_artillery_foundry.level_after_queued_constructions subtract = b:building_artillery_foundry.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_automotive_industry }
+      add = { value = b:building_automotive_industry.level_after_queued_constructions subtract = b:building_automotive_industry.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_banana_plantation }
+      add = { value = b:building_banana_plantation.level_after_queued_constructions subtract = b:building_banana_plantation.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_barrack }
+      add = { value = b:building_barrack.level_after_queued_constructions subtract = b:building_barrack.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_big_ben }
+      add = { value = b:building_big_ben.level_after_queued_constructions subtract = b:building_big_ben.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_chemical_plant }
+      add = { value = b:building_chemical_plant.level_after_queued_constructions subtract = b:building_chemical_plant.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_coal_mine }
+      add = { value = b:building_coal_mine.level_after_queued_constructions subtract = b:building_coal_mine.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_coffee_plantation }
+      add = { value = b:building_coffee_plantation.level_after_queued_constructions subtract = b:building_coffee_plantation.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_construction_sector }
+      add = { value = b:building_construction_sector.level_after_queued_constructions subtract = b:building_construction_sector.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_copper_mine }
+      add = { value = b:building_copper_mine.level_after_queued_constructions subtract = b:building_copper_mine.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_cotton_plantation }
+      add = { value = b:building_cotton_plantation.level_after_queued_constructions subtract = b:building_cotton_plantation.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_cristo_redentor }
+      add = { value = b:building_cristo_redentor.level_after_queued_constructions subtract = b:building_cristo_redentor.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_dye_plantation }
+      add = { value = b:building_dye_plantation.level_after_queued_constructions subtract = b:building_dye_plantation.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_eiffel_tower }
+      add = { value = b:building_eiffel_tower.level_after_queued_constructions subtract = b:building_eiffel_tower.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_electrics_industry }
+      add = { value = b:building_electrics_industry.level_after_queued_constructions subtract = b:building_electrics_industry.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_estacion_de_madrid_atocha }
+      add = { value = b:building_estacion_de_madrid_atocha.level_after_queued_constructions subtract = b:building_estacion_de_madrid_atocha.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_explosives_factory }
+      add = { value = b:building_explosives_factory.level_after_queued_constructions subtract = b:building_explosives_factory.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_fishing_wharf }
+      add = { value = b:building_fishing_wharf.level_after_queued_constructions subtract = b:building_fishing_wharf.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_food_industry }
+      add = { value = b:building_food_industry.level_after_queued_constructions subtract = b:building_food_industry.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_forbidden_city }
+      add = { value = b:building_forbidden_city.level_after_queued_constructions subtract = b:building_forbidden_city.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_furniture_manufactory }
+      add = { value = b:building_furniture_manufactory.level_after_queued_constructions subtract = b:building_furniture_manufactory.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_glassworks }
+      add = { value = b:building_glassworks.level_after_queued_constructions subtract = b:building_glassworks.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_gold_mine }
+      add = { value = b:building_gold_mine.level_after_queued_constructions subtract = b:building_gold_mine.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_government_administration }
+      add = { value = b:building_government_administration.level_after_queued_constructions subtract = b:building_government_administration.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_gran_teatro_de_la_habana }
+      add = { value = b:building_gran_teatro_de_la_habana.level_after_queued_constructions subtract = b:building_gran_teatro_de_la_habana.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_hagia_sophia }
+      add = { value = b:building_hagia_sophia.level_after_queued_constructions subtract = b:building_hagia_sophia.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_iron_mine }
+      add = { value = b:building_iron_mine.level_after_queued_constructions subtract = b:building_iron_mine.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_kaiserforum_1 }
+      add = { value = b:building_kaiserforum_1.level_after_queued_constructions subtract = b:building_kaiserforum_1.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_kaiserforum_2 }
+      add = { value = b:building_kaiserforum_2.level_after_queued_constructions subtract = b:building_kaiserforum_2.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_kaiserforum_3 }
+      add = { value = b:building_kaiserforum_3.level_after_queued_constructions subtract = b:building_kaiserforum_3.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_kaiserforum_4 }
+      add = { value = b:building_kaiserforum_4.level_after_queued_constructions subtract = b:building_kaiserforum_4.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_kiel_canal }
+      add = { value = b:building_kiel_canal.level_after_queued_constructions subtract = b:building_kiel_canal.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_lead_mine }
+      add = { value = b:building_lead_mine.level_after_queued_constructions subtract = b:building_lead_mine.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_livestock_ranch }
+      add = { value = b:building_livestock_ranch.level_after_queued_constructions subtract = b:building_livestock_ranch.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_logging_camp }
+      add = { value = b:building_logging_camp.level_after_queued_constructions subtract = b:building_logging_camp.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_maize_farm }
+      add = { value = b:building_maize_farm.level_after_queued_constructions subtract = b:building_maize_farm.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_manila_cathedral_monument }
+      add = { value = b:building_manila_cathedral_monument.level_after_queued_constructions subtract = b:building_manila_cathedral_monument.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_millet_farm }
+      add = { value = b:building_millet_farm.level_after_queued_constructions subtract = b:building_millet_farm.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_mosque_of_djenne }
+      add = { value = b:building_mosque_of_djenne.level_after_queued_constructions subtract = b:building_mosque_of_djenne.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_motor_industry }
+      add = { value = b:building_motor_industry.level_after_queued_constructions subtract = b:building_motor_industry.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_munition_plant }
+      add = { value = b:building_munition_plant.level_after_queued_constructions subtract = b:building_munition_plant.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_naval_administration }
+      add = { value = b:building_naval_administration.level_after_queued_constructions subtract = b:building_naval_administration.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_naval_fortification }
+      add = { value = b:building_naval_fortification.level_after_queued_constructions subtract = b:building_naval_fortification.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_oil_rig }
+      add = { value = b:building_oil_rig.level_after_queued_constructions subtract = b:building_oil_rig.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_opium_plantation }
+      add = { value = b:building_opium_plantation.level_after_queued_constructions subtract = b:building_opium_plantation.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_panama_canal }
+      add = { value = b:building_panama_canal.level_after_queued_constructions subtract = b:building_panama_canal.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_paper_mill }
+      add = { value = b:building_paper_mill.level_after_queued_constructions subtract = b:building_paper_mill.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_pena_palace }
+      add = { value = b:building_pena_palace.level_after_queued_constructions subtract = b:building_pena_palace.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_port }
+      add = { value = b:building_port.level_after_queued_constructions subtract = b:building_port.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_power_bloc_statue }
+      add = { value = b:building_power_bloc_statue.level_after_queued_constructions subtract = b:building_power_bloc_statue.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_power_plant }
+      add = { value = b:building_power_plant.level_after_queued_constructions subtract = b:building_power_plant.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_railway }
+      add = { value = b:building_railway.level_after_queued_constructions subtract = b:building_railway.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_rice_farm }
+      add = { value = b:building_rice_farm.level_after_queued_constructions subtract = b:building_rice_farm.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_rubber_plantation }
+      add = { value = b:building_rubber_plantation.level_after_queued_constructions subtract = b:building_rubber_plantation.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_rye_farm }
+      add = { value = b:building_rye_farm.level_after_queued_constructions subtract = b:building_rye_farm.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_sagrada_familia_cathedral_1 }
+      add = { value = b:building_sagrada_familia_cathedral_1.level_after_queued_constructions subtract = b:building_sagrada_familia_cathedral_1.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_sagrada_familia_cathedral_2 }
+      add = { value = b:building_sagrada_familia_cathedral_2.level_after_queued_constructions subtract = b:building_sagrada_familia_cathedral_2.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_sagrada_familia_cathedral_3 }
+      add = { value = b:building_sagrada_familia_cathedral_3.level_after_queued_constructions subtract = b:building_sagrada_familia_cathedral_3.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_saint_basils_cathedral }
+      add = { value = b:building_saint_basils_cathedral.level_after_queued_constructions subtract = b:building_saint_basils_cathedral.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_shipyard }
+      add = { value = b:building_shipyard.level_after_queued_constructions subtract = b:building_shipyard.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_silk_plantation }
+      add = { value = b:building_silk_plantation.level_after_queued_constructions subtract = b:building_silk_plantation.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_skyscraper }
+      add = { value = b:building_skyscraper.level_after_queued_constructions subtract = b:building_skyscraper.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_statue_of_liberty }
+      add = { value = b:building_statue_of_liberty.level_after_queued_constructions subtract = b:building_statue_of_liberty.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_steel_mill }
+      add = { value = b:building_steel_mill.level_after_queued_constructions subtract = b:building_steel_mill.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_suez_canal }
+      add = { value = b:building_suez_canal.level_after_queued_constructions subtract = b:building_suez_canal.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_sugar_plantation }
+      add = { value = b:building_sugar_plantation.level_after_queued_constructions subtract = b:building_sugar_plantation.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_sulfur_mine }
+      add = { value = b:building_sulfur_mine.level_after_queued_constructions subtract = b:building_sulfur_mine.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_synthetics_plant }
+      add = { value = b:building_synthetics_plant.level_after_queued_constructions subtract = b:building_synthetics_plant.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_taj_mahal }
+      add = { value = b:building_taj_mahal.level_after_queued_constructions subtract = b:building_taj_mahal.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_tea_plantation }
+      add = { value = b:building_tea_plantation.level_after_queued_constructions subtract = b:building_tea_plantation.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_textile_mill }
+      add = { value = b:building_textile_mill.level_after_queued_constructions subtract = b:building_textile_mill.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_tobacco_plantation }
+      add = { value = b:building_tobacco_plantation.level_after_queued_constructions subtract = b:building_tobacco_plantation.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_tooling_workshop }
+      add = { value = b:building_tooling_workshop.level_after_queued_constructions subtract = b:building_tooling_workshop.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_trade_center }
+      add = { value = b:building_trade_center.level_after_queued_constructions subtract = b:building_trade_center.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_university }
+      add = { value = b:building_university.level_after_queued_constructions subtract = b:building_university.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_vatican_city }
+      add = { value = b:building_vatican_city.level_after_queued_constructions subtract = b:building_vatican_city.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_victoria_terminus }
+      add = { value = b:building_victoria_terminus.level_after_queued_constructions subtract = b:building_victoria_terminus.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_vineyard }
+      add = { value = b:building_vineyard.level_after_queued_constructions subtract = b:building_vineyard.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_whaling_station }
+      add = { value = b:building_whaling_station.level_after_queued_constructions subtract = b:building_whaling_station.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_wheat_farm }
+      add = { value = b:building_wheat_farm.level_after_queued_constructions subtract = b:building_wheat_farm.level min = 0 multiply = 1 }
+     }
+     if = { limit = { has_building = building_white_house }
+      add = { value = b:building_white_house.level_after_queued_constructions subtract = b:building_white_house.level min = 0 multiply = 1 }
+     }
+     if = { limit = {
+      NOT = { has_building = building_logging_camp }
+      has_variable = sed_wood_request_pending var:sed_wood_intent_level = 0
+var:sed_wood_intent_variant = 1
+     } add = 1 }
+     if = { limit = {
+      NOT = { has_building = building_iron_mine }
+      has_variable = sed_iron_request_pending var:sed_iron_intent_level = 0
+var:sed_iron_intent_variant = 1
+     } add = 1 }
+     if = { limit = {
+      NOT = { has_building = building_coal_mine }
+      has_variable = sed_coal_request_pending var:sed_coal_intent_level = 0
+var:sed_coal_intent_variant = 1
+     } add = 1 }
+     if = { limit = {
+      NOT = { has_building = building_wheat_farm }
+      has_variable = sed_grain_request_pending var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 1
+     } add = 1 }
+     if = { limit = {
+      NOT = { has_building = building_rye_farm }
+      has_variable = sed_grain_request_pending var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 2
+     } add = 1 }
+     if = { limit = {
+      NOT = { has_building = building_rice_farm }
+      has_variable = sed_grain_request_pending var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 3
+     } add = 1 }
+     if = { limit = {
+      NOT = { has_building = building_maize_farm }
+      has_variable = sed_grain_request_pending var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 4
+     } add = 1 }
+     if = { limit = {
+      NOT = { has_building = building_millet_farm }
+      has_variable = sed_grain_request_pending var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 5
+     } add = 1 }
+     if = { limit = {
+      NOT = { has_building = building_cotton_plantation }
+      has_variable = sed_fabric_request_pending var:sed_fabric_intent_level = 0
+var:sed_fabric_intent_variant = 1
+     } add = 1 }
+     if = { limit = {
+      NOT = { has_building = building_livestock_ranch }
+      has_variable = sed_fabric_request_pending var:sed_fabric_intent_level = 0
+var:sed_fabric_intent_variant = 2
+     } add = 1 }
+     if = { limit = {
+      NOT = { has_building = building_tooling_workshop }
+      has_variable = sed_tools_request_pending var:sed_tools_intent_level = 0
+var:sed_tools_intent_variant = 1
+     } add = 1 }
+     if = { limit = {
+      NOT = { has_building = building_food_industry }
+      has_variable = sed_groceries_request_pending var:sed_groceries_intent_level = 0
+var:sed_groceries_intent_variant = 1
+     } add = 1 }
+     if = { limit = {
+      NOT = { has_building = building_textile_mill }
+      has_variable = sed_clothes_request_pending var:sed_clothes_intent_level = 0
+var:sed_clothes_intent_variant = 1
+     } add = 1 }
+     if = { limit = {
+      NOT = { has_building = building_arms_industry }
+      has_variable = sed_small_arms_request_pending var:sed_small_arms_intent_level = 0
+var:sed_small_arms_intent_variant = 1
+     } add = 1 }
+     if = { limit = {
+      NOT = { has_building = building_artillery_foundry }
+      has_variable = sed_artillery_request_pending var:sed_artillery_intent_level = 0
+var:sed_artillery_intent_variant = 1
+     } add = 1 }
+     if = { limit = {
+      NOT = { has_building = building_munition_plant }
+      has_variable = sed_ammunition_request_pending var:sed_ammunition_intent_level = 0
+var:sed_ammunition_intent_variant = 1
+     } add = 1 }
+     if = { limit = {
+      NOT = { has_building = building_railway }
+      has_variable = sed_railway_request_pending var:sed_railway_intent_level = 0
+
+     } add = 1 }
+    }
+   } }
+  }
+  set_variable = { name = sed_build_budget_queue_points value = 0 }
+  if = { limit = { construction_queue_num_queued_government_levels > 0 }
+   set_variable = { name = sed_build_budget_queue_points value = {
+    value = 0 every_scope_state = { limit = { }
+
+     if = { limit = { has_building = building_angkor_wat }
+      add = { value = b:building_angkor_wat.level_after_queued_constructions subtract = b:building_angkor_wat.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_arms_industry }
+      add = { value = b:building_arms_industry.level_after_queued_constructions subtract = b:building_arms_industry.level min = 0 multiply = 600 }
+     }
+     if = { limit = { has_building = building_art_academy }
+      add = { value = b:building_art_academy.level_after_queued_constructions subtract = b:building_art_academy.level min = 0 multiply = 400 }
+     }
+     if = { limit = { has_building = building_artillery_foundry }
+      add = { value = b:building_artillery_foundry.level_after_queued_constructions subtract = b:building_artillery_foundry.level min = 0 multiply = 600 }
+     }
+     if = { limit = { has_building = building_automotive_industry }
+      add = { value = b:building_automotive_industry.level_after_queued_constructions subtract = b:building_automotive_industry.level min = 0 multiply = 800 }
+     }
+     if = { limit = { has_building = building_banana_plantation }
+      add = { value = b:building_banana_plantation.level_after_queued_constructions subtract = b:building_banana_plantation.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_barrack }
+      add = { value = b:building_barrack.level_after_queued_constructions subtract = b:building_barrack.level min = 0 multiply = 100 }
+     }
+     if = { limit = { has_building = building_big_ben }
+      add = { value = b:building_big_ben.level_after_queued_constructions subtract = b:building_big_ben.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_chemical_plant }
+      add = { value = b:building_chemical_plant.level_after_queued_constructions subtract = b:building_chemical_plant.level min = 0 multiply = 800 }
+     }
+     if = { limit = { has_building = building_coal_mine }
+      add = { value = b:building_coal_mine.level_after_queued_constructions subtract = b:building_coal_mine.level min = 0 multiply = 400 }
+     }
+     if = { limit = { has_building = building_coffee_plantation }
+      add = { value = b:building_coffee_plantation.level_after_queued_constructions subtract = b:building_coffee_plantation.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_construction_sector }
+      add = { value = b:building_construction_sector.level_after_queued_constructions subtract = b:building_construction_sector.level min = 0 multiply = 25 }
+     }
+     if = { limit = { has_building = building_copper_mine }
+      add = { value = b:building_copper_mine.level_after_queued_constructions subtract = b:building_copper_mine.level min = 0 multiply = 400 }
+     }
+     if = { limit = { has_building = building_cotton_plantation }
+      add = { value = b:building_cotton_plantation.level_after_queued_constructions subtract = b:building_cotton_plantation.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_cristo_redentor }
+      add = { value = b:building_cristo_redentor.level_after_queued_constructions subtract = b:building_cristo_redentor.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_dye_plantation }
+      add = { value = b:building_dye_plantation.level_after_queued_constructions subtract = b:building_dye_plantation.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_eiffel_tower }
+      add = { value = b:building_eiffel_tower.level_after_queued_constructions subtract = b:building_eiffel_tower.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_electrics_industry }
+      add = { value = b:building_electrics_industry.level_after_queued_constructions subtract = b:building_electrics_industry.level min = 0 multiply = 800 }
+     }
+     if = { limit = { has_building = building_estacion_de_madrid_atocha }
+      add = { value = b:building_estacion_de_madrid_atocha.level_after_queued_constructions subtract = b:building_estacion_de_madrid_atocha.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_explosives_factory }
+      add = { value = b:building_explosives_factory.level_after_queued_constructions subtract = b:building_explosives_factory.level min = 0 multiply = 800 }
+     }
+     if = { limit = { has_building = building_fishing_wharf }
+      add = { value = b:building_fishing_wharf.level_after_queued_constructions subtract = b:building_fishing_wharf.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_food_industry }
+      add = { value = b:building_food_industry.level_after_queued_constructions subtract = b:building_food_industry.level min = 0 multiply = 600 }
+     }
+     if = { limit = { has_building = building_forbidden_city }
+      add = { value = b:building_forbidden_city.level_after_queued_constructions subtract = b:building_forbidden_city.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_furniture_manufactory }
+      add = { value = b:building_furniture_manufactory.level_after_queued_constructions subtract = b:building_furniture_manufactory.level min = 0 multiply = 600 }
+     }
+     if = { limit = { has_building = building_glassworks }
+      add = { value = b:building_glassworks.level_after_queued_constructions subtract = b:building_glassworks.level min = 0 multiply = 600 }
+     }
+     if = { limit = { has_building = building_gold_mine }
+      add = { value = b:building_gold_mine.level_after_queued_constructions subtract = b:building_gold_mine.level min = 0 multiply = 400 }
+     }
+     if = { limit = { has_building = building_government_administration }
+      add = { value = b:building_government_administration.level_after_queued_constructions subtract = b:building_government_administration.level min = 0 multiply = 100 }
+     }
+     if = { limit = { has_building = building_gran_teatro_de_la_habana }
+      add = { value = b:building_gran_teatro_de_la_habana.level_after_queued_constructions subtract = b:building_gran_teatro_de_la_habana.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_hagia_sophia }
+      add = { value = b:building_hagia_sophia.level_after_queued_constructions subtract = b:building_hagia_sophia.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_iron_mine }
+      add = { value = b:building_iron_mine.level_after_queued_constructions subtract = b:building_iron_mine.level min = 0 multiply = 400 }
+     }
+     if = { limit = { has_building = building_kaiserforum_1 }
+      add = { value = b:building_kaiserforum_1.level_after_queued_constructions subtract = b:building_kaiserforum_1.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_kaiserforum_2 }
+      add = { value = b:building_kaiserforum_2.level_after_queued_constructions subtract = b:building_kaiserforum_2.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_kaiserforum_3 }
+      add = { value = b:building_kaiserforum_3.level_after_queued_constructions subtract = b:building_kaiserforum_3.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_kaiserforum_4 }
+      add = { value = b:building_kaiserforum_4.level_after_queued_constructions subtract = b:building_kaiserforum_4.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_kiel_canal }
+      add = { value = b:building_kiel_canal.level_after_queued_constructions subtract = b:building_kiel_canal.level min = 0 multiply = 5000 }
+     }
+     if = { limit = { has_building = building_lead_mine }
+      add = { value = b:building_lead_mine.level_after_queued_constructions subtract = b:building_lead_mine.level min = 0 multiply = 400 }
+     }
+     if = { limit = { has_building = building_livestock_ranch }
+      add = { value = b:building_livestock_ranch.level_after_queued_constructions subtract = b:building_livestock_ranch.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_logging_camp }
+      add = { value = b:building_logging_camp.level_after_queued_constructions subtract = b:building_logging_camp.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_maize_farm }
+      add = { value = b:building_maize_farm.level_after_queued_constructions subtract = b:building_maize_farm.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_manila_cathedral_monument }
+      add = { value = b:building_manila_cathedral_monument.level_after_queued_constructions subtract = b:building_manila_cathedral_monument.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_millet_farm }
+      add = { value = b:building_millet_farm.level_after_queued_constructions subtract = b:building_millet_farm.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_mosque_of_djenne }
+      add = { value = b:building_mosque_of_djenne.level_after_queued_constructions subtract = b:building_mosque_of_djenne.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_motor_industry }
+      add = { value = b:building_motor_industry.level_after_queued_constructions subtract = b:building_motor_industry.level min = 0 multiply = 800 }
+     }
+     if = { limit = { has_building = building_munition_plant }
+      add = { value = b:building_munition_plant.level_after_queued_constructions subtract = b:building_munition_plant.level min = 0 multiply = 800 }
+     }
+     if = { limit = { has_building = building_naval_administration }
+      add = { value = b:building_naval_administration.level_after_queued_constructions subtract = b:building_naval_administration.level min = 0 multiply = 100 }
+     }
+     if = { limit = { has_building = building_naval_fortification }
+      add = { value = b:building_naval_fortification.level_after_queued_constructions subtract = b:building_naval_fortification.level min = 0 multiply = 100 }
+     }
+     if = { limit = { has_building = building_oil_rig }
+      add = { value = b:building_oil_rig.level_after_queued_constructions subtract = b:building_oil_rig.level min = 0 multiply = 400 }
+     }
+     if = { limit = { has_building = building_opium_plantation }
+      add = { value = b:building_opium_plantation.level_after_queued_constructions subtract = b:building_opium_plantation.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_panama_canal }
+      add = { value = b:building_panama_canal.level_after_queued_constructions subtract = b:building_panama_canal.level min = 0 multiply = 5000 }
+     }
+     if = { limit = { has_building = building_paper_mill }
+      add = { value = b:building_paper_mill.level_after_queued_constructions subtract = b:building_paper_mill.level min = 0 multiply = 600 }
+     }
+     if = { limit = { has_building = building_pena_palace }
+      add = { value = b:building_pena_palace.level_after_queued_constructions subtract = b:building_pena_palace.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_port }
+      add = { value = b:building_port.level_after_queued_constructions subtract = b:building_port.level min = 0 multiply = 400 }
+     }
+     if = { limit = { has_building = building_power_bloc_statue }
+      add = { value = b:building_power_bloc_statue.level_after_queued_constructions subtract = b:building_power_bloc_statue.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_power_plant }
+      add = { value = b:building_power_plant.level_after_queued_constructions subtract = b:building_power_plant.level min = 0 multiply = 400 }
+     }
+     if = { limit = { has_building = building_railway }
+      add = { value = b:building_railway.level_after_queued_constructions subtract = b:building_railway.level min = 0 multiply = 800 }
+     }
+     if = { limit = { has_building = building_rice_farm }
+      add = { value = b:building_rice_farm.level_after_queued_constructions subtract = b:building_rice_farm.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_rubber_plantation }
+      add = { value = b:building_rubber_plantation.level_after_queued_constructions subtract = b:building_rubber_plantation.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_rye_farm }
+      add = { value = b:building_rye_farm.level_after_queued_constructions subtract = b:building_rye_farm.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_sagrada_familia_cathedral_1 }
+      add = { value = b:building_sagrada_familia_cathedral_1.level_after_queued_constructions subtract = b:building_sagrada_familia_cathedral_1.level min = 0 multiply = 6000 }
+     }
+     if = { limit = { has_building = building_sagrada_familia_cathedral_2 }
+      add = { value = b:building_sagrada_familia_cathedral_2.level_after_queued_constructions subtract = b:building_sagrada_familia_cathedral_2.level min = 0 multiply = 6000 }
+     }
+     if = { limit = { has_building = building_sagrada_familia_cathedral_3 }
+      add = { value = b:building_sagrada_familia_cathedral_3.level_after_queued_constructions subtract = b:building_sagrada_familia_cathedral_3.level min = 0 multiply = 6000 }
+     }
+     if = { limit = { has_building = building_saint_basils_cathedral }
+      add = { value = b:building_saint_basils_cathedral.level_after_queued_constructions subtract = b:building_saint_basils_cathedral.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_shipyard }
+      add = { value = b:building_shipyard.level_after_queued_constructions subtract = b:building_shipyard.level min = 0 multiply = 600 }
+     }
+     if = { limit = { has_building = building_silk_plantation }
+      add = { value = b:building_silk_plantation.level_after_queued_constructions subtract = b:building_silk_plantation.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_skyscraper }
+      add = { value = b:building_skyscraper.level_after_queued_constructions subtract = b:building_skyscraper.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_statue_of_liberty }
+      add = { value = b:building_statue_of_liberty.level_after_queued_constructions subtract = b:building_statue_of_liberty.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_steel_mill }
+      add = { value = b:building_steel_mill.level_after_queued_constructions subtract = b:building_steel_mill.level min = 0 multiply = 800 }
+     }
+     if = { limit = { has_building = building_suez_canal }
+      add = { value = b:building_suez_canal.level_after_queued_constructions subtract = b:building_suez_canal.level min = 0 multiply = 5000 }
+     }
+     if = { limit = { has_building = building_sugar_plantation }
+      add = { value = b:building_sugar_plantation.level_after_queued_constructions subtract = b:building_sugar_plantation.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_sulfur_mine }
+      add = { value = b:building_sulfur_mine.level_after_queued_constructions subtract = b:building_sulfur_mine.level min = 0 multiply = 400 }
+     }
+     if = { limit = { has_building = building_synthetics_plant }
+      add = { value = b:building_synthetics_plant.level_after_queued_constructions subtract = b:building_synthetics_plant.level min = 0 multiply = 800 }
+     }
+     if = { limit = { has_building = building_taj_mahal }
+      add = { value = b:building_taj_mahal.level_after_queued_constructions subtract = b:building_taj_mahal.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_tea_plantation }
+      add = { value = b:building_tea_plantation.level_after_queued_constructions subtract = b:building_tea_plantation.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_textile_mill }
+      add = { value = b:building_textile_mill.level_after_queued_constructions subtract = b:building_textile_mill.level min = 0 multiply = 600 }
+     }
+     if = { limit = { has_building = building_tobacco_plantation }
+      add = { value = b:building_tobacco_plantation.level_after_queued_constructions subtract = b:building_tobacco_plantation.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_tooling_workshop }
+      add = { value = b:building_tooling_workshop.level_after_queued_constructions subtract = b:building_tooling_workshop.level min = 0 multiply = 600 }
+     }
+     if = { limit = { has_building = building_trade_center }
+      add = { value = b:building_trade_center.level_after_queued_constructions subtract = b:building_trade_center.level min = 0 multiply = 100 }
+     }
+     if = { limit = { has_building = building_university }
+      add = { value = b:building_university.level_after_queued_constructions subtract = b:building_university.level min = 0 multiply = 400 }
+     }
+     if = { limit = { has_building = building_vatican_city }
+      add = { value = b:building_vatican_city.level_after_queued_constructions subtract = b:building_vatican_city.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_victoria_terminus }
+      add = { value = b:building_victoria_terminus.level_after_queued_constructions subtract = b:building_victoria_terminus.level min = 0 multiply = 2500 }
+     }
+     if = { limit = { has_building = building_vineyard }
+      add = { value = b:building_vineyard.level_after_queued_constructions subtract = b:building_vineyard.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_whaling_station }
+      add = { value = b:building_whaling_station.level_after_queued_constructions subtract = b:building_whaling_station.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_wheat_farm }
+      add = { value = b:building_wheat_farm.level_after_queued_constructions subtract = b:building_wheat_farm.level min = 0 multiply = 200 }
+     }
+     if = { limit = { has_building = building_white_house }
+      add = { value = b:building_white_house.level_after_queued_constructions subtract = b:building_white_house.level min = 0 multiply = 2500 }
+     }
+     if = { limit = {
+      NOT = { has_building = building_logging_camp }
+      has_variable = sed_wood_request_pending var:sed_wood_intent_level = 0
+var:sed_wood_intent_variant = 1
+     } add = 200 }
+     if = { limit = {
+      NOT = { has_building = building_iron_mine }
+      has_variable = sed_iron_request_pending var:sed_iron_intent_level = 0
+var:sed_iron_intent_variant = 1
+     } add = 400 }
+     if = { limit = {
+      NOT = { has_building = building_coal_mine }
+      has_variable = sed_coal_request_pending var:sed_coal_intent_level = 0
+var:sed_coal_intent_variant = 1
+     } add = 400 }
+     if = { limit = {
+      NOT = { has_building = building_wheat_farm }
+      has_variable = sed_grain_request_pending var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 1
+     } add = 200 }
+     if = { limit = {
+      NOT = { has_building = building_rye_farm }
+      has_variable = sed_grain_request_pending var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 2
+     } add = 200 }
+     if = { limit = {
+      NOT = { has_building = building_rice_farm }
+      has_variable = sed_grain_request_pending var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 3
+     } add = 200 }
+     if = { limit = {
+      NOT = { has_building = building_maize_farm }
+      has_variable = sed_grain_request_pending var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 4
+     } add = 200 }
+     if = { limit = {
+      NOT = { has_building = building_millet_farm }
+      has_variable = sed_grain_request_pending var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 5
+     } add = 200 }
+     if = { limit = {
+      NOT = { has_building = building_cotton_plantation }
+      has_variable = sed_fabric_request_pending var:sed_fabric_intent_level = 0
+var:sed_fabric_intent_variant = 1
+     } add = 200 }
+     if = { limit = {
+      NOT = { has_building = building_livestock_ranch }
+      has_variable = sed_fabric_request_pending var:sed_fabric_intent_level = 0
+var:sed_fabric_intent_variant = 2
+     } add = 200 }
+     if = { limit = {
+      NOT = { has_building = building_tooling_workshop }
+      has_variable = sed_tools_request_pending var:sed_tools_intent_level = 0
+var:sed_tools_intent_variant = 1
+     } add = 600 }
+     if = { limit = {
+      NOT = { has_building = building_food_industry }
+      has_variable = sed_groceries_request_pending var:sed_groceries_intent_level = 0
+var:sed_groceries_intent_variant = 1
+     } add = 600 }
+     if = { limit = {
+      NOT = { has_building = building_textile_mill }
+      has_variable = sed_clothes_request_pending var:sed_clothes_intent_level = 0
+var:sed_clothes_intent_variant = 1
+     } add = 600 }
+     if = { limit = {
+      NOT = { has_building = building_arms_industry }
+      has_variable = sed_small_arms_request_pending var:sed_small_arms_intent_level = 0
+var:sed_small_arms_intent_variant = 1
+     } add = 600 }
+     if = { limit = {
+      NOT = { has_building = building_artillery_foundry }
+      has_variable = sed_artillery_request_pending var:sed_artillery_intent_level = 0
+var:sed_artillery_intent_variant = 1
+     } add = 600 }
+     if = { limit = {
+      NOT = { has_building = building_munition_plant }
+      has_variable = sed_ammunition_request_pending var:sed_ammunition_intent_level = 0
+var:sed_ammunition_intent_variant = 1
+     } add = 800 }
+     if = { limit = {
+      NOT = { has_building = building_railway }
+      has_variable = sed_railway_request_pending var:sed_railway_intent_level = 0
+
+     } add = 800 }
+    }
+   } }
+  }
+  set_variable = { name = sed_build_budget_queue_levels_unknown value = {
+   value = construction_queue_num_queued_government_levels
+   subtract = var:sed_build_budget_queue_levels_known min = 0
+  } }
+  set_variable = { name = sed_build_budget_queue_points value = {
+   value = var:sed_build_budget_queue_points
+   add = { value = var:sed_build_budget_queue_levels_unknown multiply = 6000 }
+   max = { value = construction_queue_num_queued_government_levels min = 0 multiply = 6000 }
+  } }
+  set_variable = { name = sed_build_budget_queue_weeks value = 0 }
+  if = { limit = { modifier:country_construction_add > 0 }
+   set_variable = { name = sed_build_budget_queue_weeks value = {
+    value = var:sed_build_budget_queue_points divide = modifier:country_construction_add
+   } }
+  }
+
   set_variable = { name = sed_build_budget_project_weeks value = 0 }
   set_variable = { name = sed_build_budget_project_materials value = {
    value = var:sed_build_budget_project_points multiply = var:sed_build_budget_point_cost
@@ -5414,10 +6132,13 @@ sed_refresh_direct_budget = {
     value = var:sed_build_budget_project_points divide = var:sed_build_budget_points
    } }
   }
+  set_variable = { name = sed_build_budget_funding_weeks value = {
+   value = var:sed_build_budget_project_weeks add = var:sed_build_budget_queue_weeks add = 4 min = 26
+  } }
   set_variable = { name = sed_build_budget_required_gold value = {
    value = fixed_expenses min = 0 multiply = 4
    add = { value = var:sed_build_budget_weekly subtract = net_total_income min = 0
-    multiply = { value = var:sed_build_budget_project_weeks add = 4 min = 26 max = 56 }
+    multiply = var:sed_build_budget_funding_weeks
    }
   } }
  }
@@ -5837,14 +6558,14 @@ sed_coord_sync = {
   set_variable = { name = sed_coord_advisor_policy value = 0 }
   if = { limit = { has_variable = aroai_autobuild } set_variable = { name = sed_coord_executor value = 5 } }
   else_if = { limit = { sed_coord_fiscal_safe = yes NOT = { in_default = yes } is_construction_paused = no }
-   if = { limit = { sed_coord_reserve_drawdown_safe = yes construction_queue_num_queued_government_levels > 0 }
+   if = { limit = { var:sed_plan_goal = 2 sed_direct_fiscal_safe = yes sed_direct_supply_priority_exists = yes }
+    set_variable = { name = sed_coord_executor value = 11 }
+   }
+   else_if = { limit = { sed_coord_reserve_drawdown_safe = yes construction_queue_num_queued_government_levels > 0 }
     set_variable = { name = sed_coord_executor value = 12 }
    }
    else_if = { limit = { var:sed_plan_waiting = 1 }
     set_variable = { name = sed_coord_executor value = 10 }
-   }
-   else_if = { limit = { var:sed_plan_goal = 2 sed_auto_fiscal_safe = yes sed_direct_supply_priority_exists = yes }
-    set_variable = { name = sed_coord_executor value = 11 }
    }
    else_if = { limit = { var:sed_plan_goal = 1 has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes }
     set_variable = { name = zw_var_scsab_construct_railway value = 1 }

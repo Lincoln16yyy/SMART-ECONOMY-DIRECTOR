@@ -22,6 +22,23 @@ class CoordinationTests(unittest.TestCase):
     def external(self):
         return {option: self.c.variables[option] for _, option, _ in OPTIONS if option in self.c.variables}
 
+    def test_direct_supply_can_use_reserves_with_an_existing_public_queue(self):
+        c = self.c
+        producer = building('building_logging_camp')
+        producer['production_methods'] = ['pm_simple_forestry']
+        c.states = [state(buildings=[producer, building('building_iron_mine', queued_levels=1)])]
+        c.market_goods['wood'] = dict(market_goods_has_goods_shortage=True,
+                                     market_goods_buy_orders=100, market_goods_sell_orders=40)
+        c.readings.update(net_total_income=-10, net_fixed_income=100,
+                          gold_reserves=1000000, principal=0,
+                          construction_queue_num_queued_government_levels=1)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_coord_executor'], 11)
+        self.assertEqual(self.external(), {})
+        self.assertEqual([project['building'] for project in c.constructions],
+                         ['building_logging_camp'])
+
     def test_automatic_takes_control_and_chooses_only_supply_railways(self):
         c = self.c
         c.run('sed_set_mode_automatic')

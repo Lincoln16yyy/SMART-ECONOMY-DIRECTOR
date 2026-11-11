@@ -289,8 +289,12 @@ sed_coord_reserve_drawdown_safe = {
  }
 }
 
+sed_direct_fiscal_safe = {
+ OR = { sed_auto_fiscal_safe = yes sed_coord_reserve_drawdown_safe = yes }
+}
+
 sed_coord_fiscal_safe = {
- OR = { sed_auto_fiscal_safe = yes AND = { has_variable = sed_coord_advisor_known sed_coord_reserve_drawdown_safe = yes } }
+ OR = { sed_auto_fiscal_safe = yes sed_coord_reserve_drawdown_safe = yes }
 }
 '''
 

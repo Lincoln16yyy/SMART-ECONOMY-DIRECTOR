@@ -2,6 +2,32 @@
 
 
 
+
+## 0.7.6 — Compromissos da fila e retomada por reservas
+
+O orçamento direto soma a construção de níveis pendentes nos tipos vanilla
+verificados em `data/queued_building_costs.json`, incluindo fundações próprias
+que ainda não têm prédio. A fila pública agregada limita a soma. Níveis sem
+correspondência usam 6000 pontos, o maior custo vanilla verificado. A janela
+estimada soma fila/capacidade nacional, duração do novo projeto e quatro
+semanas, com piso de 26 semanas. O teto anterior de 56 semanas foi removido.
+
+A referência semanal considera os pontos que os projetos públicos existentes
+mais o novo podem consumir em paralelo, limitada pela capacidade nacional e
+pelo material dos setores ocupados. A guarda de reservas usa essa referência
+durante a janela estimada. O executor direto pode operar com déficit semanal
+se o saldo operacional é não negativo, não há dívida e as duas guardas de
+reservas e materiais são satisfeitas. Com coordenação, a prioridade própria
+é avaliada antes da espera genérica por fila pública financiada por reservas.
+Os caminhos específicos do Supply Chain mantêm suas guardas anteriores.
+
+Os pontos da fila incluem o custo integral dos níveis pendentes e ignoram o
+progresso já feito. Leituras por prédio podem incluir outro investidor e não
+identificam projetos estrangeiros do país. O fallback cobre a falta de
+correspondência na contagem agregada. Custos modificados por outros mods,
+eficiência local, ordem exata, autoria e despesas operacionais futuras
+continuam sem previsão precisa. A cobertura é uma referência de estresse.
+
 ## 0.7.5 — Despesa militar durante recuperação fiscal
 
 O Automático passa a reduzir salários militares em crise/default com saldo
