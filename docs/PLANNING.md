@@ -15,15 +15,17 @@ A fundação não cria um caminho paralelo: usa o mesmo candidato, o mesmo plano
 de até três prioridades, a mesma aprovação (também disponível no Assistido)
 e as mesmas guardas fiscais, de materiais, de fila privada, de pausa e o
 limite de uma tentativa por mês. Não inicia obra em estado que já tem a
-variante; nesse caso a expansão normal continua valendo. O livro de resultados
+variante; nesse caso a expansão normal continua valendo. Enquanto a fundação
+está na fila ainda não há prédio no país, então o gatilho exige que nenhum
+estado tenha pedido pendente daquele bem: só se funda uma base por país, e
+revisões seguintes não duplicam a indústria em outro estado. O livro de resultados
 passa a contar a fundação como pedido e infere a conclusão quando o nível sai
 de 0 ao deixar a fila.
 
 Quando nenhum estado pode hospedar o prédio, o objetivo 5 permanece e a
 interface diz que o Director aguarda tecnologia, terra ou infraestrutura; a
-construção não é forçada e a importação continua fora do escopo. 243 testes
-sintéticos aprovados, incluindo fundação automática, ausência de estado apto
-e as regressões anteriores. Geração e validação
+construção não é forçada e a importação continua fora do escopo.244 testes sintéticos aprovados, incluindo fundação automática, ausência de estado apto,
+fundação única por país enquanto a obra está na fila e as regressões anteriores. Geração e validação
 estática locais aprovadas. Sem engine ou campanha nesta etapa: custo real,
 terra disponível e comportamento de `can_construct_building` no jogo ainda
 precisam de confirmação.

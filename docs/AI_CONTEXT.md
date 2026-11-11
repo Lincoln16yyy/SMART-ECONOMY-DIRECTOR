@@ -12,8 +12,10 @@ prédio novo (intenção com nível 0) usando o dispatcher, a aprovação e o li
 de resultados existentes, sob as guardas fiscais, de materiais, de fila
 privada, de pausa e o limite mensal. Sem estado apto, o objetivo 5 permanece e
 nada é forçado. Implementação em `sed_<bem>_found_site` e no ramo de enqueue de
-`sed_run_<bem>_approval`; testes em `tests/test_planning.py`. 243 testes
-sintéticos aprovados; engine e campanha pendentes.
+`sed_run_<bem>_approval`; o gatilho exige que nenhum estado tenha pedido
+pendente daquele bem, limitando a uma fundação por país. Testes em
+`tests/test_planning.py`. 244 testes sintéticos aprovados; engine e campanha
+pendentes.
 
 ## 0.6.26 — Setor de construção e segunda revisão no Automático
 

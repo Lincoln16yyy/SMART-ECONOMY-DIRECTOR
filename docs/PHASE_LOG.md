@@ -1712,3 +1712,16 @@ objetivo 5 permanece e nada é forçado.
 estado apto e as regressões anteriores. Geração, validação estática e verificação de artefatos locais
 aprovadas. Sem instalação, engine ou campanha nesta etapa; custo real, terra
 disponível e concorrência seguem sem confirmação.
+
+## 2026-11-10 — Fundação única por país (correção da 0.7.0)
+
+O gatilho de fundação podia duplicar a mesma indústria: enquanto a obra estava
+na fila não existia prédio, o bem continuava marcado como ausente e outro
+estado sem pedido pendente voltava a ser elegível na revisão seguinte. O
+gatilho agora exige que nenhum estado tenha `sed_<bem>_request_pending`, então
+só há uma fundação por país. Quando o prédio conclui, o bem deixa de ser
+ausente e a expansão normal assume.
+
+244 testes sintéticos aprovados, incluindo duas revisões mensais com dois
+estados aptos e apenas uma inclusão. Geração e validação estática locais
+aprovadas; comportamento na engine continua pendente.

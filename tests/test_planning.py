@@ -208,6 +208,22 @@ class PlanningTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_iron_intents'], 1)
         self.assertEqual(c.variables['sed_auto_review_status'], 1)
 
+    def test_a_queued_founding_is_not_duplicated_in_another_state(self):
+        first = state(can_construct=True)
+        second = state(can_construct=True)
+        self.c.states = [first, second]
+        self.c.market_goods['iron'] = dict(market_goods_has_goods_shortage=True,
+                                          market_goods_buy_orders=100,
+                                          market_goods_sell_orders=0)
+        c = self.c
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(len(c.constructions), 1)
+        c.readings['month'] = 1
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(len(c.constructions), 1)
+        self.assertEqual(self.ranked(), [])
+
     def test_missing_industry_without_a_host_state_stays_an_objective(self):
         target = state(can_construct=False)
         self.c.states = [target]

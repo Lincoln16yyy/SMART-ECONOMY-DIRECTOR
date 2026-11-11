@@ -1637,7 +1637,13 @@ sed_{good}_candidate_site = {{
 # No verified producer in the country: found the base in a state that can host it.
 sed_{good}_found_site = {{
  sed_{good}_candidate_site = yes
- owner = {{ var:sed_plan_missing_{good} = 1 }}
+ owner = {{
+  has_variable = sed_plan_missing_{good}
+  var:sed_plan_missing_{good} = 1
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = {{ any_scope_state = {{ has_variable = sed_{good}_request_pending }} }}
+ }}
  {absent}
  OR = {{ {constructible} }}
 }}

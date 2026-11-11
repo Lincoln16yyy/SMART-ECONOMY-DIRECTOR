@@ -347,7 +347,13 @@ sed_wood_candidate_site = {
 # No verified producer in the country: found the base in a state that can host it.
 sed_wood_found_site = {
  sed_wood_candidate_site = yes
- owner = { var:sed_plan_missing_wood = 1 }
+ owner = {
+  has_variable = sed_plan_missing_wood
+  var:sed_plan_missing_wood = 1
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_wood_request_pending } }
+ }
  NOT = { has_building = building_logging_camp }
  OR = { can_construct_building = building_logging_camp }
 }
@@ -409,7 +415,13 @@ sed_iron_candidate_site = {
 # No verified producer in the country: found the base in a state that can host it.
 sed_iron_found_site = {
  sed_iron_candidate_site = yes
- owner = { var:sed_plan_missing_iron = 1 }
+ owner = {
+  has_variable = sed_plan_missing_iron
+  var:sed_plan_missing_iron = 1
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_iron_request_pending } }
+ }
  NOT = { has_building = building_iron_mine }
  OR = { can_construct_building = building_iron_mine }
 }
@@ -477,7 +489,13 @@ sed_coal_candidate_site = {
 # No verified producer in the country: found the base in a state that can host it.
 sed_coal_found_site = {
  sed_coal_candidate_site = yes
- owner = { var:sed_plan_missing_coal = 1 }
+ owner = {
+  has_variable = sed_plan_missing_coal
+  var:sed_plan_missing_coal = 1
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_coal_request_pending } }
+ }
  NOT = { has_building = building_coal_mine }
  OR = { can_construct_building = building_coal_mine }
 }
@@ -545,7 +563,13 @@ sed_grain_candidate_site = {
 # No verified producer in the country: found the base in a state that can host it.
 sed_grain_found_site = {
  sed_grain_candidate_site = yes
- owner = { var:sed_plan_missing_grain = 1 }
+ owner = {
+  has_variable = sed_plan_missing_grain
+  var:sed_plan_missing_grain = 1
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_grain_request_pending } }
+ }
  NOT = { has_building = building_wheat_farm } NOT = { has_building = building_rye_farm } NOT = { has_building = building_rice_farm } NOT = { has_building = building_maize_farm } NOT = { has_building = building_millet_farm }
  OR = { can_construct_building = building_wheat_farm can_construct_building = building_rye_farm can_construct_building = building_rice_farm can_construct_building = building_maize_farm can_construct_building = building_millet_farm }
 }
@@ -821,7 +845,13 @@ sed_fabric_candidate_site = {
 # No verified producer in the country: found the base in a state that can host it.
 sed_fabric_found_site = {
  sed_fabric_candidate_site = yes
- owner = { var:sed_plan_missing_fabric = 1 }
+ owner = {
+  has_variable = sed_plan_missing_fabric
+  var:sed_plan_missing_fabric = 1
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_fabric_request_pending } }
+ }
  NOT = { has_building = building_cotton_plantation } NOT = { has_building = building_livestock_ranch }
  OR = { can_construct_building = building_cotton_plantation can_construct_building = building_livestock_ranch }
 }
@@ -926,7 +956,13 @@ sed_tools_candidate_site = {
 # No verified producer in the country: found the base in a state that can host it.
 sed_tools_found_site = {
  sed_tools_candidate_site = yes
- owner = { var:sed_plan_missing_tools = 1 }
+ owner = {
+  has_variable = sed_plan_missing_tools
+  var:sed_plan_missing_tools = 1
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_tools_request_pending } }
+ }
  NOT = { has_building = building_tooling_workshop }
  OR = { can_construct_building = building_tooling_workshop }
 }
@@ -990,7 +1026,13 @@ sed_groceries_candidate_site = {
 # No verified producer in the country: found the base in a state that can host it.
 sed_groceries_found_site = {
  sed_groceries_candidate_site = yes
- owner = { var:sed_plan_missing_groceries = 1 }
+ owner = {
+  has_variable = sed_plan_missing_groceries
+  var:sed_plan_missing_groceries = 1
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_groceries_request_pending } }
+ }
  NOT = { has_building = building_food_industry }
  OR = { can_construct_building = building_food_industry }
 }
@@ -1060,7 +1102,13 @@ sed_clothes_candidate_site = {
 # No verified producer in the country: found the base in a state that can host it.
 sed_clothes_found_site = {
  sed_clothes_candidate_site = yes
- owner = { var:sed_plan_missing_clothes = 1 }
+ owner = {
+  has_variable = sed_plan_missing_clothes
+  var:sed_plan_missing_clothes = 1
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_clothes_request_pending } }
+ }
  NOT = { has_building = building_textile_mill }
  OR = { can_construct_building = building_textile_mill }
 }
@@ -1124,7 +1172,13 @@ owner = { military_expenses > 0 market = { mg:small_arms ?= { market_goods_buy_o
 # No verified producer in the country: found the base in a state that can host it.
 sed_small_arms_found_site = {
  sed_small_arms_candidate_site = yes
- owner = { var:sed_plan_missing_small_arms = 1 }
+ owner = {
+  has_variable = sed_plan_missing_small_arms
+  var:sed_plan_missing_small_arms = 1
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_small_arms_request_pending } }
+ }
  NOT = { has_building = building_arms_industry }
  OR = { can_construct_building = building_arms_industry }
 }
@@ -1188,7 +1242,13 @@ owner = { military_expenses > 0 market = { mg:artillery ?= { market_goods_buy_or
 # No verified producer in the country: found the base in a state that can host it.
 sed_artillery_found_site = {
  sed_artillery_candidate_site = yes
- owner = { var:sed_plan_missing_artillery = 1 }
+ owner = {
+  has_variable = sed_plan_missing_artillery
+  var:sed_plan_missing_artillery = 1
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_artillery_request_pending } }
+ }
  NOT = { has_building = building_artillery_foundry }
  OR = { can_construct_building = building_artillery_foundry }
 }
@@ -1256,7 +1316,13 @@ owner = { military_expenses > 0 market = { mg:ammunition ?= { market_goods_buy_o
 # No verified producer in the country: found the base in a state that can host it.
 sed_ammunition_found_site = {
  sed_ammunition_candidate_site = yes
- owner = { var:sed_plan_missing_ammunition = 1 }
+ owner = {
+  has_variable = sed_plan_missing_ammunition
+  var:sed_plan_missing_ammunition = 1
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_ammunition_request_pending } }
+ }
  NOT = { has_building = building_munition_plant }
  OR = { can_construct_building = building_munition_plant }
 }
