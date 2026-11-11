@@ -5,14 +5,14 @@ import json
 from pathlib import Path
 
 try:
-    from . import planning, coordination, construction_budget, labor, input_forecast
+    from . import planning, coordination, construction_budget, labor, input_forecast, production_methods
 except ImportError:
-    import planning, coordination, construction_budget, labor, input_forecast
+    import planning, coordination, construction_budget, labor, input_forecast, production_methods
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.6'
+VERSION = '0.7.7'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -184,7 +184,7 @@ STATE_VARIABLES = ['sed_railway_request_pending', 'sed_construction_request_pend
     f"sed_{item['good']}_request_pending" for item in SUPPLY_TARGETS] + IGNORED_VARIABLES + [
     f"sed_{item['good']}_{field}" for item in SUPPLY_TARGETS
     for field in ('intent_level', 'intent_variant')]
-STATE_VARIABLES += planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES
+STATE_VARIABLES += planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES + production_methods.state_variables(SUPPLY_TARGETS)
 EXTRA_VARIABLES = '''sed_last_year sed_last_month sed_month_key sed_in_default
 sed_gdp_per_capita sed_per_capita_available sed_debt_share sed_debt_share_available
 sed_reserve_weeks sed_reserve_weeks_available sed_states sed_infrastructure_short_states
@@ -382,7 +382,12 @@ sed_refresh_supply_candidates = {
      change_variable = {{ name = sed_{good}_intents add = 1 }}
     }}
     else = {{ set_variable = {{ name = sed_{good}_intents value = 1 }} }}
-    prev = {{ set_variable = {{ name = sed_{good}_request_pending value = yes }} }}
+    prev = {{
+     set_variable = {{ name = sed_{good}_request_pending value = yes }}
+     if = {{ limit = {{ owner = {{ has_variable = sed_mode_automatic }} var:sed_{good}_intent_level = 0 }}
+      set_variable = {{ name = sed_{good}_found_pm_pending value = var:sed_{good}_intent_variant }}
+     }}
+    }}
    }}
    else = {{
     set_variable = {{ name = sed_{good}_action_status value = 2 }}
@@ -415,6 +420,8 @@ sed_refresh_supply_candidates = {
         other_modes = [value for value in ('manual', 'assisted', 'automatic') if value != mode]
         cleanup = '\n'.join(f' remove_variable = sed_mode_{value}' for value in other_modes)
         release = ' sed_coord_restore = yes\n sed_restore_fiscal_policy = yes\n sed_restore_wage_policy = yes\n sed_restore_military_wage_policy = yes\n' if mode != 'automatic' else ''
+        if mode != 'automatic':
+            release += ' every_scope_state = {\n' + '\n'.join('  remove_variable = ' + name for name in production_methods.state_variables(SUPPLY_TARGETS)) + '\n }\n'
         takeover = ''
         if mode == 'automatic':
             takeover = ' if = { limit = { has_variable = sed_enabled NOT = { has_variable = sed_coord_active } sed_coord_tools_available = yes } sed_coord_enable = yes }\n'
@@ -443,6 +450,7 @@ sed_refresh_supply_candidates = {
  }
 }''')
     result.append('''sed_auto_apply_monthly = {
+ sed_configure_founded_industries = yes
  sed_refresh_national_plan = yes
  sed_apply_fiscal_policy = yes
  sed_apply_wage_policy = yes
@@ -1270,10 +1278,10 @@ sed_update_growth = {
     cleanup = '\n'.join(' clear_variable_list = ' + name for name in lists)
     script = script.replace('sed_disable_country = {', 'sed_disable_country = {\n' + cleanup, 1)
     # All state-scoped planner variables are removed on deactivation.
-    state_cleanup = '\n'.join('  remove_variable = ' + name for name in planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES)
+    state_cleanup = '\n'.join('  remove_variable = ' + name for name in planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES + production_methods.state_variables(SUPPLY_TARGETS))
     script = script.replace(' # Schema and automatic attempt month',
                             ' every_scope_state = {\n' + state_cleanup + '\n }\n # Schema and automatic attempt month', 1)
-    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, INPUT_DEPENDENCIES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + input_forecast.effects() + input_priority_effect() + labor.effects() + construction_budget.effects(founding_projects()) + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + planning.military_wage_policy_effects() + coordination.effects()
+    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, INPUT_DEPENDENCIES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + input_forecast.effects() + input_priority_effect() + labor.effects() + construction_budget.effects(founding_projects()) + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + planning.military_wage_policy_effects() + production_methods.effects(SUPPLY_TARGETS, variants) + coordination.effects()
 
 
 def scripted_guis():

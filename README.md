@@ -1,5 +1,12 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.7, o Automático configura métodos básicos de produção nas indústrias
+que fundou e acompanha. A configuração passa por verificações de insumos,
+trabalho estimado e permissão do jogo. A escolha inicial de PMs está
+implementada para o catálogo de produtores. Modernização e otimização
+contínua seguem pendentes.
+
+
 Na 0.7.6, o orçamento direto considera a fila existente e a nova obra na
 cobertura por reservas, com referência para projetos simultâneos. O Automático
 pode retomar investimentos com déficit semanal quando a operação, a dívida e

@@ -1840,3 +1840,19 @@ exatas do financiamento, além da execução coordenada com fila ocupada.
 Gerador, validação estática 1.15, pacote e whitespace aprovados. Instalada com
 backup `mod_before_0.7.6_20261110_235444_968965` e conferência dos 14 arquivos.
 Prazo real, autoria dos projetos e resultado em campanha continuam pendentes.
+
+
+## 2026-11-11 — Configuração inicial de PMs (0.7.7)
+
+Fundações automáticas confirmadas recebem configuração básica por grupo de PM.
+O Director verifica permissões, insumos e reserva de trabalho e confirma os
+métodos ativos antes de encerrar o acompanhamento. Mudanças reservam insumos
+na leitura corrente para impedir dupla utilização entre indústrias. Métodos
+já ativos dispensam nova ativação. Trocas de modo, cancelamento identificado,
+expansões além do primeiro nível e marca de ignorar encerram o preparo.
+
+286 testes sintéticos aprovados. Regressões cobrem acompanhamento da fundação,
+falha de inclusão, confirmação, escassez, trabalho, preflight por grupo, modos,
+limpeza e disputa por insumos. Gerador, validação estática, pacote e whitespace
+aprovados. Instalada com backup `mod_before_0.7.7_20261111_000840_381639`,
+conferindo os 14 arquivos. Aplicação real na engine e efeito econômico pendentes.

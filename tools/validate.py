@@ -52,7 +52,11 @@ def validate(root=ROOT, game=None):
                        'every_scope_building', 'ordered_scope_state', 'clear_variable_list',
                        'add_to_variable_list', 'add_journal_entry', 'start_building_construction',
                        'trigger_event', 'order_by', 'max', 'check_range_bounds',
-                       'set_tax_level', 'set_government_wage_level', 'set_military_wage_level'}
+                       'set_tax_level', 'set_government_wage_level', 'set_military_wage_level',
+                       'activate_production_method'}
+    startup_profiles = json.loads((ROOT / 'data/founding_production_methods.json').read_text())
+    startup_methods = {(building, group['method']) for building, groups in startup_profiles.items()
+                       for group in groups}
     tax_effects = {'sed_apply_fiscal_policy', 'sed_restore_fiscal_policy'}
     wage_effects = {'sed_apply_wage_policy', 'sed_restore_wage_policy'}
     military_wage_effects = {'sed_apply_military_wage_policy', 'sed_restore_military_wage_policy'}
@@ -94,6 +98,10 @@ def validate(root=ROOT, game=None):
             if entry.key == 'set_military_wage_level':
                 if effect_name not in military_wage_effects or entry.value not in tax_levels:
                     errors.append('Military wage change outside the reviewed policy: ' + str(entry.value))
+            if entry.key == 'activate_production_method':
+                pair = (child(entry.value, 'building_type'), child(entry.value, 'production_method'))
+                if effect_name != 'sed_configure_founded_industries' or pair not in startup_methods:
+                    errors.append('Production method change outside the reviewed founding setup')
             if entry.key == 'remove_variable':
                 if not str(entry.value).startswith('sed_'):
                     if effect_name not in ('sed_coord_sync', 'sed_coord_restore') or entry.value not in coordinated_options:
@@ -126,6 +134,7 @@ def validate(root=ROOT, game=None):
         ('sed_apply_fiscal_policy', 'sed_tax_month_limit_reached'),
         ('sed_apply_wage_policy', 'sed_wage_month_limit_reached'),
         ('sed_apply_military_wage_policy', 'sed_military_wage_month_limit_reached'),
+        ('sed_configure_founded_industries', None),
     ):
         body = custom.get(name, [])
         outer = body[0] if len(body) == 1 else None
@@ -134,13 +143,15 @@ def validate(root=ROOT, game=None):
                            ('has_variable', 'sed_mode_automatic')]:
             if not any(entry.key == key and entry.value == value for entry in limit):
                 errors.append('Fiscal/wage policy lacks required execution guard: ' + name + ' ' + value)
-        for key, value in [(monthly_guard, 'yes'), ('has_variable', 'sed_mode_manual'),
-                           ('has_variable', 'sed_mode_assisted')]:
+        exclusions = [('has_variable', 'sed_mode_manual'), ('has_variable', 'sed_mode_assisted')]
+        if monthly_guard:
+            exclusions.append((monthly_guard, 'yes'))
+        for key, value in exclusions:
             if not any(entry.key == 'NOT' and isinstance(entry.value, list)
                        and any(item.key == key and item.value == value for item in entry.value)
                        for entry in limit):
                 errors.append('Fiscal/wage policy lacks monthly or mode exclusion: ' + name + ' ' + value)
-    for mutation in ('activate_production_method', 'start_enactment', 'add_treasury',
+    for mutation in ('start_enactment', 'add_treasury',
                      'declare_war', 'add_modifier'):
         if re.search(r'\b' + mutation + r'\s*=', all_text):
             errors.append('Unexpected economic/political mutation: ' + mutation)

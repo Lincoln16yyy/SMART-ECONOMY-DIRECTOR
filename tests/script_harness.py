@@ -6,6 +6,7 @@ It does not emulate the game, validate primitive names, or test GUI rendering.
 
 from tools.pdx_script import child
 from tools.input_forecast import MARKET_GOODS, LOCAL_GOODS
+from tools.production_methods import PROFILES as PRODUCTION_PROFILES
 
 
 COUNTRY = 'country'
@@ -84,6 +85,7 @@ class Country:
         self.wage_changes = []
         self.military_wage_changes = []
         self.military_formations = []
+        self.production_method_changes = []
         self.construction_accepted = True
         self.market_goods = {good: {'market_goods_buy_orders': 1000,
                                     'market_goods_sell_orders': 1000,
@@ -239,6 +241,10 @@ class Country:
             return scope.get('building') == entry.value
         if key == 'can_construct_building':
             return bool(scope.get('can_construct_building'))
+        if key == 'can_activate_production_method':
+            kind = child(entry.value, 'building_type')
+            method = child(entry.value, 'production_method')
+            return self.building(scope, kind) is not None and method not in scope.get('blocked_methods', [])
         if key.startswith('b:') and '.' not in key:
             building = self.building(scope, key[2:])
             return building is not None and self.condition(entry.value, building)
@@ -328,6 +334,14 @@ class Country:
             elif key == 'set_military_wage_level':
                 self.readings['military_wage_level'] = value
                 self.military_wage_changes.append(value)
+            elif key == 'activate_production_method':
+                kind = child(value, 'building_type')
+                method = child(value, 'production_method')
+                target = self.building(scope, kind)
+                group = next(profile for profile in PRODUCTION_PROFILES[kind] if method in profile['alternatives'])
+                target['production_methods'] = [active for active in target.get('production_methods', [])
+                                                if active not in group['alternatives']] + [method]
+                self.production_method_changes.append((kind, method, scope))
             elif key == 'start_building_construction':
                 target = scope if scope.get('__scope__') == STATE else None
                 self.constructions.append(dict(building=value, state=target))

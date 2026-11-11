@@ -1,12 +1,42 @@
 # Contexto de continuidade
 
-Última entrega documentada: 0.7.6 instalada com jogo fechado e 14 arquivos
-conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.6_20261110_235444_968965`.
-274 testes sintéticos aprovados. As novas políticas ainda exigem confirmação na engine.
+Última entrega documentada: 0.7.7 instalada com jogo fechado e 14 arquivos
+conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.7_20261111_000840_381639`.
+286 testes sintéticos aprovados. A configuração inicial de PMs ainda exige confirmação na engine.
 
 
 
 
+
+
+## 0.7.7 — Configuração inicial das indústrias fundadas
+
+Fundações automáticas de produtores recebem uma marca de configuração inicial
+após inclusão confirmada. Na revisão automática, o Director tenta aplicar o
+primeiro método vanilla de cada grupo de produção do prédio, formando uma
+configuração básica. O registro de grupos foi extraído da instalação local.
+
+A operação exige prédio presente com nível atual e após fila de no máximo um,
+estado incorporado, ausência de marca de ignorar, reserva demográfica cobrindo
+os compromissos e margem para todos os insumos da configuração básica com 25%
+de estresse. Todos os métodos precisam estar ativos ou passar por
+`can_activate_production_method` antes de qualquer mudança. A confirmação usa
+os métodos ativos. Trocas realizadas reservam os insumos na leitura corrente
+para impedir que outra configuração use a mesma margem.
+
+A marca é removida após confirmação, saída do Automático, desativação,
+cancelamento identificado, expansão além do primeiro nível ou marca de ignorar.
+Atualizar o diagnóstico continua sem executar configuração. O método aplicado
+passa a integrar o prédio. A função usa `activate_production_method` em escopo
+de estado, com a assinatura verificada no executável e no adaptador de
+administração do Advisor instalado.
+
+A escolha é uma configuração básica inicial. Comparação de produtividade,
+preços, rentabilidade, qualificações e modernização dos prédios estabelecidos
+continua pendente. A guarda conservadora de insumos para autorizar a fundação
+continua usando os métodos tecnologicamente disponíveis. O acompanhamento é
+baseado no livro inferido existente, sem identidade de projeto. A primeira
+aplicação real ainda exige confirmação na engine.
 
 ## 0.7.6 — Compromissos da fila e retomada por reservas
 
