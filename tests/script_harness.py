@@ -127,7 +127,9 @@ class Country:
         except ValueError:
             pass
         if name in ('market_goods_buy_orders', 'market_goods_sell_orders',
-                    'state_goods_production', 'state_goods_consumption'):
+                    'state_goods_production', 'state_goods_consumption',
+                    'market_goods_pricier', 'market_goods_cheaper',
+                    'state_goods_pricier', 'state_goods_cheaper'):
             return scope.get(name, 0)  # Explicit synthetic zero-orders default; never engine evidence.
         if name in scope:
             return scope[name]

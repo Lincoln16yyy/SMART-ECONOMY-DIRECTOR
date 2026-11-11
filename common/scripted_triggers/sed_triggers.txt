@@ -724,7 +724,7 @@ sed_wood_found_site = {
 }
 sed_wood_supplier_available = {
  sed_wood_candidate_site = yes
- OR = { sed_wood_logging_camp_eligible = yes sed_wood_logging_camp_found_eligible = yes }
+ OR = { sed_wood_logging_camp_investment_eligible = yes }
 }
 sed_wood_candidate_eligible = {
  owner = { sed_wood_supply_demand = yes }
@@ -736,6 +736,10 @@ sed_wood_queued_supply = { OR = { has_variable = sed_wood_request_pending AND = 
   has_active_production_method = pm_simple_forestry } } } } }
 
 # State scope: one verified producer type for wood; output checked by active method.
+sed_wood_logging_camp_investment_eligible = {
+ OR = { sed_wood_logging_camp_eligible = yes sed_wood_logging_camp_found_eligible = yes }
+ sed_investment_logging_camp_output > 0
+}
 sed_wood_logging_camp_found_eligible = {
  sed_wood_logging_camp_found_operable = yes
  sed_founding_input_logging_camp_safe = yes
@@ -799,7 +803,7 @@ sed_iron_found_site = {
 }
 sed_iron_supplier_available = {
  sed_iron_candidate_site = yes
- OR = { sed_iron_iron_mine_eligible = yes sed_iron_iron_mine_found_eligible = yes }
+ OR = { sed_iron_iron_mine_investment_eligible = yes }
 }
 sed_iron_candidate_eligible = {
  owner = { sed_iron_supply_demand = yes }
@@ -814,6 +818,10 @@ sed_iron_queued_supply = { OR = { has_variable = sed_iron_request_pending AND = 
   has_active_production_method = pm_picks_and_shovels_building_iron_mine } } } } }
 
 # State scope: one verified producer type for iron; output checked by active method.
+sed_iron_iron_mine_investment_eligible = {
+ OR = { sed_iron_iron_mine_eligible = yes sed_iron_iron_mine_found_eligible = yes }
+ sed_investment_iron_mine_output > 0
+}
 sed_iron_iron_mine_found_eligible = {
  sed_iron_iron_mine_found_operable = yes
  sed_founding_input_iron_mine_safe = yes
@@ -880,7 +888,7 @@ sed_coal_found_site = {
 }
 sed_coal_supplier_available = {
  sed_coal_candidate_site = yes
- OR = { sed_coal_coal_mine_eligible = yes sed_coal_coal_mine_found_eligible = yes }
+ OR = { sed_coal_coal_mine_investment_eligible = yes }
 }
 sed_coal_candidate_eligible = {
  owner = { sed_coal_supply_demand = yes }
@@ -895,6 +903,10 @@ sed_coal_queued_supply = { OR = { has_variable = sed_coal_request_pending AND = 
   has_active_production_method = pm_picks_and_shovels_building_coal_mine } } } } }
 
 # State scope: one verified producer type for coal; output checked by active method.
+sed_coal_coal_mine_investment_eligible = {
+ OR = { sed_coal_coal_mine_eligible = yes sed_coal_coal_mine_found_eligible = yes }
+ sed_investment_coal_mine_output > 0
+}
 sed_coal_coal_mine_found_eligible = {
  sed_coal_coal_mine_found_operable = yes
  sed_founding_input_coal_mine_safe = yes
@@ -961,7 +973,7 @@ sed_grain_found_site = {
 }
 sed_grain_supplier_available = {
  sed_grain_candidate_site = yes
- OR = { sed_grain_wheat_farm_eligible = yes sed_grain_rye_farm_eligible = yes sed_grain_rice_farm_eligible = yes sed_grain_maize_farm_eligible = yes sed_grain_millet_farm_eligible = yes sed_grain_wheat_farm_found_eligible = yes sed_grain_rye_farm_found_eligible = yes sed_grain_rice_farm_found_eligible = yes sed_grain_maize_farm_found_eligible = yes sed_grain_millet_farm_found_eligible = yes }
+ OR = { sed_grain_wheat_farm_investment_eligible = yes sed_grain_rye_farm_investment_eligible = yes sed_grain_rice_farm_investment_eligible = yes sed_grain_maize_farm_investment_eligible = yes sed_grain_millet_farm_investment_eligible = yes }
 }
 sed_grain_candidate_eligible = {
  owner = { sed_grain_supply_demand = yes }
@@ -988,6 +1000,10 @@ sed_grain_queued_supply = { OR = { has_variable = sed_grain_request_pending AND 
   has_active_production_method = pm_soil_enriching_farming } } } } }
 
 # State scope: one verified producer type for grain; output checked by active method.
+sed_grain_wheat_farm_investment_eligible = {
+ OR = { sed_grain_wheat_farm_eligible = yes sed_grain_wheat_farm_found_eligible = yes }
+ sed_investment_wheat_farm_output > 0
+}
 sed_grain_wheat_farm_found_eligible = {
  sed_grain_wheat_farm_found_operable = yes
  sed_founding_input_wheat_farm_safe = yes
@@ -1022,6 +1038,10 @@ sed_grain_wheat_farm_operable = {
 }
 
 # State scope: one verified producer type for grain; output checked by active method.
+sed_grain_rye_farm_investment_eligible = {
+ OR = { sed_grain_rye_farm_eligible = yes sed_grain_rye_farm_found_eligible = yes }
+ sed_investment_rye_farm_output > 0
+}
 sed_grain_rye_farm_found_eligible = {
  sed_grain_rye_farm_found_operable = yes
  sed_founding_input_rye_farm_safe = yes
@@ -1055,6 +1075,10 @@ sed_grain_rye_farm_operable = {
 }
 
 # State scope: one verified producer type for grain; output checked by active method.
+sed_grain_rice_farm_investment_eligible = {
+ OR = { sed_grain_rice_farm_eligible = yes sed_grain_rice_farm_found_eligible = yes }
+ sed_investment_rice_farm_output > 0
+}
 sed_grain_rice_farm_found_eligible = {
  sed_grain_rice_farm_found_operable = yes
  sed_founding_input_rice_farm_safe = yes
@@ -1089,6 +1113,10 @@ sed_grain_rice_farm_operable = {
 }
 
 # State scope: one verified producer type for grain; output checked by active method.
+sed_grain_maize_farm_investment_eligible = {
+ OR = { sed_grain_maize_farm_eligible = yes sed_grain_maize_farm_found_eligible = yes }
+ sed_investment_maize_farm_output > 0
+}
 sed_grain_maize_farm_found_eligible = {
  sed_grain_maize_farm_found_operable = yes
  sed_founding_input_maize_farm_safe = yes
@@ -1122,6 +1150,10 @@ sed_grain_maize_farm_operable = {
 }
 
 # State scope: one verified producer type for grain; output checked by active method.
+sed_grain_millet_farm_investment_eligible = {
+ OR = { sed_grain_millet_farm_eligible = yes sed_grain_millet_farm_found_eligible = yes }
+ sed_investment_millet_farm_output > 0
+}
 sed_grain_millet_farm_found_eligible = {
  sed_grain_millet_farm_found_operable = yes
  sed_founding_input_millet_farm_safe = yes
@@ -1155,102 +1187,342 @@ sed_grain_millet_farm_operable = {
 }
 
 sed_grain_wheat_farm_preferred_supplier = {
- sed_grain_wheat_farm_eligible = yes
+ sed_grain_wheat_farm_investment_eligible = yes
  OR = {
-  NOT = { sed_grain_rye_farm_eligible = yes }
-  sed_supplier_wheat_farm_output >= sed_supplier_rye_farm_output
+  NOT = { sed_grain_rye_farm_investment_eligible = yes }
+  AND = { sed_investment_wheat_farm_margin >= 0 sed_investment_rye_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_wheat_farm_margin >= 0 sed_investment_rye_farm_margin >= 0 }
+    AND = { sed_investment_wheat_farm_margin < 0 sed_investment_rye_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_wheat_farm_output > sed_investment_rye_farm_output
+    AND = { sed_investment_wheat_farm_output = sed_investment_rye_farm_output
+     sed_investment_wheat_farm_margin >= sed_investment_rye_farm_margin
+    }
+   }
+  }
  }
  OR = {
-  NOT = { sed_grain_rice_farm_eligible = yes }
-  sed_supplier_wheat_farm_output >= sed_supplier_rice_farm_output
+  NOT = { sed_grain_rice_farm_investment_eligible = yes }
+  AND = { sed_investment_wheat_farm_margin >= 0 sed_investment_rice_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_wheat_farm_margin >= 0 sed_investment_rice_farm_margin >= 0 }
+    AND = { sed_investment_wheat_farm_margin < 0 sed_investment_rice_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_wheat_farm_output > sed_investment_rice_farm_output
+    AND = { sed_investment_wheat_farm_output = sed_investment_rice_farm_output
+     sed_investment_wheat_farm_margin >= sed_investment_rice_farm_margin
+    }
+   }
+  }
  }
  OR = {
-  NOT = { sed_grain_maize_farm_eligible = yes }
-  sed_supplier_wheat_farm_output >= sed_supplier_maize_farm_output
+  NOT = { sed_grain_maize_farm_investment_eligible = yes }
+  AND = { sed_investment_wheat_farm_margin >= 0 sed_investment_maize_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_wheat_farm_margin >= 0 sed_investment_maize_farm_margin >= 0 }
+    AND = { sed_investment_wheat_farm_margin < 0 sed_investment_maize_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_wheat_farm_output > sed_investment_maize_farm_output
+    AND = { sed_investment_wheat_farm_output = sed_investment_maize_farm_output
+     sed_investment_wheat_farm_margin >= sed_investment_maize_farm_margin
+    }
+   }
+  }
  }
  OR = {
-  NOT = { sed_grain_millet_farm_eligible = yes }
-  sed_supplier_wheat_farm_output >= sed_supplier_millet_farm_output
+  NOT = { sed_grain_millet_farm_investment_eligible = yes }
+  AND = { sed_investment_wheat_farm_margin >= 0 sed_investment_millet_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_wheat_farm_margin >= 0 sed_investment_millet_farm_margin >= 0 }
+    AND = { sed_investment_wheat_farm_margin < 0 sed_investment_millet_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_wheat_farm_output > sed_investment_millet_farm_output
+    AND = { sed_investment_wheat_farm_output = sed_investment_millet_farm_output
+     sed_investment_wheat_farm_margin >= sed_investment_millet_farm_margin
+    }
+   }
+  }
  }
 }
 
 sed_grain_rye_farm_preferred_supplier = {
- sed_grain_rye_farm_eligible = yes
+ sed_grain_rye_farm_investment_eligible = yes
  OR = {
-  NOT = { sed_grain_wheat_farm_eligible = yes }
-  sed_supplier_rye_farm_output > sed_supplier_wheat_farm_output
+  NOT = { sed_grain_wheat_farm_investment_eligible = yes }
+  AND = { sed_investment_rye_farm_margin >= 0 sed_investment_wheat_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_rye_farm_margin >= 0 sed_investment_wheat_farm_margin >= 0 }
+    AND = { sed_investment_rye_farm_margin < 0 sed_investment_wheat_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_rye_farm_output > sed_investment_wheat_farm_output
+    AND = { sed_investment_rye_farm_output = sed_investment_wheat_farm_output
+     sed_investment_rye_farm_margin > sed_investment_wheat_farm_margin
+    }
+   }
+  }
  }
  OR = {
-  NOT = { sed_grain_rice_farm_eligible = yes }
-  sed_supplier_rye_farm_output >= sed_supplier_rice_farm_output
+  NOT = { sed_grain_rice_farm_investment_eligible = yes }
+  AND = { sed_investment_rye_farm_margin >= 0 sed_investment_rice_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_rye_farm_margin >= 0 sed_investment_rice_farm_margin >= 0 }
+    AND = { sed_investment_rye_farm_margin < 0 sed_investment_rice_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_rye_farm_output > sed_investment_rice_farm_output
+    AND = { sed_investment_rye_farm_output = sed_investment_rice_farm_output
+     sed_investment_rye_farm_margin >= sed_investment_rice_farm_margin
+    }
+   }
+  }
  }
  OR = {
-  NOT = { sed_grain_maize_farm_eligible = yes }
-  sed_supplier_rye_farm_output >= sed_supplier_maize_farm_output
+  NOT = { sed_grain_maize_farm_investment_eligible = yes }
+  AND = { sed_investment_rye_farm_margin >= 0 sed_investment_maize_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_rye_farm_margin >= 0 sed_investment_maize_farm_margin >= 0 }
+    AND = { sed_investment_rye_farm_margin < 0 sed_investment_maize_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_rye_farm_output > sed_investment_maize_farm_output
+    AND = { sed_investment_rye_farm_output = sed_investment_maize_farm_output
+     sed_investment_rye_farm_margin >= sed_investment_maize_farm_margin
+    }
+   }
+  }
  }
  OR = {
-  NOT = { sed_grain_millet_farm_eligible = yes }
-  sed_supplier_rye_farm_output >= sed_supplier_millet_farm_output
+  NOT = { sed_grain_millet_farm_investment_eligible = yes }
+  AND = { sed_investment_rye_farm_margin >= 0 sed_investment_millet_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_rye_farm_margin >= 0 sed_investment_millet_farm_margin >= 0 }
+    AND = { sed_investment_rye_farm_margin < 0 sed_investment_millet_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_rye_farm_output > sed_investment_millet_farm_output
+    AND = { sed_investment_rye_farm_output = sed_investment_millet_farm_output
+     sed_investment_rye_farm_margin >= sed_investment_millet_farm_margin
+    }
+   }
+  }
  }
 }
 
 sed_grain_rice_farm_preferred_supplier = {
- sed_grain_rice_farm_eligible = yes
+ sed_grain_rice_farm_investment_eligible = yes
  OR = {
-  NOT = { sed_grain_wheat_farm_eligible = yes }
-  sed_supplier_rice_farm_output > sed_supplier_wheat_farm_output
+  NOT = { sed_grain_wheat_farm_investment_eligible = yes }
+  AND = { sed_investment_rice_farm_margin >= 0 sed_investment_wheat_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_rice_farm_margin >= 0 sed_investment_wheat_farm_margin >= 0 }
+    AND = { sed_investment_rice_farm_margin < 0 sed_investment_wheat_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_rice_farm_output > sed_investment_wheat_farm_output
+    AND = { sed_investment_rice_farm_output = sed_investment_wheat_farm_output
+     sed_investment_rice_farm_margin > sed_investment_wheat_farm_margin
+    }
+   }
+  }
  }
  OR = {
-  NOT = { sed_grain_rye_farm_eligible = yes }
-  sed_supplier_rice_farm_output > sed_supplier_rye_farm_output
+  NOT = { sed_grain_rye_farm_investment_eligible = yes }
+  AND = { sed_investment_rice_farm_margin >= 0 sed_investment_rye_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_rice_farm_margin >= 0 sed_investment_rye_farm_margin >= 0 }
+    AND = { sed_investment_rice_farm_margin < 0 sed_investment_rye_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_rice_farm_output > sed_investment_rye_farm_output
+    AND = { sed_investment_rice_farm_output = sed_investment_rye_farm_output
+     sed_investment_rice_farm_margin > sed_investment_rye_farm_margin
+    }
+   }
+  }
  }
  OR = {
-  NOT = { sed_grain_maize_farm_eligible = yes }
-  sed_supplier_rice_farm_output >= sed_supplier_maize_farm_output
+  NOT = { sed_grain_maize_farm_investment_eligible = yes }
+  AND = { sed_investment_rice_farm_margin >= 0 sed_investment_maize_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_rice_farm_margin >= 0 sed_investment_maize_farm_margin >= 0 }
+    AND = { sed_investment_rice_farm_margin < 0 sed_investment_maize_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_rice_farm_output > sed_investment_maize_farm_output
+    AND = { sed_investment_rice_farm_output = sed_investment_maize_farm_output
+     sed_investment_rice_farm_margin >= sed_investment_maize_farm_margin
+    }
+   }
+  }
  }
  OR = {
-  NOT = { sed_grain_millet_farm_eligible = yes }
-  sed_supplier_rice_farm_output >= sed_supplier_millet_farm_output
+  NOT = { sed_grain_millet_farm_investment_eligible = yes }
+  AND = { sed_investment_rice_farm_margin >= 0 sed_investment_millet_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_rice_farm_margin >= 0 sed_investment_millet_farm_margin >= 0 }
+    AND = { sed_investment_rice_farm_margin < 0 sed_investment_millet_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_rice_farm_output > sed_investment_millet_farm_output
+    AND = { sed_investment_rice_farm_output = sed_investment_millet_farm_output
+     sed_investment_rice_farm_margin >= sed_investment_millet_farm_margin
+    }
+   }
+  }
  }
 }
 
 sed_grain_maize_farm_preferred_supplier = {
- sed_grain_maize_farm_eligible = yes
+ sed_grain_maize_farm_investment_eligible = yes
  OR = {
-  NOT = { sed_grain_wheat_farm_eligible = yes }
-  sed_supplier_maize_farm_output > sed_supplier_wheat_farm_output
+  NOT = { sed_grain_wheat_farm_investment_eligible = yes }
+  AND = { sed_investment_maize_farm_margin >= 0 sed_investment_wheat_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_maize_farm_margin >= 0 sed_investment_wheat_farm_margin >= 0 }
+    AND = { sed_investment_maize_farm_margin < 0 sed_investment_wheat_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_maize_farm_output > sed_investment_wheat_farm_output
+    AND = { sed_investment_maize_farm_output = sed_investment_wheat_farm_output
+     sed_investment_maize_farm_margin > sed_investment_wheat_farm_margin
+    }
+   }
+  }
  }
  OR = {
-  NOT = { sed_grain_rye_farm_eligible = yes }
-  sed_supplier_maize_farm_output > sed_supplier_rye_farm_output
+  NOT = { sed_grain_rye_farm_investment_eligible = yes }
+  AND = { sed_investment_maize_farm_margin >= 0 sed_investment_rye_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_maize_farm_margin >= 0 sed_investment_rye_farm_margin >= 0 }
+    AND = { sed_investment_maize_farm_margin < 0 sed_investment_rye_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_maize_farm_output > sed_investment_rye_farm_output
+    AND = { sed_investment_maize_farm_output = sed_investment_rye_farm_output
+     sed_investment_maize_farm_margin > sed_investment_rye_farm_margin
+    }
+   }
+  }
  }
  OR = {
-  NOT = { sed_grain_rice_farm_eligible = yes }
-  sed_supplier_maize_farm_output > sed_supplier_rice_farm_output
+  NOT = { sed_grain_rice_farm_investment_eligible = yes }
+  AND = { sed_investment_maize_farm_margin >= 0 sed_investment_rice_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_maize_farm_margin >= 0 sed_investment_rice_farm_margin >= 0 }
+    AND = { sed_investment_maize_farm_margin < 0 sed_investment_rice_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_maize_farm_output > sed_investment_rice_farm_output
+    AND = { sed_investment_maize_farm_output = sed_investment_rice_farm_output
+     sed_investment_maize_farm_margin > sed_investment_rice_farm_margin
+    }
+   }
+  }
  }
  OR = {
-  NOT = { sed_grain_millet_farm_eligible = yes }
-  sed_supplier_maize_farm_output >= sed_supplier_millet_farm_output
+  NOT = { sed_grain_millet_farm_investment_eligible = yes }
+  AND = { sed_investment_maize_farm_margin >= 0 sed_investment_millet_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_maize_farm_margin >= 0 sed_investment_millet_farm_margin >= 0 }
+    AND = { sed_investment_maize_farm_margin < 0 sed_investment_millet_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_maize_farm_output > sed_investment_millet_farm_output
+    AND = { sed_investment_maize_farm_output = sed_investment_millet_farm_output
+     sed_investment_maize_farm_margin >= sed_investment_millet_farm_margin
+    }
+   }
+  }
  }
 }
 
 sed_grain_millet_farm_preferred_supplier = {
- sed_grain_millet_farm_eligible = yes
+ sed_grain_millet_farm_investment_eligible = yes
  OR = {
-  NOT = { sed_grain_wheat_farm_eligible = yes }
-  sed_supplier_millet_farm_output > sed_supplier_wheat_farm_output
+  NOT = { sed_grain_wheat_farm_investment_eligible = yes }
+  AND = { sed_investment_millet_farm_margin >= 0 sed_investment_wheat_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_millet_farm_margin >= 0 sed_investment_wheat_farm_margin >= 0 }
+    AND = { sed_investment_millet_farm_margin < 0 sed_investment_wheat_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_millet_farm_output > sed_investment_wheat_farm_output
+    AND = { sed_investment_millet_farm_output = sed_investment_wheat_farm_output
+     sed_investment_millet_farm_margin > sed_investment_wheat_farm_margin
+    }
+   }
+  }
  }
  OR = {
-  NOT = { sed_grain_rye_farm_eligible = yes }
-  sed_supplier_millet_farm_output > sed_supplier_rye_farm_output
+  NOT = { sed_grain_rye_farm_investment_eligible = yes }
+  AND = { sed_investment_millet_farm_margin >= 0 sed_investment_rye_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_millet_farm_margin >= 0 sed_investment_rye_farm_margin >= 0 }
+    AND = { sed_investment_millet_farm_margin < 0 sed_investment_rye_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_millet_farm_output > sed_investment_rye_farm_output
+    AND = { sed_investment_millet_farm_output = sed_investment_rye_farm_output
+     sed_investment_millet_farm_margin > sed_investment_rye_farm_margin
+    }
+   }
+  }
  }
  OR = {
-  NOT = { sed_grain_rice_farm_eligible = yes }
-  sed_supplier_millet_farm_output > sed_supplier_rice_farm_output
+  NOT = { sed_grain_rice_farm_investment_eligible = yes }
+  AND = { sed_investment_millet_farm_margin >= 0 sed_investment_rice_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_millet_farm_margin >= 0 sed_investment_rice_farm_margin >= 0 }
+    AND = { sed_investment_millet_farm_margin < 0 sed_investment_rice_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_millet_farm_output > sed_investment_rice_farm_output
+    AND = { sed_investment_millet_farm_output = sed_investment_rice_farm_output
+     sed_investment_millet_farm_margin > sed_investment_rice_farm_margin
+    }
+   }
+  }
  }
  OR = {
-  NOT = { sed_grain_maize_farm_eligible = yes }
-  sed_supplier_millet_farm_output > sed_supplier_maize_farm_output
+  NOT = { sed_grain_maize_farm_investment_eligible = yes }
+  AND = { sed_investment_millet_farm_margin >= 0 sed_investment_maize_farm_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_millet_farm_margin >= 0 sed_investment_maize_farm_margin >= 0 }
+    AND = { sed_investment_millet_farm_margin < 0 sed_investment_maize_farm_margin < 0 }
+   }
+   OR = {
+    sed_investment_millet_farm_output > sed_investment_maize_farm_output
+    AND = { sed_investment_millet_farm_output = sed_investment_maize_farm_output
+     sed_investment_millet_farm_margin > sed_investment_maize_farm_margin
+    }
+   }
+  }
  }
 }
 
@@ -1286,7 +1558,7 @@ sed_fabric_found_site = {
 }
 sed_fabric_supplier_available = {
  sed_fabric_candidate_site = yes
- OR = { sed_fabric_cotton_plantation_eligible = yes sed_fabric_livestock_ranch_eligible = yes sed_fabric_cotton_plantation_found_eligible = yes sed_fabric_livestock_ranch_found_eligible = yes }
+ OR = { sed_fabric_cotton_plantation_investment_eligible = yes sed_fabric_livestock_ranch_investment_eligible = yes }
 }
 sed_fabric_candidate_eligible = {
  owner = { sed_fabric_supply_demand = yes }
@@ -1301,6 +1573,10 @@ sed_fabric_queued_supply = { OR = { has_variable = sed_fabric_request_pending AN
   has_active_production_method = pm_simple_ranch } } } } }
 
 # State scope: one verified producer type for fabric; output checked by active method.
+sed_fabric_cotton_plantation_investment_eligible = {
+ OR = { sed_fabric_cotton_plantation_eligible = yes sed_fabric_cotton_plantation_found_eligible = yes }
+ sed_investment_cotton_plantation_output > 0
+}
 sed_fabric_cotton_plantation_found_eligible = {
  sed_fabric_cotton_plantation_found_operable = yes
  sed_founding_input_cotton_plantation_safe = yes
@@ -1334,6 +1610,10 @@ sed_fabric_cotton_plantation_operable = {
 }
 
 # State scope: one verified producer type for fabric; output checked by active method.
+sed_fabric_livestock_ranch_investment_eligible = {
+ OR = { sed_fabric_livestock_ranch_eligible = yes sed_fabric_livestock_ranch_found_eligible = yes }
+ sed_investment_livestock_ranch_output > 0
+}
 sed_fabric_livestock_ranch_found_eligible = {
  sed_fabric_livestock_ranch_found_operable = yes
  sed_founding_input_livestock_ranch_safe = yes
@@ -1366,18 +1646,42 @@ sed_fabric_livestock_ranch_operable = {
 }
 
 sed_fabric_cotton_plantation_preferred_supplier = {
- sed_fabric_cotton_plantation_eligible = yes
+ sed_fabric_cotton_plantation_investment_eligible = yes
  OR = {
-  NOT = { sed_fabric_livestock_ranch_eligible = yes }
-  sed_supplier_cotton_plantation_output >= sed_supplier_livestock_ranch_output
+  NOT = { sed_fabric_livestock_ranch_investment_eligible = yes }
+  AND = { sed_investment_cotton_plantation_margin >= 0 sed_investment_livestock_ranch_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_cotton_plantation_margin >= 0 sed_investment_livestock_ranch_margin >= 0 }
+    AND = { sed_investment_cotton_plantation_margin < 0 sed_investment_livestock_ranch_margin < 0 }
+   }
+   OR = {
+    sed_investment_cotton_plantation_output > sed_investment_livestock_ranch_output
+    AND = { sed_investment_cotton_plantation_output = sed_investment_livestock_ranch_output
+     sed_investment_cotton_plantation_margin >= sed_investment_livestock_ranch_margin
+    }
+   }
+  }
  }
 }
 
 sed_fabric_livestock_ranch_preferred_supplier = {
- sed_fabric_livestock_ranch_eligible = yes
+ sed_fabric_livestock_ranch_investment_eligible = yes
  OR = {
-  NOT = { sed_fabric_cotton_plantation_eligible = yes }
-  sed_supplier_livestock_ranch_output > sed_supplier_cotton_plantation_output
+  NOT = { sed_fabric_cotton_plantation_investment_eligible = yes }
+  AND = { sed_investment_livestock_ranch_margin >= 0 sed_investment_cotton_plantation_margin < 0 }
+  AND = {
+   OR = {
+    AND = { sed_investment_livestock_ranch_margin >= 0 sed_investment_cotton_plantation_margin >= 0 }
+    AND = { sed_investment_livestock_ranch_margin < 0 sed_investment_cotton_plantation_margin < 0 }
+   }
+   OR = {
+    sed_investment_livestock_ranch_output > sed_investment_cotton_plantation_output
+    AND = { sed_investment_livestock_ranch_output = sed_investment_cotton_plantation_output
+     sed_investment_livestock_ranch_margin > sed_investment_cotton_plantation_margin
+    }
+   }
+  }
  }
 }
 
@@ -1413,7 +1717,7 @@ sed_tools_found_site = {
 }
 sed_tools_supplier_available = {
  sed_tools_candidate_site = yes
- OR = { sed_tools_tooling_workshop_eligible = yes sed_tools_tooling_workshop_found_eligible = yes }
+ OR = { sed_tools_tooling_workshop_investment_eligible = yes }
 }
 sed_tools_candidate_eligible = {
  owner = { sed_tools_supply_demand = yes }
@@ -1426,6 +1730,10 @@ sed_tools_queued_supply = { OR = { has_variable = sed_tools_request_pending AND 
   has_active_production_method = pm_steel } } } } }
 
 # State scope: one verified producer type for tools; output checked by active method.
+sed_tools_tooling_workshop_investment_eligible = {
+ OR = { sed_tools_tooling_workshop_eligible = yes sed_tools_tooling_workshop_found_eligible = yes }
+ sed_investment_tooling_workshop_output > 0
+}
 sed_tools_tooling_workshop_found_eligible = {
  sed_tools_tooling_workshop_found_operable = yes
  sed_founding_input_tooling_workshop_safe = yes
@@ -1490,7 +1798,7 @@ sed_groceries_found_site = {
 }
 sed_groceries_supplier_available = {
  sed_groceries_candidate_site = yes
- OR = { sed_groceries_food_industry_eligible = yes sed_groceries_food_industry_found_eligible = yes }
+ OR = { sed_groceries_food_industry_investment_eligible = yes }
 }
 sed_groceries_candidate_eligible = {
  owner = { sed_groceries_supply_demand = yes }
@@ -1506,6 +1814,10 @@ sed_groceries_queued_supply = { OR = { has_variable = sed_groceries_request_pend
   has_active_production_method = pm_vacuum_canning_principle_3 } } } } }
 
 # State scope: one verified producer type for groceries; output checked by active method.
+sed_groceries_food_industry_investment_eligible = {
+ OR = { sed_groceries_food_industry_eligible = yes sed_groceries_food_industry_found_eligible = yes }
+ sed_investment_food_industry_output > 0
+}
 sed_groceries_food_industry_found_eligible = {
  sed_groceries_food_industry_found_operable = yes
  sed_founding_input_food_industry_safe = yes
@@ -1573,7 +1885,7 @@ sed_clothes_found_site = {
 }
 sed_clothes_supplier_available = {
  sed_clothes_candidate_site = yes
- OR = { sed_clothes_textile_mill_eligible = yes sed_clothes_textile_mill_found_eligible = yes }
+ OR = { sed_clothes_textile_mill_investment_eligible = yes }
 }
 sed_clothes_candidate_eligible = {
  owner = { sed_clothes_supply_demand = yes }
@@ -1586,6 +1898,10 @@ sed_clothes_queued_supply = { OR = { has_variable = sed_clothes_request_pending 
   has_active_production_method = pm_sewing_machines } } } } }
 
 # State scope: one verified producer type for clothes; output checked by active method.
+sed_clothes_textile_mill_investment_eligible = {
+ OR = { sed_clothes_textile_mill_eligible = yes sed_clothes_textile_mill_found_eligible = yes }
+ sed_investment_textile_mill_output > 0
+}
 sed_clothes_textile_mill_found_eligible = {
  sed_clothes_textile_mill_found_operable = yes
  sed_founding_input_textile_mill_safe = yes
@@ -1650,7 +1966,7 @@ sed_small_arms_found_site = {
 }
 sed_small_arms_supplier_available = {
  sed_small_arms_candidate_site = yes
- OR = { sed_small_arms_arms_industry_eligible = yes sed_small_arms_arms_industry_found_eligible = yes }
+ OR = { sed_small_arms_arms_industry_investment_eligible = yes }
 }
 sed_small_arms_candidate_eligible = {
  owner = { sed_small_arms_supply_demand = yes }
@@ -1663,6 +1979,10 @@ sed_small_arms_queued_supply = { OR = { has_variable = sed_small_arms_request_pe
   has_active_production_method = pm_bolt_action_rifles } } } } }
 
 # State scope: one verified producer type for small_arms; output checked by active method.
+sed_small_arms_arms_industry_investment_eligible = {
+ OR = { sed_small_arms_arms_industry_eligible = yes sed_small_arms_arms_industry_found_eligible = yes }
+ sed_investment_arms_industry_output > 0
+}
 sed_small_arms_arms_industry_found_eligible = {
  sed_small_arms_arms_industry_found_operable = yes
  sed_founding_input_arms_industry_safe = yes
@@ -1727,7 +2047,7 @@ sed_artillery_found_site = {
 }
 sed_artillery_supplier_available = {
  sed_artillery_candidate_site = yes
- OR = { sed_artillery_artillery_foundry_eligible = yes sed_artillery_artillery_foundry_found_eligible = yes }
+ OR = { sed_artillery_artillery_foundry_investment_eligible = yes }
 }
 sed_artillery_candidate_eligible = {
  owner = { sed_artillery_supply_demand = yes }
@@ -1742,6 +2062,10 @@ sed_artillery_queued_supply = { OR = { has_variable = sed_artillery_request_pend
   has_active_production_method = pm_recoiled_barrels } } } } }
 
 # State scope: one verified producer type for artillery; output checked by active method.
+sed_artillery_artillery_foundry_investment_eligible = {
+ OR = { sed_artillery_artillery_foundry_eligible = yes sed_artillery_artillery_foundry_found_eligible = yes }
+ sed_investment_artillery_foundry_output > 0
+}
 sed_artillery_artillery_foundry_found_eligible = {
  sed_artillery_artillery_foundry_found_operable = yes
  sed_founding_input_artillery_foundry_safe = yes
@@ -1808,7 +2132,7 @@ sed_ammunition_found_site = {
 }
 sed_ammunition_supplier_available = {
  sed_ammunition_candidate_site = yes
- OR = { sed_ammunition_munition_plant_eligible = yes sed_ammunition_munition_plant_found_eligible = yes }
+ OR = { sed_ammunition_munition_plant_investment_eligible = yes }
 }
 sed_ammunition_candidate_eligible = {
  owner = { sed_ammunition_supply_demand = yes }
@@ -1819,6 +2143,10 @@ sed_ammunition_queued_supply = { OR = { has_variable = sed_ammunition_request_pe
   has_active_production_method = pm_explosive_shells } } } } }
 
 # State scope: one verified producer type for ammunition; output checked by active method.
+sed_ammunition_munition_plant_investment_eligible = {
+ OR = { sed_ammunition_munition_plant_eligible = yes sed_ammunition_munition_plant_found_eligible = yes }
+ sed_investment_munition_plant_output > 0
+}
 sed_ammunition_munition_plant_found_eligible = {
  sed_ammunition_munition_plant_found_operable = yes
  sed_founding_input_munition_plant_safe = yes

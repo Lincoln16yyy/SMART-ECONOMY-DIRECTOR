@@ -5,14 +5,14 @@ import json
 from pathlib import Path
 
 try:
-    from . import planning, coordination, construction_budget, labor, input_forecast, production_methods
+    from . import planning, coordination, construction_budget, labor, input_forecast, production_methods, investment
 except ImportError:
-    import planning, coordination, construction_budget, labor, input_forecast, production_methods
+    import planning, coordination, construction_budget, labor, input_forecast, production_methods, investment
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.10'
+VERSION = '0.7.12'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -184,7 +184,7 @@ STATE_VARIABLES = ['sed_railway_request_pending', 'sed_construction_request_pend
     f"sed_{item['good']}_request_pending" for item in SUPPLY_TARGETS] + IGNORED_VARIABLES + [
     f"sed_{item['good']}_{field}" for item in SUPPLY_TARGETS
     for field in ('intent_level', 'intent_variant')]
-STATE_VARIABLES += planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES + production_methods.state_variables(SUPPLY_TARGETS)
+STATE_VARIABLES += planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES + investment.STATE_VARIABLES + production_methods.state_variables(SUPPLY_TARGETS)
 EXTRA_VARIABLES = '''sed_last_year sed_last_month sed_month_key sed_in_default
 sed_gdp_per_capita sed_per_capita_available sed_debt_share sed_debt_share_available
 sed_reserve_weeks sed_reserve_weeks_available sed_states sed_infrastructure_short_states
@@ -215,7 +215,7 @@ sed_queue_levels_before'''.split() + [
 ]
 
 
-EXTRA_VARIABLES += production_methods.COUNTRY_VARIABLES
+EXTRA_VARIABLES += production_methods.COUNTRY_VARIABLES + investment.COUNTRY_VARIABLES
 EXTRA_VARIABLES += planning.country_variables(ACTION_NAMES) + coordination.VARIABLES + construction_budget.VARIABLES + input_forecast.COUNTRY_VARIABLES
 EXTRA_VARIABLES += ['sed_input_pass_changed', *(f'sed_input_priority_{good}' for good in INPUT_DEPENDENCIES)]
 
@@ -286,7 +286,7 @@ sed_refresh_supply_candidates = {
                 ('labor_states', f'sed_state_labor_available < {labor.REQUIREMENTS[building]}'),
                 ('input_states', f'b:{building} = {{ building_has_goods_shortage = yes }}'),
                 ('forecast_states', f'NOT = {{ sed_input_{variant_id(variant)}_safe = yes }}'),
-                ('method_states', f'b:{building} = {{ NOT = {{ OR = {{ {methods} }} }} }}'),
+                ('method_states', f'OR = {{ b:{building} = {{ NOT = {{ OR = {{ {methods} }} }} }} sed_investment_{variant_id(variant)}_output <= 0 }}'),
                 ('permission_states', f'NOT = {{ can_construct_building = {building} }}'),
                 ('infrastructure_states', 'infrastructure_delta < 0'),
             ]
@@ -350,13 +350,10 @@ sed_refresh_supply_candidates = {
         for index, variant in enumerate(vs):
             branch = 'if' if index == 0 else 'else_if'
             name = variant_id(variant)
-            eligible = (f'OR = {{ sed_{good}_{name}_eligible = yes '
-                        f'sed_{good}_{name}_found_eligible = yes }}')
-            if good in INPUT_DEPENDENCIES and len(vs) > 1:
-                eligible += (f' OR = {{ owner = {{ NOT = {{ AND = {{ has_variable = sed_mode_automatic '
-                             f'has_variable = sed_input_priority_{good} }} }} }} '
-                             f'OR = {{ sed_{good}_{name}_preferred_supplier = yes '
-                             f'sed_{good}_{name}_found_eligible = yes }} }}')
+            eligible = f'sed_{good}_{name}_investment_eligible = yes'
+            if len(vs) > 1:
+                eligible += (f' OR = {{ owner = {{ NOT = {{ has_variable = sed_mode_automatic }} }} '
+                             f'sed_{good}_{name}_preferred_supplier = yes }}')
             enqueue += f'''  {branch} = {{
    limit = {{ {eligible} }}
    # A founding reads level 0; the monthly review then infers completion from the queue.
@@ -369,7 +366,7 @@ sed_refresh_supply_candidates = {
   }}
 '''
         result.append(f'''sed_run_{good}_approval = {{
- owner = {{ if = {{ limit = {{ is_player = yes has_variable = sed_enabled }} sed_refresh_input_readings = yes if = {{ limit = {{ has_variable = sed_mode_automatic }} sed_refresh_direct_budget = yes }} }} }}
+ owner = {{ if = {{ limit = {{ is_player = yes has_variable = sed_enabled }} sed_refresh_investment_prices = yes sed_refresh_input_readings = yes if = {{ limit = {{ has_variable = sed_mode_automatic }} sed_refresh_direct_budget = yes }} }} }}
  if = {{
   limit = {{ sed_{good}_approval_valid = yes }}
   owner = {{ set_variable = {{ name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }} }}
@@ -1289,10 +1286,10 @@ sed_update_growth = {
     cleanup = '\n'.join(' clear_variable_list = ' + name for name in lists)
     script = script.replace('sed_disable_country = {', 'sed_disable_country = {\n' + cleanup, 1)
     # All state-scoped planner variables are removed on deactivation.
-    state_cleanup = '\n'.join('  remove_variable = ' + name for name in planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES + production_methods.state_variables(SUPPLY_TARGETS))
+    state_cleanup = '\n'.join('  remove_variable = ' + name for name in planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES + investment.STATE_VARIABLES + production_methods.state_variables(SUPPLY_TARGETS))
     script = script.replace(' # Schema and automatic attempt month',
                             ' every_scope_state = {\n' + state_cleanup + '\n }\n # Schema and automatic attempt month', 1)
-    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, INPUT_DEPENDENCIES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + input_forecast.effects() + input_priority_effect() + labor.effects() + construction_budget.effects(founding_projects()) + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + planning.military_wage_policy_effects() + production_methods.effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants, recovery=True) + coordination.effects()
+    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, INPUT_DEPENDENCIES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + input_forecast.effects() + input_priority_effect() + labor.effects() + construction_budget.effects(founding_projects()) + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + planning.military_wage_policy_effects() + investment.effects() + production_methods.effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants, recovery=True) + coordination.effects()
 
 
 def scripted_guis():
@@ -1686,7 +1683,7 @@ def supply_triggers():
     for item in SUPPLY_TARGETS:
         good = item['good']
         vs = variants(item)
-        alternatives = ' '.join(f'sed_{good}_{variant_id(variant)}_eligible = yes' for variant in vs)
+        alternatives = ' '.join(f'sed_{good}_{variant_id(variant)}_investment_eligible = yes' for variant in vs)
         military_gate = ('owner = { military_expenses > 0 market = { mg:' + good + ' ?= { market_goods_buy_orders > 0 } } }'
                          if good in planning.MILITARY_INDUSTRY_GOODS else '')
         shortage = f'market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }}'
@@ -1695,7 +1692,6 @@ def supply_triggers():
             demand = (f'OR = {{ {shortage} AND = {{ has_variable = sed_input_priority_{good} '
                       f'NOT = {{ any_scope_state = {{ sed_{good}_queued_supply = yes }} }} }} }}')
         absent = ' '.join(f'NOT = {{ has_building = {variant["building"]} }}' for variant in vs)
-        constructible = ' '.join(f'sed_{good}_{variant_id(variant)}_found_eligible = yes' for variant in vs)
         result.append(f'''sed_{good}_supply_demand = {{ {demand} }}
 sed_{good}_candidate_site = {{
  is_incorporated = yes
@@ -1717,7 +1713,7 @@ sed_{good}_found_site = {{
 }}
 sed_{good}_supplier_available = {{
  sed_{good}_candidate_site = yes
- OR = {{ {alternatives} {constructible} }}
+ OR = {{ {alternatives} }}
 }}
 sed_{good}_candidate_eligible = {{
  owner = {{ sed_{good}_supply_demand = yes }}
@@ -1733,6 +1729,10 @@ sed_{good}_candidate_eligible = {{
             building = variant['building']
             methods = variant_methods(variant, '  ')
             result.append(f'''# State scope: one verified producer type for {good}; output checked by active method.
+sed_{good}_{variant_id(variant)}_investment_eligible = {{
+ OR = {{ sed_{good}_{variant_id(variant)}_eligible = yes sed_{good}_{variant_id(variant)}_found_eligible = yes }}
+ sed_investment_{variant_id(variant)}_output > 0
+}}
 sed_{good}_{variant_id(variant)}_found_eligible = {{
  sed_{good}_{variant_id(variant)}_found_operable = yes
  sed_founding_input_{variant_id(variant)}_safe = yes
@@ -1762,10 +1762,10 @@ sed_{good}_{variant_id(variant)}_operable = {{
  can_construct_building = {building}
 }}
 ''')
-        if good in INPUT_DEPENDENCIES and len(vs) > 1:
+        if len(vs) > 1:
             for index, variant in enumerate(vs):
                 name = variant_id(variant)
-                result.append(f'sed_{good}_{name}_preferred_supplier = {{\n sed_{good}_{name}_eligible = yes')
+                result.append(f'sed_{good}_{name}_preferred_supplier = {{\n sed_{good}_{name}_investment_eligible = yes')
                 for other_index, other in enumerate(vs):
                     if other_index == index:
                         continue
@@ -1773,8 +1773,20 @@ sed_{good}_{variant_id(variant)}_operable = {{
                     # Earlier variants win ties, matching the existing approval order.
                     comparison = '>' if other_index < index else '>='
                     result.append(f''' OR = {{
-  NOT = {{ sed_{good}_{other_name}_eligible = yes }}
-  sed_supplier_{name}_output {comparison} sed_supplier_{other_name}_output
+  NOT = {{ sed_{good}_{other_name}_investment_eligible = yes }}
+  AND = {{ sed_investment_{name}_margin >= 0 sed_investment_{other_name}_margin < 0 }}
+  AND = {{
+   OR = {{
+    AND = {{ sed_investment_{name}_margin >= 0 sed_investment_{other_name}_margin >= 0 }}
+    AND = {{ sed_investment_{name}_margin < 0 sed_investment_{other_name}_margin < 0 }}
+   }}
+   OR = {{
+    sed_investment_{name}_output > sed_investment_{other_name}_output
+    AND = {{ sed_investment_{name}_output = sed_investment_{other_name}_output
+     sed_investment_{name}_margin {comparison} sed_investment_{other_name}_margin
+    }}
+   }}
+  }}
  }}''')
                 result.append('}\n')
         result.append(f'''sed_{good}_approval_valid = {{
@@ -2286,7 +2298,7 @@ sed_pulse.1 = {
         'common/scripted_effects/sed_effects.txt': effects(),
         'common/scripted_guis/sed_scripted_guis.txt': scripted_guis(),
         'common/scripted_triggers/sed_triggers.txt': scripted_triggers(),
-        'common/script_values/sed_values.txt': '# Current calendar, independent of diagnostic refresh.\nsed_live_month_key = { value = year multiply = 12 add = month }\n' + labor.values(projects) + input_forecast.values(projects) + supplier_output_values(),
+        'common/script_values/sed_values.txt': '# Current calendar, independent of diagnostic refresh.\nsed_live_month_key = { value = year multiply = 12 add = month }\n' + labor.values(projects) + input_forecast.values(projects) + supplier_output_values() + investment.values(SUPPLY_TARGETS, variants),
         'gui/journal_entry_widgets/sed_diagnostics.gui': widget(),
         'localization/braz_por/sed_l_braz_por.yml': localization('braz_por'),
         'localization/english/sed_l_english.yml': localization('english'),

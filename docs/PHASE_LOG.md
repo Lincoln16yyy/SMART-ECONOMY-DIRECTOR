@@ -1918,3 +1918,37 @@ default, intervalo, falha de ativação e gerentes externos. Gerador, validaçã
 estática, pacote e whitespace aprovados. Instalada com backup
 `mod_before_0.7.10_20261111_011143_486381`, conferindo os 14 arquivos.
 Produção efetiva, lucro real, qualificações e campanha seguem pendentes.
+
+
+## 2026-11-11 — Escolha econômica de fornecedores (0.7.11)
+
+O plano compara fornecedores do mesmo bem pela margem material estimada,
+oferta e desempate econômico. Margens não negativas têm preferência. Dentro
+desse grupo, a maior oferta vem primeiro e a margem desempata. Quando todas
+as referências são negativas, a necessidade estratégica ainda pode gerar uma
+obra. A escolha também alcança variantes dentro do mesmo estado. As referências
+incluem subprodutos, todos os insumos ativos e uma configuração básica para
+fundações. Saída líquida zero do bem-alvo exclui o fornecedor.
+
+321 testes sintéticos aprovados. Regressões cobrem preferência econômica,
+desempate, referências negativas, variantes, subprodutos, saída zero,
+aprovação assistida e fundações. Gerador, validação estática, pacote e
+whitespace aprovados. Instalada com backup
+`mod_before_0.7.11_20261111_015138_269433`, conferindo os 14 arquivos.
+Preços locais, lucro real, salários e qualificações seguem pendentes.
+
+
+## 2026-11-11 — Preços nas referências de investimento (0.7.12)
+
+A seleção de fornecedores passa a usar variação de preços observada no mercado
+e faixas locais com margem de incerteza. O mercado tem leitura numérica nativa
+verificada nos artigos vanilla de transferência de bens. Os estados usam
+comparações nativas de preços. As referências são renovadas no plano e na
+aprovação e ficam em cache por país e estado. O diagnóstico renova dados.
+
+330 testes sintéticos aprovados. Regressões cobrem variações fracionárias,
+referência local e de mercado, atualização dos caches, escolha de destino por
+preços de saída/entrada, fundações, revalidação da variante e limpeza. Gerador,
+validação estática, pacote e whitespace aprovados. Instalada com backup
+`mod_before_0.7.12_20261111_102922_823642`, conferindo os 14 arquivos.
+Lucro real, salários, qualificações e confirmação em campanha seguem pendentes.
