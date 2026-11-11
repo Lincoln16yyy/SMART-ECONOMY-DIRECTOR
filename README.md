@@ -1,5 +1,19 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.10, o Automático pode reduzir a dependência de insumos em falta nos
+produtores existentes, inclusive em default e com expansão enfileirada. Ele
+avalia métodos com menores entradas e preservação de pelo menos metade da
+produção nominal estimada. Essa recuperação tem prioridade sobre modernizar
+e pode reduzir a produção nominal em troca de menor dependência de insumos.
+
+
+Na 0.7.9, o Automático moderniza produtores existentes de bens em falta ou
+insumos prioritários. A escolha considera ganho material estimado e reserva
+insumos adicionais, com uma tentativa mensal compartilhada com a construção
+própria e intervalo de três meses por prédio. Gerentes de PMs ativos no
+Advisor têm precedência. Lucro real e qualificações continuam pendentes.
+
+
 Na 0.7.8, a escolha inicial de PMs compara saída e margem material de referência.
 O Automático pode selecionar um método mais produtivo com insumos disponíveis,
 ou iniciar com a configuração básica. A margem usa preços-base e estresse de

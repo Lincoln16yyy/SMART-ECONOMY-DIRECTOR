@@ -181,6 +181,12 @@ class FoundingMethodTests(unittest.TestCase):
         self.c.run('sed_configure_founded_industries')
         self.assertEqual(self.c.variables['sed_pm_reserved_wood'], 0)
 
+    def test_advisor_pm_manager_takes_over_pending_initial_configuration(self):
+        self.c.variables['advisor_pm_balance_enabled'] = True
+        self.c.run('sed_configure_founded_industries')
+        self.assertEqual(self.c.production_method_changes, [])
+        self.assertNotIn('sed_tools_found_pm_pending', self.target['variables'])
+
 
 if __name__ == '__main__':
     unittest.main()

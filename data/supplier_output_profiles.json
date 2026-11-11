@@ -79,5 +79,42 @@
     "pm_pig_iron": 60,
     "pm_steel": 80,
     "pm_rubber_grips": 110
+  },
+  "building_food_industry": {
+    "pm_bakery": 45,
+    "pm_sweeteners": 65,
+    "pm_baking_powder": 120,
+    "pm_cannery": 30,
+    "pm_cannery_fish": 30,
+    "pm_vacuum_canning": 60,
+    "pm_vacuum_canning_principle_3": 70,
+    "pm_pot_stills": -25,
+    "pm_patent_stills": -40
+  },
+  "building_textile_mill": {
+    "pm_handsewn_clothes": 45,
+    "pm_dye_workshops": 60,
+    "pm_sewing_machines": 100,
+    "pm_electric_sewing_machines": 140,
+    "pm_craftsman_sewing": -30,
+    "pm_elastics": -70
+  },
+  "building_arms_industry": {
+    "pm_muskets": 30,
+    "pm_rifles": 50,
+    "pm_repeaters": 70,
+    "pm_bolt_action_rifles": 100
+  },
+  "building_artillery_foundry": {
+    "pm_cannons": 25,
+    "pm_bronze_cannons": 25,
+    "pm_smoothbores": 45,
+    "pm_bronze_smoothbores": 45,
+    "pm_breech_loaders": 65,
+    "pm_recoiled_barrels": 90
+  },
+  "building_munition_plant": {
+    "pm_percussion_caps": 50,
+    "pm_explosive_shells": 90
   }
 }

@@ -5,6 +5,68 @@
 
 
 
+
+
+## 0.7.10 — Recuperação de produtores com insumos em falta
+
+A revisão automática avalia recuperação antes da modernização. O candidato
+precisa ter escassez de insumos no prédio e confirmação de escassez de um
+insumo que o método alvo elimine. A troca preserva os outros grupos de PMs,
+não introduz insumos nem aumenta quantidades de entrada ou empregos do grupo.
+A configuração alvo precisa ter margem material positiva a preços-base.
+
+A saída nominal estimada do bem-alvo precisa preservar pelo menos metade da
+saída atual e continuar positiva. Essa conta usa todos os PMs ativos conhecidos,
+incluindo mudanças de produção secundária. As quantidades dos demais produtos são
+preservadas. Todos os insumos que restariam após a troca precisam estar sem
+escassez observada, considerando também os outros grupos de PMs. O requisito de
+ocupação é de pelo menos 50%. O maior custo de insumos evitado, ponderado por
+nível e ocupação, seleciona o candidato nacional.
+
+Recuperação usa a tentativa mensal compartilhada com modernização e construção.
+Ela pode ocorrer em default, em estados não incorporados, com infraestrutura
+negativa e expansão já enfileirada, pois a mudança reduz as dependências do
+método e abrange os níveis existentes/futuros do mesmo tipo. O intervalo de
+observação anterior de uma modernização pode ser superado para tratar a
+escassez. A troca confirmada inicia novo intervalo de três meses antes de
+modernizar novamente. Controles externos e marcas de ignorar têm precedência.
+
+A recuperação pode reduzir a produção nominal. O piso e a margem são referências
+baseadas nos coeficientes vanilla. Preços locais, qualificações, remuneração e
+produção efetiva ainda exigem desenvolvimento e verificação. O resultado da
+revisão confirma a troca do método, com avaliação econômica posterior pendente.
+
+## 0.7.9 — Modernização contínua dos produtores existentes
+
+O Automático avalia produtores de bens em escassez ou insumos priorizados.
+Compara mudanças do grupo principal que aumentem a saída do bem-alvo,
+preservem os demais produtos, não aumentem o total de empregos do grupo e
+melhorem a margem material estressada a preços-base. O maior ganho estimado,
+escalado pelo nível e ocupação, escolhe o prédio nacional.
+
+A seleção exige pelo menos 90% de ocupação, contratação sem falha, ausência de
+escassez atual de insumos, infraestrutura e incorporação adequadas, ausência
+de expansão enfileirada e permissão tecnológica/do jogo. Os insumos adicionais
+são projetados para todos os níveis e recebem margem de 25%. A reserva mensal
+é aplicada antes de novas leituras do plano.
+
+Há uma tentativa mensal nacional, compartilhada com a construção direta, e
+um intervalo de três meses por prédio após troca confirmada. O limite mensal
+é marcado antes do comando, inclusive em falha. Trocas de modo preservam o
+intervalo por prédio. Desativação limpa o acompanhamento por prédio e preserva
+o marcador mensal. Após a tentativa, a coordenação suspende as opções
+verificadas de construção externa até o mês seguinte, sob executor 13.
+
+Os controles `advisor_pm_balance_enabled` e `advisor_labor_auto_enabled` foram
+verificados na agenda e rotina de PMs do Advisor instalado. Quando estão
+ativos, a modernização própria aguarda e o preparo inicial é entregue ao
+controlador externo. ARoAI ativo também impede modernização própria.
+
+A análise continua limitada ao catálogo e ao grupo principal. Qualificações,
+salários por profissão, preços locais, lucro real, automação dos demais grupos
+e modernização das unidades militares permanecem pendentes. Uma nova leitura
+após a troca reavalia os gargalos. A confirmação na engine segue necessária.
+
 ## 0.7.8 — Escolha econômica inicial de PMs
 
 A configuração das fundações compara os métodos do grupo principal. O cálculo

@@ -1164,6 +1164,9 @@ sed_auto_status_competing_visible_sgui = { scope = country is_shown = { has_vari
 sed_auto_status_safety_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 14 } }
 sed_auto_status_unconfirmed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 15 } }
 sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 16 } }
+sed_auto_status_modernized_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 23 } }
+sed_auto_status_pm_unconfirmed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 24 } }
+sed_auto_status_pm_recovered_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 25 } }
 sed_auto_pending_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic has_variable = sed_auto_event_pending } }
 sed_auto_idle_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic NOT = { has_variable = sed_auto_event_pending } } }
 sed_auto_unrecorded_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic NOT = { has_variable = sed_auto_review_status } } }
@@ -1199,6 +1202,7 @@ sed_coord_executor_9_visible_sgui = { scope = country is_shown = { has_variable 
 sed_coord_executor_10_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 10 } }
 sed_coord_executor_11_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 11 } }
 sed_coord_executor_12_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 12 } }
+sed_coord_executor_13_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 13 } }
 sed_coord_advisor_policy_1_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 1 has_variable = sed_coord_advisor_policy var:sed_coord_advisor_policy = 1 } }
 sed_coord_advisor_policy_2_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 1 has_variable = sed_coord_advisor_policy var:sed_coord_advisor_policy = 2 } }
 sed_coord_advisor_policy_3_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 1 has_variable = sed_coord_advisor_policy var:sed_coord_advisor_policy = 3 } }
