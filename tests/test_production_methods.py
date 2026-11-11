@@ -124,7 +124,7 @@ class FoundingMethodTests(unittest.TestCase):
         c.run('sed_configure_founded_industries')
         self.assertEqual(c.production_method_changes, [])
         self.target['buildings'] = [self.producer]
-        c.run('sed_configure_founded_industries')
+        c.run('sed_auto_apply_monthly')
         self.assertIn('pm_crude_tools', self.producer['production_methods'])
 
     def test_failed_insertion_does_not_authorize_method_changes(self):
