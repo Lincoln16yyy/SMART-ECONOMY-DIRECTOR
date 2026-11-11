@@ -518,5 +518,27 @@
       "tools": 4,
       "coal": 10
     }
+  },
+  "building_paper_mill": {
+    "pm_pulp_pressing": {
+      "wood": 30.0
+    },
+    "pm_sulfite_pulping": {
+      "wood": 30.0,
+      "sulfur": 10.0
+    },
+    "pm_bleached_paper": {
+      "wood": 30.0,
+      "sulfur": 10.0,
+      "dye": 10.0
+    },
+    "pm_watertube_boiler_building_paper_mill": {
+      "tools": 5.0,
+      "coal": 5.0
+    },
+    "pm_rotary_valve_engine_building_paper_mill": {
+      "tools": 5.0,
+      "coal": 10.0
+    }
   }
 }

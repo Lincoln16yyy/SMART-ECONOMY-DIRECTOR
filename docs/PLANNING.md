@@ -1149,3 +1149,58 @@ explícitas devolvem o nível original. A redução de imposto termina em baixo.
 O livro acompanha a variante solicitada e verifica presença do produtor antes
 de inferir o resultado. Fontes, defeitos corrigidos e limites da verificação
 estão em [REVIEW_2026-11-10.md](REVIEW_2026-11-10.md).
+
+## 0.7.13 — Investimento civil antes da escassez
+
+O teste do Paraguai em 1842 confirmou avanço da revisão mensal até julho,
+reservas de 163 para 170 mil e fila vazia em agosto. O país fotografado tinha os dez pontos gratuitos e nenhum setor. Esses
+pontos entram em `country_construction_add`, conforme o modificador vanilla
+`country_gdp_construction`. A ausência de setor, por si só, não explica a
+inatividade do Advisor. O motivo exato da seleção externa permanece pendente.
+
+O Director agora inclui no catálogo próprio bens civis com compras positivas,
+compras superiores às vendas e preço de mercado pelo menos 20% acima da base.
+Essa oportunidade exige margem material estimada positiva e conserva as
+verificações de trabalho, insumos, infraestrutura, fila e orçamento. A regra
+vale no Automático. Escassez e insumos estratégicos mantêm seus critérios.
+A propagação de necessidades também considera esses alvos civis caros.
+O limiar de 20% é uma heurística inicial que exige calibração em campanha.
+A inclusão depende de um fornecedor elegível. O resultado do Paraguai após
+esta mudança ainda precisa de confirmação na engine.
+
+## 0.7.14 — Papel e bloqueio de orçamento do Advisor
+
+O catálogo próprio passa a doze bens, incluindo papel. O Director pode fundar
+a primeira fábrica ou ampliar uma existente. As rotinas geradas incluem plano,
+aprovação revalidada, previsão de insumos, referência de materiais e duração,
+reserva de trabalhadores, acompanhamento de pedidos e métodos de produção.
+Os coeficientes foram extraídos do vanilla local 1.15. A configuração básica
+usa 30 de madeira para 40 de papel e 5.000 empregos por nível. Métodos mais
+avançados acrescentam enxofre, corantes e insumos de automação. Madeira,
+ferramentas e carvão participam da propagação de prioridades do catálogo.
+A produção própria de enxofre e corantes continua pendente.
+
+A fundação automática diante de escassez também pode usar uma ocupação inicial
+parcial. A reserva estimada precisa cobrir pelo menos 25% dos empregos e os
+trabalhadores suficientes para o déficit atual com 25% de folga, usando a saída
+do método básico. Esses limiares são heurísticas iniciais. A aprovação Assistida
+e a expansão de produtores conservam a exigência de trabalho anterior.
+O projeto enfileirado continua comprometendo todos os empregos do nível.
+Essa regra evita exigir uma fábrica inteira para suprir uma demanda pequena,
+mas contratação real, qualificações e rentabilidade ainda exigem calibração.
+No save foram encontradas leituras de reserva estimada próximas de 1,6 mil e
+2 mil, abaixo dos 5 mil empregos antes exigidos para fundar papel.
+
+O save `paraguai_1843_03_06.v3` contém o estado 4 do Advisor, cuja rotina
+corresponde a bloqueio de orçamento. As variáveis salvas registram compromisso
+semanal de 7.289,95, margem de 2.679,70655, dez pontos e reserva disponível de
+161.151,98626. O compromisso por 26 semanas exige 189.538,70. Esses números
+foram lidos nos registros numéricos de variáveis do save binário, em escala
+100.000, e confrontados com as rotinas instaladas. O diagnóstico explica a
+espera registrada pelo executor externo. Os pontos gratuitos contam como
+capacidade. A ausência de setor, isoladamente, não determina essa espera.
+
+A rota própria de papel conserva seus filtros e pode usar a capacidade gratuita
+com a referência de materiais dos setores existentes. A obra depende de
+tecnologia, permissão, trabalhadores e insumos elegíveis. A inclusão na fila
+real e o efeito na universidade precisam de confirmação em campanha.

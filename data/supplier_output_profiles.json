@@ -116,5 +116,10 @@
   "building_munition_plant": {
     "pm_percussion_caps": 50,
     "pm_explosive_shells": 90
+  },
+  "building_paper_mill": {
+    "pm_pulp_pressing": 40.0,
+    "pm_sulfite_pulping": 70.0,
+    "pm_bleached_paper": 100.0
   }
 }

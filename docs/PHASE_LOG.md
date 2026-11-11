@@ -1952,3 +1952,48 @@ preços de saída/entrada, fundações, revalidação da variante e limpeza. Ger
 validação estática, pacote e whitespace aprovados. Instalada com backup
 `mod_before_0.7.12_20261111_102922_823642`, conferindo os 14 arquivos.
 Lucro real, salários, qualificações e confirmação em campanha seguem pendentes.
+
+## 0.7.13 — Oportunidades civis com preço elevado
+
+O teste do Paraguai mostrou revisão mensal ativa até 7/1842 e fila vazia em
+agosto, com 170 mil em reservas. Os pontos gratuitos entram no modificador
+de capacidade utilizado pelo Advisor. A ausência de setor, por si só, não
+explica a inatividade externa. Seu motivo exato permanece pendente. O catálogo próprio foi ampliado para bens
+civis com demanda superior à oferta e preço de mercado pelo menos 20% acima
+da base, exigindo margem material positiva. Preservados filtros de trabalho,
+insumos, fila, orçamento e limitação mensal. O limiar exige calibração.
+A propagação de insumos considera essas oportunidades. Corrigido texto antigo
+sobre teto de 56 semanas, já removido do orçamento na 0.7.6.
+
+336 testes sintéticos aprovados. Validação estática local 1.15, geração
+consistente, pacote e verificação de espaçamento aprovados. Instalado com backup
+`mod_before_0.7.13_20261111_105515_974019` e conferência de 14 arquivos.
+Confirmação da nova seleção em campanha permanece pendente.
+
+## 0.7.14 — Papel e fundação proporcional à escassez
+
+Incluído papel no catálogo, com fundação, expansão, reserva de trabalho,
+previsão de insumos, orçamento, acompanhamento e métodos de produção.
+Coeficientes e grupos extraídos do vanilla 1.15 local. O método básico usa
+30 de madeira e produz 40 de papel, com 5.000 empregos. Insumos avançados
+incluem enxofre e corantes. Sua produção própria continua pendente.
+
+A fundação automática por escassez admite ocupação parcial quando a reserva
+estimada cobre pelo menos 25% dos empregos e produção suficiente para o
+déficit atual com 25% de folga. A fila reserva todos os empregos do nível.
+Assistido e expansões conservam a regra de trabalho anterior. Os limiares
+exigem calibração de contratação e operação real em campanha.
+
+A leitura de variáveis do save paraguaio de março de 1843 registrou estado
+4 do Advisor, margem semanal 2.679,70655, compromisso de 7.289,95 e reserva
+adicional 161.151,98626. A reserva exigida por ele era 189.538,70 para 26
+semanas. Esse bloqueio explica a espera externa registrada. Leituras locais
+de trabalho próximas de 1,6 mil e 2 mil também ficavam abaixo da exigência
+anterior de uma fábrica inteira. O efeito da correção na engine é pendente.
+
+343 testes sintéticos aprovados, incluindo fundação e expansão de papel,
+prioridade da madeira, capacidade gratuita, trabalho insuficiente, déficit
+pequeno e reserva integral dos empregos após o pedido. Geração consistente,
+validação estática local 1.15, pacote e espaçamento aprovados. Instalado com
+jogo fechado, backup `mod_before_0.7.14_20261111_112138_348829` e conferência
+de 14 arquivos.

@@ -20,6 +20,7 @@ sed_enable_country = {
  set_variable = { name = sed_small_arms_action_status value = 0 }
  set_variable = { name = sed_artillery_action_status value = 0 }
  set_variable = { name = sed_ammunition_action_status value = 0 }
+ set_variable = { name = sed_paper_action_status value = 0 }
  if = {
   limit = { NOT = { OR = { has_variable = sed_mode_manual has_variable = sed_mode_assisted has_variable = sed_mode_automatic } } }
   sed_set_mode_assisted = yes
@@ -42,6 +43,7 @@ sed_disable_country = {
  clear_variable_list = sed_plan_1_small_arms
  clear_variable_list = sed_plan_1_artillery
  clear_variable_list = sed_plan_1_ammunition
+ clear_variable_list = sed_plan_1_paper
  clear_variable_list = sed_plan_2_railway
  clear_variable_list = sed_plan_2_construction
  clear_variable_list = sed_plan_2_wood
@@ -55,6 +57,7 @@ sed_disable_country = {
  clear_variable_list = sed_plan_2_small_arms
  clear_variable_list = sed_plan_2_artillery
  clear_variable_list = sed_plan_2_ammunition
+ clear_variable_list = sed_plan_2_paper
  clear_variable_list = sed_plan_3_railway
  clear_variable_list = sed_plan_3_construction
  clear_variable_list = sed_plan_3_wood
@@ -68,6 +71,7 @@ sed_disable_country = {
  clear_variable_list = sed_plan_3_small_arms
  clear_variable_list = sed_plan_3_artillery
  clear_variable_list = sed_plan_3_ammunition
+ clear_variable_list = sed_plan_3_paper
  clear_variable_list = sed_input_blocked_wood
  clear_variable_list = sed_input_blocked_iron
  clear_variable_list = sed_input_blocked_coal
@@ -166,6 +170,7 @@ sed_disable_country = {
  remove_variable = sed_small_arms_action_status
  remove_variable = sed_artillery_action_status
  remove_variable = sed_ammunition_action_status
+ remove_variable = sed_paper_action_status
  remove_variable = sed_auto_retry_month
  remove_variable = sed_wood_intents
  remove_variable = sed_wood_completed
@@ -222,6 +227,11 @@ sed_disable_country = {
  remove_variable = sed_ammunition_abandoned
  remove_variable = sed_ammunition_result
  remove_variable = sed_ammunition_result_month
+ remove_variable = sed_paper_intents
+ remove_variable = sed_paper_completed
+ remove_variable = sed_paper_abandoned
+ remove_variable = sed_paper_result
+ remove_variable = sed_paper_result_month
  remove_variable = sed_railway_intents
  remove_variable = sed_railway_completed
  remove_variable = sed_railway_abandoned
@@ -364,6 +374,18 @@ sed_disable_country = {
  remove_variable = sed_ammunition_infrastructure_states
  remove_variable = sed_ammunition_labor_states
  remove_variable = sed_ammunition_forecast_states
+ remove_variable = sed_paper_producer_states
+ remove_variable = sed_paper_ignored_states
+ remove_variable = sed_paper_pending_states
+ remove_variable = sed_paper_unincorporated_states
+ remove_variable = sed_paper_understaffed_states
+ remove_variable = sed_paper_hiring_states
+ remove_variable = sed_paper_input_states
+ remove_variable = sed_paper_method_states
+ remove_variable = sed_paper_permission_states
+ remove_variable = sed_paper_infrastructure_states
+ remove_variable = sed_paper_labor_states
+ remove_variable = sed_paper_forecast_states
  remove_variable = sed_pm_upgrade_status
  remove_variable = sed_investment_market_wood_lower
  remove_variable = sed_investment_market_wood_upper
@@ -427,6 +449,10 @@ sed_disable_country = {
  remove_variable = sed_investment_market_luxury_clothes_upper
  remove_variable = sed_investment_market_silk_lower
  remove_variable = sed_investment_market_silk_upper
+ remove_variable = sed_investment_market_paper_lower
+ remove_variable = sed_investment_market_paper_upper
+ remove_variable = sed_investment_market_sulfur_lower
+ remove_variable = sed_investment_market_sulfur_upper
  remove_variable = sed_plan_count
  remove_variable = sed_plan_goal
  remove_variable = sed_fiscal_status
@@ -459,6 +485,7 @@ sed_disable_country = {
  remove_variable = sed_plan_pressure_small_arms
  remove_variable = sed_plan_pressure_artillery
  remove_variable = sed_plan_pressure_ammunition
+ remove_variable = sed_plan_pressure_paper
  remove_variable = sed_plan_missing_wood
  remove_variable = sed_plan_missing_iron
  remove_variable = sed_plan_missing_coal
@@ -470,6 +497,7 @@ sed_disable_country = {
  remove_variable = sed_plan_missing_small_arms
  remove_variable = sed_plan_missing_artillery
  remove_variable = sed_plan_missing_ammunition
+ remove_variable = sed_plan_missing_paper
  remove_variable = sed_wood_short_months
  remove_variable = sed_iron_short_months
  remove_variable = sed_coal_short_months
@@ -481,6 +509,7 @@ sed_disable_country = {
  remove_variable = sed_small_arms_short_months
  remove_variable = sed_artillery_short_months
  remove_variable = sed_ammunition_short_months
+ remove_variable = sed_paper_short_months
  remove_variable = sed_wood_meta_year
  remove_variable = sed_iron_meta_year
  remove_variable = sed_coal_meta_year
@@ -492,6 +521,7 @@ sed_disable_country = {
  remove_variable = sed_small_arms_meta_year
  remove_variable = sed_artillery_meta_year
  remove_variable = sed_ammunition_meta_year
+ remove_variable = sed_paper_meta_year
  remove_variable = sed_wood_short_sample_month
  remove_variable = sed_iron_short_sample_month
  remove_variable = sed_coal_short_sample_month
@@ -503,6 +533,7 @@ sed_disable_country = {
  remove_variable = sed_small_arms_short_sample_month
  remove_variable = sed_artillery_short_sample_month
  remove_variable = sed_ammunition_short_sample_month
+ remove_variable = sed_paper_short_sample_month
  remove_variable = sed_short_sample_gap
  remove_variable = sed_coord_active
  remove_variable = sed_coord_supply_known
@@ -559,6 +590,7 @@ sed_disable_country = {
  remove_variable = sed_input_market_margin_silk
  remove_variable = sed_input_market_margin_steel
  remove_variable = sed_input_market_margin_sugar
+ remove_variable = sed_input_market_margin_sulfur
  remove_variable = sed_input_market_margin_tools
  remove_variable = sed_input_market_margin_wood
  remove_variable = sed_pm_inputs_month
@@ -581,6 +613,7 @@ sed_disable_country = {
  remove_variable = sed_pm_reserved_silk
  remove_variable = sed_pm_reserved_steel
  remove_variable = sed_pm_reserved_sugar
+ remove_variable = sed_pm_reserved_sulfur
  remove_variable = sed_pm_reserved_tools
  remove_variable = sed_pm_reserved_wood
  remove_variable = sed_input_pass_changed
@@ -603,6 +636,7 @@ sed_disable_country = {
  clear_variable_list = sed_small_arms_candidates
  clear_variable_list = sed_artillery_candidates
  clear_variable_list = sed_ammunition_candidates
+ clear_variable_list = sed_paper_candidates
  every_scope_state = {
   remove_variable = sed_railway_request_pending
   remove_variable = sed_construction_request_pending
@@ -641,6 +675,9 @@ sed_disable_country = {
   remove_variable = sed_ammunition_request_pending
   remove_variable = sed_ammunition_intent_level
   remove_variable = sed_ammunition_intent_variant
+  remove_variable = sed_paper_request_pending
+  remove_variable = sed_paper_intent_level
+  remove_variable = sed_paper_intent_variant
   remove_variable = sed_railway_ignored
   remove_variable = sed_construction_ignored
   remove_variable = sed_wood_ignored
@@ -654,6 +691,7 @@ sed_disable_country = {
   remove_variable = sed_small_arms_ignored
   remove_variable = sed_artillery_ignored
   remove_variable = sed_ammunition_ignored
+  remove_variable = sed_paper_ignored
  }
  every_scope_state = {
   remove_variable = sed_plan_score
@@ -684,6 +722,8 @@ sed_disable_country = {
   remove_variable = sed_plan_artillery_score
   remove_variable = sed_plan_ammunition_rank
   remove_variable = sed_plan_ammunition_score
+  remove_variable = sed_plan_paper_rank
+  remove_variable = sed_plan_paper_score
   remove_variable = sed_plan_wood_margin
   remove_variable = sed_plan_wood_output
   remove_variable = sed_plan_iron_margin
@@ -706,6 +746,8 @@ sed_disable_country = {
   remove_variable = sed_plan_artillery_output
   remove_variable = sed_plan_ammunition_margin
   remove_variable = sed_plan_ammunition_output
+  remove_variable = sed_plan_paper_margin
+  remove_variable = sed_plan_paper_output
   remove_variable = sed_labor_pool
   remove_variable = sed_labor_committed
   remove_variable = sed_labor_available
@@ -775,6 +817,10 @@ sed_disable_country = {
   remove_variable = sed_investment_local_luxury_clothes_upper
   remove_variable = sed_investment_local_silk_lower
   remove_variable = sed_investment_local_silk_upper
+  remove_variable = sed_investment_local_paper_lower
+  remove_variable = sed_investment_local_paper_upper
+  remove_variable = sed_investment_local_sulfur_lower
+  remove_variable = sed_investment_local_sulfur_upper
   remove_variable = sed_wood_found_pm_pending
   remove_variable = sed_iron_found_pm_pending
   remove_variable = sed_coal_found_pm_pending
@@ -786,6 +832,7 @@ sed_disable_country = {
   remove_variable = sed_small_arms_found_pm_pending
   remove_variable = sed_artillery_found_pm_pending
   remove_variable = sed_ammunition_found_pm_pending
+  remove_variable = sed_paper_found_pm_pending
   remove_variable = sed_pm_upgrade_score
   remove_variable = sed_pm_upgrade_choice
   remove_variable = sed_pm_upgrade_levels
@@ -805,6 +852,7 @@ sed_disable_country = {
   remove_variable = sed_pm_cooldown_arms_industry
   remove_variable = sed_pm_cooldown_artillery_foundry
   remove_variable = sed_pm_cooldown_munition_plant
+  remove_variable = sed_pm_cooldown_paper_mill
  }
  # Schema and automatic attempt month persist; disabling cannot reset the monthly cap.
 }
@@ -1057,6 +1105,7 @@ sed_refresh_construction_candidates = {
  clear_variable_list = sed_small_arms_candidates
  clear_variable_list = sed_artillery_candidates
  clear_variable_list = sed_ammunition_candidates
+ clear_variable_list = sed_paper_candidates
  # Same primary-reason cascade as the railway counts. Only states that already
  # have a construction sector enter this denominator.
  set_variable = { name = sed_construction_ignored_states value = 0 }
@@ -2583,6 +2632,102 @@ sed_refresh_supply_candidates = {
    root = { add_to_variable_list = { name = sed_ammunition_candidates target = prev } }
   }
  }
+ set_variable = { name = sed_paper_producer_states value = 0 }
+ set_variable = { name = sed_paper_ignored_states value = 0 }
+ set_variable = { name = sed_paper_pending_states value = 0 }
+ set_variable = { name = sed_paper_unincorporated_states value = 0 }
+ set_variable = { name = sed_paper_understaffed_states value = 0 }
+ set_variable = { name = sed_paper_hiring_states value = 0 }
+ set_variable = { name = sed_paper_input_states value = 0 }
+ set_variable = { name = sed_paper_method_states value = 0 }
+ set_variable = { name = sed_paper_permission_states value = 0 }
+ set_variable = { name = sed_paper_infrastructure_states value = 0 }
+ set_variable = { name = sed_paper_labor_states value = 0 }
+ set_variable = { name = sed_paper_forecast_states value = 0 }
+ clear_variable_list = sed_paper_candidates
+ every_scope_state = {
+  if = {
+   limit = { has_variable = sed_paper_request_pending
+    NOT = { OR = { AND = { has_variable = sed_paper_intent_variant OR = { AND = { var:sed_paper_intent_variant = 1 has_building = building_paper_mill b:building_paper_mill = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_paper_intent_variant } OR = { AND = { has_building = building_paper_mill b:building_paper_mill = { level_after_queued_constructions > level } } } } AND = { var:sed_paper_intent_level = 0 NOT = { has_building = building_paper_mill } owner = { construction_queue_num_queued_government_levels > 0 } } } }
+   }
+   if = {
+    limit = { has_variable = sed_paper_intent_variant has_variable = sed_paper_intent_level }
+    if = {
+     limit = { var:sed_paper_intent_variant = 1
+      has_building = building_paper_mill
+      b:building_paper_mill.level > var:sed_paper_intent_level
+     }
+     sed_paper_record_completed = yes
+    }
+    else = { sed_paper_record_abandoned = yes }
+   }
+   remove_variable = sed_paper_request_pending
+  }
+  if = {
+   limit = { OR = { has_building = building_paper_mill } }
+   root = { change_variable = { name = sed_paper_producer_states add = 1 } }
+  }
+  if = { limit = { sed_paper_candidate_eligible = yes } }
+  else_if = {
+   limit = { has_building = building_paper_mill }
+   if = {
+    limit = { has_variable = sed_paper_ignored }
+    root = { change_variable = { name = sed_paper_ignored_states add = 1 } }
+   }
+   else_if = {
+    limit = { OR = { has_variable = sed_paper_request_pending b:building_paper_mill = { level_after_queued_constructions > level } } }
+    root = { change_variable = { name = sed_paper_pending_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { is_incorporated = yes } }
+    root = { change_variable = { name = sed_paper_unincorporated_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_paper_mill = { OR = { level <= 0 occupancy < 0.8 } } }
+    root = { change_variable = { name = sed_paper_understaffed_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_paper_mill = { has_failed_hires = yes } }
+    root = { change_variable = { name = sed_paper_hiring_states add = 1 } }
+   }
+   else_if = {
+    limit = { sed_state_labor_available < 5000 }
+    root = { change_variable = { name = sed_paper_labor_states add = 1 } }
+   }
+   else_if = {
+    limit = { b:building_paper_mill = { building_has_goods_shortage = yes } }
+    root = { change_variable = { name = sed_paper_input_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { sed_input_paper_mill_safe = yes } }
+    root = { change_variable = { name = sed_paper_forecast_states add = 1 } }
+   }
+   else_if = {
+    limit = { OR = { b:building_paper_mill = { NOT = { OR = { has_active_production_method = pm_pulp_pressing has_active_production_method = pm_sulfite_pulping has_active_production_method = pm_bleached_paper } } } sed_investment_paper_mill_output <= 0 } }
+    root = { change_variable = { name = sed_paper_method_states add = 1 } }
+   }
+   else_if = {
+    limit = { NOT = { can_construct_building = building_paper_mill } }
+    root = { change_variable = { name = sed_paper_permission_states add = 1 } }
+   }
+   else_if = {
+    limit = { infrastructure_delta < 0 }
+    root = { change_variable = { name = sed_paper_infrastructure_states add = 1 } }
+   }
+  }
+ }
+ if = {
+  limit = { is_player = yes has_variable = sed_enabled
+   sed_paper_supply_demand = yes
+  }
+  ordered_scope_state = {
+   limit = { sed_paper_candidate_eligible = yes }
+   order_by = { value = state_population multiply = -1 }
+   max = 3
+   check_range_bounds = no
+   root = { add_to_variable_list = { name = sed_paper_candidates target = prev } }
+  }
+ }
 }
 sed_run_wood_approval = {
  owner = { if = { limit = { is_player = yes has_variable = sed_enabled } sed_refresh_investment_prices = yes sed_refresh_input_readings = yes if = { limit = { has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } } }
@@ -3371,6 +3516,73 @@ sed_ammunition_record_abandoned = {
  remove_variable = sed_ammunition_intent_level
  remove_variable = sed_ammunition_intent_variant
 }
+sed_run_paper_approval = {
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled } sed_refresh_investment_prices = yes sed_refresh_input_readings = yes if = { limit = { has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } } }
+ if = {
+  limit = { sed_paper_approval_valid = yes }
+  owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
+  owner = { sed_record_auto_attempt = yes }
+  if = {
+   limit = { sed_paper_paper_mill_investment_eligible = yes }
+   # A founding reads level 0; the monthly review then infers completion from the queue.
+   set_variable = { name = sed_paper_intent_level value = 0 }
+   if = { limit = { has_building = building_paper_mill }
+    set_variable = { name = sed_paper_intent_level value = b:building_paper_mill.level }
+   }
+   set_variable = { name = sed_paper_intent_variant value = 1 }
+   start_building_construction = building_paper_mill
+  }
+  owner = {
+   if = {
+    limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_paper_action_status value = 1 }
+    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }
+    if = { limit = { has_variable = sed_paper_intents }
+     change_variable = { name = sed_paper_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_paper_intents value = 1 } }
+    prev = {
+     set_variable = { name = sed_paper_request_pending value = yes }
+     if = { limit = { owner = { has_variable = sed_mode_automatic } var:sed_paper_intent_level = 0 }
+      set_variable = { name = sed_paper_found_pm_pending value = var:sed_paper_intent_variant }
+     }
+    }
+   }
+   else = {
+    set_variable = { name = sed_paper_action_status value = 2 }
+    prev = {
+     remove_variable = sed_paper_intent_level
+     remove_variable = sed_paper_intent_variant
+    }
+   }
+   remove_variable = sed_queue_levels_before
+  }
+ }
+}
+sed_paper_record_completed = {
+ owner = {
+  if = { limit = { has_variable = sed_paper_completed }
+   change_variable = { name = sed_paper_completed add = 1 }
+  }
+  else = { set_variable = { name = sed_paper_completed value = 1 } }
+  set_variable = { name = sed_paper_result value = 1 }
+  set_variable = { name = sed_paper_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_paper_intent_level
+ remove_variable = sed_paper_intent_variant
+}
+sed_paper_record_abandoned = {
+ owner = {
+  if = { limit = { has_variable = sed_paper_abandoned }
+   change_variable = { name = sed_paper_abandoned add = 1 }
+  }
+  else = { set_variable = { name = sed_paper_abandoned value = 1 } }
+  set_variable = { name = sed_paper_result value = 2 }
+  set_variable = { name = sed_paper_result_month value = sed_live_month_key }
+ }
+ remove_variable = sed_paper_intent_level
+ remove_variable = sed_paper_intent_variant
+}
 sed_set_mode_manual = {
  sed_coord_restore = yes
  sed_restore_fiscal_policy = yes
@@ -3389,6 +3601,7 @@ sed_set_mode_manual = {
   remove_variable = sed_small_arms_found_pm_pending
   remove_variable = sed_artillery_found_pm_pending
   remove_variable = sed_ammunition_found_pm_pending
+  remove_variable = sed_paper_found_pm_pending
  }
  remove_variable = sed_mode_manual remove_variable = sed_mode_assisted
  remove_variable = sed_mode_automatic
@@ -3414,6 +3627,7 @@ sed_set_mode_assisted = {
   remove_variable = sed_small_arms_found_pm_pending
   remove_variable = sed_artillery_found_pm_pending
   remove_variable = sed_ammunition_found_pm_pending
+  remove_variable = sed_paper_found_pm_pending
  }
  remove_variable = sed_mode_assisted remove_variable = sed_mode_manual
  remove_variable = sed_mode_automatic
@@ -3641,6 +3855,18 @@ sed_auto_run_direct = {
    }
   }
   else_if = {
+   limit = { any_scope_state = { sed_paper_candidate_eligible = yes var:sed_plan_paper_rank = 1 } }
+   ordered_scope_state = {
+    limit = { sed_paper_candidate_eligible = yes var:sed_plan_paper_rank = 1 }
+    order_by = { value = state_population multiply = -1 }
+    max = 1
+    check_range_bounds = no
+    # A candidate was selected; only confirmed insertion changes this to success.
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
+    sed_run_paper_approval = yes
+   }
+  }
+  else_if = {
    limit = { any_scope_state = { sed_construction_candidate_eligible = yes var:sed_plan_construction_rank = 1 } }
    ordered_scope_state = {
     limit = { sed_construction_candidate_eligible = yes var:sed_plan_construction_rank = 1 }
@@ -3766,6 +3992,14 @@ sed_ignore_ammunition = {
  }
 }
 
+sed_ignore_paper = {
+ if = {
+  limit = { owner = { is_player = yes has_variable = sed_enabled } sed_paper_candidate_eligible = yes }
+  set_variable = { name = sed_paper_ignored value = yes }
+  owner = { sed_refresh_diagnostics = yes }
+ }
+}
+
 sed_restore_ignored = {
  if = {
   limit = { is_player = yes has_variable = sed_enabled }
@@ -3783,6 +4017,7 @@ sed_restore_ignored = {
   remove_variable = sed_small_arms_ignored
   remove_variable = sed_artillery_ignored
   remove_variable = sed_ammunition_ignored
+  remove_variable = sed_paper_ignored
   }
   sed_refresh_diagnostics = yes
  }
@@ -3831,6 +4066,7 @@ sed_refresh_national_plan = {
   clear_variable_list = sed_plan_1_small_arms
   clear_variable_list = sed_plan_1_artillery
   clear_variable_list = sed_plan_1_ammunition
+  clear_variable_list = sed_plan_1_paper
   clear_variable_list = sed_plan_2_railway
   clear_variable_list = sed_plan_2_construction
   clear_variable_list = sed_plan_2_wood
@@ -3844,6 +4080,7 @@ sed_refresh_national_plan = {
   clear_variable_list = sed_plan_2_small_arms
   clear_variable_list = sed_plan_2_artillery
   clear_variable_list = sed_plan_2_ammunition
+  clear_variable_list = sed_plan_2_paper
   clear_variable_list = sed_plan_3_railway
   clear_variable_list = sed_plan_3_construction
   clear_variable_list = sed_plan_3_wood
@@ -3857,6 +4094,7 @@ sed_refresh_national_plan = {
   clear_variable_list = sed_plan_3_small_arms
   clear_variable_list = sed_plan_3_artillery
   clear_variable_list = sed_plan_3_ammunition
+  clear_variable_list = sed_plan_3_paper
   set_variable = { name = sed_plan_missing_wood value = 0 }
   if = { limit = {
 
@@ -4330,6 +4568,49 @@ sed_refresh_national_plan = {
   }
   else = { remove_variable = sed_ammunition_short_months }
   set_variable = { name = sed_ammunition_short_sample_month value = sed_live_month_key }
+  set_variable = { name = sed_plan_missing_paper value = 0 }
+  if = { limit = {
+
+   market = { mg:paper ?= { market_goods_has_goods_shortage = yes } }
+   NOT = { any_scope_state = { OR = { has_building = building_paper_mill } } }
+  }
+   set_variable = { name = sed_plan_missing_paper value = 1 }
+   change_variable = { name = sed_plan_missing_count add = 1 }
+  }
+  set_variable = { name = sed_plan_pressure_paper value = {
+   value = 0
+   market ?= { mg:paper ?= {
+    if = { limit = { market_goods_buy_orders > 0 }
+     add = { value = market_goods_buy_orders subtract = market_goods_sell_orders
+      divide = market_goods_buy_orders min = 0 max = 1 multiply = 100 }
+    }
+   } }
+  } }
+  if = { limit = { NOT = { has_variable = sed_paper_short_sample_month } }
+   remove_variable = sed_paper_short_months
+   remove_variable = sed_paper_meta_year
+  }
+  if = { limit = {  market = { mg:paper ?= { market_goods_has_goods_shortage = yes } } }
+   if = { limit = { NOT = { has_variable = sed_paper_short_sample_month var:sed_paper_short_sample_month = sed_live_month_key } }
+    set_variable = { name = sed_short_sample_gap value = 0 }
+    if = { limit = { has_variable = sed_paper_short_sample_month }
+     set_variable = { name = sed_short_sample_gap value = { value = sed_live_month_key subtract = var:sed_paper_short_sample_month } }
+    }
+    if = { limit = { var:sed_short_sample_gap = 1 has_variable = sed_paper_short_months }
+     change_variable = { name = sed_paper_short_months add = 1 }
+    }
+    else = { set_variable = { name = sed_paper_short_months value = 1 } }
+    remove_variable = sed_short_sample_gap
+   }
+   else_if = { limit = { NOT = { has_variable = sed_paper_short_months } }
+    set_variable = { name = sed_paper_short_months value = 1 }
+   }
+   if = { limit = { var:sed_paper_short_months >= 3 }
+    set_variable = { name = sed_paper_meta_year value = year }
+   }
+  }
+  else = { remove_variable = sed_paper_short_months }
+  set_variable = { name = sed_paper_short_sample_month value = sed_live_month_key }
   every_scope_state = {
    set_variable = { name = sed_plan_railway_rank value = 0 }
    set_variable = { name = sed_plan_railway_score value = 0 }
@@ -4482,6 +4763,18 @@ sed_refresh_national_plan = {
     set_variable = { name = sed_plan_ammunition_margin value = sed_investment_ammunition_margin }
     set_variable = { name = sed_plan_ammunition_output value = sed_investment_ammunition_output }
    }
+   set_variable = { name = sed_plan_paper_rank value = 0 }
+   set_variable = { name = sed_plan_paper_score value = 0 }
+   if = { limit = { sed_paper_candidate_eligible = yes }
+    set_variable = { name = sed_plan_paper_score value = { value = owner.var:sed_plan_pressure_paper add = 90
+    if = { limit = { owner = { has_variable = sed_paper_meta_year var:sed_paper_meta_year = year } } add = 25 } } }
+   }
+   set_variable = { name = sed_plan_paper_margin value = 0 }
+   set_variable = { name = sed_plan_paper_output value = 0 }
+   if = { limit = { var:sed_plan_paper_score > 0 }
+    set_variable = { name = sed_plan_paper_margin value = sed_investment_paper_margin }
+    set_variable = { name = sed_plan_paper_output value = sed_investment_paper_output }
+   }
   }
   every_scope_state = {
    set_variable = { name = sed_plan_score value = 0 }
@@ -4537,6 +4830,10 @@ sed_refresh_national_plan = {
    if = { limit = { var:sed_plan_ammunition_rank = 0 var:sed_plan_ammunition_score > var:sed_plan_score }
     set_variable = { name = sed_plan_score value = var:sed_plan_ammunition_score }
     set_variable = { name = sed_plan_type value = 13 }
+   }
+   if = { limit = { var:sed_plan_paper_rank = 0 var:sed_plan_paper_score > var:sed_plan_score }
+    set_variable = { name = sed_plan_score value = var:sed_plan_paper_score }
+    set_variable = { name = sed_plan_type value = 14 }
    }
   }
   ordered_scope_state = {
@@ -5033,6 +5330,49 @@ sed_refresh_national_plan = {
      }
     }
    }
+   if = { limit = { var:sed_plan_type = 14 }
+    if = {
+     limit = { owner = { has_variable = sed_mode_automatic } }
+     owner = {
+      remove_variable = sed_investment_nonnegative_only
+      if = { limit = { any_scope_state = { var:sed_plan_paper_score > 0 var:sed_plan_paper_rank = 0 var:sed_plan_paper_margin >= 0 } }
+       set_variable = { name = sed_investment_nonnegative_only value = yes }
+      }
+      ordered_scope_state = {
+       limit = { var:sed_plan_paper_score > 0 var:sed_plan_paper_rank = 0
+        OR = { owner = { NOT = { has_variable = sed_investment_nonnegative_only } } var:sed_plan_paper_margin >= 0 }
+       }
+       order_by = { value = var:sed_plan_paper_output }
+       max = 1 check_range_bounds = no
+       owner = { set_variable = { name = sed_investment_best_output value = prev.var:sed_plan_paper_output } }
+      }
+      ordered_scope_state = {
+       limit = { var:sed_plan_paper_score > 0 var:sed_plan_paper_rank = 0
+        var:sed_plan_paper_output = owner.var:sed_investment_best_output
+        OR = { owner = { NOT = { has_variable = sed_investment_nonnegative_only } } var:sed_plan_paper_margin >= 0 }
+       }
+       order_by = { value = var:sed_plan_paper_margin }
+       max = 1 check_range_bounds = no
+       set_variable = { name = sed_plan_paper_rank value = 1 }
+       owner = {
+        add_to_variable_list = { name = sed_plan_1_paper target = prev }
+        change_variable = { name = sed_plan_count add = 1 }
+        set_variable = { name = sed_plan_goal value = 2 }
+       }
+      }
+      remove_variable = sed_investment_best_output
+      remove_variable = sed_investment_nonnegative_only
+     }
+    }
+    else = {
+     set_variable = { name = sed_plan_paper_rank value = 1 }
+     owner = {
+      add_to_variable_list = { name = sed_plan_1_paper target = prev }
+      change_variable = { name = sed_plan_count add = 1 }
+      set_variable = { name = sed_plan_goal value = 2 }
+     }
+    }
+   }
   }
   every_scope_state = {
    set_variable = { name = sed_plan_score value = 0 }
@@ -5088,6 +5428,10 @@ sed_refresh_national_plan = {
    if = { limit = { var:sed_plan_ammunition_rank = 0 var:sed_plan_ammunition_score > var:sed_plan_score }
     set_variable = { name = sed_plan_score value = var:sed_plan_ammunition_score }
     set_variable = { name = sed_plan_type value = 13 }
+   }
+   if = { limit = { var:sed_plan_paper_rank = 0 var:sed_plan_paper_score > var:sed_plan_score }
+    set_variable = { name = sed_plan_score value = var:sed_plan_paper_score }
+    set_variable = { name = sed_plan_type value = 14 }
    }
   }
   ordered_scope_state = {
@@ -5584,6 +5928,49 @@ sed_refresh_national_plan = {
      }
     }
    }
+   if = { limit = { var:sed_plan_type = 14 }
+    if = {
+     limit = { owner = { has_variable = sed_mode_automatic } }
+     owner = {
+      remove_variable = sed_investment_nonnegative_only
+      if = { limit = { any_scope_state = { var:sed_plan_paper_score > 0 var:sed_plan_paper_rank = 0 var:sed_plan_paper_margin >= 0 } }
+       set_variable = { name = sed_investment_nonnegative_only value = yes }
+      }
+      ordered_scope_state = {
+       limit = { var:sed_plan_paper_score > 0 var:sed_plan_paper_rank = 0
+        OR = { owner = { NOT = { has_variable = sed_investment_nonnegative_only } } var:sed_plan_paper_margin >= 0 }
+       }
+       order_by = { value = var:sed_plan_paper_output }
+       max = 1 check_range_bounds = no
+       owner = { set_variable = { name = sed_investment_best_output value = prev.var:sed_plan_paper_output } }
+      }
+      ordered_scope_state = {
+       limit = { var:sed_plan_paper_score > 0 var:sed_plan_paper_rank = 0
+        var:sed_plan_paper_output = owner.var:sed_investment_best_output
+        OR = { owner = { NOT = { has_variable = sed_investment_nonnegative_only } } var:sed_plan_paper_margin >= 0 }
+       }
+       order_by = { value = var:sed_plan_paper_margin }
+       max = 1 check_range_bounds = no
+       set_variable = { name = sed_plan_paper_rank value = 2 }
+       owner = {
+        add_to_variable_list = { name = sed_plan_2_paper target = prev }
+        change_variable = { name = sed_plan_count add = 1 }
+
+       }
+      }
+      remove_variable = sed_investment_best_output
+      remove_variable = sed_investment_nonnegative_only
+     }
+    }
+    else = {
+     set_variable = { name = sed_plan_paper_rank value = 2 }
+     owner = {
+      add_to_variable_list = { name = sed_plan_2_paper target = prev }
+      change_variable = { name = sed_plan_count add = 1 }
+
+     }
+    }
+   }
   }
   every_scope_state = {
    set_variable = { name = sed_plan_score value = 0 }
@@ -5639,6 +6026,10 @@ sed_refresh_national_plan = {
    if = { limit = { var:sed_plan_ammunition_rank = 0 var:sed_plan_ammunition_score > var:sed_plan_score }
     set_variable = { name = sed_plan_score value = var:sed_plan_ammunition_score }
     set_variable = { name = sed_plan_type value = 13 }
+   }
+   if = { limit = { var:sed_plan_paper_rank = 0 var:sed_plan_paper_score > var:sed_plan_score }
+    set_variable = { name = sed_plan_score value = var:sed_plan_paper_score }
+    set_variable = { name = sed_plan_type value = 14 }
    }
   }
   ordered_scope_state = {
@@ -6135,6 +6526,49 @@ sed_refresh_national_plan = {
      }
     }
    }
+   if = { limit = { var:sed_plan_type = 14 }
+    if = {
+     limit = { owner = { has_variable = sed_mode_automatic } }
+     owner = {
+      remove_variable = sed_investment_nonnegative_only
+      if = { limit = { any_scope_state = { var:sed_plan_paper_score > 0 var:sed_plan_paper_rank = 0 var:sed_plan_paper_margin >= 0 } }
+       set_variable = { name = sed_investment_nonnegative_only value = yes }
+      }
+      ordered_scope_state = {
+       limit = { var:sed_plan_paper_score > 0 var:sed_plan_paper_rank = 0
+        OR = { owner = { NOT = { has_variable = sed_investment_nonnegative_only } } var:sed_plan_paper_margin >= 0 }
+       }
+       order_by = { value = var:sed_plan_paper_output }
+       max = 1 check_range_bounds = no
+       owner = { set_variable = { name = sed_investment_best_output value = prev.var:sed_plan_paper_output } }
+      }
+      ordered_scope_state = {
+       limit = { var:sed_plan_paper_score > 0 var:sed_plan_paper_rank = 0
+        var:sed_plan_paper_output = owner.var:sed_investment_best_output
+        OR = { owner = { NOT = { has_variable = sed_investment_nonnegative_only } } var:sed_plan_paper_margin >= 0 }
+       }
+       order_by = { value = var:sed_plan_paper_margin }
+       max = 1 check_range_bounds = no
+       set_variable = { name = sed_plan_paper_rank value = 3 }
+       owner = {
+        add_to_variable_list = { name = sed_plan_3_paper target = prev }
+        change_variable = { name = sed_plan_count add = 1 }
+
+       }
+      }
+      remove_variable = sed_investment_best_output
+      remove_variable = sed_investment_nonnegative_only
+     }
+    }
+    else = {
+     set_variable = { name = sed_plan_paper_rank value = 3 }
+     owner = {
+      add_to_variable_list = { name = sed_plan_3_paper target = prev }
+      change_variable = { name = sed_plan_count add = 1 }
+
+     }
+    }
+   }
   }
   if = { limit = { var:sed_plan_goal = 0 any_scope_state = {
    is_incorporated = yes infrastructure_delta < 0 NOT = { has_variable = sed_railway_ignored } has_building = building_railway
@@ -6220,6 +6654,13 @@ sed_refresh_national_plan = {
    set_variable = { name = sed_plan_goal value = 2 }
    set_variable = { name = sed_plan_waiting value = 1 }
   }
+  if = { limit = { var:sed_plan_goal = 0
+   market = { mg:paper ?= { market_goods_has_goods_shortage = yes } }
+   any_scope_state = { is_incorporated = yes NOT = { has_variable = sed_paper_ignored } sed_paper_queued_supply = yes }
+  }
+   set_variable = { name = sed_plan_goal value = 2 }
+   set_variable = { name = sed_plan_waiting value = 1 }
+  }
   if = { limit = { var:sed_plan_goal = 0 var:sed_plan_missing_count > 0 } set_variable = { name = sed_plan_goal value = 5 } }
   if = { limit = { var:sed_plan_goal = 0 sed_coord_fiscal_safe = yes } set_variable = { name = sed_plan_goal value = 8 } }
   if = { limit = { OR = { var:sed_plan_goal = 0 var:sed_plan_goal = 8 } bureaucracy < 0 } set_variable = { name = sed_plan_goal value = 6 } }
@@ -6262,6 +6703,7 @@ sed_refresh_input_readings = {
   set_variable = { name = sed_input_market_margin_silk value = sed_input_country_headroom_silk }
   set_variable = { name = sed_input_market_margin_steel value = sed_input_country_headroom_steel }
   set_variable = { name = sed_input_market_margin_sugar value = sed_input_country_headroom_sugar }
+  set_variable = { name = sed_input_market_margin_sulfur value = sed_input_country_headroom_sulfur }
   set_variable = { name = sed_input_market_margin_tools value = sed_input_country_headroom_tools }
   set_variable = { name = sed_input_market_margin_wood value = sed_input_country_headroom_wood }
   every_scope_state = {
@@ -6282,6 +6724,7 @@ sed_refresh_input_priorities = {
  ordered_scope_state = {
   limit = { OR = {
    sed_input_blocks_wood_tools_tooling_workshop = yes
+   sed_input_blocks_wood_paper_paper_mill = yes
   } }
   order_by = { value = state_population }
   max = 3
@@ -6325,6 +6768,7 @@ sed_refresh_input_priorities = {
    sed_input_blocks_coal_small_arms_arms_industry = yes
    sed_input_blocks_coal_artillery_artillery_foundry = yes
    sed_input_blocks_coal_ammunition_munition_plant = yes
+   sed_input_blocks_coal_paper_paper_mill = yes
   } }
   order_by = { value = state_population }
   max = 3
@@ -6381,6 +6825,7 @@ sed_refresh_input_priorities = {
    sed_input_blocks_tools_small_arms_arms_industry = yes
    sed_input_blocks_tools_artillery_artillery_foundry = yes
    sed_input_blocks_tools_ammunition_munition_plant = yes
+   sed_input_blocks_tools_paper_paper_mill = yes
   } }
   order_by = { value = state_population }
   max = 3
@@ -6409,11 +6854,19 @@ sed_extend_input_priorities = {
    NOT = { has_variable = sed_input_priority_wood }
    OR = {
    AND = {
-    OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_tools }
+    OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:tools ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_tools }
     NOT = { any_scope_state = { sed_tools_queued_supply = yes } }
     NOT = { any_scope_state = { sed_tools_supplier_available = yes } }
     any_scope_state = { OR = {
      sed_input_blocks_wood_tools_tooling_workshop_constraint = yes
+    } }
+   }
+   AND = {
+    OR = { market = { mg:paper ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:paper ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } }  }
+    NOT = { any_scope_state = { sed_paper_queued_supply = yes } }
+    NOT = { any_scope_state = { sed_paper_supplier_available = yes } }
+    any_scope_state = { OR = {
+     sed_input_blocks_wood_paper_paper_mill_constraint = yes
     } }
    }
    }
@@ -6426,7 +6879,7 @@ sed_extend_input_priorities = {
    NOT = { has_variable = sed_input_priority_iron }
    OR = {
    AND = {
-    OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_fabric }
+    OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:fabric ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_fabric }
     NOT = { any_scope_state = { sed_fabric_queued_supply = yes } }
     NOT = { any_scope_state = { sed_fabric_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6434,7 +6887,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_tools }
+    OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:tools ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_tools }
     NOT = { any_scope_state = { sed_tools_queued_supply = yes } }
     NOT = { any_scope_state = { sed_tools_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6442,7 +6895,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:groceries ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } }  }
     NOT = { any_scope_state = { sed_groceries_queued_supply = yes } }
     NOT = { any_scope_state = { sed_groceries_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6450,7 +6903,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }   }
     NOT = { any_scope_state = { sed_small_arms_queued_supply = yes } }
     NOT = { any_scope_state = { sed_small_arms_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6458,7 +6911,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }   }
     NOT = { any_scope_state = { sed_artillery_queued_supply = yes } }
     NOT = { any_scope_state = { sed_artillery_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6475,7 +6928,7 @@ sed_extend_input_priorities = {
    NOT = { has_variable = sed_input_priority_coal }
    OR = {
    AND = {
-    OR = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_wood }
+    OR = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:wood ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_wood }
     NOT = { any_scope_state = { sed_wood_queued_supply = yes } }
     NOT = { any_scope_state = { sed_wood_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6483,7 +6936,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_iron }
+    OR = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:iron ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_iron }
     NOT = { any_scope_state = { sed_iron_queued_supply = yes } }
     NOT = { any_scope_state = { sed_iron_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6491,7 +6944,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_grain }
+    OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:grain ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_grain }
     NOT = { any_scope_state = { sed_grain_queued_supply = yes } }
     NOT = { any_scope_state = { sed_grain_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6503,7 +6956,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_fabric }
+    OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:fabric ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_fabric }
     NOT = { any_scope_state = { sed_fabric_queued_supply = yes } }
     NOT = { any_scope_state = { sed_fabric_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6511,7 +6964,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_tools }
+    OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:tools ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_tools }
     NOT = { any_scope_state = { sed_tools_queued_supply = yes } }
     NOT = { any_scope_state = { sed_tools_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6519,7 +6972,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }   }
     NOT = { any_scope_state = { sed_small_arms_queued_supply = yes } }
     NOT = { any_scope_state = { sed_small_arms_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6527,7 +6980,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }   }
     NOT = { any_scope_state = { sed_artillery_queued_supply = yes } }
     NOT = { any_scope_state = { sed_artillery_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6535,11 +6988,19 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } }   }
     NOT = { any_scope_state = { sed_ammunition_queued_supply = yes } }
     NOT = { any_scope_state = { sed_ammunition_supplier_available = yes } }
     any_scope_state = { OR = {
      sed_input_blocks_coal_ammunition_munition_plant_constraint = yes
+    } }
+   }
+   AND = {
+    OR = { market = { mg:paper ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:paper ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } }  }
+    NOT = { any_scope_state = { sed_paper_queued_supply = yes } }
+    NOT = { any_scope_state = { sed_paper_supplier_available = yes } }
+    any_scope_state = { OR = {
+     sed_input_blocks_coal_paper_paper_mill_constraint = yes
     } }
    }
    }
@@ -6552,7 +7013,7 @@ sed_extend_input_priorities = {
    NOT = { has_variable = sed_input_priority_grain }
    OR = {
    AND = {
-    OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_fabric }
+    OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:fabric ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_fabric }
     NOT = { any_scope_state = { sed_fabric_queued_supply = yes } }
     NOT = { any_scope_state = { sed_fabric_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6560,7 +7021,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:groceries ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } }  }
     NOT = { any_scope_state = { sed_groceries_queued_supply = yes } }
     NOT = { any_scope_state = { sed_groceries_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6577,7 +7038,7 @@ sed_extend_input_priorities = {
    NOT = { has_variable = sed_input_priority_fabric }
    OR = {
    AND = {
-    OR = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:clothes ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } }  }
     NOT = { any_scope_state = { sed_clothes_queued_supply = yes } }
     NOT = { any_scope_state = { sed_clothes_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6594,7 +7055,7 @@ sed_extend_input_priorities = {
    NOT = { has_variable = sed_input_priority_tools }
    OR = {
    AND = {
-    OR = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_wood }
+    OR = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:wood ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_wood }
     NOT = { any_scope_state = { sed_wood_queued_supply = yes } }
     NOT = { any_scope_state = { sed_wood_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6602,7 +7063,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_iron }
+    OR = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:iron ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_iron }
     NOT = { any_scope_state = { sed_iron_queued_supply = yes } }
     NOT = { any_scope_state = { sed_iron_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6610,7 +7071,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_coal }
+    OR = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:coal ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_coal }
     NOT = { any_scope_state = { sed_coal_queued_supply = yes } }
     NOT = { any_scope_state = { sed_coal_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6618,7 +7079,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_grain }
+    OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:grain ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_grain }
     NOT = { any_scope_state = { sed_grain_queued_supply = yes } }
     NOT = { any_scope_state = { sed_grain_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6630,7 +7091,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_fabric }
+    OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:fabric ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_fabric }
     NOT = { any_scope_state = { sed_fabric_queued_supply = yes } }
     NOT = { any_scope_state = { sed_fabric_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6638,7 +7099,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:groceries ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } }  }
     NOT = { any_scope_state = { sed_groceries_queued_supply = yes } }
     NOT = { any_scope_state = { sed_groceries_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6646,7 +7107,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:clothes ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } }  }
     NOT = { any_scope_state = { sed_clothes_queued_supply = yes } }
     NOT = { any_scope_state = { sed_clothes_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6654,7 +7115,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }   }
     NOT = { any_scope_state = { sed_small_arms_queued_supply = yes } }
     NOT = { any_scope_state = { sed_small_arms_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6662,7 +7123,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }   }
     NOT = { any_scope_state = { sed_artillery_queued_supply = yes } }
     NOT = { any_scope_state = { sed_artillery_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6670,11 +7131,19 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } }   }
     NOT = { any_scope_state = { sed_ammunition_queued_supply = yes } }
     NOT = { any_scope_state = { sed_ammunition_supplier_available = yes } }
     any_scope_state = { OR = {
      sed_input_blocks_tools_ammunition_munition_plant_constraint = yes
+    } }
+   }
+   AND = {
+    OR = { market = { mg:paper ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:paper ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } }  }
+    NOT = { any_scope_state = { sed_paper_queued_supply = yes } }
+    NOT = { any_scope_state = { sed_paper_supplier_available = yes } }
+    any_scope_state = { OR = {
+     sed_input_blocks_tools_paper_paper_mill_constraint = yes
     } }
    }
    }
@@ -6808,6 +7277,10 @@ sed_refresh_direct_budget = {
   }
   if = { limit = { var:sed_build_budget_project_points = 0
    any_scope_state = { has_variable = sed_plan_clothes_rank var:sed_plan_clothes_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 600 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_paper_rank var:sed_plan_paper_rank = 1 } }
    set_variable = { name = sed_build_budget_project_points value = 600 }
   }
   if = { limit = { var:sed_build_budget_project_points = 0
@@ -7160,6 +7633,11 @@ var:sed_artillery_intent_variant = 1
 var:sed_ammunition_intent_variant = 1
      } add = 1 }
      if = { limit = {
+      NOT = { has_building = building_paper_mill }
+      has_variable = sed_paper_request_pending var:sed_paper_intent_level = 0
+var:sed_paper_intent_variant = 1
+     } add = 1 }
+     if = { limit = {
       NOT = { has_building = building_railway }
       has_variable = sed_railway_request_pending var:sed_railway_intent_level = 0
 
@@ -7505,6 +7983,11 @@ var:sed_artillery_intent_variant = 1
 var:sed_ammunition_intent_variant = 1
      } add = 800 }
      if = { limit = {
+      NOT = { has_building = building_paper_mill }
+      has_variable = sed_paper_request_pending var:sed_paper_intent_level = 0
+var:sed_paper_intent_variant = 1
+     } add = 600 }
+     if = { limit = {
       NOT = { has_building = building_railway }
       has_variable = sed_railway_request_pending var:sed_railway_intent_level = 0
 
@@ -7849,6 +8332,10 @@ sed_refresh_investment_prices = {
   set_variable = { name = sed_investment_market_luxury_clothes_upper value = sed_investment_market_price_luxury_clothes_upper }
   set_variable = { name = sed_investment_market_silk_lower value = sed_investment_market_price_silk_lower }
   set_variable = { name = sed_investment_market_silk_upper value = sed_investment_market_price_silk_upper }
+  set_variable = { name = sed_investment_market_paper_lower value = sed_investment_market_price_paper_lower }
+  set_variable = { name = sed_investment_market_paper_upper value = sed_investment_market_price_paper_upper }
+  set_variable = { name = sed_investment_market_sulfur_lower value = sed_investment_market_price_sulfur_lower }
+  set_variable = { name = sed_investment_market_sulfur_upper value = sed_investment_market_price_sulfur_upper }
   every_scope_state = {
    set_variable = { name = sed_investment_local_wood_lower value = sed_investment_observed_price_wood_lower }
    set_variable = { name = sed_investment_local_wood_upper value = sed_investment_observed_price_wood_upper }
@@ -7912,6 +8399,10 @@ sed_refresh_investment_prices = {
    set_variable = { name = sed_investment_local_luxury_clothes_upper value = sed_investment_observed_price_luxury_clothes_upper }
    set_variable = { name = sed_investment_local_silk_lower value = sed_investment_observed_price_silk_lower }
    set_variable = { name = sed_investment_local_silk_upper value = sed_investment_observed_price_silk_upper }
+   set_variable = { name = sed_investment_local_paper_lower value = sed_investment_observed_price_paper_lower }
+   set_variable = { name = sed_investment_local_paper_upper value = sed_investment_observed_price_paper_upper }
+   set_variable = { name = sed_investment_local_sulfur_lower value = sed_investment_observed_price_sulfur_lower }
+   set_variable = { name = sed_investment_local_sulfur_upper value = sed_investment_observed_price_sulfur_upper }
   }
  }
 }
@@ -9154,6 +9645,92 @@ sed_configure_founded_industries = {
      if = { limit = { b:building_munition_plant = { has_active_production_method = pm_percussion_caps has_active_production_method = pm_automation_disabled } } remove_variable = sed_ammunition_found_pm_pending }
     }
    }
+   if = { limit = { has_variable = sed_paper_found_pm_pending var:sed_paper_found_pm_pending = 1 }
+    if = { limit = { OR = {
+     has_variable = sed_paper_ignored is_incorporated = no
+     owner = { OR = { has_variable = advisor_pm_balance_enabled has_variable = advisor_labor_auto_enabled } }
+     AND = { NOT = { has_building = building_paper_mill } NOT = { has_variable = sed_paper_request_pending } }
+     AND = { has_building = building_paper_mill b:building_paper_mill = { OR = { level > 1 level_after_queued_constructions > 1 } } }
+    } } remove_variable = sed_paper_found_pm_pending }
+    else_if = { limit = { has_building = building_paper_mill
+     sed_state_labor_pool >= sed_state_labor_committed
+     owner = { has_technology_researched = chemical_bleaching }
+       OR = { b:building_paper_mill = { has_active_production_method = pm_bleached_paper }
+        can_activate_production_method = { building_type = building_paper_mill production_method = pm_bleached_paper }
+       }
+       OR = { b:building_paper_mill = { has_active_production_method = pm_automation_disabled }
+        can_activate_production_method = { building_type = building_paper_mill production_method = pm_automation_disabled }
+       }
+       sed_input_headroom_dye >= 12.5
+       sed_input_headroom_sulfur >= 12.5
+       sed_input_headroom_wood >= 37.5
+    }
+     if = { limit = { NOT = { b:building_paper_mill = { has_active_production_method = pm_bleached_paper has_active_production_method = pm_automation_disabled } } }
+       if = { limit = { b:building_paper_mill = { NOT = { has_active_production_method = pm_bleached_paper } } }
+        activate_production_method = { building_type = building_paper_mill production_method = pm_bleached_paper }
+       }
+       if = { limit = { b:building_paper_mill = { NOT = { has_active_production_method = pm_automation_disabled } } }
+        activate_production_method = { building_type = building_paper_mill production_method = pm_automation_disabled }
+       }
+        owner = { set_variable = { name = sed_pm_reserved_dye value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_dye } add = var:sed_pm_reserved_dye } add = 12.5 } }
+        set_variable = { name = sed_input_market_margin_dye value = { value = var:sed_input_market_margin_dye subtract = 12.5 } } }
+        owner = { set_variable = { name = sed_pm_reserved_sulfur value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_sulfur } add = var:sed_pm_reserved_sulfur } add = 12.5 } }
+        set_variable = { name = sed_input_market_margin_sulfur value = { value = var:sed_input_market_margin_sulfur subtract = 12.5 } } }
+        owner = { set_variable = { name = sed_pm_reserved_wood value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_wood } add = var:sed_pm_reserved_wood } add = 37.5 } }
+        set_variable = { name = sed_input_market_margin_wood value = { value = var:sed_input_market_margin_wood subtract = 37.5 } } }
+     }
+     if = { limit = { b:building_paper_mill = { has_active_production_method = pm_bleached_paper has_active_production_method = pm_automation_disabled } } remove_variable = sed_paper_found_pm_pending }
+    }
+    else_if = { limit = { has_building = building_paper_mill
+     sed_state_labor_pool >= sed_state_labor_committed
+     owner = { has_technology_researched = mechanical_tools }
+       OR = { b:building_paper_mill = { has_active_production_method = pm_sulfite_pulping }
+        can_activate_production_method = { building_type = building_paper_mill production_method = pm_sulfite_pulping }
+       }
+       OR = { b:building_paper_mill = { has_active_production_method = pm_automation_disabled }
+        can_activate_production_method = { building_type = building_paper_mill production_method = pm_automation_disabled }
+       }
+       sed_input_headroom_sulfur >= 12.5
+       sed_input_headroom_wood >= 37.5
+    }
+     if = { limit = { NOT = { b:building_paper_mill = { has_active_production_method = pm_sulfite_pulping has_active_production_method = pm_automation_disabled } } }
+       if = { limit = { b:building_paper_mill = { NOT = { has_active_production_method = pm_sulfite_pulping } } }
+        activate_production_method = { building_type = building_paper_mill production_method = pm_sulfite_pulping }
+       }
+       if = { limit = { b:building_paper_mill = { NOT = { has_active_production_method = pm_automation_disabled } } }
+        activate_production_method = { building_type = building_paper_mill production_method = pm_automation_disabled }
+       }
+        owner = { set_variable = { name = sed_pm_reserved_sulfur value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_sulfur } add = var:sed_pm_reserved_sulfur } add = 12.5 } }
+        set_variable = { name = sed_input_market_margin_sulfur value = { value = var:sed_input_market_margin_sulfur subtract = 12.5 } } }
+        owner = { set_variable = { name = sed_pm_reserved_wood value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_wood } add = var:sed_pm_reserved_wood } add = 37.5 } }
+        set_variable = { name = sed_input_market_margin_wood value = { value = var:sed_input_market_margin_wood subtract = 37.5 } } }
+     }
+     if = { limit = { b:building_paper_mill = { has_active_production_method = pm_sulfite_pulping has_active_production_method = pm_automation_disabled } } remove_variable = sed_paper_found_pm_pending }
+    }
+    else_if = { limit = { has_building = building_paper_mill
+     sed_state_labor_pool >= sed_state_labor_committed
+     owner = {  }
+       OR = { b:building_paper_mill = { has_active_production_method = pm_pulp_pressing }
+        can_activate_production_method = { building_type = building_paper_mill production_method = pm_pulp_pressing }
+       }
+       OR = { b:building_paper_mill = { has_active_production_method = pm_automation_disabled }
+        can_activate_production_method = { building_type = building_paper_mill production_method = pm_automation_disabled }
+       }
+       sed_input_headroom_wood >= 37.5
+    }
+     if = { limit = { NOT = { b:building_paper_mill = { has_active_production_method = pm_pulp_pressing has_active_production_method = pm_automation_disabled } } }
+       if = { limit = { b:building_paper_mill = { NOT = { has_active_production_method = pm_pulp_pressing } } }
+        activate_production_method = { building_type = building_paper_mill production_method = pm_pulp_pressing }
+       }
+       if = { limit = { b:building_paper_mill = { NOT = { has_active_production_method = pm_automation_disabled } } }
+        activate_production_method = { building_type = building_paper_mill production_method = pm_automation_disabled }
+       }
+        owner = { set_variable = { name = sed_pm_reserved_wood value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_wood } add = var:sed_pm_reserved_wood } add = 37.5 } }
+        set_variable = { name = sed_input_market_margin_wood value = { value = var:sed_input_market_margin_wood subtract = 37.5 } } }
+     }
+     if = { limit = { b:building_paper_mill = { has_active_production_method = pm_pulp_pressing has_active_production_method = pm_automation_disabled } } remove_variable = sed_paper_found_pm_pending }
+    }
+   }
   }
  }
 }
@@ -9178,6 +9755,7 @@ sed_clear_pm_input_reservations = {
  set_variable = { name = sed_pm_reserved_silk value = 0 }
  set_variable = { name = sed_pm_reserved_steel value = 0 }
  set_variable = { name = sed_pm_reserved_sugar value = 0 }
+ set_variable = { name = sed_pm_reserved_sulfur value = 0 }
  set_variable = { name = sed_pm_reserved_tools value = 0 }
  set_variable = { name = sed_pm_reserved_wood value = 0 }
  every_scope_state = {
@@ -9409,6 +9987,18 @@ sed_modernize_existing_industry = {
    if = { limit = { sed_pm_upgrade_50_eligible = yes var:sed_pm_upgrade_score < { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy } }
     set_variable = { name = sed_pm_upgrade_score value = { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy } }
     set_variable = { name = sed_pm_upgrade_choice value = 50 }
+   }
+   if = { limit = { sed_pm_upgrade_51_eligible = yes var:sed_pm_upgrade_score < { value = 50 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 50 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 51 }
+   }
+   if = { limit = { sed_pm_upgrade_52_eligible = yes var:sed_pm_upgrade_score < { value = 225 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 225 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 52 }
+   }
+   if = { limit = { sed_pm_upgrade_53_eligible = yes var:sed_pm_upgrade_score < { value = 175 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 175 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 53 }
    }
   }
   ordered_scope_state = {
@@ -10310,6 +10900,59 @@ sed_modernize_existing_industry = {
     }
     remove_variable = sed_pm_upgrade_levels
    }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 51 sed_pm_upgrade_51_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_paper_mill.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_paper_mill production_method = pm_sulfite_pulping }
+     owner = { set_variable = { name = sed_pm_reserved_sulfur value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_sulfur } add = var:sed_pm_reserved_sulfur } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_sulfur value = { value = var:sed_input_market_margin_sulfur subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_paper_mill = { has_active_production_method = pm_sulfite_pulping } }
+     set_variable = { name = sed_pm_cooldown_paper_mill value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 52 sed_pm_upgrade_52_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_paper_mill.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_paper_mill production_method = pm_bleached_paper }
+     owner = { set_variable = { name = sed_pm_reserved_sulfur value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_sulfur } add = var:sed_pm_reserved_sulfur } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_sulfur value = { value = var:sed_input_market_margin_sulfur subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_dye value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_dye } add = var:sed_pm_reserved_dye } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_dye value = { value = var:sed_input_market_margin_dye subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_paper_mill = { has_active_production_method = pm_bleached_paper } }
+     set_variable = { name = sed_pm_cooldown_paper_mill value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 53 sed_pm_upgrade_53_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_paper_mill.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_paper_mill production_method = pm_bleached_paper }
+     owner = { set_variable = { name = sed_pm_reserved_dye value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_dye } add = var:sed_pm_reserved_dye } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_dye value = { value = var:sed_input_market_margin_dye subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_paper_mill = { has_active_production_method = pm_bleached_paper } }
+     set_variable = { name = sed_pm_cooldown_paper_mill value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
   }
  }
 }
@@ -10477,6 +11120,18 @@ sed_recover_existing_industry = {
    if = { limit = { sed_pm_recovery_37_eligible = yes var:sed_pm_upgrade_score < { value = 800 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
     set_variable = { name = sed_pm_upgrade_score value = { value = 800 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
     set_variable = { name = sed_pm_upgrade_choice value = 37 }
+   }
+   if = { limit = { sed_pm_recovery_38_eligible = yes var:sed_pm_upgrade_score < { value = 500 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 500 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 38 }
+   }
+   if = { limit = { sed_pm_recovery_39_eligible = yes var:sed_pm_upgrade_score < { value = 900 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 900 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 39 }
+   }
+   if = { limit = { sed_pm_recovery_40_eligible = yes var:sed_pm_upgrade_score < { value = 400 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 400 multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 40 }
    }
   }
   ordered_scope_state = {
@@ -11072,6 +11727,54 @@ sed_recover_existing_industry = {
 
     if = { limit = { b:building_arms_industry = { has_active_production_method = pm_repeaters } }
      set_variable = { name = sed_pm_cooldown_arms_industry value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 38 sed_pm_recovery_38_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_paper_mill.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_paper_mill production_method = pm_pulp_pressing }
+
+    if = { limit = { b:building_paper_mill = { has_active_production_method = pm_pulp_pressing } }
+     set_variable = { name = sed_pm_cooldown_paper_mill value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 39 sed_pm_recovery_39_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_paper_mill.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_paper_mill production_method = pm_pulp_pressing }
+
+    if = { limit = { b:building_paper_mill = { has_active_production_method = pm_pulp_pressing } }
+     set_variable = { name = sed_pm_cooldown_paper_mill value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 40 sed_pm_recovery_40_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_paper_mill.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_paper_mill production_method = pm_sulfite_pulping }
+
+    if = { limit = { b:building_paper_mill = { has_active_production_method = pm_sulfite_pulping } }
+     set_variable = { name = sed_pm_cooldown_paper_mill value = { value = sed_live_month_key add = 3 } }
      owner = { set_variable = { name = sed_pm_upgrade_status value = 3 } }
     }
     remove_variable = sed_pm_upgrade_levels

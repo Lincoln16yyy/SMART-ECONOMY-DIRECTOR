@@ -2455,6 +2455,177 @@ button = {
 }
  }
 }
+ type sed_paper_candidate_item = flowcontainer {
+ datacontext = "[Scope.GetState]"
+ direction = vertical spacing = 10 ignoreinvisible = yes
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ background = { using = dark_area }
+ flowcontainer = { direction = vertical spacing = 10 ignoreinvisible = yes
+  margin = { 16 12 }
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_xxl
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_paper_candidate_title"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_paper_candidate_reason"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_plan_paper_score_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_plan_paper_score"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_candidate_infrastructure"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_paper_infrastructure_blocked_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_expansion_infrastructure_blocked"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_candidate_labor"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_paper_mill_coal_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_paper_mill_coal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_paper_mill_dye_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_paper_mill_dye"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_paper_mill_sulfur_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_paper_mill_sulfur"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_paper_mill_tools_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_paper_mill_tools"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_ref_paper_mill_wood_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_input_ref_paper_mill_wood"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_paper_ready_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_approval_ready"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_paper_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_mode_approval_blocked"
+}
+button = {
+ using = default_button
+ using = fontsize_large
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_switch_assisted" tooltip = "sed_switch_assisted_tt"
+ visible = "[GetScriptedGui('sed_paper_switch_assisted_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_paper_switch_assisted_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_paper_switch_assisted_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
+}
+button = {
+ using = default_button
+ using = fontsize_large
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_paper_approve" tooltip = "sed_paper_approve_tt"
+ visible = "[GetScriptedGui('sed_approve_paper_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_approve_paper_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_approve_paper_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
+}
+button = {
+ using = default_button
+ using = fontsize_large
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_ignore_recommendation" tooltip = "sed_ignore_recommendation_tt"
+ visible = "[GetScriptedGui('sed_ignore_paper_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_ignore_paper_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_ignore_paper_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_paper_blocked_private_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_supply_blocked_private"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_paper_blocked_default_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_supply_blocked_default"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_paper_stale_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_supply_stale"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_paper_pending_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_supply_pending"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_paper_finance_caution_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_supply_finance_caution"
+}
+button = {
+ using = default_button
+ using = fontsize_large
+ using = tooltip_se
+ size = { 468 52 }
+ text = "sed_refresh_card" tooltip = "sed_refresh_card_tt"
+ visible = "[GetScriptedGui('sed_paper_refresh_card_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ enabled = "[GetScriptedGui('sed_paper_refresh_card_sgui').IsValid(GuiScope.SetRoot(State.MakeScope).End)]"
+ onclick = "[GetScriptedGui('sed_paper_refresh_card_sgui').Execute(GuiScope.SetRoot(State.MakeScope).End)]"
+}
+ }
+}
  type sed_input_blocked_wood_item = flowcontainer {
  datacontext = "[Scope.GetState]"
  direction = vertical spacing = 4 ignoreinvisible = yes
@@ -2464,6 +2635,13 @@ textbox = {
  using = fontsize_large
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_input_blocks_wood_tools_tooling_workshop"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_blocks_wood_paper_paper_mill_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_input_blocks_wood_paper_paper_mill"
 }
  }
  type sed_input_blocked_iron_item = flowcontainer {
@@ -2591,6 +2769,13 @@ textbox = {
  using = fontsize_large
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_input_blocks_coal_ammunition_munition_plant"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_blocks_coal_paper_paper_mill_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_input_blocks_coal_paper_paper_mill"
 }
  }
  type sed_input_blocked_grain_item = flowcontainer {
@@ -2722,6 +2907,13 @@ textbox = {
  using = fontsize_large
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_input_blocks_tools_ammunition_munition_plant"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_input_blocks_tools_paper_paper_mill_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_input_blocks_tools_paper_paper_mill"
 }
  }
 }
@@ -3718,6 +3910,13 @@ textbox = {
  text = "sed_meta_ammunition"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_meta_paper_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_meta_paper"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_plan_missing_wood_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -3795,6 +3994,13 @@ textbox = {
  text = "sed_plan_missing_ammunition"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_plan_missing_paper_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_plan_missing_paper"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_book_wood_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -3870,6 +4076,13 @@ textbox = {
  using = fontsize_large
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_book_ammunition"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_book_paper_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_book_paper"
 }
 textbox = {
  visible = "[GetScriptedGui('sed_book_railway_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
@@ -3977,6 +4190,12 @@ flowcontainer = {
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_1_ammunition')]"
  item = { sed_ammunition_candidate_item = {} }
 }
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_1_paper_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_1_paper')]"
+ item = { sed_paper_candidate_item = {} }
+}
 textbox = {
  visible = "[GetScriptedGui('sed_plan_rank_2_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
@@ -4062,6 +4281,12 @@ flowcontainer = {
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_2_ammunition')]"
  item = { sed_ammunition_candidate_item = {} }
 }
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_2_paper_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_2_paper')]"
+ item = { sed_paper_candidate_item = {} }
+}
 textbox = {
  visible = "[GetScriptedGui('sed_plan_rank_3_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
@@ -4146,6 +4371,12 @@ flowcontainer = {
  direction = vertical spacing = 16 ignoreinvisible = yes
  datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_3_ammunition')]"
  item = { sed_ammunition_candidate_item = {} }
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_plan_3_paper_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_plan_3_paper')]"
+ item = { sed_paper_candidate_item = {} }
 }
 flowcontainer = {
  visible = "[GetScriptedGui('sed_wood_input_priority_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
@@ -4869,6 +5100,57 @@ textbox = {
  using = fontsize_large
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_ammunition_action_failed"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_paper_section_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_xxl
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_paper_section_title"
+}
+flowcontainer = {
+ visible = "[GetScriptedGui('sed_paper_recommendations_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ direction = vertical spacing = 16 ignoreinvisible = yes
+ datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sed_paper_candidates')]"
+ item = { sed_paper_candidate_item = {} }
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_paper_no_candidates_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_supply_no_candidate"
+}
+flowcontainer = { direction = vertical spacing = 10 ignoreinvisible = yes
+ visible = "[GetScriptedGui('sed_details_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+textbox = {
+ visible = "[GetScriptedGui('sed_paper_no_candidates_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_paper_rejection_summary"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_paper_no_candidates_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_paper_rejection_details"
+}
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_paper_action_success_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_paper_action_success"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_paper_action_failed_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_paper_action_failed"
 }
 }
 flowcontainer = { direction = vertical spacing = 10 ignoreinvisible = yes

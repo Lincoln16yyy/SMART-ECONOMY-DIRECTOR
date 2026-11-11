@@ -25,7 +25,7 @@ PROFILES = (
 PROJECT_POINTS = {
     'railway': 800, 'construction': 25,
     'wood': 200, 'iron': 400, 'coal': 400, 'grain': 200, 'fabric': 200,
-    'tools': 600, 'groceries': 600, 'clothes': 600,
+    'tools': 600, 'groceries': 600, 'clothes': 600, 'paper': 600,
     'small_arms': 600, 'artillery': 600, 'ammunition': 800,
 }
 VARIABLES = ['sed_build_budget_known', 'sed_build_budget_points',

@@ -21,6 +21,61 @@ class InvestmentTests(unittest.TestCase):
         self.c.market_goods[good] = dict(market_goods_has_goods_shortage=True,
                                         market_goods_buy_orders=100, market_goods_sell_orders=40)
 
+    def test_automatic_invests_in_expensive_civilian_goods_without_shortage(self):
+        target = self.producer('building_logging_camp', ['pm_simple_forestry'])
+        self.c.market_goods['wood'] = dict(market_goods_has_goods_shortage=False,
+                                         market_goods_buy_orders=100, market_goods_sell_orders=80,
+                                         market_goods_pricier=0.25)
+        self.c.variables['advisor_enabled'] = True
+        self.c.run('sed_set_mode_automatic')
+        self.c.run('sed_auto_apply_monthly')
+        self.assertEqual(self.c.constructions, [dict(building='building_logging_camp', state=target)])
+        self.assertEqual(self.c.variables['sed_plan_goal'], 2)
+
+    def test_assisted_does_not_expand_demand_to_expensive_goods(self):
+        self.producer('building_logging_camp', ['pm_simple_forestry'])
+        self.c.market_goods['wood'] = dict(market_goods_has_goods_shortage=False,
+                                         market_goods_buy_orders=100, market_goods_sell_orders=80,
+                                         market_goods_pricier=0.25)
+        self.c.run('sed_refresh_diagnostics')
+        self.assertNotIn('sed_wood_candidates', self.c.variable_lists)
+
+    def test_automatic_waits_when_price_pressure_is_below_threshold(self):
+        self.producer('building_logging_camp', ['pm_simple_forestry'])
+        self.c.market_goods['wood'] = dict(market_goods_has_goods_shortage=False,
+                                         market_goods_buy_orders=100, market_goods_sell_orders=95,
+                                         market_goods_pricier=0.1)
+        self.c.run('sed_set_mode_automatic')
+        self.c.run('sed_auto_apply_monthly')
+        self.assertEqual(self.c.constructions, [])
+
+    def test_expensive_growth_requires_positive_material_reference(self):
+        self.producer('building_tooling_workshop',
+                      ['pm_crude_tools', 'pm_rotary_valve_engine_building_tooling_workshop'])
+        self.c.market_goods['tools'] = dict(market_goods_has_goods_shortage=False,
+                                          market_goods_buy_orders=100, market_goods_sell_orders=80,
+                                          market_goods_pricier=0.25)
+        self.c.run('sed_set_mode_automatic')
+        self.c.run('sed_auto_apply_monthly')
+        self.assertEqual(self.c.constructions, [])
+
+    def test_expensive_growth_keeps_labor_guard(self):
+        self.producer('building_logging_camp', ['pm_simple_forestry'], population=1)
+        self.c.market_goods['wood'] = dict(market_goods_has_goods_shortage=False,
+                                         market_goods_buy_orders=100, market_goods_sell_orders=80,
+                                         market_goods_pricier=0.25)
+        self.c.run('sed_set_mode_automatic')
+        self.c.run('sed_auto_apply_monthly')
+        self.assertEqual(self.c.constructions, [])
+
+    def test_expensive_military_goods_keep_shortage_requirement(self):
+        self.producer('building_arms_industry', ['pm_muskets'])
+        self.c.market_goods['small_arms'] = dict(market_goods_has_goods_shortage=False,
+                                               market_goods_buy_orders=100, market_goods_sell_orders=80,
+                                               market_goods_pricier=0.25)
+        self.c.run('sed_set_mode_automatic')
+        self.assertFalse(self.c.condition(self.c.definitions['sed_small_arms_supply_demand'], self.c.country_scope()))
+
     def test_equal_output_prefers_the_stronger_material_margin(self):
         costly = self.producer('building_logging_camp', ['pm_simple_forestry', 'pm_steam_donkey_building_logging_camp'], 100000)
         cheaper = self.producer('building_logging_camp', ['pm_simple_forestry'])

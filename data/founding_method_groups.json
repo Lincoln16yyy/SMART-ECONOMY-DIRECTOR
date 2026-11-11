@@ -458,5 +458,24 @@
         "conveyors"
       ]
     }
+  ],
+  "building_paper_mill": [
+    {
+      "pm_pulp_pressing": [],
+      "pm_sulfite_pulping": [
+        "mechanical_tools"
+      ],
+      "pm_bleached_paper": [
+        "chemical_bleaching"
+      ]
+    },
+    {
+      "pm_watertube_boiler_building_paper_mill": [
+        "watertube_boiler"
+      ],
+      "pm_rotary_valve_engine_building_paper_mill": [
+        "rotary_valve_engine"
+      ]
+    }
   ]
 }
