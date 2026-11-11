@@ -1,7 +1,32 @@
 # Contexto de continuidade
 
-Última entrega documentada: 0.6.20 instalada com jogo fechado. A 0.7.2 foi
-gerada e validada localmente, sem instalação ou execução na engine.
+Última entrega documentada: 0.7.3 instalada com jogo fechado e 14 arquivos
+conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.3_20261110_230423_163114`.
+253 testes sintéticos aprovados. As novas fundações ainda exigem confirmação na engine.
+
+
+## 0.7.3 — Fundações com reserva de trabalho e insumos
+
+Correção da revisão de 0.7.2. As fundações de produtores e da primeira ferrovia
+passam por guardas próprias de trabalho e insumos, revalidadas na aprovação.
+`data/founding_method_groups.json` contém grupos e tecnologias extraídos dos
+arquivos vanilla locais de 1.15. Os coeficientes continuam em
+`data/input_profiles.json`. Para prédio ausente, cada insumo soma o maior
+consumo de um método tecnologicamente disponível por grupo. Restrições de leis
+ou princípios não reduzem essa referência. Ela pode bloquear um prédio que
+seria viável com método mais simples. Escolher e aplicar PMs continua pendente.
+
+Pedidos próprios de fundação reservam mão de obra e insumos enquanto ainda
+não há prédio. Quando ele aparece, a leitura usa nível, fila e PMs ativos,
+evita dupla contagem e libera a reserva após o acompanhamento encerrar o
+pedido. As reservas dependem do livro inferido existente. Obras externas sem
+prédio continuam sem identidade disponível. Fundações bloqueadas por insumos
+entram nas prioridades de fornecedores, inclusive fundação do fornecedor.
+
+O objetivo de evolução confirmado pelo jogador inclui recuperação econômica,
+planejamento produtivo, comércio, PMs e fortalecimento militar conforme a
+necessidade e os recursos. Modernização e recrutamento ainda estão pendentes.
+Priorizar execução em segundo plano e pedir campanha só em marcos significativos.
 
 ## 0.7.2 — Duração e materiais do primeiro projeto
 

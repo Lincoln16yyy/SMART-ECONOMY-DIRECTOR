@@ -28,6 +28,32 @@ class LaborTests(unittest.TestCase):
         self.assertTrue(kinds <= REQUIREMENTS.keys())
         self.assertTrue(all(isinstance(workers, int) and workers > 0 for workers in REQUIREMENTS.values()))
 
+    def test_founding_revalidates_workers_before_insertion(self):
+        c = self.c
+        target = state(population=100000, state_unemployment_rate=0.21,
+                       **{'pop_type_percent_state(pop_type:peasants)': 0})
+        c.states = [target]
+        c.market_goods['iron']['market_goods_has_goods_shortage'] = True
+        c.run('sed_refresh_diagnostics')
+        self.assertTrue(c.condition(c.definitions['sed_iron_candidate_eligible'], target))
+        target['state_population'] = 50000
+        c.run('sed_run_iron_approval', target)
+        self.assertEqual(c.constructions, [])
+
+    def test_pending_founding_reserves_workers_before_building_exists(self):
+        c = self.c
+        target = state(population=100000, state_unemployment_rate=0.4,
+                       **{'pop_type_percent_state(pop_type:peasants)': 0})
+        c.states = [target]
+        target['variables'].update(sed_iron_request_pending=True, sed_iron_intent_level=0,
+                                   sed_iron_intent_variant=1)
+        self.assertEqual(c.number('sed_state_labor_committed', target), 5250)
+        target['buildings'].append(building('building_iron_mine', occupancy=0))
+        self.assertEqual(c.number('sed_state_labor_committed', target), 5250)
+        target['buildings'].clear()
+        target['variables'].pop('sed_iron_request_pending')
+        self.assertEqual(c.number('sed_state_labor_committed', target), 0)
+
     def test_exact_labor_boundary_and_population_changes_are_read_live(self):
         c = self.c
         target, _ = self.producer()

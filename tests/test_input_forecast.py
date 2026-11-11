@@ -32,6 +32,51 @@ class InputForecastTests(unittest.TestCase):
     def eligible(self):
         return self.c.condition(self.c.definitions['sed_tools_candidate_eligible'], self.target)
 
+    def test_founding_revalidates_material_supply_before_insertion(self):
+        c = self.c
+        target = state()
+        c.states = [target]
+        self.wood(100, 68.75)
+        c.run('sed_refresh_diagnostics')
+        self.assertTrue(c.condition(c.definitions['sed_tools_candidate_eligible'], target))
+        self.wood(100, 68.74)
+        c.run('sed_run_tools_approval', target)
+        self.assertEqual(c.constructions, [])
+
+    def test_founding_accounts_for_technologically_available_methods(self):
+        c = self.c
+        target = state()
+        c.states = [target]
+        self.assertEqual(c.number('sed_founding_input_iron_mine_coal', target), 0)
+        c.readings['technologies'] = ['atmospheric_engine']
+        self.assertGreater(c.number('sed_founding_input_iron_mine_coal', target), 0)
+
+    def test_pending_founding_reserves_inputs_without_double_counting(self):
+        c = self.c
+        target = state()
+        c.states = [target]
+        target['variables'].update(sed_tools_request_pending=True, sed_tools_intent_level=0,
+                                   sed_tools_intent_variant=1)
+        self.assertEqual(c.number('sed_input_pending_wood', target), 37.5)
+        producer = building('building_tooling_workshop', occupancy=0)
+        producer['production_methods'] = ['pm_crude_tools']
+        target['buildings'].append(producer)
+        self.assertEqual(c.number('sed_input_pending_wood', target), 37.5)
+        target['buildings'].clear()
+        target['variables'].pop('sed_tools_request_pending')
+        self.assertEqual(c.number('sed_input_pending_wood', target), 0)
+
+    def test_automatic_founds_an_input_supplier_before_the_missing_factory(self):
+        c = self.c
+        target = state()
+        c.states = [target]
+        self.wood(100, 50)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertIn('sed_input_priority_wood', c.variables)
+        self.assertEqual([project['building'] for project in c.constructions],
+                         ['building_logging_camp'])
+
     def test_projected_wood_shortfall_prioritizes_a_viable_logging_camp(self):
         c = self.c
         logging = building('building_logging_camp')
@@ -236,6 +281,8 @@ class InputForecastTests(unittest.TestCase):
 
     def test_automatic_waits_for_input_capacity_without_consuming_the_month(self):
         c = self.c
+        # Keep this scenario focused on waiting when the upstream is unavailable.
+        self.target['variables']['sed_wood_ignored'] = True
         self.wood(100, 68.74)
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')

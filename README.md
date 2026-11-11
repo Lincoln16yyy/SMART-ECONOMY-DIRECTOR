@@ -1,5 +1,13 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.3, fundações de indústrias e ferrovias passam a exigir reserva estimada
+de trabalhadores e insumos. Para prédios ausentes, os insumos usam o maior
+consumo por grupo de PM entre os métodos tecnologicamente disponíveis. Esse
+limite conservador pode adiar uma fundação que funcionaria com um PM simples.
+Pedidos próprios ainda sem prédio reservam trabalhadores e insumos, sem dupla
+contagem quando o prédio aparece. Um fornecedor ausente pode ser fundado para
+abastecer uma indústria bloqueada por insumos.
+
 Na 0.7.2, o orçamento direto estima a duração e os materiais do primeiro projeto
 pelo tipo de prédio, sua construção exigida e a capacidade semanal. A reserva
 exigida acompanha essa duração, até 56 semanas, em vez de usar só a janela fixa

@@ -1,0 +1,462 @@
+{
+  "building_railway": [
+    {
+      "pm_early_trains": [],
+      "pm_steam_trains": [
+        "steel_railway_cars"
+      ],
+      "pm_steam_trains_principle_transport_3": [
+        "steel_railway_cars"
+      ],
+      "pm_electric_trains": [
+        "electric_railway"
+      ],
+      "pm_electric_trains_principle_transport_3": [
+        "electric_railway"
+      ],
+      "pm_diesel_trains": [
+        "compression_ignition"
+      ],
+      "pm_diesel_trains_principle_transport_3": [
+        "compression_ignition"
+      ]
+    },
+    {
+      "pm_wooden_passenger_carriages": [],
+      "pm_steel_passenger_carriages": [
+        "steel_railway_cars"
+      ]
+    }
+  ],
+  "building_construction_sector": [
+    {
+      "pm_wooden_buildings": [],
+      "pm_iron_frame_buildings": [
+        "urban_planning"
+      ],
+      "pm_steel_frame_buildings": [
+        "steel_frame_buildings"
+      ],
+      "pm_arc_welded_buildings": [
+        "arc_welding"
+      ]
+    }
+  ],
+  "building_logging_camp": [
+    {
+      "pm_saw_mills": [
+        "steelworking"
+      ],
+      "pm_electric_saw_mills": [
+        "electrical_generation"
+      ]
+    },
+    {
+      "pm_steam_donkey_building_logging_camp": [
+        "steam_donkey"
+      ],
+      "pm_chainsaws": [
+        "combustion_engine"
+      ]
+    },
+    {
+      "pm_rail_transport_building_logging_camp": [
+        "railways"
+      ],
+      "pm_log_carts": [
+        "electric_railway"
+      ]
+    }
+  ],
+  "building_iron_mine": [
+    {
+      "pm_picks_and_shovels_building_iron_mine": [],
+      "pm_atmospheric_engine_pump_building_iron_mine": [
+        "atmospheric_engine"
+      ],
+      "pm_condensing_engine_pump_building_iron_mine": [
+        "watertube_boiler"
+      ],
+      "pm_diesel_pump_building_iron_mine": [
+        "compression_ignition"
+      ]
+    },
+    {
+      "pm_nitroglycerin_building_iron_mine": [
+        "nitroglycerin"
+      ],
+      "pm_dynamite_building_iron_mine": [
+        "dynamite"
+      ]
+    },
+    {
+      "pm_steam_donkey_mine": [
+        "steam_donkey"
+      ]
+    },
+    {
+      "pm_rail_transport_mine": [
+        "railways"
+      ]
+    }
+  ],
+  "building_coal_mine": [
+    {
+      "pm_picks_and_shovels_building_coal_mine": [],
+      "pm_atmospheric_engine_pump_building_coal_mine": [
+        "atmospheric_engine"
+      ],
+      "pm_condensing_engine_pump_building_coal_mine": [
+        "watertube_boiler"
+      ],
+      "pm_diesel_pump_building_coal_mine": [
+        "compression_ignition"
+      ]
+    },
+    {
+      "pm_nitroglycerin_building_coal_mine": [
+        "nitroglycerin"
+      ],
+      "pm_dynamite_building_coal_mine": [
+        "dynamite"
+      ]
+    },
+    {
+      "pm_steam_donkey_building_coal_mine": [
+        "steam_donkey"
+      ]
+    },
+    {
+      "pm_rail_transport_mine": [
+        "railways"
+      ]
+    }
+  ],
+  "building_wheat_farm": [
+    {
+      "pm_herring_meal_farming": [],
+      "pm_soil_enriching_farming": [
+        "intensive_agriculture"
+      ],
+      "pm_fertilization": [
+        "improved_fertilizer"
+      ],
+      "pm_chemical_fertilizer": [
+        "nitrogen_fixation"
+      ]
+    },
+    {
+      "pm_tools": [],
+      "pm_steam_threshers": [
+        "threshing_machine"
+      ],
+      "pm_tractors": [
+        "mechanized_farming"
+      ],
+      "pm_compression_ignition_tractors": [
+        "compression_ignition"
+      ]
+    }
+  ],
+  "building_rye_farm": [
+    {
+      "pm_soil_enriching_farming": [
+        "intensive_agriculture"
+      ],
+      "pm_fertilization": [
+        "improved_fertilizer"
+      ],
+      "pm_chemical_fertilizer": [
+        "nitrogen_fixation"
+      ]
+    },
+    {
+      "pm_tools": [],
+      "pm_steam_threshers": [
+        "threshing_machine"
+      ],
+      "pm_tractors": [
+        "mechanized_farming"
+      ],
+      "pm_compression_ignition_tractors": [
+        "compression_ignition"
+      ]
+    }
+  ],
+  "building_rice_farm": [
+    {
+      "pm_herring_meal_farming_building_rice_farm": [],
+      "pm_soil_enriching_farming_building_rice_farm": [
+        "intensive_agriculture"
+      ],
+      "pm_fertilization_building_rice_farm": [
+        "improved_fertilizer"
+      ],
+      "pm_chemical_fertilizer_building_rice_farm": [
+        "nitrogen_fixation"
+      ]
+    },
+    {
+      "pm_tools_building_rice_farm": [],
+      "pm_steam_threshers_building_rice_farm": [
+        "threshing_machine"
+      ]
+    }
+  ],
+  "building_maize_farm": [
+    {
+      "pm_soil_enriching_farming": [
+        "intensive_agriculture"
+      ],
+      "pm_fertilization": [
+        "improved_fertilizer"
+      ],
+      "pm_chemical_fertilizer": [
+        "nitrogen_fixation"
+      ]
+    },
+    {
+      "pm_tools": [],
+      "pm_steam_threshers": [
+        "threshing_machine"
+      ],
+      "pm_tractors": [
+        "mechanized_farming"
+      ],
+      "pm_compression_ignition_tractors": [
+        "compression_ignition"
+      ]
+    }
+  ],
+  "building_millet_farm": [
+    {
+      "pm_soil_enriching_farming": [
+        "intensive_agriculture"
+      ],
+      "pm_fertilization": [
+        "improved_fertilizer"
+      ],
+      "pm_chemical_fertilizer": [
+        "nitrogen_fixation"
+      ]
+    },
+    {
+      "pm_tools": [],
+      "pm_steam_threshers": [
+        "threshing_machine"
+      ],
+      "pm_tractors": [
+        "mechanized_farming"
+      ],
+      "pm_compression_ignition_tractors": [
+        "compression_ignition"
+      ]
+    }
+  ],
+  "building_cotton_plantation": [
+    {
+      "automatic_irrigation_building_cotton_plantation": [
+        "pumpjacks"
+      ]
+    },
+    {
+      "pm_steam_rail_transport": [
+        "railways"
+      ]
+    }
+  ],
+  "building_livestock_ranch": [
+    {
+      "pm_butchering_tools": [],
+      "pm_slaughterhouses": [
+        "mechanical_tools"
+      ],
+      "pm_mechanized_slaughtering": [
+        "mechanized_farming"
+      ]
+    },
+    {
+      "pm_sheep_farms": [
+        "intensive_agriculture"
+      ],
+      "pm_intensive_grazing_ranch": [
+        "mechanized_farming"
+      ]
+    },
+    {
+      "pm_barbed_wire_fences": [
+        "field_works"
+      ],
+      "pm_electric_fencing": [
+        "electrical_generation"
+      ]
+    },
+    {
+      "pm_refrigerated_storage_building_livestock_ranch": [
+        "pasteurization"
+      ],
+      "pm_refrigerated_rail_cars_building_livestock_ranch": [
+        "electric_railway"
+      ]
+    }
+  ],
+  "building_tooling_workshop": [
+    {
+      "pm_crude_tools": [],
+      "pm_pig_iron": [
+        "steelworking"
+      ],
+      "pm_steel": [
+        "mechanical_tools"
+      ],
+      "pm_rubber_grips": [
+        "vulcanization"
+      ]
+    },
+    {
+      "pm_watertube_boiler_building_tooling_workshop": [
+        "watertube_boiler"
+      ],
+      "pm_rotary_valve_engine_building_tooling_workshop": [
+        "rotary_valve_engine"
+      ],
+      "pm_assembly_lines_building_tooling_workshop": [
+        "conveyors"
+      ]
+    }
+  ],
+  "building_food_industry": [
+    {
+      "pm_bakery": [],
+      "pm_sweeteners": [
+        "distillation"
+      ],
+      "pm_baking_powder": [
+        "baking_powder"
+      ]
+    },
+    {
+      "pm_cannery": [
+        "canneries"
+      ],
+      "pm_cannery_fish": [
+        "canneries"
+      ],
+      "pm_vacuum_canning": [
+        "vacuum_canning"
+      ],
+      "pm_vacuum_canning_principle_3": [
+        "vacuum_canning"
+      ]
+    },
+    {
+      "pm_pot_stills": [
+        "distillation"
+      ],
+      "pm_patent_stills": [
+        "fractional_distillation"
+      ]
+    },
+    {
+      "pm_automated_bakery": [
+        "dough_rollers"
+      ]
+    }
+  ],
+  "building_textile_mill": [
+    {
+      "pm_handsewn_clothes": [],
+      "pm_dye_workshops": [
+        "lathe"
+      ],
+      "pm_sewing_machines": [
+        "mechanized_workshops"
+      ],
+      "pm_electric_sewing_machines": [
+        "electrical_capacitors"
+      ]
+    },
+    {
+      "pm_craftsman_sewing": [],
+      "pm_elastics": [
+        "vulcanization"
+      ]
+    },
+    {
+      "pm_mechanized_looms": [
+        "mechanized_workshops"
+      ],
+      "pm_automatic_power_looms": [
+        "electrical_capacitors"
+      ]
+    }
+  ],
+  "building_arms_industry": [
+    {
+      "pm_muskets": [],
+      "pm_rifles": [
+        "rifling"
+      ],
+      "pm_repeaters": [
+        "repeaters"
+      ],
+      "pm_bolt_action_rifles": [
+        "bolt_action_rifles"
+      ]
+    },
+    {
+      "pm_rotary_valve_engine_building_arms_industry": [
+        "rotary_valve_engine"
+      ],
+      "pm_assembly_lines_building_arms_industry": [
+        "conveyors"
+      ]
+    }
+  ],
+  "building_artillery_foundry": [
+    {
+      "pm_cannons": [
+        "artillery"
+      ],
+      "pm_bronze_cannons": [
+        "artillery"
+      ],
+      "pm_smoothbores": [
+        "shell_gun"
+      ],
+      "pm_bronze_smoothbores": [
+        "shell_gun"
+      ],
+      "pm_breech_loaders": [
+        "breech_loading_artillery"
+      ],
+      "pm_recoiled_barrels": [
+        "automatic_machine_guns"
+      ]
+    },
+    {
+      "pm_rotary_valve_engine_building_arms_industry": [
+        "rotary_valve_engine"
+      ],
+      "pm_assembly_lines_building_arms_industry": [
+        "conveyors"
+      ]
+    }
+  ],
+  "building_munition_plant": [
+    {
+      "pm_percussion_caps": [],
+      "pm_explosive_shells": [
+        "dynamite"
+      ]
+    },
+    {
+      "pm_rotary_valve_engine_building_munition_plant": [
+        "rotary_valve_engine"
+      ],
+      "pm_assembly_lines_building_munition_plant": [
+        "conveyors"
+      ]
+    }
+  ]
+}

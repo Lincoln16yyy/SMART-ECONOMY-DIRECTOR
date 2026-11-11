@@ -1767,3 +1767,24 @@ alongar o prazo e não entram na conta.
 247 testes sintéticos aprovados, incluindo ferrovia de 800 pontos, 80 semanas e
 reserva limitada a 56 semanas. Geração, validação estática e verificação de
 artefatos locais aprovadas. Sem instalação, engine ou campanha nesta etapa.
+
+
+## 2026-11-10 — Guardas de fundação e fornecedores ausentes (0.7.3)
+
+A revisão encontrou fundações de indústrias sem as guardas de trabalhadores e
+insumos das expansões. A aprovação agora revalida trabalho e insumos antes de
+inserir a indústria, e a primeira ferrovia também recebe essas guardas. A
+referência de insumos soma máximos por grupo de PM tecnologicamente disponível,
+com grupos e tecnologias extraídos do vanilla local. Pode adiar uma fundação
+viável com método simples. O Director ainda precisa selecionar e aplicar PMs.
+
+Pedidos próprios sem prédio reservam trabalho e insumos. A leitura migra para
+os PMs e a fila do prédio assim que ele existe, com regressões para dupla
+contagem, cancelamento e alteração das condições antes da aprovação. Um
+fornecedor ausente pode entrar no plano para desbloquear a indústria final.
+
+253 testes sintéticos aprovados. Validação estática contra a instalação 1.15
+aprovada. Confirmação na engine continua pendente.
+
+Instalada com jogo fechado, backup `mod_before_0.7.3_20261110_230423_163114`
+e conferência dos 14 arquivos pelo instalador.

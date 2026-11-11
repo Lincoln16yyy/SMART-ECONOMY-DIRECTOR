@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.2'
+VERSION = '0.7.3'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -349,12 +349,12 @@ sed_refresh_supply_candidates = {
             branch = 'if' if index == 0 else 'else_if'
             name = variant_id(variant)
             eligible = (f'OR = {{ sed_{good}_{name}_eligible = yes '
-                        f'AND = {{ sed_{good}_found_site = yes can_construct_building = {variant["building"]} }} }}')
+                        f'sed_{good}_{name}_found_eligible = yes }}')
             if good in INPUT_DEPENDENCIES and len(vs) > 1:
                 eligible += (f' OR = {{ owner = {{ NOT = {{ AND = {{ has_variable = sed_mode_automatic '
                              f'has_variable = sed_input_priority_{good} }} }} }} '
                              f'OR = {{ sed_{good}_{name}_preferred_supplier = yes '
-                             f'AND = {{ sed_{good}_found_site = yes can_construct_building = {variant["building"]} }} }} }}')
+                             f'sed_{good}_{name}_found_eligible = yes }} }}')
             enqueue += f'''  {branch} = {{
    limit = {{ {eligible} }}
    # A founding reads level 0; the monthly review then infers completion from the queue.
@@ -1569,6 +1569,8 @@ sed_railway_found_site = {
  NOT = { has_variable = sed_railway_request_pending }
  NOT = { has_building = building_railway }
  can_construct_building = building_railway
+ sed_state_labor_available >= 1200
+ sed_founding_input_railway_safe = yes
 }
 
 sed_railway_candidate_eligible = {
@@ -1644,8 +1646,14 @@ def supply_triggers():
             result.append(f'''{key} = {{
  sed_{downstream}_candidate_site = yes
  owner = {{ market = {{ mg:{downstream} ?= {{ market_goods_has_goods_shortage = yes }} }} }}
- sed_{downstream}_{variant_id(variant)}_operable = yes
+ OR = {{
+ AND = {{ sed_{downstream}_{variant_id(variant)}_operable = yes
 {input_forecast.blocked_input(variant['building'], good)}
+ }}
+ AND = {{ sed_{downstream}_{variant_id(variant)}_found_operable = yes
+{input_forecast.blocked_input(variant['building'], good, founding=True)}
+ }}
+ }}
 }}
 ''')
     for item in SUPPLY_TARGETS:
@@ -1660,7 +1668,7 @@ def supply_triggers():
             demand = (f'OR = {{ {shortage} AND = {{ has_variable = sed_input_priority_{good} '
                       f'NOT = {{ any_scope_state = {{ sed_{good}_queued_supply = yes }} }} }} }}')
         absent = ' '.join(f'NOT = {{ has_building = {variant["building"]} }}' for variant in vs)
-        constructible = ' '.join(f'can_construct_building = {variant["building"]}' for variant in vs)
+        constructible = ' '.join(f'sed_{good}_{variant_id(variant)}_found_eligible = yes' for variant in vs)
         result.append(f'''sed_{good}_supply_demand = {{ {demand} }}
 sed_{good}_candidate_site = {{
  is_incorporated = yes
@@ -1673,18 +1681,16 @@ sed_{good}_candidate_site = {{
 sed_{good}_found_site = {{
  sed_{good}_candidate_site = yes
  owner = {{
-  has_variable = sed_plan_missing_{good}
-  var:sed_plan_missing_{good} = 1
+  NOT = {{ any_scope_state = {{ OR = {{ {' '.join(f'has_building = {variant["building"]}' for variant in vs)} }} }} }}
   # One base per country: a queued founding has no building yet, so the
   # missing flag alone would let later reviews duplicate it elsewhere.
   NOT = {{ any_scope_state = {{ has_variable = sed_{good}_request_pending }} }}
  }}
  {absent}
- OR = {{ {constructible} }}
 }}
 sed_{good}_supplier_available = {{
  sed_{good}_candidate_site = yes
- OR = {{ {alternatives} sed_{good}_found_site = yes }}
+ OR = {{ {alternatives} {constructible} }}
 }}
 sed_{good}_candidate_eligible = {{
  owner = {{ sed_{good}_supply_demand = yes }}
@@ -1700,6 +1706,15 @@ sed_{good}_candidate_eligible = {{
             building = variant['building']
             methods = variant_methods(variant, '  ')
             result.append(f'''# State scope: one verified producer type for {good}; output checked by active method.
+sed_{good}_{variant_id(variant)}_found_eligible = {{
+ sed_{good}_{variant_id(variant)}_found_operable = yes
+ sed_founding_input_{variant_id(variant)}_safe = yes
+}}
+sed_{good}_{variant_id(variant)}_found_operable = {{
+ sed_{good}_found_site = yes
+ can_construct_building = {building}
+ sed_state_labor_available >= {labor.REQUIREMENTS[building]}
+}}
 sed_{good}_{variant_id(variant)}_eligible = {{
  sed_{good}_{variant_id(variant)}_operable = yes
  sed_input_{variant_id(variant)}_safe = yes
@@ -2231,6 +2246,10 @@ sed_pulse.1 = {
  }
 }
 '''
+    founding_projects = [(item['good'], index, variant['building'])
+                         for item in SUPPLY_TARGETS
+                         for index, variant in enumerate(variants(item), 1)]
+    founding_projects.append(('railway', 0, 'building_railway'))
     result = {
         'common/decisions/sed_decisions.txt': decisions,
         'common/journal_entries/sed_journal_entries.txt': journal,
@@ -2239,7 +2258,7 @@ sed_pulse.1 = {
         'common/scripted_effects/sed_effects.txt': effects(),
         'common/scripted_guis/sed_scripted_guis.txt': scripted_guis(),
         'common/scripted_triggers/sed_triggers.txt': scripted_triggers(),
-        'common/script_values/sed_values.txt': '# Current calendar, independent of diagnostic refresh.\nsed_live_month_key = { value = year multiply = 12 add = month }\n' + labor.values() + input_forecast.values() + supplier_output_values(),
+        'common/script_values/sed_values.txt': '# Current calendar, independent of diagnostic refresh.\nsed_live_month_key = { value = year multiply = 12 add = month }\n' + labor.values(founding_projects) + input_forecast.values(founding_projects) + supplier_output_values(),
         'gui/journal_entry_widgets/sed_diagnostics.gui': widget(),
         'localization/braz_por/sed_l_braz_por.yml': localization('braz_por'),
         'localization/english/sed_l_english.yml': localization('english'),

@@ -11,7 +11,7 @@ REQUIREMENTS = json.loads((Path(__file__).resolve().parents[1] / 'data/labor_req
 STATE_VARIABLES = ['sed_labor_pool', 'sed_labor_committed', 'sed_labor_available']
 
 
-def values():
+def values(founding_projects=()):
     result = ['''# State scope; demographic proxy rather than a worker count from the engine.
 sed_state_labor_pool = {
  value = state_population min = 0
@@ -32,6 +32,14 @@ sed_state_labor_committed = {
    min = 0 multiply = {workers}
   }}
  }}''')
+    for action, variant, building in founding_projects:
+        variant_gate = f'var:sed_{action}_intent_variant = {variant}' if variant else ''
+        result.append(f''' if = {{ limit = {{
+  NOT = {{ has_building = {building} }}
+  has_variable = sed_{action}_request_pending
+  var:sed_{action}_intent_level = 0
+{variant_gate}
+ }} add = {REQUIREMENTS[building]} }}''')
     result.append('''}
 sed_state_labor_available = {
  value = sed_state_labor_pool subtract = sed_state_labor_committed min = 0

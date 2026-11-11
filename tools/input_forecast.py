@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 
 PROFILES = json.loads((Path(__file__).resolve().parents[1] / 'data/input_profiles.json').read_text())
+FOUNDING_GROUPS = json.loads((Path(__file__).resolve().parents[1] / 'data/founding_method_groups.json').read_text())
 LOCAL_GOODS = {'electricity', 'transportation', 'services'}
 GOODS = sorted({good for methods in PROFILES.values() for goods in methods.values() for good in goods})
 LABELS_PT = {
@@ -23,15 +24,16 @@ COUNTRY_VARIABLES = ['sed_input_market_margin_' + good for good in MARKET_GOODS]
 STATE_VARIABLES = ['sed_input_local_margin_' + good for good in sorted(LOCAL_GOODS & set(GOODS))]
 
 
-def amount_name(building, good):
-    return 'sed_input_' + building.removeprefix('building_') + '_' + good
+def amount_name(building, good, founding=False):
+    prefix = 'sed_founding_input_' if founding else 'sed_input_'
+    return prefix + building.removeprefix('building_') + '_' + good
 
 
 def building_goods(building):
     return sorted({good for inputs in PROFILES[building].values() for good in inputs})
 
 
-def values():
+def values(founding_projects=()):
     result = []
     for building, methods in PROFILES.items():
         for good in building_goods(building):
@@ -40,6 +42,19 @@ def values():
                 if good in inputs:
                     result.append(f' if = {{ limit = {{ b:{building} = {{ has_active_production_method = {method} }} }} add = {inputs[good]} }}')
             result.append(' min = 0\n}')
+            # A new building has no active PM to inspect. Reserve enough for any
+            # technologically available method, taking one maximum per group.
+            result.append(f'{amount_name(building, good, founding=True)} = {{\n value = 0')
+            for group in FOUNDING_GROUPS[building]:
+                result.append(' add = { value = 0')
+                for method, technologies in group.items():
+                    amount = PROFILES[building][method].get(good, 0)
+                    if amount <= 0:
+                        continue
+                    gates = ' '.join(f'has_technology_researched = {tech}' for tech in technologies)
+                    result.append(f' if = {{ limit = {{ owner = {{ {gates} }} }} min = {amount} }}')
+                result.append(' }')
+            result.append('}')
     for good in GOODS:
         result.append(f'sed_input_pending_{good} = {{\n value = 0')
         for building in PROFILES:
@@ -53,6 +68,16 @@ def values():
    multiply = 1.25
   }}
  }}''')
+        for action, variant, building in founding_projects:
+            if good not in building_goods(building):
+                continue
+            variant_gate = f'var:sed_{action}_intent_variant = {variant}' if variant else ''
+            result.append(f''' if = {{ limit = {{
+  NOT = {{ has_building = {building} }}
+  has_variable = sed_{action}_request_pending
+  var:sed_{action}_intent_level = 0
+{variant_gate}
+ }} add = {{ value = {amount_name(building, good, founding=True)} multiply = 1.25 }} }}''')
         result.append('}')
         if good in LOCAL_GOODS:
             result.append(f'''sed_input_local_headroom_{good} = {{
@@ -75,8 +100,8 @@ sed_input_headroom_{good} = {{ value = owner.var:sed_input_market_margin_{good} 
     return '\n'.join(result) + '\n'
 
 
-def blocked_input(building, good):
-    amount = amount_name(building, good)
+def blocked_input(building, good, founding=False):
+    amount = amount_name(building, good, founding=founding)
     return f""" {amount} > 0
      sed_input_headroom_{good} < {{ value = {amount} multiply = 1.25 }}"""
 
@@ -89,6 +114,14 @@ def triggers():
         for good in building_goods(building):
             result.append(f''' NOT = {{
  {blocked_input(building, good)}
+ }}''')
+        result.append('}')
+        result.append(f'sed_founding_input_{name}_safe = {{')
+        for good in building_goods(building):
+            amount = amount_name(building, good, founding=True)
+            result.append(f''' NOT = {{
+ {amount} > 0
+ sed_input_headroom_{good} < {{ value = {amount} multiply = 1.25 }}
  }}''')
         result.append('}')
     return '\n'.join(result) + '\n'
