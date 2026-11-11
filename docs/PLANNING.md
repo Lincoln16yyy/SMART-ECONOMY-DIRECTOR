@@ -1293,3 +1293,13 @@ O painel declara que leis, imposto de consumo e gasto discricionário estão for
 do Director e reconhece o Smart Government Advisor quando `sg_enabled` existe.
 O Director lê apenas esse marcador; os ids `sg_top_*` não são traduzidos para
 evitar duplicar o `law_ids.json` do outro mod.
+
+## 0.7.21 — Evento consultivo de importação
+
+Quando a escassez de um dos doze bens não tem candidata local elegível nem
+pedido pendente, o pulso mensal dispara um evento próprio (`sed_pulse.2..13`)
+em vez de uma linha no painel. O evento tem prazo de leitura, ícone vanilla e
+três opções sem efeito econômico: reconhecer a importação (cooldown de 12
+meses), recalcular o plano e adiar por 24 meses. O Director continua sem
+qualquer efeito de comércio — a sondagem com Tiger mostra que rota comercial
+não é scriptável na 1.15.

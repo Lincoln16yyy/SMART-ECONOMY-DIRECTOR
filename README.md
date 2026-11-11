@@ -1,5 +1,11 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.21, quando a escassez de um bem não tem expansão local elegível nem
+pedido pendente, o Director dispara um evento próprio com prazo e três opções:
+reconhecer a importação (silêncio de 12 meses), recalcular o plano agora ou
+adiar por 24 meses. O evento orienta; abrir rota comercial é ação do jogador,
+porque o script não pode fazê-lo na 1.15.
+
 Na 0.7.20, o painel declara que leis, imposto de consumo e gasto discricionário
 ficam fora do Director e reconhece o Smart Government Advisor quando instalado,
 sem repetir as recomendações de leis dele.

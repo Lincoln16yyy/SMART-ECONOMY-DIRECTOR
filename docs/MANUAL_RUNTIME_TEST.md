@@ -606,3 +606,25 @@ do Director e conferir a linha "Smart Government Advisor detectado". Sem o
 outro mod, deve aparecer apenas a linha de escopo das leis. Clicar "Atualizar
 diagnóstico" e avançar um mês não pode alterar leis, nem criar diário duplicado.
 Devolver captura do painel com e sem o mod e o trecho do `logs/error.log`.
+
+## Evento de importação 0.7.21 (pendente)
+
+Com o Director ativo e uma escassez real sem expansão local possível (por
+exemplo, nenhum produtor do bem com insumos, trabalho e fila liberados):
+
+1. Avançar um mês. Deve aparecer um evento com ícone industrial, prazo de
+   leitura e três opções: "Vou abrir a rota de importação", "Recalcular o plano
+   agora" e "Só me avise em 2 anos". Conferir que a descrição cita o bem certo.
+2. Escolher "Vou abrir a rota de importação": o mesmo evento não pode reaparecer
+   nos 12 meses seguintes. Abrir a rota é ação sua na interface de comércio; o
+   Director não deve criar rota, nem registrar erro no `logs/error.log`.
+3. Sem responder, deixar expirar: o evento deve resolver sozinho na opção
+   padrão (recalcular o plano) e não alterar impostos, salários ou obras.
+4. Clicar "Só me avise em 2 anos" e avançar 24 meses: o aviso pode voltar se a
+   escassez continuar.
+5. Desativar o Director: nenhum aviso novo deve aparecer, e as variáveis
+   `sed_import_notice_*` não devem sobrar na próxima leitura.
+6. Devolver captura do evento, o texto do `logs/error.log` e o save.
+
+Limites conhecidos: o prazo do evento em meses e a escolha automática ao
+expirar seguem NÃO VERIFICADO; as três opções são inofensivas por desenho.

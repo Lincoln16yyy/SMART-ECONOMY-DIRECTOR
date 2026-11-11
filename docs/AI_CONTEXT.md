@@ -1,11 +1,11 @@
 # Contexto de continuidade
 
-Última entrega do mod — 0.7.20 instalada com jogo fechado e 14 arquivos
-conferidos. Backup `sed_backups/mod_before_0.7.20_20261111_194507_214722`.
-Código — painel declara a fronteira de leis e reconhece o Smart Government
-Advisor instalado; unidade salarial observada no painel desde a 0.7.19.
-Comércio exterior foi descartado por evidência (efeito removido na 1.9).
-Teste sintético — 363 testes aprovados.
+Última entrega do mod — 0.7.21 gerada, testada e instalada com jogo fechado.
+Código — evento consultivo de importação (com prazo e três opções) quando há
+escassez e nenhuma expansão local passa nos filtros; painel desde a 0.7.20
+declara a fronteira de leis e reconhece o Smart Government Advisor.
+Comércio: script não abre rota (efeito removido na 1.9); o aviso é só orientação.
+Teste sintético — 370 testes aprovados.
 Estático — geração consistente e validação local 1.15 aprovadas. Tiger 1.19.0:
 mesmos três campos de diário do vanilla 1.15 e 917 avisos (767 de colocação de
 chaves no GUI, 150 de OR de item único).
@@ -16,9 +16,27 @@ Ler `AGENTS.md`, `docs/agent/vic3-modding/SKILL.md` e suas referências.
 O ambiente registra o Tiger, o resultado da sondagem de comércio e o Smart
 Government instalado (1.0.0, esquema 2, variáveis `sg_*`). A pasta de
 documentação exportada do jogo continua ausente.
-Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.17–0.7.19:
+Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.21 (evento de
+importação) e depois a seção 0.7.17–0.7.19:
 conferir a unidade no painel, o desvio de fornecedor, a pontuação de PMs,
 save/reload e limpeza. Depois retomar as leituras fiscais e a fundação básica.
+
+## 0.7.21 — Evento consultivo de importação
+
+Código — `sed_check_import_notices` roda no pulso mensal e, para cada um dos
+doze bens, dispara `sed_pulse.2..13` quando há escassez (`sed_<bem>_supply_demand`)
+e nenhum estado tem candidata elegível nem pedido pendente. O evento é visível,
+tem `duration = 3`, ícone vanilla `event_industry.dds` e três opções inline
+(sem `effect = {}`, como no vanilla `1848.1`): "vou abrir a rota" (cooldown 12
+meses), "recalcular o plano agora" (`sed_refresh_diagnostics`, padrão) e "só me
+avise em 2 anos" (24 meses). O `immediate` grava 6 meses de cooldown em
+`sed_import_notice_<bem>_month`, variável limpa ao desativar.
+
+Evidência — sondagem com Tiger: `create_trade_route` removido na 1.9;
+`add_trade_route_level`, `cancel_trade_route` e `establish_trade_route` são
+tokens desconhecidos. Portanto o evento orienta, não age. `duration` em meses e
+a escolha automática de opção ao expirar seguem NÃO VERIFICADO; as três opções
+são inofensivas por desenho.
 
 ## 0.7.20 — Leis delegadas ao Smart Government
 

@@ -113,3 +113,25 @@ precisam ser confirmados na engine antes de serem registrados como verificados.
 - Confirmar em campanha a fundação, os PMs iniciais e a contratação da 0.7.15,
   além das leituras fiscais e de prontidão da 0.7.16.
 - Confirmar save/reload, restauração e alterações fiscais em campanha.
+
+## Sondagem de primitivas: comércio e formato de opção de evento (2026-11-11)
+
+Pasta temporária com `.metadata/metadata.json` e `common/scripted_effects/probe.txt`,
+validada com o Tiger 1.19.0 (`--game '/home/lincoln-ii/Games/Victoria 3'`):
+
+- `create_trade_route` → `warning(removed): was removed in 1.9`, "replaced
+  with world trade system". Não usar.
+- `add_trade_route_level`, `cancel_trade_route`, `establish_trade_route` →
+  `error(unknown-field): unknown token`. Não existem como efeito de script.
+- Conclusão: script só lê comércio (pedidos, faixa de preço, escassez). Abrir
+  rota é ação da UI/IA do jogador.
+
+Formato de evento (vanilla `events/1848.txt`, evento `1848.1`): `type`, `placement`,
+`title`, `desc`, `flavor`, `duration`, `icon`, `on_created_soundeffect`,
+`trigger`, `immediate` e `option` com `name`, `custom_tooltip`, `ai_chance`,
+`default_option` e **efeitos inline**. `effect = { ... }` dentro de `option` é
+`unknown-field` na 1.15. Ícones disponíveis em
+`game/gfx/interface/icons/event_icons/` (`event_industry.dds` usado na 0.7.21).
+
+`duration` do evento é tratado como meses na documentação interna do mod;
+semântica e escolha automática ao expirar seguem NÃO VERIFICADO.

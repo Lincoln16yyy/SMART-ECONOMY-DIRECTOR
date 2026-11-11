@@ -2224,3 +2224,35 @@ mesmos três `unknown-field` de diário; avisos 915 → 917 (dois
 Não verificado: exibição com os dois mods na engine e convivência dos diários.
 Instalada a 0.7.20 com jogo fechado, 14 arquivos conferidos, ordem preservada e
 backup `mod_before_0.7.20_20261111_194507_214722`.
+
+## 0.7.21 — Evento consultivo de importação
+
+Sondagem de primitiva com Tiger 1.19.0: `create_trade_route` responde
+`removed in 1.9` (substituído pelo sistema de comércio mundial) e
+`add_trade_route_level`, `cancel_trade_route` e `establish_trade_route` são
+`unknown token`. Nenhum efeito de script abre, nivela ou cancela rota comercial
+na 1.15, então o Director orienta em vez de agir.
+
+O pulso mensal chama `sed_check_import_notices` (escopo de país). Para cada um
+dos doze bens, dispara `sed_pulse.2..13` quando `sed_<bem>_supply_demand` é
+verdadeiro, nenhum estado tem `sed_<bem>_candidate_eligible` e nenhum pedido
+`sed_<bem>_request_pending` está aberto. O cooldown vem de
+`sed_import_notice_<bem>_month`, comparado com `sed_live_month_key`; a variável
+entra na limpeza de `sed_disable_country`.
+
+Evento visível com `duration = 3`, ícone vanilla `event_industry.dds`,
+`custom_tooltip` em cada opção e efeitos inline — `effect = {}` dentro de
+`option` é `unknown-field` para o Tiger, e o vanilla `1848.1` confirma o
+formato. Opções: abrir a rota (12 meses), recalcular o plano
+(`sed_refresh_diagnostics`, `default_option`) e adiar 24 meses. O `immediate`
+grava 6 meses.
+
+Teste sintético — 370 aprovados; os sete novos cobrem disparo, ausência de
+escassez, pedido pendente, cooldown, valores das três opções, estrutura e
+localização dos doze eventos e a ausência de efeito de comércio nos gerados.
+
+Estático — geração consistente, validação local 1.15, Tiger 1.19.0 com os mesmos
+três `unknown-field` de diário e 917 avisos (sem novos).
+
+Não verificado: prazo em meses, escolha automática ao expirar e exibição na
+engine. Instalada com jogo fechado e backup; conferir `logs/error.log` e o save.
