@@ -1,8 +1,8 @@
 # Contexto de continuidade
 
-Última entrega documentada: 0.7.10 instalada com jogo fechado e 14 arquivos
-conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.10_20261111_011143_486381`.
-313 testes sintéticos aprovados. A recuperação de escassez ainda exige confirmação na engine.
+Última entrega documentada: 0.7.11 instalada com jogo fechado e 14 arquivos
+conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.11_20261111_015138_269433`.
+321 testes sintéticos aprovados. A seleção econômica ainda exige confirmação na engine.
 
 
 
@@ -11,6 +11,29 @@ conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.10_20261111_01114
 
 
 
+
+
+## 0.7.11 — Escolha econômica dos fornecedores
+
+A necessidade nacional escolhe o bem. No Automático, os fornecedores elegíveis
+desse bem são comparados por margem material de referência, oferta e desempate
+econômico. Havendo alternativas com margem estimada não negativa, elas têm
+preferência. Nesse grupo, a maior saída do bem-alvo vem primeiro e a margem
+desempata ofertas iguais. Se todas as referências forem negativas, a seleção
+mantém uma opção para a necessidade estratégica.
+
+A mesma regra escolhe a variante dentro do estado e ordena os três pares do
+plano, com revalidação na aprovação automática. A margem contabiliza 75% do
+valor de todas as saídas conhecidas e 125% do custo dos insumos, a preços-base.
+As quantidades respeitam os métodos ativos e as mudanças de produtos
+secundários. Uma fundação usa a configuração básica como referência inicial.
+A saída líquida do bem-alvo precisa ser positiva para integrar os fornecedores.
+
+O campo `all_outputs` de `data/founding_method_economics.json` foi extraído dos
+PMs vanilla locais. O novo gerador `tools/investment.py` fornece referências por
+nível. Salários, qualificações, preços locais, bônus de produtividade, despesas
+operacionais futuras e lucro real ainda precisam de modelo e calibração. As
+referências servem à escolha dentro do catálogo atual.
 
 ## 0.7.10 — Recuperação de produtores com insumos em falta
 

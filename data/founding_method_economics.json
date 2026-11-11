@@ -24,7 +24,13 @@
     "artillery": 70.0,
     "ammunition": 50.0,
     "lead": 40.0,
-    "explosives": 50.0
+    "explosives": 50.0,
+    "liquor": 30.0,
+    "fruit": 30.0,
+    "transportation": 30.0,
+    "glass": 40.0,
+    "luxury_clothes": 60.0,
+    "silk": 40.0
   },
   "buildings": {
     "building_logging_camp": {
@@ -787,6 +793,331 @@
         "technologies": [
           "dynamite"
         ]
+      }
+    }
+  },
+  "all_outputs": {
+    "building_logging_camp": {
+      "pm_simple_forestry": {
+        "wood": 30.0
+      },
+      "pm_saw_mills": {
+        "wood": 60.0
+      },
+      "pm_electric_saw_mills": {
+        "wood": 100.0
+      },
+      "pm_hardwood": {
+        "wood": -25.0,
+        "hardwood": 10.0
+      },
+      "pm_increased_hardwood": {
+        "wood": -40.0,
+        "hardwood": 20.0
+      }
+    },
+    "building_iron_mine": {
+      "pm_picks_and_shovels_building_iron_mine": {
+        "iron": 20.0
+      },
+      "pm_atmospheric_engine_pump_building_iron_mine": {
+        "iron": 40.0
+      },
+      "pm_condensing_engine_pump_building_iron_mine": {
+        "iron": 60.0
+      },
+      "pm_diesel_pump_building_iron_mine": {
+        "iron": 70.0
+      },
+      "pm_nitroglycerin_building_iron_mine": {
+        "iron": 12.0
+      },
+      "pm_dynamite_building_iron_mine": {
+        "iron": 20.0
+      }
+    },
+    "building_coal_mine": {
+      "pm_picks_and_shovels_building_coal_mine": {
+        "coal": 25.0
+      },
+      "pm_atmospheric_engine_pump_building_coal_mine": {
+        "coal": 40.0
+      },
+      "pm_condensing_engine_pump_building_coal_mine": {
+        "coal": 60.0
+      },
+      "pm_diesel_pump_building_coal_mine": {
+        "coal": 90.0
+      },
+      "pm_nitroglycerin_building_coal_mine": {
+        "coal": 15.0
+      },
+      "pm_dynamite_building_coal_mine": {
+        "coal": 25.0
+      },
+      "pm_steam_donkey_building_coal_mine": {
+        "coal": -3.0
+      }
+    },
+    "building_wheat_farm": {
+      "pm_simple_farming": {
+        "grain": 20.0
+      },
+      "pm_herring_meal_farming": {
+        "grain": 25.0
+      },
+      "pm_soil_enriching_farming": {
+        "grain": 30.0
+      },
+      "pm_fertilization": {
+        "grain": 45.0
+      },
+      "pm_chemical_fertilizer": {
+        "grain": 60.0
+      },
+      "pm_citrus_orchards": {
+        "grain": -8.0,
+        "fruit": 7.0,
+        "sugar": 1.0
+      },
+      "pm_sugar_beets": {
+        "grain": -5.0,
+        "sugar": 4.0
+      }
+    },
+    "building_rye_farm": {
+      "pm_simple_farming": {
+        "grain": 20.0
+      },
+      "pm_soil_enriching_farming": {
+        "grain": 30.0
+      },
+      "pm_fertilization": {
+        "grain": 45.0
+      },
+      "pm_chemical_fertilizer": {
+        "grain": 60.0
+      },
+      "pm_potatoes": {
+        "grain": -10.0,
+        "liquor": 10.0
+      },
+      "pm_apple_orchards": {
+        "grain": -8.0,
+        "fruit": 7.0,
+        "sugar": 1.0
+      },
+      "pm_sugar_beets": {
+        "grain": -5.0,
+        "sugar": 4.0
+      }
+    },
+    "building_rice_farm": {
+      "pm_simple_farming_building_rice_farm": {
+        "grain": 35.0
+      },
+      "pm_herring_meal_farming_building_rice_farm": {
+        "grain": 45.0
+      },
+      "pm_soil_enriching_farming_building_rice_farm": {
+        "grain": 50.0
+      },
+      "pm_fertilization_building_rice_farm": {
+        "grain": 75.0
+      },
+      "pm_chemical_fertilizer_building_rice_farm": {
+        "grain": 100.0
+      },
+      "pm_fig_orchards_building_rice_farm": {
+        "grain": -20.0,
+        "fruit": 15.0,
+        "sugar": 2.0
+      }
+    },
+    "building_maize_farm": {
+      "pm_simple_farming": {
+        "grain": 20.0
+      },
+      "pm_soil_enriching_farming": {
+        "grain": 30.0
+      },
+      "pm_fertilization": {
+        "grain": 45.0
+      },
+      "pm_chemical_fertilizer": {
+        "grain": 60.0
+      },
+      "pm_citrus_orchards": {
+        "grain": -8.0,
+        "fruit": 7.0,
+        "sugar": 1.0
+      }
+    },
+    "building_millet_farm": {
+      "pm_simple_farming": {
+        "grain": 20.0
+      },
+      "pm_soil_enriching_farming": {
+        "grain": 30.0
+      },
+      "pm_fertilization": {
+        "grain": 45.0
+      },
+      "pm_chemical_fertilizer": {
+        "grain": 60.0
+      },
+      "pm_fig_orchards": {
+        "grain": -8.0,
+        "fruit": 7.0,
+        "sugar": 1.0
+      }
+    },
+    "building_cotton_plantation": {
+      "default_building_cotton_plantation": {
+        "fabric": 45.0
+      },
+      "automatic_irrigation_building_cotton_plantation": {
+        "fabric": 80.0
+      },
+      "slave_exploitation_cotton": {
+        "fabric": 20.0
+      },
+      "worker_exploitation_cotton": {
+        "fabric": 10.0
+      }
+    },
+    "building_livestock_ranch": {
+      "pm_open_air_stockyards": {
+        "meat": 10.0
+      },
+      "pm_butchering_tools": {
+        "meat": 15.0
+      },
+      "pm_slaughterhouses": {
+        "meat": 25.0
+      },
+      "pm_mechanized_slaughtering": {
+        "meat": 35.0
+      },
+      "pm_simple_ranch": {
+        "fabric": 5.0
+      },
+      "pm_sheep_farms": {
+        "fabric": 15.0,
+        "fertilizer": 2.5
+      },
+      "pm_intensive_grazing_ranch": {
+        "fabric": 25.0,
+        "fertilizer": 5.0
+      }
+    },
+    "building_tooling_workshop": {
+      "pm_crude_tools": {
+        "tools": 30.0
+      },
+      "pm_pig_iron": {
+        "tools": 60.0
+      },
+      "pm_steel": {
+        "tools": 80.0
+      },
+      "pm_rubber_grips": {
+        "tools": 110.0
+      }
+    },
+    "building_food_industry": {
+      "pm_bakery": {
+        "groceries": 45.0
+      },
+      "pm_sweeteners": {
+        "groceries": 65.0
+      },
+      "pm_baking_powder": {
+        "groceries": 120.0
+      },
+      "pm_cannery": {
+        "groceries": 30.0
+      },
+      "pm_cannery_fish": {
+        "groceries": 30.0
+      },
+      "pm_vacuum_canning": {
+        "groceries": 60.0
+      },
+      "pm_vacuum_canning_principle_3": {
+        "groceries": 70.0
+      },
+      "pm_pot_stills": {
+        "liquor": 60.0,
+        "groceries": -25.0
+      },
+      "pm_patent_stills": {
+        "liquor": 100.0,
+        "groceries": -40.0
+      }
+    },
+    "building_textile_mill": {
+      "pm_handsewn_clothes": {
+        "clothes": 45.0
+      },
+      "pm_dye_workshops": {
+        "clothes": 60.0
+      },
+      "pm_sewing_machines": {
+        "clothes": 100.0
+      },
+      "pm_electric_sewing_machines": {
+        "clothes": 140.0
+      },
+      "pm_craftsman_sewing": {
+        "clothes": -30.0,
+        "luxury_clothes": 30.0
+      },
+      "pm_elastics": {
+        "clothes": -70.0,
+        "luxury_clothes": 70.0
+      }
+    },
+    "building_arms_industry": {
+      "pm_muskets": {
+        "small_arms": 30.0
+      },
+      "pm_rifles": {
+        "small_arms": 50.0
+      },
+      "pm_repeaters": {
+        "small_arms": 70.0
+      },
+      "pm_bolt_action_rifles": {
+        "small_arms": 100.0
+      }
+    },
+    "building_artillery_foundry": {
+      "pm_cannons": {
+        "artillery": 25.0
+      },
+      "pm_bronze_cannons": {
+        "artillery": 25.0
+      },
+      "pm_smoothbores": {
+        "artillery": 45.0
+      },
+      "pm_bronze_smoothbores": {
+        "artillery": 45.0
+      },
+      "pm_breech_loaders": {
+        "artillery": 65.0
+      },
+      "pm_recoiled_barrels": {
+        "artillery": 90.0
+      }
+    },
+    "building_munition_plant": {
+      "pm_percussion_caps": {
+        "ammunition": 50.0
+      },
+      "pm_explosive_shells": {
+        "ammunition": 90.0
       }
     }
   }

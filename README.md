@@ -1,5 +1,11 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.11, o Automático compara fornecedores do mesmo bem por oferta e margem
+material estimada. A referência inclui subprodutos e insumos dos PMs ativos,
+com preferência por margens não negativas e desempate econômico entre ofertas
+iguais. Fornecedores com saída líquida zero do bem-alvo são excluídos.
+
+
 Na 0.7.10, o Automático pode reduzir a dependência de insumos em falta nos
 produtores existentes, inclusive em default e com expansão enfileirada. Ele
 avalia métodos com menores entradas e preservação de pelo menos metade da

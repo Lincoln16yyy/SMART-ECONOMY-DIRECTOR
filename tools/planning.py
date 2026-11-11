@@ -15,7 +15,8 @@ COUNTRY_VARIABLES = ['sed_plan_count', 'sed_plan_goal', 'sed_fiscal_status',
                      'sed_plan_year', 'sed_plan_month', 'sed_plan_missing_count',
                      'sed_plan_waiting', 'sed_reserve_floor', 'sed_reserve_required',
                      'sed_reserve_spare', 'sed_reserve_runway', 'sed_military_posture', 'sed_military_at_war',
-                     'sed_military_shortage_count'] + [f'sed_military_short_{good}' for good, _, _ in MILITARY_GOODS]
+                     'sed_military_shortage_count', 'sed_investment_best_output',
+                     'sed_investment_nonnegative_only'] + [f'sed_military_short_{good}' for good, _, _ in MILITARY_GOODS]
 STATE_VARIABLES = ['sed_plan_score', 'sed_plan_type']
 
 
@@ -31,7 +32,9 @@ def country_variables(actions):
 
 def state_variables(actions):
     return STATE_VARIABLES + [f'sed_plan_{name}_{field}' for name in actions
-                             for field in ('rank', 'score')]
+                             for field in ('rank', 'score')] + [
+        f'sed_plan_{name}_{field}' for name in actions if name not in ('railway', 'construction')
+        for field in ('margin', 'output')]
 
 
 def lists(actions):
@@ -406,6 +409,13 @@ def effects(actions, dependencies, buildings):
         result.append(f'''   if = {{ limit = {{ {eligibility} }}
     set_variable = {{ name = sed_plan_{name}_score value = {{ {score} }} }}
    }}''')
+        if name not in ('railway', 'construction'):
+            result.append(f'''   set_variable = {{ name = sed_plan_{name}_margin value = 0 }}
+   set_variable = {{ name = sed_plan_{name}_output value = 0 }}
+   if = {{ limit = {{ var:sed_plan_{name}_score > 0 }}
+    set_variable = {{ name = sed_plan_{name}_margin value = sed_investment_{name}_margin }}
+    set_variable = {{ name = sed_plan_{name}_output value = sed_investment_{name}_output }}
+   }}''')
     result.append('  }')
     # Recompute the best unselected pair in each state, select the best state,
     # then repeat. Allows three different building types in the same state.
@@ -435,18 +445,34 @@ owner = {{
  change_variable = {{ name = sed_plan_count add = 1 }}
  {goal_update}
 }}'''
-            if rank == 1 and name in dependencies:
-                # Choose the good by the existing policy before comparing its suppliers.
+            if name not in ('railway', 'construction'):
+                # Preserve the chosen national objective, then compare its unranked suppliers.
                 assign_rank = f'''if = {{
- limit = {{ owner = {{ has_variable = sed_mode_automatic has_variable = sed_input_priority_{name} }} }}
+ limit = {{ owner = {{ has_variable = sed_mode_automatic }} }}
  owner = {{
+  remove_variable = sed_investment_nonnegative_only
+  if = {{ limit = {{ any_scope_state = {{ var:sed_plan_{name}_score > 0 var:sed_plan_{name}_rank = 0 var:sed_plan_{name}_margin >= 0 }} }}
+   set_variable = {{ name = sed_investment_nonnegative_only value = yes }}
+  }}
   ordered_scope_state = {{
-   limit = {{ var:sed_plan_{name}_score > 0 }}
-   order_by = {{ value = sed_supplier_{name}_output }}
-   max = 1
-   check_range_bounds = no
+   limit = {{ var:sed_plan_{name}_score > 0 var:sed_plan_{name}_rank = 0
+    OR = {{ owner = {{ NOT = {{ has_variable = sed_investment_nonnegative_only }} }} var:sed_plan_{name}_margin >= 0 }}
+   }}
+   order_by = {{ value = var:sed_plan_{name}_output }}
+   max = 1 check_range_bounds = no
+   owner = {{ set_variable = {{ name = sed_investment_best_output value = prev.var:sed_plan_{name}_output }} }}
+  }}
+  ordered_scope_state = {{
+   limit = {{ var:sed_plan_{name}_score > 0 var:sed_plan_{name}_rank = 0
+    var:sed_plan_{name}_output = owner.var:sed_investment_best_output
+    OR = {{ owner = {{ NOT = {{ has_variable = sed_investment_nonnegative_only }} }} var:sed_plan_{name}_margin >= 0 }}
+   }}
+   order_by = {{ value = var:sed_plan_{name}_margin }}
+   max = 1 check_range_bounds = no
 {indent(assign_rank, '   ')}
   }}
+  remove_variable = sed_investment_best_output
+  remove_variable = sed_investment_nonnegative_only
  }}
 }}
 else = {{
