@@ -6409,7 +6409,7 @@ sed_extend_input_priorities = {
    NOT = { has_variable = sed_input_priority_wood }
    OR = {
    AND = {
-    OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_tools }
+    OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:tools ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_tools }
     NOT = { any_scope_state = { sed_tools_queued_supply = yes } }
     NOT = { any_scope_state = { sed_tools_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6426,7 +6426,7 @@ sed_extend_input_priorities = {
    NOT = { has_variable = sed_input_priority_iron }
    OR = {
    AND = {
-    OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_fabric }
+    OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:fabric ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_fabric }
     NOT = { any_scope_state = { sed_fabric_queued_supply = yes } }
     NOT = { any_scope_state = { sed_fabric_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6434,7 +6434,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_tools }
+    OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:tools ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_tools }
     NOT = { any_scope_state = { sed_tools_queued_supply = yes } }
     NOT = { any_scope_state = { sed_tools_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6442,7 +6442,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:groceries ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } }  }
     NOT = { any_scope_state = { sed_groceries_queued_supply = yes } }
     NOT = { any_scope_state = { sed_groceries_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6450,7 +6450,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }   }
     NOT = { any_scope_state = { sed_small_arms_queued_supply = yes } }
     NOT = { any_scope_state = { sed_small_arms_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6458,7 +6458,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }   }
     NOT = { any_scope_state = { sed_artillery_queued_supply = yes } }
     NOT = { any_scope_state = { sed_artillery_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6475,7 +6475,7 @@ sed_extend_input_priorities = {
    NOT = { has_variable = sed_input_priority_coal }
    OR = {
    AND = {
-    OR = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_wood }
+    OR = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:wood ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_wood }
     NOT = { any_scope_state = { sed_wood_queued_supply = yes } }
     NOT = { any_scope_state = { sed_wood_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6483,7 +6483,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_iron }
+    OR = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:iron ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_iron }
     NOT = { any_scope_state = { sed_iron_queued_supply = yes } }
     NOT = { any_scope_state = { sed_iron_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6491,7 +6491,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_grain }
+    OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:grain ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_grain }
     NOT = { any_scope_state = { sed_grain_queued_supply = yes } }
     NOT = { any_scope_state = { sed_grain_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6503,7 +6503,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_fabric }
+    OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:fabric ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_fabric }
     NOT = { any_scope_state = { sed_fabric_queued_supply = yes } }
     NOT = { any_scope_state = { sed_fabric_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6511,7 +6511,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_tools }
+    OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:tools ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_tools }
     NOT = { any_scope_state = { sed_tools_queued_supply = yes } }
     NOT = { any_scope_state = { sed_tools_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6519,7 +6519,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }   }
     NOT = { any_scope_state = { sed_small_arms_queued_supply = yes } }
     NOT = { any_scope_state = { sed_small_arms_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6527,7 +6527,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }   }
     NOT = { any_scope_state = { sed_artillery_queued_supply = yes } }
     NOT = { any_scope_state = { sed_artillery_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6535,7 +6535,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } }   }
     NOT = { any_scope_state = { sed_ammunition_queued_supply = yes } }
     NOT = { any_scope_state = { sed_ammunition_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6552,7 +6552,7 @@ sed_extend_input_priorities = {
    NOT = { has_variable = sed_input_priority_grain }
    OR = {
    AND = {
-    OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_fabric }
+    OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:fabric ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_fabric }
     NOT = { any_scope_state = { sed_fabric_queued_supply = yes } }
     NOT = { any_scope_state = { sed_fabric_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6560,7 +6560,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:groceries ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } }  }
     NOT = { any_scope_state = { sed_groceries_queued_supply = yes } }
     NOT = { any_scope_state = { sed_groceries_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6577,7 +6577,7 @@ sed_extend_input_priorities = {
    NOT = { has_variable = sed_input_priority_fabric }
    OR = {
    AND = {
-    OR = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:clothes ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } }  }
     NOT = { any_scope_state = { sed_clothes_queued_supply = yes } }
     NOT = { any_scope_state = { sed_clothes_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6594,7 +6594,7 @@ sed_extend_input_priorities = {
    NOT = { has_variable = sed_input_priority_tools }
    OR = {
    AND = {
-    OR = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_wood }
+    OR = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:wood ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_wood }
     NOT = { any_scope_state = { sed_wood_queued_supply = yes } }
     NOT = { any_scope_state = { sed_wood_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6602,7 +6602,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_iron }
+    OR = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:iron ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_iron }
     NOT = { any_scope_state = { sed_iron_queued_supply = yes } }
     NOT = { any_scope_state = { sed_iron_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6610,7 +6610,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_coal }
+    OR = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:coal ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_coal }
     NOT = { any_scope_state = { sed_coal_queued_supply = yes } }
     NOT = { any_scope_state = { sed_coal_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6618,7 +6618,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_grain }
+    OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:grain ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_grain }
     NOT = { any_scope_state = { sed_grain_queued_supply = yes } }
     NOT = { any_scope_state = { sed_grain_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6630,7 +6630,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } has_variable = sed_input_priority_fabric }
+    OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:fabric ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } has_variable = sed_input_priority_fabric }
     NOT = { any_scope_state = { sed_fabric_queued_supply = yes } }
     NOT = { any_scope_state = { sed_fabric_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6638,7 +6638,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:groceries ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } }  }
     NOT = { any_scope_state = { sed_groceries_queued_supply = yes } }
     NOT = { any_scope_state = { sed_groceries_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6646,7 +6646,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:clothes ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } }  }
     NOT = { any_scope_state = { sed_clothes_queued_supply = yes } }
     NOT = { any_scope_state = { sed_clothes_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6654,7 +6654,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }   }
     NOT = { any_scope_state = { sed_small_arms_queued_supply = yes } }
     NOT = { any_scope_state = { sed_small_arms_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6662,7 +6662,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }   }
     NOT = { any_scope_state = { sed_artillery_queued_supply = yes } }
     NOT = { any_scope_state = { sed_artillery_supplier_available = yes } }
     any_scope_state = { OR = {
@@ -6670,7 +6670,7 @@ sed_extend_input_priorities = {
     } }
    }
    AND = {
-    OR = { market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } }  }
+    OR = { market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } }   }
     NOT = { any_scope_state = { sed_ammunition_queued_supply = yes } }
     NOT = { any_scope_state = { sed_ammunition_supplier_available = yes } }
     any_scope_state = { OR = {

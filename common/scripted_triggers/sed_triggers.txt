@@ -703,7 +703,7 @@ sed_input_blocks_tools_ammunition_munition_plant_constraint = {
  }
 }
 
-sed_wood_supply_demand = { OR = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_input_priority_wood NOT = { any_scope_state = { sed_wood_queued_supply = yes } } } } }
+sed_wood_supply_demand = { OR = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:wood ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } AND = { has_variable = sed_input_priority_wood NOT = { any_scope_state = { sed_wood_queued_supply = yes } } } } }
 sed_wood_candidate_site = {
  is_incorporated = yes
  infrastructure_delta >= 0
@@ -729,6 +729,11 @@ sed_wood_supplier_available = {
 sed_wood_candidate_eligible = {
  owner = { sed_wood_supply_demand = yes }
  sed_wood_supplier_available = yes
+ OR = {
+  owner = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } }
+  owner = { has_variable = sed_input_priority_wood }
+  sed_investment_wood_margin > 0
+ }
 }
 
 sed_wood_queued_supply = { OR = { has_variable = sed_wood_request_pending AND = { has_building = building_logging_camp b:building_logging_camp = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_electric_saw_mills
@@ -782,7 +787,7 @@ sed_wood_approval_valid = {
   sed_execution_mode_permits_approval = yes
  }
 }
-sed_iron_supply_demand = { OR = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_input_priority_iron NOT = { any_scope_state = { sed_iron_queued_supply = yes } } } } }
+sed_iron_supply_demand = { OR = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:iron ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } AND = { has_variable = sed_input_priority_iron NOT = { any_scope_state = { sed_iron_queued_supply = yes } } } } }
 sed_iron_candidate_site = {
  is_incorporated = yes
  infrastructure_delta >= 0
@@ -808,6 +813,11 @@ sed_iron_supplier_available = {
 sed_iron_candidate_eligible = {
  owner = { sed_iron_supply_demand = yes }
  sed_iron_supplier_available = yes
+ OR = {
+  owner = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
+  owner = { has_variable = sed_input_priority_iron }
+  sed_investment_iron_margin > 0
+ }
 }
 
 sed_iron_queued_supply = { OR = { has_variable = sed_iron_request_pending AND = { has_building = building_iron_mine b:building_iron_mine = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_atmospheric_engine_pump_building_iron_mine
@@ -867,7 +877,7 @@ sed_iron_approval_valid = {
   sed_execution_mode_permits_approval = yes
  }
 }
-sed_coal_supply_demand = { OR = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_input_priority_coal NOT = { any_scope_state = { sed_coal_queued_supply = yes } } } } }
+sed_coal_supply_demand = { OR = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:coal ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } AND = { has_variable = sed_input_priority_coal NOT = { any_scope_state = { sed_coal_queued_supply = yes } } } } }
 sed_coal_candidate_site = {
  is_incorporated = yes
  infrastructure_delta >= 0
@@ -893,6 +903,11 @@ sed_coal_supplier_available = {
 sed_coal_candidate_eligible = {
  owner = { sed_coal_supply_demand = yes }
  sed_coal_supplier_available = yes
+ OR = {
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+  owner = { has_variable = sed_input_priority_coal }
+  sed_investment_coal_margin > 0
+ }
 }
 
 sed_coal_queued_supply = { OR = { has_variable = sed_coal_request_pending AND = { has_building = building_coal_mine b:building_coal_mine = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_atmospheric_engine_pump_building_coal_mine
@@ -952,7 +967,7 @@ sed_coal_approval_valid = {
   sed_execution_mode_permits_approval = yes
  }
 }
-sed_grain_supply_demand = { OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_input_priority_grain NOT = { any_scope_state = { sed_grain_queued_supply = yes } } } } }
+sed_grain_supply_demand = { OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:grain ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } AND = { has_variable = sed_input_priority_grain NOT = { any_scope_state = { sed_grain_queued_supply = yes } } } } }
 sed_grain_candidate_site = {
  is_incorporated = yes
  infrastructure_delta >= 0
@@ -978,6 +993,11 @@ sed_grain_supplier_available = {
 sed_grain_candidate_eligible = {
  owner = { sed_grain_supply_demand = yes }
  sed_grain_supplier_available = yes
+ OR = {
+  owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
+  owner = { has_variable = sed_input_priority_grain }
+  sed_investment_grain_margin > 0
+ }
 }
 
 sed_grain_queued_supply = { OR = { has_variable = sed_grain_request_pending AND = { has_building = building_wheat_farm b:building_wheat_farm = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_chemical_fertilizer
@@ -1537,7 +1557,7 @@ sed_grain_approval_valid = {
   sed_execution_mode_permits_approval = yes
  }
 }
-sed_fabric_supply_demand = { OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_input_priority_fabric NOT = { any_scope_state = { sed_fabric_queued_supply = yes } } } } }
+sed_fabric_supply_demand = { OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:fabric ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } AND = { has_variable = sed_input_priority_fabric NOT = { any_scope_state = { sed_fabric_queued_supply = yes } } } } }
 sed_fabric_candidate_site = {
  is_incorporated = yes
  infrastructure_delta >= 0
@@ -1563,6 +1583,11 @@ sed_fabric_supplier_available = {
 sed_fabric_candidate_eligible = {
  owner = { sed_fabric_supply_demand = yes }
  sed_fabric_supplier_available = yes
+ OR = {
+  owner = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
+  owner = { has_variable = sed_input_priority_fabric }
+  sed_investment_fabric_margin > 0
+ }
 }
 
 sed_fabric_queued_supply = { OR = { has_variable = sed_fabric_request_pending AND = { has_building = building_cotton_plantation b:building_cotton_plantation = { level_after_queued_constructions > level OR = {   has_active_production_method = automatic_irrigation_building_cotton_plantation
@@ -1696,7 +1721,7 @@ sed_fabric_approval_valid = {
   sed_execution_mode_permits_approval = yes
  }
 }
-sed_tools_supply_demand = { OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_input_priority_tools NOT = { any_scope_state = { sed_tools_queued_supply = yes } } } } }
+sed_tools_supply_demand = { OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:tools ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } AND = { has_variable = sed_input_priority_tools NOT = { any_scope_state = { sed_tools_queued_supply = yes } } } } }
 sed_tools_candidate_site = {
  is_incorporated = yes
  infrastructure_delta >= 0
@@ -1722,6 +1747,11 @@ sed_tools_supplier_available = {
 sed_tools_candidate_eligible = {
  owner = { sed_tools_supply_demand = yes }
  sed_tools_supplier_available = yes
+ OR = {
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+  owner = { has_variable = sed_input_priority_tools }
+  sed_investment_tools_margin > 0
+ }
 }
 
 sed_tools_queued_supply = { OR = { has_variable = sed_tools_request_pending AND = { has_building = building_tooling_workshop b:building_tooling_workshop = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_crude_tools
@@ -1777,7 +1807,7 @@ sed_tools_approval_valid = {
   sed_execution_mode_permits_approval = yes
  }
 }
-sed_groceries_supply_demand = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } }
+sed_groceries_supply_demand = { OR = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:groceries ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } } }
 sed_groceries_candidate_site = {
  is_incorporated = yes
  infrastructure_delta >= 0
@@ -1803,6 +1833,11 @@ sed_groceries_supplier_available = {
 sed_groceries_candidate_eligible = {
  owner = { sed_groceries_supply_demand = yes }
  sed_groceries_supplier_available = yes
+ OR = {
+  owner = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } }
+  owner = { has_variable = sed_input_priority_groceries }
+  sed_investment_groceries_margin > 0
+ }
 }
 
 sed_groceries_queued_supply = { OR = { has_variable = sed_groceries_request_pending AND = { has_building = building_food_industry b:building_food_industry = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_bakery
@@ -1864,7 +1899,7 @@ sed_groceries_approval_valid = {
   sed_execution_mode_permits_approval = yes
  }
 }
-sed_clothes_supply_demand = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } }
+sed_clothes_supply_demand = { OR = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:clothes ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } } }
 sed_clothes_candidate_site = {
  is_incorporated = yes
  infrastructure_delta >= 0
@@ -1890,6 +1925,11 @@ sed_clothes_supplier_available = {
 sed_clothes_candidate_eligible = {
  owner = { sed_clothes_supply_demand = yes }
  sed_clothes_supplier_available = yes
+ OR = {
+  owner = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } }
+  owner = { has_variable = sed_input_priority_clothes }
+  sed_investment_clothes_margin > 0
+ }
 }
 
 sed_clothes_queued_supply = { OR = { has_variable = sed_clothes_request_pending AND = { has_building = building_textile_mill b:building_textile_mill = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_dye_workshops
@@ -1945,7 +1985,7 @@ sed_clothes_approval_valid = {
   sed_execution_mode_permits_approval = yes
  }
 }
-sed_small_arms_supply_demand = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } } }
+sed_small_arms_supply_demand = { OR = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }  } }
 sed_small_arms_candidate_site = {
  is_incorporated = yes
  infrastructure_delta >= 0
@@ -1971,6 +2011,11 @@ sed_small_arms_supplier_available = {
 sed_small_arms_candidate_eligible = {
  owner = { sed_small_arms_supply_demand = yes }
  sed_small_arms_supplier_available = yes
+ OR = {
+  owner = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } } }
+  owner = { has_variable = sed_input_priority_small_arms }
+  sed_investment_small_arms_margin > 0
+ }
 }
 
 sed_small_arms_queued_supply = { OR = { has_variable = sed_small_arms_request_pending AND = { has_building = building_arms_industry b:building_arms_industry = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_muskets
@@ -2026,7 +2071,7 @@ sed_small_arms_approval_valid = {
   sed_execution_mode_permits_approval = yes
  }
 }
-sed_artillery_supply_demand = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } } }
+sed_artillery_supply_demand = { OR = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }  } }
 sed_artillery_candidate_site = {
  is_incorporated = yes
  infrastructure_delta >= 0
@@ -2052,6 +2097,11 @@ sed_artillery_supplier_available = {
 sed_artillery_candidate_eligible = {
  owner = { sed_artillery_supply_demand = yes }
  sed_artillery_supplier_available = yes
+ OR = {
+  owner = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } } }
+  owner = { has_variable = sed_input_priority_artillery }
+  sed_investment_artillery_margin > 0
+ }
 }
 
 sed_artillery_queued_supply = { OR = { has_variable = sed_artillery_request_pending AND = { has_building = building_artillery_foundry b:building_artillery_foundry = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_cannons
@@ -2111,7 +2161,7 @@ sed_artillery_approval_valid = {
   sed_execution_mode_permits_approval = yes
  }
 }
-sed_ammunition_supply_demand = { market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } } }
+sed_ammunition_supply_demand = { OR = { market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } }  } }
 sed_ammunition_candidate_site = {
  is_incorporated = yes
  infrastructure_delta >= 0
@@ -2137,6 +2187,11 @@ sed_ammunition_supplier_available = {
 sed_ammunition_candidate_eligible = {
  owner = { sed_ammunition_supply_demand = yes }
  sed_ammunition_supplier_available = yes
+ OR = {
+  owner = { market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } } }
+  owner = { has_variable = sed_input_priority_ammunition }
+  sed_investment_ammunition_margin > 0
+ }
 }
 
 sed_ammunition_queued_supply = { OR = { has_variable = sed_ammunition_request_pending AND = { has_building = building_munition_plant b:building_munition_plant = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_percussion_caps

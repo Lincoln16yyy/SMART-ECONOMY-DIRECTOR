@@ -1952,3 +1952,20 @@ preços de saída/entrada, fundações, revalidação da variante e limpeza. Ger
 validação estática, pacote e whitespace aprovados. Instalada com backup
 `mod_before_0.7.12_20261111_102922_823642`, conferindo os 14 arquivos.
 Lucro real, salários, qualificações e confirmação em campanha seguem pendentes.
+
+## 0.7.13 — Oportunidades civis com preço elevado
+
+O teste do Paraguai mostrou revisão mensal ativa até 7/1842 e fila vazia em
+agosto, com 170 mil em reservas. Os pontos gratuitos entram no modificador
+de capacidade utilizado pelo Advisor. A ausência de setor, por si só, não
+explica a inatividade externa. Seu motivo exato permanece pendente. O catálogo próprio foi ampliado para bens
+civis com demanda superior à oferta e preço de mercado pelo menos 20% acima
+da base, exigindo margem material positiva. Preservados filtros de trabalho,
+insumos, fila, orçamento e limitação mensal. O limiar exige calibração.
+A propagação de insumos considera essas oportunidades. Corrigido texto antigo
+sobre teto de 56 semanas, já removido do orçamento na 0.7.6.
+
+336 testes sintéticos aprovados. Validação estática local 1.15, geração
+consistente, pacote e verificação de espaçamento aprovados. Instalado com backup
+`mod_before_0.7.13_20261111_105515_974019` e conferência de 14 arquivos.
+Confirmação da nova seleção em campanha permanece pendente.

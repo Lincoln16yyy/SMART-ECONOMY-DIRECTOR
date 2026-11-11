@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.12'
+VERSION = '0.7.13'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -152,8 +152,13 @@ def input_priority_effect():
             )
             priority = (f'has_variable = sed_input_priority_{downstream}'
                         if downstream in INPUT_DEPENDENCIES else '')
+            growth = ''
+            if downstream not in planning.MILITARY_INDUSTRY_GOODS:
+                growth = (f'AND = {{ has_variable = sed_mode_automatic market = {{ mg:{downstream} ?= {{ '
+                          'market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders '
+                          'market_goods_pricier >= 0.2 } } }')
             downstream_checks.append(f'''   AND = {{
-    OR = {{ market = {{ mg:{downstream} ?= {{ market_goods_has_goods_shortage = yes }} }} {priority} }}
+    OR = {{ market = {{ mg:{downstream} ?= {{ market_goods_has_goods_shortage = yes }} }} {growth} {priority} }}
     NOT = {{ any_scope_state = {{ sed_{downstream}_queued_supply = yes }} }}
     NOT = {{ any_scope_state = {{ sed_{downstream}_supplier_available = yes }} }}
     any_scope_state = {{ OR = {{
@@ -1687,9 +1692,14 @@ def supply_triggers():
         military_gate = ('owner = { military_expenses > 0 market = { mg:' + good + ' ?= { market_goods_buy_orders > 0 } } }'
                          if good in planning.MILITARY_INDUSTRY_GOODS else '')
         shortage = f'market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }}'
-        demand = shortage
+        growth = ''
+        if good not in planning.MILITARY_INDUSTRY_GOODS:
+            growth = (f'AND = {{ has_variable = sed_mode_automatic market = {{ mg:{good} ?= {{ '
+                      'market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders '
+                      'market_goods_pricier >= 0.2 } } }')
+        demand = f'OR = {{ {shortage} {growth} }}'
         if good in INPUT_DEPENDENCIES:
-            demand = (f'OR = {{ {shortage} AND = {{ has_variable = sed_input_priority_{good} '
+            demand = (f'OR = {{ {shortage} {growth} AND = {{ has_variable = sed_input_priority_{good} '
                       f'NOT = {{ any_scope_state = {{ sed_{good}_queued_supply = yes }} }} }} }}')
         absent = ' '.join(f'NOT = {{ has_building = {variant["building"]} }}' for variant in vs)
         result.append(f'''sed_{good}_supply_demand = {{ {demand} }}
@@ -1718,6 +1728,11 @@ sed_{good}_supplier_available = {{
 sed_{good}_candidate_eligible = {{
  owner = {{ sed_{good}_supply_demand = yes }}
  sed_{good}_supplier_available = yes
+ OR = {{
+  owner = {{ {shortage} }}
+  owner = {{ has_variable = sed_input_priority_{good} }}
+  sed_investment_{good}_margin > 0
+ }}
 }}
 ''')
         queued_variants = ' '.join(
@@ -2124,7 +2139,7 @@ def localization(language):
         'sed_candidate_labor': ("Última leitura de mão de obra. Reserva estimada após vagas e filas conhecidas: [State.MakeScope.Var('sed_labor_available').GetValue|0]. Compromissos estimados: [State.MakeScope.Var('sed_labor_committed').GetValue|0]. Referência demográfica; qualificações e migração futura ainda precisam de avaliação.", "Last labor reading. Estimated reserve after known vacancies and queues: [State.MakeScope.Var('sed_labor_available').GetValue|0]. Estimated commitments: [State.MakeScope.Var('sed_labor_committed').GetValue|0]. Demographic reference; qualifications and future migration still require assessment."),
         'sed_auto_status_budget': ('Última revisão: referência de materiais da próxima obra sem cobertura ou método de construção desconhecido. Nenhuma tentativa consumida. Confira o orçamento direto no plano.', 'Last review: next-project material benchmark is uncovered or construction method is unknown. No attempt consumed. See the direct budget in the plan.'),
         'sed_build_budget_unknown': ('Orçamento direto pendente. Um setor ativo usa método de construção fora dos quatro perfis verificados. O Automático direto aguarda uma leitura reconhecida; aprovação Assistida permanece explícita.', 'Direct budget pending. An active sector uses a construction method outside the four verified profiles. Direct Automatic awaits recognized data; Assisted approval remains explicit.'),
-        'sed_build_budget': ('Referência conservadora para materiais da próxima obra direta: @money!' + v('build_budget_weekly', 'K') + '/semana, para até ' + v('build_budget_points', '1') + ' pontos. Teto de materiais pelos níveis e ocupação dos setores: @money!' + v('build_budget_material_capacity', 'K') + '/semana. Ouro exigido se o saldo não cobrir a referência: @money!' + v('build_budget_required_gold', 'K') + ', com ausência de dívida. Usa o maior custo entre métodos ativos, limitado pelos materiais dos setores existentes, com preços-base acrescidos de 75%. A duração estimada do primeiro projeto amplia a reserva exigida, até 56 semanas; salários futuros, subsídios e modificadores continuam fora.', 'Conservative material benchmark for the next direct project: @money!' + v('build_budget_weekly', 'K') + '/week, for up to ' + v('build_budget_points', '1') + ' points. Sector level/occupancy material cap: @money!' + v('build_budget_material_capacity', 'K') + '/week. Gold required if the balance does not cover the benchmark: @money!' + v('build_budget_required_gold', 'K') + ', with no debt. Uses the highest active-method cost, capped by existing sector materials, with base prices plus 75%. The first project\u2019s estimated duration extends the required reserve, up to 56 weeks; future wages, subsidies and modifiers remain outside.'),
+        'sed_build_budget': ('Referência conservadora para materiais da próxima obra direta: @money!' + v('build_budget_weekly', 'K') + '/semana, para até ' + v('build_budget_points', '1') + ' pontos. Teto de materiais pelos níveis e ocupação dos setores: @money!' + v('build_budget_material_capacity', 'K') + '/semana. Ouro exigido se o saldo não cobrir a referência: @money!' + v('build_budget_required_gold', 'K') + ', com ausência de dívida. Usa o maior custo entre métodos ativos, limitado pelos materiais dos setores existentes, com preços-base acrescidos de 75%. A duração estimada do primeiro projeto amplia a reserva exigida; salários futuros, subsídios e modificadores continuam fora.', 'Conservative material benchmark for the next direct project: @money!' + v('build_budget_weekly', 'K') + '/week, for up to ' + v('build_budget_points', '1') + ' points. Sector level/occupancy material cap: @money!' + v('build_budget_material_capacity', 'K') + '/week. Gold required if the balance does not cover the benchmark: @money!' + v('build_budget_required_gold', 'K') + ', with no debt. Uses the highest active-method cost, capped by existing sector materials, with base prices plus 75%. The first project\u2019s estimated duration extends the required reserve; future wages, subsidies and modifiers remain outside.'),
         'sed_build_budget_project': ('O primeiro projeto requer ' + v('build_budget_project_points', '0') + ' pontos, estimados em ' + v('build_budget_project_weeks', '1') + ' semanas. A fila existente acrescenta uma referência de ' + v('build_budget_queue_weeks', '1') + ' semanas. A janela de financiamento é de ' + v('build_budget_funding_weeks', '1') + ' semanas. Progresso já executado e eficiência local seguem fora da estimativa.', 'The first project requires ' + v('build_budget_project_points', '0') + ' points, estimated at ' + v('build_budget_project_weeks', '1') + ' weeks. The existing queue adds a reference of ' + v('build_budget_queue_weeks', '1') + ' weeks. The funding window is ' + v('build_budget_funding_weeks', '1') + ' weeks. Completed progress and local efficiency remain outside the estimate.'),
         'sed_coord_executor_12': ('Ritmo por reservas: aguardando a fila pública existente. Com déficit financiado por ouro, novas autorizações externas ficam suspensas enquanto houver níveis públicos enfileirados. A política fiscal continua ativa e o orçamento é reavaliado nas revisões.', 'Reserve-funded pace: waiting for the existing government queue. While gold funds a deficit, new external authorizations remain suspended while government levels are queued. Fiscal policy remains active and the budget is reassessed on reviews.'),
         'sed_auto_status_reserve_queue': ('Última revisão: preservação de reservas, aguardando obras públicas já enfileiradas antes de autorizar novos investimentos.', 'Last review: preserving reserves, waiting for already queued government projects before authorizing new investment.'),

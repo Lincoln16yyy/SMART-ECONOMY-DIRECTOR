@@ -1,18 +1,28 @@
 # Contexto de continuidade
 
-Última entrega documentada: 0.7.12 instalada com jogo fechado e 14 arquivos
-conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.12_20261111_102922_823642`.
-330 testes sintéticos aprovados. As referências de preço ainda exigem confirmação na engine.
+Última entrega documentada — 0.7.13 instalada com jogo fechado e 14 arquivos
+conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.13_20261111_105515_974019`.
+336 testes sintéticos aprovados. Geração consistente, validação estática
+local 1.15, pacote e verificação de espaçamento aprovados.
+A oportunidade por preço exige confirmação em campanha.
 
+## 0.7.13 — Investimento civil antes da escassez
 
+O teste do Paraguai em 1842 confirmou avanço da revisão mensal até julho,
+reservas de 163 para 170 mil e fila vazia em agosto. O país fotografado tinha os dez pontos gratuitos e nenhum setor. Esses
+pontos entram em `country_construction_add`, conforme o modificador vanilla
+`country_gdp_construction`. A ausência de setor, por si só, não explica a
+inatividade do Advisor. O motivo exato da seleção externa permanece pendente.
 
-
-
-
-
-
-
-
+O Director agora inclui no catálogo próprio bens civis com compras positivas,
+compras superiores às vendas e preço de mercado pelo menos 20% acima da base.
+Essa oportunidade exige margem material estimada positiva e conserva as
+verificações de trabalho, insumos, infraestrutura, fila e orçamento. A regra
+vale no Automático. Escassez e insumos estratégicos mantêm seus critérios.
+A propagação de necessidades também considera esses alvos civis caros.
+O limiar de 20% é uma heurística inicial que exige calibração em campanha.
+A inclusão depende de um fornecedor elegível. O resultado do Paraguai após
+esta mudança ainda precisa de confirmação na engine.
 
 ## 0.7.12 — Preços observados nas referências de investimento
 

@@ -1149,3 +1149,21 @@ explícitas devolvem o nível original. A redução de imposto termina em baixo.
 O livro acompanha a variante solicitada e verifica presença do produtor antes
 de inferir o resultado. Fontes, defeitos corrigidos e limites da verificação
 estão em [REVIEW_2026-11-10.md](REVIEW_2026-11-10.md).
+
+## 0.7.13 — Investimento civil antes da escassez
+
+O teste do Paraguai em 1842 confirmou avanço da revisão mensal até julho,
+reservas de 163 para 170 mil e fila vazia em agosto. O país fotografado tinha os dez pontos gratuitos e nenhum setor. Esses
+pontos entram em `country_construction_add`, conforme o modificador vanilla
+`country_gdp_construction`. A ausência de setor, por si só, não explica a
+inatividade do Advisor. O motivo exato da seleção externa permanece pendente.
+
+O Director agora inclui no catálogo próprio bens civis com compras positivas,
+compras superiores às vendas e preço de mercado pelo menos 20% acima da base.
+Essa oportunidade exige margem material estimada positiva e conserva as
+verificações de trabalho, insumos, infraestrutura, fila e orçamento. A regra
+vale no Automático. Escassez e insumos estratégicos mantêm seus critérios.
+A propagação de necessidades também considera esses alvos civis caros.
+O limiar de 20% é uma heurística inicial que exige calibração em campanha.
+A inclusão depende de um fornecedor elegível. O resultado do Paraguai após
+esta mudança ainda precisa de confirmação na engine.
