@@ -1791,3 +1791,34 @@ e conferência dos 14 arquivos pelo instalador.
 
 Revisão final da estimativa por grupo aprovada em 254 testes e reinstalada com
 backup `mod_before_0.7.3_20261110_230839_169721`, conferindo novamente os 14 arquivos.
+
+
+## 2026-11-10 — Cadeias de vários elos no Automático (0.7.4)
+
+A análise de insumos percorre os bens suportados até encontrar fornecedores
+viáveis. Inclui intermediários ausentes, interrompe a propagação quando há
+alternativa elegível ou obra relacionada e termina em ciclos. Limpeza completa
+das prioridades antes de cada leitura evita carregar demandas encerradas.
+A oferta enfileirada reconhece fundações próprias ainda sem prédio.
+
+259 testes sintéticos aprovados, incluindo cadeia de três insumos, fundação
+intermediária, obra pendente, alternativa em outro estado e ciclo com posterior
+fim da escassez. Gerador, validação estática, pacote e whitespace aprovados.
+Instalada com backup `mod_before_0.7.4_20261110_232207_422360` e conferência dos
+14 arquivos. Campanha ainda pendente para essas mudanças.
+
+
+## 2026-11-10 — Recuperação fiscal com salários militares (0.7.5)
+
+Salários militares passam a ter política automática de crise operacional na
+paz, com um passo mensal e piso baixo. Guerra, jogada diplomática ou formação
+mobilizada impedem cortes. A recuperação se limita ao nível capturado, exige
+margem financeira na paz e permite recompor até médio quando há necessidade
+de prontidão. Sair do Automático ou desativar restaura o nível original.
+
+266 testes sintéticos aprovados, incluindo fronteiras de orçamento, déficit
+de construção, prontidão, modos conflitantes e persistência do limite mensal.
+Gerador, validação estática, pacote e whitespace aprovados. Efeito e triggers
+verificados no executável, localização e scripts vanilla locais.
+Instalada com backup `mod_before_0.7.5_20261110_233730_175392` e conferência dos
+14 arquivos. Efeitos financeiros e funcionamento na engine ainda pendentes.

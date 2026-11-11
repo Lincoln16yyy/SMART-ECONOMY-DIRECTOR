@@ -1,5 +1,52 @@
 # Planejamento e coordenação — 0.6.8
 
+
+
+## 0.7.5 — Despesa militar durante recuperação fiscal
+
+O Automático passa a reduzir salários militares em crise/default com saldo
+operacional negativo e despesas militares positivas. Cada mês permite um passo,
+com piso baixo. Guerra, jogada diplomática ou formação mobilizada impedem o
+corte. Déficit apenas de construção preserva essa despesa.
+
+O primeiro corte captura o nível original. Com prontidão militar exigida,
+a revisão pode recuperar um passo até médio, limitado ao original, mesmo
+em crise. Acima de médio, ou na paz, a recuperação exige superávit,
+saldo operacional não negativo, ausência de dívida, doze semanas de despesas
+fixas em reservas e saldo de pelo menos metade da despesa militar observada.
+Essa margem é um parâmetro conservador inicial, sem previsão exata do novo
+salário. O limite mensal também vale para a recuperação de prontidão.
+
+Sair do Automático ou desativar restaura o nível capturado. O marcador mensal
+persiste para impedir cortes repetidos por troca de modo. Saves anteriores
+sem snapshot capturam o nível no primeiro corte efetivo. A atualização de
+diagnóstico continua sem executar políticas.
+
+Fontes locais verificadas incluem o efeito `set_military_wage_level` e sua
+assinatura no executável 1.15, a localização `SET_MILITARY_WAGE_LEVEL`, o
+trigger `has_diplomatic_play` do executável e `any_military_formation` com
+`is_mobilized` nos objetivos tutoriais vanilla. Aceitação e resultados em
+campanha continuam pendentes. Recrutamento e modernização permanecem pendentes.
+
+## 0.7.4 — Planejamento de insumos em vários elos
+
+O Automático recalcula as prioridades a partir da escassez atual e propaga a
+necessidade pelos fornecedores intermediários. Expansões e fundações podem
+participar da cadeia. A propagação para quando encontra um fornecedor elegível
+ou uma obra relacionada já enfileirada. Uma alternativa elegível em outro
+estado evita priorizar os insumos de um produtor bloqueado.
+
+Cada leitura limpa as prioridades anteriores. A propagação tem no máximo uma
+passagem por bem de insumo suportado, encerrando antes quando nada muda. Isso
+cobre os caminhos simples do catálogo e termina em dependências circulares.
+O livro de fundações próprias passa a contar também na identificação de oferta
+enfileirada, mesmo antes de existir prédio.
+
+A execução continua limitada a uma tentativa por mês e ao catálogo atual.
+Bens fora do catálogo, comércio, escolha de PMs e ciclos sem fornecedor viável
+continuam pendentes. Nenhuma produção futura é creditada como oferta atual.
+O plano volta a avaliar o gargalo após a mudança real da oferta.
+
 ## 0.7.2 — Duração e materiais do primeiro projeto
 
 O orçamento direto continuava usando uma janela fixa de 26 semanas de déficit

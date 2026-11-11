@@ -178,8 +178,86 @@ sed_restore_wage_policy = {
 '''
 
 
+def military_wage_policy_effects():
+    """Reduce structural peacetime deficits and recover only the captured wage."""
+    snapshots = []
+    cuts = []
+    recoveries = []
+    restores = []
+    for index, level in enumerate(TAX_LEVELS, 1):
+        branch = 'if' if index == 1 else 'else_if'
+        snapshots.append(f'  {branch} = {{ limit = {{ military_wage_level = {level} }} set_variable = {{ name = sed_military_wage_saved value = {index} }} }}')
+        restores.append(f'  {branch} = {{ limit = {{ var:sed_military_wage_saved = {index} }} set_military_wage_level = {level} }}')
+        if index > 2:
+            branch = 'if' if index == 3 else 'else_if'
+            step = policy_step('set_military_wage_level', TAX_LEVELS[index - 2],
+                               'sed_military_wage_last_change_month', index)
+            cuts.append(f'   {branch} = {{ limit = {{ military_wage_level = {level} }} sed_save_military_wage = yes {step} }}')
+        if index < len(TAX_LEVELS):
+            branch = 'if' if index == 1 else 'else_if'
+            readiness = 'sed_military_readiness_required = yes' if index < 3 else ''
+            step = policy_step('set_military_wage_level', TAX_LEVELS[index],
+                               'sed_military_wage_last_change_month', index)
+            recoveries.append(f'''   {branch} = {{ limit = {{
+    military_wage_level = {level}
+    var:sed_military_wage_saved > {index}
+    OR = {{ sed_military_wage_recovery_affordable = yes {readiness} }}
+   }} {step} }}''')
+    return '''sed_save_military_wage = {
+ if = { limit = { is_player = yes NOT = { has_variable = sed_military_wage_saved } }
+''' + '\n'.join(snapshots) + '''
+ }
+}
+
+sed_apply_military_wage_policy = {
+ if = { limit = {
+  is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic
+  has_variable = sed_fiscal_status
+  NOT = { has_variable = sed_mode_manual }
+  NOT = { has_variable = sed_mode_assisted }
+  NOT = { sed_military_wage_month_limit_reached = yes }
+ }
+  if = { limit = {
+   OR = { var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 }
+   net_fixed_income < 0 military_expenses > 0
+   NOT = { sed_military_readiness_required = yes }
+  }
+''' + '\n'.join(cuts) + '''
+  }
+  else_if = { limit = { has_variable = sed_military_wage_saved }
+''' + '\n'.join(recoveries) + '''
+  }
+ }
+}
+
+sed_restore_military_wage_policy = {
+ if = { limit = { is_player = yes has_variable = sed_military_wage_saved }
+''' + '\n'.join(restores) + '''
+  remove_variable = sed_military_wage_saved
+ }
+}
+'''
+
+
 def triggers():
-    return '''sed_tax_month_limit_reached = {
+    return '''sed_military_wage_month_limit_reached = {
+ has_variable = sed_military_wage_last_change_month
+ var:sed_military_wage_last_change_month = sed_live_month_key
+}
+
+sed_military_readiness_required = {
+ OR = { is_at_war = yes has_diplomatic_play = yes any_military_formation = { is_mobilized = yes } }
+}
+
+sed_military_wage_recovery_affordable = {
+ net_total_income > 0
+ net_fixed_income >= 0
+ net_total_income >= { value = military_expenses min = 0 multiply = 0.5 }
+ principal <= 0
+ gold_reserves >= { value = fixed_expenses min = 0 multiply = 12 }
+}
+
+sed_tax_month_limit_reached = {
  has_variable = sed_tax_last_change_month
  var:sed_tax_last_change_month = sed_live_month_key
 }

@@ -52,9 +52,10 @@ def validate(root=ROOT, game=None):
                        'every_scope_building', 'ordered_scope_state', 'clear_variable_list',
                        'add_to_variable_list', 'add_journal_entry', 'start_building_construction',
                        'trigger_event', 'order_by', 'max', 'check_range_bounds',
-                       'set_tax_level', 'set_government_wage_level'}
+                       'set_tax_level', 'set_government_wage_level', 'set_military_wage_level'}
     tax_effects = {'sed_apply_fiscal_policy', 'sed_restore_fiscal_policy'}
     wage_effects = {'sed_apply_wage_policy', 'sed_restore_wage_policy'}
+    military_wage_effects = {'sed_apply_military_wage_policy', 'sed_restore_military_wage_policy'}
     tax_levels = {'very_low', 'low', 'medium', 'high', 'very_high'}
 
     # Narrow, reviewed exception: only two guarded adapter effects may change
@@ -90,6 +91,9 @@ def validate(root=ROOT, game=None):
             if entry.key == 'set_government_wage_level':
                 if effect_name not in wage_effects or entry.value not in tax_levels:
                     errors.append('Wage level change outside the reviewed wage policy: ' + str(entry.value))
+            if entry.key == 'set_military_wage_level':
+                if effect_name not in military_wage_effects or entry.value not in tax_levels:
+                    errors.append('Military wage change outside the reviewed policy: ' + str(entry.value))
             if entry.key == 'remove_variable':
                 if not str(entry.value).startswith('sed_'):
                     if effect_name not in ('sed_coord_sync', 'sed_coord_restore') or entry.value not in coordinated_options:
@@ -121,6 +125,7 @@ def validate(root=ROOT, game=None):
     for name, monthly_guard in (
         ('sed_apply_fiscal_policy', 'sed_tax_month_limit_reached'),
         ('sed_apply_wage_policy', 'sed_wage_month_limit_reached'),
+        ('sed_apply_military_wage_policy', 'sed_military_wage_month_limit_reached'),
     ):
         body = custom.get(name, [])
         outer = body[0] if len(body) == 1 else None
