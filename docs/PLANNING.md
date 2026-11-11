@@ -1279,3 +1279,10 @@ pontuação nacional de modernização e recuperação quando o estado tem unida
 salarial observada. Um par materialmente positivo pode ser descartado por
 pontuação zero. Filtros de pares, guardas operacionais, cooldown e reservas
 permanecem iguais; a configuração inicial das fundações segue material.
+
+## 0.7.19 — Unidade salarial no painel
+
+O painel exibe a unidade salarial nacional (`sed_investment_wage_unit`) quando
+`sed_investment_wage_known = 1`, com texto próprio para o fallback material.
+A leitura por estado continua interna. O comércio exterior foi descartado por
+evidência: `create_trade_route` foi removido na 1.9.

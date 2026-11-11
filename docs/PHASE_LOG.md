@@ -2150,3 +2150,42 @@ Não verificado: ordem dos pares segue material, ganho real da troca, efeito em
 ocupação futura e calibragem da unidade. Instalada a 0.7.18 com jogo fechado,
 14 arquivos conferidos, ordem preservada e backup
 `mod_before_0.7.18_20261111_190422_253541`.
+
+## 2026-11-11 — 0.7.19: unidade salarial no painel e comércio descartado
+
+Objetivo: tornar verificável em campanha o que a 0.7.17/0.7.18 calculam, e
+encerrar o item "comércio" da lista de lacunas com evidência.
+
+Evidência sobre comércio — criei um mod de sondagem isolado em `/tmp` com
+`create_trade_route = { market = ... goods = ... }` e rodei
+`vic3-tiger --game "<jogo>"`. Resposta: "warning(removed): `create_trade_route`
+was removed in 1.9 — replaced with world trade system". Não existe efeito de
+script para abrir rota comercial na 1.15; o binário só mantém comandos
+internos (`create_trade_route_command`, `establish_trade_route`).
+Consequência: o Director não pode comprar fora da produção local; a entrada da
+lista vira limitação de engine, registrada em `STATUS.md` e
+`references/ambiente-local.md`.
+
+Código — painel (`gui/journal_entry_widgets/sed_diagnostics.gui`) com:
+- `sed_investment_policy`, explicando que oferta e pontuação de PMs descontam
+  a folha observada;
+- `sed_investment_wage`, com a unidade nacional por emprego ponderado
+  (`sed_investment_wage_unit`, formato `|2`), visível quando
+  `sed_investment_wage_known = 1`;
+- `sed_investment_wage_unknown`, o fallback material quando não há amostra.
+Visibilidade por duas novas `scripted_guis` de escopo de país. Textos em PT/EN.
+
+Roteiro — `docs/MANUAL_RUNTIME_TEST.md` ganhou a seção 0.7.17–0.7.19, com
+passos para conferir a unidade, o efeito de um prédio subsidiado, o desvio de
+fornecedor, a pontuação de PMs, save/reload e limpeza na desativação.
+
+Teste sintético — 362 aprovados; a regressão nova verifica as linhas do painel,
+a visibilidade e que o texto de fallback não cita a variável da unidade.
+
+Estático — geração consistente, validação local 1.15, Tiger 1.19.0 com os
+mesmos três `unknown-field` de diário. Avisos passaram de 912 para 915: três
+`brace-placement` no GUI, do mesmo tipo dos 760 já existentes.
+
+Não verificado: layout real do painel, formatação do número e save/reload.
+Instalada a 0.7.19 com jogo fechado, 14 arquivos conferidos, ordem preservada e
+backup `mod_before_0.7.19_20261111_193151_185694`.

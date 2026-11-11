@@ -1,5 +1,8 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.19, o painel mostra a unidade salarial observada (ou o fallback
+material) usada pelas decisões de oferta e pela pontuação de PMs.
+
 Na 0.7.18, a pontuação de modernização e de recuperação de PMs desconta a
 folha salarial da mudança. Um par materialmente positivo pode ser descartado
 quando a troca adiciona emprego ponderado.

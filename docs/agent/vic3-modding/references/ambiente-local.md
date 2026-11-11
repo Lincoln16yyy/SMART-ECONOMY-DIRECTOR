@@ -64,7 +64,7 @@ python3 tools/package_mod.py
 python3 tools/install_mod.py --user-data '/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3'
 ```
 
-A última entrega executou 361 testes sintéticos e instalou a versão 0.7.18
+A última entrega executou 362 testes sintéticos e instalou a versão 0.7.19
 com conferência de 14 arquivos. O último `--check` confirmou sincronia.
 [confirmado 2026-11-11]
 
@@ -97,6 +97,14 @@ precisam ser confirmados na engine antes de serem registrados como verificados.
 - Reavaliar os alertas Tiger quando houver versão compatível com o jogo 1.15.
 - Comparação com bloco de valor à direita é forma vanilla: `net_fixed_income >=
   { ... }` em `common/diplomatic_actions/30_fund_lobby.txt`. [confirmado 2026-11-11]
+- Comércio não é scriptável na 1.15: a sondagem de `create_trade_route` em mod
+  isolado fez o Tiger 1.19.0 responder "removed in 1.9 — replaced with world
+  trade system". O binário só mantém comandos internos. Não insistir nesse
+  caminho. [confirmado 2026-11-11]
+- Sondagem de primitiva desconhecida: criar pasta temporária com
+  `common/scripted_effects/probe.txt` e `.metadata/metadata.json` mínimo e rodar
+  `vic3-tiger --game '<jogo>' <pasta>`. O relatório responde se o efeito existe,
+  foi removido ou quais campos aceita. [confirmado 2026-11-11]
 - Gerar e indexar a documentação exportada do jogo instalado.
 - Confirmar em campanha a fundação, os PMs iniciais e a contratação da 0.7.15,
   além das leituras fiscais e de prontidão da 0.7.16.

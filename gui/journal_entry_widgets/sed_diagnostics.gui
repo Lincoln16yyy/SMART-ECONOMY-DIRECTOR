@@ -3816,6 +3816,26 @@ textbox = {
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_investment_policy"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_investment_wage_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_investment_wage"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_investment_wage_unknown_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_investment_wage_unknown"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_plan_policy"
 }
 textbox = {

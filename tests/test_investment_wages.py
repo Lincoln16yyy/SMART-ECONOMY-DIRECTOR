@@ -3,6 +3,7 @@ import unittest
 
 from test_diagnostics import script_definitions
 from script_harness import Country, building, state
+from tools.build_mod import outputs
 
 LOGGING_BASE = ['pm_simple_forestry', 'pm_no_hardwood', 'pm_no_equipment', 'pm_road_carts']
 
@@ -93,6 +94,21 @@ class InvestmentWageTests(unittest.TestCase):
         self.assertTrue(self.c.condition(
             self.c.definitions['sed_grain_wheat_farm_preferred_supplier'], target))
         self.assertEqual(self.c.number('sed_investment_grain_return', target), 0)
+
+    def test_panel_shows_the_observed_unit_and_its_material_fallback(self):
+        gui = outputs()['gui/journal_entry_widgets/sed_diagnostics.gui'].decode('utf-8-sig')
+        self.assertIn('text = "sed_investment_wage"', gui)
+        self.assertIn('text = "sed_investment_wage_unknown"', gui)
+        self.assertIn('sed_investment_wage_visible_sgui', gui)
+        self.assertIn('sed_investment_wage_unknown_visible_sgui', gui)
+        for language in ('braz_por', 'english'):
+            text = outputs()[f'localization/{language}/sed_l_{language}.yml'].decode('utf-8-sig')
+            known = next(line for line in text.splitlines()
+                         if line.startswith(' sed_investment_wage:0'))
+            unknown = next(line for line in text.splitlines()
+                           if line.startswith(' sed_investment_wage_unknown:0'))
+            self.assertIn("Var('sed_investment_wage_unit')", known)
+            self.assertNotIn('sed_investment_wage_unit', unknown)
 
     def test_disable_clears_wage_readings(self):
         target = state(buildings=[self.producer(earnings=4800, weekly_profit=1800)])

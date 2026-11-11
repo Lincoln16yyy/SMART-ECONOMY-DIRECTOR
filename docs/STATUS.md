@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.18
+# Estado dos requisitos — 0.7.19
 
 ## Protocolo de evidência adotado
 
@@ -12,7 +12,7 @@ Restam três campos do diário apontados como desconhecidos, presentes no vanill
 formatação e de OR de um item permanecem visíveis. A documentação exportada
 continua ausente. Carregou e Campanha das leituras fiscais, da prontidão e do
 novo retorno salarial e da pontuação de PMs seguem NÃO VERIFICADO. Teste
-sintético — 361 testes aprovados.
+sintético — 362 testes aprovados.
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.
@@ -39,6 +39,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Métodos de produção | Configuração inicial em fundações acompanhadas desde a 0.7.7. Seleção inicial e, desde a 0.7.9, modernização contínua do grupo principal para gargalos, por saída e margem material estimada a preços-base, com reserva mensal de insumos. Desde a 0.7.10, recuperação de escassez por método com menor dependência de insumos e piso de saída nominal. A 0.7.17 fornece a unidade salarial observada aos filtros de oferta; a 0.7.18 desconta a folha da mudança na pontuação de modernização e recuperação | Confirmar na engine. Preços reais, qualificações, salários por profissão e automação dos demais grupos pendentes. A ordem dos pares e a configuração inicial seguem apenas materiais |
 | Economia militar | Custos, participação das despesas, guerra e cinco bens monitorados. Expansões de armas, artilharia e munição na 0.6.14, com bônus de prioridade em guerra | Confirmar leituras na engine, identificar consumo nacional, planejar indústria bélica, modernização e coordenação do recrutamento |
 | Leis, guerra e diplomacia | Fora das mutações econômicas implementadas | Mantidas sob responsabilidade dos módulos e decisões previstos pelo briefing |
+| Comércio exterior | Limitação de engine confirmada: `create_trade_route` foi removido na 1.9 (Tiger 1.19.0) e o jogo usa o sistema de comércio mundial; não há efeito de script para abrir rota | Importação continua fora do mod. Decidir se o painel deve ao menos sugerir importação ao jogador (sem ação) |
 | Haiti, país rico e crise | Cenários sintéticos fiscais e de seleção | Campanhas registradas e comparáveis permanecem pendentes |
 | Crescimento em campanha longa | Ainda sem evidência | Medir PIB, SoL, emprego, dívida, reservas e diversificação durante vários anos |
 | Entrega | Gerador, validador, testes, ZIP e instalador com backup | Entrega da 0.6.9 com backup, conferência dos outputs e PR de revisão |

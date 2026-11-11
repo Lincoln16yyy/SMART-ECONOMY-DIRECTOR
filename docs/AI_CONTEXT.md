@@ -1,23 +1,45 @@
 # Contexto de continuidade
 
-Última entrega do mod — 0.7.18 instalada com jogo fechado e 14 arquivos
-conferidos. Backup `sed_backups/mod_before_0.7.18_20261111_190422_253541`.
-Código — modernização e recuperação de PMs descontam a folha salarial da
-mudança antes de escolher o candidato nacional. A 0.7.17 já usava a unidade
-salarial observada no retorno de oferta.
-Teste sintético — 361 testes aprovados (7 novos de salários na oferta e 2 de
-pontuação de PMs).
-Estático — geração consistente e validação local 1.15 aprovadas. Tiger 1.19.0
-executado: mesmos três campos de diário do vanilla 1.15 e 912 avisos de estilo.
-Carregou e Campanha — retorno com salários, unidade por estado e pontuação de
-PMs seguem NÃO VERIFICADO. Calibragem do valor esperado pendente.
+Última entrega do mod — 0.7.19 instalada com jogo fechado e 14 arquivos
+conferidos. Backup `sed_backups/mod_before_0.7.19_20261111_193151_185694`.
+Código — o painel mostra a unidade salarial observada e o seu fallback material;
+comércio exterior foi descartado por evidência (efeito removido na 1.9).
+Teste sintético — 362 testes aprovados.
+Estático — geração consistente e validação local 1.15 aprovadas. Tiger 1.19.0:
+mesmos três campos de diário do vanilla 1.15 e 915 avisos de estilo (765 de
+colocação de chaves no GUI, 150 de OR de item único; +3 do mesmo tipo no GUI).
+Carregou e Campanha — retorno com salários, unidade por estado, painel e
+pontuação de PMs seguem NÃO VERIFICADO.
 
 Ler `AGENTS.md`, `docs/agent/vic3-modding/SKILL.md` e suas referências.
-O ambiente registra o binário Tiger em `dist/tools/`, sua versão e o comando.
-A pasta de documentação exportada do jogo continua ausente.
-Próximo passo — confirmar em campanha `sed_investment_wage_unit`, o desvio de
-preferência e a pontuação de PMs; retomar leituras fiscais, restauração,
-save/reload e a fundação básica da 0.7.15/0.7.16.
+O ambiente registra o binário Tiger em `dist/tools/`, sua versão e o comando,
+e o resultado da sondagem de comércio. A pasta de documentação exportada do
+jogo continua ausente.
+Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.17–0.7.19:
+conferir a unidade no painel, o desvio de fornecedor, a pontuação de PMs,
+save/reload e limpeza. Depois retomar as leituras fiscais e a fundação básica.
+
+## 0.7.19 — Unidade salarial visível no painel
+
+Código — o painel do diário ganhou duas linhas fixas e três chaves de
+texto PT/EN: `sed_investment_policy` (regra de retorno), `sed_investment_wage`
+(unidade nacional por emprego ponderado, visível quando
+`sed_investment_wage_known = 1`) e `sed_investment_wage_unknown` (fallback
+material). Visibilidade por `sed_investment_wage_visible_sgui` e
+`sed_investment_wage_unknown_visible_sgui`, ambas em escopo de país.
+A unidade mostrada é a média nacional; a leitura por estado continua interna.
+
+Evidência — comércio exterior não é scriptável na 1.15. Uma sondagem isolada
+(`create_trade_route` em mod de teste, Tiger 1.19.0) respondeu
+"`create_trade_route` was removed in 1.9 — replaced with world trade system".
+O item "comércio" da lista de lacunas fica como limitação de engine, não como
+pendência de implementação. No binário do jogo só restam comandos internos.
+
+Teste sintético — nova regressão verifica as duas linhas no GUI, a visibilidade
+e que a chave de fallback não referencia a variável da unidade.
+
+Não verificado — layout do painel na engine, formatação `|2` da unidade e
+comportamento após save/reload. Roteiro em `docs/MANUAL_RUNTIME_TEST.md`.
 
 ## 0.7.18 — Salários na pontuação de modernização e recuperação
 

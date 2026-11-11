@@ -559,3 +559,42 @@ Assistido, conferir a restauração dos níveis originais.
 
 O teste de inicialização já chegou ao menu com as rotinas carregadas. A
 conferência acima verifica o comportamento em campanha e permanece pendente.
+
+## Retorno com salários 0.7.17–0.7.19 (pendente)
+
+Objetivo: confirmar na engine a unidade salarial observada, o retorno que
+desconta folha e a pontuação de PMs. Guardar uma cópia do save antes de cada
+passo e registrar data, país e estado.
+
+1. Abrir o painel do Director com o mod ativo e o Automático ligado. Localizar
+   a linha "Unidade salarial observada" acima da política do plano. Se não
+   houver prédio saudável, deve aparecer a linha de ausência de amostra.
+2. Escolher um produtor de madeira saudável (ocupação de ao menos 80%, sem
+   escassez, sem contratação falha, não subsidiado). Anotar `earnings` e
+   `weekly_profit` no painel do prédio. A unidade esperada é
+   `(earnings − weekly_profit) ÷ (pesos de emprego × nível × ocupação)`.
+   Comparar com o número mostrado no Director.
+3. Repetir com um prédio subsidiado ou com escassez de insumos: a unidade não
+   deve mudar por causa dele.
+4. Avançar um mês sem alterar prédios: a unidade deve ficar estável. Subsidiar
+   um prédio que estava na amostra e avançar um mês: a unidade deve mudar na
+   revisão seguinte.
+5. Oferta: numa escassez com margem material pequena, comparar o fornecedor
+   escolhido antes e depois de a unidade salarial subir. Registrar a unidade,
+   a margem e o cartão da prioridade. Mudança de fornecedor aqui é o sinal que
+   a 0.7.17 tenta produzir.
+6. PMs: com prédio elegível (ocupação ≥ 90%, sem escassez, insumo e tecnologia
+   ok), observar a modernização. Se a troca aumenta emprego ponderado e a
+   folha estimada zera a pontuação, a revisão deve registrar método mantido.
+   Anotar o método antes e depois e a mensagem da revisão.
+7. Salvar e recarregar no Automático: a unidade deve ser recalculada na próxima
+   revisão. Conferir `logs/error.log` sem erro novo citando `sed_`.
+8. Desativar o Director: as duas linhas novas somem do painel e as variáveis
+   `sed_investment_wage_*` não devem sobrar (conferir no save, se possível).
+9. Devolver: trecho do `logs/error.log`, captura do painel nas duas revisões,
+   captura do cartão da prioridade, método antes/depois e o save.
+
+Limites conhecidos: a unidade é média por emprego ponderado, não salário por
+profissão; `earnings` semanal está documentado apenas pela localização vanilla;
+o painel mostra a média nacional, não a leitura por estado. Divergência grande
+deve ser registrada para calibragem, não ajustada sem evidência.

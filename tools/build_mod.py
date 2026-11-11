@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.18'
+VERSION = '0.7.19'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -730,6 +730,9 @@ def widget():
         body += textbox(f'sed_military_short_{good}', f'sed_military_short_{good}_visible_sgui')
     body += textbox('sed_military_scope')
     body += textbox('sed_input_forecast_policy')
+    body += textbox('sed_investment_policy')
+    body += textbox('sed_investment_wage', 'sed_investment_wage_visible_sgui')
+    body += textbox('sed_investment_wage_unknown', 'sed_investment_wage_unknown_visible_sgui')
     body += textbox('sed_plan_policy')
     body += textbox('sed_tax_policy', 'sed_tax_policy_visible_sgui')
     body += textbox('sed_wage_policy', 'sed_tax_policy_visible_sgui')
@@ -1334,6 +1337,13 @@ sed_approve_construction_sgui = {
 }}
 sed_mode_{mode}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_mode_{mode} }} }}
 '''
+    result += '''sed_investment_wage_visible_sgui = { scope = country
+ is_shown = { has_variable = sed_enabled
+  has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 } }
+sed_investment_wage_unknown_visible_sgui = { scope = country
+ is_shown = { has_variable = sed_enabled
+  NOT = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 } } }
+'''
     for item in SUPPLY_TARGETS:
         good = item['good']
         result += f'''sed_approve_{good}_sgui = {{
@@ -1898,6 +1908,9 @@ def localization(language):
         'je_sed_diagnostics': ('Smart Economy Director', 'Smart Economy Director'),
         'je_sed_diagnostics_reason': ('Indicadores econômicos do país, atualizados sob solicitação ou todo mês.', 'National economic indicators, refreshed on request or monthly.'),
         'sed_activation_tt': ('Ative o Director pela decisão Ativar Smart Economy Director.', 'Use the Enable Smart Economy Director decision.'),
+        'sed_investment_policy': ('Decisões de oferta e a pontuação de modernização descontam a folha salarial observada. A referência usa o ganho material a 75% da receita e 125% dos insumos, menos os pesos de emprego do nível multiplicados pelo gasto por emprego ponderado. Preços futuros e lucro real continuam fora.', 'Supply decisions and modernization scoring subtract the observed wage bill. The reference uses the material gain at 75% of revenue and 125% of inputs, minus the level’s employment weights times the cost per weighted job. Future prices and realized profit remain outside.'),
+        'sed_investment_wage': ('Unidade salarial observada: @money!' + v('investment_wage_unit', '2') + ' por emprego ponderado por semana, a partir dos prédios saudáveis do país. Estados com amostra própria usam a própria média.', 'Observed wage unit: @money!' + v('investment_wage_unit', '2') + ' per weighted job per week, from the country’s healthy buildings. States with their own sample use their own average.'),
+        'sed_investment_wage_unknown': ('Sem amostra salarial utilizável. Elegibilidade, preferência entre fornecedores e pontuação de PMs usam apenas a margem material.', 'No usable wage sample. Eligibility, supplier preference and PM scoring use the material margin only.'),
         'sed_disabled_desc': ('Diagnóstico desativado.', 'Diagnostics disabled.'),
         'sed_enable': ('Ativar Smart Economy Director', 'Enable Smart Economy Director'),
         'sed_enable_desc': ('Abre um diagnóstico econômico no diário e lê os indicadores atuais. A ativação é opcional, inclusive em saves existentes.', 'Opens an economic diagnosis in the journal and reads current indicators. Enabling is optional, including in existing saves.'),
