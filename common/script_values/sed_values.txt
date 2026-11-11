@@ -121,6 +121,108 @@ sed_state_labor_committed = {
    min = 0 multiply = 5000
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_logging_camp }
+  has_variable = sed_wood_request_pending
+  var:sed_wood_intent_level = 0
+var:sed_wood_intent_variant = 1
+ } add = 5000 }
+ if = { limit = {
+  NOT = { has_building = building_iron_mine }
+  has_variable = sed_iron_request_pending
+  var:sed_iron_intent_level = 0
+var:sed_iron_intent_variant = 1
+ } add = 5250 }
+ if = { limit = {
+  NOT = { has_building = building_coal_mine }
+  has_variable = sed_coal_request_pending
+  var:sed_coal_intent_level = 0
+var:sed_coal_intent_variant = 1
+ } add = 5250 }
+ if = { limit = {
+  NOT = { has_building = building_wheat_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 1
+ } add = 5000 }
+ if = { limit = {
+  NOT = { has_building = building_rye_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 2
+ } add = 5000 }
+ if = { limit = {
+  NOT = { has_building = building_rice_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 3
+ } add = 10000 }
+ if = { limit = {
+  NOT = { has_building = building_maize_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 4
+ } add = 5000 }
+ if = { limit = {
+  NOT = { has_building = building_millet_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 5
+ } add = 5000 }
+ if = { limit = {
+  NOT = { has_building = building_cotton_plantation }
+  has_variable = sed_fabric_request_pending
+  var:sed_fabric_intent_level = 0
+var:sed_fabric_intent_variant = 1
+ } add = 8000 }
+ if = { limit = {
+  NOT = { has_building = building_livestock_ranch }
+  has_variable = sed_fabric_request_pending
+  var:sed_fabric_intent_level = 0
+var:sed_fabric_intent_variant = 2
+ } add = 5000 }
+ if = { limit = {
+  NOT = { has_building = building_tooling_workshop }
+  has_variable = sed_tools_request_pending
+  var:sed_tools_intent_level = 0
+var:sed_tools_intent_variant = 1
+ } add = 5000 }
+ if = { limit = {
+  NOT = { has_building = building_food_industry }
+  has_variable = sed_groceries_request_pending
+  var:sed_groceries_intent_level = 0
+var:sed_groceries_intent_variant = 1
+ } add = 6600 }
+ if = { limit = {
+  NOT = { has_building = building_textile_mill }
+  has_variable = sed_clothes_request_pending
+  var:sed_clothes_intent_level = 0
+var:sed_clothes_intent_variant = 1
+ } add = 6000 }
+ if = { limit = {
+  NOT = { has_building = building_arms_industry }
+  has_variable = sed_small_arms_request_pending
+  var:sed_small_arms_intent_level = 0
+var:sed_small_arms_intent_variant = 1
+ } add = 5000 }
+ if = { limit = {
+  NOT = { has_building = building_artillery_foundry }
+  has_variable = sed_artillery_request_pending
+  var:sed_artillery_intent_level = 0
+var:sed_artillery_intent_variant = 1
+ } add = 5250 }
+ if = { limit = {
+  NOT = { has_building = building_munition_plant }
+  has_variable = sed_ammunition_request_pending
+  var:sed_ammunition_intent_level = 0
+var:sed_ammunition_intent_variant = 1
+ } add = 5000 }
+ if = { limit = {
+  NOT = { has_building = building_railway }
+  has_variable = sed_railway_request_pending
+  var:sed_railway_intent_level = 0
+
+ } add = 1200 }
 }
 sed_state_labor_available = {
  value = sed_state_labor_pool subtract = sed_state_labor_committed min = 0
@@ -132,11 +234,30 @@ sed_input_railway_coal = {
  if = { limit = { b:building_railway = { has_active_production_method = pm_steam_trains_principle_transport_3 } } add = 6 }
  min = 0
 }
+sed_founding_input_railway_coal = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 2 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = steel_railway_cars } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = steel_railway_cars } } add = 6 } }
+ }
+ add = { value = 0
+ }
+}
 sed_input_railway_electricity = {
  value = 0
  if = { limit = { b:building_railway = { has_active_production_method = pm_electric_trains } } add = 8 }
  if = { limit = { b:building_railway = { has_active_production_method = pm_electric_trains_principle_transport_3 } } add = 10 }
  min = 0
+}
+sed_founding_input_railway_electricity = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = electric_railway } } add = 8 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = electric_railway } } add = 10 } }
+ }
+ add = { value = 0
+ }
 }
 sed_input_railway_engines = {
  value = 0
@@ -149,31 +270,82 @@ sed_input_railway_engines = {
  if = { limit = { b:building_railway = { has_active_production_method = pm_steam_trains_principle_transport_3 } } add = 6 }
  min = 0
 }
+sed_founding_input_railway_engines = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = steel_railway_cars } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = steel_railway_cars } } add = 6 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = electric_railway } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = electric_railway } } add = 6 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = compression_ignition } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = compression_ignition } } add = 6 } }
+ }
+ add = { value = 0
+ }
+}
 sed_input_railway_oil = {
  value = 0
  if = { limit = { b:building_railway = { has_active_production_method = pm_diesel_trains } } add = 6 }
  if = { limit = { b:building_railway = { has_active_production_method = pm_diesel_trains_principle_transport_3 } } add = 8 }
  min = 0
 }
+sed_founding_input_railway_oil = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = compression_ignition } } add = 6 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = compression_ignition } } add = 8 } }
+ }
+ add = { value = 0
+ }
+}
 sed_input_railway_steel = {
  value = 0
  if = { limit = { b:building_railway = { has_active_production_method = pm_steel_passenger_carriages } } add = 5 }
  min = 0
+}
+sed_founding_input_railway_steel = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = steel_railway_cars } } add = 5 } }
+ }
 }
 sed_input_railway_wood = {
  value = 0
  if = { limit = { b:building_railway = { has_active_production_method = pm_wooden_passenger_carriages } } add = 8 }
  min = 0
 }
+sed_founding_input_railway_wood = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 8 } }
+ }
+}
 sed_input_construction_sector_copper = {
  value = 0
  if = { limit = { b:building_construction_sector = { has_active_production_method = pm_arc_welded_buildings } } add = 10 }
  min = 0
 }
+sed_founding_input_construction_sector_copper = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = arc_welding } } add = 10 } }
+ }
+}
 sed_input_construction_sector_electricity = {
  value = 0
  if = { limit = { b:building_construction_sector = { has_active_production_method = pm_arc_welded_buildings } } add = 40 }
  min = 0
+}
+sed_founding_input_construction_sector_electricity = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = arc_welding } } add = 40 } }
+ }
 }
 sed_input_construction_sector_explosives = {
  value = 0
@@ -181,11 +353,25 @@ sed_input_construction_sector_explosives = {
  if = { limit = { b:building_construction_sector = { has_active_production_method = pm_steel_frame_buildings } } add = 10 }
  min = 0
 }
+sed_founding_input_construction_sector_explosives = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = steel_frame_buildings } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = arc_welding } } add = 20 } }
+ }
+}
 sed_input_construction_sector_fabric = {
  value = 0
  if = { limit = { b:building_construction_sector = { has_active_production_method = pm_iron_frame_buildings } } add = 20 }
  if = { limit = { b:building_construction_sector = { has_active_production_method = pm_wooden_buildings } } add = 25 }
  min = 0
+}
+sed_founding_input_construction_sector_fabric = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 25 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = urban_planning } } add = 20 } }
+ }
 }
 sed_input_construction_sector_glass = {
  value = 0
@@ -193,16 +379,36 @@ sed_input_construction_sector_glass = {
  if = { limit = { b:building_construction_sector = { has_active_production_method = pm_steel_frame_buildings } } add = 40 }
  min = 0
 }
+sed_founding_input_construction_sector_glass = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = steel_frame_buildings } } add = 40 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = arc_welding } } add = 40 } }
+ }
+}
 sed_input_construction_sector_iron = {
  value = 0
  if = { limit = { b:building_construction_sector = { has_active_production_method = pm_iron_frame_buildings } } add = 50 }
  min = 0
+}
+sed_founding_input_construction_sector_iron = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = urban_planning } } add = 50 } }
+ }
 }
 sed_input_construction_sector_steel = {
  value = 0
  if = { limit = { b:building_construction_sector = { has_active_production_method = pm_arc_welded_buildings } } add = 50 }
  if = { limit = { b:building_construction_sector = { has_active_production_method = pm_steel_frame_buildings } } add = 50 }
  min = 0
+}
+sed_founding_input_construction_sector_steel = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = steel_frame_buildings } } add = 50 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = arc_welding } } add = 50 } }
+ }
 }
 sed_input_construction_sector_tools = {
  value = 0
@@ -211,21 +417,56 @@ sed_input_construction_sector_tools = {
  if = { limit = { b:building_construction_sector = { has_active_production_method = pm_steel_frame_buildings } } add = 20 }
  min = 0
 }
+sed_founding_input_construction_sector_tools = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = urban_planning } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = steel_frame_buildings } } add = 20 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = arc_welding } } add = 30 } }
+ }
+}
 sed_input_construction_sector_wood = {
  value = 0
  if = { limit = { b:building_construction_sector = { has_active_production_method = pm_iron_frame_buildings } } add = 40 }
  if = { limit = { b:building_construction_sector = { has_active_production_method = pm_wooden_buildings } } add = 75 }
  min = 0
 }
+sed_founding_input_construction_sector_wood = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 75 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = urban_planning } } add = 40 } }
+ }
+}
 sed_input_logging_camp_coal = {
  value = 0
  if = { limit = { b:building_logging_camp = { has_active_production_method = pm_steam_donkey_building_logging_camp } } add = 4 }
  min = 0
 }
+sed_founding_input_logging_camp_coal = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = steam_donkey } } add = 4 } }
+ }
+ add = { value = 0
+ }
+}
 sed_input_logging_camp_electricity = {
  value = 0
  if = { limit = { b:building_logging_camp = { has_active_production_method = pm_electric_saw_mills } } add = 5 }
  min = 0
+}
+sed_founding_input_logging_camp_electricity = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = electrical_generation } } add = 5 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
 }
 sed_input_logging_camp_engines = {
  value = 0
@@ -233,10 +474,31 @@ sed_input_logging_camp_engines = {
  if = { limit = { b:building_logging_camp = { has_active_production_method = pm_steam_donkey_building_logging_camp } } add = 1 }
  min = 0
 }
+sed_founding_input_logging_camp_engines = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = steam_donkey } } add = 1 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = combustion_engine } } add = 1 } }
+ }
+ add = { value = 0
+ }
+}
 sed_input_logging_camp_oil = {
  value = 0
  if = { limit = { b:building_logging_camp = { has_active_production_method = pm_chainsaws } } add = 4 }
  min = 0
+}
+sed_founding_input_logging_camp_oil = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = combustion_engine } } add = 4 } }
+ }
+ add = { value = 0
+ }
 }
 sed_input_logging_camp_tools = {
  value = 0
@@ -244,11 +506,33 @@ sed_input_logging_camp_tools = {
  if = { limit = { b:building_logging_camp = { has_active_production_method = pm_saw_mills } } add = 5 }
  min = 0
 }
+sed_founding_input_logging_camp_tools = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = steelworking } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = electrical_generation } } add = 10 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+}
 sed_input_logging_camp_transportation = {
  value = 0
  if = { limit = { b:building_logging_camp = { has_active_production_method = pm_log_carts } } add = 8 }
  if = { limit = { b:building_logging_camp = { has_active_production_method = pm_rail_transport_building_logging_camp } } add = 5 }
  min = 0
+}
+sed_founding_input_logging_camp_transportation = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = railways } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = electric_railway } } add = 8 } }
+ }
 }
 sed_input_iron_mine_coal = {
  value = 0
@@ -257,10 +541,36 @@ sed_input_iron_mine_coal = {
  if = { limit = { b:building_iron_mine = { has_active_production_method = pm_steam_donkey_mine } } add = 4 }
  min = 0
 }
+sed_founding_input_iron_mine_coal = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = atmospheric_engine } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = watertube_boiler } } add = 15 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = steam_donkey } } add = 4 } }
+ }
+ add = { value = 0
+ }
+}
 sed_input_iron_mine_engines = {
  value = 0
  if = { limit = { b:building_iron_mine = { has_active_production_method = pm_steam_donkey_mine } } add = 1 }
  min = 0
+}
+sed_founding_input_iron_mine_engines = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = steam_donkey } } add = 1 } }
+ }
+ add = { value = 0
+ }
 }
 sed_input_iron_mine_explosives = {
  value = 0
@@ -268,10 +578,35 @@ sed_input_iron_mine_explosives = {
  if = { limit = { b:building_iron_mine = { has_active_production_method = pm_nitroglycerin_building_iron_mine } } add = 5 }
  min = 0
 }
+sed_founding_input_iron_mine_explosives = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = nitroglycerin } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = dynamite } } add = 10 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+}
 sed_input_iron_mine_oil = {
  value = 0
  if = { limit = { b:building_iron_mine = { has_active_production_method = pm_diesel_pump_building_iron_mine } } add = 5 }
  min = 0
+}
+sed_founding_input_iron_mine_oil = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = compression_ignition } } add = 5 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
 }
 sed_input_iron_mine_tools = {
  value = 0
@@ -281,15 +616,54 @@ sed_input_iron_mine_tools = {
  if = { limit = { b:building_iron_mine = { has_active_production_method = pm_picks_and_shovels_building_iron_mine } } add = 5 }
  min = 0
 }
+sed_founding_input_iron_mine_tools = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = atmospheric_engine } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = watertube_boiler } } add = 15 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = compression_ignition } } add = 15 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+}
 sed_input_iron_mine_transportation = {
  value = 0
  if = { limit = { b:building_iron_mine = { has_active_production_method = pm_rail_transport_mine } } add = 5 }
  min = 0
 }
+sed_founding_input_iron_mine_transportation = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = railways } } add = 5 } }
+ }
+}
 sed_input_coal_mine_engines = {
  value = 0
  if = { limit = { b:building_coal_mine = { has_active_production_method = pm_steam_donkey_building_coal_mine } } add = 1 }
  min = 0
+}
+sed_founding_input_coal_mine_engines = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = steam_donkey } } add = 1 } }
+ }
+ add = { value = 0
+ }
 }
 sed_input_coal_mine_explosives = {
  value = 0
@@ -297,10 +671,35 @@ sed_input_coal_mine_explosives = {
  if = { limit = { b:building_coal_mine = { has_active_production_method = pm_nitroglycerin_building_coal_mine } } add = 5 }
  min = 0
 }
+sed_founding_input_coal_mine_explosives = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = nitroglycerin } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = dynamite } } add = 10 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+}
 sed_input_coal_mine_oil = {
  value = 0
  if = { limit = { b:building_coal_mine = { has_active_production_method = pm_diesel_pump_building_coal_mine } } add = 5 }
  min = 0
+}
+sed_founding_input_coal_mine_oil = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = compression_ignition } } add = 5 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
 }
 sed_input_coal_mine_tools = {
  value = 0
@@ -310,10 +709,37 @@ sed_input_coal_mine_tools = {
  if = { limit = { b:building_coal_mine = { has_active_production_method = pm_picks_and_shovels_building_coal_mine } } add = 5 }
  min = 0
 }
+sed_founding_input_coal_mine_tools = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = atmospheric_engine } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = watertube_boiler } } add = 15 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = compression_ignition } } add = 15 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+}
 sed_input_coal_mine_transportation = {
  value = 0
  if = { limit = { b:building_coal_mine = { has_active_production_method = pm_rail_transport_mine } } add = 5 }
  min = 0
+}
+sed_founding_input_coal_mine_transportation = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = railways } } add = 5 } }
+ }
 }
 sed_input_wheat_farm_coal = {
  value = 0
@@ -321,11 +747,29 @@ sed_input_wheat_farm_coal = {
  if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_tractors } } add = 2 }
  min = 0
 }
+sed_founding_input_wheat_farm_coal = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = threshing_machine } } add = 1 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanized_farming } } add = 2 } }
+ }
+}
 sed_input_wheat_farm_engines = {
  value = 0
  if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_compression_ignition_tractors } } add = 1 }
  if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_tractors } } add = 1 }
  min = 0
+}
+sed_founding_input_wheat_farm_engines = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanized_farming } } add = 1 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = compression_ignition } } add = 1 } }
+ }
 }
 sed_input_wheat_farm_fertilizer = {
  value = 0
@@ -334,15 +778,41 @@ sed_input_wheat_farm_fertilizer = {
  if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_soil_enriching_farming } } add = 5 }
  min = 0
 }
+sed_founding_input_wheat_farm_fertilizer = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = intensive_agriculture } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = improved_fertilizer } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = nitrogen_fixation } } add = 15 } }
+ }
+ add = { value = 0
+ }
+}
 sed_input_wheat_farm_fish = {
  value = 0
  if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_herring_meal_farming } } add = 5 }
  min = 0
 }
+sed_founding_input_wheat_farm_fish = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 5 } }
+ }
+ add = { value = 0
+ }
+}
 sed_input_wheat_farm_oil = {
  value = 0
  if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_compression_ignition_tractors } } add = 2 }
  min = 0
+}
+sed_founding_input_wheat_farm_oil = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = compression_ignition } } add = 2 } }
+ }
 }
 sed_input_wheat_farm_tools = {
  value = 0
@@ -350,17 +820,44 @@ sed_input_wheat_farm_tools = {
  if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_tools } } add = 2 }
  min = 0
 }
+sed_founding_input_wheat_farm_tools = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 2 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = threshing_machine } } add = 2 } }
+ }
+}
 sed_input_rye_farm_coal = {
  value = 0
  if = { limit = { b:building_rye_farm = { has_active_production_method = pm_steam_threshers } } add = 1 }
  if = { limit = { b:building_rye_farm = { has_active_production_method = pm_tractors } } add = 2 }
  min = 0
 }
+sed_founding_input_rye_farm_coal = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = threshing_machine } } add = 1 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanized_farming } } add = 2 } }
+ }
+}
 sed_input_rye_farm_engines = {
  value = 0
  if = { limit = { b:building_rye_farm = { has_active_production_method = pm_compression_ignition_tractors } } add = 1 }
  if = { limit = { b:building_rye_farm = { has_active_production_method = pm_tractors } } add = 1 }
  min = 0
+}
+sed_founding_input_rye_farm_engines = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanized_farming } } add = 1 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = compression_ignition } } add = 1 } }
+ }
 }
 sed_input_rye_farm_fertilizer = {
  value = 0
@@ -369,10 +866,28 @@ sed_input_rye_farm_fertilizer = {
  if = { limit = { b:building_rye_farm = { has_active_production_method = pm_soil_enriching_farming } } add = 5 }
  min = 0
 }
+sed_founding_input_rye_farm_fertilizer = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = intensive_agriculture } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = improved_fertilizer } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = nitrogen_fixation } } add = 15 } }
+ }
+ add = { value = 0
+ }
+}
 sed_input_rye_farm_oil = {
  value = 0
  if = { limit = { b:building_rye_farm = { has_active_production_method = pm_compression_ignition_tractors } } add = 2 }
  min = 0
+}
+sed_founding_input_rye_farm_oil = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = compression_ignition } } add = 2 } }
+ }
 }
 sed_input_rye_farm_tools = {
  value = 0
@@ -380,10 +895,27 @@ sed_input_rye_farm_tools = {
  if = { limit = { b:building_rye_farm = { has_active_production_method = pm_tools } } add = 2 }
  min = 0
 }
+sed_founding_input_rye_farm_tools = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 2 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = threshing_machine } } add = 2 } }
+ }
+}
 sed_input_rice_farm_coal = {
  value = 0
  if = { limit = { b:building_rice_farm = { has_active_production_method = pm_steam_threshers_building_rice_farm } } add = 2 }
  min = 0
+}
+sed_founding_input_rice_farm_coal = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = threshing_machine } } add = 2 } }
+ }
 }
 sed_input_rice_farm_fertilizer = {
  value = 0
@@ -392,10 +924,28 @@ sed_input_rice_farm_fertilizer = {
  if = { limit = { b:building_rice_farm = { has_active_production_method = pm_soil_enriching_farming_building_rice_farm } } add = 10 }
  min = 0
 }
+sed_founding_input_rice_farm_fertilizer = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = intensive_agriculture } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = improved_fertilizer } } add = 20 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = nitrogen_fixation } } add = 30 } }
+ }
+ add = { value = 0
+ }
+}
 sed_input_rice_farm_fish = {
  value = 0
  if = { limit = { b:building_rice_farm = { has_active_production_method = pm_herring_meal_farming_building_rice_farm } } add = 10 }
  min = 0
+}
+sed_founding_input_rice_farm_fish = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 10 } }
+ }
+ add = { value = 0
+ }
 }
 sed_input_rice_farm_tools = {
  value = 0
@@ -403,17 +953,44 @@ sed_input_rice_farm_tools = {
  if = { limit = { b:building_rice_farm = { has_active_production_method = pm_tools_building_rice_farm } } add = 4 }
  min = 0
 }
+sed_founding_input_rice_farm_tools = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 4 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = threshing_machine } } add = 4 } }
+ }
+}
 sed_input_maize_farm_coal = {
  value = 0
  if = { limit = { b:building_maize_farm = { has_active_production_method = pm_steam_threshers } } add = 1 }
  if = { limit = { b:building_maize_farm = { has_active_production_method = pm_tractors } } add = 2 }
  min = 0
 }
+sed_founding_input_maize_farm_coal = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = threshing_machine } } add = 1 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanized_farming } } add = 2 } }
+ }
+}
 sed_input_maize_farm_engines = {
  value = 0
  if = { limit = { b:building_maize_farm = { has_active_production_method = pm_compression_ignition_tractors } } add = 1 }
  if = { limit = { b:building_maize_farm = { has_active_production_method = pm_tractors } } add = 1 }
  min = 0
+}
+sed_founding_input_maize_farm_engines = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanized_farming } } add = 1 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = compression_ignition } } add = 1 } }
+ }
 }
 sed_input_maize_farm_fertilizer = {
  value = 0
@@ -422,10 +999,28 @@ sed_input_maize_farm_fertilizer = {
  if = { limit = { b:building_maize_farm = { has_active_production_method = pm_soil_enriching_farming } } add = 5 }
  min = 0
 }
+sed_founding_input_maize_farm_fertilizer = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = intensive_agriculture } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = improved_fertilizer } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = nitrogen_fixation } } add = 15 } }
+ }
+ add = { value = 0
+ }
+}
 sed_input_maize_farm_oil = {
  value = 0
  if = { limit = { b:building_maize_farm = { has_active_production_method = pm_compression_ignition_tractors } } add = 2 }
  min = 0
+}
+sed_founding_input_maize_farm_oil = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = compression_ignition } } add = 2 } }
+ }
 }
 sed_input_maize_farm_tools = {
  value = 0
@@ -433,17 +1028,44 @@ sed_input_maize_farm_tools = {
  if = { limit = { b:building_maize_farm = { has_active_production_method = pm_tools } } add = 2 }
  min = 0
 }
+sed_founding_input_maize_farm_tools = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 2 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = threshing_machine } } add = 2 } }
+ }
+}
 sed_input_millet_farm_coal = {
  value = 0
  if = { limit = { b:building_millet_farm = { has_active_production_method = pm_steam_threshers } } add = 1 }
  if = { limit = { b:building_millet_farm = { has_active_production_method = pm_tractors } } add = 2 }
  min = 0
 }
+sed_founding_input_millet_farm_coal = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = threshing_machine } } add = 1 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanized_farming } } add = 2 } }
+ }
+}
 sed_input_millet_farm_engines = {
  value = 0
  if = { limit = { b:building_millet_farm = { has_active_production_method = pm_compression_ignition_tractors } } add = 1 }
  if = { limit = { b:building_millet_farm = { has_active_production_method = pm_tractors } } add = 1 }
  min = 0
+}
+sed_founding_input_millet_farm_engines = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanized_farming } } add = 1 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = compression_ignition } } add = 1 } }
+ }
 }
 sed_input_millet_farm_fertilizer = {
  value = 0
@@ -452,10 +1074,28 @@ sed_input_millet_farm_fertilizer = {
  if = { limit = { b:building_millet_farm = { has_active_production_method = pm_soil_enriching_farming } } add = 5 }
  min = 0
 }
+sed_founding_input_millet_farm_fertilizer = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = intensive_agriculture } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = improved_fertilizer } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = nitrogen_fixation } } add = 15 } }
+ }
+ add = { value = 0
+ }
+}
 sed_input_millet_farm_oil = {
  value = 0
  if = { limit = { b:building_millet_farm = { has_active_production_method = pm_compression_ignition_tractors } } add = 2 }
  min = 0
+}
+sed_founding_input_millet_farm_oil = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = compression_ignition } } add = 2 } }
+ }
 }
 sed_input_millet_farm_tools = {
  value = 0
@@ -463,20 +1103,57 @@ sed_input_millet_farm_tools = {
  if = { limit = { b:building_millet_farm = { has_active_production_method = pm_tools } } add = 2 }
  min = 0
 }
+sed_founding_input_millet_farm_tools = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 2 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = threshing_machine } } add = 2 } }
+ }
+}
 sed_input_cotton_plantation_engines = {
  value = 0
  if = { limit = { b:building_cotton_plantation = { has_active_production_method = automatic_irrigation_building_cotton_plantation } } add = 5 }
  min = 0
+}
+sed_founding_input_cotton_plantation_engines = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = pumpjacks } } add = 5 } }
+ }
+ add = { value = 0
+ }
 }
 sed_input_cotton_plantation_transportation = {
  value = 0
  if = { limit = { b:building_cotton_plantation = { has_active_production_method = pm_steam_rail_transport } } add = 5 }
  min = 0
 }
+sed_founding_input_cotton_plantation_transportation = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = railways } } add = 5 } }
+ }
+}
 sed_input_livestock_ranch_coal = {
  value = 0
  if = { limit = { b:building_livestock_ranch = { has_active_production_method = pm_mechanized_slaughtering } } add = 5 }
  min = 0
+}
+sed_founding_input_livestock_ranch_coal = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanized_farming } } add = 5 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
 }
 sed_input_livestock_ranch_electricity = {
  value = 0
@@ -485,17 +1162,57 @@ sed_input_livestock_ranch_electricity = {
  if = { limit = { b:building_livestock_ranch = { has_active_production_method = pm_refrigerated_storage_building_livestock_ranch } } add = 1 }
  min = 0
 }
+sed_founding_input_livestock_ranch_electricity = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = electrical_generation } } add = 1 } }
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = pasteurization } } add = 1 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = electric_railway } } add = 1 } }
+ }
+}
 sed_input_livestock_ranch_grain = {
  value = 0
  if = { limit = { b:building_livestock_ranch = { has_active_production_method = pm_intensive_grazing_ranch } } add = 15 }
  if = { limit = { b:building_livestock_ranch = { has_active_production_method = pm_sheep_farms } } add = 10 }
  min = 0
 }
+sed_founding_input_livestock_ranch_grain = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = intensive_agriculture } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanized_farming } } add = 15 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+}
 sed_input_livestock_ranch_iron = {
  value = 0
  if = { limit = { b:building_livestock_ranch = { has_active_production_method = pm_barbed_wire_fences } } add = 1 }
  if = { limit = { b:building_livestock_ranch = { has_active_production_method = pm_electric_fencing } } add = 1 }
  min = 0
+}
+sed_founding_input_livestock_ranch_iron = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = field_works } } add = 1 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = electrical_generation } } add = 1 } }
+ }
+ add = { value = 0
+ }
 }
 sed_input_livestock_ranch_tools = {
  value = 0
@@ -504,10 +1221,36 @@ sed_input_livestock_ranch_tools = {
  if = { limit = { b:building_livestock_ranch = { has_active_production_method = pm_slaughterhouses } } add = 5 }
  min = 0
 }
+sed_founding_input_livestock_ranch_tools = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 2 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanical_tools } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanized_farming } } add = 5 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+}
 sed_input_livestock_ranch_transportation = {
  value = 0
  if = { limit = { b:building_livestock_ranch = { has_active_production_method = pm_refrigerated_rail_cars_building_livestock_ranch } } add = 1 }
  min = 0
+}
+sed_founding_input_livestock_ranch_transportation = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = electric_railway } } add = 1 } }
+ }
 }
 sed_input_tooling_workshop_coal = {
  value = 0
@@ -515,36 +1258,94 @@ sed_input_tooling_workshop_coal = {
  if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_watertube_boiler_building_tooling_workshop } } add = 10 }
  min = 0
 }
+sed_founding_input_tooling_workshop_coal = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = watertube_boiler } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = rotary_valve_engine } } add = 15 } }
+ }
+}
 sed_input_tooling_workshop_copper = {
  value = 0
  if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_assembly_lines_building_tooling_workshop } } add = 1 }
  min = 0
+}
+sed_founding_input_tooling_workshop_copper = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = conveyors } } add = 1 } }
+ }
 }
 sed_input_tooling_workshop_electricity = {
  value = 0
  if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_assembly_lines_building_tooling_workshop } } add = 5 }
  min = 0
 }
+sed_founding_input_tooling_workshop_electricity = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = conveyors } } add = 5 } }
+ }
+}
 sed_input_tooling_workshop_iron = {
  value = 0
  if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_pig_iron } } add = 20 }
  min = 0
+}
+sed_founding_input_tooling_workshop_iron = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = steelworking } } add = 20 } }
+ }
+ add = { value = 0
+ }
 }
 sed_input_tooling_workshop_oil = {
  value = 0
  if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_assembly_lines_building_tooling_workshop } } add = 9 }
  min = 0
 }
+sed_founding_input_tooling_workshop_oil = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = conveyors } } add = 9 } }
+ }
+}
 sed_input_tooling_workshop_rubber = {
  value = 0
  if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_rubber_grips } } add = 10 }
  min = 0
+}
+sed_founding_input_tooling_workshop_rubber = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = vulcanization } } add = 10 } }
+ }
+ add = { value = 0
+ }
 }
 sed_input_tooling_workshop_steel = {
  value = 0
  if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_rubber_grips } } add = 30 }
  if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_steel } } add = 20 }
  min = 0
+}
+sed_founding_input_tooling_workshop_steel = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanical_tools } } add = 20 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = vulcanization } } add = 30 } }
+ }
+ add = { value = 0
+ }
 }
 sed_input_tooling_workshop_wood = {
  value = 0
@@ -553,6 +1354,16 @@ sed_input_tooling_workshop_wood = {
  if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_steel } } add = 30 }
  min = 0
 }
+sed_founding_input_tooling_workshop_wood = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 30 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = steelworking } } add = 30 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanical_tools } } add = 30 } }
+ }
+ add = { value = 0
+ }
+}
 sed_input_food_industry_copper = {
  value = 0
  if = { limit = { b:building_food_industry = { has_active_production_method = pm_automated_bakery } } add = 1 }
@@ -560,10 +1371,36 @@ sed_input_food_industry_copper = {
  if = { limit = { b:building_food_industry = { has_active_production_method = pm_pot_stills } } add = 2 }
  min = 0
 }
+sed_founding_input_food_industry_copper = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = distillation } } add = 2 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = fractional_distillation } } add = 4 } }
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = dough_rollers } } add = 1 } }
+ }
+}
 sed_input_food_industry_electricity = {
  value = 0
  if = { limit = { b:building_food_industry = { has_active_production_method = pm_automated_bakery } } add = 5 }
  min = 0
+}
+sed_founding_input_food_industry_electricity = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = dough_rollers } } add = 5 } }
+ }
 }
 sed_input_food_industry_fish = {
  value = 0
@@ -572,11 +1409,38 @@ sed_input_food_industry_fish = {
  if = { limit = { b:building_food_industry = { has_active_production_method = pm_vacuum_canning_principle_3 } } add = 30 }
  min = 0
 }
+sed_founding_input_food_industry_fish = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = canneries } } add = 30 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = vacuum_canning } } add = 30 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = vacuum_canning } } add = 30 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+}
 sed_input_food_industry_glass = {
  value = 0
  if = { limit = { b:building_food_industry = { has_active_production_method = pm_patent_stills } } add = 6 }
  if = { limit = { b:building_food_industry = { has_active_production_method = pm_pot_stills } } add = 3 }
  min = 0
+}
+sed_founding_input_food_industry_glass = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = distillation } } add = 3 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = fractional_distillation } } add = 6 } }
+ }
+ add = { value = 0
+ }
 }
 sed_input_food_industry_grain = {
  value = 0
@@ -589,6 +1453,20 @@ sed_input_food_industry_grain = {
  if = { limit = { b:building_food_industry = { has_active_production_method = pm_vacuum_canning_principle_3 } } add = -30 }
  min = 0
 }
+sed_founding_input_food_industry_grain = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 40 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = distillation } } add = 40 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = baking_powder } } add = 80 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+}
 sed_input_food_industry_iron = {
  value = 0
  if = { limit = { b:building_food_industry = { has_active_production_method = pm_cannery } } add = 10 }
@@ -597,6 +1475,21 @@ sed_input_food_industry_iron = {
  if = { limit = { b:building_food_industry = { has_active_production_method = pm_vacuum_canning_principle_3 } } add = 10 }
  min = 0
 }
+sed_founding_input_food_industry_iron = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = canneries } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = canneries } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = vacuum_canning } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = vacuum_canning } } add = 10 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+}
 sed_input_food_industry_meat = {
  value = 0
  if = { limit = { b:building_food_industry = { has_active_production_method = pm_cannery } } add = 20 }
@@ -604,11 +1497,38 @@ sed_input_food_industry_meat = {
  if = { limit = { b:building_food_industry = { has_active_production_method = pm_vacuum_canning_principle_3 } } add = 20 }
  min = 0
 }
+sed_founding_input_food_industry_meat = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = canneries } } add = 20 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = vacuum_canning } } add = 20 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = vacuum_canning } } add = 20 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+}
 sed_input_food_industry_oil = {
  value = 0
  if = { limit = { b:building_food_industry = { has_active_production_method = pm_vacuum_canning } } add = 5 }
  if = { limit = { b:building_food_industry = { has_active_production_method = pm_vacuum_canning_principle_3 } } add = 5 }
  min = 0
+}
+sed_founding_input_food_industry_oil = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = vacuum_canning } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = vacuum_canning } } add = 5 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
 }
 sed_input_food_industry_sugar = {
  value = 0
@@ -618,16 +1538,54 @@ sed_input_food_industry_sugar = {
  if = { limit = { b:building_food_industry = { has_active_production_method = pm_sweeteners } } add = 15 }
  min = 0
 }
+sed_founding_input_food_industry_sugar = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = distillation } } add = 15 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = baking_powder } } add = 30 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = distillation } } add = 25 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = fractional_distillation } } add = 25 } }
+ }
+ add = { value = 0
+ }
+}
 sed_input_food_industry_tools = {
  value = 0
  if = { limit = { b:building_food_industry = { has_active_production_method = pm_automated_bakery } } add = 2 }
  min = 0
+}
+sed_founding_input_food_industry_tools = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = dough_rollers } } add = 2 } }
+ }
 }
 sed_input_textile_mill_copper = {
  value = 0
  if = { limit = { b:building_textile_mill = { has_active_production_method = pm_automatic_power_looms } } add = 2 }
  if = { limit = { b:building_textile_mill = { has_active_production_method = pm_electric_sewing_machines } } add = 2 }
  min = 0
+}
+sed_founding_input_textile_mill_copper = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = electrical_capacitors } } add = 2 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = electrical_capacitors } } add = 2 } }
+ }
 }
 sed_input_textile_mill_dye = {
  value = 0
@@ -636,11 +1594,34 @@ sed_input_textile_mill_dye = {
  if = { limit = { b:building_textile_mill = { has_active_production_method = pm_sewing_machines } } add = 10 }
  min = 0
 }
+sed_founding_input_textile_mill_dye = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = lathe } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanized_workshops } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = electrical_capacitors } } add = 20 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+}
 sed_input_textile_mill_electricity = {
  value = 0
  if = { limit = { b:building_textile_mill = { has_active_production_method = pm_automatic_power_looms } } add = 10 }
  if = { limit = { b:building_textile_mill = { has_active_production_method = pm_electric_sewing_machines } } add = 10 }
  min = 0
+}
+sed_founding_input_textile_mill_electricity = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = electrical_capacitors } } add = 10 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = electrical_capacitors } } add = 10 } }
+ }
 }
 sed_input_textile_mill_fabric = {
  value = 0
@@ -652,16 +1633,50 @@ sed_input_textile_mill_fabric = {
  if = { limit = { b:building_textile_mill = { has_active_production_method = pm_sewing_machines } } add = 60 }
  min = 0
 }
+sed_founding_input_textile_mill_fabric = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 40 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = lathe } } add = 40 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanized_workshops } } add = 60 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = electrical_capacitors } } add = 60 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ }
+}
 sed_input_textile_mill_rubber = {
  value = 0
  if = { limit = { b:building_textile_mill = { has_active_production_method = pm_elastics } } add = 10 }
  min = 0
+}
+sed_founding_input_textile_mill_rubber = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = vulcanization } } add = 10 } }
+ }
+ add = { value = 0
+ }
 }
 sed_input_textile_mill_silk = {
  value = 0
  if = { limit = { b:building_textile_mill = { has_active_production_method = pm_craftsman_sewing } } add = 15 }
  if = { limit = { b:building_textile_mill = { has_active_production_method = pm_elastics } } add = 35 }
  min = 0
+}
+sed_founding_input_textile_mill_silk = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 15 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = vulcanization } } add = 35 } }
+ }
+ add = { value = 0
+ }
 }
 sed_input_textile_mill_tools = {
  value = 0
@@ -671,20 +1686,57 @@ sed_input_textile_mill_tools = {
  if = { limit = { b:building_textile_mill = { has_active_production_method = pm_sewing_machines } } add = 5 }
  min = 0
 }
+sed_founding_input_textile_mill_tools = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanized_workshops } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = electrical_capacitors } } add = 8 } }
+ }
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanized_workshops } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = electrical_capacitors } } add = 3 } }
+ }
+}
 sed_input_arms_industry_coal = {
  value = 0
  if = { limit = { b:building_arms_industry = { has_active_production_method = pm_rotary_valve_engine_building_arms_industry } } add = 10 }
  min = 0
+}
+sed_founding_input_arms_industry_coal = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = rotary_valve_engine } } add = 10 } }
+ }
 }
 sed_input_arms_industry_copper = {
  value = 0
  if = { limit = { b:building_arms_industry = { has_active_production_method = pm_assembly_lines_building_arms_industry } } add = 1 }
  min = 0
 }
+sed_founding_input_arms_industry_copper = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = conveyors } } add = 1 } }
+ }
+}
 sed_input_arms_industry_electricity = {
  value = 0
  if = { limit = { b:building_arms_industry = { has_active_production_method = pm_assembly_lines_building_arms_industry } } add = 5 }
  min = 0
+}
+sed_founding_input_arms_industry_electricity = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = conveyors } } add = 5 } }
+ }
 }
 sed_input_arms_industry_hardwood = {
  value = 0
@@ -694,10 +1746,29 @@ sed_input_arms_industry_hardwood = {
  if = { limit = { b:building_arms_industry = { has_active_production_method = pm_rifles } } add = 10 }
  min = 0
 }
+sed_founding_input_arms_industry_hardwood = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = rifling } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = repeaters } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = bolt_action_rifles } } add = 10 } }
+ }
+ add = { value = 0
+ }
+}
 sed_input_arms_industry_iron = {
  value = 0
  if = { limit = { b:building_arms_industry = { has_active_production_method = pm_muskets } } add = 10 }
  min = 0
+}
+sed_founding_input_arms_industry_iron = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 10 } }
+ }
+ add = { value = 0
+ }
 }
 sed_input_arms_industry_oil = {
  value = 0
@@ -705,12 +1776,31 @@ sed_input_arms_industry_oil = {
  if = { limit = { b:building_arms_industry = { has_active_production_method = pm_bolt_action_rifles } } add = 10 }
  min = 0
 }
+sed_founding_input_arms_industry_oil = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = bolt_action_rifles } } add = 10 } }
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = conveyors } } add = 5 } }
+ }
+}
 sed_input_arms_industry_steel = {
  value = 0
  if = { limit = { b:building_arms_industry = { has_active_production_method = pm_bolt_action_rifles } } add = 20 }
  if = { limit = { b:building_arms_industry = { has_active_production_method = pm_repeaters } } add = 20 }
  if = { limit = { b:building_arms_industry = { has_active_production_method = pm_rifles } } add = 10 }
  min = 0
+}
+sed_founding_input_arms_industry_steel = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = rifling } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = repeaters } } add = 20 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = bolt_action_rifles } } add = 20 } }
+ }
+ add = { value = 0
+ }
 }
 sed_input_arms_industry_tools = {
  value = 0
@@ -721,10 +1811,30 @@ sed_input_arms_industry_tools = {
  if = { limit = { b:building_arms_industry = { has_active_production_method = pm_rotary_valve_engine_building_arms_industry } } add = 4 }
  min = 0
 }
+sed_founding_input_arms_industry_tools = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = rifling } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = repeaters } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = bolt_action_rifles } } add = 20 } }
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = rotary_valve_engine } } add = 4 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = conveyors } } add = 4 } }
+ }
+}
 sed_input_artillery_foundry_coal = {
  value = 0
  if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_rotary_valve_engine_building_arms_industry } } add = 10 }
  min = 0
+}
+sed_founding_input_artillery_foundry_coal = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = rotary_valve_engine } } add = 10 } }
+ }
 }
 sed_input_artillery_foundry_copper = {
  value = 0
@@ -733,10 +1843,28 @@ sed_input_artillery_foundry_copper = {
  if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_bronze_smoothbores } } add = 20 }
  min = 0
 }
+sed_founding_input_artillery_foundry_copper = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = artillery } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = shell_gun } } add = 20 } }
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = conveyors } } add = 1 } }
+ }
+}
 sed_input_artillery_foundry_electricity = {
  value = 0
  if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_assembly_lines_building_arms_industry } } add = 5 }
  min = 0
+}
+sed_founding_input_artillery_foundry_electricity = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = conveyors } } add = 5 } }
+ }
 }
 sed_input_artillery_foundry_hardwood = {
  value = 0
@@ -747,11 +1875,32 @@ sed_input_artillery_foundry_hardwood = {
  if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_smoothbores } } add = 15 }
  min = 0
 }
+sed_founding_input_artillery_foundry_hardwood = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = artillery } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = artillery } } add = 15 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = shell_gun } } add = 15 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = shell_gun } } add = 20 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = breech_loading_artillery } } add = 10 } }
+ }
+ add = { value = 0
+ }
+}
 sed_input_artillery_foundry_iron = {
  value = 0
  if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_cannons } } add = 15 }
  if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_smoothbores } } add = 25 }
  min = 0
+}
+sed_founding_input_artillery_foundry_iron = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = artillery } } add = 15 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = shell_gun } } add = 25 } }
+ }
+ add = { value = 0
+ }
 }
 sed_input_artillery_foundry_oil = {
  value = 0
@@ -759,11 +1908,29 @@ sed_input_artillery_foundry_oil = {
  if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_recoiled_barrels } } add = 10 }
  min = 0
 }
+sed_founding_input_artillery_foundry_oil = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = automatic_machine_guns } } add = 10 } }
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = conveyors } } add = 5 } }
+ }
+}
 sed_input_artillery_foundry_steel = {
  value = 0
  if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_breech_loaders } } add = 25 }
  if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_recoiled_barrels } } add = 40 }
  min = 0
+}
+sed_founding_input_artillery_foundry_steel = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = breech_loading_artillery } } add = 25 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = automatic_machine_guns } } add = 40 } }
+ }
+ add = { value = 0
+ }
 }
 sed_input_artillery_foundry_tools = {
  value = 0
@@ -773,10 +1940,29 @@ sed_input_artillery_foundry_tools = {
  if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_rotary_valve_engine_building_arms_industry } } add = 4 }
  min = 0
 }
+sed_founding_input_artillery_foundry_tools = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = breech_loading_artillery } } add = 10 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = automatic_machine_guns } } add = 20 } }
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = rotary_valve_engine } } add = 4 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = conveyors } } add = 4 } }
+ }
+}
 sed_input_munition_plant_coal = {
  value = 0
  if = { limit = { b:building_munition_plant = { has_active_production_method = pm_rotary_valve_engine_building_munition_plant } } add = 10 }
  min = 0
+}
+sed_founding_input_munition_plant_coal = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = rotary_valve_engine } } add = 10 } }
+ }
 }
 sed_input_munition_plant_copper = {
  value = 0
@@ -785,10 +1971,28 @@ sed_input_munition_plant_copper = {
  if = { limit = { b:building_munition_plant = { has_active_production_method = pm_percussion_caps } } add = 5 }
  min = 0
 }
+sed_founding_input_munition_plant_copper = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 5 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = dynamite } } add = 10 } }
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = conveyors } } add = 1 } }
+ }
+}
 sed_input_munition_plant_electricity = {
  value = 0
  if = { limit = { b:building_munition_plant = { has_active_production_method = pm_assembly_lines_building_munition_plant } } add = 5 }
  min = 0
+}
+sed_founding_input_munition_plant_electricity = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = conveyors } } add = 5 } }
+ }
 }
 sed_input_munition_plant_explosives = {
  value = 0
@@ -796,22 +2000,57 @@ sed_input_munition_plant_explosives = {
  if = { limit = { b:building_munition_plant = { has_active_production_method = pm_percussion_caps } } add = 20 }
  min = 0
 }
+sed_founding_input_munition_plant_explosives = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 20 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = dynamite } } add = 40 } }
+ }
+ add = { value = 0
+ }
+}
 sed_input_munition_plant_lead = {
  value = 0
  if = { limit = { b:building_munition_plant = { has_active_production_method = pm_explosive_shells } } add = 20 }
  if = { limit = { b:building_munition_plant = { has_active_production_method = pm_percussion_caps } } add = 15 }
  min = 0
 }
+sed_founding_input_munition_plant_lead = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 15 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = dynamite } } add = 20 } }
+ }
+ add = { value = 0
+ }
+}
 sed_input_munition_plant_oil = {
  value = 0
  if = { limit = { b:building_munition_plant = { has_active_production_method = pm_assembly_lines_building_munition_plant } } add = 5 }
  min = 0
+}
+sed_founding_input_munition_plant_oil = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = conveyors } } add = 5 } }
+ }
 }
 sed_input_munition_plant_tools = {
  value = 0
  if = { limit = { b:building_munition_plant = { has_active_production_method = pm_assembly_lines_building_munition_plant } } add = 4 }
  if = { limit = { b:building_munition_plant = { has_active_production_method = pm_rotary_valve_engine_building_munition_plant } } add = 4 }
  min = 0
+}
+sed_founding_input_munition_plant_tools = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = rotary_valve_engine } } add = 4 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = conveyors } } add = 4 } }
+ }
 }
 sed_input_pending_coal = {
  value = 0
@@ -932,6 +2171,84 @@ sed_input_pending_coal = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_logging_camp }
+  has_variable = sed_wood_request_pending
+  var:sed_wood_intent_level = 0
+var:sed_wood_intent_variant = 1
+ } add = { value = sed_founding_input_logging_camp_coal multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_iron_mine }
+  has_variable = sed_iron_request_pending
+  var:sed_iron_intent_level = 0
+var:sed_iron_intent_variant = 1
+ } add = { value = sed_founding_input_iron_mine_coal multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_wheat_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 1
+ } add = { value = sed_founding_input_wheat_farm_coal multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_rye_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 2
+ } add = { value = sed_founding_input_rye_farm_coal multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_rice_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 3
+ } add = { value = sed_founding_input_rice_farm_coal multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_maize_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 4
+ } add = { value = sed_founding_input_maize_farm_coal multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_millet_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 5
+ } add = { value = sed_founding_input_millet_farm_coal multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_livestock_ranch }
+  has_variable = sed_fabric_request_pending
+  var:sed_fabric_intent_level = 0
+var:sed_fabric_intent_variant = 2
+ } add = { value = sed_founding_input_livestock_ranch_coal multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_tooling_workshop }
+  has_variable = sed_tools_request_pending
+  var:sed_tools_intent_level = 0
+var:sed_tools_intent_variant = 1
+ } add = { value = sed_founding_input_tooling_workshop_coal multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_arms_industry }
+  has_variable = sed_small_arms_request_pending
+  var:sed_small_arms_intent_level = 0
+var:sed_small_arms_intent_variant = 1
+ } add = { value = sed_founding_input_arms_industry_coal multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_artillery_foundry }
+  has_variable = sed_artillery_request_pending
+  var:sed_artillery_intent_level = 0
+var:sed_artillery_intent_variant = 1
+ } add = { value = sed_founding_input_artillery_foundry_coal multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_munition_plant }
+  has_variable = sed_ammunition_request_pending
+  var:sed_ammunition_intent_level = 0
+var:sed_ammunition_intent_variant = 1
+ } add = { value = sed_founding_input_munition_plant_coal multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_railway }
+  has_variable = sed_railway_request_pending
+  var:sed_railway_intent_level = 0
+
+ } add = { value = sed_founding_input_railway_coal multiply = 1.25 } }
 }
 sed_input_country_headroom_coal = {
  value = 0
@@ -1004,6 +2321,42 @@ sed_input_pending_copper = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_tooling_workshop }
+  has_variable = sed_tools_request_pending
+  var:sed_tools_intent_level = 0
+var:sed_tools_intent_variant = 1
+ } add = { value = sed_founding_input_tooling_workshop_copper multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_food_industry }
+  has_variable = sed_groceries_request_pending
+  var:sed_groceries_intent_level = 0
+var:sed_groceries_intent_variant = 1
+ } add = { value = sed_founding_input_food_industry_copper multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_textile_mill }
+  has_variable = sed_clothes_request_pending
+  var:sed_clothes_intent_level = 0
+var:sed_clothes_intent_variant = 1
+ } add = { value = sed_founding_input_textile_mill_copper multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_arms_industry }
+  has_variable = sed_small_arms_request_pending
+  var:sed_small_arms_intent_level = 0
+var:sed_small_arms_intent_variant = 1
+ } add = { value = sed_founding_input_arms_industry_copper multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_artillery_foundry }
+  has_variable = sed_artillery_request_pending
+  var:sed_artillery_intent_level = 0
+var:sed_artillery_intent_variant = 1
+ } add = { value = sed_founding_input_artillery_foundry_copper multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_munition_plant }
+  has_variable = sed_ammunition_request_pending
+  var:sed_ammunition_intent_level = 0
+var:sed_ammunition_intent_variant = 1
+ } add = { value = sed_founding_input_munition_plant_copper multiply = 1.25 } }
 }
 sed_input_country_headroom_copper = {
  value = 0
@@ -1022,6 +2375,12 @@ sed_input_pending_dye = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_textile_mill }
+  has_variable = sed_clothes_request_pending
+  var:sed_clothes_intent_level = 0
+var:sed_clothes_intent_variant = 1
+ } add = { value = sed_founding_input_textile_mill_dye multiply = 1.25 } }
 }
 sed_input_country_headroom_dye = {
  value = 0
@@ -1121,6 +2480,60 @@ sed_input_pending_electricity = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_logging_camp }
+  has_variable = sed_wood_request_pending
+  var:sed_wood_intent_level = 0
+var:sed_wood_intent_variant = 1
+ } add = { value = sed_founding_input_logging_camp_electricity multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_livestock_ranch }
+  has_variable = sed_fabric_request_pending
+  var:sed_fabric_intent_level = 0
+var:sed_fabric_intent_variant = 2
+ } add = { value = sed_founding_input_livestock_ranch_electricity multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_tooling_workshop }
+  has_variable = sed_tools_request_pending
+  var:sed_tools_intent_level = 0
+var:sed_tools_intent_variant = 1
+ } add = { value = sed_founding_input_tooling_workshop_electricity multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_food_industry }
+  has_variable = sed_groceries_request_pending
+  var:sed_groceries_intent_level = 0
+var:sed_groceries_intent_variant = 1
+ } add = { value = sed_founding_input_food_industry_electricity multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_textile_mill }
+  has_variable = sed_clothes_request_pending
+  var:sed_clothes_intent_level = 0
+var:sed_clothes_intent_variant = 1
+ } add = { value = sed_founding_input_textile_mill_electricity multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_arms_industry }
+  has_variable = sed_small_arms_request_pending
+  var:sed_small_arms_intent_level = 0
+var:sed_small_arms_intent_variant = 1
+ } add = { value = sed_founding_input_arms_industry_electricity multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_artillery_foundry }
+  has_variable = sed_artillery_request_pending
+  var:sed_artillery_intent_level = 0
+var:sed_artillery_intent_variant = 1
+ } add = { value = sed_founding_input_artillery_foundry_electricity multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_munition_plant }
+  has_variable = sed_ammunition_request_pending
+  var:sed_ammunition_intent_level = 0
+var:sed_ammunition_intent_variant = 1
+ } add = { value = sed_founding_input_munition_plant_electricity multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_railway }
+  has_variable = sed_railway_request_pending
+  var:sed_railway_intent_level = 0
+
+ } add = { value = sed_founding_input_railway_electricity multiply = 1.25 } }
 }
 sed_input_local_headroom_electricity = {
  value = 0
@@ -1215,6 +2628,60 @@ sed_input_pending_engines = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_logging_camp }
+  has_variable = sed_wood_request_pending
+  var:sed_wood_intent_level = 0
+var:sed_wood_intent_variant = 1
+ } add = { value = sed_founding_input_logging_camp_engines multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_iron_mine }
+  has_variable = sed_iron_request_pending
+  var:sed_iron_intent_level = 0
+var:sed_iron_intent_variant = 1
+ } add = { value = sed_founding_input_iron_mine_engines multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_coal_mine }
+  has_variable = sed_coal_request_pending
+  var:sed_coal_intent_level = 0
+var:sed_coal_intent_variant = 1
+ } add = { value = sed_founding_input_coal_mine_engines multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_wheat_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 1
+ } add = { value = sed_founding_input_wheat_farm_engines multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_rye_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 2
+ } add = { value = sed_founding_input_rye_farm_engines multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_maize_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 4
+ } add = { value = sed_founding_input_maize_farm_engines multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_millet_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 5
+ } add = { value = sed_founding_input_millet_farm_engines multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_cotton_plantation }
+  has_variable = sed_fabric_request_pending
+  var:sed_fabric_intent_level = 0
+var:sed_fabric_intent_variant = 1
+ } add = { value = sed_founding_input_cotton_plantation_engines multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_railway }
+  has_variable = sed_railway_request_pending
+  var:sed_railway_intent_level = 0
+
+ } add = { value = sed_founding_input_railway_engines multiply = 1.25 } }
 }
 sed_input_country_headroom_engines = {
  value = 0
@@ -1260,6 +2727,24 @@ sed_input_pending_explosives = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_iron_mine }
+  has_variable = sed_iron_request_pending
+  var:sed_iron_intent_level = 0
+var:sed_iron_intent_variant = 1
+ } add = { value = sed_founding_input_iron_mine_explosives multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_coal_mine }
+  has_variable = sed_coal_request_pending
+  var:sed_coal_intent_level = 0
+var:sed_coal_intent_variant = 1
+ } add = { value = sed_founding_input_coal_mine_explosives multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_munition_plant }
+  has_variable = sed_ammunition_request_pending
+  var:sed_ammunition_intent_level = 0
+var:sed_ammunition_intent_variant = 1
+ } add = { value = sed_founding_input_munition_plant_explosives multiply = 1.25 } }
 }
 sed_input_country_headroom_explosives = {
  value = 0
@@ -1287,6 +2772,12 @@ sed_input_pending_fabric = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_textile_mill }
+  has_variable = sed_clothes_request_pending
+  var:sed_clothes_intent_level = 0
+var:sed_clothes_intent_variant = 1
+ } add = { value = sed_founding_input_textile_mill_fabric multiply = 1.25 } }
 }
 sed_input_country_headroom_fabric = {
  value = 0
@@ -1341,6 +2832,36 @@ sed_input_pending_fertilizer = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_wheat_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 1
+ } add = { value = sed_founding_input_wheat_farm_fertilizer multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_rye_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 2
+ } add = { value = sed_founding_input_rye_farm_fertilizer multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_rice_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 3
+ } add = { value = sed_founding_input_rice_farm_fertilizer multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_maize_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 4
+ } add = { value = sed_founding_input_maize_farm_fertilizer multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_millet_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 5
+ } add = { value = sed_founding_input_millet_farm_fertilizer multiply = 1.25 } }
 }
 sed_input_country_headroom_fertilizer = {
  value = 0
@@ -1377,6 +2898,24 @@ sed_input_pending_fish = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_wheat_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 1
+ } add = { value = sed_founding_input_wheat_farm_fish multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_rice_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 3
+ } add = { value = sed_founding_input_rice_farm_fish multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_food_industry }
+  has_variable = sed_groceries_request_pending
+  var:sed_groceries_intent_level = 0
+var:sed_groceries_intent_variant = 1
+ } add = { value = sed_founding_input_food_industry_fish multiply = 1.25 } }
 }
 sed_input_country_headroom_fish = {
  value = 0
@@ -1404,6 +2943,12 @@ sed_input_pending_glass = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_food_industry }
+  has_variable = sed_groceries_request_pending
+  var:sed_groceries_intent_level = 0
+var:sed_groceries_intent_variant = 1
+ } add = { value = sed_founding_input_food_industry_glass multiply = 1.25 } }
 }
 sed_input_country_headroom_glass = {
  value = 0
@@ -1431,6 +2976,18 @@ sed_input_pending_grain = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_livestock_ranch }
+  has_variable = sed_fabric_request_pending
+  var:sed_fabric_intent_level = 0
+var:sed_fabric_intent_variant = 2
+ } add = { value = sed_founding_input_livestock_ranch_grain multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_food_industry }
+  has_variable = sed_groceries_request_pending
+  var:sed_groceries_intent_level = 0
+var:sed_groceries_intent_variant = 1
+ } add = { value = sed_founding_input_food_industry_grain multiply = 1.25 } }
 }
 sed_input_country_headroom_grain = {
  value = 0
@@ -1458,6 +3015,18 @@ sed_input_pending_hardwood = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_arms_industry }
+  has_variable = sed_small_arms_request_pending
+  var:sed_small_arms_intent_level = 0
+var:sed_small_arms_intent_variant = 1
+ } add = { value = sed_founding_input_arms_industry_hardwood multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_artillery_foundry }
+  has_variable = sed_artillery_request_pending
+  var:sed_artillery_intent_level = 0
+var:sed_artillery_intent_variant = 1
+ } add = { value = sed_founding_input_artillery_foundry_hardwood multiply = 1.25 } }
 }
 sed_input_country_headroom_hardwood = {
  value = 0
@@ -1521,6 +3090,36 @@ sed_input_pending_iron = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_livestock_ranch }
+  has_variable = sed_fabric_request_pending
+  var:sed_fabric_intent_level = 0
+var:sed_fabric_intent_variant = 2
+ } add = { value = sed_founding_input_livestock_ranch_iron multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_tooling_workshop }
+  has_variable = sed_tools_request_pending
+  var:sed_tools_intent_level = 0
+var:sed_tools_intent_variant = 1
+ } add = { value = sed_founding_input_tooling_workshop_iron multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_food_industry }
+  has_variable = sed_groceries_request_pending
+  var:sed_groceries_intent_level = 0
+var:sed_groceries_intent_variant = 1
+ } add = { value = sed_founding_input_food_industry_iron multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_arms_industry }
+  has_variable = sed_small_arms_request_pending
+  var:sed_small_arms_intent_level = 0
+var:sed_small_arms_intent_variant = 1
+ } add = { value = sed_founding_input_arms_industry_iron multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_artillery_foundry }
+  has_variable = sed_artillery_request_pending
+  var:sed_artillery_intent_level = 0
+var:sed_artillery_intent_variant = 1
+ } add = { value = sed_founding_input_artillery_foundry_iron multiply = 1.25 } }
 }
 sed_input_country_headroom_iron = {
  value = 0
@@ -1539,6 +3138,12 @@ sed_input_pending_lead = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_munition_plant }
+  has_variable = sed_ammunition_request_pending
+  var:sed_ammunition_intent_level = 0
+var:sed_ammunition_intent_variant = 1
+ } add = { value = sed_founding_input_munition_plant_lead multiply = 1.25 } }
 }
 sed_input_country_headroom_lead = {
  value = 0
@@ -1557,6 +3162,12 @@ sed_input_pending_meat = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_food_industry }
+  has_variable = sed_groceries_request_pending
+  var:sed_groceries_intent_level = 0
+var:sed_groceries_intent_variant = 1
+ } add = { value = sed_founding_input_food_industry_meat multiply = 1.25 } }
 }
 sed_input_country_headroom_meat = {
  value = 0
@@ -1683,6 +3294,84 @@ sed_input_pending_oil = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_logging_camp }
+  has_variable = sed_wood_request_pending
+  var:sed_wood_intent_level = 0
+var:sed_wood_intent_variant = 1
+ } add = { value = sed_founding_input_logging_camp_oil multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_iron_mine }
+  has_variable = sed_iron_request_pending
+  var:sed_iron_intent_level = 0
+var:sed_iron_intent_variant = 1
+ } add = { value = sed_founding_input_iron_mine_oil multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_coal_mine }
+  has_variable = sed_coal_request_pending
+  var:sed_coal_intent_level = 0
+var:sed_coal_intent_variant = 1
+ } add = { value = sed_founding_input_coal_mine_oil multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_wheat_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 1
+ } add = { value = sed_founding_input_wheat_farm_oil multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_rye_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 2
+ } add = { value = sed_founding_input_rye_farm_oil multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_maize_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 4
+ } add = { value = sed_founding_input_maize_farm_oil multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_millet_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 5
+ } add = { value = sed_founding_input_millet_farm_oil multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_tooling_workshop }
+  has_variable = sed_tools_request_pending
+  var:sed_tools_intent_level = 0
+var:sed_tools_intent_variant = 1
+ } add = { value = sed_founding_input_tooling_workshop_oil multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_food_industry }
+  has_variable = sed_groceries_request_pending
+  var:sed_groceries_intent_level = 0
+var:sed_groceries_intent_variant = 1
+ } add = { value = sed_founding_input_food_industry_oil multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_arms_industry }
+  has_variable = sed_small_arms_request_pending
+  var:sed_small_arms_intent_level = 0
+var:sed_small_arms_intent_variant = 1
+ } add = { value = sed_founding_input_arms_industry_oil multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_artillery_foundry }
+  has_variable = sed_artillery_request_pending
+  var:sed_artillery_intent_level = 0
+var:sed_artillery_intent_variant = 1
+ } add = { value = sed_founding_input_artillery_foundry_oil multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_munition_plant }
+  has_variable = sed_ammunition_request_pending
+  var:sed_ammunition_intent_level = 0
+var:sed_ammunition_intent_variant = 1
+ } add = { value = sed_founding_input_munition_plant_oil multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_railway }
+  has_variable = sed_railway_request_pending
+  var:sed_railway_intent_level = 0
+
+ } add = { value = sed_founding_input_railway_oil multiply = 1.25 } }
 }
 sed_input_country_headroom_oil = {
  value = 0
@@ -1710,6 +3399,18 @@ sed_input_pending_rubber = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_tooling_workshop }
+  has_variable = sed_tools_request_pending
+  var:sed_tools_intent_level = 0
+var:sed_tools_intent_variant = 1
+ } add = { value = sed_founding_input_tooling_workshop_rubber multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_textile_mill }
+  has_variable = sed_clothes_request_pending
+  var:sed_clothes_intent_level = 0
+var:sed_clothes_intent_variant = 1
+ } add = { value = sed_founding_input_textile_mill_rubber multiply = 1.25 } }
 }
 sed_input_country_headroom_rubber = {
  value = 0
@@ -1728,6 +3429,12 @@ sed_input_pending_silk = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_textile_mill }
+  has_variable = sed_clothes_request_pending
+  var:sed_clothes_intent_level = 0
+var:sed_clothes_intent_variant = 1
+ } add = { value = sed_founding_input_textile_mill_silk multiply = 1.25 } }
 }
 sed_input_country_headroom_silk = {
  value = 0
@@ -1782,6 +3489,30 @@ sed_input_pending_steel = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_tooling_workshop }
+  has_variable = sed_tools_request_pending
+  var:sed_tools_intent_level = 0
+var:sed_tools_intent_variant = 1
+ } add = { value = sed_founding_input_tooling_workshop_steel multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_arms_industry }
+  has_variable = sed_small_arms_request_pending
+  var:sed_small_arms_intent_level = 0
+var:sed_small_arms_intent_variant = 1
+ } add = { value = sed_founding_input_arms_industry_steel multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_artillery_foundry }
+  has_variable = sed_artillery_request_pending
+  var:sed_artillery_intent_level = 0
+var:sed_artillery_intent_variant = 1
+ } add = { value = sed_founding_input_artillery_foundry_steel multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_railway }
+  has_variable = sed_railway_request_pending
+  var:sed_railway_intent_level = 0
+
+ } add = { value = sed_founding_input_railway_steel multiply = 1.25 } }
 }
 sed_input_country_headroom_steel = {
  value = 0
@@ -1800,6 +3531,12 @@ sed_input_pending_sugar = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_food_industry }
+  has_variable = sed_groceries_request_pending
+  var:sed_groceries_intent_level = 0
+var:sed_groceries_intent_variant = 1
+ } add = { value = sed_founding_input_food_industry_sugar multiply = 1.25 } }
 }
 sed_input_country_headroom_sugar = {
  value = 0
@@ -1944,6 +3681,90 @@ sed_input_pending_tools = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_logging_camp }
+  has_variable = sed_wood_request_pending
+  var:sed_wood_intent_level = 0
+var:sed_wood_intent_variant = 1
+ } add = { value = sed_founding_input_logging_camp_tools multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_iron_mine }
+  has_variable = sed_iron_request_pending
+  var:sed_iron_intent_level = 0
+var:sed_iron_intent_variant = 1
+ } add = { value = sed_founding_input_iron_mine_tools multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_coal_mine }
+  has_variable = sed_coal_request_pending
+  var:sed_coal_intent_level = 0
+var:sed_coal_intent_variant = 1
+ } add = { value = sed_founding_input_coal_mine_tools multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_wheat_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 1
+ } add = { value = sed_founding_input_wheat_farm_tools multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_rye_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 2
+ } add = { value = sed_founding_input_rye_farm_tools multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_rice_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 3
+ } add = { value = sed_founding_input_rice_farm_tools multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_maize_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 4
+ } add = { value = sed_founding_input_maize_farm_tools multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_millet_farm }
+  has_variable = sed_grain_request_pending
+  var:sed_grain_intent_level = 0
+var:sed_grain_intent_variant = 5
+ } add = { value = sed_founding_input_millet_farm_tools multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_livestock_ranch }
+  has_variable = sed_fabric_request_pending
+  var:sed_fabric_intent_level = 0
+var:sed_fabric_intent_variant = 2
+ } add = { value = sed_founding_input_livestock_ranch_tools multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_food_industry }
+  has_variable = sed_groceries_request_pending
+  var:sed_groceries_intent_level = 0
+var:sed_groceries_intent_variant = 1
+ } add = { value = sed_founding_input_food_industry_tools multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_textile_mill }
+  has_variable = sed_clothes_request_pending
+  var:sed_clothes_intent_level = 0
+var:sed_clothes_intent_variant = 1
+ } add = { value = sed_founding_input_textile_mill_tools multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_arms_industry }
+  has_variable = sed_small_arms_request_pending
+  var:sed_small_arms_intent_level = 0
+var:sed_small_arms_intent_variant = 1
+ } add = { value = sed_founding_input_arms_industry_tools multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_artillery_foundry }
+  has_variable = sed_artillery_request_pending
+  var:sed_artillery_intent_level = 0
+var:sed_artillery_intent_variant = 1
+ } add = { value = sed_founding_input_artillery_foundry_tools multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_munition_plant }
+  has_variable = sed_ammunition_request_pending
+  var:sed_ammunition_intent_level = 0
+var:sed_ammunition_intent_variant = 1
+ } add = { value = sed_founding_input_munition_plant_tools multiply = 1.25 } }
 }
 sed_input_country_headroom_tools = {
  value = 0
@@ -1998,6 +3819,36 @@ sed_input_pending_transportation = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_logging_camp }
+  has_variable = sed_wood_request_pending
+  var:sed_wood_intent_level = 0
+var:sed_wood_intent_variant = 1
+ } add = { value = sed_founding_input_logging_camp_transportation multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_iron_mine }
+  has_variable = sed_iron_request_pending
+  var:sed_iron_intent_level = 0
+var:sed_iron_intent_variant = 1
+ } add = { value = sed_founding_input_iron_mine_transportation multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_coal_mine }
+  has_variable = sed_coal_request_pending
+  var:sed_coal_intent_level = 0
+var:sed_coal_intent_variant = 1
+ } add = { value = sed_founding_input_coal_mine_transportation multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_cotton_plantation }
+  has_variable = sed_fabric_request_pending
+  var:sed_fabric_intent_level = 0
+var:sed_fabric_intent_variant = 1
+ } add = { value = sed_founding_input_cotton_plantation_transportation multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_livestock_ranch }
+  has_variable = sed_fabric_request_pending
+  var:sed_fabric_intent_level = 0
+var:sed_fabric_intent_variant = 2
+ } add = { value = sed_founding_input_livestock_ranch_transportation multiply = 1.25 } }
 }
 sed_input_local_headroom_transportation = {
  value = 0
@@ -2038,6 +3889,18 @@ sed_input_pending_wood = {
    multiply = 1.25
   }
  }
+ if = { limit = {
+  NOT = { has_building = building_tooling_workshop }
+  has_variable = sed_tools_request_pending
+  var:sed_tools_intent_level = 0
+var:sed_tools_intent_variant = 1
+ } add = { value = sed_founding_input_tooling_workshop_wood multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_railway }
+  has_variable = sed_railway_request_pending
+  var:sed_railway_intent_level = 0
+
+ } add = { value = sed_founding_input_railway_wood multiply = 1.25 } }
 }
 sed_input_country_headroom_wood = {
  value = 0

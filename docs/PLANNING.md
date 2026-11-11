@@ -1,5 +1,83 @@
 # Planejamento e coordenação — 0.6.8
 
+## 0.7.2 — Duração e materiais do primeiro projeto
+
+O orçamento direto continuava usando uma janela fixa de 26 semanas de déficit
+para a reserva exigida e não estimava o tamanho do projeto escolhido. A 0.7.2
+identifica a primeira prioridade do plano e lê a construção exigida por nível
+na base vanilla: 200 pontos para fazendas, madeira e tecido; 400 para ferro e
+carvão; 600 para ferramentas, alimentos, roupas e indústria bélica; 800 para
+ferrovia, aço e munição; 25 para o setor de construção.
+
+Com a capacidade semanal (`country_construction_add`, limitada pelo progresso
+máximo), o painel mostra pontos, semanas estimadas e materiais de referência do
+projeto inteiro. A reserva exigida passa a usar a maior janela entre 26 e a
+duração do projeto mais quatro semanas, limitada a 56 semanas. Projetos curtos
+mantêm o piso anterior; ferrovias e munição, que duram mais, exigem mais ouro
+sem bloquear obras de até um ano de déficit coberto. A estimativa assume o
+maior custo entre métodos ativos e preços-base com 75% de estresse; fila
+concorrente, salários, subsídios e modificadores ainda podem alongar o prazo.
+
+247 testes sintéticos aprovados, incluindo o primeiro projeto de ferrovia com
+800 pontos, 80 semanas e reserva de 56 semanas. Geração e validação estática
+locais aprovadas. Sem engine ou campanha nesta etapa: a duração real depende da
+fila e de efeitos que o script não observa.
+
+## 0.7.1 — Primeira ferrovia e pedido de fundação persistente
+
+Até a 0.7.0, ferrovia só entrava no plano quando já existia e estava operante.
+Um estado com infraestrutura negativa e nenhuma ferrovia ficava apenas na
+contagem "sem ferrovia" e nunca recebia obra. A 0.7.1 inclui o primeiro nível
+como fundação: estado incorporado, déficit atual, sem `building_railway`, sem
+pedido pendente e com `can_construct_building` aceito. O candidato mantém o
+ranking por déficit, a aprovação (também no Assistido) e o livro de ferrovias;
+a intenção registra nível 0 e a conclusão é inferida quando o prédio aparece.
+
+A mesma entrega corrige a persistência da fundação. Sem prédio, a limpeza de
+pendências tratava o pedido como abandonado na leitura seguinte, antes de a
+obra concluir; isso liberava o gatilho e permitia fundar de novo. Agora o
+pedido de fundação, de ferrovia ou de indústria, permanece pendente enquanto
+houver níveis na fila pública e nenhum prédio; a pendência só é encerrada
+quando o prédio aparece (conclusão) ou a fila esvazia (abandono).
+
+246 testes sintéticos aprovados, incluindo fundação automática de ferrovia e
+persistência do pedido após uma leitura intermediária. Geração e validação
+estática locais aprovadas. Sem engine ou campanha nesta etapa: terra,
+permissão e concorrência reais continuam pendentes de confirmação.
+
+## 0.7.0 — Fundação da indústria ausente
+
+Até a 0.6.26, um bem em escassez sem produtor no país entrava apenas no
+objetivo 5: o Director registrava a ausência, mas a construção direta exigia
+um produtor existente para expandir. A 0.7.0 fecha essa lacuna. Quando há
+escassez de mercado, nenhum estado do país tem um dos produtores do bem e ao
+menos um estado incorporado aceita `can_construct_building` para alguma
+variante, esse estado entra no ranking normal como qualquer alvo de oferta.
+O dirigente automático escolhe a primeira prioridade, e a aprovação enfileira
+um nível do prédio novo com nível inicial 0.
+
+A fundação não cria um caminho paralelo: usa o mesmo candidato, o mesmo plano
+de até três prioridades, a mesma aprovação (também disponível no Assistido)
+e as mesmas guardas fiscais, de materiais, de fila privada, de pausa e o
+limite de uma tentativa por mês. Não inicia obra em estado que já tem a
+variante; nesse caso a expansão normal continua valendo. Enquanto a fundação
+está na fila ainda não há prédio no país, então o gatilho exige que nenhum
+estado tenha pedido pendente daquele bem: só se funda uma base por país, e
+revisões seguintes não duplicam a indústria em outro estado. O livro de resultados
+passa a contar a fundação como pedido e infere a conclusão quando o nível sai
+de 0 ao deixar a fila.
+
+Quando nenhum estado pode hospedar o prédio, o objetivo 5 permanece e a
+interface diz que o Director aguarda tecnologia, terra ou infraestrutura; a
+construção não é forçada e a importação continua fora do escopo.
+
+244 testes sintéticos aprovados à época, incluindo fundação automática,
+ausência de estado apto, fundação única por país enquanto a obra está na fila e
+as regressões anteriores. Geração e validação
+estática locais aprovadas. Sem engine ou campanha nesta etapa: custo real,
+terra disponível e comportamento de `can_construct_building` no jogo ainda
+precisam de confirmação.
+
 ## 0.6.26 — Setor de construção e segunda revisão no Automático
 
 O Automático passou a tratar o setor de construção como alvo do dispatcher,

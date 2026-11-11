@@ -1,18 +1,35 @@
 ﻿# State scope. Candidate is limited to an operating railway with a live infrastructure deficit.
+# State scope. A deficit state with no railway can found the base.
+sed_railway_found_site = {
+ is_incorporated = yes
+ infrastructure_delta < 0
+ NOT = { has_variable = sed_railway_ignored }
+ NOT = { has_variable = sed_railway_request_pending }
+ NOT = { has_building = building_railway }
+ can_construct_building = building_railway
+ sed_state_labor_available >= 1200
+ sed_founding_input_railway_safe = yes
+}
+
 sed_railway_candidate_eligible = {
  is_incorporated = yes
  infrastructure_delta < 0
  NOT = { has_variable = sed_railway_ignored }
  NOT = { has_variable = sed_railway_request_pending }
- has_building = building_railway
- b:building_railway = {
-  level > 0
-  occupancy >= 0.8
-  has_failed_hires = no
-  building_has_goods_shortage = no
-  level_after_queued_constructions <= level
+ OR = {
+  sed_railway_found_site = yes
+  AND = {
+   has_building = building_railway
+   b:building_railway = {
+    level > 0
+    occupancy >= 0.8
+    has_failed_hires = no
+    building_has_goods_shortage = no
+    level_after_queued_constructions <= level
+   }
+   can_construct_building = building_railway
+  }
  }
- can_construct_building = building_railway
 }
 
 sed_railway_approval_valid = {
@@ -59,281 +76,526 @@ sed_construction_approval_valid = {
 sed_input_blocks_wood_tools_tooling_workshop = {
  sed_tools_candidate_site = yes
  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
- sed_tools_tooling_workshop_operable = yes
+ OR = {
+ AND = { sed_tools_tooling_workshop_operable = yes
  sed_input_tooling_workshop_wood > 0
      sed_input_headroom_wood < { value = sed_input_tooling_workshop_wood multiply = 1.25 }
+ }
+ AND = { sed_tools_tooling_workshop_found_operable = yes
+ sed_founding_input_tooling_workshop_wood > 0
+     sed_input_headroom_wood < { value = sed_founding_input_tooling_workshop_wood multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_iron_fabric_livestock_ranch = {
  sed_fabric_candidate_site = yes
  owner = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
- sed_fabric_livestock_ranch_operable = yes
+ OR = {
+ AND = { sed_fabric_livestock_ranch_operable = yes
  sed_input_livestock_ranch_iron > 0
      sed_input_headroom_iron < { value = sed_input_livestock_ranch_iron multiply = 1.25 }
+ }
+ AND = { sed_fabric_livestock_ranch_found_operable = yes
+ sed_founding_input_livestock_ranch_iron > 0
+     sed_input_headroom_iron < { value = sed_founding_input_livestock_ranch_iron multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_iron_tools_tooling_workshop = {
  sed_tools_candidate_site = yes
  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
- sed_tools_tooling_workshop_operable = yes
+ OR = {
+ AND = { sed_tools_tooling_workshop_operable = yes
  sed_input_tooling_workshop_iron > 0
      sed_input_headroom_iron < { value = sed_input_tooling_workshop_iron multiply = 1.25 }
+ }
+ AND = { sed_tools_tooling_workshop_found_operable = yes
+ sed_founding_input_tooling_workshop_iron > 0
+     sed_input_headroom_iron < { value = sed_founding_input_tooling_workshop_iron multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_iron_groceries_food_industry = {
  sed_groceries_candidate_site = yes
  owner = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } }
- sed_groceries_food_industry_operable = yes
+ OR = {
+ AND = { sed_groceries_food_industry_operable = yes
  sed_input_food_industry_iron > 0
      sed_input_headroom_iron < { value = sed_input_food_industry_iron multiply = 1.25 }
+ }
+ AND = { sed_groceries_food_industry_found_operable = yes
+ sed_founding_input_food_industry_iron > 0
+     sed_input_headroom_iron < { value = sed_founding_input_food_industry_iron multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_iron_small_arms_arms_industry = {
  sed_small_arms_candidate_site = yes
  owner = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } } }
- sed_small_arms_arms_industry_operable = yes
+ OR = {
+ AND = { sed_small_arms_arms_industry_operable = yes
  sed_input_arms_industry_iron > 0
      sed_input_headroom_iron < { value = sed_input_arms_industry_iron multiply = 1.25 }
+ }
+ AND = { sed_small_arms_arms_industry_found_operable = yes
+ sed_founding_input_arms_industry_iron > 0
+     sed_input_headroom_iron < { value = sed_founding_input_arms_industry_iron multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_iron_artillery_artillery_foundry = {
  sed_artillery_candidate_site = yes
  owner = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } } }
- sed_artillery_artillery_foundry_operable = yes
+ OR = {
+ AND = { sed_artillery_artillery_foundry_operable = yes
  sed_input_artillery_foundry_iron > 0
      sed_input_headroom_iron < { value = sed_input_artillery_foundry_iron multiply = 1.25 }
+ }
+ AND = { sed_artillery_artillery_foundry_found_operable = yes
+ sed_founding_input_artillery_foundry_iron > 0
+     sed_input_headroom_iron < { value = sed_founding_input_artillery_foundry_iron multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_coal_wood_logging_camp = {
  sed_wood_candidate_site = yes
  owner = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } }
- sed_wood_logging_camp_operable = yes
+ OR = {
+ AND = { sed_wood_logging_camp_operable = yes
  sed_input_logging_camp_coal > 0
      sed_input_headroom_coal < { value = sed_input_logging_camp_coal multiply = 1.25 }
+ }
+ AND = { sed_wood_logging_camp_found_operable = yes
+ sed_founding_input_logging_camp_coal > 0
+     sed_input_headroom_coal < { value = sed_founding_input_logging_camp_coal multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_coal_iron_iron_mine = {
  sed_iron_candidate_site = yes
  owner = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
- sed_iron_iron_mine_operable = yes
+ OR = {
+ AND = { sed_iron_iron_mine_operable = yes
  sed_input_iron_mine_coal > 0
      sed_input_headroom_coal < { value = sed_input_iron_mine_coal multiply = 1.25 }
+ }
+ AND = { sed_iron_iron_mine_found_operable = yes
+ sed_founding_input_iron_mine_coal > 0
+     sed_input_headroom_coal < { value = sed_founding_input_iron_mine_coal multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_coal_grain_wheat_farm = {
  sed_grain_candidate_site = yes
  owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
- sed_grain_wheat_farm_operable = yes
+ OR = {
+ AND = { sed_grain_wheat_farm_operable = yes
  sed_input_wheat_farm_coal > 0
      sed_input_headroom_coal < { value = sed_input_wheat_farm_coal multiply = 1.25 }
+ }
+ AND = { sed_grain_wheat_farm_found_operable = yes
+ sed_founding_input_wheat_farm_coal > 0
+     sed_input_headroom_coal < { value = sed_founding_input_wheat_farm_coal multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_coal_grain_rye_farm = {
  sed_grain_candidate_site = yes
  owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
- sed_grain_rye_farm_operable = yes
+ OR = {
+ AND = { sed_grain_rye_farm_operable = yes
  sed_input_rye_farm_coal > 0
      sed_input_headroom_coal < { value = sed_input_rye_farm_coal multiply = 1.25 }
+ }
+ AND = { sed_grain_rye_farm_found_operable = yes
+ sed_founding_input_rye_farm_coal > 0
+     sed_input_headroom_coal < { value = sed_founding_input_rye_farm_coal multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_coal_grain_rice_farm = {
  sed_grain_candidate_site = yes
  owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
- sed_grain_rice_farm_operable = yes
+ OR = {
+ AND = { sed_grain_rice_farm_operable = yes
  sed_input_rice_farm_coal > 0
      sed_input_headroom_coal < { value = sed_input_rice_farm_coal multiply = 1.25 }
+ }
+ AND = { sed_grain_rice_farm_found_operable = yes
+ sed_founding_input_rice_farm_coal > 0
+     sed_input_headroom_coal < { value = sed_founding_input_rice_farm_coal multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_coal_grain_maize_farm = {
  sed_grain_candidate_site = yes
  owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
- sed_grain_maize_farm_operable = yes
+ OR = {
+ AND = { sed_grain_maize_farm_operable = yes
  sed_input_maize_farm_coal > 0
      sed_input_headroom_coal < { value = sed_input_maize_farm_coal multiply = 1.25 }
+ }
+ AND = { sed_grain_maize_farm_found_operable = yes
+ sed_founding_input_maize_farm_coal > 0
+     sed_input_headroom_coal < { value = sed_founding_input_maize_farm_coal multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_coal_grain_millet_farm = {
  sed_grain_candidate_site = yes
  owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
- sed_grain_millet_farm_operable = yes
+ OR = {
+ AND = { sed_grain_millet_farm_operable = yes
  sed_input_millet_farm_coal > 0
      sed_input_headroom_coal < { value = sed_input_millet_farm_coal multiply = 1.25 }
+ }
+ AND = { sed_grain_millet_farm_found_operable = yes
+ sed_founding_input_millet_farm_coal > 0
+     sed_input_headroom_coal < { value = sed_founding_input_millet_farm_coal multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_coal_fabric_livestock_ranch = {
  sed_fabric_candidate_site = yes
  owner = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
- sed_fabric_livestock_ranch_operable = yes
+ OR = {
+ AND = { sed_fabric_livestock_ranch_operable = yes
  sed_input_livestock_ranch_coal > 0
      sed_input_headroom_coal < { value = sed_input_livestock_ranch_coal multiply = 1.25 }
+ }
+ AND = { sed_fabric_livestock_ranch_found_operable = yes
+ sed_founding_input_livestock_ranch_coal > 0
+     sed_input_headroom_coal < { value = sed_founding_input_livestock_ranch_coal multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_coal_tools_tooling_workshop = {
  sed_tools_candidate_site = yes
  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
- sed_tools_tooling_workshop_operable = yes
+ OR = {
+ AND = { sed_tools_tooling_workshop_operable = yes
  sed_input_tooling_workshop_coal > 0
      sed_input_headroom_coal < { value = sed_input_tooling_workshop_coal multiply = 1.25 }
+ }
+ AND = { sed_tools_tooling_workshop_found_operable = yes
+ sed_founding_input_tooling_workshop_coal > 0
+     sed_input_headroom_coal < { value = sed_founding_input_tooling_workshop_coal multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_coal_small_arms_arms_industry = {
  sed_small_arms_candidate_site = yes
  owner = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } } }
- sed_small_arms_arms_industry_operable = yes
+ OR = {
+ AND = { sed_small_arms_arms_industry_operable = yes
  sed_input_arms_industry_coal > 0
      sed_input_headroom_coal < { value = sed_input_arms_industry_coal multiply = 1.25 }
+ }
+ AND = { sed_small_arms_arms_industry_found_operable = yes
+ sed_founding_input_arms_industry_coal > 0
+     sed_input_headroom_coal < { value = sed_founding_input_arms_industry_coal multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_coal_artillery_artillery_foundry = {
  sed_artillery_candidate_site = yes
  owner = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } } }
- sed_artillery_artillery_foundry_operable = yes
+ OR = {
+ AND = { sed_artillery_artillery_foundry_operable = yes
  sed_input_artillery_foundry_coal > 0
      sed_input_headroom_coal < { value = sed_input_artillery_foundry_coal multiply = 1.25 }
+ }
+ AND = { sed_artillery_artillery_foundry_found_operable = yes
+ sed_founding_input_artillery_foundry_coal > 0
+     sed_input_headroom_coal < { value = sed_founding_input_artillery_foundry_coal multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_coal_ammunition_munition_plant = {
  sed_ammunition_candidate_site = yes
  owner = { market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } } }
- sed_ammunition_munition_plant_operable = yes
+ OR = {
+ AND = { sed_ammunition_munition_plant_operable = yes
  sed_input_munition_plant_coal > 0
      sed_input_headroom_coal < { value = sed_input_munition_plant_coal multiply = 1.25 }
+ }
+ AND = { sed_ammunition_munition_plant_found_operable = yes
+ sed_founding_input_munition_plant_coal > 0
+     sed_input_headroom_coal < { value = sed_founding_input_munition_plant_coal multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_grain_fabric_livestock_ranch = {
  sed_fabric_candidate_site = yes
  owner = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
- sed_fabric_livestock_ranch_operable = yes
+ OR = {
+ AND = { sed_fabric_livestock_ranch_operable = yes
  sed_input_livestock_ranch_grain > 0
      sed_input_headroom_grain < { value = sed_input_livestock_ranch_grain multiply = 1.25 }
+ }
+ AND = { sed_fabric_livestock_ranch_found_operable = yes
+ sed_founding_input_livestock_ranch_grain > 0
+     sed_input_headroom_grain < { value = sed_founding_input_livestock_ranch_grain multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_grain_groceries_food_industry = {
  sed_groceries_candidate_site = yes
  owner = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } }
- sed_groceries_food_industry_operable = yes
+ OR = {
+ AND = { sed_groceries_food_industry_operable = yes
  sed_input_food_industry_grain > 0
      sed_input_headroom_grain < { value = sed_input_food_industry_grain multiply = 1.25 }
+ }
+ AND = { sed_groceries_food_industry_found_operable = yes
+ sed_founding_input_food_industry_grain > 0
+     sed_input_headroom_grain < { value = sed_founding_input_food_industry_grain multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_fabric_clothes_textile_mill = {
  sed_clothes_candidate_site = yes
  owner = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } }
- sed_clothes_textile_mill_operable = yes
+ OR = {
+ AND = { sed_clothes_textile_mill_operable = yes
  sed_input_textile_mill_fabric > 0
      sed_input_headroom_fabric < { value = sed_input_textile_mill_fabric multiply = 1.25 }
+ }
+ AND = { sed_clothes_textile_mill_found_operable = yes
+ sed_founding_input_textile_mill_fabric > 0
+     sed_input_headroom_fabric < { value = sed_founding_input_textile_mill_fabric multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_tools_wood_logging_camp = {
  sed_wood_candidate_site = yes
  owner = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } }
- sed_wood_logging_camp_operable = yes
+ OR = {
+ AND = { sed_wood_logging_camp_operable = yes
  sed_input_logging_camp_tools > 0
      sed_input_headroom_tools < { value = sed_input_logging_camp_tools multiply = 1.25 }
+ }
+ AND = { sed_wood_logging_camp_found_operable = yes
+ sed_founding_input_logging_camp_tools > 0
+     sed_input_headroom_tools < { value = sed_founding_input_logging_camp_tools multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_tools_iron_iron_mine = {
  sed_iron_candidate_site = yes
  owner = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } } }
- sed_iron_iron_mine_operable = yes
+ OR = {
+ AND = { sed_iron_iron_mine_operable = yes
  sed_input_iron_mine_tools > 0
      sed_input_headroom_tools < { value = sed_input_iron_mine_tools multiply = 1.25 }
+ }
+ AND = { sed_iron_iron_mine_found_operable = yes
+ sed_founding_input_iron_mine_tools > 0
+     sed_input_headroom_tools < { value = sed_founding_input_iron_mine_tools multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_tools_coal_coal_mine = {
  sed_coal_candidate_site = yes
  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
- sed_coal_coal_mine_operable = yes
+ OR = {
+ AND = { sed_coal_coal_mine_operable = yes
  sed_input_coal_mine_tools > 0
      sed_input_headroom_tools < { value = sed_input_coal_mine_tools multiply = 1.25 }
+ }
+ AND = { sed_coal_coal_mine_found_operable = yes
+ sed_founding_input_coal_mine_tools > 0
+     sed_input_headroom_tools < { value = sed_founding_input_coal_mine_tools multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_tools_grain_wheat_farm = {
  sed_grain_candidate_site = yes
  owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
- sed_grain_wheat_farm_operable = yes
+ OR = {
+ AND = { sed_grain_wheat_farm_operable = yes
  sed_input_wheat_farm_tools > 0
      sed_input_headroom_tools < { value = sed_input_wheat_farm_tools multiply = 1.25 }
+ }
+ AND = { sed_grain_wheat_farm_found_operable = yes
+ sed_founding_input_wheat_farm_tools > 0
+     sed_input_headroom_tools < { value = sed_founding_input_wheat_farm_tools multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_tools_grain_rye_farm = {
  sed_grain_candidate_site = yes
  owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
- sed_grain_rye_farm_operable = yes
+ OR = {
+ AND = { sed_grain_rye_farm_operable = yes
  sed_input_rye_farm_tools > 0
      sed_input_headroom_tools < { value = sed_input_rye_farm_tools multiply = 1.25 }
+ }
+ AND = { sed_grain_rye_farm_found_operable = yes
+ sed_founding_input_rye_farm_tools > 0
+     sed_input_headroom_tools < { value = sed_founding_input_rye_farm_tools multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_tools_grain_rice_farm = {
  sed_grain_candidate_site = yes
  owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
- sed_grain_rice_farm_operable = yes
+ OR = {
+ AND = { sed_grain_rice_farm_operable = yes
  sed_input_rice_farm_tools > 0
      sed_input_headroom_tools < { value = sed_input_rice_farm_tools multiply = 1.25 }
+ }
+ AND = { sed_grain_rice_farm_found_operable = yes
+ sed_founding_input_rice_farm_tools > 0
+     sed_input_headroom_tools < { value = sed_founding_input_rice_farm_tools multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_tools_grain_maize_farm = {
  sed_grain_candidate_site = yes
  owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
- sed_grain_maize_farm_operable = yes
+ OR = {
+ AND = { sed_grain_maize_farm_operable = yes
  sed_input_maize_farm_tools > 0
      sed_input_headroom_tools < { value = sed_input_maize_farm_tools multiply = 1.25 }
+ }
+ AND = { sed_grain_maize_farm_found_operable = yes
+ sed_founding_input_maize_farm_tools > 0
+     sed_input_headroom_tools < { value = sed_founding_input_maize_farm_tools multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_tools_grain_millet_farm = {
  sed_grain_candidate_site = yes
  owner = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } } }
- sed_grain_millet_farm_operable = yes
+ OR = {
+ AND = { sed_grain_millet_farm_operable = yes
  sed_input_millet_farm_tools > 0
      sed_input_headroom_tools < { value = sed_input_millet_farm_tools multiply = 1.25 }
+ }
+ AND = { sed_grain_millet_farm_found_operable = yes
+ sed_founding_input_millet_farm_tools > 0
+     sed_input_headroom_tools < { value = sed_founding_input_millet_farm_tools multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_tools_fabric_livestock_ranch = {
  sed_fabric_candidate_site = yes
  owner = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
- sed_fabric_livestock_ranch_operable = yes
+ OR = {
+ AND = { sed_fabric_livestock_ranch_operable = yes
  sed_input_livestock_ranch_tools > 0
      sed_input_headroom_tools < { value = sed_input_livestock_ranch_tools multiply = 1.25 }
+ }
+ AND = { sed_fabric_livestock_ranch_found_operable = yes
+ sed_founding_input_livestock_ranch_tools > 0
+     sed_input_headroom_tools < { value = sed_founding_input_livestock_ranch_tools multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_tools_groceries_food_industry = {
  sed_groceries_candidate_site = yes
  owner = { market = { mg:groceries ?= { market_goods_has_goods_shortage = yes } } }
- sed_groceries_food_industry_operable = yes
+ OR = {
+ AND = { sed_groceries_food_industry_operable = yes
  sed_input_food_industry_tools > 0
      sed_input_headroom_tools < { value = sed_input_food_industry_tools multiply = 1.25 }
+ }
+ AND = { sed_groceries_food_industry_found_operable = yes
+ sed_founding_input_food_industry_tools > 0
+     sed_input_headroom_tools < { value = sed_founding_input_food_industry_tools multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_tools_clothes_textile_mill = {
  sed_clothes_candidate_site = yes
  owner = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } } }
- sed_clothes_textile_mill_operable = yes
+ OR = {
+ AND = { sed_clothes_textile_mill_operable = yes
  sed_input_textile_mill_tools > 0
      sed_input_headroom_tools < { value = sed_input_textile_mill_tools multiply = 1.25 }
+ }
+ AND = { sed_clothes_textile_mill_found_operable = yes
+ sed_founding_input_textile_mill_tools > 0
+     sed_input_headroom_tools < { value = sed_founding_input_textile_mill_tools multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_tools_small_arms_arms_industry = {
  sed_small_arms_candidate_site = yes
  owner = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } } }
- sed_small_arms_arms_industry_operable = yes
+ OR = {
+ AND = { sed_small_arms_arms_industry_operable = yes
  sed_input_arms_industry_tools > 0
      sed_input_headroom_tools < { value = sed_input_arms_industry_tools multiply = 1.25 }
+ }
+ AND = { sed_small_arms_arms_industry_found_operable = yes
+ sed_founding_input_arms_industry_tools > 0
+     sed_input_headroom_tools < { value = sed_founding_input_arms_industry_tools multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_tools_artillery_artillery_foundry = {
  sed_artillery_candidate_site = yes
  owner = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } } }
- sed_artillery_artillery_foundry_operable = yes
+ OR = {
+ AND = { sed_artillery_artillery_foundry_operable = yes
  sed_input_artillery_foundry_tools > 0
      sed_input_headroom_tools < { value = sed_input_artillery_foundry_tools multiply = 1.25 }
+ }
+ AND = { sed_artillery_artillery_foundry_found_operable = yes
+ sed_founding_input_artillery_foundry_tools > 0
+     sed_input_headroom_tools < { value = sed_founding_input_artillery_foundry_tools multiply = 1.25 }
+ }
+ }
 }
 
 sed_input_blocks_tools_ammunition_munition_plant = {
  sed_ammunition_candidate_site = yes
  owner = { market = { mg:ammunition ?= { market_goods_has_goods_shortage = yes } } }
- sed_ammunition_munition_plant_operable = yes
+ OR = {
+ AND = { sed_ammunition_munition_plant_operable = yes
  sed_input_munition_plant_tools > 0
      sed_input_headroom_tools < { value = sed_input_munition_plant_tools multiply = 1.25 }
+ }
+ AND = { sed_ammunition_munition_plant_found_operable = yes
+ sed_founding_input_munition_plant_tools > 0
+     sed_input_headroom_tools < { value = sed_founding_input_munition_plant_tools multiply = 1.25 }
+ }
+ }
 }
 
 sed_wood_supply_demand = { OR = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_input_priority_wood NOT = { any_scope_state = { sed_wood_queued_supply = yes } } } } }
@@ -344,9 +606,20 @@ sed_wood_candidate_site = {
  NOT = { has_variable = sed_wood_request_pending }
 
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_wood_found_site = {
+ sed_wood_candidate_site = yes
+ owner = {
+  NOT = { any_scope_state = { OR = { has_building = building_logging_camp } } }
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_wood_request_pending } }
+ }
+ NOT = { has_building = building_logging_camp }
+}
 sed_wood_supplier_available = {
  sed_wood_candidate_site = yes
- OR = { sed_wood_logging_camp_eligible = yes }
+ OR = { sed_wood_logging_camp_eligible = yes sed_wood_logging_camp_found_eligible = yes }
 }
 sed_wood_candidate_eligible = {
  owner = { sed_wood_supply_demand = yes }
@@ -358,6 +631,15 @@ sed_wood_queued_supply = { OR = { AND = { has_building = building_logging_camp b
   has_active_production_method = pm_simple_forestry } } } } }
 
 # State scope: one verified producer type for wood; output checked by active method.
+sed_wood_logging_camp_found_eligible = {
+ sed_wood_logging_camp_found_operable = yes
+ sed_founding_input_logging_camp_safe = yes
+}
+sed_wood_logging_camp_found_operable = {
+ sed_wood_found_site = yes
+ can_construct_building = building_logging_camp
+ sed_state_labor_available >= 5000
+}
 sed_wood_logging_camp_eligible = {
  sed_wood_logging_camp_operable = yes
  sed_input_logging_camp_safe = yes
@@ -399,9 +681,20 @@ sed_iron_candidate_site = {
  NOT = { has_variable = sed_iron_request_pending }
 
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_iron_found_site = {
+ sed_iron_candidate_site = yes
+ owner = {
+  NOT = { any_scope_state = { OR = { has_building = building_iron_mine } } }
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_iron_request_pending } }
+ }
+ NOT = { has_building = building_iron_mine }
+}
 sed_iron_supplier_available = {
  sed_iron_candidate_site = yes
- OR = { sed_iron_iron_mine_eligible = yes }
+ OR = { sed_iron_iron_mine_eligible = yes sed_iron_iron_mine_found_eligible = yes }
 }
 sed_iron_candidate_eligible = {
  owner = { sed_iron_supply_demand = yes }
@@ -416,6 +709,15 @@ sed_iron_queued_supply = { OR = { AND = { has_building = building_iron_mine b:bu
   has_active_production_method = pm_picks_and_shovels_building_iron_mine } } } } }
 
 # State scope: one verified producer type for iron; output checked by active method.
+sed_iron_iron_mine_found_eligible = {
+ sed_iron_iron_mine_found_operable = yes
+ sed_founding_input_iron_mine_safe = yes
+}
+sed_iron_iron_mine_found_operable = {
+ sed_iron_found_site = yes
+ can_construct_building = building_iron_mine
+ sed_state_labor_available >= 5250
+}
 sed_iron_iron_mine_eligible = {
  sed_iron_iron_mine_operable = yes
  sed_input_iron_mine_safe = yes
@@ -460,9 +762,20 @@ sed_coal_candidate_site = {
  NOT = { has_variable = sed_coal_request_pending }
 
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_coal_found_site = {
+ sed_coal_candidate_site = yes
+ owner = {
+  NOT = { any_scope_state = { OR = { has_building = building_coal_mine } } }
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_coal_request_pending } }
+ }
+ NOT = { has_building = building_coal_mine }
+}
 sed_coal_supplier_available = {
  sed_coal_candidate_site = yes
- OR = { sed_coal_coal_mine_eligible = yes }
+ OR = { sed_coal_coal_mine_eligible = yes sed_coal_coal_mine_found_eligible = yes }
 }
 sed_coal_candidate_eligible = {
  owner = { sed_coal_supply_demand = yes }
@@ -477,6 +790,15 @@ sed_coal_queued_supply = { OR = { AND = { has_building = building_coal_mine b:bu
   has_active_production_method = pm_picks_and_shovels_building_coal_mine } } } } }
 
 # State scope: one verified producer type for coal; output checked by active method.
+sed_coal_coal_mine_found_eligible = {
+ sed_coal_coal_mine_found_operable = yes
+ sed_founding_input_coal_mine_safe = yes
+}
+sed_coal_coal_mine_found_operable = {
+ sed_coal_found_site = yes
+ can_construct_building = building_coal_mine
+ sed_state_labor_available >= 5250
+}
 sed_coal_coal_mine_eligible = {
  sed_coal_coal_mine_operable = yes
  sed_input_coal_mine_safe = yes
@@ -521,9 +843,20 @@ sed_grain_candidate_site = {
  NOT = { has_variable = sed_grain_request_pending }
 
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_grain_found_site = {
+ sed_grain_candidate_site = yes
+ owner = {
+  NOT = { any_scope_state = { OR = { has_building = building_wheat_farm has_building = building_rye_farm has_building = building_rice_farm has_building = building_maize_farm has_building = building_millet_farm } } }
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_grain_request_pending } }
+ }
+ NOT = { has_building = building_wheat_farm } NOT = { has_building = building_rye_farm } NOT = { has_building = building_rice_farm } NOT = { has_building = building_maize_farm } NOT = { has_building = building_millet_farm }
+}
 sed_grain_supplier_available = {
  sed_grain_candidate_site = yes
- OR = { sed_grain_wheat_farm_eligible = yes sed_grain_rye_farm_eligible = yes sed_grain_rice_farm_eligible = yes sed_grain_maize_farm_eligible = yes sed_grain_millet_farm_eligible = yes }
+ OR = { sed_grain_wheat_farm_eligible = yes sed_grain_rye_farm_eligible = yes sed_grain_rice_farm_eligible = yes sed_grain_maize_farm_eligible = yes sed_grain_millet_farm_eligible = yes sed_grain_wheat_farm_found_eligible = yes sed_grain_rye_farm_found_eligible = yes sed_grain_rice_farm_found_eligible = yes sed_grain_maize_farm_found_eligible = yes sed_grain_millet_farm_found_eligible = yes }
 }
 sed_grain_candidate_eligible = {
  owner = { sed_grain_supply_demand = yes }
@@ -550,6 +883,15 @@ sed_grain_queued_supply = { OR = { AND = { has_building = building_wheat_farm b:
   has_active_production_method = pm_soil_enriching_farming } } } } }
 
 # State scope: one verified producer type for grain; output checked by active method.
+sed_grain_wheat_farm_found_eligible = {
+ sed_grain_wheat_farm_found_operable = yes
+ sed_founding_input_wheat_farm_safe = yes
+}
+sed_grain_wheat_farm_found_operable = {
+ sed_grain_found_site = yes
+ can_construct_building = building_wheat_farm
+ sed_state_labor_available >= 5000
+}
 sed_grain_wheat_farm_eligible = {
  sed_grain_wheat_farm_operable = yes
  sed_input_wheat_farm_safe = yes
@@ -575,6 +917,15 @@ sed_grain_wheat_farm_operable = {
 }
 
 # State scope: one verified producer type for grain; output checked by active method.
+sed_grain_rye_farm_found_eligible = {
+ sed_grain_rye_farm_found_operable = yes
+ sed_founding_input_rye_farm_safe = yes
+}
+sed_grain_rye_farm_found_operable = {
+ sed_grain_found_site = yes
+ can_construct_building = building_rye_farm
+ sed_state_labor_available >= 5000
+}
 sed_grain_rye_farm_eligible = {
  sed_grain_rye_farm_operable = yes
  sed_input_rye_farm_safe = yes
@@ -599,6 +950,15 @@ sed_grain_rye_farm_operable = {
 }
 
 # State scope: one verified producer type for grain; output checked by active method.
+sed_grain_rice_farm_found_eligible = {
+ sed_grain_rice_farm_found_operable = yes
+ sed_founding_input_rice_farm_safe = yes
+}
+sed_grain_rice_farm_found_operable = {
+ sed_grain_found_site = yes
+ can_construct_building = building_rice_farm
+ sed_state_labor_available >= 10000
+}
 sed_grain_rice_farm_eligible = {
  sed_grain_rice_farm_operable = yes
  sed_input_rice_farm_safe = yes
@@ -624,6 +984,15 @@ sed_grain_rice_farm_operable = {
 }
 
 # State scope: one verified producer type for grain; output checked by active method.
+sed_grain_maize_farm_found_eligible = {
+ sed_grain_maize_farm_found_operable = yes
+ sed_founding_input_maize_farm_safe = yes
+}
+sed_grain_maize_farm_found_operable = {
+ sed_grain_found_site = yes
+ can_construct_building = building_maize_farm
+ sed_state_labor_available >= 5000
+}
 sed_grain_maize_farm_eligible = {
  sed_grain_maize_farm_operable = yes
  sed_input_maize_farm_safe = yes
@@ -648,6 +1017,15 @@ sed_grain_maize_farm_operable = {
 }
 
 # State scope: one verified producer type for grain; output checked by active method.
+sed_grain_millet_farm_found_eligible = {
+ sed_grain_millet_farm_found_operable = yes
+ sed_founding_input_millet_farm_safe = yes
+}
+sed_grain_millet_farm_found_operable = {
+ sed_grain_found_site = yes
+ can_construct_building = building_millet_farm
+ sed_state_labor_available >= 5000
+}
 sed_grain_millet_farm_eligible = {
  sed_grain_millet_farm_operable = yes
  sed_input_millet_farm_safe = yes
@@ -790,9 +1168,20 @@ sed_fabric_candidate_site = {
  NOT = { has_variable = sed_fabric_request_pending }
 
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_fabric_found_site = {
+ sed_fabric_candidate_site = yes
+ owner = {
+  NOT = { any_scope_state = { OR = { has_building = building_cotton_plantation has_building = building_livestock_ranch } } }
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_fabric_request_pending } }
+ }
+ NOT = { has_building = building_cotton_plantation } NOT = { has_building = building_livestock_ranch }
+}
 sed_fabric_supplier_available = {
  sed_fabric_candidate_site = yes
- OR = { sed_fabric_cotton_plantation_eligible = yes sed_fabric_livestock_ranch_eligible = yes }
+ OR = { sed_fabric_cotton_plantation_eligible = yes sed_fabric_livestock_ranch_eligible = yes sed_fabric_cotton_plantation_found_eligible = yes sed_fabric_livestock_ranch_found_eligible = yes }
 }
 sed_fabric_candidate_eligible = {
  owner = { sed_fabric_supply_demand = yes }
@@ -807,6 +1196,15 @@ sed_fabric_queued_supply = { OR = { AND = { has_building = building_cotton_plant
   has_active_production_method = pm_simple_ranch } } } } }
 
 # State scope: one verified producer type for fabric; output checked by active method.
+sed_fabric_cotton_plantation_found_eligible = {
+ sed_fabric_cotton_plantation_found_operable = yes
+ sed_founding_input_cotton_plantation_safe = yes
+}
+sed_fabric_cotton_plantation_found_operable = {
+ sed_fabric_found_site = yes
+ can_construct_building = building_cotton_plantation
+ sed_state_labor_available >= 8000
+}
 sed_fabric_cotton_plantation_eligible = {
  sed_fabric_cotton_plantation_operable = yes
  sed_input_cotton_plantation_safe = yes
@@ -831,6 +1229,15 @@ sed_fabric_cotton_plantation_operable = {
 }
 
 # State scope: one verified producer type for fabric; output checked by active method.
+sed_fabric_livestock_ranch_found_eligible = {
+ sed_fabric_livestock_ranch_found_operable = yes
+ sed_founding_input_livestock_ranch_safe = yes
+}
+sed_fabric_livestock_ranch_found_operable = {
+ sed_fabric_found_site = yes
+ can_construct_building = building_livestock_ranch
+ sed_state_labor_available >= 5000
+}
 sed_fabric_livestock_ranch_eligible = {
  sed_fabric_livestock_ranch_operable = yes
  sed_input_livestock_ranch_safe = yes
@@ -888,9 +1295,20 @@ sed_tools_candidate_site = {
  NOT = { has_variable = sed_tools_request_pending }
 
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_tools_found_site = {
+ sed_tools_candidate_site = yes
+ owner = {
+  NOT = { any_scope_state = { OR = { has_building = building_tooling_workshop } } }
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_tools_request_pending } }
+ }
+ NOT = { has_building = building_tooling_workshop }
+}
 sed_tools_supplier_available = {
  sed_tools_candidate_site = yes
- OR = { sed_tools_tooling_workshop_eligible = yes }
+ OR = { sed_tools_tooling_workshop_eligible = yes sed_tools_tooling_workshop_found_eligible = yes }
 }
 sed_tools_candidate_eligible = {
  owner = { sed_tools_supply_demand = yes }
@@ -903,6 +1321,15 @@ sed_tools_queued_supply = { OR = { AND = { has_building = building_tooling_works
   has_active_production_method = pm_steel } } } } }
 
 # State scope: one verified producer type for tools; output checked by active method.
+sed_tools_tooling_workshop_found_eligible = {
+ sed_tools_tooling_workshop_found_operable = yes
+ sed_founding_input_tooling_workshop_safe = yes
+}
+sed_tools_tooling_workshop_found_operable = {
+ sed_tools_found_site = yes
+ can_construct_building = building_tooling_workshop
+ sed_state_labor_available >= 5000
+}
 sed_tools_tooling_workshop_eligible = {
  sed_tools_tooling_workshop_operable = yes
  sed_input_tooling_workshop_safe = yes
@@ -945,9 +1372,20 @@ sed_groceries_candidate_site = {
  NOT = { has_variable = sed_groceries_request_pending }
 
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_groceries_found_site = {
+ sed_groceries_candidate_site = yes
+ owner = {
+  NOT = { any_scope_state = { OR = { has_building = building_food_industry } } }
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_groceries_request_pending } }
+ }
+ NOT = { has_building = building_food_industry }
+}
 sed_groceries_supplier_available = {
  sed_groceries_candidate_site = yes
- OR = { sed_groceries_food_industry_eligible = yes }
+ OR = { sed_groceries_food_industry_eligible = yes sed_groceries_food_industry_found_eligible = yes }
 }
 sed_groceries_candidate_eligible = {
  owner = { sed_groceries_supply_demand = yes }
@@ -963,6 +1401,15 @@ sed_groceries_queued_supply = { OR = { AND = { has_building = building_food_indu
   has_active_production_method = pm_vacuum_canning_principle_3 } } } } }
 
 # State scope: one verified producer type for groceries; output checked by active method.
+sed_groceries_food_industry_found_eligible = {
+ sed_groceries_food_industry_found_operable = yes
+ sed_founding_input_food_industry_safe = yes
+}
+sed_groceries_food_industry_found_operable = {
+ sed_groceries_found_site = yes
+ can_construct_building = building_food_industry
+ sed_state_labor_available >= 6600
+}
 sed_groceries_food_industry_eligible = {
  sed_groceries_food_industry_operable = yes
  sed_input_food_industry_safe = yes
@@ -1008,9 +1455,20 @@ sed_clothes_candidate_site = {
  NOT = { has_variable = sed_clothes_request_pending }
 
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_clothes_found_site = {
+ sed_clothes_candidate_site = yes
+ owner = {
+  NOT = { any_scope_state = { OR = { has_building = building_textile_mill } } }
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_clothes_request_pending } }
+ }
+ NOT = { has_building = building_textile_mill }
+}
 sed_clothes_supplier_available = {
  sed_clothes_candidate_site = yes
- OR = { sed_clothes_textile_mill_eligible = yes }
+ OR = { sed_clothes_textile_mill_eligible = yes sed_clothes_textile_mill_found_eligible = yes }
 }
 sed_clothes_candidate_eligible = {
  owner = { sed_clothes_supply_demand = yes }
@@ -1023,6 +1481,15 @@ sed_clothes_queued_supply = { OR = { AND = { has_building = building_textile_mil
   has_active_production_method = pm_sewing_machines } } } } }
 
 # State scope: one verified producer type for clothes; output checked by active method.
+sed_clothes_textile_mill_found_eligible = {
+ sed_clothes_textile_mill_found_operable = yes
+ sed_founding_input_textile_mill_safe = yes
+}
+sed_clothes_textile_mill_found_operable = {
+ sed_clothes_found_site = yes
+ can_construct_building = building_textile_mill
+ sed_state_labor_available >= 6000
+}
 sed_clothes_textile_mill_eligible = {
  sed_clothes_textile_mill_operable = yes
  sed_input_textile_mill_safe = yes
@@ -1065,9 +1532,20 @@ sed_small_arms_candidate_site = {
  NOT = { has_variable = sed_small_arms_request_pending }
 owner = { military_expenses > 0 market = { mg:small_arms ?= { market_goods_buy_orders > 0 } } }
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_small_arms_found_site = {
+ sed_small_arms_candidate_site = yes
+ owner = {
+  NOT = { any_scope_state = { OR = { has_building = building_arms_industry } } }
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_small_arms_request_pending } }
+ }
+ NOT = { has_building = building_arms_industry }
+}
 sed_small_arms_supplier_available = {
  sed_small_arms_candidate_site = yes
- OR = { sed_small_arms_arms_industry_eligible = yes }
+ OR = { sed_small_arms_arms_industry_eligible = yes sed_small_arms_arms_industry_found_eligible = yes }
 }
 sed_small_arms_candidate_eligible = {
  owner = { sed_small_arms_supply_demand = yes }
@@ -1080,6 +1558,15 @@ sed_small_arms_queued_supply = { OR = { AND = { has_building = building_arms_ind
   has_active_production_method = pm_bolt_action_rifles } } } } }
 
 # State scope: one verified producer type for small_arms; output checked by active method.
+sed_small_arms_arms_industry_found_eligible = {
+ sed_small_arms_arms_industry_found_operable = yes
+ sed_founding_input_arms_industry_safe = yes
+}
+sed_small_arms_arms_industry_found_operable = {
+ sed_small_arms_found_site = yes
+ can_construct_building = building_arms_industry
+ sed_state_labor_available >= 5000
+}
 sed_small_arms_arms_industry_eligible = {
  sed_small_arms_arms_industry_operable = yes
  sed_input_arms_industry_safe = yes
@@ -1122,9 +1609,20 @@ sed_artillery_candidate_site = {
  NOT = { has_variable = sed_artillery_request_pending }
 owner = { military_expenses > 0 market = { mg:artillery ?= { market_goods_buy_orders > 0 } } }
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_artillery_found_site = {
+ sed_artillery_candidate_site = yes
+ owner = {
+  NOT = { any_scope_state = { OR = { has_building = building_artillery_foundry } } }
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_artillery_request_pending } }
+ }
+ NOT = { has_building = building_artillery_foundry }
+}
 sed_artillery_supplier_available = {
  sed_artillery_candidate_site = yes
- OR = { sed_artillery_artillery_foundry_eligible = yes }
+ OR = { sed_artillery_artillery_foundry_eligible = yes sed_artillery_artillery_foundry_found_eligible = yes }
 }
 sed_artillery_candidate_eligible = {
  owner = { sed_artillery_supply_demand = yes }
@@ -1139,6 +1637,15 @@ sed_artillery_queued_supply = { OR = { AND = { has_building = building_artillery
   has_active_production_method = pm_recoiled_barrels } } } } }
 
 # State scope: one verified producer type for artillery; output checked by active method.
+sed_artillery_artillery_foundry_found_eligible = {
+ sed_artillery_artillery_foundry_found_operable = yes
+ sed_founding_input_artillery_foundry_safe = yes
+}
+sed_artillery_artillery_foundry_found_operable = {
+ sed_artillery_found_site = yes
+ can_construct_building = building_artillery_foundry
+ sed_state_labor_available >= 5250
+}
 sed_artillery_artillery_foundry_eligible = {
  sed_artillery_artillery_foundry_operable = yes
  sed_input_artillery_foundry_safe = yes
@@ -1183,9 +1690,20 @@ sed_ammunition_candidate_site = {
  NOT = { has_variable = sed_ammunition_request_pending }
 owner = { military_expenses > 0 market = { mg:ammunition ?= { market_goods_buy_orders > 0 } } }
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_ammunition_found_site = {
+ sed_ammunition_candidate_site = yes
+ owner = {
+  NOT = { any_scope_state = { OR = { has_building = building_munition_plant } } }
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_ammunition_request_pending } }
+ }
+ NOT = { has_building = building_munition_plant }
+}
 sed_ammunition_supplier_available = {
  sed_ammunition_candidate_site = yes
- OR = { sed_ammunition_munition_plant_eligible = yes }
+ OR = { sed_ammunition_munition_plant_eligible = yes sed_ammunition_munition_plant_found_eligible = yes }
 }
 sed_ammunition_candidate_eligible = {
  owner = { sed_ammunition_supply_demand = yes }
@@ -1196,6 +1714,15 @@ sed_ammunition_queued_supply = { OR = { AND = { has_building = building_munition
   has_active_production_method = pm_explosive_shells } } } } }
 
 # State scope: one verified producer type for ammunition; output checked by active method.
+sed_ammunition_munition_plant_found_eligible = {
+ sed_ammunition_munition_plant_found_operable = yes
+ sed_founding_input_munition_plant_safe = yes
+}
+sed_ammunition_munition_plant_found_operable = {
+ sed_ammunition_found_site = yes
+ can_construct_building = building_munition_plant
+ sed_state_labor_available >= 5000
+}
 sed_ammunition_munition_plant_eligible = {
  sed_ammunition_munition_plant_operable = yes
  sed_input_munition_plant_safe = yes
@@ -1365,6 +1892,32 @@ sed_input_railway_safe = {
      sed_input_headroom_wood < { value = sed_input_railway_wood multiply = 1.25 }
  }
 }
+sed_founding_input_railway_safe = {
+ NOT = {
+ sed_founding_input_railway_coal > 0
+ sed_input_headroom_coal < { value = sed_founding_input_railway_coal multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_railway_electricity > 0
+ sed_input_headroom_electricity < { value = sed_founding_input_railway_electricity multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_railway_engines > 0
+ sed_input_headroom_engines < { value = sed_founding_input_railway_engines multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_railway_oil > 0
+ sed_input_headroom_oil < { value = sed_founding_input_railway_oil multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_railway_steel > 0
+ sed_input_headroom_steel < { value = sed_founding_input_railway_steel multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_railway_wood > 0
+ sed_input_headroom_wood < { value = sed_founding_input_railway_wood multiply = 1.25 }
+ }
+}
 sed_input_construction_sector_safe = {
  NOT = {
   sed_input_construction_sector_copper > 0
@@ -1403,6 +1956,44 @@ sed_input_construction_sector_safe = {
      sed_input_headroom_wood < { value = sed_input_construction_sector_wood multiply = 1.25 }
  }
 }
+sed_founding_input_construction_sector_safe = {
+ NOT = {
+ sed_founding_input_construction_sector_copper > 0
+ sed_input_headroom_copper < { value = sed_founding_input_construction_sector_copper multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_construction_sector_electricity > 0
+ sed_input_headroom_electricity < { value = sed_founding_input_construction_sector_electricity multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_construction_sector_explosives > 0
+ sed_input_headroom_explosives < { value = sed_founding_input_construction_sector_explosives multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_construction_sector_fabric > 0
+ sed_input_headroom_fabric < { value = sed_founding_input_construction_sector_fabric multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_construction_sector_glass > 0
+ sed_input_headroom_glass < { value = sed_founding_input_construction_sector_glass multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_construction_sector_iron > 0
+ sed_input_headroom_iron < { value = sed_founding_input_construction_sector_iron multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_construction_sector_steel > 0
+ sed_input_headroom_steel < { value = sed_founding_input_construction_sector_steel multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_construction_sector_tools > 0
+ sed_input_headroom_tools < { value = sed_founding_input_construction_sector_tools multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_construction_sector_wood > 0
+ sed_input_headroom_wood < { value = sed_founding_input_construction_sector_wood multiply = 1.25 }
+ }
+}
 sed_input_logging_camp_safe = {
  NOT = {
   sed_input_logging_camp_coal > 0
@@ -1427,6 +2018,32 @@ sed_input_logging_camp_safe = {
  NOT = {
   sed_input_logging_camp_transportation > 0
      sed_input_headroom_transportation < { value = sed_input_logging_camp_transportation multiply = 1.25 }
+ }
+}
+sed_founding_input_logging_camp_safe = {
+ NOT = {
+ sed_founding_input_logging_camp_coal > 0
+ sed_input_headroom_coal < { value = sed_founding_input_logging_camp_coal multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_logging_camp_electricity > 0
+ sed_input_headroom_electricity < { value = sed_founding_input_logging_camp_electricity multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_logging_camp_engines > 0
+ sed_input_headroom_engines < { value = sed_founding_input_logging_camp_engines multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_logging_camp_oil > 0
+ sed_input_headroom_oil < { value = sed_founding_input_logging_camp_oil multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_logging_camp_tools > 0
+ sed_input_headroom_tools < { value = sed_founding_input_logging_camp_tools multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_logging_camp_transportation > 0
+ sed_input_headroom_transportation < { value = sed_founding_input_logging_camp_transportation multiply = 1.25 }
  }
 }
 sed_input_iron_mine_safe = {
@@ -1455,6 +2072,32 @@ sed_input_iron_mine_safe = {
      sed_input_headroom_transportation < { value = sed_input_iron_mine_transportation multiply = 1.25 }
  }
 }
+sed_founding_input_iron_mine_safe = {
+ NOT = {
+ sed_founding_input_iron_mine_coal > 0
+ sed_input_headroom_coal < { value = sed_founding_input_iron_mine_coal multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_iron_mine_engines > 0
+ sed_input_headroom_engines < { value = sed_founding_input_iron_mine_engines multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_iron_mine_explosives > 0
+ sed_input_headroom_explosives < { value = sed_founding_input_iron_mine_explosives multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_iron_mine_oil > 0
+ sed_input_headroom_oil < { value = sed_founding_input_iron_mine_oil multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_iron_mine_tools > 0
+ sed_input_headroom_tools < { value = sed_founding_input_iron_mine_tools multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_iron_mine_transportation > 0
+ sed_input_headroom_transportation < { value = sed_founding_input_iron_mine_transportation multiply = 1.25 }
+ }
+}
 sed_input_coal_mine_safe = {
  NOT = {
   sed_input_coal_mine_engines > 0
@@ -1475,6 +2118,28 @@ sed_input_coal_mine_safe = {
  NOT = {
   sed_input_coal_mine_transportation > 0
      sed_input_headroom_transportation < { value = sed_input_coal_mine_transportation multiply = 1.25 }
+ }
+}
+sed_founding_input_coal_mine_safe = {
+ NOT = {
+ sed_founding_input_coal_mine_engines > 0
+ sed_input_headroom_engines < { value = sed_founding_input_coal_mine_engines multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_coal_mine_explosives > 0
+ sed_input_headroom_explosives < { value = sed_founding_input_coal_mine_explosives multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_coal_mine_oil > 0
+ sed_input_headroom_oil < { value = sed_founding_input_coal_mine_oil multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_coal_mine_tools > 0
+ sed_input_headroom_tools < { value = sed_founding_input_coal_mine_tools multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_coal_mine_transportation > 0
+ sed_input_headroom_transportation < { value = sed_founding_input_coal_mine_transportation multiply = 1.25 }
  }
 }
 sed_input_wheat_farm_safe = {
@@ -1503,6 +2168,32 @@ sed_input_wheat_farm_safe = {
      sed_input_headroom_tools < { value = sed_input_wheat_farm_tools multiply = 1.25 }
  }
 }
+sed_founding_input_wheat_farm_safe = {
+ NOT = {
+ sed_founding_input_wheat_farm_coal > 0
+ sed_input_headroom_coal < { value = sed_founding_input_wheat_farm_coal multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_wheat_farm_engines > 0
+ sed_input_headroom_engines < { value = sed_founding_input_wheat_farm_engines multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_wheat_farm_fertilizer > 0
+ sed_input_headroom_fertilizer < { value = sed_founding_input_wheat_farm_fertilizer multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_wheat_farm_fish > 0
+ sed_input_headroom_fish < { value = sed_founding_input_wheat_farm_fish multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_wheat_farm_oil > 0
+ sed_input_headroom_oil < { value = sed_founding_input_wheat_farm_oil multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_wheat_farm_tools > 0
+ sed_input_headroom_tools < { value = sed_founding_input_wheat_farm_tools multiply = 1.25 }
+ }
+}
 sed_input_rye_farm_safe = {
  NOT = {
   sed_input_rye_farm_coal > 0
@@ -1525,6 +2216,28 @@ sed_input_rye_farm_safe = {
      sed_input_headroom_tools < { value = sed_input_rye_farm_tools multiply = 1.25 }
  }
 }
+sed_founding_input_rye_farm_safe = {
+ NOT = {
+ sed_founding_input_rye_farm_coal > 0
+ sed_input_headroom_coal < { value = sed_founding_input_rye_farm_coal multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_rye_farm_engines > 0
+ sed_input_headroom_engines < { value = sed_founding_input_rye_farm_engines multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_rye_farm_fertilizer > 0
+ sed_input_headroom_fertilizer < { value = sed_founding_input_rye_farm_fertilizer multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_rye_farm_oil > 0
+ sed_input_headroom_oil < { value = sed_founding_input_rye_farm_oil multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_rye_farm_tools > 0
+ sed_input_headroom_tools < { value = sed_founding_input_rye_farm_tools multiply = 1.25 }
+ }
+}
 sed_input_rice_farm_safe = {
  NOT = {
   sed_input_rice_farm_coal > 0
@@ -1541,6 +2254,24 @@ sed_input_rice_farm_safe = {
  NOT = {
   sed_input_rice_farm_tools > 0
      sed_input_headroom_tools < { value = sed_input_rice_farm_tools multiply = 1.25 }
+ }
+}
+sed_founding_input_rice_farm_safe = {
+ NOT = {
+ sed_founding_input_rice_farm_coal > 0
+ sed_input_headroom_coal < { value = sed_founding_input_rice_farm_coal multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_rice_farm_fertilizer > 0
+ sed_input_headroom_fertilizer < { value = sed_founding_input_rice_farm_fertilizer multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_rice_farm_fish > 0
+ sed_input_headroom_fish < { value = sed_founding_input_rice_farm_fish multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_rice_farm_tools > 0
+ sed_input_headroom_tools < { value = sed_founding_input_rice_farm_tools multiply = 1.25 }
  }
 }
 sed_input_maize_farm_safe = {
@@ -1565,6 +2296,28 @@ sed_input_maize_farm_safe = {
      sed_input_headroom_tools < { value = sed_input_maize_farm_tools multiply = 1.25 }
  }
 }
+sed_founding_input_maize_farm_safe = {
+ NOT = {
+ sed_founding_input_maize_farm_coal > 0
+ sed_input_headroom_coal < { value = sed_founding_input_maize_farm_coal multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_maize_farm_engines > 0
+ sed_input_headroom_engines < { value = sed_founding_input_maize_farm_engines multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_maize_farm_fertilizer > 0
+ sed_input_headroom_fertilizer < { value = sed_founding_input_maize_farm_fertilizer multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_maize_farm_oil > 0
+ sed_input_headroom_oil < { value = sed_founding_input_maize_farm_oil multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_maize_farm_tools > 0
+ sed_input_headroom_tools < { value = sed_founding_input_maize_farm_tools multiply = 1.25 }
+ }
+}
 sed_input_millet_farm_safe = {
  NOT = {
   sed_input_millet_farm_coal > 0
@@ -1587,6 +2340,28 @@ sed_input_millet_farm_safe = {
      sed_input_headroom_tools < { value = sed_input_millet_farm_tools multiply = 1.25 }
  }
 }
+sed_founding_input_millet_farm_safe = {
+ NOT = {
+ sed_founding_input_millet_farm_coal > 0
+ sed_input_headroom_coal < { value = sed_founding_input_millet_farm_coal multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_millet_farm_engines > 0
+ sed_input_headroom_engines < { value = sed_founding_input_millet_farm_engines multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_millet_farm_fertilizer > 0
+ sed_input_headroom_fertilizer < { value = sed_founding_input_millet_farm_fertilizer multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_millet_farm_oil > 0
+ sed_input_headroom_oil < { value = sed_founding_input_millet_farm_oil multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_millet_farm_tools > 0
+ sed_input_headroom_tools < { value = sed_founding_input_millet_farm_tools multiply = 1.25 }
+ }
+}
 sed_input_cotton_plantation_safe = {
  NOT = {
   sed_input_cotton_plantation_engines > 0
@@ -1595,6 +2370,16 @@ sed_input_cotton_plantation_safe = {
  NOT = {
   sed_input_cotton_plantation_transportation > 0
      sed_input_headroom_transportation < { value = sed_input_cotton_plantation_transportation multiply = 1.25 }
+ }
+}
+sed_founding_input_cotton_plantation_safe = {
+ NOT = {
+ sed_founding_input_cotton_plantation_engines > 0
+ sed_input_headroom_engines < { value = sed_founding_input_cotton_plantation_engines multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_cotton_plantation_transportation > 0
+ sed_input_headroom_transportation < { value = sed_founding_input_cotton_plantation_transportation multiply = 1.25 }
  }
 }
 sed_input_livestock_ranch_safe = {
@@ -1621,6 +2406,32 @@ sed_input_livestock_ranch_safe = {
  NOT = {
   sed_input_livestock_ranch_transportation > 0
      sed_input_headroom_transportation < { value = sed_input_livestock_ranch_transportation multiply = 1.25 }
+ }
+}
+sed_founding_input_livestock_ranch_safe = {
+ NOT = {
+ sed_founding_input_livestock_ranch_coal > 0
+ sed_input_headroom_coal < { value = sed_founding_input_livestock_ranch_coal multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_livestock_ranch_electricity > 0
+ sed_input_headroom_electricity < { value = sed_founding_input_livestock_ranch_electricity multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_livestock_ranch_grain > 0
+ sed_input_headroom_grain < { value = sed_founding_input_livestock_ranch_grain multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_livestock_ranch_iron > 0
+ sed_input_headroom_iron < { value = sed_founding_input_livestock_ranch_iron multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_livestock_ranch_tools > 0
+ sed_input_headroom_tools < { value = sed_founding_input_livestock_ranch_tools multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_livestock_ranch_transportation > 0
+ sed_input_headroom_transportation < { value = sed_founding_input_livestock_ranch_transportation multiply = 1.25 }
  }
 }
 sed_input_tooling_workshop_safe = {
@@ -1655,6 +2466,40 @@ sed_input_tooling_workshop_safe = {
  NOT = {
   sed_input_tooling_workshop_wood > 0
      sed_input_headroom_wood < { value = sed_input_tooling_workshop_wood multiply = 1.25 }
+ }
+}
+sed_founding_input_tooling_workshop_safe = {
+ NOT = {
+ sed_founding_input_tooling_workshop_coal > 0
+ sed_input_headroom_coal < { value = sed_founding_input_tooling_workshop_coal multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_tooling_workshop_copper > 0
+ sed_input_headroom_copper < { value = sed_founding_input_tooling_workshop_copper multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_tooling_workshop_electricity > 0
+ sed_input_headroom_electricity < { value = sed_founding_input_tooling_workshop_electricity multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_tooling_workshop_iron > 0
+ sed_input_headroom_iron < { value = sed_founding_input_tooling_workshop_iron multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_tooling_workshop_oil > 0
+ sed_input_headroom_oil < { value = sed_founding_input_tooling_workshop_oil multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_tooling_workshop_rubber > 0
+ sed_input_headroom_rubber < { value = sed_founding_input_tooling_workshop_rubber multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_tooling_workshop_steel > 0
+ sed_input_headroom_steel < { value = sed_founding_input_tooling_workshop_steel multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_tooling_workshop_wood > 0
+ sed_input_headroom_wood < { value = sed_founding_input_tooling_workshop_wood multiply = 1.25 }
  }
 }
 sed_input_food_industry_safe = {
@@ -1699,6 +2544,48 @@ sed_input_food_industry_safe = {
      sed_input_headroom_tools < { value = sed_input_food_industry_tools multiply = 1.25 }
  }
 }
+sed_founding_input_food_industry_safe = {
+ NOT = {
+ sed_founding_input_food_industry_copper > 0
+ sed_input_headroom_copper < { value = sed_founding_input_food_industry_copper multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_food_industry_electricity > 0
+ sed_input_headroom_electricity < { value = sed_founding_input_food_industry_electricity multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_food_industry_fish > 0
+ sed_input_headroom_fish < { value = sed_founding_input_food_industry_fish multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_food_industry_glass > 0
+ sed_input_headroom_glass < { value = sed_founding_input_food_industry_glass multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_food_industry_grain > 0
+ sed_input_headroom_grain < { value = sed_founding_input_food_industry_grain multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_food_industry_iron > 0
+ sed_input_headroom_iron < { value = sed_founding_input_food_industry_iron multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_food_industry_meat > 0
+ sed_input_headroom_meat < { value = sed_founding_input_food_industry_meat multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_food_industry_oil > 0
+ sed_input_headroom_oil < { value = sed_founding_input_food_industry_oil multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_food_industry_sugar > 0
+ sed_input_headroom_sugar < { value = sed_founding_input_food_industry_sugar multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_food_industry_tools > 0
+ sed_input_headroom_tools < { value = sed_founding_input_food_industry_tools multiply = 1.25 }
+ }
+}
 sed_input_textile_mill_safe = {
  NOT = {
   sed_input_textile_mill_copper > 0
@@ -1727,6 +2614,36 @@ sed_input_textile_mill_safe = {
  NOT = {
   sed_input_textile_mill_tools > 0
      sed_input_headroom_tools < { value = sed_input_textile_mill_tools multiply = 1.25 }
+ }
+}
+sed_founding_input_textile_mill_safe = {
+ NOT = {
+ sed_founding_input_textile_mill_copper > 0
+ sed_input_headroom_copper < { value = sed_founding_input_textile_mill_copper multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_textile_mill_dye > 0
+ sed_input_headroom_dye < { value = sed_founding_input_textile_mill_dye multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_textile_mill_electricity > 0
+ sed_input_headroom_electricity < { value = sed_founding_input_textile_mill_electricity multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_textile_mill_fabric > 0
+ sed_input_headroom_fabric < { value = sed_founding_input_textile_mill_fabric multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_textile_mill_rubber > 0
+ sed_input_headroom_rubber < { value = sed_founding_input_textile_mill_rubber multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_textile_mill_silk > 0
+ sed_input_headroom_silk < { value = sed_founding_input_textile_mill_silk multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_textile_mill_tools > 0
+ sed_input_headroom_tools < { value = sed_founding_input_textile_mill_tools multiply = 1.25 }
  }
 }
 sed_input_arms_industry_safe = {
@@ -1763,6 +2680,40 @@ sed_input_arms_industry_safe = {
      sed_input_headroom_tools < { value = sed_input_arms_industry_tools multiply = 1.25 }
  }
 }
+sed_founding_input_arms_industry_safe = {
+ NOT = {
+ sed_founding_input_arms_industry_coal > 0
+ sed_input_headroom_coal < { value = sed_founding_input_arms_industry_coal multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_arms_industry_copper > 0
+ sed_input_headroom_copper < { value = sed_founding_input_arms_industry_copper multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_arms_industry_electricity > 0
+ sed_input_headroom_electricity < { value = sed_founding_input_arms_industry_electricity multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_arms_industry_hardwood > 0
+ sed_input_headroom_hardwood < { value = sed_founding_input_arms_industry_hardwood multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_arms_industry_iron > 0
+ sed_input_headroom_iron < { value = sed_founding_input_arms_industry_iron multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_arms_industry_oil > 0
+ sed_input_headroom_oil < { value = sed_founding_input_arms_industry_oil multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_arms_industry_steel > 0
+ sed_input_headroom_steel < { value = sed_founding_input_arms_industry_steel multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_arms_industry_tools > 0
+ sed_input_headroom_tools < { value = sed_founding_input_arms_industry_tools multiply = 1.25 }
+ }
+}
 sed_input_artillery_foundry_safe = {
  NOT = {
   sed_input_artillery_foundry_coal > 0
@@ -1797,6 +2748,40 @@ sed_input_artillery_foundry_safe = {
      sed_input_headroom_tools < { value = sed_input_artillery_foundry_tools multiply = 1.25 }
  }
 }
+sed_founding_input_artillery_foundry_safe = {
+ NOT = {
+ sed_founding_input_artillery_foundry_coal > 0
+ sed_input_headroom_coal < { value = sed_founding_input_artillery_foundry_coal multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_artillery_foundry_copper > 0
+ sed_input_headroom_copper < { value = sed_founding_input_artillery_foundry_copper multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_artillery_foundry_electricity > 0
+ sed_input_headroom_electricity < { value = sed_founding_input_artillery_foundry_electricity multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_artillery_foundry_hardwood > 0
+ sed_input_headroom_hardwood < { value = sed_founding_input_artillery_foundry_hardwood multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_artillery_foundry_iron > 0
+ sed_input_headroom_iron < { value = sed_founding_input_artillery_foundry_iron multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_artillery_foundry_oil > 0
+ sed_input_headroom_oil < { value = sed_founding_input_artillery_foundry_oil multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_artillery_foundry_steel > 0
+ sed_input_headroom_steel < { value = sed_founding_input_artillery_foundry_steel multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_artillery_foundry_tools > 0
+ sed_input_headroom_tools < { value = sed_founding_input_artillery_foundry_tools multiply = 1.25 }
+ }
+}
 sed_input_munition_plant_safe = {
  NOT = {
   sed_input_munition_plant_coal > 0
@@ -1825,6 +2810,36 @@ sed_input_munition_plant_safe = {
  NOT = {
   sed_input_munition_plant_tools > 0
      sed_input_headroom_tools < { value = sed_input_munition_plant_tools multiply = 1.25 }
+ }
+}
+sed_founding_input_munition_plant_safe = {
+ NOT = {
+ sed_founding_input_munition_plant_coal > 0
+ sed_input_headroom_coal < { value = sed_founding_input_munition_plant_coal multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_munition_plant_copper > 0
+ sed_input_headroom_copper < { value = sed_founding_input_munition_plant_copper multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_munition_plant_electricity > 0
+ sed_input_headroom_electricity < { value = sed_founding_input_munition_plant_electricity multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_munition_plant_explosives > 0
+ sed_input_headroom_explosives < { value = sed_founding_input_munition_plant_explosives multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_munition_plant_lead > 0
+ sed_input_headroom_lead < { value = sed_founding_input_munition_plant_lead multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_munition_plant_oil > 0
+ sed_input_headroom_oil < { value = sed_founding_input_munition_plant_oil multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_munition_plant_tools > 0
+ sed_input_headroom_tools < { value = sed_founding_input_munition_plant_tools multiply = 1.25 }
  }
 }
 sed_coord_tools_available = {

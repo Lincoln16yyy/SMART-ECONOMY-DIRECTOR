@@ -20,6 +20,13 @@ textbox = {
  text = "sed_railway_candidate_reason"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_railway_found_reason_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_railway_found_reason"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_plan_railway_score_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -3357,6 +3364,13 @@ textbox = {
  using = fontsize_large
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_build_budget"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_build_budget_project_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_build_budget_project"
 }
 textbox = {
  visible = "[GetScriptedGui('sed_build_budget_unknown_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"

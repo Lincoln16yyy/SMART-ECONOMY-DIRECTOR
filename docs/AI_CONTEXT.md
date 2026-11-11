@@ -1,7 +1,68 @@
 # Contexto de continuidade
 
-Última entrega documentada: 0.6.20 instalada com jogo fechado. A 0.6.26 foi
-gerada e validada localmente, sem instalação ou execução na engine.
+Última entrega documentada: 0.7.3 instalada com jogo fechado e 14 arquivos
+conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.3_20261110_230839_169721`.
+254 testes sintéticos aprovados. As novas fundações ainda exigem confirmação na engine.
+
+
+## 0.7.3 — Fundações com reserva de trabalho e insumos
+
+Correção da revisão de 0.7.2. As fundações de produtores e da primeira ferrovia
+passam por guardas próprias de trabalho e insumos, revalidadas na aprovação.
+`data/founding_method_groups.json` contém grupos e tecnologias extraídos dos
+arquivos vanilla locais de 1.15. Os coeficientes continuam em
+`data/input_profiles.json`. Para prédio ausente, cada insumo soma o maior
+consumo de um método tecnologicamente disponível por grupo. Restrições de leis
+ou princípios não reduzem essa referência. Ela pode bloquear um prédio que
+seria viável com método mais simples. Escolher e aplicar PMs continua pendente.
+
+Pedidos próprios de fundação reservam mão de obra e insumos enquanto ainda
+não há prédio. Quando ele aparece, a leitura usa nível, fila e PMs ativos,
+evita dupla contagem e libera a reserva após o acompanhamento encerrar o
+pedido. As reservas dependem do livro inferido existente. Obras externas sem
+prédio continuam sem identidade disponível. Fundações bloqueadas por insumos
+entram nas prioridades de fornecedores, inclusive fundação do fornecedor.
+
+O objetivo de evolução confirmado pelo jogador inclui recuperação econômica,
+planejamento produtivo, comércio, PMs e fortalecimento militar conforme a
+necessidade e os recursos. Modernização e recrutamento ainda estão pendentes.
+Priorizar execução em segundo plano e pedir campanha só em marcos significativos.
+
+## 0.7.2 — Duração e materiais do primeiro projeto
+
+`sed_refresh_direct_budget` identifica a ação com `sed_plan_<ação>_rank = 1` e
+usa `PROJECT_POINTS` (vanilla `required_construction` por tipo) para gravar
+pontos, semanas estimadas e materiais do projeto. A reserva exigida usa
+`max(26, semanas + 4)` com teto de 56 semanas. Novas variáveis em
+`sed_build_budget_project_*`, painel e localização PT/EN. 247 testes
+sintéticos aprovados; duração real de fila concorrente e salários continuam
+fora da estimativa.
+
+## 0.7.1 — Primeira ferrovia e pendência de fundação
+
+Estado incorporado com déficit de infraestrutura e sem `building_railway`
+entra no plano como `sed_railway_found_site`, desde que aceite
+`can_construct_building` e não tenha pedido pendente. A aprovação de ferrovia
+lê nível 0 quando não há prédio e infere conclusão quando ele aparece. A
+limpeza de pendências agora mantém o pedido de fundação (ferrovia ou
+indústria) enquanto houver níveis na fila pública e nenhum prédio; antes, a
+primeira leitura após enfileirar marcava a fundação como abandonada e liberava
+uma duplicação. Testes em `tests/test_planning.py`; 246 testes sintéticos
+aprovados. Engine e campanha pendentes.
+
+## 0.7.0 — Fundação da indústria ausente
+
+Quando um bem está em escassez, o país não tem produtor verificado e algum
+estado incorporado aceita `can_construct_building`, o estado entra como alvo
+normal de oferta no plano. O Automático pode então enfileirar um nível do
+prédio novo (intenção com nível 0) usando o dispatcher, a aprovação e o livro
+de resultados existentes, sob as guardas fiscais, de materiais, de fila
+privada, de pausa e o limite mensal. Sem estado apto, o objetivo 5 permanece e
+nada é forçado. Implementação em `sed_<bem>_found_site` e no ramo de enqueue de
+`sed_run_<bem>_approval`; o gatilho exige que nenhum estado tenha pedido
+pendente daquele bem, limitando a uma fundação por país. Testes em
+`tests/test_planning.py`. 244 testes sintéticos aprovados; engine e campanha
+pendentes.
 
 ## 0.6.26 — Setor de construção e segunda revisão no Automático
 

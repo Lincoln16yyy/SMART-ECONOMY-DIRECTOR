@@ -4,7 +4,7 @@ import unittest
 from tools.build_mod import SUPPLY_TARGETS
 from tools.construction_budget import BASE_PRICES, PROFILES
 from test_diagnostics import script_definitions
-from script_harness import Country, building, construction_sector, state
+from script_harness import Country, building, construction_sector, railway, state
 
 
 class ConstructionBudgetTests(unittest.TestCase):
@@ -153,6 +153,18 @@ class ConstructionBudgetTests(unittest.TestCase):
         c.run('sed_refresh_direct_budget')
         self.assertEqual(c.variables['sed_build_budget_material_capacity'], 3500)
         self.assertEqual(c.variables['sed_build_budget_weekly'], 3500)
+
+    def test_first_priority_duration_and_materials_extend_required_reserve(self):
+        c = self.c
+        self.sector('pm_wooden_buildings')
+        c.states.append(state(-10, can_construct=True))
+        c.run('sed_refresh_national_plan')
+        c.run('sed_refresh_direct_budget')
+        self.assertEqual(c.variables['sed_build_budget_project_points'], 800)
+        self.assertAlmostEqual(c.variables['sed_build_budget_project_weeks'], 80)
+        self.assertEqual(c.variables['sed_build_budget_project_materials'], 1400000)
+        # The reserve window grows with the project but is capped at 56 weeks.
+        self.assertEqual(c.variables['sed_build_budget_required_gold'], 190600)
 
     def test_project_cap_still_limits_large_sector_material_reference(self):
         c = self.c

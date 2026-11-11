@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.6.26'
+VERSION = '0.7.3'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -261,7 +261,9 @@ sed_refresh_supply_candidates = {
         request_queued = (f'OR = {{ AND = {{ has_variable = sed_{good}_intent_variant '
                           f'OR = {{ {tracked_queued} }} }} '
                           f'AND = {{ NOT = {{ has_variable = sed_{good}_intent_variant }} '
-                          f'OR = {{ {any_queued} }} }} }}')
+                          f'OR = {{ {any_queued} }} }} '
+                          f'AND = {{ var:sed_{good}_intent_level = 0 NOT = {{ {any_present} }} '
+                          f'owner = {{ construction_queue_num_queued_government_levels > 0 }} }} }}')
         reset = '\n'.join(f' set_variable = {{ name = sed_{good}_{reason} value = 0 }}'
                           for reason in SUPPLY_DIAGNOSTICS)
         breakdown = f'''  if = {{
@@ -346,15 +348,20 @@ sed_refresh_supply_candidates = {
         for index, variant in enumerate(vs):
             branch = 'if' if index == 0 else 'else_if'
             name = variant_id(variant)
-            eligible = f'sed_{good}_{name}_eligible = yes'
+            eligible = (f'OR = {{ sed_{good}_{name}_eligible = yes '
+                        f'sed_{good}_{name}_found_eligible = yes }}')
             if good in INPUT_DEPENDENCIES and len(vs) > 1:
                 eligible += (f' OR = {{ owner = {{ NOT = {{ AND = {{ has_variable = sed_mode_automatic '
                              f'has_variable = sed_input_priority_{good} }} }} }} '
-                             f'sed_{good}_{name}_preferred_supplier = yes }}')
+                             f'OR = {{ sed_{good}_{name}_preferred_supplier = yes '
+                             f'sed_{good}_{name}_found_eligible = yes }} }}')
             enqueue += f'''  {branch} = {{
    limit = {{ {eligible} }}
-   # Baseline level before queuing; the monthly review compares it after the queue.
-   set_variable = {{ name = sed_{good}_intent_level value = b:{variant['building']}.level }}
+   # A founding reads level 0; the monthly review then infers completion from the queue.
+   set_variable = {{ name = sed_{good}_intent_level value = 0 }}
+   if = {{ limit = {{ has_building = {variant['building']} }}
+    set_variable = {{ name = sed_{good}_intent_level value = b:{variant['building']}.level }}
+   }}
    set_variable = {{ name = sed_{good}_intent_variant value = {index + 1} }}
    start_building_construction = {variant['building']}
   }}
@@ -575,6 +582,9 @@ def candidate_item(name):
     prefix = 'sed_supply' if supply else f'sed_{name}'
     content = textbox(f'sed_{name}_candidate_title', heading=True, width=468)
     content += textbox(f'sed_{name}_candidate_reason', width=468)
+    if name == 'railway':
+        content += textbox('sed_railway_found_reason',
+                           'sed_railway_found_reason_visible_sgui', width=468, state=True)
     content += textbox(f'sed_plan_{name}_score', f'sed_plan_{name}_score_visible_sgui', width=468, state=True)
     if name != 'railway':
         content += textbox('sed_candidate_infrastructure', width=468)
@@ -680,6 +690,7 @@ def widget():
     body += textbox('sed_plan_waiting', 'sed_plan_waiting_visible_sgui')
     body += textbox('sed_reserve_budget', 'sed_reserve_budget_visible_sgui')
     body += textbox('sed_build_budget', 'sed_build_budget_visible_sgui')
+    body += textbox('sed_build_budget_project', 'sed_build_budget_project_visible_sgui')
     body += textbox('sed_build_budget_unknown', 'sed_build_budget_unknown_visible_sgui')
     for status in range(1, 6):
         body += textbox(f'sed_fiscal_{status}', f'sed_fiscal_{status}_visible_sgui')
@@ -917,9 +928,17 @@ sed_refresh_railway_candidates = {
   if = {
    limit = {
     has_variable = sed_railway_request_pending
-    OR = {
-     NOT = { has_building = building_railway }
-     b:building_railway = { level_after_queued_constructions <= level }
+    NOT = {
+     OR = {
+      AND = { has_building = building_railway
+       b:building_railway = { level_after_queued_constructions > level } }
+      # A founded railway has no building yet; the queue itself proves it is
+      # still in progress. Without this, the request was cleared as abandoned
+      # on the next reading and could be founded again elsewhere.
+      AND = { NOT = { has_building = building_railway }
+       var:sed_railway_intent_level = 0
+       owner = { construction_queue_num_queued_government_levels > 0 } }
+     }
     }
    }
    if = {
@@ -994,7 +1013,11 @@ sed_run_railway_approval = {
    set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }
   }
   owner = { sed_record_auto_attempt = yes }
-  set_variable = { name = sed_railway_intent_level value = b:building_railway.level }
+  # A founding reads level 0; a later reading infers completion from the queue.
+  if = { limit = { has_building = building_railway }
+   set_variable = { name = sed_railway_intent_level value = b:building_railway.level }
+  }
+  else = { set_variable = { name = sed_railway_intent_level value = 0 } }
   start_building_construction = building_railway
   owner = {
    if = {
@@ -1498,6 +1521,7 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
     result += 'sed_reserve_budget_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_year net_total_income < 0 } }\n'
     result += 'sed_auto_status_budget_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 22 } }\n'
     result += 'sed_build_budget_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_build_budget_known var:sed_build_budget_known = 1 } }\n'
+    result += 'sed_build_budget_project_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_build_budget_known var:sed_build_budget_known = 1 var:sed_build_budget_project_points > 0 } }\n'
     result += 'sed_build_budget_unknown_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_build_budget_known var:sed_build_budget_known = 0 } }\n'
     for item in SUPPLY_TARGETS:
         for variant in variants(item):
@@ -1529,6 +1553,7 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
             result += f'sed_plan_{rank}_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable_list = sed_plan_{rank}_{name} }} }}\n'
     for name in ACTION_NAMES:
         result += f'sed_plan_{name}_score_visible_sgui = {{ scope = state is_shown = {{ owner = {{ has_variable = sed_enabled }} has_variable = sed_plan_{name}_score var:sed_plan_{name}_score > 0 }} }}\n'
+    result += 'sed_railway_found_reason_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } sed_railway_found_site = yes } }\n'
     result += 'sed_tax_policy_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_mode_automatic } }\n'
     result += 'sed_details_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_details_visible } }\n'
     return '# Generated by tools/build_mod.py.\n' + result
@@ -1536,20 +1561,37 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
 
 def scripted_triggers():
     return '''# State scope. Candidate is limited to an operating railway with a live infrastructure deficit.
+# State scope. A deficit state with no railway can found the base.
+sed_railway_found_site = {
+ is_incorporated = yes
+ infrastructure_delta < 0
+ NOT = { has_variable = sed_railway_ignored }
+ NOT = { has_variable = sed_railway_request_pending }
+ NOT = { has_building = building_railway }
+ can_construct_building = building_railway
+ sed_state_labor_available >= 1200
+ sed_founding_input_railway_safe = yes
+}
+
 sed_railway_candidate_eligible = {
  is_incorporated = yes
  infrastructure_delta < 0
  NOT = { has_variable = sed_railway_ignored }
  NOT = { has_variable = sed_railway_request_pending }
- has_building = building_railway
- b:building_railway = {
-  level > 0
-  occupancy >= 0.8
-  has_failed_hires = no
-  building_has_goods_shortage = no
-  level_after_queued_constructions <= level
+ OR = {
+  sed_railway_found_site = yes
+  AND = {
+   has_building = building_railway
+   b:building_railway = {
+    level > 0
+    occupancy >= 0.8
+    has_failed_hires = no
+    building_has_goods_shortage = no
+    level_after_queued_constructions <= level
+   }
+   can_construct_building = building_railway
+  }
  }
- can_construct_building = building_railway
 }
 
 sed_railway_approval_valid = {
@@ -1604,8 +1646,14 @@ def supply_triggers():
             result.append(f'''{key} = {{
  sed_{downstream}_candidate_site = yes
  owner = {{ market = {{ mg:{downstream} ?= {{ market_goods_has_goods_shortage = yes }} }} }}
- sed_{downstream}_{variant_id(variant)}_operable = yes
+ OR = {{
+ AND = {{ sed_{downstream}_{variant_id(variant)}_operable = yes
 {input_forecast.blocked_input(variant['building'], good)}
+ }}
+ AND = {{ sed_{downstream}_{variant_id(variant)}_found_operable = yes
+{input_forecast.blocked_input(variant['building'], good, founding=True)}
+ }}
+ }}
 }}
 ''')
     for item in SUPPLY_TARGETS:
@@ -1619,6 +1667,8 @@ def supply_triggers():
         if good in INPUT_DEPENDENCIES:
             demand = (f'OR = {{ {shortage} AND = {{ has_variable = sed_input_priority_{good} '
                       f'NOT = {{ any_scope_state = {{ sed_{good}_queued_supply = yes }} }} }} }}')
+        absent = ' '.join(f'NOT = {{ has_building = {variant["building"]} }}' for variant in vs)
+        constructible = ' '.join(f'sed_{good}_{variant_id(variant)}_found_eligible = yes' for variant in vs)
         result.append(f'''sed_{good}_supply_demand = {{ {demand} }}
 sed_{good}_candidate_site = {{
  is_incorporated = yes
@@ -1627,9 +1677,20 @@ sed_{good}_candidate_site = {{
  NOT = {{ has_variable = sed_{good}_request_pending }}
 {military_gate}
 }}
+# No verified producer in the country: found the base in a state that can host it.
+sed_{good}_found_site = {{
+ sed_{good}_candidate_site = yes
+ owner = {{
+  NOT = {{ any_scope_state = {{ OR = {{ {' '.join(f'has_building = {variant["building"]}' for variant in vs)} }} }} }}
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = {{ any_scope_state = {{ has_variable = sed_{good}_request_pending }} }}
+ }}
+ {absent}
+}}
 sed_{good}_supplier_available = {{
  sed_{good}_candidate_site = yes
- OR = {{ {alternatives} }}
+ OR = {{ {alternatives} {constructible} }}
 }}
 sed_{good}_candidate_eligible = {{
  owner = {{ sed_{good}_supply_demand = yes }}
@@ -1645,6 +1706,15 @@ sed_{good}_candidate_eligible = {{
             building = variant['building']
             methods = variant_methods(variant, '  ')
             result.append(f'''# State scope: one verified producer type for {good}; output checked by active method.
+sed_{good}_{variant_id(variant)}_found_eligible = {{
+ sed_{good}_{variant_id(variant)}_found_operable = yes
+ sed_founding_input_{variant_id(variant)}_safe = yes
+}}
+sed_{good}_{variant_id(variant)}_found_operable = {{
+ sed_{good}_found_site = yes
+ can_construct_building = {building}
+ sed_state_labor_available >= {labor.REQUIREMENTS[building]}
+}}
 sed_{good}_{variant_id(variant)}_eligible = {{
  sed_{good}_{variant_id(variant)}_operable = yes
  sed_input_{variant_id(variant)}_safe = yes
@@ -1811,12 +1881,13 @@ def localization(language):
         'sed_employment_readings': (f'Edifícios com insumos em falta: {v("shortage_buildings", "0")} · Contratação incompleta: {v("understaffed_buildings", "0")} · Falhas de contratação: {v("hiring_failure_buildings", "0")}', f'Buildings short of inputs: {v("shortage_buildings", "0")} · Incomplete staffing: {v("understaffed_buildings", "0")} · Failed hires: {v("hiring_failure_buildings", "0")}'),
         'sed_limitations_title': ('Como interpretar', 'How to interpret'),
         'sed_recommendations_title': ('Oportunidades de infraestrutura', 'Infrastructure opportunities'),
-        'sed_recommendations_intro': ('Protótipo: até três ferrovias operantes em estados incorporados com infraestrutura negativa. A análise não calcula custo nem retorno; aprove uma ação por vez e confira o orçamento.', 'Prototype: up to three operating railways in incorporated states with negative infrastructure. The analysis does not calculate cost or return; approve one action at a time and review the budget.'),
+        'sed_recommendations_intro': ('Protótipo: até três ferrovias operantes em estados incorporados com infraestrutura negativa. Estado com déficit e sem ferrovia pode receber a primeira, sob as mesmas guardas. A análise não calcula custo nem retorno; aprove uma ação por vez e confira o orçamento.', 'Prototype: up to three operating railways in incorporated states with negative infrastructure. A deficit state with no railway can receive its first, under the same guards. The analysis does not calculate cost or return; approve one action at a time and review the budget.'),
         'sed_no_infrastructure_opportunity': ('Sem déficit atual de infraestrutura nos estados do país. O Director não recomenda expandir ferrovias agora.', 'No current infrastructure deficit in the country’s states. The Director does not recommend railway expansion now.'),
-        'sed_no_railway_candidate': ('Há déficit de infraestrutura, mas nenhuma ferrovia passou pelos filtros de operação, contratação, insumos e fila.', 'Infrastructure deficits exist, but no railway passed the operation, hiring, input, and queue filters.'),
+        'sed_no_railway_candidate': ('Há déficit de infraestrutura, mas nenhum estado passou pelos filtros de operação, contratação, insumos, permissão e fila.', 'Infrastructure deficits exist, but no state passed the operation, hiring, input, permission, and queue filters.'),
         'sed_railway_breakdown': (f'Estados com déficit de infraestrutura: {v("railway_deficit_states", "0")} · Sem ferrovia: {v("railway_no_railway_states", "0")} · Ferrovia não operante: {v("railway_not_ready_states", "0")} · Bloqueados por incorporação ou permissão: {v("railway_blocked_states", "0")}. Cada estado é contado por um motivo principal.', f'States with an infrastructure deficit: {v("railway_deficit_states", "0")} · No railway: {v("railway_no_railway_states", "0")} · Railway not operating: {v("railway_not_ready_states", "0")} · Blocked by incorporation or permission: {v("railway_blocked_states", "0")}. Each state is counted under one primary reason.'),
         'sed_railway_candidate_title': ('#bold [State.GetName]#! — saldo de infraestrutura: #v [State.GetInfrastructureBalance|0+=]#!', '#bold [State.GetName]#! — infrastructure balance: #v [State.GetInfrastructureBalance|0+=]#!'),
         'sed_railway_candidate_reason': ('A ferrovia está empregada, sem falta de insumos nem expansão já enfileirada. Um nível público pode aliviar o gargalo; o efeito e o custo futuros não são previstos.', 'The railway is staffed, has no input shortage, and has no queued expansion. One government level may relieve the bottleneck; future impact and cost are not forecast.'),
+        'sed_railway_found_reason': ('Estado com déficit de infraestrutura e sem ferrovia. O Director pode fundar a primeira ferrovia aqui; o efeito e o custo futuros não são previstos.', 'State with an infrastructure deficit and no railway. The Director may found the first railway here; future impact and cost are not forecast.'),
         'sed_approve_railway': ('Aprovar: enfileirar 1 nível público', 'Approve: queue 1 government level'),
         'sed_approve_railway_tt': ('Requer modo Assistido, país fora de inadimplência e fila privada vazia; estado e filas são revalidados no clique. Saldo semanal negativo gera um alerta financeiro, mas não bloqueia. Usa a fila normal do jogo.', 'Requires Assisted mode, no default, and an empty private queue; state and queues are rechecked on click. A negative weekly balance raises a caution but does not block. Uses the normal game queue.'),
         'sed_railway_blocked_private': ('Botão bloqueado: há níveis na fila privada.', 'Button blocked: the private queue has levels.'),
@@ -1851,7 +1922,7 @@ def localization(language):
         'sed_supply_stale': ('A escassez ou as condições do prédio mudaram. Nenhuma ação foi executada; atualize o diagnóstico.', 'The shortage or building conditions changed. No action was executed; refresh the diagnosis.'),
         'sed_supply_pending': ('Esta expansão já está na fila. Aguarde sua conclusão ou cancelamento antes de aprovar outra.', 'This expansion is already queued. Wait for it to complete or be cancelled before approving another.'),
         'sed_supply_finance_caution': ('Alerta: o saldo semanal está negativo. A aprovação continua disponível; confira custo e prazo na fila do jogo.', 'Caution: the weekly balance is negative. Approval remains available; review cost and timing in the game queue.'),
-        'sed_limitations': ('Protótipos limitados a ferrovias operantes com infraestrutura negativa, setores de construção operantes com fila pública de ao menos três projetos e produtores locais para madeira, ferro, carvão, cereais, tecido, ferramentas, mantimentos e roupas quando o mercado mostra escassez. As recomendações de oferta não estimam custo, retorno ou contratação futura. Aprovar apenas adiciona um nível à fila pública; custos e tempo dependem do jogo. Saldo negativo é aviso, não bloqueio; inadimplência e fila privada ocupada bloqueiam a aprovação. Qualificações, salários, desempregados e dependência externa ainda não são medidos diretamente. Variações de PIB podem refletir mudanças de fronteira e mercado.', 'Prototypes are limited to operating railways with negative infrastructure, operating construction sectors when the government queue has at least three projects, and local producers for wood, iron, coal, grain, fabric, tools, groceries, and clothes when the market reports a shortage. Supply recommendations do not estimate cost, returns, or future hiring. Approval only adds one level to the government queue; costs and timing depend on the game. A negative balance is a caution, not a blocker; default and a nonempty private queue block approval. Qualifications, wages, unemployment, and external dependence are not directly measured. GDP changes may reflect border and market changes.'),
+        'sed_limitations': ('Protótipos limitados a ferrovias operantes ou à fundação da primeira ferrovia em estado com déficit, setores de construção operantes com fila pública de ao menos três projetos e produtores locais para madeira, ferro, carvão, cereais, tecido, ferramentas, mantimentos e roupas quando o mercado mostra escassez. As recomendações de oferta não estimam custo, retorno ou contratação futura. Aprovar apenas adiciona um nível à fila pública; custos e tempo dependem do jogo. Saldo negativo é aviso, não bloqueio; inadimplência e fila privada ocupada bloqueiam a aprovação. Qualificações, salários, desempregados e dependência externa ainda não são medidos diretamente. Variações de PIB podem refletir mudanças de fronteira e mercado.', 'Prototypes are limited to operating railways or founding the first railway in a deficit state, operating construction sectors when the government queue has at least three projects, and local producers for wood, iron, coal, grain, fabric, tools, groceries, and clothes when the market reports a shortage. Supply recommendations do not estimate cost, returns, or future hiring. Approval only adds one level to the government queue; costs and timing depend on the game. A negative balance is a caution, not a blocker; default and a nonempty private queue block approval. Qualifications, wages, unemployment, and external dependence are not directly measured. GDP changes may reflect border and market changes.'),
     }
     for item in SUPPLY_TARGETS:
         good = item['good']
@@ -1947,7 +2018,7 @@ def localization(language):
         'sed_ignore_recommendation': ('Ignorar neste estado', 'Ignore in this state'),
         'sed_recommendations_intro': ('Expansões de ferrovias existentes quando falta infraestrutura. Aprovar adiciona um nível público.', 'Expand existing railways where infrastructure is insufficient. Approval adds one government level.'),
         'sed_construction_intro': ('Expandir um setor existente quando há pelo menos três projetos públicos.', 'Expand an existing sector when at least three government projects are queued.'),
-        'sed_supply_intro': ('Expansões de produtores existentes para atender à escassez do mercado ou abastecer outra expansão.', 'Existing producer expansions to address market shortages or supply another expansion.'),
+        'sed_supply_intro': ('Expansões de produtores existentes ou fundação da indústria ausente para atender à escassez do mercado ou abastecer outra expansão.', 'Existing producer expansions or founding of the missing industry to address market shortages or supply another expansion.'),
         'sed_supply_no_candidate': ('Nenhum produtor elegível nesta leitura. Esta versão só expande prédios existentes.', 'No eligible producer in this reading. This version only expands existing buildings.'),
     })
     for name in ACTION_NAMES:
@@ -1994,7 +2065,7 @@ def localization(language):
         'sed_fiscal_4': ('Fiscal: emergência por inadimplência. Nenhuma expansão autorizada.', 'Fiscal: default emergency. No expansion authorized.'),
         'sed_goal_0': ('Objetivo atual: observar e preservar recursos; sem expansão elegível.', 'Current objective: observe and preserve resources; no eligible expansion.'),
         'sed_goal_1': ('Objetivo atual: aliviar o gargalo de infraestrutura.', 'Current objective: relieve the infrastructure bottleneck.'),
-        'sed_goal_2': ('Objetivo atual: reduzir escassez de bens com produtores viáveis.', 'Current objective: reduce goods shortages using viable producers.'),
+        'sed_goal_2': ('Objetivo atual: reduzir escassez de bens ampliando produtores viáveis ou fundando a indústria ausente em estado apto.', 'Current objective: reduce goods shortages by expanding viable producers or founding the missing industry in a suitable state.'),
         'sed_goal_3': ('Objetivo atual: ampliar capacidade para a demanda da fila pública, com aprovação Assistida.', 'Current objective: expand capacity for government queue demand, with Assisted approval.'),
         'sed_goal_4': ('Objetivo atual: estabilizar as finanças antes de ampliar compromissos.', 'Current objective: stabilize finances before expanding commitments.'),
         'sed_auto_current_fiscal': ('Agora: política fiscal bloqueia novas tentativas automáticas. Requer saldos não negativos, reservas de quatro semanas de despesas fixas e dívida até 75% do crédito. A política de impostos e salários civis continua ativa no Automático.', 'Now: fiscal policy blocks new automatic attempts. Requires nonnegative balances, reserves covering four weeks of fixed expenses and debt up to 75% of credit. Tax and civilian government wage policy remains active in Automatic.'),
@@ -2010,7 +2081,8 @@ def localization(language):
         'sed_candidate_labor': ("Última leitura de mão de obra. Reserva estimada após vagas e filas conhecidas: [State.MakeScope.Var('sed_labor_available').GetValue|0]. Compromissos estimados: [State.MakeScope.Var('sed_labor_committed').GetValue|0]. Referência demográfica; qualificações e migração futura ainda precisam de avaliação.", "Last labor reading. Estimated reserve after known vacancies and queues: [State.MakeScope.Var('sed_labor_available').GetValue|0]. Estimated commitments: [State.MakeScope.Var('sed_labor_committed').GetValue|0]. Demographic reference; qualifications and future migration still require assessment."),
         'sed_auto_status_budget': ('Última revisão: referência de materiais da próxima obra sem cobertura ou método de construção desconhecido. Nenhuma tentativa consumida. Confira o orçamento direto no plano.', 'Last review: next-project material benchmark is uncovered or construction method is unknown. No attempt consumed. See the direct budget in the plan.'),
         'sed_build_budget_unknown': ('Orçamento direto pendente. Um setor ativo usa método de construção fora dos quatro perfis verificados. O Automático direto aguarda uma leitura reconhecida; aprovação Assistida permanece explícita.', 'Direct budget pending. An active sector uses a construction method outside the four verified profiles. Direct Automatic awaits recognized data; Assisted approval remains explicit.'),
-        'sed_build_budget': ('Referência conservadora para materiais da próxima obra direta: @money!' + v('build_budget_weekly', 'K') + '/semana, para até ' + v('build_budget_points', '1') + ' pontos. Teto de materiais pelos níveis e ocupação dos setores: @money!' + v('build_budget_material_capacity', 'K') + '/semana. Ouro exigido se o saldo não cobrir a referência: @money!' + v('build_budget_required_gold', 'K') + ', com ausência de dívida. Usa o maior custo entre métodos ativos, limitado pelos materiais dos setores existentes, com preços-base acrescidos de 75%. Pode superestimar; salários futuros, subsídios, modificadores e duração da obra ainda precisam ser avaliados.', 'Conservative material benchmark for the next direct project: @money!' + v('build_budget_weekly', 'K') + '/week, for up to ' + v('build_budget_points', '1') + ' points. Sector level/occupancy material cap: @money!' + v('build_budget_material_capacity', 'K') + '/week. Gold required if the balance does not cover the benchmark: @money!' + v('build_budget_required_gold', 'K') + ', with no debt. Uses the highest active-method cost, capped by existing sector materials, with base prices plus 75%. May overestimate; future wages, subsidies, modifiers and project duration still require assessment.'),
+        'sed_build_budget': ('Referência conservadora para materiais da próxima obra direta: @money!' + v('build_budget_weekly', 'K') + '/semana, para até ' + v('build_budget_points', '1') + ' pontos. Teto de materiais pelos níveis e ocupação dos setores: @money!' + v('build_budget_material_capacity', 'K') + '/semana. Ouro exigido se o saldo não cobrir a referência: @money!' + v('build_budget_required_gold', 'K') + ', com ausência de dívida. Usa o maior custo entre métodos ativos, limitado pelos materiais dos setores existentes, com preços-base acrescidos de 75%. A duração estimada do primeiro projeto amplia a reserva exigida, até 56 semanas; salários futuros, subsídios e modificadores continuam fora.', 'Conservative material benchmark for the next direct project: @money!' + v('build_budget_weekly', 'K') + '/week, for up to ' + v('build_budget_points', '1') + ' points. Sector level/occupancy material cap: @money!' + v('build_budget_material_capacity', 'K') + '/week. Gold required if the balance does not cover the benchmark: @money!' + v('build_budget_required_gold', 'K') + ', with no debt. Uses the highest active-method cost, capped by existing sector materials, with base prices plus 75%. The first project\u2019s estimated duration extends the required reserve, up to 56 weeks; future wages, subsidies and modifiers remain outside.'),
+        'sed_build_budget_project': ('Primeiro projeto do plano: ' + v('build_budget_project_points', '0') + ' pontos de construção, cerca de ' + v('build_budget_project_weeks', '1') + ' semanas na capacidade atual. Materiais de referência do projeto inteiro: @money!' + v('build_budget_project_materials', 'K') + '. Estimativa por tipo de prédio e capacidade semanal; fila concorrente, salários e modificadores podem alongar o prazo.', 'Plan\u2019s first project: ' + v('build_budget_project_points', '0') + ' construction points, about ' + v('build_budget_project_weeks', '1') + ' weeks at current capacity. Material reference for the whole project: @money!' + v('build_budget_project_materials', 'K') + '. Estimate from building type and weekly capacity; competing queue work, wages and modifiers can extend it.'),
         'sed_coord_executor_12': ('Ritmo por reservas: aguardando a fila pública existente. Com déficit financiado por ouro, novas autorizações externas ficam suspensas enquanto houver níveis públicos enfileirados. A política fiscal continua ativa e o orçamento é reavaliado nas revisões.', 'Reserve-funded pace: waiting for the existing government queue. While gold funds a deficit, new external authorizations remain suspended while government levels are queued. Fiscal policy remains active and the budget is reassessed on reviews.'),
         'sed_auto_status_reserve_queue': ('Última revisão: preservação de reservas, aguardando obras públicas já enfileiradas antes de autorizar novos investimentos.', 'Last review: preserving reserves, waiting for already queued government projects before authorizing new investment.'),
         'sed_reserve_budget': ('Orçamento por reservas nesta leitura. Piso de doze semanas de despesas fixas: @money!' + v('reserve_floor', 'K') + '. Ouro acima do piso: @money!' + v('reserve_spare', 'K') + '. Cobertura do déficit atual acima do piso: ' + v('reserve_runway', '1') + ' semanas. Ouro exigido pela regra de 26 semanas: @money!' + v('reserve_required', 'K') + '. Estimativa com despesas e déficit atuais; custo de novas obras ainda precisa ser avaliado.', 'Reserve budget in this reading. Twelve-week fixed-expense floor: @money!' + v('reserve_floor', 'K') + '. Gold above the floor: @money!' + v('reserve_spare', 'K') + '. Current deficit coverage above the floor: ' + v('reserve_runway', '1') + ' weeks. Gold required by the 26-week rule: @money!' + v('reserve_required', 'K') + '. Estimate using current expenses and deficit; new construction costs still require assessment.'),
@@ -2030,14 +2102,14 @@ def localization(language):
         pairs[f'sed_{policy}_last_command'] = (
             f'Último comando do Director para {pt}: ' + command_date + ', nível ' + levels + '. Escala de 1 (muito baixo) a 5 (muito alto). Confira o resultado no orçamento.',
             f'Last Director command for {en}: ' + command_date + ', level ' + levels + '. Scale from 1 (very low) to 5 (very high). Check the outcome in the budget.')
-    pairs['sed_goal_5'] = ('Objetivo atual: investigar ausência dos produtores atendidos pelo protótipo para bens em escassez. A construção direta do Director ainda exige produtor existente; a ferramenta externa mantém sua própria seleção.', 'Current objective: investigate missing prototype-supported producers for scarce goods. Direct Director construction still requires an existing producer; the external tool keeps its own selection.')
+    pairs['sed_goal_5'] = ('Objetivo atual: fundar a indústria ausente para bens em escassez. Nenhum estado incorporado pode hospedar o produtor agora, por tecnologia, terra ou infraestrutura; o Director aguarda uma leitura que abra um local apto e não força a construção.', 'Current objective: found the missing industry for scarce goods. No incorporated state can host the producer now because of technology, land or infrastructure; the Director waits for a reading that opens a suitable site and does not force construction.')
     for item in SUPPLY_TARGETS:
         name = item['good']
         names_pt = [variant['building_pt'] for variant in variants(item)]
         names_en = [variant['building_en'] for variant in variants(item)]
         producers_pt = ', '.join(names_pt[:-1]) + (' ou ' if len(names_pt) > 1 else '') + names_pt[-1]
         producers_en = ', '.join(names_en[:-1]) + (' or ' if len(names_en) > 1 else '') + names_en[-1]
-        pairs[f'sed_plan_missing_{name}'] = (f"Setor a investigar: {item['label_pt']} em escassez no mercado, sem produtor verificado ({producers_pt}) nos estados do país. Importação ou outros produtores podem suprir o bem; não é ordem de autossuficiência.", f"Sector to investigate: market shortage of {item['label_en']}, with no verified producer ({producers_en}) in the country's states. Imports or other producers may supply it; this is not a self-sufficiency mandate.")
+        pairs[f'sed_plan_missing_{name}'] = (f"Setor a fundar: {item['label_pt']} em escassez no mercado, sem produtor verificado ({producers_pt}) nos estados do país. O Director funda a base quando há estado incorporado apto, sob as guardas fiscais, de materiais e de fila. Importação ou outros produtores podem suprir o bem; não é ordem de autossuficiência.", f"Sector to found: market shortage of {item['label_en']}, with no verified producer ({producers_en}) in the country's states. The Director founds the base when an incorporated state can host it, under the fiscal, material and queue guards. Imports or other producers may supply it; this is not a self-sufficiency mandate.")
         pairs[f'sed_book_{name}'] = (f"Histórico de {item['label_pt']}: {v(name + '_intents', '0')} pedidos, {v(name + '_completed', '0')} concluídos, {v(name + '_abandoned', '0')} abandonados. Conclusão inferida quando o nível do produtor sobe ao sair da fila; cancelamento ou obra externa podem distorcer a leitura.", f"{item['label_en'].capitalize()} history: {v(name + '_intents', '0')} requested, {v(name + '_completed', '0')} completed, {v(name + '_abandoned', '0')} abandoned. Completion is inferred when the producer level rises after leaving the queue; cancellation or external work can distort it.")
         pairs[f'sed_meta_{name}'] = (f"Meta industrial anual: ampliar a oferta de {item['label_pt']}. A escassez foi observada em três meses de calendário consecutivos; ele mantém prioridade no plano até o fim do ano. A meta não dispensa os filtros de trabalhadores, insumos, fila, infraestrutura e proteção fiscal.", f"Annual industrial goal: expand the supply of {item['label_en']}. Shortage was observed in three consecutive calendar months; it keeps priority in the plan until the end of the year. The goal does not bypass the worker, input, queue, infrastructure and fiscal guards.")
     pairs['sed_book_railway'] = (f"Histórico de ferrovias: {v('railway_intents', '0')} pedidos, {v('railway_completed', '0')} concluídos, {v('railway_abandoned', '0')} abandonados. Conclusão inferida quando o nível sobe ao sair da fila.", f"Railway history: {v('railway_intents', '0')} requested, {v('railway_completed', '0')} completed, {v('railway_abandoned', '0')} abandoned. Completion is inferred when the level rises after leaving the queue.")
@@ -2054,11 +2126,12 @@ def localization(language):
     for name, option, pt_label, en_label in COMPETING_BUILDERS:
         pairs[f'sed_auto_builder_{name}'] = (pt_label, en_label)
     pairs['sed_railway_candidate_reason'] = ('Ferrovia operante em estado com déficit de infraestrutura. Custo e retorno não estimados.', 'Operating railway in a state with an infrastructure deficit. Cost and return not estimated.')
+    pairs['sed_railway_found_reason'] = ('Estado com déficit de infraestrutura e sem ferrovia: o Director funda a primeira. Custo e retorno não estimados.', 'State with an infrastructure deficit and no railway: the Director founds the first one. Cost and return not estimated.')
     pairs['sed_construction_candidate_reason'] = ('Setor operante e fila pública com demanda. Custo e contratação futura não estimados.', 'Operating sector with demand in the government queue. Cost and future hiring not estimated.')
     for item in SUPPLY_TARGETS:
         pairs[f"sed_{item['good']}_candidate_reason"] = (
-            f"Escassez de {item['label_pt']}; produtor operante, sem falta de insumos ou expansão enfileirada.",
-            f"Shortage of {item['label_en']}; operating producer, without input shortage or queued expansion.")
+            f"Escassez de {item['label_pt']}; amplia produtor operante ou funda a base em estado apto, sem falta de insumos ou expansão enfileirada.",
+            f"Shortage of {item['label_en']}; expands an operating producer or founds the base in a suitable state, without input shortage or queued expansion.")
     for name in ('railway', 'construction'):
         key = f'sed_{name}_breakdown'
         pairs[key] = (pairs[key][0] + ' Ignorados por você: ' + v(name + '_ignored_states', '0') + '.',
@@ -2173,6 +2246,10 @@ sed_pulse.1 = {
  }
 }
 '''
+    founding_projects = [(item['good'], index, variant['building'])
+                         for item in SUPPLY_TARGETS
+                         for index, variant in enumerate(variants(item), 1)]
+    founding_projects.append(('railway', 0, 'building_railway'))
     result = {
         'common/decisions/sed_decisions.txt': decisions,
         'common/journal_entries/sed_journal_entries.txt': journal,
@@ -2181,7 +2258,7 @@ sed_pulse.1 = {
         'common/scripted_effects/sed_effects.txt': effects(),
         'common/scripted_guis/sed_scripted_guis.txt': scripted_guis(),
         'common/scripted_triggers/sed_triggers.txt': scripted_triggers(),
-        'common/script_values/sed_values.txt': '# Current calendar, independent of diagnostic refresh.\nsed_live_month_key = { value = year multiply = 12 add = month }\n' + labor.values() + input_forecast.values() + supplier_output_values(),
+        'common/script_values/sed_values.txt': '# Current calendar, independent of diagnostic refresh.\nsed_live_month_key = { value = year multiply = 12 add = month }\n' + labor.values(founding_projects) + input_forecast.values(founding_projects) + supplier_output_values(),
         'gui/journal_entry_widgets/sed_diagnostics.gui': widget(),
         'localization/braz_por/sed_l_braz_por.yml': localization('braz_por'),
         'localization/english/sed_l_english.yml': localization('english'),

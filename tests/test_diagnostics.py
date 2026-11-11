@@ -835,6 +835,8 @@ class DiagnosisTests(unittest.TestCase):
                 c, target, producer = self.card_fixture(name)
                 c.readings['construction_queue_num_queued_government_levels'] = 0
                 target['infrastructure_delta'] = -2
+                # Keep the railway lane ineligible so this tests only the supply guard.
+                target['buildings'].append(railway(occupancy=0.5))
                 c.run('sed_set_mode_automatic')
                 c.run('sed_auto_apply_monthly')
                 self.assertEqual(c.constructions, [])
@@ -1000,7 +1002,7 @@ class DiagnosisTests(unittest.TestCase):
             'goods_shortage': (state(-2, buildings=[railway(shortage=True)]), False),
             'queued_expansion': (state(-2, buildings=[railway(queued_levels=1)]), False),
             'cannot_construct': (state(-2, can_construct=False, buildings=[railway()]), False),
-            'no_railway': (state(-2), False),
+            'no_railway_found': (state(-2), True),
         }
         for name, (target, expected) in cases.items():
             with self.subTest(name):
@@ -1033,7 +1035,8 @@ class DiagnosisTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_railway_no_railway_states'], 1)
         self.assertEqual(c.variables['sed_railway_not_ready_states'], 1)
         self.assertEqual(c.variables['sed_railway_blocked_states'], 2)
-        self.assertEqual(c.variable_lists['sed_railway_candidates'], [states[-1]])
+        # The no-railway deficit state now enters as a founding target.
+        self.assertEqual(c.variable_lists['sed_railway_candidates'], [states[-1], states[1]])
         self.assertEqual(
             c.variables['sed_railway_deficit_states'],
             c.variables['sed_railway_no_railway_states']
@@ -1301,7 +1304,7 @@ class DiagnosisTests(unittest.TestCase):
                     construction_queue_num_queued_private_levels=1)
                 assert_only('private')
                 # Ineligible states name no guard.
-                ineligible = state(-2, buildings=[])
+                ineligible = state(0, buildings=[])
                 self.assertFalse(any(
                     c.condition(next(entry.value for entry in self.definitions[name]
                                      if entry.key == 'is_shown'), ineligible)

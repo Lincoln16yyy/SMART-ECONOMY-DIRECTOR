@@ -190,6 +190,91 @@ class PlanningTests(unittest.TestCase):
         self.assertEqual(self.c.variables['sed_plan_goal'], 2)
         self.assertEqual(self.c.variables['sed_auto_review_status'], 1)
 
+    def test_automatic_founds_a_missing_industry_in_a_constructible_state(self):
+        target = state(can_construct=True)
+        self.c.states = [target]
+        self.c.market_goods['iron'] = dict(market_goods_has_goods_shortage=True,
+                                          market_goods_buy_orders=100,
+                                          market_goods_sell_orders=0)
+        c = self.c
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_missing_iron'], 1)
+        self.assertEqual(self.ranked(), [(1, 'iron', target)])
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.constructions, [dict(building='building_iron_mine', state=target)])
+        self.assertEqual(target['variables']['sed_iron_intent_level'], 0)
+        self.assertEqual(target['variables']['sed_iron_intent_variant'], 1)
+        self.assertEqual(c.variables['sed_iron_intents'], 1)
+        self.assertEqual(c.variables['sed_auto_review_status'], 1)
+
+    def test_a_queued_founding_is_not_duplicated_in_another_state(self):
+        first = state(can_construct=True)
+        second = state(can_construct=True)
+        self.c.states = [first, second]
+        self.c.market_goods['iron'] = dict(market_goods_has_goods_shortage=True,
+                                          market_goods_buy_orders=100,
+                                          market_goods_sell_orders=0)
+        c = self.c
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(len(c.constructions), 1)
+        c.readings['month'] = 1
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(len(c.constructions), 1)
+        self.assertEqual(self.ranked(), [])
+
+    def test_a_queued_founding_stays_pending_after_a_reading(self):
+        first = state(can_construct=True)
+        second = state(can_construct=True)
+        self.c.states = [first, second]
+        self.c.market_goods['iron'] = dict(market_goods_has_goods_shortage=True,
+                                          market_goods_buy_orders=100,
+                                          market_goods_sell_orders=0)
+        c = self.c
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        owner = first if c.constructions[0]['state'] is first else second
+        other = second if owner is first else first
+        # A diagnostic reading runs the supply cleanup before the queue clears.
+        c.readings['month'] = 1
+        c.run('sed_refresh_diagnostics')
+        self.assertIn('sed_iron_request_pending', owner['variables'])
+        self.assertNotIn('sed_iron_request_pending', other['variables'])
+        self.assertEqual(c.variables.get('sed_iron_abandoned'), None)
+        c.readings['month'] = 2
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(len(c.constructions), 1)
+
+    def test_automatic_founds_the_first_railway_in_a_deficit_state(self):
+        target = state(-10, can_construct=True)
+        self.c.states = [target]
+        c = self.c
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_goal'], 1)
+        self.assertEqual(self.ranked(), [(1, 'railway', target)])
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.constructions, [dict(building='building_railway', state=target)])
+        self.assertEqual(target['variables']['sed_railway_intent_level'], 0)
+        self.assertEqual(c.variables['sed_railway_intents'], 1)
+        self.assertEqual(c.variables['sed_auto_review_status'], 1)
+
+    def test_missing_industry_without_a_host_state_stays_an_objective(self):
+        target = state(can_construct=False)
+        self.c.states = [target]
+        self.c.market_goods['iron'] = dict(market_goods_has_goods_shortage=True,
+                                          market_goods_buy_orders=100,
+                                          market_goods_sell_orders=0)
+        c = self.c
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_missing_iron'], 1)
+        self.assertEqual(c.variables['sed_plan_goal'], 5)
+        self.assertEqual(self.ranked(), [])
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.constructions, [])
+
     def test_exactly_three_global_pairs_even_when_one_state_has_several_types(self):
         target = self.producer('grain', buy=100, sell=0)
         self.producer('clothes', target, buy=100, sell=10)

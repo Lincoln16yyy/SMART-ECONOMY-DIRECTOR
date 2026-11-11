@@ -1691,3 +1691,103 @@ confirmada, bloqueio da segunda tentativa no mesmo mês e fila privada ainda
 bloqueando. Geração e validação estática locais aprovadas. Sem instalação,
 execução na engine ou campanha nesta etapa; custo incremental de fila longa e
 concorrência real seguem sem confirmação.
+
+## 2026-11-10 — Fundação da indústria ausente (0.7.0)
+
+O jogador pediu que o Automático aja como gestor e transforme qualquer país com
+os recursos que ele tem. A lacuna era a base produtiva ausente: o Director
+identificava o bem em escassez sem produtor, mas não podia construir porque a
+aprovação exigia um prédio existente para expandir.
+
+A 0.7.0 inclui estados aptos a fundar a base no candidato normal do bem. Um
+estado entra quando é incorporado, não tem nenhuma variante do prédio, aceita
+`can_construct_building` para alguma variante e o país não tem produtor
+verificado daquele bem. A fundação usa o ranking, o dispatcher, a aprovação e
+o livro de resultados existentes; o nível inicial é 0 e a conclusão é inferida
+quando o nível sobe ao sair da fila. As guardas fiscais, de materiais, de fila
+privada, de pausa e o limite mensal continuam valendo. Sem estado apto, o
+objetivo 5 permanece e nada é forçado.
+
+243 testes sintéticos aprovados, incluindo fundação automática, ausência de
+estado apto e as regressões anteriores. Geração, validação estática e verificação de artefatos locais
+aprovadas. Sem instalação, engine ou campanha nesta etapa; custo real, terra
+disponível e concorrência seguem sem confirmação.
+
+## 2026-11-10 — Fundação única por país (correção da 0.7.0)
+
+O gatilho de fundação podia duplicar a mesma indústria: enquanto a obra estava
+na fila não existia prédio, o bem continuava marcado como ausente e outro
+estado sem pedido pendente voltava a ser elegível na revisão seguinte. O
+gatilho agora exige que nenhum estado tenha `sed_<bem>_request_pending`, então
+só há uma fundação por país. Quando o prédio conclui, o bem deixa de ser
+ausente e a expansão normal assume.
+
+244 testes sintéticos aprovados, incluindo duas revisões mensais com dois
+estados aptos e apenas uma inclusão. Geração e validação estática locais
+aprovadas; comportamento na engine continua pendente.
+
+## 2026-11-10 — Primeira ferrovia e pendência de fundação (0.7.1)
+
+A 0.7.0 permitia fundar indústria, mas não ferrovia: um estado com
+infraestrutura negativa e nenhuma ferrovia ficava só na contagem e nunca
+recebia obra. A 0.7.1 aceita esse estado como candidato normal quando ele é
+incorporado, aceita `can_construct_building` e não tem pedido pendente. A
+aprovação grava nível 0 e o livro de ferrovias infere a conclusão quando o
+prédio aparece, como já fazia com a indústria.
+
+Ao revisar o caminho, apareceu uma falha da 0.7.0: sem prédio, a limpeza de
+pendências marcava a fundação como abandonada na primeira leitura seguinte e
+removia o marcador, permitindo fundar de novo em outro estado. Agora o pedido
+de fundação permanece enquanto houver níveis na fila pública; só encerra
+quando o prédio aparece ou a fila esvazia. A regra vale para ferrovia e para
+os onze bens.
+
+246 testes sintéticos aprovados, incluindo fundação automática de ferrovia e
+persistência do pedido após diagnóstico intermediário. Geração, validação
+estática e verificação de artefatos locais aprovadas. Sem instalação, engine
+ou campanha nesta etapa; terra, permissão e concorrência reais seguem sem
+confirmação.
+
+## 2026-11-10 — Duração e materiais do primeiro projeto (0.7.2)
+
+O orçamento direto ainda media a reserva por uma janela fixa de 26 semanas e
+não dizia o tamanho da obra escolhida. A 0.7.2 identifica a ação em primeiro
+lugar no plano e usa a construção exigida do prédio na base vanilla
+(`required_construction`): 200 pontos para fazendas, madeira e tecido; 400 para
+ferro e carvão; 600 para ferramentas, alimentos, roupas e indústria bélica;
+800 para ferrovia, aço e munição; 25 para o setor de construção.
+
+O painel passa a mostrar pontos, semanas e materiais de referência do projeto
+inteiro. A reserva exigida usa a maior janela entre 26 e a duração mais quatro
+semanas, limitada a 56. Projetos curtos mantêm o piso anterior; ferrovia e
+munição exigem mais ouro, mas uma obra de até um ano de déficit coberto segue
+autorizada. Fila concorrente, salários, subsídios e modificadores ainda podem
+alongar o prazo e não entram na conta.
+
+247 testes sintéticos aprovados, incluindo ferrovia de 800 pontos, 80 semanas e
+reserva limitada a 56 semanas. Geração, validação estática e verificação de
+artefatos locais aprovadas. Sem instalação, engine ou campanha nesta etapa.
+
+
+## 2026-11-10 — Guardas de fundação e fornecedores ausentes (0.7.3)
+
+A revisão encontrou fundações de indústrias sem as guardas de trabalhadores e
+insumos das expansões. A aprovação agora revalida trabalho e insumos antes de
+inserir a indústria, e a primeira ferrovia também recebe essas guardas. A
+referência de insumos soma máximos por grupo de PM tecnologicamente disponível,
+com grupos e tecnologias extraídos do vanilla local. Pode adiar uma fundação
+viável com método simples. O Director ainda precisa selecionar e aplicar PMs.
+
+Pedidos próprios sem prédio reservam trabalho e insumos. A leitura migra para
+os PMs e a fila do prédio assim que ele existe, com regressões para dupla
+contagem, cancelamento e alteração das condições antes da aprovação. Um
+fornecedor ausente pode entrar no plano para desbloquear a indústria final.
+
+254 testes sintéticos aprovados. Validação estática contra a instalação 1.15
+aprovada. Confirmação na engine continua pendente.
+
+Instalada com jogo fechado, backup `mod_before_0.7.3_20261110_230423_163114`
+e conferência dos 14 arquivos pelo instalador.
+
+Revisão final da estimativa por grupo aprovada em 254 testes e reinstalada com
+backup `mod_before_0.7.3_20261110_230839_169721`, conferindo novamente os 14 arquivos.

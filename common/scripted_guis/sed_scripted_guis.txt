@@ -1224,6 +1224,7 @@ sed_auto_status_reserve_queue_visible_sgui = { scope = country is_shown = { has_
 sed_reserve_budget_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_year net_total_income < 0 } }
 sed_auto_status_budget_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 22 } }
 sed_build_budget_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_build_budget_known var:sed_build_budget_known = 1 } }
+sed_build_budget_project_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_build_budget_known var:sed_build_budget_known = 1 var:sed_build_budget_project_points > 0 } }
 sed_build_budget_unknown_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_build_budget_known var:sed_build_budget_known = 0 } }
 sed_input_ref_logging_camp_coal_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_logging_camp sed_input_logging_camp_coal > 0 } }
 sed_input_ref_logging_camp_electricity_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_logging_camp sed_input_logging_camp_electricity > 0 } }
@@ -1430,5 +1431,6 @@ sed_plan_clothes_score_visible_sgui = { scope = state is_shown = { owner = { has
 sed_plan_small_arms_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_small_arms_score var:sed_plan_small_arms_score > 0 } }
 sed_plan_artillery_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_artillery_score var:sed_plan_artillery_score > 0 } }
 sed_plan_ammunition_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_ammunition_score var:sed_plan_ammunition_score > 0 } }
+sed_railway_found_reason_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } sed_railway_found_site = yes } }
 sed_tax_policy_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_mode_automatic } }
 sed_details_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_details_visible } }

@@ -460,6 +460,9 @@ sed_disable_country = {
  remove_variable = sed_build_budget_weekly
  remove_variable = sed_build_budget_required_gold
  remove_variable = sed_build_budget_material_capacity
+ remove_variable = sed_build_budget_project_points
+ remove_variable = sed_build_budget_project_weeks
+ remove_variable = sed_build_budget_project_materials
  remove_variable = sed_input_market_margin_coal
  remove_variable = sed_input_market_margin_copper
  remove_variable = sed_input_market_margin_dye
@@ -714,9 +717,17 @@ sed_refresh_railway_candidates = {
   if = {
    limit = {
     has_variable = sed_railway_request_pending
-    OR = {
-     NOT = { has_building = building_railway }
-     b:building_railway = { level_after_queued_constructions <= level }
+    NOT = {
+     OR = {
+      AND = { has_building = building_railway
+       b:building_railway = { level_after_queued_constructions > level } }
+      # A founded railway has no building yet; the queue itself proves it is
+      # still in progress. Without this, the request was cleared as abandoned
+      # on the next reading and could be founded again elsewhere.
+      AND = { NOT = { has_building = building_railway }
+       var:sed_railway_intent_level = 0
+       owner = { construction_queue_num_queued_government_levels > 0 } }
+     }
     }
    }
    if = {
@@ -791,7 +802,11 @@ sed_run_railway_approval = {
    set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }
   }
   owner = { sed_record_auto_attempt = yes }
-  set_variable = { name = sed_railway_intent_level value = b:building_railway.level }
+  # A founding reads level 0; a later reading infers completion from the queue.
+  if = { limit = { has_building = building_railway }
+   set_variable = { name = sed_railway_intent_level value = b:building_railway.level }
+  }
+  else = { set_variable = { name = sed_railway_intent_level value = 0 } }
   start_building_construction = building_railway
   owner = {
    if = {
@@ -1047,7 +1062,7 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_wood_request_pending
-    NOT = { OR = { AND = { has_variable = sed_wood_intent_variant OR = { AND = { var:sed_wood_intent_variant = 1 has_building = building_logging_camp b:building_logging_camp = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_wood_intent_variant } OR = { AND = { has_building = building_logging_camp b:building_logging_camp = { level_after_queued_constructions > level } } } } } }
+    NOT = { OR = { AND = { has_variable = sed_wood_intent_variant OR = { AND = { var:sed_wood_intent_variant = 1 has_building = building_logging_camp b:building_logging_camp = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_wood_intent_variant } OR = { AND = { has_building = building_logging_camp b:building_logging_camp = { level_after_queued_constructions > level } } } } AND = { var:sed_wood_intent_level = 0 NOT = { has_building = building_logging_camp } owner = { construction_queue_num_queued_government_levels > 0 } } } }
    }
    if = {
     limit = { has_variable = sed_wood_intent_variant has_variable = sed_wood_intent_level }
@@ -1143,7 +1158,7 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_iron_request_pending
-    NOT = { OR = { AND = { has_variable = sed_iron_intent_variant OR = { AND = { var:sed_iron_intent_variant = 1 has_building = building_iron_mine b:building_iron_mine = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_iron_intent_variant } OR = { AND = { has_building = building_iron_mine b:building_iron_mine = { level_after_queued_constructions > level } } } } } }
+    NOT = { OR = { AND = { has_variable = sed_iron_intent_variant OR = { AND = { var:sed_iron_intent_variant = 1 has_building = building_iron_mine b:building_iron_mine = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_iron_intent_variant } OR = { AND = { has_building = building_iron_mine b:building_iron_mine = { level_after_queued_constructions > level } } } } AND = { var:sed_iron_intent_level = 0 NOT = { has_building = building_iron_mine } owner = { construction_queue_num_queued_government_levels > 0 } } } }
    }
    if = {
     limit = { has_variable = sed_iron_intent_variant has_variable = sed_iron_intent_level }
@@ -1239,7 +1254,7 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_coal_request_pending
-    NOT = { OR = { AND = { has_variable = sed_coal_intent_variant OR = { AND = { var:sed_coal_intent_variant = 1 has_building = building_coal_mine b:building_coal_mine = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_coal_intent_variant } OR = { AND = { has_building = building_coal_mine b:building_coal_mine = { level_after_queued_constructions > level } } } } } }
+    NOT = { OR = { AND = { has_variable = sed_coal_intent_variant OR = { AND = { var:sed_coal_intent_variant = 1 has_building = building_coal_mine b:building_coal_mine = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_coal_intent_variant } OR = { AND = { has_building = building_coal_mine b:building_coal_mine = { level_after_queued_constructions > level } } } } AND = { var:sed_coal_intent_level = 0 NOT = { has_building = building_coal_mine } owner = { construction_queue_num_queued_government_levels > 0 } } } }
    }
    if = {
     limit = { has_variable = sed_coal_intent_variant has_variable = sed_coal_intent_level }
@@ -1335,7 +1350,7 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_grain_request_pending
-    NOT = { OR = { AND = { has_variable = sed_grain_intent_variant OR = { AND = { var:sed_grain_intent_variant = 1 has_building = building_wheat_farm b:building_wheat_farm = { level_after_queued_constructions > level } } AND = { var:sed_grain_intent_variant = 2 has_building = building_rye_farm b:building_rye_farm = { level_after_queued_constructions > level } } AND = { var:sed_grain_intent_variant = 3 has_building = building_rice_farm b:building_rice_farm = { level_after_queued_constructions > level } } AND = { var:sed_grain_intent_variant = 4 has_building = building_maize_farm b:building_maize_farm = { level_after_queued_constructions > level } } AND = { var:sed_grain_intent_variant = 5 has_building = building_millet_farm b:building_millet_farm = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_grain_intent_variant } OR = { AND = { has_building = building_wheat_farm b:building_wheat_farm = { level_after_queued_constructions > level } } AND = { has_building = building_rye_farm b:building_rye_farm = { level_after_queued_constructions > level } } AND = { has_building = building_rice_farm b:building_rice_farm = { level_after_queued_constructions > level } } AND = { has_building = building_maize_farm b:building_maize_farm = { level_after_queued_constructions > level } } AND = { has_building = building_millet_farm b:building_millet_farm = { level_after_queued_constructions > level } } } } } }
+    NOT = { OR = { AND = { has_variable = sed_grain_intent_variant OR = { AND = { var:sed_grain_intent_variant = 1 has_building = building_wheat_farm b:building_wheat_farm = { level_after_queued_constructions > level } } AND = { var:sed_grain_intent_variant = 2 has_building = building_rye_farm b:building_rye_farm = { level_after_queued_constructions > level } } AND = { var:sed_grain_intent_variant = 3 has_building = building_rice_farm b:building_rice_farm = { level_after_queued_constructions > level } } AND = { var:sed_grain_intent_variant = 4 has_building = building_maize_farm b:building_maize_farm = { level_after_queued_constructions > level } } AND = { var:sed_grain_intent_variant = 5 has_building = building_millet_farm b:building_millet_farm = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_grain_intent_variant } OR = { AND = { has_building = building_wheat_farm b:building_wheat_farm = { level_after_queued_constructions > level } } AND = { has_building = building_rye_farm b:building_rye_farm = { level_after_queued_constructions > level } } AND = { has_building = building_rice_farm b:building_rice_farm = { level_after_queued_constructions > level } } AND = { has_building = building_maize_farm b:building_maize_farm = { level_after_queued_constructions > level } } AND = { has_building = building_millet_farm b:building_millet_farm = { level_after_queued_constructions > level } } } } AND = { var:sed_grain_intent_level = 0 NOT = { has_building = building_wheat_farm has_building = building_rye_farm has_building = building_rice_farm has_building = building_maize_farm has_building = building_millet_farm } owner = { construction_queue_num_queued_government_levels > 0 } } } }
    }
    if = {
     limit = { has_variable = sed_grain_intent_variant has_variable = sed_grain_intent_level }
@@ -1643,7 +1658,7 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_fabric_request_pending
-    NOT = { OR = { AND = { has_variable = sed_fabric_intent_variant OR = { AND = { var:sed_fabric_intent_variant = 1 has_building = building_cotton_plantation b:building_cotton_plantation = { level_after_queued_constructions > level } } AND = { var:sed_fabric_intent_variant = 2 has_building = building_livestock_ranch b:building_livestock_ranch = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_fabric_intent_variant } OR = { AND = { has_building = building_cotton_plantation b:building_cotton_plantation = { level_after_queued_constructions > level } } AND = { has_building = building_livestock_ranch b:building_livestock_ranch = { level_after_queued_constructions > level } } } } } }
+    NOT = { OR = { AND = { has_variable = sed_fabric_intent_variant OR = { AND = { var:sed_fabric_intent_variant = 1 has_building = building_cotton_plantation b:building_cotton_plantation = { level_after_queued_constructions > level } } AND = { var:sed_fabric_intent_variant = 2 has_building = building_livestock_ranch b:building_livestock_ranch = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_fabric_intent_variant } OR = { AND = { has_building = building_cotton_plantation b:building_cotton_plantation = { level_after_queued_constructions > level } } AND = { has_building = building_livestock_ranch b:building_livestock_ranch = { level_after_queued_constructions > level } } } } AND = { var:sed_fabric_intent_level = 0 NOT = { has_building = building_cotton_plantation has_building = building_livestock_ranch } owner = { construction_queue_num_queued_government_levels > 0 } } } }
    }
    if = {
     limit = { has_variable = sed_fabric_intent_variant has_variable = sed_fabric_intent_level }
@@ -1792,7 +1807,7 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_tools_request_pending
-    NOT = { OR = { AND = { has_variable = sed_tools_intent_variant OR = { AND = { var:sed_tools_intent_variant = 1 has_building = building_tooling_workshop b:building_tooling_workshop = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_tools_intent_variant } OR = { AND = { has_building = building_tooling_workshop b:building_tooling_workshop = { level_after_queued_constructions > level } } } } } }
+    NOT = { OR = { AND = { has_variable = sed_tools_intent_variant OR = { AND = { var:sed_tools_intent_variant = 1 has_building = building_tooling_workshop b:building_tooling_workshop = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_tools_intent_variant } OR = { AND = { has_building = building_tooling_workshop b:building_tooling_workshop = { level_after_queued_constructions > level } } } } AND = { var:sed_tools_intent_level = 0 NOT = { has_building = building_tooling_workshop } owner = { construction_queue_num_queued_government_levels > 0 } } } }
    }
    if = {
     limit = { has_variable = sed_tools_intent_variant has_variable = sed_tools_intent_level }
@@ -1888,7 +1903,7 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_groceries_request_pending
-    NOT = { OR = { AND = { has_variable = sed_groceries_intent_variant OR = { AND = { var:sed_groceries_intent_variant = 1 has_building = building_food_industry b:building_food_industry = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_groceries_intent_variant } OR = { AND = { has_building = building_food_industry b:building_food_industry = { level_after_queued_constructions > level } } } } } }
+    NOT = { OR = { AND = { has_variable = sed_groceries_intent_variant OR = { AND = { var:sed_groceries_intent_variant = 1 has_building = building_food_industry b:building_food_industry = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_groceries_intent_variant } OR = { AND = { has_building = building_food_industry b:building_food_industry = { level_after_queued_constructions > level } } } } AND = { var:sed_groceries_intent_level = 0 NOT = { has_building = building_food_industry } owner = { construction_queue_num_queued_government_levels > 0 } } } }
    }
    if = {
     limit = { has_variable = sed_groceries_intent_variant has_variable = sed_groceries_intent_level }
@@ -1984,7 +1999,7 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_clothes_request_pending
-    NOT = { OR = { AND = { has_variable = sed_clothes_intent_variant OR = { AND = { var:sed_clothes_intent_variant = 1 has_building = building_textile_mill b:building_textile_mill = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_clothes_intent_variant } OR = { AND = { has_building = building_textile_mill b:building_textile_mill = { level_after_queued_constructions > level } } } } } }
+    NOT = { OR = { AND = { has_variable = sed_clothes_intent_variant OR = { AND = { var:sed_clothes_intent_variant = 1 has_building = building_textile_mill b:building_textile_mill = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_clothes_intent_variant } OR = { AND = { has_building = building_textile_mill b:building_textile_mill = { level_after_queued_constructions > level } } } } AND = { var:sed_clothes_intent_level = 0 NOT = { has_building = building_textile_mill } owner = { construction_queue_num_queued_government_levels > 0 } } } }
    }
    if = {
     limit = { has_variable = sed_clothes_intent_variant has_variable = sed_clothes_intent_level }
@@ -2080,7 +2095,7 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_small_arms_request_pending
-    NOT = { OR = { AND = { has_variable = sed_small_arms_intent_variant OR = { AND = { var:sed_small_arms_intent_variant = 1 has_building = building_arms_industry b:building_arms_industry = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_small_arms_intent_variant } OR = { AND = { has_building = building_arms_industry b:building_arms_industry = { level_after_queued_constructions > level } } } } } }
+    NOT = { OR = { AND = { has_variable = sed_small_arms_intent_variant OR = { AND = { var:sed_small_arms_intent_variant = 1 has_building = building_arms_industry b:building_arms_industry = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_small_arms_intent_variant } OR = { AND = { has_building = building_arms_industry b:building_arms_industry = { level_after_queued_constructions > level } } } } AND = { var:sed_small_arms_intent_level = 0 NOT = { has_building = building_arms_industry } owner = { construction_queue_num_queued_government_levels > 0 } } } }
    }
    if = {
     limit = { has_variable = sed_small_arms_intent_variant has_variable = sed_small_arms_intent_level }
@@ -2176,7 +2191,7 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_artillery_request_pending
-    NOT = { OR = { AND = { has_variable = sed_artillery_intent_variant OR = { AND = { var:sed_artillery_intent_variant = 1 has_building = building_artillery_foundry b:building_artillery_foundry = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_artillery_intent_variant } OR = { AND = { has_building = building_artillery_foundry b:building_artillery_foundry = { level_after_queued_constructions > level } } } } } }
+    NOT = { OR = { AND = { has_variable = sed_artillery_intent_variant OR = { AND = { var:sed_artillery_intent_variant = 1 has_building = building_artillery_foundry b:building_artillery_foundry = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_artillery_intent_variant } OR = { AND = { has_building = building_artillery_foundry b:building_artillery_foundry = { level_after_queued_constructions > level } } } } AND = { var:sed_artillery_intent_level = 0 NOT = { has_building = building_artillery_foundry } owner = { construction_queue_num_queued_government_levels > 0 } } } }
    }
    if = {
     limit = { has_variable = sed_artillery_intent_variant has_variable = sed_artillery_intent_level }
@@ -2272,7 +2287,7 @@ sed_refresh_supply_candidates = {
  every_scope_state = {
   if = {
    limit = { has_variable = sed_ammunition_request_pending
-    NOT = { OR = { AND = { has_variable = sed_ammunition_intent_variant OR = { AND = { var:sed_ammunition_intent_variant = 1 has_building = building_munition_plant b:building_munition_plant = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_ammunition_intent_variant } OR = { AND = { has_building = building_munition_plant b:building_munition_plant = { level_after_queued_constructions > level } } } } } }
+    NOT = { OR = { AND = { has_variable = sed_ammunition_intent_variant OR = { AND = { var:sed_ammunition_intent_variant = 1 has_building = building_munition_plant b:building_munition_plant = { level_after_queued_constructions > level } } } } AND = { NOT = { has_variable = sed_ammunition_intent_variant } OR = { AND = { has_building = building_munition_plant b:building_munition_plant = { level_after_queued_constructions > level } } } } AND = { var:sed_ammunition_intent_level = 0 NOT = { has_building = building_munition_plant } owner = { construction_queue_num_queued_government_levels > 0 } } } }
    }
    if = {
     limit = { has_variable = sed_ammunition_intent_variant has_variable = sed_ammunition_intent_level }
@@ -2360,9 +2375,12 @@ sed_run_wood_approval = {
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
   if = {
-   limit = { sed_wood_logging_camp_eligible = yes }
-   # Baseline level before queuing; the monthly review compares it after the queue.
-   set_variable = { name = sed_wood_intent_level value = b:building_logging_camp.level }
+   limit = { OR = { sed_wood_logging_camp_eligible = yes sed_wood_logging_camp_found_eligible = yes } }
+   # A founding reads level 0; the monthly review then infers completion from the queue.
+   set_variable = { name = sed_wood_intent_level value = 0 }
+   if = { limit = { has_building = building_logging_camp }
+    set_variable = { name = sed_wood_intent_level value = b:building_logging_camp.level }
+   }
    set_variable = { name = sed_wood_intent_variant value = 1 }
    start_building_construction = building_logging_camp
   }
@@ -2419,9 +2437,12 @@ sed_run_iron_approval = {
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
   if = {
-   limit = { sed_iron_iron_mine_eligible = yes }
-   # Baseline level before queuing; the monthly review compares it after the queue.
-   set_variable = { name = sed_iron_intent_level value = b:building_iron_mine.level }
+   limit = { OR = { sed_iron_iron_mine_eligible = yes sed_iron_iron_mine_found_eligible = yes } }
+   # A founding reads level 0; the monthly review then infers completion from the queue.
+   set_variable = { name = sed_iron_intent_level value = 0 }
+   if = { limit = { has_building = building_iron_mine }
+    set_variable = { name = sed_iron_intent_level value = b:building_iron_mine.level }
+   }
    set_variable = { name = sed_iron_intent_variant value = 1 }
    start_building_construction = building_iron_mine
   }
@@ -2478,9 +2499,12 @@ sed_run_coal_approval = {
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
   if = {
-   limit = { sed_coal_coal_mine_eligible = yes }
-   # Baseline level before queuing; the monthly review compares it after the queue.
-   set_variable = { name = sed_coal_intent_level value = b:building_coal_mine.level }
+   limit = { OR = { sed_coal_coal_mine_eligible = yes sed_coal_coal_mine_found_eligible = yes } }
+   # A founding reads level 0; the monthly review then infers completion from the queue.
+   set_variable = { name = sed_coal_intent_level value = 0 }
+   if = { limit = { has_building = building_coal_mine }
+    set_variable = { name = sed_coal_intent_level value = b:building_coal_mine.level }
+   }
    set_variable = { name = sed_coal_intent_variant value = 1 }
    start_building_construction = building_coal_mine
   }
@@ -2537,37 +2561,52 @@ sed_run_grain_approval = {
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
   if = {
-   limit = { sed_grain_wheat_farm_eligible = yes OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_grain } } } sed_grain_wheat_farm_preferred_supplier = yes } }
-   # Baseline level before queuing; the monthly review compares it after the queue.
-   set_variable = { name = sed_grain_intent_level value = b:building_wheat_farm.level }
+   limit = { OR = { sed_grain_wheat_farm_eligible = yes sed_grain_wheat_farm_found_eligible = yes } OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_grain } } } OR = { sed_grain_wheat_farm_preferred_supplier = yes sed_grain_wheat_farm_found_eligible = yes } } }
+   # A founding reads level 0; the monthly review then infers completion from the queue.
+   set_variable = { name = sed_grain_intent_level value = 0 }
+   if = { limit = { has_building = building_wheat_farm }
+    set_variable = { name = sed_grain_intent_level value = b:building_wheat_farm.level }
+   }
    set_variable = { name = sed_grain_intent_variant value = 1 }
    start_building_construction = building_wheat_farm
   }
   else_if = {
-   limit = { sed_grain_rye_farm_eligible = yes OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_grain } } } sed_grain_rye_farm_preferred_supplier = yes } }
-   # Baseline level before queuing; the monthly review compares it after the queue.
-   set_variable = { name = sed_grain_intent_level value = b:building_rye_farm.level }
+   limit = { OR = { sed_grain_rye_farm_eligible = yes sed_grain_rye_farm_found_eligible = yes } OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_grain } } } OR = { sed_grain_rye_farm_preferred_supplier = yes sed_grain_rye_farm_found_eligible = yes } } }
+   # A founding reads level 0; the monthly review then infers completion from the queue.
+   set_variable = { name = sed_grain_intent_level value = 0 }
+   if = { limit = { has_building = building_rye_farm }
+    set_variable = { name = sed_grain_intent_level value = b:building_rye_farm.level }
+   }
    set_variable = { name = sed_grain_intent_variant value = 2 }
    start_building_construction = building_rye_farm
   }
   else_if = {
-   limit = { sed_grain_rice_farm_eligible = yes OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_grain } } } sed_grain_rice_farm_preferred_supplier = yes } }
-   # Baseline level before queuing; the monthly review compares it after the queue.
-   set_variable = { name = sed_grain_intent_level value = b:building_rice_farm.level }
+   limit = { OR = { sed_grain_rice_farm_eligible = yes sed_grain_rice_farm_found_eligible = yes } OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_grain } } } OR = { sed_grain_rice_farm_preferred_supplier = yes sed_grain_rice_farm_found_eligible = yes } } }
+   # A founding reads level 0; the monthly review then infers completion from the queue.
+   set_variable = { name = sed_grain_intent_level value = 0 }
+   if = { limit = { has_building = building_rice_farm }
+    set_variable = { name = sed_grain_intent_level value = b:building_rice_farm.level }
+   }
    set_variable = { name = sed_grain_intent_variant value = 3 }
    start_building_construction = building_rice_farm
   }
   else_if = {
-   limit = { sed_grain_maize_farm_eligible = yes OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_grain } } } sed_grain_maize_farm_preferred_supplier = yes } }
-   # Baseline level before queuing; the monthly review compares it after the queue.
-   set_variable = { name = sed_grain_intent_level value = b:building_maize_farm.level }
+   limit = { OR = { sed_grain_maize_farm_eligible = yes sed_grain_maize_farm_found_eligible = yes } OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_grain } } } OR = { sed_grain_maize_farm_preferred_supplier = yes sed_grain_maize_farm_found_eligible = yes } } }
+   # A founding reads level 0; the monthly review then infers completion from the queue.
+   set_variable = { name = sed_grain_intent_level value = 0 }
+   if = { limit = { has_building = building_maize_farm }
+    set_variable = { name = sed_grain_intent_level value = b:building_maize_farm.level }
+   }
    set_variable = { name = sed_grain_intent_variant value = 4 }
    start_building_construction = building_maize_farm
   }
   else_if = {
-   limit = { sed_grain_millet_farm_eligible = yes OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_grain } } } sed_grain_millet_farm_preferred_supplier = yes } }
-   # Baseline level before queuing; the monthly review compares it after the queue.
-   set_variable = { name = sed_grain_intent_level value = b:building_millet_farm.level }
+   limit = { OR = { sed_grain_millet_farm_eligible = yes sed_grain_millet_farm_found_eligible = yes } OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_grain } } } OR = { sed_grain_millet_farm_preferred_supplier = yes sed_grain_millet_farm_found_eligible = yes } } }
+   # A founding reads level 0; the monthly review then infers completion from the queue.
+   set_variable = { name = sed_grain_intent_level value = 0 }
+   if = { limit = { has_building = building_millet_farm }
+    set_variable = { name = sed_grain_intent_level value = b:building_millet_farm.level }
+   }
    set_variable = { name = sed_grain_intent_variant value = 5 }
    start_building_construction = building_millet_farm
   }
@@ -2624,16 +2663,22 @@ sed_run_fabric_approval = {
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
   if = {
-   limit = { sed_fabric_cotton_plantation_eligible = yes OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_fabric } } } sed_fabric_cotton_plantation_preferred_supplier = yes } }
-   # Baseline level before queuing; the monthly review compares it after the queue.
-   set_variable = { name = sed_fabric_intent_level value = b:building_cotton_plantation.level }
+   limit = { OR = { sed_fabric_cotton_plantation_eligible = yes sed_fabric_cotton_plantation_found_eligible = yes } OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_fabric } } } OR = { sed_fabric_cotton_plantation_preferred_supplier = yes sed_fabric_cotton_plantation_found_eligible = yes } } }
+   # A founding reads level 0; the monthly review then infers completion from the queue.
+   set_variable = { name = sed_fabric_intent_level value = 0 }
+   if = { limit = { has_building = building_cotton_plantation }
+    set_variable = { name = sed_fabric_intent_level value = b:building_cotton_plantation.level }
+   }
    set_variable = { name = sed_fabric_intent_variant value = 1 }
    start_building_construction = building_cotton_plantation
   }
   else_if = {
-   limit = { sed_fabric_livestock_ranch_eligible = yes OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_fabric } } } sed_fabric_livestock_ranch_preferred_supplier = yes } }
-   # Baseline level before queuing; the monthly review compares it after the queue.
-   set_variable = { name = sed_fabric_intent_level value = b:building_livestock_ranch.level }
+   limit = { OR = { sed_fabric_livestock_ranch_eligible = yes sed_fabric_livestock_ranch_found_eligible = yes } OR = { owner = { NOT = { AND = { has_variable = sed_mode_automatic has_variable = sed_input_priority_fabric } } } OR = { sed_fabric_livestock_ranch_preferred_supplier = yes sed_fabric_livestock_ranch_found_eligible = yes } } }
+   # A founding reads level 0; the monthly review then infers completion from the queue.
+   set_variable = { name = sed_fabric_intent_level value = 0 }
+   if = { limit = { has_building = building_livestock_ranch }
+    set_variable = { name = sed_fabric_intent_level value = b:building_livestock_ranch.level }
+   }
    set_variable = { name = sed_fabric_intent_variant value = 2 }
    start_building_construction = building_livestock_ranch
   }
@@ -2690,9 +2735,12 @@ sed_run_tools_approval = {
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
   if = {
-   limit = { sed_tools_tooling_workshop_eligible = yes }
-   # Baseline level before queuing; the monthly review compares it after the queue.
-   set_variable = { name = sed_tools_intent_level value = b:building_tooling_workshop.level }
+   limit = { OR = { sed_tools_tooling_workshop_eligible = yes sed_tools_tooling_workshop_found_eligible = yes } }
+   # A founding reads level 0; the monthly review then infers completion from the queue.
+   set_variable = { name = sed_tools_intent_level value = 0 }
+   if = { limit = { has_building = building_tooling_workshop }
+    set_variable = { name = sed_tools_intent_level value = b:building_tooling_workshop.level }
+   }
    set_variable = { name = sed_tools_intent_variant value = 1 }
    start_building_construction = building_tooling_workshop
   }
@@ -2749,9 +2797,12 @@ sed_run_groceries_approval = {
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
   if = {
-   limit = { sed_groceries_food_industry_eligible = yes }
-   # Baseline level before queuing; the monthly review compares it after the queue.
-   set_variable = { name = sed_groceries_intent_level value = b:building_food_industry.level }
+   limit = { OR = { sed_groceries_food_industry_eligible = yes sed_groceries_food_industry_found_eligible = yes } }
+   # A founding reads level 0; the monthly review then infers completion from the queue.
+   set_variable = { name = sed_groceries_intent_level value = 0 }
+   if = { limit = { has_building = building_food_industry }
+    set_variable = { name = sed_groceries_intent_level value = b:building_food_industry.level }
+   }
    set_variable = { name = sed_groceries_intent_variant value = 1 }
    start_building_construction = building_food_industry
   }
@@ -2808,9 +2859,12 @@ sed_run_clothes_approval = {
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
   if = {
-   limit = { sed_clothes_textile_mill_eligible = yes }
-   # Baseline level before queuing; the monthly review compares it after the queue.
-   set_variable = { name = sed_clothes_intent_level value = b:building_textile_mill.level }
+   limit = { OR = { sed_clothes_textile_mill_eligible = yes sed_clothes_textile_mill_found_eligible = yes } }
+   # A founding reads level 0; the monthly review then infers completion from the queue.
+   set_variable = { name = sed_clothes_intent_level value = 0 }
+   if = { limit = { has_building = building_textile_mill }
+    set_variable = { name = sed_clothes_intent_level value = b:building_textile_mill.level }
+   }
    set_variable = { name = sed_clothes_intent_variant value = 1 }
    start_building_construction = building_textile_mill
   }
@@ -2867,9 +2921,12 @@ sed_run_small_arms_approval = {
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
   if = {
-   limit = { sed_small_arms_arms_industry_eligible = yes }
-   # Baseline level before queuing; the monthly review compares it after the queue.
-   set_variable = { name = sed_small_arms_intent_level value = b:building_arms_industry.level }
+   limit = { OR = { sed_small_arms_arms_industry_eligible = yes sed_small_arms_arms_industry_found_eligible = yes } }
+   # A founding reads level 0; the monthly review then infers completion from the queue.
+   set_variable = { name = sed_small_arms_intent_level value = 0 }
+   if = { limit = { has_building = building_arms_industry }
+    set_variable = { name = sed_small_arms_intent_level value = b:building_arms_industry.level }
+   }
    set_variable = { name = sed_small_arms_intent_variant value = 1 }
    start_building_construction = building_arms_industry
   }
@@ -2926,9 +2983,12 @@ sed_run_artillery_approval = {
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
   if = {
-   limit = { sed_artillery_artillery_foundry_eligible = yes }
-   # Baseline level before queuing; the monthly review compares it after the queue.
-   set_variable = { name = sed_artillery_intent_level value = b:building_artillery_foundry.level }
+   limit = { OR = { sed_artillery_artillery_foundry_eligible = yes sed_artillery_artillery_foundry_found_eligible = yes } }
+   # A founding reads level 0; the monthly review then infers completion from the queue.
+   set_variable = { name = sed_artillery_intent_level value = 0 }
+   if = { limit = { has_building = building_artillery_foundry }
+    set_variable = { name = sed_artillery_intent_level value = b:building_artillery_foundry.level }
+   }
    set_variable = { name = sed_artillery_intent_variant value = 1 }
    start_building_construction = building_artillery_foundry
   }
@@ -2985,9 +3045,12 @@ sed_run_ammunition_approval = {
   owner = { set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels } }
   owner = { sed_record_auto_attempt = yes }
   if = {
-   limit = { sed_ammunition_munition_plant_eligible = yes }
-   # Baseline level before queuing; the monthly review compares it after the queue.
-   set_variable = { name = sed_ammunition_intent_level value = b:building_munition_plant.level }
+   limit = { OR = { sed_ammunition_munition_plant_eligible = yes sed_ammunition_munition_plant_found_eligible = yes } }
+   # A founding reads level 0; the monthly review then infers completion from the queue.
+   set_variable = { name = sed_ammunition_intent_level value = 0 }
+   if = { limit = { has_building = building_munition_plant }
+    set_variable = { name = sed_ammunition_intent_level value = b:building_munition_plant.level }
+   }
    set_variable = { name = sed_ammunition_intent_variant value = 1 }
    start_building_construction = building_munition_plant
   }
@@ -5498,9 +5561,75 @@ sed_refresh_direct_budget = {
    value = var:sed_build_budget_points multiply = var:sed_build_budget_point_cost
    max = var:sed_build_budget_material_capacity
   } }
+  # Duration and full material reference for the plan's first priority.
+  set_variable = { name = sed_build_budget_project_points value = 0 }
+
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_railway_rank var:sed_plan_railway_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 800 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_construction_rank var:sed_plan_construction_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 25 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_wood_rank var:sed_plan_wood_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 200 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_iron_rank var:sed_plan_iron_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 400 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_coal_rank var:sed_plan_coal_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 400 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_grain_rank var:sed_plan_grain_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 200 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_fabric_rank var:sed_plan_fabric_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 200 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_tools_rank var:sed_plan_tools_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 600 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_groceries_rank var:sed_plan_groceries_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 600 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_clothes_rank var:sed_plan_clothes_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 600 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_small_arms_rank var:sed_plan_small_arms_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 600 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_artillery_rank var:sed_plan_artillery_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 600 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_ammunition_rank var:sed_plan_ammunition_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 800 }
+  }
+  set_variable = { name = sed_build_budget_project_weeks value = 0 }
+  set_variable = { name = sed_build_budget_project_materials value = {
+   value = var:sed_build_budget_project_points multiply = var:sed_build_budget_point_cost
+  } }
+  if = { limit = { var:sed_build_budget_project_points > 0 var:sed_build_budget_points > 0 }
+   set_variable = { name = sed_build_budget_project_weeks value = {
+    value = var:sed_build_budget_project_points divide = var:sed_build_budget_points
+   } }
+  }
   set_variable = { name = sed_build_budget_required_gold value = {
    value = fixed_expenses min = 0 multiply = 4
-   add = { value = var:sed_build_budget_weekly subtract = net_total_income min = 0 multiply = 26 }
+   add = { value = var:sed_build_budget_weekly subtract = net_total_income min = 0
+    multiply = { value = var:sed_build_budget_project_weeks add = 4 min = 26 max = 56 }
+   }
   } }
  }
 }

@@ -1,5 +1,30 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.3, fundações de indústrias e ferrovias passam a exigir reserva estimada
+de trabalhadores e insumos. Para prédios ausentes, os insumos usam o maior
+consumo por grupo de PM entre os métodos tecnologicamente disponíveis. Esse
+limite conservador pode adiar uma fundação que funcionaria com um PM simples.
+Pedidos próprios ainda sem prédio reservam trabalhadores e insumos, sem dupla
+contagem quando o prédio aparece. Um fornecedor ausente pode ser fundado para
+abastecer uma indústria bloqueada por insumos.
+
+Na 0.7.2, o orçamento direto estima a duração e os materiais do primeiro projeto
+pelo tipo de prédio, sua construção exigida e a capacidade semanal. A reserva
+exigida acompanha essa duração, até 56 semanas, em vez de usar só a janela fixa
+de 26 semanas.
+
+Na 0.7.1, um estado com déficit de infraestrutura e sem ferrovia pode receber
+a primeira ferrovia pelo Automático, com as mesmas guardas de orçamento,
+materiais e fila. O pedido continua pendente enquanto a obra está na fila,
+mesmo antes de existir prédio, e não é duplicado em outro estado.
+
+Na 0.7.0, o Automático pode fundar a indústria ausente que causa escassez: se
+um bem está em falta, o país não tem produtor verificado e algum estado
+incorporado pode hospedar a construção, o Director enfileira um nível do
+prédio novo sob as mesmas guardas fiscais, de materiais, de fila e o limite
+de uma tentativa por mês. Sem estado apto, o objetivo 5 registra o bloqueio e
+nada é forçado.
+
 Na 0.6.26, o Automático age com a fila pública ocupada, pode expandir o setor
 de construção quando ele é a primeira prioridade do plano e agenda uma segunda
 revisão no mesmo mês quando a fila privada bloqueia a primeira. A expansão
