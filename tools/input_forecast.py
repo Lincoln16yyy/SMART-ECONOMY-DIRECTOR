@@ -52,7 +52,7 @@ def values(founding_projects=()):
                     if amount <= 0:
                         continue
                     gates = ' '.join(f'has_technology_researched = {tech}' for tech in technologies)
-                    result.append(f' if = {{ limit = {{ owner = {{ {gates} }} }} min = {amount} }}')
+                    result.append(f' min = {{ value = 0 if = {{ limit = {{ owner = {{ {gates} }} }} add = {amount} }} }}')
                 result.append(' }')
             result.append('}')
     for good in GOODS:

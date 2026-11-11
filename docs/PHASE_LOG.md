@@ -1783,8 +1783,11 @@ os PMs e a fila do prédio assim que ele existe, com regressões para dupla
 contagem, cancelamento e alteração das condições antes da aprovação. Um
 fornecedor ausente pode entrar no plano para desbloquear a indústria final.
 
-253 testes sintéticos aprovados. Validação estática contra a instalação 1.15
+254 testes sintéticos aprovados. Validação estática contra a instalação 1.15
 aprovada. Confirmação na engine continua pendente.
 
 Instalada com jogo fechado, backup `mod_before_0.7.3_20261110_230423_163114`
 e conferência dos 14 arquivos pelo instalador.
+
+Revisão final da estimativa por grupo aprovada em 254 testes e reinstalada com
+backup `mod_before_0.7.3_20261110_230839_169721`, conferindo novamente os 14 arquivos.

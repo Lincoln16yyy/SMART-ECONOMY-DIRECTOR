@@ -1,8 +1,8 @@
 # Contexto de continuidade
 
 Última entrega documentada: 0.7.3 instalada com jogo fechado e 14 arquivos
-conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.3_20261110_230423_163114`.
-253 testes sintéticos aprovados. As novas fundações ainda exigem confirmação na engine.
+conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.3_20261110_230839_169721`.
+254 testes sintéticos aprovados. As novas fundações ainda exigem confirmação na engine.
 
 
 ## 0.7.3 — Fundações com reserva de trabalho e insumos
