@@ -1,11 +1,92 @@
 # Contexto de continuidade
 
-Última entrega documentada: 0.7.5 instalada com jogo fechado e 14 arquivos
-conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.5_20261110_233730_175392`.
-266 testes sintéticos aprovados. As novas políticas ainda exigem confirmação na engine.
+Última entrega documentada: 0.7.8 instalada com jogo fechado e 14 arquivos
+conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.8_20261111_002618_879011`.
+291 testes sintéticos aprovados. A escolha econômica inicial de PMs ainda exige confirmação na engine.
 
 
 
+
+
+
+
+## 0.7.8 — Escolha econômica inicial de PMs
+
+A configuração das fundações compara os métodos do grupo principal. O cálculo
+usa 75% da receita a preços-base e 125% dos insumos a preços-base. Uma
+alternativa precisa aumentar a saída do bem-alvo, melhorar a margem material
+sobre a básica, ter margem positiva e não aumentar a soma de empregos do grupo.
+Entre alternativas elegíveis, a maior margem de referência é tentada primeiro.
+Os outros grupos usam a configuração básica anterior. Tecnologia, permissão
+do jogo, insumos e reserva demográfica continuam revalidados antes da mudança.
+
+O novo `data/founding_method_economics.json` contém coeficientes de entradas,
+saídas, empregos e tecnologias do grupo principal, extraídos dos arquivos
+vanilla locais, e preços-base dos bens. A seleção é inicial e ocorre nas
+fundações acompanhadas. Modernização contínua dos prédios estabelecidos,
+salários por profissão, preços locais, qualificações e lucro real ainda
+exigem desenvolvimento e calibração.
+
+A reserva integral estressada de insumos das configurações efetivamente
+alteradas passa a integrar as leituras de margem até o fim do mês civil.
+Assim, a atualização do plano ou um diagnóstico no mesmo mês preserva o
+compromisso quando a demanda de mercado ainda não foi recalculada. A reserva
+expira na mudança do mês e é limpa na saída do Automático ou desativação.
+Essa regra pode adiar ações mesmo depois de a demanda real já incorporar o PM.
+
+## 0.7.7 — Configuração inicial das indústrias fundadas
+
+Fundações automáticas de produtores recebem uma marca de configuração inicial
+após inclusão confirmada. Na revisão automática, o Director tenta aplicar o
+primeiro método vanilla de cada grupo de produção do prédio, formando uma
+configuração básica. O registro de grupos foi extraído da instalação local.
+
+A operação exige prédio presente com nível atual e após fila de no máximo um,
+estado incorporado, ausência de marca de ignorar, reserva demográfica cobrindo
+os compromissos e margem para todos os insumos da configuração básica com 25%
+de estresse. Todos os métodos precisam estar ativos ou passar por
+`can_activate_production_method` antes de qualquer mudança. A confirmação usa
+os métodos ativos. Trocas realizadas reservam os insumos na leitura corrente
+para impedir que outra configuração use a mesma margem.
+
+A marca é removida após confirmação, saída do Automático, desativação,
+cancelamento identificado, expansão além do primeiro nível ou marca de ignorar.
+Atualizar o diagnóstico continua sem executar configuração. O método aplicado
+passa a integrar o prédio. A função usa `activate_production_method` em escopo
+de estado, com a assinatura verificada no executável e no adaptador de
+administração do Advisor instalado.
+
+A escolha é uma configuração básica inicial. Comparação de produtividade,
+preços, rentabilidade, qualificações e modernização dos prédios estabelecidos
+continua pendente. A guarda conservadora de insumos para autorizar a fundação
+continua usando os métodos tecnologicamente disponíveis. O acompanhamento é
+baseado no livro inferido existente, sem identidade de projeto. A primeira
+aplicação real ainda exige confirmação na engine.
+
+## 0.7.6 — Compromissos da fila e retomada por reservas
+
+O orçamento direto soma a construção de níveis pendentes nos tipos vanilla
+verificados em `data/queued_building_costs.json`, incluindo fundações próprias
+que ainda não têm prédio. A fila pública agregada limita a soma. Níveis sem
+correspondência usam 6000 pontos, o maior custo vanilla verificado. A janela
+estimada soma fila/capacidade nacional, duração do novo projeto e quatro
+semanas, com piso de 26 semanas. O teto anterior de 56 semanas foi removido.
+
+A referência semanal considera os pontos que os projetos públicos existentes
+mais o novo podem consumir em paralelo, limitada pela capacidade nacional e
+pelo material dos setores ocupados. A guarda de reservas usa essa referência
+durante a janela estimada. O executor direto pode operar com déficit semanal
+se o saldo operacional é não negativo, não há dívida e as duas guardas de
+reservas e materiais são satisfeitas. Com coordenação, a prioridade própria
+é avaliada antes da espera genérica por fila pública financiada por reservas.
+Os caminhos específicos do Supply Chain mantêm suas guardas anteriores.
+
+Os pontos da fila incluem o custo integral dos níveis pendentes e ignoram o
+progresso já feito. Leituras por prédio podem incluir outro investidor e não
+identificam projetos estrangeiros do país. O fallback cobre a falta de
+correspondência na contagem agregada. Custos modificados por outros mods,
+eficiência local, ordem exata, autoria e despesas operacionais futuras
+continuam sem previsão precisa. A cobertura é uma referência de estresse.
 
 ## 0.7.5 — Despesa militar durante recuperação fiscal
 

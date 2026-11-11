@@ -1,5 +1,24 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.8, a escolha inicial de PMs compara saída e margem material de referência.
+O Automático pode selecionar um método mais produtivo com insumos disponíveis,
+ou iniciar com a configuração básica. A margem usa preços-base e estresse de
+receitas e custos. As reservas de insumos das trocas são mantidas no mês civil.
+
+
+Na 0.7.7, o Automático configura métodos básicos de produção nas indústrias
+que fundou e acompanha. A configuração passa por verificações de insumos,
+trabalho estimado e permissão do jogo. A escolha inicial de PMs está
+implementada para o catálogo de produtores. Modernização e otimização
+contínua seguem pendentes.
+
+
+Na 0.7.6, o orçamento direto considera a fila existente e a nova obra na
+cobertura por reservas, com referência para projetos simultâneos. O Automático
+pode retomar investimentos com déficit semanal quando a operação, a dívida e
+a cobertura estimada permitem. Custos e prazo continuam aproximados.
+
+
 Na 0.7.5, a recuperação fiscal inclui salários militares na paz. Em crise com
 déficit operacional, o Automático corta um nível por mês até baixo. Guerra,
 jogada diplomática e mobilização impedem cortes. Os cortes feitos pelo

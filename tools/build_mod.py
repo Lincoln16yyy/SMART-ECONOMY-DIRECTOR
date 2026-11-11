@@ -5,14 +5,14 @@ import json
 from pathlib import Path
 
 try:
-    from . import planning, coordination, construction_budget, labor, input_forecast
+    from . import planning, coordination, construction_budget, labor, input_forecast, production_methods
 except ImportError:
-    import planning, coordination, construction_budget, labor, input_forecast
+    import planning, coordination, construction_budget, labor, input_forecast, production_methods
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.5'
+VERSION = '0.7.8'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -55,6 +55,13 @@ def variants(item):
     """Primary producer plus verified alternatives for the same market good."""
     return [{'building': item['building'], 'methods': item['methods'],
              'building_pt': item['building_pt'], 'building_en': item['building_en']}] + item.get('alternatives', [])
+
+
+def founding_projects():
+    projects = [(item['good'], index, variant['building'])
+                for item in SUPPLY_TARGETS
+                for index, variant in enumerate(variants(item), 1)]
+    return projects + [('railway', 0, 'building_railway')]
 
 
 def variant_id(variant):
@@ -177,7 +184,7 @@ STATE_VARIABLES = ['sed_railway_request_pending', 'sed_construction_request_pend
     f"sed_{item['good']}_request_pending" for item in SUPPLY_TARGETS] + IGNORED_VARIABLES + [
     f"sed_{item['good']}_{field}" for item in SUPPLY_TARGETS
     for field in ('intent_level', 'intent_variant')]
-STATE_VARIABLES += planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES
+STATE_VARIABLES += planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES + production_methods.state_variables(SUPPLY_TARGETS)
 EXTRA_VARIABLES = '''sed_last_year sed_last_month sed_month_key sed_in_default
 sed_gdp_per_capita sed_per_capita_available sed_debt_share sed_debt_share_available
 sed_reserve_weeks sed_reserve_weeks_available sed_states sed_infrastructure_short_states
@@ -375,7 +382,12 @@ sed_refresh_supply_candidates = {
      change_variable = {{ name = sed_{good}_intents add = 1 }}
     }}
     else = {{ set_variable = {{ name = sed_{good}_intents value = 1 }} }}
-    prev = {{ set_variable = {{ name = sed_{good}_request_pending value = yes }} }}
+    prev = {{
+     set_variable = {{ name = sed_{good}_request_pending value = yes }}
+     if = {{ limit = {{ owner = {{ has_variable = sed_mode_automatic }} var:sed_{good}_intent_level = 0 }}
+      set_variable = {{ name = sed_{good}_found_pm_pending value = var:sed_{good}_intent_variant }}
+     }}
+    }}
    }}
    else = {{
     set_variable = {{ name = sed_{good}_action_status value = 2 }}
@@ -408,6 +420,8 @@ sed_refresh_supply_candidates = {
         other_modes = [value for value in ('manual', 'assisted', 'automatic') if value != mode]
         cleanup = '\n'.join(f' remove_variable = sed_mode_{value}' for value in other_modes)
         release = ' sed_coord_restore = yes\n sed_restore_fiscal_policy = yes\n sed_restore_wage_policy = yes\n sed_restore_military_wage_policy = yes\n' if mode != 'automatic' else ''
+        if mode != 'automatic':
+            release += ' sed_clear_pm_input_reservations = yes\n every_scope_state = {\n' + '\n'.join('  remove_variable = ' + name for name in production_methods.state_variables(SUPPLY_TARGETS)) + '\n }\n'
         takeover = ''
         if mode == 'automatic':
             takeover = ' if = { limit = { has_variable = sed_enabled NOT = { has_variable = sed_coord_active } sed_coord_tools_available = yes } sed_coord_enable = yes }\n'
@@ -436,6 +450,7 @@ sed_refresh_supply_candidates = {
  }
 }''')
     result.append('''sed_auto_apply_monthly = {
+ sed_configure_founded_industries = yes
  sed_refresh_national_plan = yes
  sed_apply_fiscal_policy = yes
  sed_apply_wage_policy = yes
@@ -500,7 +515,7 @@ sed_auto_run_direct = {
  else_if = { limit = { construction_queue_num_queued_private_levels > 0 } set_variable = { name = sed_auto_action_status value = 11 } }
  else_if = { limit = { is_construction_paused = yes } set_variable = { name = sed_auto_action_status value = 12 } }
  else_if = { limit = { sed_competing_builder_configured = yes } set_variable = { name = sed_auto_action_status value = 13 } }
- else_if = { limit = { NOT = { sed_auto_fiscal_safe = yes } } set_variable = { name = sed_auto_action_status value = 17 } }
+ else_if = { limit = { NOT = { sed_direct_fiscal_safe = yes } } set_variable = { name = sed_auto_action_status value = 17 } }
  else_if = { limit = { NOT = { sed_direct_budget_safe = yes } } set_variable = { name = sed_auto_action_status value = 22 } }
  else = { set_variable = { name = sed_auto_action_status value = 14 } }
 }
@@ -1263,10 +1278,10 @@ sed_update_growth = {
     cleanup = '\n'.join(' clear_variable_list = ' + name for name in lists)
     script = script.replace('sed_disable_country = {', 'sed_disable_country = {\n' + cleanup, 1)
     # All state-scoped planner variables are removed on deactivation.
-    state_cleanup = '\n'.join('  remove_variable = ' + name for name in planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES)
+    state_cleanup = '\n'.join('  remove_variable = ' + name for name in planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES + production_methods.state_variables(SUPPLY_TARGETS))
     script = script.replace(' # Schema and automatic attempt month',
                             ' every_scope_state = {\n' + state_cleanup + '\n }\n # Schema and automatic attempt month', 1)
-    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, INPUT_DEPENDENCIES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + input_forecast.effects() + input_priority_effect() + labor.effects() + construction_budget.effects() + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + planning.military_wage_policy_effects() + coordination.effects()
+    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, INPUT_DEPENDENCIES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + input_forecast.effects() + input_priority_effect() + labor.effects() + construction_budget.effects(founding_projects()) + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + planning.military_wage_policy_effects() + production_methods.effects(SUPPLY_TARGETS, variants) + coordination.effects()
 
 
 def scripted_guis():
@@ -1796,7 +1811,7 @@ sed_auto_executor_safe = {
  construction_queue_num_queued_private_levels = 0
  is_construction_paused = no
  NOT = { sed_competing_builder_configured = yes }
- sed_auto_fiscal_safe = yes
+ sed_direct_fiscal_safe = yes
  sed_direct_budget_safe = yes
 }''')
     priorities = '\n'.join(
@@ -2029,8 +2044,8 @@ def localization(language):
         'sed_coord_advisor_policy_3': ('Orientação do Advisor aplicada para retorno ao tesouro e preservação das reservas, com opção de endividamento desabilitada. A dívida atingiu ao menos 50% do crédito.', 'Advisor guidance applied for treasury return and reserve protection, with borrowing disabled. Debt reached at least 50% of credit.'),
     })
     pairs['sed_fiscal_5'] = (
-        'Fiscal com construção financiada por reservas. Saldo operacional não negativo, sem dívida e ouro cobrindo doze semanas de despesas fixas mais 26 semanas do déficit observado. O Advisor pode avaliar investimentos com seu próprio orçamento quando a fila pública estiver livre. Os caminhos diretos e do Supply Chain exigem a guarda de saldo não negativo.',
-        'Fiscal state with reserve-funded construction. Nonnegative operating balance, no debt and gold covering twelve weeks of fixed expenses plus 26 weeks of the observed deficit. The Advisor can assess investment using its own budget when the government queue is empty. Direct and Supply Chain paths require the nonnegative-balance guard.')
+        'Fiscal com construção financiada por reservas. Saldo operacional não negativo, sem dívida e ouro cobrindo doze semanas de despesas fixas mais 26 semanas do déficit observado. O Advisor pode avaliar investimentos com seu próprio orçamento quando a fila pública estiver livre. O Director também pode investir sob sua guarda de materiais e da fila. Os caminhos do Supply Chain exigem saldo não negativo.',
+        'Fiscal state with reserve-funded construction. Nonnegative operating balance, no debt and gold covering twelve weeks of fixed expenses plus 26 weeks of the observed deficit. The Advisor can assess investment using its own budget when the government queue is empty. The Director can also invest under its material and queue budget guard. Supply Chain paths require a nonnegative balance.')
     pairs['sed_mode_automatic_button_tt'] = (
         'Coordena os construtores detectados e aplica a política fiscal. Impostos e salários civis admitem um ajuste por mês de calendário. Sair do Automático restaura as opções e níveis anteriores. O executor próprio admite uma tentativa de obra por mês, mesmo com a fila pública ocupada; a fila privada precisa estar vazia. As ferramentas externas seguem seus próprios limites.',
         'Coordinates detected builders and applies fiscal policy. Taxes and civilian government wages allow one adjustment per calendar month. Leaving Automatic restores previous options and levels. The direct executor allows one construction attempt per month even while the government queue is busy; the private queue must be empty. External tools follow their own limits.')
@@ -2067,7 +2082,7 @@ def localization(language):
         'sed_goal_2': ('Objetivo atual: reduzir escassez de bens ampliando produtores viáveis ou fundando a indústria ausente em estado apto.', 'Current objective: reduce goods shortages by expanding viable producers or founding the missing industry in a suitable state.'),
         'sed_goal_3': ('Objetivo atual: ampliar capacidade para a demanda da fila pública, com aprovação Assistida.', 'Current objective: expand capacity for government queue demand, with Assisted approval.'),
         'sed_goal_4': ('Objetivo atual: estabilizar as finanças antes de ampliar compromissos.', 'Current objective: stabilize finances before expanding commitments.'),
-        'sed_auto_current_fiscal': ('Agora: política fiscal bloqueia novas tentativas automáticas. Requer saldos não negativos, reservas de quatro semanas de despesas fixas e dívida até 75% do crédito. A política de impostos e salários civis continua ativa no Automático.', 'Now: fiscal policy blocks new automatic attempts. Requires nonnegative balances, reserves covering four weeks of fixed expenses and debt up to 75% of credit. Tax and civilian government wage policy remains active in Automatic.'),
+        'sed_auto_current_fiscal': ('Agora: política fiscal bloqueia novas tentativas automáticas. Requer a guarda fiscal habitual ou financiamento por reservas com saldo operacional não negativo, sem dívida e cobertura estimada das obras. A política de impostos e salários civis continua ativa no Automático.', 'Now: fiscal policy blocks new automatic attempts. Requires the usual fiscal guard or reserve financing with nonnegative operating balance, no debt and estimated construction coverage. Tax and civilian government wage policy remains active in Automatic.'),
         'sed_auto_status_fiscal': ('A última revisão não tentou obra por proteção fiscal.', 'The last review did not attempt construction because of fiscal protection.'),
     })
     pairs.update({
@@ -2081,7 +2096,7 @@ def localization(language):
         'sed_auto_status_budget': ('Última revisão: referência de materiais da próxima obra sem cobertura ou método de construção desconhecido. Nenhuma tentativa consumida. Confira o orçamento direto no plano.', 'Last review: next-project material benchmark is uncovered or construction method is unknown. No attempt consumed. See the direct budget in the plan.'),
         'sed_build_budget_unknown': ('Orçamento direto pendente. Um setor ativo usa método de construção fora dos quatro perfis verificados. O Automático direto aguarda uma leitura reconhecida; aprovação Assistida permanece explícita.', 'Direct budget pending. An active sector uses a construction method outside the four verified profiles. Direct Automatic awaits recognized data; Assisted approval remains explicit.'),
         'sed_build_budget': ('Referência conservadora para materiais da próxima obra direta: @money!' + v('build_budget_weekly', 'K') + '/semana, para até ' + v('build_budget_points', '1') + ' pontos. Teto de materiais pelos níveis e ocupação dos setores: @money!' + v('build_budget_material_capacity', 'K') + '/semana. Ouro exigido se o saldo não cobrir a referência: @money!' + v('build_budget_required_gold', 'K') + ', com ausência de dívida. Usa o maior custo entre métodos ativos, limitado pelos materiais dos setores existentes, com preços-base acrescidos de 75%. A duração estimada do primeiro projeto amplia a reserva exigida, até 56 semanas; salários futuros, subsídios e modificadores continuam fora.', 'Conservative material benchmark for the next direct project: @money!' + v('build_budget_weekly', 'K') + '/week, for up to ' + v('build_budget_points', '1') + ' points. Sector level/occupancy material cap: @money!' + v('build_budget_material_capacity', 'K') + '/week. Gold required if the balance does not cover the benchmark: @money!' + v('build_budget_required_gold', 'K') + ', with no debt. Uses the highest active-method cost, capped by existing sector materials, with base prices plus 75%. The first project\u2019s estimated duration extends the required reserve, up to 56 weeks; future wages, subsidies and modifiers remain outside.'),
-        'sed_build_budget_project': ('Primeiro projeto do plano: ' + v('build_budget_project_points', '0') + ' pontos de construção, cerca de ' + v('build_budget_project_weeks', '1') + ' semanas na capacidade atual. Materiais de referência do projeto inteiro: @money!' + v('build_budget_project_materials', 'K') + '. Estimativa por tipo de prédio e capacidade semanal; fila concorrente, salários e modificadores podem alongar o prazo.', 'Plan\u2019s first project: ' + v('build_budget_project_points', '0') + ' construction points, about ' + v('build_budget_project_weeks', '1') + ' weeks at current capacity. Material reference for the whole project: @money!' + v('build_budget_project_materials', 'K') + '. Estimate from building type and weekly capacity; competing queue work, wages and modifiers can extend it.'),
+        'sed_build_budget_project': ('O primeiro projeto requer ' + v('build_budget_project_points', '0') + ' pontos, estimados em ' + v('build_budget_project_weeks', '1') + ' semanas. A fila existente acrescenta uma referência de ' + v('build_budget_queue_weeks', '1') + ' semanas. A janela de financiamento é de ' + v('build_budget_funding_weeks', '1') + ' semanas. Progresso já executado e eficiência local seguem fora da estimativa.', 'The first project requires ' + v('build_budget_project_points', '0') + ' points, estimated at ' + v('build_budget_project_weeks', '1') + ' weeks. The existing queue adds a reference of ' + v('build_budget_queue_weeks', '1') + ' weeks. The funding window is ' + v('build_budget_funding_weeks', '1') + ' weeks. Completed progress and local efficiency remain outside the estimate.'),
         'sed_coord_executor_12': ('Ritmo por reservas: aguardando a fila pública existente. Com déficit financiado por ouro, novas autorizações externas ficam suspensas enquanto houver níveis públicos enfileirados. A política fiscal continua ativa e o orçamento é reavaliado nas revisões.', 'Reserve-funded pace: waiting for the existing government queue. While gold funds a deficit, new external authorizations remain suspended while government levels are queued. Fiscal policy remains active and the budget is reassessed on reviews.'),
         'sed_auto_status_reserve_queue': ('Última revisão: preservação de reservas, aguardando obras públicas já enfileiradas antes de autorizar novos investimentos.', 'Last review: preserving reserves, waiting for already queued government projects before authorizing new investment.'),
         'sed_reserve_budget': ('Orçamento por reservas nesta leitura. Piso de doze semanas de despesas fixas: @money!' + v('reserve_floor', 'K') + '. Ouro acima do piso: @money!' + v('reserve_spare', 'K') + '. Cobertura do déficit atual acima do piso: ' + v('reserve_runway', '1') + ' semanas. Ouro exigido pela regra de 26 semanas: @money!' + v('reserve_required', 'K') + '. Estimativa com despesas e déficit atuais; custo de novas obras ainda precisa ser avaliado.', 'Reserve budget in this reading. Twelve-week fixed-expense floor: @money!' + v('reserve_floor', 'K') + '. Gold above the floor: @money!' + v('reserve_spare', 'K') + '. Current deficit coverage above the floor: ' + v('reserve_runway', '1') + ' weeks. Gold required by the 26-week rule: @money!' + v('reserve_required', 'K') + '. Estimate using current expenses and deficit; new construction costs still require assessment.'),
@@ -2245,10 +2260,7 @@ sed_pulse.1 = {
  }
 }
 '''
-    founding_projects = [(item['good'], index, variant['building'])
-                         for item in SUPPLY_TARGETS
-                         for index, variant in enumerate(variants(item), 1)]
-    founding_projects.append(('railway', 0, 'building_railway'))
+    projects = founding_projects()
     result = {
         'common/decisions/sed_decisions.txt': decisions,
         'common/journal_entries/sed_journal_entries.txt': journal,
@@ -2257,7 +2269,7 @@ sed_pulse.1 = {
         'common/scripted_effects/sed_effects.txt': effects(),
         'common/scripted_guis/sed_scripted_guis.txt': scripted_guis(),
         'common/scripted_triggers/sed_triggers.txt': scripted_triggers(),
-        'common/script_values/sed_values.txt': '# Current calendar, independent of diagnostic refresh.\nsed_live_month_key = { value = year multiply = 12 add = month }\n' + labor.values(founding_projects) + input_forecast.values(founding_projects) + supplier_output_values(),
+        'common/script_values/sed_values.txt': '# Current calendar, independent of diagnostic refresh.\nsed_live_month_key = { value = year multiply = 12 add = month }\n' + labor.values(projects) + input_forecast.values(projects) + supplier_output_values(),
         'gui/journal_entry_widgets/sed_diagnostics.gui': widget(),
         'localization/braz_por/sed_l_braz_por.yml': localization('braz_por'),
         'localization/english/sed_l_english.yml': localization('english'),

@@ -843,7 +843,7 @@ class PlanningTests(unittest.TestCase):
         c = self.c
         c.states = [target]
         c.readings['num_queued_government_constructions'] = 3
-        c.readings.update(principal=0, gold_reserves=200000)
+        c.readings.update(principal=0, gold_reserves=300000)
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')
         # Railways outrank the sector; the sector itself is not queued.

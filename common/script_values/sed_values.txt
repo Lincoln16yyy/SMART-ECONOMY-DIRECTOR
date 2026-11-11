@@ -2254,6 +2254,9 @@ sed_input_country_headroom_coal = {
  value = 0
  market ?= { mg:coal ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_coal } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_coal
+ } subtract = var:sed_pm_reserved_coal }
 }
 sed_input_headroom_coal = { value = owner.var:sed_input_market_margin_coal }
 sed_input_pending_copper = {
@@ -2362,6 +2365,9 @@ sed_input_country_headroom_copper = {
  value = 0
  market ?= { mg:copper ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_copper } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_copper
+ } subtract = var:sed_pm_reserved_copper }
 }
 sed_input_headroom_copper = { value = owner.var:sed_input_market_margin_copper }
 sed_input_pending_dye = {
@@ -2386,6 +2392,9 @@ sed_input_country_headroom_dye = {
  value = 0
  market ?= { mg:dye ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_dye } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_dye
+ } subtract = var:sed_pm_reserved_dye }
 }
 sed_input_headroom_dye = { value = owner.var:sed_input_market_margin_dye }
 sed_input_pending_electricity = {
@@ -2539,6 +2548,9 @@ sed_input_local_headroom_electricity = {
  value = 0
  sg:electricity ?= { add = { value = state_goods_production min = 0 multiply = 2 subtract = { value = state_goods_consumption min = 0 } } }
  subtract = sed_input_pending_electricity
+ if = { limit = { owner = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key }
+  has_variable = sed_pm_reserved_electricity
+ } subtract = var:sed_pm_reserved_electricity }
 }
 sed_input_headroom_electricity = {
  value = 0
@@ -2687,6 +2699,9 @@ sed_input_country_headroom_engines = {
  value = 0
  market ?= { mg:engines ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_engines } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_engines
+ } subtract = var:sed_pm_reserved_engines }
 }
 sed_input_headroom_engines = { value = owner.var:sed_input_market_margin_engines }
 sed_input_pending_explosives = {
@@ -2750,6 +2765,9 @@ sed_input_country_headroom_explosives = {
  value = 0
  market ?= { mg:explosives ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_explosives } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_explosives
+ } subtract = var:sed_pm_reserved_explosives }
 }
 sed_input_headroom_explosives = { value = owner.var:sed_input_market_margin_explosives }
 sed_input_pending_fabric = {
@@ -2783,6 +2801,9 @@ sed_input_country_headroom_fabric = {
  value = 0
  market ?= { mg:fabric ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_fabric } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_fabric
+ } subtract = var:sed_pm_reserved_fabric }
 }
 sed_input_headroom_fabric = { value = owner.var:sed_input_market_margin_fabric }
 sed_input_pending_fertilizer = {
@@ -2867,6 +2888,9 @@ sed_input_country_headroom_fertilizer = {
  value = 0
  market ?= { mg:fertilizer ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_fertilizer } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_fertilizer
+ } subtract = var:sed_pm_reserved_fertilizer }
 }
 sed_input_headroom_fertilizer = { value = owner.var:sed_input_market_margin_fertilizer }
 sed_input_pending_fish = {
@@ -2921,6 +2945,9 @@ sed_input_country_headroom_fish = {
  value = 0
  market ?= { mg:fish ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_fish } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_fish
+ } subtract = var:sed_pm_reserved_fish }
 }
 sed_input_headroom_fish = { value = owner.var:sed_input_market_margin_fish }
 sed_input_pending_glass = {
@@ -2954,6 +2981,9 @@ sed_input_country_headroom_glass = {
  value = 0
  market ?= { mg:glass ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_glass } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_glass
+ } subtract = var:sed_pm_reserved_glass }
 }
 sed_input_headroom_glass = { value = owner.var:sed_input_market_margin_glass }
 sed_input_pending_grain = {
@@ -2993,6 +3023,9 @@ sed_input_country_headroom_grain = {
  value = 0
  market ?= { mg:grain ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_grain } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_grain
+ } subtract = var:sed_pm_reserved_grain }
 }
 sed_input_headroom_grain = { value = owner.var:sed_input_market_margin_grain }
 sed_input_pending_hardwood = {
@@ -3032,6 +3065,9 @@ sed_input_country_headroom_hardwood = {
  value = 0
  market ?= { mg:hardwood ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_hardwood } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_hardwood
+ } subtract = var:sed_pm_reserved_hardwood }
 }
 sed_input_headroom_hardwood = { value = owner.var:sed_input_market_margin_hardwood }
 sed_input_pending_iron = {
@@ -3125,6 +3161,9 @@ sed_input_country_headroom_iron = {
  value = 0
  market ?= { mg:iron ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_iron } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_iron
+ } subtract = var:sed_pm_reserved_iron }
 }
 sed_input_headroom_iron = { value = owner.var:sed_input_market_margin_iron }
 sed_input_pending_lead = {
@@ -3149,6 +3188,9 @@ sed_input_country_headroom_lead = {
  value = 0
  market ?= { mg:lead ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_lead } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_lead
+ } subtract = var:sed_pm_reserved_lead }
 }
 sed_input_headroom_lead = { value = owner.var:sed_input_market_margin_lead }
 sed_input_pending_meat = {
@@ -3173,6 +3215,9 @@ sed_input_country_headroom_meat = {
  value = 0
  market ?= { mg:meat ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_meat } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_meat
+ } subtract = var:sed_pm_reserved_meat }
 }
 sed_input_headroom_meat = { value = owner.var:sed_input_market_margin_meat }
 sed_input_pending_oil = {
@@ -3377,6 +3422,9 @@ sed_input_country_headroom_oil = {
  value = 0
  market ?= { mg:oil ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_oil } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_oil
+ } subtract = var:sed_pm_reserved_oil }
 }
 sed_input_headroom_oil = { value = owner.var:sed_input_market_margin_oil }
 sed_input_pending_rubber = {
@@ -3416,6 +3464,9 @@ sed_input_country_headroom_rubber = {
  value = 0
  market ?= { mg:rubber ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_rubber } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_rubber
+ } subtract = var:sed_pm_reserved_rubber }
 }
 sed_input_headroom_rubber = { value = owner.var:sed_input_market_margin_rubber }
 sed_input_pending_silk = {
@@ -3440,6 +3491,9 @@ sed_input_country_headroom_silk = {
  value = 0
  market ?= { mg:silk ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_silk } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_silk
+ } subtract = var:sed_pm_reserved_silk }
 }
 sed_input_headroom_silk = { value = owner.var:sed_input_market_margin_silk }
 sed_input_pending_steel = {
@@ -3518,6 +3572,9 @@ sed_input_country_headroom_steel = {
  value = 0
  market ?= { mg:steel ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_steel } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_steel
+ } subtract = var:sed_pm_reserved_steel }
 }
 sed_input_headroom_steel = { value = owner.var:sed_input_market_margin_steel }
 sed_input_pending_sugar = {
@@ -3542,6 +3599,9 @@ sed_input_country_headroom_sugar = {
  value = 0
  market ?= { mg:sugar ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_sugar } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_sugar
+ } subtract = var:sed_pm_reserved_sugar }
 }
 sed_input_headroom_sugar = { value = owner.var:sed_input_market_margin_sugar }
 sed_input_pending_tools = {
@@ -3770,6 +3830,9 @@ sed_input_country_headroom_tools = {
  value = 0
  market ?= { mg:tools ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_tools } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_tools
+ } subtract = var:sed_pm_reserved_tools }
 }
 sed_input_headroom_tools = { value = owner.var:sed_input_market_margin_tools }
 sed_input_pending_transportation = {
@@ -3854,6 +3917,9 @@ sed_input_local_headroom_transportation = {
  value = 0
  sg:transportation ?= { add = { value = state_goods_production min = 0 multiply = 2 subtract = { value = state_goods_consumption min = 0 } } }
  subtract = sed_input_pending_transportation
+ if = { limit = { owner = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key }
+  has_variable = sed_pm_reserved_transportation
+ } subtract = var:sed_pm_reserved_transportation }
 }
 sed_input_headroom_transportation = {
  value = 0
@@ -3906,6 +3972,9 @@ sed_input_country_headroom_wood = {
  value = 0
  market ?= { mg:wood ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
  subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_wood } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_wood
+ } subtract = var:sed_pm_reserved_wood }
 }
 sed_input_headroom_wood = { value = owner.var:sed_input_market_margin_wood }
 sed_supplier_logging_camp_output = {

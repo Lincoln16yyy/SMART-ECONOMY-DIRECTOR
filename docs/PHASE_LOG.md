@@ -1822,3 +1822,55 @@ Gerador, validação estática, pacote e whitespace aprovados. Efeito e triggers
 verificados no executável, localização e scripts vanilla locais.
 Instalada com backup `mod_before_0.7.5_20261110_233730_175392` e conferência dos
 14 arquivos. Efeitos financeiros e funcionamento na engine ainda pendentes.
+
+
+## 2026-11-10 — Fila no orçamento e retomada por reservas (0.7.6)
+
+A referência de financiamento soma a fila identificada e o primeiro projeto,
+considera projetos simultâneos e remove o teto de 56 semanas. O catálogo de
+84 custos vanilla cobre níveis pendentes, com fallback de 6000 pontos para
+níveis agregados sem correspondência. Fundações próprias sem prédio recebem
+seu custo conhecido. A execução direta pode usar reservas com déficit semanal,
+saldo operacional não negativo e ausência de dívida, sob as guardas de caixa.
+A coordenação mantém os outros construtores suspensos durante essa execução.
+
+274 testes sintéticos aprovados. Regressões cobrem fila conhecida, fallback,
+capacidade zero, fundação, limpeza das leituras, simultaneidade e fronteiras
+exatas do financiamento, além da execução coordenada com fila ocupada.
+Gerador, validação estática 1.15, pacote e whitespace aprovados. Instalada com
+backup `mod_before_0.7.6_20261110_235444_968965` e conferência dos 14 arquivos.
+Prazo real, autoria dos projetos e resultado em campanha continuam pendentes.
+
+
+## 2026-11-11 — Configuração inicial de PMs (0.7.7)
+
+Fundações automáticas confirmadas recebem configuração básica por grupo de PM.
+O Director verifica permissões, insumos e reserva de trabalho e confirma os
+métodos ativos antes de encerrar o acompanhamento. Mudanças reservam insumos
+na leitura corrente para impedir dupla utilização entre indústrias. Métodos
+já ativos dispensam nova ativação. Trocas de modo, cancelamento identificado,
+expansões além do primeiro nível e marca de ignorar encerram o preparo.
+
+286 testes sintéticos aprovados. Regressões cobrem acompanhamento da fundação,
+falha de inclusão, confirmação, escassez, trabalho, preflight por grupo, modos,
+limpeza e disputa por insumos. Gerador, validação estática, pacote e whitespace
+aprovados. Instalada com backup `mod_before_0.7.7_20261111_000840_381639`,
+conferindo os 14 arquivos. Aplicação real na engine e efeito econômico pendentes.
+
+
+## 2026-11-11 — Seleção econômica inicial de PMs (0.7.8)
+
+A configuração inicial compara métodos do grupo principal por saída e margem
+material estressada a preços-base, sem aumento de empregos no grupo. A melhor
+alternativa pesquisada e abastecida é tentada antes da configuração básica.
+Os coeficientes foram extraídos do vanilla local. As reservas de insumos das
+mudanças passam a sobreviver a releituras no mesmo mês e expiram na troca de
+mês ou na saída do Automático.
+
+291 testes sintéticos aprovados. Regressões incluem método mais produtivo,
+margem pior apesar de maior saída, falta de insumos, retorno à configuração
+básica e persistência/expiração das reservas. Gerador, validação estática,
+pacote e whitespace aprovados. Instalada com backup
+`mod_before_0.7.8_20261111_002618_879011` e conferência dos 14 arquivos.
+Lucro real, preços locais, qualificações, modernização contínua e campanha
+permanecem pendentes.

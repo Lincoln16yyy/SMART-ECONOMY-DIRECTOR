@@ -137,14 +137,14 @@ sed_coord_sync = {{
   set_variable = {{ name = sed_coord_advisor_policy value = 0 }}
   if = {{ limit = {{ has_variable = aroai_autobuild }} set_variable = {{ name = sed_coord_executor value = 5 }} }}
   else_if = {{ limit = {{ sed_coord_fiscal_safe = yes NOT = {{ in_default = yes }} is_construction_paused = no }}
-   if = {{ limit = {{ sed_coord_reserve_drawdown_safe = yes construction_queue_num_queued_government_levels > 0 }}
+   if = {{ limit = {{ var:sed_plan_goal = 2 sed_direct_fiscal_safe = yes sed_direct_supply_priority_exists = yes }}
+    set_variable = {{ name = sed_coord_executor value = 11 }}
+   }}
+   else_if = {{ limit = {{ sed_coord_reserve_drawdown_safe = yes construction_queue_num_queued_government_levels > 0 }}
     set_variable = {{ name = sed_coord_executor value = 12 }}
    }}
    else_if = {{ limit = {{ var:sed_plan_waiting = 1 }}
     set_variable = {{ name = sed_coord_executor value = 10 }}
-   }}
-   else_if = {{ limit = {{ var:sed_plan_goal = 2 sed_auto_fiscal_safe = yes sed_direct_supply_priority_exists = yes }}
-    set_variable = {{ name = sed_coord_executor value = 11 }}
    }}
    else_if = {{ limit = {{ var:sed_plan_goal = 1 has_variable = sed_coord_supply_known sed_auto_fiscal_safe = yes }}
     {enable_option('railways')}

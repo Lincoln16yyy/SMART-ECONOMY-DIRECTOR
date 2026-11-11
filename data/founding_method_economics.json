@@ -1,0 +1,793 @@
+{
+  "prices": {
+    "wood": 20.0,
+    "tools": 40.0,
+    "electricity": 30.0,
+    "iron": 40.0,
+    "coal": 30.0,
+    "oil": 40.0,
+    "grain": 20.0,
+    "fish": 20.0,
+    "fertilizer": 30.0,
+    "fabric": 20.0,
+    "engines": 60.0,
+    "meat": 30.0,
+    "steel": 50.0,
+    "rubber": 40.0,
+    "groceries": 30.0,
+    "sugar": 30.0,
+    "clothes": 30.0,
+    "dye": 40.0,
+    "copper": 40.0,
+    "small_arms": 60.0,
+    "hardwood": 40.0,
+    "artillery": 70.0,
+    "ammunition": 50.0,
+    "lead": 40.0,
+    "explosives": 50.0
+  },
+  "buildings": {
+    "building_logging_camp": {
+      "pm_simple_forestry": {
+        "inputs": {},
+        "outputs": {
+          "wood": 30.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_saw_mills": {
+        "inputs": {
+          "tools": 5.0
+        },
+        "outputs": {
+          "wood": 60.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "steelworking"
+        ]
+      },
+      "pm_electric_saw_mills": {
+        "inputs": {
+          "tools": 10.0,
+          "electricity": 5.0
+        },
+        "outputs": {
+          "wood": 100.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "electrical_generation"
+        ]
+      }
+    },
+    "building_iron_mine": {
+      "pm_picks_and_shovels_building_iron_mine": {
+        "inputs": {
+          "tools": 5.0
+        },
+        "outputs": {
+          "iron": 20.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_atmospheric_engine_pump_building_iron_mine": {
+        "inputs": {
+          "tools": 10.0,
+          "coal": 10.0
+        },
+        "outputs": {
+          "iron": 40.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "atmospheric_engine"
+        ]
+      },
+      "pm_condensing_engine_pump_building_iron_mine": {
+        "inputs": {
+          "tools": 15.0,
+          "coal": 15.0
+        },
+        "outputs": {
+          "iron": 60.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "watertube_boiler"
+        ]
+      },
+      "pm_diesel_pump_building_iron_mine": {
+        "inputs": {
+          "tools": 15.0,
+          "oil": 5.0
+        },
+        "outputs": {
+          "iron": 70.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "compression_ignition"
+        ]
+      }
+    },
+    "building_coal_mine": {
+      "pm_picks_and_shovels_building_coal_mine": {
+        "inputs": {
+          "tools": 5.0
+        },
+        "outputs": {
+          "coal": 25.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_atmospheric_engine_pump_building_coal_mine": {
+        "inputs": {
+          "tools": 10.0
+        },
+        "outputs": {
+          "coal": 40.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "atmospheric_engine"
+        ]
+      },
+      "pm_condensing_engine_pump_building_coal_mine": {
+        "inputs": {
+          "tools": 15.0
+        },
+        "outputs": {
+          "coal": 60.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "watertube_boiler"
+        ]
+      },
+      "pm_diesel_pump_building_coal_mine": {
+        "inputs": {
+          "tools": 15.0,
+          "oil": 5.0
+        },
+        "outputs": {
+          "coal": 90.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "compression_ignition"
+        ]
+      }
+    },
+    "building_wheat_farm": {
+      "pm_simple_farming": {
+        "inputs": {},
+        "outputs": {
+          "grain": 20.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_herring_meal_farming": {
+        "inputs": {
+          "fish": 5.0
+        },
+        "outputs": {
+          "grain": 25.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_soil_enriching_farming": {
+        "inputs": {
+          "fertilizer": 5.0
+        },
+        "outputs": {
+          "grain": 30.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "intensive_agriculture"
+        ]
+      },
+      "pm_fertilization": {
+        "inputs": {
+          "fertilizer": 10.0
+        },
+        "outputs": {
+          "grain": 45.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "improved_fertilizer"
+        ]
+      },
+      "pm_chemical_fertilizer": {
+        "inputs": {
+          "fertilizer": 15.0
+        },
+        "outputs": {
+          "grain": 60.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "nitrogen_fixation"
+        ]
+      }
+    },
+    "building_rye_farm": {
+      "pm_simple_farming": {
+        "inputs": {},
+        "outputs": {
+          "grain": 20.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_soil_enriching_farming": {
+        "inputs": {
+          "fertilizer": 5.0
+        },
+        "outputs": {
+          "grain": 30.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "intensive_agriculture"
+        ]
+      },
+      "pm_fertilization": {
+        "inputs": {
+          "fertilizer": 10.0
+        },
+        "outputs": {
+          "grain": 45.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "improved_fertilizer"
+        ]
+      },
+      "pm_chemical_fertilizer": {
+        "inputs": {
+          "fertilizer": 15.0
+        },
+        "outputs": {
+          "grain": 60.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "nitrogen_fixation"
+        ]
+      }
+    },
+    "building_rice_farm": {
+      "pm_simple_farming_building_rice_farm": {
+        "inputs": {},
+        "outputs": {
+          "grain": 35.0
+        },
+        "workers": 10000.0,
+        "technologies": []
+      },
+      "pm_herring_meal_farming_building_rice_farm": {
+        "inputs": {
+          "fish": 10.0
+        },
+        "outputs": {
+          "grain": 45.0
+        },
+        "workers": 10000.0,
+        "technologies": []
+      },
+      "pm_soil_enriching_farming_building_rice_farm": {
+        "inputs": {
+          "fertilizer": 10.0
+        },
+        "outputs": {
+          "grain": 50.0
+        },
+        "workers": 10000.0,
+        "technologies": [
+          "intensive_agriculture"
+        ]
+      },
+      "pm_fertilization_building_rice_farm": {
+        "inputs": {
+          "fertilizer": 20.0
+        },
+        "outputs": {
+          "grain": 75.0
+        },
+        "workers": 10000.0,
+        "technologies": [
+          "improved_fertilizer"
+        ]
+      },
+      "pm_chemical_fertilizer_building_rice_farm": {
+        "inputs": {
+          "fertilizer": 30.0
+        },
+        "outputs": {
+          "grain": 100.0
+        },
+        "workers": 10000.0,
+        "technologies": [
+          "nitrogen_fixation"
+        ]
+      }
+    },
+    "building_maize_farm": {
+      "pm_simple_farming": {
+        "inputs": {},
+        "outputs": {
+          "grain": 20.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_soil_enriching_farming": {
+        "inputs": {
+          "fertilizer": 5.0
+        },
+        "outputs": {
+          "grain": 30.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "intensive_agriculture"
+        ]
+      },
+      "pm_fertilization": {
+        "inputs": {
+          "fertilizer": 10.0
+        },
+        "outputs": {
+          "grain": 45.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "improved_fertilizer"
+        ]
+      },
+      "pm_chemical_fertilizer": {
+        "inputs": {
+          "fertilizer": 15.0
+        },
+        "outputs": {
+          "grain": 60.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "nitrogen_fixation"
+        ]
+      }
+    },
+    "building_millet_farm": {
+      "pm_simple_farming": {
+        "inputs": {},
+        "outputs": {
+          "grain": 20.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_soil_enriching_farming": {
+        "inputs": {
+          "fertilizer": 5.0
+        },
+        "outputs": {
+          "grain": 30.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "intensive_agriculture"
+        ]
+      },
+      "pm_fertilization": {
+        "inputs": {
+          "fertilizer": 10.0
+        },
+        "outputs": {
+          "grain": 45.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "improved_fertilizer"
+        ]
+      },
+      "pm_chemical_fertilizer": {
+        "inputs": {
+          "fertilizer": 15.0
+        },
+        "outputs": {
+          "grain": 60.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "nitrogen_fixation"
+        ]
+      }
+    },
+    "building_cotton_plantation": {
+      "default_building_cotton_plantation": {
+        "inputs": {},
+        "outputs": {
+          "fabric": 45.0
+        },
+        "workers": 8000.0,
+        "technologies": []
+      },
+      "automatic_irrigation_building_cotton_plantation": {
+        "inputs": {
+          "engines": 5.0
+        },
+        "outputs": {
+          "fabric": 80.0
+        },
+        "workers": 7000.0,
+        "technologies": [
+          "pumpjacks"
+        ]
+      }
+    },
+    "building_livestock_ranch": {
+      "pm_open_air_stockyards": {
+        "inputs": {},
+        "outputs": {
+          "meat": 10.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_butchering_tools": {
+        "inputs": {
+          "tools": 2.0
+        },
+        "outputs": {
+          "meat": 15.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_slaughterhouses": {
+        "inputs": {
+          "tools": 5.0
+        },
+        "outputs": {
+          "meat": 25.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "mechanical_tools"
+        ]
+      },
+      "pm_mechanized_slaughtering": {
+        "inputs": {
+          "tools": 5.0,
+          "coal": 5.0
+        },
+        "outputs": {
+          "meat": 35.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "mechanized_farming"
+        ]
+      }
+    },
+    "building_tooling_workshop": {
+      "pm_crude_tools": {
+        "inputs": {
+          "wood": 30.0
+        },
+        "outputs": {
+          "tools": 30.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_pig_iron": {
+        "inputs": {
+          "wood": 30.0,
+          "iron": 20.0
+        },
+        "outputs": {
+          "tools": 60.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "steelworking"
+        ]
+      },
+      "pm_steel": {
+        "inputs": {
+          "wood": 30.0,
+          "steel": 20.0
+        },
+        "outputs": {
+          "tools": 80.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "mechanical_tools"
+        ]
+      },
+      "pm_rubber_grips": {
+        "inputs": {
+          "rubber": 10.0,
+          "steel": 30.0
+        },
+        "outputs": {
+          "tools": 110.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "vulcanization"
+        ]
+      }
+    },
+    "building_food_industry": {
+      "pm_bakery": {
+        "inputs": {
+          "grain": 40.0
+        },
+        "outputs": {
+          "groceries": 45.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_sweeteners": {
+        "inputs": {
+          "grain": 40.0,
+          "sugar": 15.0
+        },
+        "outputs": {
+          "groceries": 65.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "distillation"
+        ]
+      },
+      "pm_baking_powder": {
+        "inputs": {
+          "grain": 80.0,
+          "sugar": 30.0
+        },
+        "outputs": {
+          "groceries": 120.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "baking_powder"
+        ]
+      }
+    },
+    "building_textile_mill": {
+      "pm_handsewn_clothes": {
+        "inputs": {
+          "fabric": 40.0
+        },
+        "outputs": {
+          "clothes": 45.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_dye_workshops": {
+        "inputs": {
+          "fabric": 40.0,
+          "dye": 5.0
+        },
+        "outputs": {
+          "clothes": 60.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "lathe"
+        ]
+      },
+      "pm_sewing_machines": {
+        "inputs": {
+          "fabric": 60.0,
+          "dye": 10.0,
+          "tools": 5.0
+        },
+        "outputs": {
+          "clothes": 100.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "mechanized_workshops"
+        ]
+      },
+      "pm_electric_sewing_machines": {
+        "inputs": {
+          "fabric": 60.0,
+          "dye": 20.0,
+          "tools": 8.0,
+          "copper": 2.0,
+          "electricity": 10.0
+        },
+        "outputs": {
+          "clothes": 140.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "electrical_capacitors"
+        ]
+      }
+    },
+    "building_arms_industry": {
+      "pm_muskets": {
+        "inputs": {
+          "iron": 10.0,
+          "hardwood": 10.0
+        },
+        "outputs": {
+          "small_arms": 30.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_rifles": {
+        "inputs": {
+          "steel": 10.0,
+          "hardwood": 10.0,
+          "tools": 5.0
+        },
+        "outputs": {
+          "small_arms": 50.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "rifling"
+        ]
+      },
+      "pm_repeaters": {
+        "inputs": {
+          "steel": 20.0,
+          "hardwood": 10.0,
+          "tools": 10.0
+        },
+        "outputs": {
+          "small_arms": 70.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "repeaters"
+        ]
+      },
+      "pm_bolt_action_rifles": {
+        "inputs": {
+          "steel": 20.0,
+          "hardwood": 10.0,
+          "tools": 20.0,
+          "oil": 10.0
+        },
+        "outputs": {
+          "small_arms": 100.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "bolt_action_rifles"
+        ]
+      }
+    },
+    "building_artillery_foundry": {
+      "pm_cannons": {
+        "inputs": {
+          "iron": 15.0,
+          "hardwood": 10.0
+        },
+        "outputs": {
+          "artillery": 25.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "artillery"
+        ]
+      },
+      "pm_bronze_cannons": {
+        "inputs": {
+          "copper": 10.0,
+          "hardwood": 15.0
+        },
+        "outputs": {
+          "artillery": 25.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "artillery"
+        ]
+      },
+      "pm_smoothbores": {
+        "inputs": {
+          "iron": 25.0,
+          "hardwood": 15.0
+        },
+        "outputs": {
+          "artillery": 45.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "shell_gun"
+        ]
+      },
+      "pm_bronze_smoothbores": {
+        "inputs": {
+          "copper": 20.0,
+          "hardwood": 20.0
+        },
+        "outputs": {
+          "artillery": 45.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "shell_gun"
+        ]
+      },
+      "pm_breech_loaders": {
+        "inputs": {
+          "steel": 25.0,
+          "hardwood": 10.0,
+          "tools": 10.0
+        },
+        "outputs": {
+          "artillery": 65.0
+        },
+        "workers": 5250.0,
+        "technologies": [
+          "breech_loading_artillery"
+        ]
+      },
+      "pm_recoiled_barrels": {
+        "inputs": {
+          "steel": 40.0,
+          "tools": 20.0,
+          "oil": 10.0
+        },
+        "outputs": {
+          "artillery": 90.0
+        },
+        "workers": 5250.0,
+        "technologies": [
+          "automatic_machine_guns"
+        ]
+      }
+    },
+    "building_munition_plant": {
+      "pm_percussion_caps": {
+        "inputs": {
+          "explosives": 20.0,
+          "lead": 15.0,
+          "copper": 5.0
+        },
+        "outputs": {
+          "ammunition": 50.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_explosive_shells": {
+        "inputs": {
+          "explosives": 40.0,
+          "lead": 20.0,
+          "copper": 10.0
+        },
+        "outputs": {
+          "ammunition": 90.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "dynamite"
+        ]
+      }
+    }
+  }
+}
