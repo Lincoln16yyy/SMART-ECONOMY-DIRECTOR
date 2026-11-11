@@ -1204,3 +1204,27 @@ A rota própria de papel conserva seus filtros e pode usar a capacidade gratuita
 com a referência de materiais dos setores existentes. A obra depende de
 tecnologia, permissão, trabalhadores e insumos elegíveis. A inclusão na fila
 real e o efeito na universidade precisam de confirmação em campanha.
+
+## 0.7.15 — Insumos de uma configuração inicial concreta
+
+No Automático, a previsão de fundação das indústrias geridas usa a primeira configuração
+verificada de cada grupo de PM. A regra se aplica a todas as indústrias do
+catálogo. Pesquisar métodos avançados deixa de acrescentar suas entradas à
+previsão de uma fundação básica. A reserva de pedidos sem prédio usa a mesma
+configuração. Após existir prédio, seus métodos ativos determinam os insumos.
+
+O Assistido conserva a previsão anterior mais ampla. As opções ativas de
+controle de PMs do Advisor também a conservam, pois esse executor assume a
+configuração inicial. Ferrovia e
+setor de construção também conservam seu modelo anterior. O Director continua
+avaliando melhorias iniciais por tecnologia, oferta e margem material, com
+revalidação de ativação e reserva mensal dos insumos escolhidos.
+
+Um pedido próprio parcialmente ocupado pode confirmar a configuração básica
+ou retornar seu grupo principal ao básico sem exigir de novo todos os empregos,
+quando os grupos auxiliares já estão básicos e o PM principal preserva a
+quantidade de empregos. Mudar grupos auxiliares que ampliem empregos continua
+exigindo a verificação normal de trabalho. A regra vale durante a configuração
+inicial rastreada. Preços e materiais continuam orientando a comparação econômica.
+Previsão de lucro completo, salários por profissão e confirmação do resultado
+real permanecem pendentes.

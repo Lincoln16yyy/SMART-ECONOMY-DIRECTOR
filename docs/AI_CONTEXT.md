@@ -1,10 +1,34 @@
 # Contexto de continuidade
 
-Última entrega documentada — 0.7.14 instalada com jogo fechado e 14 arquivos
-conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.14_20261111_112138_348829`.
-343 testes sintéticos aprovados. Geração consistente, validação estática
-local 1.15, pacote e verificação de espaçamento aprovados. Papel e fundação
-com ocupação parcial ainda exigem confirmação em campanha.
+Última entrega documentada — 0.7.15 instalada com jogo fechado e 14 arquivos
+conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.15_20261111_115337_758673`.
+349 testes sintéticos aprovados. Geração consistente, validação estática
+local 1.15, pacote e verificação de espaçamento aprovados. Configuração
+inicial e contratação real ainda exigem confirmação em campanha.
+
+## 0.7.15 — Insumos de uma configuração inicial concreta
+
+No Automático, a previsão de fundação das indústrias geridas usa a primeira configuração
+verificada de cada grupo de PM. A regra se aplica a todas as indústrias do
+catálogo. Pesquisar métodos avançados deixa de acrescentar suas entradas à
+previsão de uma fundação básica. A reserva de pedidos sem prédio usa a mesma
+configuração. Após existir prédio, seus métodos ativos determinam os insumos.
+
+O Assistido conserva a previsão anterior mais ampla. As opções ativas de
+controle de PMs do Advisor também a conservam, pois esse executor assume a
+configuração inicial. Ferrovia e
+setor de construção também conservam seu modelo anterior. O Director continua
+avaliando melhorias iniciais por tecnologia, oferta e margem material, com
+revalidação de ativação e reserva mensal dos insumos escolhidos.
+
+Um pedido próprio parcialmente ocupado pode confirmar a configuração básica
+ou retornar seu grupo principal ao básico sem exigir de novo todos os empregos,
+quando os grupos auxiliares já estão básicos e o PM principal preserva a
+quantidade de empregos. Mudar grupos auxiliares que ampliem empregos continua
+exigindo a verificação normal de trabalho. A regra vale durante a configuração
+inicial rastreada. Preços e materiais continuam orientando a comparação econômica.
+Previsão de lucro completo, salários por profissão e confirmação do resultado
+real permanecem pendentes.
 
 ## 0.7.14 — Papel e bloqueio de orçamento do Advisor
 

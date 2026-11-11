@@ -1997,3 +1997,28 @@ pequeno e reserva integral dos empregos após o pedido. Geração consistente,
 validação estática local 1.15, pacote e espaçamento aprovados. Instalado com
 jogo fechado, backup `mod_before_0.7.14_20261111_112138_348829` e conferência
 de 14 arquivos.
+
+## 0.7.15 — Configuração básica viável para fundações industriais
+
+A previsão de entradas no Automático usa a configuração básica verificada
+para todas as indústrias do catálogo próprio. A pesquisa de métodos avançados
+passa a fornecer opções de melhoria após a conclusão. Esses métodos continuam
+sujeitos a tecnologia, ativação permitida, margem material e insumos disponíveis.
+Reservas de pedidos sem prédio usam a configuração básica. Prédios existentes
+usam seus PMs ativos. O Assistido, o controle externo de PMs e os dois tipos
+fora do registro de configuração industrial conservam a previsão anterior.
+
+A configuração inicial rastreada aceita confirmar o básico e retornar o PM
+principal a ele sem ampliar empregos se os grupos auxiliares já são básicos.
+Esse caso atende fundações com ocupação parcial. Mudanças que acrescentam
+empregos conservam a guarda de trabalho. A avaliação econômica existente usa
+preços e materiais. Lucro completo, salários por profissão e resultados reais
+continuam pendentes. A cobertura direta permanece nos doze bens do catálogo.
+
+349 testes sintéticos aprovados. A cobertura nova percorre os insumos básicos
+de todas as indústrias registradas, mantém a previsão conservadora no Assistido
+e sob controle externo de PMs, reproduz pesquisa avançada com falta de insumos
+e verifica configuração inicial parcialmente ocupada sem acrescentar empregos.
+Geração consistente, validação estática local 1.15, pacote e espaçamento aprovados.
+Instalada com backup `mod_before_0.7.15_20261111_115337_758673` e conferência de
+14 arquivos. Resultado real em campanha segue pendente.
