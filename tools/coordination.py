@@ -136,6 +136,9 @@ sed_coord_sync = {{
   set_variable = {{ name = sed_coord_executor value = 0 }}
   set_variable = {{ name = sed_coord_advisor_policy value = 0 }}
   if = {{ limit = {{ has_variable = aroai_autobuild }} set_variable = {{ name = sed_coord_executor value = 5 }} }}
+  else_if = {{ limit = {{ sed_pm_upgrade_month_limit_reached = yes }}
+   set_variable = {{ name = sed_coord_executor value = 13 }}
+  }}
   else_if = {{ limit = {{ sed_coord_fiscal_safe = yes NOT = {{ in_default = yes }} is_construction_paused = no }}
    if = {{ limit = {{ var:sed_plan_goal = 2 sed_direct_fiscal_safe = yes sed_direct_supply_priority_exists = yes }}
     set_variable = {{ name = sed_coord_executor value = 11 }}

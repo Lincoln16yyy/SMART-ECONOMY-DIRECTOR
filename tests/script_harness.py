@@ -86,6 +86,7 @@ class Country:
         self.military_wage_changes = []
         self.military_formations = []
         self.production_method_changes = []
+        self.production_method_accepted = True
         self.construction_accepted = True
         self.market_goods = {good: {'market_goods_buy_orders': 1000,
                                     'market_goods_sell_orders': 1000,
@@ -105,6 +106,8 @@ class Country:
         return scope.setdefault('variables', {})
 
     def lookup(self, name, scope):
+        if name.startswith('prev.var:'):
+            return self.variables_for(scope['__previous_scope__'])[name[len('prev.var:'):]]
         if name in ('tax_level', 'government_wage_level', 'military_wage_level'):
             return self.tax_level_rank(scope.get(name, self.readings[name]))
         if name.startswith('b:') and '.' in name:
@@ -301,7 +304,9 @@ class Country:
                     raise AssertionError('prev used without a previous scope')
                 self.execute(value, previous, previous=scope)
             elif key == 'owner':
-                self.execute(value, self.country_scope(), previous=scope)
+                owner = self.country_scope()
+                owner['__previous_scope__'] = scope
+                self.execute(value, owner, previous=scope)
             elif key == 'every_scope_state':
                 limit = next((e.value for e in value if e.key == 'limit'), [])
                 rest = [e for e in value if e.key != 'limit']
@@ -339,8 +344,9 @@ class Country:
                 method = child(value, 'production_method')
                 target = self.building(scope, kind)
                 group = next(profile for profile in PRODUCTION_PROFILES[kind] if method in profile['alternatives'])
-                target['production_methods'] = [active for active in target.get('production_methods', [])
-                                                if active not in group['alternatives']] + [method]
+                if self.production_method_accepted:
+                    target['production_methods'] = [active for active in target.get('production_methods', [])
+                                                    if active not in group['alternatives']] + [method]
                 self.production_method_changes.append((kind, method, scope))
             elif key == 'start_building_construction':
                 target = scope if scope.get('__scope__') == STATE else None

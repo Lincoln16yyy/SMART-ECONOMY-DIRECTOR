@@ -1874,3 +1874,25 @@ pacote e whitespace aprovados. Instalada com backup
 `mod_before_0.7.8_20261111_002618_879011` e conferência dos 14 arquivos.
 Lucro real, preços locais, qualificações, modernização contínua e campanha
 permanecem pendentes.
+
+
+## 2026-11-11 — Modernização contínua de produtores (0.7.9)
+
+O Automático passa a modernizar o grupo principal de produtores existentes
+para bens em falta e insumos priorizados. A escolha nacional compara ganho
+material estimado por nível/ocupação, exige aumento da saída, preservação dos
+outros produtos e ausência de aumento do total de empregos no grupo. Insumos
+adicionais são reservados para todos os níveis. Há uma tentativa mensal
+compartilhada com a construção direta e intervalo de três meses por prédio.
+
+Controles de PMs ativos no Advisor têm precedência. A coordenação suspende
+construção externa verificada no mês da tentativa própria. O resultado usa
+confirmação do método ativo e falhas consomem a tentativa, com marcador mensal
+preservado após desativação.
+
+302 testes sintéticos aprovados. Regressões cobrem entrada normal, escolha
+nacional, insumos, nível, contratação, intervalos e troca de modo, falha de
+ativação, prioridade dos gerentes externos e coordenação. Gerador, validação
+estática, pacote e whitespace aprovados. Instalada com backup
+`mod_before_0.7.9_20261111_005011_104622`, conferindo os 14 arquivos.
+Campanha, qualificações e lucro real ainda exigem verificação/desenvolvimento.

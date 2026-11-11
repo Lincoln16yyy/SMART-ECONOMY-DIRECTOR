@@ -2858,6 +2858,13 @@ textbox = {
  text = "sed_coord_executor_12"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_coord_executor_13_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_coord_executor_13"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_coord_supply_policy_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -3210,6 +3217,20 @@ textbox = {
  using = fontsize_large
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_auto_status_budget"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_status_modernized_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_status_modernized"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_status_pm_unconfirmed_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_status_pm_unconfirmed"
 }
 flowcontainer = { direction = horizontal spacing = 12
 button = {

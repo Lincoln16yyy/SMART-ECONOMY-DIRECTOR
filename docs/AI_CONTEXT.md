@@ -1,14 +1,46 @@
 # Contexto de continuidade
 
-Última entrega documentada: 0.7.8 instalada com jogo fechado e 14 arquivos
-conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.8_20261111_002618_879011`.
-291 testes sintéticos aprovados. A escolha econômica inicial de PMs ainda exige confirmação na engine.
+Última entrega documentada: 0.7.9 instalada com jogo fechado e 14 arquivos
+conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.9_20261111_005011_104622`.
+302 testes sintéticos aprovados. A modernização contínua ainda exige confirmação na engine.
 
 
 
 
 
 
+
+
+## 0.7.9 — Modernização contínua dos produtores existentes
+
+O Automático avalia produtores de bens em escassez ou insumos priorizados.
+Compara mudanças do grupo principal que aumentem a saída do bem-alvo,
+preservem os demais produtos, não aumentem o total de empregos do grupo e
+melhorem a margem material estressada a preços-base. O maior ganho estimado,
+escalado pelo nível e ocupação, escolhe o prédio nacional.
+
+A seleção exige pelo menos 90% de ocupação, contratação sem falha, ausência de
+escassez atual de insumos, infraestrutura e incorporação adequadas, ausência
+de expansão enfileirada e permissão tecnológica/do jogo. Os insumos adicionais
+são projetados para todos os níveis e recebem margem de 25%. A reserva mensal
+é aplicada antes de novas leituras do plano.
+
+Há uma tentativa mensal nacional, compartilhada com a construção direta, e
+um intervalo de três meses por prédio após troca confirmada. O limite mensal
+é marcado antes do comando, inclusive em falha. Trocas de modo preservam o
+intervalo por prédio. Desativação limpa o acompanhamento por prédio e preserva
+o marcador mensal. Após a tentativa, a coordenação suspende as opções
+verificadas de construção externa até o mês seguinte, sob executor 13.
+
+Os controles `advisor_pm_balance_enabled` e `advisor_labor_auto_enabled` foram
+verificados na agenda e rotina de PMs do Advisor instalado. Quando estão
+ativos, a modernização própria aguarda e o preparo inicial é entregue ao
+controlador externo. ARoAI ativo também impede modernização própria.
+
+A análise continua limitada ao catálogo e ao grupo principal. Qualificações,
+salários por profissão, preços locais, lucro real, automação dos demais grupos
+e modernização das unidades militares permanecem pendentes. Uma nova leitura
+após a troca reavalia os gargalos. A confirmação na engine segue necessária.
 
 ## 0.7.8 — Escolha econômica inicial de PMs
 

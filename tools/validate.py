@@ -102,7 +102,7 @@ def validate(root=ROOT, game=None):
                     errors.append('Military wage change outside the reviewed policy: ' + str(entry.value))
             if entry.key == 'activate_production_method':
                 pair = (child(entry.value, 'building_type'), child(entry.value, 'production_method'))
-                if effect_name != 'sed_configure_founded_industries' or pair not in startup_methods:
+                if effect_name not in {'sed_configure_founded_industries', 'sed_modernize_existing_industry'} or pair not in startup_methods:
                     errors.append('Production method change outside the reviewed founding setup')
             if entry.key == 'remove_variable':
                 if not str(entry.value).startswith('sed_'):
@@ -137,6 +137,7 @@ def validate(root=ROOT, game=None):
         ('sed_apply_wage_policy', 'sed_wage_month_limit_reached'),
         ('sed_apply_military_wage_policy', 'sed_military_wage_month_limit_reached'),
         ('sed_configure_founded_industries', None),
+        ('sed_modernize_existing_industry', 'sed_pm_upgrade_month_limit_reached'),
     ):
         body = custom.get(name, [])
         outer = body[0] if len(body) == 1 else None

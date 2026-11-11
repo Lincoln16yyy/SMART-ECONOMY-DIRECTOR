@@ -364,6 +364,7 @@ sed_disable_country = {
  remove_variable = sed_ammunition_infrastructure_states
  remove_variable = sed_ammunition_labor_states
  remove_variable = sed_ammunition_forecast_states
+ remove_variable = sed_pm_upgrade_status
  remove_variable = sed_plan_count
  remove_variable = sed_plan_goal
  remove_variable = sed_fiscal_status
@@ -637,6 +638,25 @@ sed_disable_country = {
   remove_variable = sed_small_arms_found_pm_pending
   remove_variable = sed_artillery_found_pm_pending
   remove_variable = sed_ammunition_found_pm_pending
+  remove_variable = sed_pm_upgrade_score
+  remove_variable = sed_pm_upgrade_choice
+  remove_variable = sed_pm_upgrade_levels
+  remove_variable = sed_pm_cooldown_logging_camp
+  remove_variable = sed_pm_cooldown_iron_mine
+  remove_variable = sed_pm_cooldown_coal_mine
+  remove_variable = sed_pm_cooldown_wheat_farm
+  remove_variable = sed_pm_cooldown_rye_farm
+  remove_variable = sed_pm_cooldown_rice_farm
+  remove_variable = sed_pm_cooldown_maize_farm
+  remove_variable = sed_pm_cooldown_millet_farm
+  remove_variable = sed_pm_cooldown_cotton_plantation
+  remove_variable = sed_pm_cooldown_livestock_ranch
+  remove_variable = sed_pm_cooldown_tooling_workshop
+  remove_variable = sed_pm_cooldown_food_industry
+  remove_variable = sed_pm_cooldown_textile_mill
+  remove_variable = sed_pm_cooldown_arms_industry
+  remove_variable = sed_pm_cooldown_artillery_foundry
+  remove_variable = sed_pm_cooldown_munition_plant
  }
  # Schema and automatic attempt month persist; disabling cannot reset the monthly cap.
 }
@@ -3281,6 +3301,10 @@ sed_schedule_auto_retry = {
 sed_auto_apply_monthly = {
  sed_configure_founded_industries = yes
  sed_refresh_national_plan = yes
+ sed_modernize_existing_industry = yes
+ if = { limit = { sed_pm_upgrade_month_limit_reached = yes has_variable = sed_pm_upgrade_status var:sed_pm_upgrade_status = 1 }
+  sed_refresh_national_plan = yes
+ }
  sed_apply_fiscal_policy = yes
  sed_apply_wage_policy = yes
  sed_apply_military_wage_policy = yes
@@ -3302,6 +3326,10 @@ sed_auto_apply_monthly = {
   }
  }
  else = { sed_auto_run_direct = yes }
+ if = { limit = { sed_pm_upgrade_month_limit_reached = yes has_variable = sed_pm_upgrade_status }
+  set_variable = { name = sed_auto_action_status value = 24 }
+  if = { limit = { var:sed_pm_upgrade_status = 1 } set_variable = { name = sed_auto_action_status value = 23 } }
+ }
  # Store the actual result after either direct execution or delegation.
  set_variable = { name = sed_auto_review_status value = var:sed_auto_action_status }
  set_variable = { name = sed_auto_review_year value = year }
@@ -6505,16 +6533,13 @@ sed_configure_founded_industries = {
   NOT = { has_variable = sed_mode_manual }
   NOT = { has_variable = sed_mode_assisted }
  }
-  if = { limit = { NOT = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key } }
-   sed_clear_pm_input_reservations = yes
-   set_variable = { name = sed_pm_inputs_month value = sed_live_month_key }
-  }
-  sed_refresh_input_readings = yes
+  sed_begin_pm_input_reservations = yes
   every_scope_state = {
 
    if = { limit = { has_variable = sed_wood_found_pm_pending var:sed_wood_found_pm_pending = 1 }
     if = { limit = { OR = {
      has_variable = sed_wood_ignored is_incorporated = no
+     owner = { OR = { has_variable = advisor_pm_balance_enabled has_variable = advisor_labor_auto_enabled } }
      AND = { NOT = { has_building = building_logging_camp } NOT = { has_variable = sed_wood_request_pending } }
      AND = { has_building = building_logging_camp b:building_logging_camp = { OR = { level > 1 level_after_queued_constructions > 1 } } }
     } } remove_variable = sed_wood_found_pm_pending }
@@ -6629,6 +6654,7 @@ sed_configure_founded_industries = {
    if = { limit = { has_variable = sed_iron_found_pm_pending var:sed_iron_found_pm_pending = 1 }
     if = { limit = { OR = {
      has_variable = sed_iron_ignored is_incorporated = no
+     owner = { OR = { has_variable = advisor_pm_balance_enabled has_variable = advisor_labor_auto_enabled } }
      AND = { NOT = { has_building = building_iron_mine } NOT = { has_variable = sed_iron_request_pending } }
      AND = { has_building = building_iron_mine b:building_iron_mine = { OR = { level > 1 level_after_queued_constructions > 1 } } }
     } } remove_variable = sed_iron_found_pm_pending }
@@ -6747,6 +6773,7 @@ sed_configure_founded_industries = {
    if = { limit = { has_variable = sed_coal_found_pm_pending var:sed_coal_found_pm_pending = 1 }
     if = { limit = { OR = {
      has_variable = sed_coal_ignored is_incorporated = no
+     owner = { OR = { has_variable = advisor_pm_balance_enabled has_variable = advisor_labor_auto_enabled } }
      AND = { NOT = { has_building = building_coal_mine } NOT = { has_variable = sed_coal_request_pending } }
      AND = { has_building = building_coal_mine b:building_coal_mine = { OR = { level > 1 level_after_queued_constructions > 1 } } }
     } } remove_variable = sed_coal_found_pm_pending }
@@ -6897,6 +6924,7 @@ sed_configure_founded_industries = {
    if = { limit = { has_variable = sed_grain_found_pm_pending var:sed_grain_found_pm_pending = 1 }
     if = { limit = { OR = {
      has_variable = sed_grain_ignored is_incorporated = no
+     owner = { OR = { has_variable = advisor_pm_balance_enabled has_variable = advisor_labor_auto_enabled } }
      AND = { NOT = { has_building = building_wheat_farm } NOT = { has_variable = sed_grain_request_pending } }
      AND = { has_building = building_wheat_farm b:building_wheat_farm = { OR = { level > 1 level_after_queued_constructions > 1 } } }
     } } remove_variable = sed_grain_found_pm_pending }
@@ -6961,6 +6989,7 @@ sed_configure_founded_industries = {
    if = { limit = { has_variable = sed_grain_found_pm_pending var:sed_grain_found_pm_pending = 2 }
     if = { limit = { OR = {
      has_variable = sed_grain_ignored is_incorporated = no
+     owner = { OR = { has_variable = advisor_pm_balance_enabled has_variable = advisor_labor_auto_enabled } }
      AND = { NOT = { has_building = building_rye_farm } NOT = { has_variable = sed_grain_request_pending } }
      AND = { has_building = building_rye_farm b:building_rye_farm = { OR = { level > 1 level_after_queued_constructions > 1 } } }
     } } remove_variable = sed_grain_found_pm_pending }
@@ -7025,6 +7054,7 @@ sed_configure_founded_industries = {
    if = { limit = { has_variable = sed_grain_found_pm_pending var:sed_grain_found_pm_pending = 3 }
     if = { limit = { OR = {
      has_variable = sed_grain_ignored is_incorporated = no
+     owner = { OR = { has_variable = advisor_pm_balance_enabled has_variable = advisor_labor_auto_enabled } }
      AND = { NOT = { has_building = building_rice_farm } NOT = { has_variable = sed_grain_request_pending } }
      AND = { has_building = building_rice_farm b:building_rice_farm = { OR = { level > 1 level_after_queued_constructions > 1 } } }
     } } remove_variable = sed_grain_found_pm_pending }
@@ -7060,6 +7090,7 @@ sed_configure_founded_industries = {
    if = { limit = { has_variable = sed_grain_found_pm_pending var:sed_grain_found_pm_pending = 4 }
     if = { limit = { OR = {
      has_variable = sed_grain_ignored is_incorporated = no
+     owner = { OR = { has_variable = advisor_pm_balance_enabled has_variable = advisor_labor_auto_enabled } }
      AND = { NOT = { has_building = building_maize_farm } NOT = { has_variable = sed_grain_request_pending } }
      AND = { has_building = building_maize_farm b:building_maize_farm = { OR = { level > 1 level_after_queued_constructions > 1 } } }
     } } remove_variable = sed_grain_found_pm_pending }
@@ -7124,6 +7155,7 @@ sed_configure_founded_industries = {
    if = { limit = { has_variable = sed_grain_found_pm_pending var:sed_grain_found_pm_pending = 5 }
     if = { limit = { OR = {
      has_variable = sed_grain_ignored is_incorporated = no
+     owner = { OR = { has_variable = advisor_pm_balance_enabled has_variable = advisor_labor_auto_enabled } }
      AND = { NOT = { has_building = building_millet_farm } NOT = { has_variable = sed_grain_request_pending } }
      AND = { has_building = building_millet_farm b:building_millet_farm = { OR = { level > 1 level_after_queued_constructions > 1 } } }
     } } remove_variable = sed_grain_found_pm_pending }
@@ -7188,6 +7220,7 @@ sed_configure_founded_industries = {
    if = { limit = { has_variable = sed_fabric_found_pm_pending var:sed_fabric_found_pm_pending = 1 }
     if = { limit = { OR = {
      has_variable = sed_fabric_ignored is_incorporated = no
+     owner = { OR = { has_variable = advisor_pm_balance_enabled has_variable = advisor_labor_auto_enabled } }
      AND = { NOT = { has_building = building_cotton_plantation } NOT = { has_variable = sed_fabric_request_pending } }
      AND = { has_building = building_cotton_plantation b:building_cotton_plantation = { OR = { level > 1 level_after_queued_constructions > 1 } } }
     } } remove_variable = sed_fabric_found_pm_pending }
@@ -7252,6 +7285,7 @@ sed_configure_founded_industries = {
    if = { limit = { has_variable = sed_fabric_found_pm_pending var:sed_fabric_found_pm_pending = 2 }
     if = { limit = { OR = {
      has_variable = sed_fabric_ignored is_incorporated = no
+     owner = { OR = { has_variable = advisor_pm_balance_enabled has_variable = advisor_labor_auto_enabled } }
      AND = { NOT = { has_building = building_livestock_ranch } NOT = { has_variable = sed_fabric_request_pending } }
      AND = { has_building = building_livestock_ranch b:building_livestock_ranch = { OR = { level > 1 level_after_queued_constructions > 1 } } }
     } } remove_variable = sed_fabric_found_pm_pending }
@@ -7293,6 +7327,7 @@ sed_configure_founded_industries = {
    if = { limit = { has_variable = sed_tools_found_pm_pending var:sed_tools_found_pm_pending = 1 }
     if = { limit = { OR = {
      has_variable = sed_tools_ignored is_incorporated = no
+     owner = { OR = { has_variable = advisor_pm_balance_enabled has_variable = advisor_labor_auto_enabled } }
      AND = { NOT = { has_building = building_tooling_workshop } NOT = { has_variable = sed_tools_request_pending } }
      AND = { has_building = building_tooling_workshop b:building_tooling_workshop = { OR = { level > 1 level_after_queued_constructions > 1 } } }
     } } remove_variable = sed_tools_found_pm_pending }
@@ -7375,6 +7410,7 @@ sed_configure_founded_industries = {
    if = { limit = { has_variable = sed_groceries_found_pm_pending var:sed_groceries_found_pm_pending = 1 }
     if = { limit = { OR = {
      has_variable = sed_groceries_ignored is_incorporated = no
+     owner = { OR = { has_variable = advisor_pm_balance_enabled has_variable = advisor_labor_auto_enabled } }
      AND = { NOT = { has_building = building_food_industry } NOT = { has_variable = sed_groceries_request_pending } }
      AND = { has_building = building_food_industry b:building_food_industry = { OR = { level > 1 level_after_queued_constructions > 1 } } }
     } } remove_variable = sed_groceries_found_pm_pending }
@@ -7417,6 +7453,7 @@ sed_configure_founded_industries = {
    if = { limit = { has_variable = sed_clothes_found_pm_pending var:sed_clothes_found_pm_pending = 1 }
     if = { limit = { OR = {
      has_variable = sed_clothes_ignored is_incorporated = no
+     owner = { OR = { has_variable = advisor_pm_balance_enabled has_variable = advisor_labor_auto_enabled } }
      AND = { NOT = { has_building = building_textile_mill } NOT = { has_variable = sed_clothes_request_pending } }
      AND = { has_building = building_textile_mill b:building_textile_mill = { OR = { level > 1 level_after_queued_constructions > 1 } } }
     } } remove_variable = sed_clothes_found_pm_pending }
@@ -7485,6 +7522,7 @@ sed_configure_founded_industries = {
    if = { limit = { has_variable = sed_small_arms_found_pm_pending var:sed_small_arms_found_pm_pending = 1 }
     if = { limit = { OR = {
      has_variable = sed_small_arms_ignored is_incorporated = no
+     owner = { OR = { has_variable = advisor_pm_balance_enabled has_variable = advisor_labor_auto_enabled } }
      AND = { NOT = { has_building = building_arms_industry } NOT = { has_variable = sed_small_arms_request_pending } }
      AND = { has_building = building_arms_industry b:building_arms_industry = { OR = { level > 1 level_after_queued_constructions > 1 } } }
     } } remove_variable = sed_small_arms_found_pm_pending }
@@ -7608,6 +7646,7 @@ sed_configure_founded_industries = {
    if = { limit = { has_variable = sed_artillery_found_pm_pending var:sed_artillery_found_pm_pending = 1 }
     if = { limit = { OR = {
      has_variable = sed_artillery_ignored is_incorporated = no
+     owner = { OR = { has_variable = advisor_pm_balance_enabled has_variable = advisor_labor_auto_enabled } }
      AND = { NOT = { has_building = building_artillery_foundry } NOT = { has_variable = sed_artillery_request_pending } }
      AND = { has_building = building_artillery_foundry b:building_artillery_foundry = { OR = { level > 1 level_after_queued_constructions > 1 } } }
     } } remove_variable = sed_artillery_found_pm_pending }
@@ -7693,6 +7732,7 @@ sed_configure_founded_industries = {
    if = { limit = { has_variable = sed_ammunition_found_pm_pending var:sed_ammunition_found_pm_pending = 1 }
     if = { limit = { OR = {
      has_variable = sed_ammunition_ignored is_incorporated = no
+     owner = { OR = { has_variable = advisor_pm_balance_enabled has_variable = advisor_labor_auto_enabled } }
      AND = { NOT = { has_building = building_munition_plant } NOT = { has_variable = sed_ammunition_request_pending } }
      AND = { has_building = building_munition_plant b:building_munition_plant = { OR = { level > 1 level_after_queued_constructions > 1 } } }
     } } remove_variable = sed_ammunition_found_pm_pending }
@@ -7755,6 +7795,1134 @@ sed_clear_pm_input_reservations = {
  every_scope_state = {
   set_variable = { name = sed_pm_reserved_electricity value = 0 }
   set_variable = { name = sed_pm_reserved_transportation value = 0 }
+ }
+}
+sed_begin_pm_input_reservations = {
+ if = { limit = { NOT = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key } }
+  sed_clear_pm_input_reservations = yes
+  set_variable = { name = sed_pm_inputs_month value = sed_live_month_key }
+ }
+ sed_refresh_input_readings = yes
+}
+sed_modernize_existing_industry = {
+ if = { limit = {
+  is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic
+  NOT = { has_variable = sed_mode_manual }
+  NOT = { has_variable = sed_mode_assisted }
+  NOT = { sed_pm_upgrade_month_limit_reached = yes }
+  NOT = { sed_auto_month_limit_reached = yes }
+  NOT = { in_default = yes }
+  NOT = { has_variable = aroai_autobuild }
+  NOT = { has_variable = advisor_pm_balance_enabled }
+  NOT = { has_variable = advisor_labor_auto_enabled }
+  OR = { has_variable = sed_coord_active NOT = { sed_competing_builder_configured = yes } }
+ }
+  sed_begin_pm_input_reservations = yes
+  every_scope_state = {
+   set_variable = { name = sed_pm_upgrade_score value = 0 }
+   set_variable = { name = sed_pm_upgrade_choice value = 0 }
+
+   if = { limit = { sed_pm_upgrade_1_eligible = yes var:sed_pm_upgrade_score < { value = 200 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 200 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 1 }
+   }
+   if = { limit = { sed_pm_upgrade_2_eligible = yes var:sed_pm_upgrade_score < { value = 362.5 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 362.5 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 2 }
+   }
+   if = { limit = { sed_pm_upgrade_3_eligible = yes var:sed_pm_upgrade_score < { value = 162.5 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 162.5 multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 3 }
+   }
+   if = { limit = { sed_pm_upgrade_4_eligible = yes var:sed_pm_upgrade_score < { value = 137.5 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 137.5 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 4 }
+   }
+   if = { limit = { sed_pm_upgrade_5_eligible = yes var:sed_pm_upgrade_score < { value = 750 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 750 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 5 }
+   }
+   if = { limit = { sed_pm_upgrade_6_eligible = yes var:sed_pm_upgrade_score < { value = 162.5 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 162.5 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 6 }
+   }
+   if = { limit = { sed_pm_upgrade_7_eligible = yes var:sed_pm_upgrade_score < { value = 775 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 775 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 7 }
+   }
+   if = { limit = { sed_pm_upgrade_8_eligible = yes var:sed_pm_upgrade_score < { value = 612.5 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 612.5 multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 8 }
+   }
+   if = { limit = { sed_pm_upgrade_9_eligible = yes var:sed_pm_upgrade_score < { value = 87.5 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 87.5 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 9 }
+   }
+   if = { limit = { sed_pm_upgrade_10_eligible = yes var:sed_pm_upgrade_score < { value = 287.5 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 287.5 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 10 }
+   }
+   if = { limit = { sed_pm_upgrade_11_eligible = yes var:sed_pm_upgrade_score < { value = 712.5 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 712.5 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 11 }
+   }
+   if = { limit = { sed_pm_upgrade_12_eligible = yes var:sed_pm_upgrade_score < { value = 200 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 200 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 12 }
+   }
+   if = { limit = { sed_pm_upgrade_13_eligible = yes var:sed_pm_upgrade_score < { value = 625 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 625 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 13 }
+   }
+   if = { limit = { sed_pm_upgrade_14_eligible = yes var:sed_pm_upgrade_score < { value = 425 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 425 multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 14 }
+   }
+   if = { limit = { sed_pm_upgrade_15_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 15 }
+   }
+   if = { limit = { sed_pm_upgrade_16_eligible = yes var:sed_pm_upgrade_score < { value = 12.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 12.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 16 }
+   }
+   if = { limit = { sed_pm_upgrade_17_eligible = yes var:sed_pm_upgrade_score < { value = 50 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 50 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 17 }
+   }
+   if = { limit = { sed_pm_upgrade_18_eligible = yes var:sed_pm_upgrade_score < { value = 87.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 87.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 18 }
+   }
+   if = { limit = { sed_pm_upgrade_19_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 19 }
+   }
+   if = { limit = { sed_pm_upgrade_20_eligible = yes var:sed_pm_upgrade_score < { value = 75 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 75 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 20 }
+   }
+   if = { limit = { sed_pm_upgrade_21_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 21 }
+   }
+   if = { limit = { sed_pm_upgrade_22_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 22 }
+   }
+   if = { limit = { sed_pm_upgrade_23_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 23 }
+   }
+   if = { limit = { sed_pm_upgrade_24_eligible = yes var:sed_pm_upgrade_score < { value = 75 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 75 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 24 }
+   }
+   if = { limit = { sed_pm_upgrade_25_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 25 }
+   }
+   if = { limit = { sed_pm_upgrade_26_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 26 }
+   }
+   if = { limit = { sed_pm_upgrade_27_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 27 }
+   }
+   if = { limit = { sed_pm_upgrade_28_eligible = yes var:sed_pm_upgrade_score < { value = 75 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 75 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 28 }
+   }
+   if = { limit = { sed_pm_upgrade_29_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 29 }
+   }
+   if = { limit = { sed_pm_upgrade_30_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 30 }
+   }
+   if = { limit = { sed_pm_upgrade_31_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 31 }
+   }
+   if = { limit = { sed_pm_upgrade_32_eligible = yes var:sed_pm_upgrade_score < { value = 75 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 75 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 32 }
+   }
+   if = { limit = { sed_pm_upgrade_33_eligible = yes var:sed_pm_upgrade_score < { value = 37.5 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 37.5 multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 33 }
+   }
+   if = { limit = { sed_pm_upgrade_34_eligible = yes var:sed_pm_upgrade_score < { value = 150 multiply = b:building_cotton_plantation.level multiply = b:building_cotton_plantation.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 150 multiply = b:building_cotton_plantation.level multiply = b:building_cotton_plantation.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 34 }
+   }
+   if = { limit = { sed_pm_upgrade_35_eligible = yes var:sed_pm_upgrade_score < { value = 250 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 250 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 35 }
+   }
+   if = { limit = { sed_pm_upgrade_36_eligible = yes var:sed_pm_upgrade_score < { value = 775 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 775 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 36 }
+   }
+   if = { limit = { sed_pm_upgrade_37_eligible = yes var:sed_pm_upgrade_score < { value = 350 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 350 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 37 }
+   }
+   if = { limit = { sed_pm_upgrade_38_eligible = yes var:sed_pm_upgrade_score < { value = 875 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 875 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 38 }
+   }
+   if = { limit = { sed_pm_upgrade_39_eligible = yes var:sed_pm_upgrade_score < { value = 525 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 525 multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 39 }
+   }
+   if = { limit = { sed_pm_upgrade_40_eligible = yes var:sed_pm_upgrade_score < { value = 87.5 multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 87.5 multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 40 }
+   }
+   if = { limit = { sed_pm_upgrade_41_eligible = yes var:sed_pm_upgrade_score < { value = 525 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 525 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 41 }
+   }
+   if = { limit = { sed_pm_upgrade_42_eligible = yes var:sed_pm_upgrade_score < { value = 550 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 550 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 42 }
+   }
+   if = { limit = { sed_pm_upgrade_43_eligible = yes var:sed_pm_upgrade_score < { value = 900 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 900 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 43 }
+   }
+   if = { limit = { sed_pm_upgrade_44_eligible = yes var:sed_pm_upgrade_score < { value = 25 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 25 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 44 }
+   }
+   if = { limit = { sed_pm_upgrade_45_eligible = yes var:sed_pm_upgrade_score < { value = 375 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 375 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 45 }
+   }
+   if = { limit = { sed_pm_upgrade_46_eligible = yes var:sed_pm_upgrade_score < { value = 350 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 350 multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 46 }
+   }
+   if = { limit = { sed_pm_upgrade_47_eligible = yes var:sed_pm_upgrade_score < { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 47 }
+   }
+   if = { limit = { sed_pm_upgrade_48_eligible = yes var:sed_pm_upgrade_score < { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 48 }
+   }
+   if = { limit = { sed_pm_upgrade_49_eligible = yes var:sed_pm_upgrade_score < { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 49 }
+   }
+   if = { limit = { sed_pm_upgrade_50_eligible = yes var:sed_pm_upgrade_score < { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_score value = { value = 300 multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy } }
+    set_variable = { name = sed_pm_upgrade_choice value = 50 }
+   }
+  }
+  ordered_scope_state = {
+   limit = { var:sed_pm_upgrade_score > 0 }
+   order_by = { value = var:sed_pm_upgrade_score }
+   max = 1 check_range_bounds = no
+
+   if = { limit = { var:sed_pm_upgrade_choice = 1 sed_pm_upgrade_1_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_logging_camp.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_logging_camp production_method = pm_saw_mills }
+     owner = { set_variable = { name = sed_pm_reserved_tools value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_tools } add = var:sed_pm_reserved_tools } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_tools value = { value = var:sed_input_market_margin_tools subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_logging_camp = { has_active_production_method = pm_saw_mills } }
+     set_variable = { name = sed_pm_cooldown_logging_camp value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 2 sed_pm_upgrade_2_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_logging_camp.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_logging_camp production_method = pm_electric_saw_mills }
+     owner = { set_variable = { name = sed_pm_reserved_tools value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_tools } add = var:sed_pm_reserved_tools } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_tools value = { value = var:sed_input_market_margin_tools subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     set_variable = { name = sed_pm_reserved_electricity value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_electricity } add = var:sed_pm_reserved_electricity } add = { value = 6.25 multiply = var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_local_margin_electricity value = { value = var:sed_input_local_margin_electricity subtract = { value = 6.25 multiply = var:sed_pm_upgrade_levels } } }
+    if = { limit = { b:building_logging_camp = { has_active_production_method = pm_electric_saw_mills } }
+     set_variable = { name = sed_pm_cooldown_logging_camp value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 3 sed_pm_upgrade_3_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_logging_camp.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_logging_camp production_method = pm_electric_saw_mills }
+     owner = { set_variable = { name = sed_pm_reserved_tools value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_tools } add = var:sed_pm_reserved_tools } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_tools value = { value = var:sed_input_market_margin_tools subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     set_variable = { name = sed_pm_reserved_electricity value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_electricity } add = var:sed_pm_reserved_electricity } add = { value = 6.25 multiply = var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_local_margin_electricity value = { value = var:sed_input_local_margin_electricity subtract = { value = 6.25 multiply = var:sed_pm_upgrade_levels } } }
+    if = { limit = { b:building_logging_camp = { has_active_production_method = pm_electric_saw_mills } }
+     set_variable = { name = sed_pm_cooldown_logging_camp value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 4 sed_pm_upgrade_4_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_iron_mine.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_iron_mine production_method = pm_condensing_engine_pump_building_iron_mine }
+     owner = { set_variable = { name = sed_pm_reserved_tools value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_tools } add = var:sed_pm_reserved_tools } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_tools value = { value = var:sed_input_market_margin_tools subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_coal value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_coal } add = var:sed_pm_reserved_coal } add = { value = 18.75 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_coal value = { value = var:sed_input_market_margin_coal subtract = { value = 18.75 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_iron_mine = { has_active_production_method = pm_condensing_engine_pump_building_iron_mine } }
+     set_variable = { name = sed_pm_cooldown_iron_mine value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 5 sed_pm_upgrade_5_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_iron_mine.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_iron_mine production_method = pm_diesel_pump_building_iron_mine }
+     owner = { set_variable = { name = sed_pm_reserved_tools value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_tools } add = var:sed_pm_reserved_tools } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_tools value = { value = var:sed_input_market_margin_tools subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_oil value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_oil } add = var:sed_pm_reserved_oil } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_oil value = { value = var:sed_input_market_margin_oil subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_iron_mine = { has_active_production_method = pm_diesel_pump_building_iron_mine } }
+     set_variable = { name = sed_pm_cooldown_iron_mine value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 6 sed_pm_upgrade_6_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_iron_mine.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_iron_mine production_method = pm_condensing_engine_pump_building_iron_mine }
+     owner = { set_variable = { name = sed_pm_reserved_tools value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_tools } add = var:sed_pm_reserved_tools } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_tools value = { value = var:sed_input_market_margin_tools subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_coal value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_coal } add = var:sed_pm_reserved_coal } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_coal value = { value = var:sed_input_market_margin_coal subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_iron_mine = { has_active_production_method = pm_condensing_engine_pump_building_iron_mine } }
+     set_variable = { name = sed_pm_cooldown_iron_mine value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 7 sed_pm_upgrade_7_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_iron_mine.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_iron_mine production_method = pm_diesel_pump_building_iron_mine }
+     owner = { set_variable = { name = sed_pm_reserved_tools value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_tools } add = var:sed_pm_reserved_tools } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_tools value = { value = var:sed_input_market_margin_tools subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_oil value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_oil } add = var:sed_pm_reserved_oil } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_oil value = { value = var:sed_input_market_margin_oil subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_iron_mine = { has_active_production_method = pm_diesel_pump_building_iron_mine } }
+     set_variable = { name = sed_pm_cooldown_iron_mine value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 8 sed_pm_upgrade_8_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_iron_mine.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_iron_mine production_method = pm_diesel_pump_building_iron_mine }
+     owner = { set_variable = { name = sed_pm_reserved_oil value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_oil } add = var:sed_pm_reserved_oil } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_oil value = { value = var:sed_input_market_margin_oil subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_iron_mine = { has_active_production_method = pm_diesel_pump_building_iron_mine } }
+     set_variable = { name = sed_pm_cooldown_iron_mine value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 9 sed_pm_upgrade_9_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_coal_mine.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_coal_mine production_method = pm_atmospheric_engine_pump_building_coal_mine }
+     owner = { set_variable = { name = sed_pm_reserved_tools value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_tools } add = var:sed_pm_reserved_tools } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_tools value = { value = var:sed_input_market_margin_tools subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_coal_mine = { has_active_production_method = pm_atmospheric_engine_pump_building_coal_mine } }
+     set_variable = { name = sed_pm_cooldown_coal_mine value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 10 sed_pm_upgrade_10_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_coal_mine.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_coal_mine production_method = pm_condensing_engine_pump_building_coal_mine }
+     owner = { set_variable = { name = sed_pm_reserved_tools value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_tools } add = var:sed_pm_reserved_tools } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_tools value = { value = var:sed_input_market_margin_tools subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_coal_mine = { has_active_production_method = pm_condensing_engine_pump_building_coal_mine } }
+     set_variable = { name = sed_pm_cooldown_coal_mine value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 11 sed_pm_upgrade_11_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_coal_mine.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_coal_mine production_method = pm_diesel_pump_building_coal_mine }
+     owner = { set_variable = { name = sed_pm_reserved_tools value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_tools } add = var:sed_pm_reserved_tools } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_tools value = { value = var:sed_input_market_margin_tools subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_oil value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_oil } add = var:sed_pm_reserved_oil } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_oil value = { value = var:sed_input_market_margin_oil subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_coal_mine = { has_active_production_method = pm_diesel_pump_building_coal_mine } }
+     set_variable = { name = sed_pm_cooldown_coal_mine value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 12 sed_pm_upgrade_12_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_coal_mine.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_coal_mine production_method = pm_condensing_engine_pump_building_coal_mine }
+     owner = { set_variable = { name = sed_pm_reserved_tools value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_tools } add = var:sed_pm_reserved_tools } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_tools value = { value = var:sed_input_market_margin_tools subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_coal_mine = { has_active_production_method = pm_condensing_engine_pump_building_coal_mine } }
+     set_variable = { name = sed_pm_cooldown_coal_mine value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 13 sed_pm_upgrade_13_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_coal_mine.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_coal_mine production_method = pm_diesel_pump_building_coal_mine }
+     owner = { set_variable = { name = sed_pm_reserved_tools value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_tools } add = var:sed_pm_reserved_tools } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_tools value = { value = var:sed_input_market_margin_tools subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_oil value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_oil } add = var:sed_pm_reserved_oil } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_oil value = { value = var:sed_input_market_margin_oil subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_coal_mine = { has_active_production_method = pm_diesel_pump_building_coal_mine } }
+     set_variable = { name = sed_pm_cooldown_coal_mine value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 14 sed_pm_upgrade_14_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_coal_mine.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_coal_mine production_method = pm_diesel_pump_building_coal_mine }
+     owner = { set_variable = { name = sed_pm_reserved_oil value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_oil } add = var:sed_pm_reserved_oil } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_oil value = { value = var:sed_input_market_margin_oil subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_coal_mine = { has_active_production_method = pm_diesel_pump_building_coal_mine } }
+     set_variable = { name = sed_pm_cooldown_coal_mine value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 15 sed_pm_upgrade_15_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_wheat_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_wheat_farm production_method = pm_chemical_fertilizer }
+     owner = { set_variable = { name = sed_pm_reserved_fertilizer value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_fertilizer } add = var:sed_pm_reserved_fertilizer } add = { value = 18.75 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_fertilizer value = { value = var:sed_input_market_margin_fertilizer subtract = { value = 18.75 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_chemical_fertilizer } }
+     set_variable = { name = sed_pm_cooldown_wheat_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 16 sed_pm_upgrade_16_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_wheat_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_wheat_farm production_method = pm_soil_enriching_farming }
+     owner = { set_variable = { name = sed_pm_reserved_fertilizer value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_fertilizer } add = var:sed_pm_reserved_fertilizer } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_fertilizer value = { value = var:sed_input_market_margin_fertilizer subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_soil_enriching_farming } }
+     set_variable = { name = sed_pm_cooldown_wheat_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 17 sed_pm_upgrade_17_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_wheat_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_wheat_farm production_method = pm_fertilization }
+     owner = { set_variable = { name = sed_pm_reserved_fertilizer value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_fertilizer } add = var:sed_pm_reserved_fertilizer } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_fertilizer value = { value = var:sed_input_market_margin_fertilizer subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_fertilization } }
+     set_variable = { name = sed_pm_cooldown_wheat_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 18 sed_pm_upgrade_18_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_wheat_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_wheat_farm production_method = pm_chemical_fertilizer }
+     owner = { set_variable = { name = sed_pm_reserved_fertilizer value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_fertilizer } add = var:sed_pm_reserved_fertilizer } add = { value = 18.75 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_fertilizer value = { value = var:sed_input_market_margin_fertilizer subtract = { value = 18.75 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_chemical_fertilizer } }
+     set_variable = { name = sed_pm_cooldown_wheat_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 19 sed_pm_upgrade_19_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_wheat_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_wheat_farm production_method = pm_fertilization }
+     owner = { set_variable = { name = sed_pm_reserved_fertilizer value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_fertilizer } add = var:sed_pm_reserved_fertilizer } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_fertilizer value = { value = var:sed_input_market_margin_fertilizer subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_fertilization } }
+     set_variable = { name = sed_pm_cooldown_wheat_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 20 sed_pm_upgrade_20_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_wheat_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_wheat_farm production_method = pm_chemical_fertilizer }
+     owner = { set_variable = { name = sed_pm_reserved_fertilizer value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_fertilizer } add = var:sed_pm_reserved_fertilizer } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_fertilizer value = { value = var:sed_input_market_margin_fertilizer subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_chemical_fertilizer } }
+     set_variable = { name = sed_pm_cooldown_wheat_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 21 sed_pm_upgrade_21_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_wheat_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_wheat_farm production_method = pm_chemical_fertilizer }
+     owner = { set_variable = { name = sed_pm_reserved_fertilizer value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_fertilizer } add = var:sed_pm_reserved_fertilizer } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_fertilizer value = { value = var:sed_input_market_margin_fertilizer subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_wheat_farm = { has_active_production_method = pm_chemical_fertilizer } }
+     set_variable = { name = sed_pm_cooldown_wheat_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 22 sed_pm_upgrade_22_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_rye_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_rye_farm production_method = pm_chemical_fertilizer }
+     owner = { set_variable = { name = sed_pm_reserved_fertilizer value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_fertilizer } add = var:sed_pm_reserved_fertilizer } add = { value = 18.75 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_fertilizer value = { value = var:sed_input_market_margin_fertilizer subtract = { value = 18.75 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_rye_farm = { has_active_production_method = pm_chemical_fertilizer } }
+     set_variable = { name = sed_pm_cooldown_rye_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 23 sed_pm_upgrade_23_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_rye_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_rye_farm production_method = pm_fertilization }
+     owner = { set_variable = { name = sed_pm_reserved_fertilizer value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_fertilizer } add = var:sed_pm_reserved_fertilizer } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_fertilizer value = { value = var:sed_input_market_margin_fertilizer subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_rye_farm = { has_active_production_method = pm_fertilization } }
+     set_variable = { name = sed_pm_cooldown_rye_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 24 sed_pm_upgrade_24_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_rye_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_rye_farm production_method = pm_chemical_fertilizer }
+     owner = { set_variable = { name = sed_pm_reserved_fertilizer value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_fertilizer } add = var:sed_pm_reserved_fertilizer } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_fertilizer value = { value = var:sed_input_market_margin_fertilizer subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_rye_farm = { has_active_production_method = pm_chemical_fertilizer } }
+     set_variable = { name = sed_pm_cooldown_rye_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 25 sed_pm_upgrade_25_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_rye_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_rye_farm production_method = pm_chemical_fertilizer }
+     owner = { set_variable = { name = sed_pm_reserved_fertilizer value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_fertilizer } add = var:sed_pm_reserved_fertilizer } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_fertilizer value = { value = var:sed_input_market_margin_fertilizer subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_rye_farm = { has_active_production_method = pm_chemical_fertilizer } }
+     set_variable = { name = sed_pm_cooldown_rye_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 26 sed_pm_upgrade_26_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_maize_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_maize_farm production_method = pm_chemical_fertilizer }
+     owner = { set_variable = { name = sed_pm_reserved_fertilizer value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_fertilizer } add = var:sed_pm_reserved_fertilizer } add = { value = 18.75 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_fertilizer value = { value = var:sed_input_market_margin_fertilizer subtract = { value = 18.75 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_maize_farm = { has_active_production_method = pm_chemical_fertilizer } }
+     set_variable = { name = sed_pm_cooldown_maize_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 27 sed_pm_upgrade_27_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_maize_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_maize_farm production_method = pm_fertilization }
+     owner = { set_variable = { name = sed_pm_reserved_fertilizer value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_fertilizer } add = var:sed_pm_reserved_fertilizer } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_fertilizer value = { value = var:sed_input_market_margin_fertilizer subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_maize_farm = { has_active_production_method = pm_fertilization } }
+     set_variable = { name = sed_pm_cooldown_maize_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 28 sed_pm_upgrade_28_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_maize_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_maize_farm production_method = pm_chemical_fertilizer }
+     owner = { set_variable = { name = sed_pm_reserved_fertilizer value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_fertilizer } add = var:sed_pm_reserved_fertilizer } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_fertilizer value = { value = var:sed_input_market_margin_fertilizer subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_maize_farm = { has_active_production_method = pm_chemical_fertilizer } }
+     set_variable = { name = sed_pm_cooldown_maize_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 29 sed_pm_upgrade_29_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_maize_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_maize_farm production_method = pm_chemical_fertilizer }
+     owner = { set_variable = { name = sed_pm_reserved_fertilizer value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_fertilizer } add = var:sed_pm_reserved_fertilizer } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_fertilizer value = { value = var:sed_input_market_margin_fertilizer subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_maize_farm = { has_active_production_method = pm_chemical_fertilizer } }
+     set_variable = { name = sed_pm_cooldown_maize_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 30 sed_pm_upgrade_30_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_millet_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_millet_farm production_method = pm_chemical_fertilizer }
+     owner = { set_variable = { name = sed_pm_reserved_fertilizer value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_fertilizer } add = var:sed_pm_reserved_fertilizer } add = { value = 18.75 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_fertilizer value = { value = var:sed_input_market_margin_fertilizer subtract = { value = 18.75 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_millet_farm = { has_active_production_method = pm_chemical_fertilizer } }
+     set_variable = { name = sed_pm_cooldown_millet_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 31 sed_pm_upgrade_31_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_millet_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_millet_farm production_method = pm_fertilization }
+     owner = { set_variable = { name = sed_pm_reserved_fertilizer value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_fertilizer } add = var:sed_pm_reserved_fertilizer } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_fertilizer value = { value = var:sed_input_market_margin_fertilizer subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_millet_farm = { has_active_production_method = pm_fertilization } }
+     set_variable = { name = sed_pm_cooldown_millet_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 32 sed_pm_upgrade_32_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_millet_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_millet_farm production_method = pm_chemical_fertilizer }
+     owner = { set_variable = { name = sed_pm_reserved_fertilizer value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_fertilizer } add = var:sed_pm_reserved_fertilizer } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_fertilizer value = { value = var:sed_input_market_margin_fertilizer subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_millet_farm = { has_active_production_method = pm_chemical_fertilizer } }
+     set_variable = { name = sed_pm_cooldown_millet_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 33 sed_pm_upgrade_33_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_millet_farm.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_millet_farm production_method = pm_chemical_fertilizer }
+     owner = { set_variable = { name = sed_pm_reserved_fertilizer value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_fertilizer } add = var:sed_pm_reserved_fertilizer } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_fertilizer value = { value = var:sed_input_market_margin_fertilizer subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_millet_farm = { has_active_production_method = pm_chemical_fertilizer } }
+     set_variable = { name = sed_pm_cooldown_millet_farm value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 34 sed_pm_upgrade_34_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_cotton_plantation.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_cotton_plantation production_method = automatic_irrigation_building_cotton_plantation }
+     owner = { set_variable = { name = sed_pm_reserved_engines value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_engines } add = var:sed_pm_reserved_engines } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_engines value = { value = var:sed_input_market_margin_engines subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_cotton_plantation = { has_active_production_method = automatic_irrigation_building_cotton_plantation } }
+     set_variable = { name = sed_pm_cooldown_cotton_plantation value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 35 sed_pm_upgrade_35_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_tooling_workshop.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_tooling_workshop production_method = pm_steel }
+     owner = { set_variable = { name = sed_pm_reserved_steel value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_steel } add = var:sed_pm_reserved_steel } add = { value = 25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_steel value = { value = var:sed_input_market_margin_steel subtract = { value = 25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_steel } }
+     set_variable = { name = sed_pm_cooldown_tooling_workshop value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 36 sed_pm_upgrade_36_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_tooling_workshop.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_tooling_workshop production_method = pm_rubber_grips }
+     owner = { set_variable = { name = sed_pm_reserved_rubber value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_rubber } add = var:sed_pm_reserved_rubber } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_rubber value = { value = var:sed_input_market_margin_rubber subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_steel value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_steel } add = var:sed_pm_reserved_steel } add = { value = 37.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_steel value = { value = var:sed_input_market_margin_steel subtract = { value = 37.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_rubber_grips } }
+     set_variable = { name = sed_pm_cooldown_tooling_workshop value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 37 sed_pm_upgrade_37_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_tooling_workshop.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_tooling_workshop production_method = pm_steel }
+     owner = { set_variable = { name = sed_pm_reserved_steel value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_steel } add = var:sed_pm_reserved_steel } add = { value = 25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_steel value = { value = var:sed_input_market_margin_steel subtract = { value = 25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_steel } }
+     set_variable = { name = sed_pm_cooldown_tooling_workshop value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 38 sed_pm_upgrade_38_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_tooling_workshop.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_tooling_workshop production_method = pm_rubber_grips }
+     owner = { set_variable = { name = sed_pm_reserved_rubber value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_rubber } add = var:sed_pm_reserved_rubber } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_rubber value = { value = var:sed_input_market_margin_rubber subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_steel value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_steel } add = var:sed_pm_reserved_steel } add = { value = 37.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_steel value = { value = var:sed_input_market_margin_steel subtract = { value = 37.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_rubber_grips } }
+     set_variable = { name = sed_pm_cooldown_tooling_workshop value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 39 sed_pm_upgrade_39_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_tooling_workshop.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_tooling_workshop production_method = pm_rubber_grips }
+     owner = { set_variable = { name = sed_pm_reserved_rubber value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_rubber } add = var:sed_pm_reserved_rubber } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_rubber value = { value = var:sed_input_market_margin_rubber subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_steel value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_steel } add = var:sed_pm_reserved_steel } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_steel value = { value = var:sed_input_market_margin_steel subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_tooling_workshop = { has_active_production_method = pm_rubber_grips } }
+     set_variable = { name = sed_pm_cooldown_tooling_workshop value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 40 sed_pm_upgrade_40_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_textile_mill.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_textile_mill production_method = pm_dye_workshops }
+     owner = { set_variable = { name = sed_pm_reserved_dye value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_dye } add = var:sed_pm_reserved_dye } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_dye value = { value = var:sed_input_market_margin_dye subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_textile_mill = { has_active_production_method = pm_dye_workshops } }
+     set_variable = { name = sed_pm_cooldown_textile_mill value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 41 sed_pm_upgrade_41_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_arms_industry.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_arms_industry production_method = pm_rifles }
+     owner = { set_variable = { name = sed_pm_reserved_steel value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_steel } add = var:sed_pm_reserved_steel } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_steel value = { value = var:sed_input_market_margin_steel subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_tools value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_tools } add = var:sed_pm_reserved_tools } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_tools value = { value = var:sed_input_market_margin_tools subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_arms_industry = { has_active_production_method = pm_rifles } }
+     set_variable = { name = sed_pm_cooldown_arms_industry value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 42 sed_pm_upgrade_42_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_arms_industry.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_arms_industry production_method = pm_repeaters }
+     owner = { set_variable = { name = sed_pm_reserved_steel value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_steel } add = var:sed_pm_reserved_steel } add = { value = 25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_steel value = { value = var:sed_input_market_margin_steel subtract = { value = 25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_tools value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_tools } add = var:sed_pm_reserved_tools } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_tools value = { value = var:sed_input_market_margin_tools subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_arms_industry = { has_active_production_method = pm_repeaters } }
+     set_variable = { name = sed_pm_cooldown_arms_industry value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 43 sed_pm_upgrade_43_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_arms_industry.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_arms_industry production_method = pm_bolt_action_rifles }
+     owner = { set_variable = { name = sed_pm_reserved_steel value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_steel } add = var:sed_pm_reserved_steel } add = { value = 25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_steel value = { value = var:sed_input_market_margin_steel subtract = { value = 25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_tools value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_tools } add = var:sed_pm_reserved_tools } add = { value = 25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_tools value = { value = var:sed_input_market_margin_tools subtract = { value = 25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_oil value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_oil } add = var:sed_pm_reserved_oil } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_oil value = { value = var:sed_input_market_margin_oil subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_arms_industry = { has_active_production_method = pm_bolt_action_rifles } }
+     set_variable = { name = sed_pm_cooldown_arms_industry value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 44 sed_pm_upgrade_44_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_arms_industry.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_arms_industry production_method = pm_repeaters }
+     owner = { set_variable = { name = sed_pm_reserved_steel value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_steel } add = var:sed_pm_reserved_steel } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_steel value = { value = var:sed_input_market_margin_steel subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_tools value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_tools } add = var:sed_pm_reserved_tools } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_tools value = { value = var:sed_input_market_margin_tools subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_arms_industry = { has_active_production_method = pm_repeaters } }
+     set_variable = { name = sed_pm_cooldown_arms_industry value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 45 sed_pm_upgrade_45_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_arms_industry.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_arms_industry production_method = pm_bolt_action_rifles }
+     owner = { set_variable = { name = sed_pm_reserved_steel value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_steel } add = var:sed_pm_reserved_steel } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_steel value = { value = var:sed_input_market_margin_steel subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_tools value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_tools } add = var:sed_pm_reserved_tools } add = { value = 18.75 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_tools value = { value = var:sed_input_market_margin_tools subtract = { value = 18.75 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_oil value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_oil } add = var:sed_pm_reserved_oil } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_oil value = { value = var:sed_input_market_margin_oil subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_arms_industry = { has_active_production_method = pm_bolt_action_rifles } }
+     set_variable = { name = sed_pm_cooldown_arms_industry value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 46 sed_pm_upgrade_46_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_arms_industry.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_arms_industry production_method = pm_bolt_action_rifles }
+     owner = { set_variable = { name = sed_pm_reserved_tools value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_tools } add = var:sed_pm_reserved_tools } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_tools value = { value = var:sed_input_market_margin_tools subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_oil value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_oil } add = var:sed_pm_reserved_oil } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_oil value = { value = var:sed_input_market_margin_oil subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_arms_industry = { has_active_production_method = pm_bolt_action_rifles } }
+     set_variable = { name = sed_pm_cooldown_arms_industry value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 47 sed_pm_upgrade_47_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_artillery_foundry.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_artillery_foundry production_method = pm_smoothbores }
+     owner = { set_variable = { name = sed_pm_reserved_iron value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_iron } add = var:sed_pm_reserved_iron } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_iron value = { value = var:sed_input_market_margin_iron subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_hardwood value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_hardwood } add = var:sed_pm_reserved_hardwood } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_hardwood value = { value = var:sed_input_market_margin_hardwood subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_smoothbores } }
+     set_variable = { name = sed_pm_cooldown_artillery_foundry value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 48 sed_pm_upgrade_48_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_artillery_foundry.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_artillery_foundry production_method = pm_bronze_smoothbores }
+     owner = { set_variable = { name = sed_pm_reserved_copper value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_copper } add = var:sed_pm_reserved_copper } add = { value = 25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_copper value = { value = var:sed_input_market_margin_copper subtract = { value = 25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_hardwood value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_hardwood } add = var:sed_pm_reserved_hardwood } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_hardwood value = { value = var:sed_input_market_margin_hardwood subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_bronze_smoothbores } }
+     set_variable = { name = sed_pm_cooldown_artillery_foundry value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 49 sed_pm_upgrade_49_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_artillery_foundry.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_artillery_foundry production_method = pm_smoothbores }
+     owner = { set_variable = { name = sed_pm_reserved_iron value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_iron } add = var:sed_pm_reserved_iron } add = { value = 31.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_iron value = { value = var:sed_input_market_margin_iron subtract = { value = 31.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_smoothbores } }
+     set_variable = { name = sed_pm_cooldown_artillery_foundry value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+   else_if = { limit = { var:sed_pm_upgrade_choice = 50 sed_pm_upgrade_50_eligible = yes }
+    set_variable = { name = sed_pm_upgrade_levels value = b:building_artillery_foundry.level }
+    owner = {
+     set_variable = { name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }
+     set_variable = { name = sed_pm_upgrade_status value = 2 }
+     sed_record_auto_attempt = yes
+     if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
+    }
+    activate_production_method = { building_type = building_artillery_foundry production_method = pm_bronze_smoothbores }
+     owner = { set_variable = { name = sed_pm_reserved_copper value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_copper } add = var:sed_pm_reserved_copper } add = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_copper value = { value = var:sed_input_market_margin_copper subtract = { value = 12.5 multiply = prev.var:sed_pm_upgrade_levels } } } }
+     owner = { set_variable = { name = sed_pm_reserved_hardwood value = { value = 0 if = { limit = { has_variable = sed_pm_reserved_hardwood } add = var:sed_pm_reserved_hardwood } add = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } }
+        set_variable = { name = sed_input_market_margin_hardwood value = { value = var:sed_input_market_margin_hardwood subtract = { value = 6.25 multiply = prev.var:sed_pm_upgrade_levels } } } }
+    if = { limit = { b:building_artillery_foundry = { has_active_production_method = pm_bronze_smoothbores } }
+     set_variable = { name = sed_pm_cooldown_artillery_foundry value = { value = sed_live_month_key add = 3 } }
+     owner = { set_variable = { name = sed_pm_upgrade_status value = 1 } }
+    }
+    remove_variable = sed_pm_upgrade_levels
+   }
+  }
  }
 }
 sed_coord_capture_supply_policy = {
@@ -7934,6 +9102,9 @@ sed_coord_sync = {
   set_variable = { name = sed_coord_executor value = 0 }
   set_variable = { name = sed_coord_advisor_policy value = 0 }
   if = { limit = { has_variable = aroai_autobuild } set_variable = { name = sed_coord_executor value = 5 } }
+  else_if = { limit = { sed_pm_upgrade_month_limit_reached = yes }
+   set_variable = { name = sed_coord_executor value = 13 }
+  }
   else_if = { limit = { sed_coord_fiscal_safe = yes NOT = { in_default = yes } is_construction_paused = no }
    if = { limit = { var:sed_plan_goal = 2 sed_direct_fiscal_safe = yes sed_direct_supply_priority_exists = yes }
     set_variable = { name = sed_coord_executor value = 11 }
