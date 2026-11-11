@@ -2022,3 +2022,12 @@ e verifica configuração inicial parcialmente ocupada sem acrescentar empregos.
 Geração consistente, validação estática local 1.15, pacote e espaçamento aprovados.
 Instalada com backup `mod_before_0.7.15_20261111_115337_758673` e conferência de
 14 arquivos. Resultado real em campanha segue pendente.
+
+## 2026-11-11 — Orientações de modding fornecidas pelo usuário
+
+Incorporados `AGENTS.md`, o skill `vic3-modding` e suas referências de fontes
+e ambiente. O ambiente registra apenas caminhos, comandos e resultados
+verificados. A pasta de documentação exportada está ausente e `vic3-tiger`
+está ausente do PATH. A validação de geração confirmou sincronia.
+Os rótulos Código, Teste sintético, Estático, Carregou e Campanha passam a
+orientar novos registros. A entrega do mod permanece na 0.7.15.

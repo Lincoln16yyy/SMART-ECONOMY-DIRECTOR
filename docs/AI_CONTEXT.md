@@ -1,10 +1,19 @@
 # Contexto de continuidade
 
-Última entrega documentada — 0.7.15 instalada com jogo fechado e 14 arquivos
-conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.15_20261111_115337_758673`.
-349 testes sintéticos aprovados. Geração consistente, validação estática
-local 1.15, pacote e verificação de espaçamento aprovados. Configuração
-inicial e contratação real ainda exigem confirmação em campanha.
+Última entrega do mod — 0.7.15 instalada com jogo fechado e 14 arquivos
+conferidos. Backup `sed_backups/mod_before_0.7.15_20261111_115337_758673`.
+Teste sintético — 349 testes aprovados na última entrega.
+Estático — geração consistente e validação local 1.15 aprovadas.
+Campanha — configuração inicial e contratação da 0.7.15 seguem NÃO VERIFICADO.
+
+Fluxo adotado a pedido do usuário em 2026-11-11. Ler `AGENTS.md`,
+`docs/agent/vic3-modding/SKILL.md` e suas referências antes do desenvolvimento.
+Os quatro arquivos fornecidos foram incorporados ao projeto. O ambiente foi
+preenchido com verificações locais. `vic3-tiger` está ausente do PATH e a pasta
+de documentação exportada está ausente dos dados do usuário.
+Próximo passo — obter documentação exportada e validação Tiger, mantendo
+Código, Teste sintético, Estático, Carregou e Campanha como evidências distintas.
+No mod, confirmar em campanha a fundação básica para a escassez identificada.
 
 ## 0.7.15 — Insumos de uma configuração inicial concreta
 

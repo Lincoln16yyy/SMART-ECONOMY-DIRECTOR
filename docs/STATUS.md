@@ -1,5 +1,14 @@
 # Estado dos requisitos — 0.7.15
 
+## Protocolo de evidência adotado
+
+As orientações do usuário estão em `AGENTS.md` e
+`docs/agent/vic3-modding/SKILL.md`, com fontes e ambiente em `references/`.
+Código, Teste sintético, Estático, Carregou e Campanha identificam evidências
+distintas. A versão 0.7.15 tem Código, Teste sintético e Estático registrados.
+A execução de Tiger está pendente e a documentação exportada está ausente.
+Carregou e Campanha da nova fundação e de seus PMs seguem NÃO VERIFICADO.
+
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.
 Implementação, teste sintético e confirmação de campanha são evidências separadas.
