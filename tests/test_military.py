@@ -38,13 +38,23 @@ class MilitaryEconomyTests(unittest.TestCase):
         c = self.c
         self.crisis(is_at_war=True)
         c.run('sed_auto_apply_monthly')
-        c.readings.update(is_at_war=False, has_diplomatic_play=True)
+        c.readings.update(is_at_war=False, is_diplomatic_play_committed_participant=True)
         c.run('sed_auto_apply_monthly')
-        c.readings['has_diplomatic_play'] = False
+        c.readings['is_diplomatic_play_committed_participant'] = False
         c.military_formations = [dict(is_mobilized=True)]
         c.run('sed_auto_apply_monthly')
         self.assertEqual(c.military_wage_changes, [])
         self.assertNotIn('sed_military_wage_saved', c.variables)
+
+    def test_each_diplomatic_role_preserves_military_readiness(self):
+        for role in ['is_diplomatic_play_initiator', 'is_diplomatic_play_target',
+                     'is_diplomatic_play_committed_participant',
+                     'is_diplomatic_play_undecided_participant']:
+            with self.subTest(role=role):
+                self.setUp()
+                self.crisis(**{role: True})
+                self.c.run('sed_auto_apply_monthly')
+                self.assertEqual(self.c.military_wage_changes, [])
 
     def test_construction_deficit_without_operating_deficit_preserves_military_wages(self):
         self.crisis(net_fixed_income=10)

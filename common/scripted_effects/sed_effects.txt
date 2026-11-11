@@ -889,8 +889,8 @@ sed_refresh_diagnostics = {
  set_variable = { name = sed_balance value = net_total_income }
  # Economy Advisor/advisor_core_values.txt
  set_variable = { name = sed_operating_balance value = net_fixed_income }
- # Economy Advisor/advisor_core_values.txt
- set_variable = { name = sed_fixed_expenses value = fixed_expenses }
+ # fixed_income menos net_fixed_income; vanilla/common/script_values/ip4_je_values.txt e tabela de triggers Tiger 1.19.0
+ set_variable = { name = sed_fixed_expenses value = sed_fixed_expenses_value }
  # vanilla/common/script_values/war_support_values.txt
  set_variable = { name = sed_gold value = gold_reserves }
  # Economy Advisor/advisor_economy_health_effects.txt
@@ -4033,7 +4033,7 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_plan_waiting value = 0 }
   set_variable = { name = sed_plan_year value = year }
   set_variable = { name = sed_plan_month value = { value = month add = 1 } }
-  set_variable = { name = sed_reserve_floor value = { value = fixed_expenses min = 0 multiply = 12 } }
+  set_variable = { name = sed_reserve_floor value = { value = sed_fixed_expenses_value min = 0 multiply = 12 } }
   set_variable = { name = sed_reserve_required value = {
    value = var:sed_reserve_floor add = { value = net_total_income max = 0 multiply = -26 }
   } }
@@ -8024,7 +8024,7 @@ var:sed_paper_intent_variant = 1
    value = var:sed_build_budget_project_weeks add = var:sed_build_budget_queue_weeks add = 4 min = 26
   } }
   set_variable = { name = sed_build_budget_required_gold value = {
-   value = fixed_expenses min = 0 multiply = 4
+   value = sed_fixed_expenses_value min = 0 multiply = 4
    add = { value = var:sed_build_budget_weekly subtract = net_total_income min = 0
     multiply = var:sed_build_budget_funding_weeks
    }
@@ -8076,7 +8076,7 @@ sed_refresh_military_plan = {
    }
    else_if = { limit = { var:sed_military_shortage_count = 0
     sed_auto_fiscal_safe = yes principal <= 0 net_total_income > 0
-    gold_reserves >= { value = fixed_expenses min = 0 multiply = 12 }
+    gold_reserves >= { value = sed_fixed_expenses_value min = 0 multiply = 12 }
    } set_variable = { name = sed_military_posture value = 4 } }
   }
  }
@@ -8122,7 +8122,7 @@ sed_apply_fiscal_policy = {
   }
   else_if = {
    limit = { OR = { var:sed_fiscal_status = 1 var:sed_fiscal_status = 5 }
-    gold_reserves >= { value = fixed_expenses min = 0 multiply = 12 }
+    gold_reserves >= { value = sed_fixed_expenses_value min = 0 multiply = 12 }
     principal <= 0
     net_total_income > 0
    }
@@ -8184,7 +8184,7 @@ sed_apply_wage_policy = {
   }
   else_if = {
    limit = { OR = { var:sed_fiscal_status = 1 var:sed_fiscal_status = 5 }
-    gold_reserves >= { value = fixed_expenses min = 0 multiply = 12 }
+    gold_reserves >= { value = sed_fixed_expenses_value min = 0 multiply = 12 }
     principal <= 0
     net_total_income > 0
    }

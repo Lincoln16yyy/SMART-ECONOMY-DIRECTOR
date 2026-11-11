@@ -72,7 +72,9 @@ class Country:
                              military_expenses=0, military_expenses_share=0, is_at_war=False,
                              bureaucracy=0, year=1836, month=0, is_player=True, in_default=False,
                              tax_level='medium', government_wage_level='medium', military_wage_level='medium',
-                             has_diplomatic_play=False,
+                             is_diplomatic_play_committed_participant=False,
+                             is_diplomatic_play_initiator=False, is_diplomatic_play_target=False,
+                             is_diplomatic_play_undecided_participant=False,
                              is_game_paused=True, is_construction_paused=False)
         self.readings.update(readings)
         self.variables = {}
@@ -108,6 +110,9 @@ class Country:
     def lookup(self, name, scope):
         if name.startswith('prev.var:'):
             return self.variables_for(scope['__previous_scope__'])[name[len('prev.var:'):]]
+        if name == 'fixed_income' and name not in self.readings:
+            # Scenario fixtures may specify expenditure and operating balance.
+            return self.readings['fixed_expenses'] + self.readings['net_fixed_income']
         if name in ('tax_level', 'government_wage_level', 'military_wage_level'):
             return self.tax_level_rank(scope.get(name, self.readings[name]))
         if name.startswith('b:') and '.' in name:

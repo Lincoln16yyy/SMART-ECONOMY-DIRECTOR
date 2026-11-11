@@ -1,13 +1,17 @@
-# Estado dos requisitos — 0.7.15
+# Estado dos requisitos — 0.7.16
 
 ## Protocolo de evidência adotado
 
 As orientações do usuário estão em `AGENTS.md` e
 `docs/agent/vic3-modding/SKILL.md`, com fontes e ambiente em `references/`.
 Código, Teste sintético, Estático, Carregou e Campanha identificam evidências
-distintas. A versão 0.7.15 tem Código, Teste sintético e Estático registrados.
-A execução de Tiger está pendente e a documentação exportada está ausente.
-Carregou e Campanha da nova fundação e de seus PMs seguem NÃO VERIFICADO.
+distintas. A 0.7.16 tem Código e Estático registrados, com execução do Tiger 1.19.0.
+A verificação pelo Tiger levou à correção de nove leituras removidas e de um escopo inadequado.
+Restam três campos do diário apontados como desconhecidos, presentes no vanilla
+1.15 e documentados no jogo. O Tiger declara suporte até 1.13.5. Os avisos de
+formatação e de OR de um item permanecem visíveis. A documentação exportada
+continua ausente. Carregou e Campanha das novas leituras e da prontidão seguem
+NÃO VERIFICADO. Teste sintético — 352 testes aprovados.
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.

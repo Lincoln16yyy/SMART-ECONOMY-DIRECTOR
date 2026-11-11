@@ -98,7 +98,7 @@ sed_apply_fiscal_policy = {
   }
   else_if = {
    limit = { OR = { var:sed_fiscal_status = 1 var:sed_fiscal_status = 5 }
-    gold_reserves >= { value = fixed_expenses min = 0 multiply = 12 }
+    gold_reserves >= { value = sed_fixed_expenses_value min = 0 multiply = 12 }
     principal <= 0
     net_total_income > 0
    }
@@ -161,7 +161,7 @@ sed_apply_wage_policy = {
   }
   else_if = {
    limit = { OR = { var:sed_fiscal_status = 1 var:sed_fiscal_status = 5 }
-    gold_reserves >= { value = fixed_expenses min = 0 multiply = 12 }
+    gold_reserves >= { value = sed_fixed_expenses_value min = 0 multiply = 12 }
     principal <= 0
     net_total_income > 0
    }
@@ -249,7 +249,9 @@ def triggers():
 }
 
 sed_military_readiness_required = {
- OR = { is_at_war = yes has_diplomatic_play = yes any_military_formation = { is_mobilized = yes } }
+ OR = { is_at_war = yes is_diplomatic_play_committed_participant = yes
+  is_diplomatic_play_initiator = yes is_diplomatic_play_target = yes
+  is_diplomatic_play_undecided_participant = yes any_military_formation = { is_mobilized = yes } }
 }
 
 sed_military_wage_recovery_affordable = {
@@ -257,7 +259,7 @@ sed_military_wage_recovery_affordable = {
  net_fixed_income >= 0
  net_total_income >= { value = military_expenses min = 0 multiply = 0.5 }
  principal <= 0
- gold_reserves >= { value = fixed_expenses min = 0 multiply = 12 }
+ gold_reserves >= { value = sed_fixed_expenses_value min = 0 multiply = 12 }
 }
 
 sed_tax_month_limit_reached = {
@@ -274,7 +276,7 @@ sed_wage_month_limit_reached = {
 sed_auto_fiscal_safe = {
  net_total_income >= 0
  net_fixed_income >= 0
- gold_reserves >= { value = fixed_expenses min = 0 multiply = 4 }
+ gold_reserves >= { value = sed_fixed_expenses_value min = 0 multiply = 4 }
  OR = {
   principal <= 0
   AND = { credit > 0 principal <= { value = credit multiply = 0.75 } }
@@ -287,7 +289,7 @@ sed_coord_reserve_drawdown_safe = {
  net_total_income < 0
  principal <= 0
  gold_reserves >= {
-  value = fixed_expenses min = 0 multiply = 12
+  value = sed_fixed_expenses_value min = 0 multiply = 12
   add = { value = net_total_income multiply = -26 }
  }
 }
@@ -315,7 +317,7 @@ def effects(actions, dependencies, buildings):
   set_variable = { name = sed_plan_waiting value = 0 }
   set_variable = { name = sed_plan_year value = year }
   set_variable = { name = sed_plan_month value = { value = month add = 1 } }
-  set_variable = { name = sed_reserve_floor value = { value = fixed_expenses min = 0 multiply = 12 } }
+  set_variable = { name = sed_reserve_floor value = { value = sed_fixed_expenses_value min = 0 multiply = 12 } }
   set_variable = { name = sed_reserve_required value = {
    value = var:sed_reserve_floor add = { value = net_total_income max = 0 multiply = -26 }
   } }
@@ -555,7 +557,7 @@ sed_refresh_military_plan = {
    }
    else_if = { limit = { var:sed_military_shortage_count = 0
     sed_auto_fiscal_safe = yes principal <= 0 net_total_income > 0
-    gold_reserves >= { value = fixed_expenses min = 0 multiply = 12 }
+    gold_reserves >= { value = sed_fixed_expenses_value min = 0 multiply = 12 }
    } set_variable = { name = sed_military_posture value = 4 } }
   }
  }

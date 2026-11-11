@@ -1,5 +1,7 @@
 ﻿# Current calendar, independent of diagnostic refresh.
 sed_live_month_key = { value = year multiply = 12 add = month }
+# Country scope. Fixed expenditure is gross fixed income minus its net balance.
+sed_fixed_expenses_value = { value = fixed_income subtract = net_fixed_income min = 0 }
 # State scope; demographic proxy rather than a worker count from the engine.
 sed_state_labor_pool = {
  value = state_population min = 0

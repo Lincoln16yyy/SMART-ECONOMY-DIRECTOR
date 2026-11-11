@@ -143,7 +143,7 @@ def effects(founding_projects=()):
    value = var:sed_build_budget_project_weeks add = var:sed_build_budget_queue_weeks add = 4 min = 26
   } }
   set_variable = { name = sed_build_budget_required_gold value = {
-   value = fixed_expenses min = 0 multiply = 4
+   value = sed_fixed_expenses_value min = 0 multiply = 4
    add = { value = var:sed_build_budget_weekly subtract = net_total_income min = 0
     multiply = var:sed_build_budget_funding_weeks
    }

@@ -1,5 +1,9 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.16, as reservas e guardas fiscais usam receitas fixas menos saldo
+operacional para medir despesas fixas. A proteção dos salários militares
+reconhece os papéis diplomáticos no escopo de país.
+
 Na 0.7.15, a fundação das indústrias próprias considera os insumos da
 configuração básica verificada. Métodos avançados são avaliados na configuração
 inicial do prédio conforme tecnologia, oferta e referência econômica.

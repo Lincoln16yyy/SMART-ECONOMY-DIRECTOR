@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.15'
+VERSION = '0.7.16'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -2332,7 +2332,7 @@ sed_pulse.1 = {
         'common/scripted_effects/sed_effects.txt': effects(),
         'common/scripted_guis/sed_scripted_guis.txt': scripted_guis(),
         'common/scripted_triggers/sed_triggers.txt': scripted_triggers(),
-        'common/script_values/sed_values.txt': '# Current calendar, independent of diagnostic refresh.\nsed_live_month_key = { value = year multiply = 12 add = month }\n' + labor.values(projects) + input_forecast.values(projects) + supplier_output_values() + investment.values(SUPPLY_TARGETS, variants),
+        'common/script_values/sed_values.txt': '# Current calendar, independent of diagnostic refresh.\nsed_live_month_key = { value = year multiply = 12 add = month }\n# Country scope. Fixed expenditure is gross fixed income minus its net balance.\nsed_fixed_expenses_value = { value = fixed_income subtract = net_fixed_income min = 0 }\n' + labor.values(projects) + input_forecast.values(projects) + supplier_output_values() + investment.values(SUPPLY_TARGETS, variants),
         'gui/journal_entry_widgets/sed_diagnostics.gui': widget(),
         'localization/braz_por/sed_l_braz_por.yml': localization('braz_por'),
         'localization/english/sed_l_english.yml': localization('english'),

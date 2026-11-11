@@ -15,6 +15,24 @@ class PlanningTests(unittest.TestCase):
         self.c = Country(script_definitions(), construction_queue_num_queued_government_levels=0)
         self.c.run('sed_enable_country')
 
+    def test_fixed_expenditure_uses_gross_income_and_operating_balance(self):
+        c = self.c
+        for income, balance, expenditure in [(1000, 745, 255), (1000, -100, 1100), (0, 0, 0), (100, 200, 0)]:
+            with self.subTest(income=income, balance=balance):
+                c.readings.update(fixed_income=income, net_fixed_income=balance)
+                self.assertEqual(c.number('sed_fixed_expenses_value', c.country_scope()), expenditure)
+        c.readings.update(fixed_income=1000, net_fixed_income=745)
+        c.run('sed_refresh_diagnostics')
+        self.assertEqual(c.variables['sed_fixed_expenses'], 255)
+
+    def test_fixed_expenditure_controls_the_four_week_reserve_guard(self):
+        c = self.c
+        c.readings.update(fixed_income=1000, net_fixed_income=745,
+                          net_total_income=100, principal=0, gold_reserves=1020)
+        self.assertTrue(c.condition(c.definitions['sed_auto_fiscal_safe'], c.country_scope()))
+        c.readings['gold_reserves'] = 1019
+        self.assertFalse(c.condition(c.definitions['sed_auto_fiscal_safe'], c.country_scope()))
+
     def test_tax_goal_requires_an_incorporated_state(self):
         c = self.c
         target = state(incorporated=False, tax_capacity_usage=200, tax_capacity=100)
