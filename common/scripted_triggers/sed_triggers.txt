@@ -344,9 +344,16 @@ sed_wood_candidate_site = {
  NOT = { has_variable = sed_wood_request_pending }
 
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_wood_found_site = {
+ sed_wood_candidate_site = yes
+ owner = { var:sed_plan_missing_wood = 1 }
+ NOT = { has_building = building_logging_camp }
+ OR = { can_construct_building = building_logging_camp }
+}
 sed_wood_supplier_available = {
  sed_wood_candidate_site = yes
- OR = { sed_wood_logging_camp_eligible = yes }
+ OR = { sed_wood_logging_camp_eligible = yes sed_wood_found_site = yes }
 }
 sed_wood_candidate_eligible = {
  owner = { sed_wood_supply_demand = yes }
@@ -399,9 +406,16 @@ sed_iron_candidate_site = {
  NOT = { has_variable = sed_iron_request_pending }
 
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_iron_found_site = {
+ sed_iron_candidate_site = yes
+ owner = { var:sed_plan_missing_iron = 1 }
+ NOT = { has_building = building_iron_mine }
+ OR = { can_construct_building = building_iron_mine }
+}
 sed_iron_supplier_available = {
  sed_iron_candidate_site = yes
- OR = { sed_iron_iron_mine_eligible = yes }
+ OR = { sed_iron_iron_mine_eligible = yes sed_iron_found_site = yes }
 }
 sed_iron_candidate_eligible = {
  owner = { sed_iron_supply_demand = yes }
@@ -460,9 +474,16 @@ sed_coal_candidate_site = {
  NOT = { has_variable = sed_coal_request_pending }
 
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_coal_found_site = {
+ sed_coal_candidate_site = yes
+ owner = { var:sed_plan_missing_coal = 1 }
+ NOT = { has_building = building_coal_mine }
+ OR = { can_construct_building = building_coal_mine }
+}
 sed_coal_supplier_available = {
  sed_coal_candidate_site = yes
- OR = { sed_coal_coal_mine_eligible = yes }
+ OR = { sed_coal_coal_mine_eligible = yes sed_coal_found_site = yes }
 }
 sed_coal_candidate_eligible = {
  owner = { sed_coal_supply_demand = yes }
@@ -521,9 +542,16 @@ sed_grain_candidate_site = {
  NOT = { has_variable = sed_grain_request_pending }
 
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_grain_found_site = {
+ sed_grain_candidate_site = yes
+ owner = { var:sed_plan_missing_grain = 1 }
+ NOT = { has_building = building_wheat_farm } NOT = { has_building = building_rye_farm } NOT = { has_building = building_rice_farm } NOT = { has_building = building_maize_farm } NOT = { has_building = building_millet_farm }
+ OR = { can_construct_building = building_wheat_farm can_construct_building = building_rye_farm can_construct_building = building_rice_farm can_construct_building = building_maize_farm can_construct_building = building_millet_farm }
+}
 sed_grain_supplier_available = {
  sed_grain_candidate_site = yes
- OR = { sed_grain_wheat_farm_eligible = yes sed_grain_rye_farm_eligible = yes sed_grain_rice_farm_eligible = yes sed_grain_maize_farm_eligible = yes sed_grain_millet_farm_eligible = yes }
+ OR = { sed_grain_wheat_farm_eligible = yes sed_grain_rye_farm_eligible = yes sed_grain_rice_farm_eligible = yes sed_grain_maize_farm_eligible = yes sed_grain_millet_farm_eligible = yes sed_grain_found_site = yes }
 }
 sed_grain_candidate_eligible = {
  owner = { sed_grain_supply_demand = yes }
@@ -790,9 +818,16 @@ sed_fabric_candidate_site = {
  NOT = { has_variable = sed_fabric_request_pending }
 
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_fabric_found_site = {
+ sed_fabric_candidate_site = yes
+ owner = { var:sed_plan_missing_fabric = 1 }
+ NOT = { has_building = building_cotton_plantation } NOT = { has_building = building_livestock_ranch }
+ OR = { can_construct_building = building_cotton_plantation can_construct_building = building_livestock_ranch }
+}
 sed_fabric_supplier_available = {
  sed_fabric_candidate_site = yes
- OR = { sed_fabric_cotton_plantation_eligible = yes sed_fabric_livestock_ranch_eligible = yes }
+ OR = { sed_fabric_cotton_plantation_eligible = yes sed_fabric_livestock_ranch_eligible = yes sed_fabric_found_site = yes }
 }
 sed_fabric_candidate_eligible = {
  owner = { sed_fabric_supply_demand = yes }
@@ -888,9 +923,16 @@ sed_tools_candidate_site = {
  NOT = { has_variable = sed_tools_request_pending }
 
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_tools_found_site = {
+ sed_tools_candidate_site = yes
+ owner = { var:sed_plan_missing_tools = 1 }
+ NOT = { has_building = building_tooling_workshop }
+ OR = { can_construct_building = building_tooling_workshop }
+}
 sed_tools_supplier_available = {
  sed_tools_candidate_site = yes
- OR = { sed_tools_tooling_workshop_eligible = yes }
+ OR = { sed_tools_tooling_workshop_eligible = yes sed_tools_found_site = yes }
 }
 sed_tools_candidate_eligible = {
  owner = { sed_tools_supply_demand = yes }
@@ -945,9 +987,16 @@ sed_groceries_candidate_site = {
  NOT = { has_variable = sed_groceries_request_pending }
 
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_groceries_found_site = {
+ sed_groceries_candidate_site = yes
+ owner = { var:sed_plan_missing_groceries = 1 }
+ NOT = { has_building = building_food_industry }
+ OR = { can_construct_building = building_food_industry }
+}
 sed_groceries_supplier_available = {
  sed_groceries_candidate_site = yes
- OR = { sed_groceries_food_industry_eligible = yes }
+ OR = { sed_groceries_food_industry_eligible = yes sed_groceries_found_site = yes }
 }
 sed_groceries_candidate_eligible = {
  owner = { sed_groceries_supply_demand = yes }
@@ -1008,9 +1057,16 @@ sed_clothes_candidate_site = {
  NOT = { has_variable = sed_clothes_request_pending }
 
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_clothes_found_site = {
+ sed_clothes_candidate_site = yes
+ owner = { var:sed_plan_missing_clothes = 1 }
+ NOT = { has_building = building_textile_mill }
+ OR = { can_construct_building = building_textile_mill }
+}
 sed_clothes_supplier_available = {
  sed_clothes_candidate_site = yes
- OR = { sed_clothes_textile_mill_eligible = yes }
+ OR = { sed_clothes_textile_mill_eligible = yes sed_clothes_found_site = yes }
 }
 sed_clothes_candidate_eligible = {
  owner = { sed_clothes_supply_demand = yes }
@@ -1065,9 +1121,16 @@ sed_small_arms_candidate_site = {
  NOT = { has_variable = sed_small_arms_request_pending }
 owner = { military_expenses > 0 market = { mg:small_arms ?= { market_goods_buy_orders > 0 } } }
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_small_arms_found_site = {
+ sed_small_arms_candidate_site = yes
+ owner = { var:sed_plan_missing_small_arms = 1 }
+ NOT = { has_building = building_arms_industry }
+ OR = { can_construct_building = building_arms_industry }
+}
 sed_small_arms_supplier_available = {
  sed_small_arms_candidate_site = yes
- OR = { sed_small_arms_arms_industry_eligible = yes }
+ OR = { sed_small_arms_arms_industry_eligible = yes sed_small_arms_found_site = yes }
 }
 sed_small_arms_candidate_eligible = {
  owner = { sed_small_arms_supply_demand = yes }
@@ -1122,9 +1185,16 @@ sed_artillery_candidate_site = {
  NOT = { has_variable = sed_artillery_request_pending }
 owner = { military_expenses > 0 market = { mg:artillery ?= { market_goods_buy_orders > 0 } } }
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_artillery_found_site = {
+ sed_artillery_candidate_site = yes
+ owner = { var:sed_plan_missing_artillery = 1 }
+ NOT = { has_building = building_artillery_foundry }
+ OR = { can_construct_building = building_artillery_foundry }
+}
 sed_artillery_supplier_available = {
  sed_artillery_candidate_site = yes
- OR = { sed_artillery_artillery_foundry_eligible = yes }
+ OR = { sed_artillery_artillery_foundry_eligible = yes sed_artillery_found_site = yes }
 }
 sed_artillery_candidate_eligible = {
  owner = { sed_artillery_supply_demand = yes }
@@ -1183,9 +1253,16 @@ sed_ammunition_candidate_site = {
  NOT = { has_variable = sed_ammunition_request_pending }
 owner = { military_expenses > 0 market = { mg:ammunition ?= { market_goods_buy_orders > 0 } } }
 }
+# No verified producer in the country: found the base in a state that can host it.
+sed_ammunition_found_site = {
+ sed_ammunition_candidate_site = yes
+ owner = { var:sed_plan_missing_ammunition = 1 }
+ NOT = { has_building = building_munition_plant }
+ OR = { can_construct_building = building_munition_plant }
+}
 sed_ammunition_supplier_available = {
  sed_ammunition_candidate_site = yes
- OR = { sed_ammunition_munition_plant_eligible = yes }
+ OR = { sed_ammunition_munition_plant_eligible = yes sed_ammunition_found_site = yes }
 }
 sed_ammunition_candidate_eligible = {
  owner = { sed_ammunition_supply_demand = yes }

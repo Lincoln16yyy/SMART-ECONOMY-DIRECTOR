@@ -190,6 +190,39 @@ class PlanningTests(unittest.TestCase):
         self.assertEqual(self.c.variables['sed_plan_goal'], 2)
         self.assertEqual(self.c.variables['sed_auto_review_status'], 1)
 
+    def test_automatic_founds_a_missing_industry_in_a_constructible_state(self):
+        target = state(can_construct=True)
+        self.c.states = [target]
+        self.c.market_goods['iron'] = dict(market_goods_has_goods_shortage=True,
+                                          market_goods_buy_orders=100,
+                                          market_goods_sell_orders=0)
+        c = self.c
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_missing_iron'], 1)
+        self.assertEqual(self.ranked(), [(1, 'iron', target)])
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.constructions, [dict(building='building_iron_mine', state=target)])
+        self.assertEqual(target['variables']['sed_iron_intent_level'], 0)
+        self.assertEqual(target['variables']['sed_iron_intent_variant'], 1)
+        self.assertEqual(c.variables['sed_iron_intents'], 1)
+        self.assertEqual(c.variables['sed_auto_review_status'], 1)
+
+    def test_missing_industry_without_a_host_state_stays_an_objective(self):
+        target = state(can_construct=False)
+        self.c.states = [target]
+        self.c.market_goods['iron'] = dict(market_goods_has_goods_shortage=True,
+                                          market_goods_buy_orders=100,
+                                          market_goods_sell_orders=0)
+        c = self.c
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_plan_missing_iron'], 1)
+        self.assertEqual(c.variables['sed_plan_goal'], 5)
+        self.assertEqual(self.ranked(), [])
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.constructions, [])
+
     def test_exactly_three_global_pairs_even_when_one_state_has_several_types(self):
         target = self.producer('grain', buy=100, sell=0)
         self.producer('clothes', target, buy=100, sell=10)

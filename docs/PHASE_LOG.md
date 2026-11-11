@@ -1691,3 +1691,24 @@ confirmada, bloqueio da segunda tentativa no mesmo mês e fila privada ainda
 bloqueando. Geração e validação estática locais aprovadas. Sem instalação,
 execução na engine ou campanha nesta etapa; custo incremental de fila longa e
 concorrência real seguem sem confirmação.
+
+## 2026-11-10 — Fundação da indústria ausente (0.7.0)
+
+O jogador pediu que o Automático aja como gestor e transforme qualquer país com
+os recursos que ele tem. A lacuna era a base produtiva ausente: o Director
+identificava o bem em escassez sem produtor, mas não podia construir porque a
+aprovação exigia um prédio existente para expandir.
+
+A 0.7.0 inclui estados aptos a fundar a base no candidato normal do bem. Um
+estado entra quando é incorporado, não tem nenhuma variante do prédio, aceita
+`can_construct_building` para alguma variante e o país não tem produtor
+verificado daquele bem. A fundação usa o ranking, o dispatcher, a aprovação e
+o livro de resultados existentes; o nível inicial é 0 e a conclusão é inferida
+quando o nível sobe ao sair da fila. As guardas fiscais, de materiais, de fila
+privada, de pausa e o limite mensal continuam valendo. Sem estado apto, o
+objetivo 5 permanece e nada é forçado.
+
+243 testes sintéticos aprovados, incluindo fundação automática, ausência de
+estado apto e as regressões anteriores. Geração, validação estática e verificação de artefatos locais
+aprovadas. Sem instalação, engine ou campanha nesta etapa; custo real, terra
+disponível e concorrência seguem sem confirmação.

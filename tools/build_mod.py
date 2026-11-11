@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.6.26'
+VERSION = '0.7.0'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -346,15 +346,20 @@ sed_refresh_supply_candidates = {
         for index, variant in enumerate(vs):
             branch = 'if' if index == 0 else 'else_if'
             name = variant_id(variant)
-            eligible = f'sed_{good}_{name}_eligible = yes'
+            eligible = (f'OR = {{ sed_{good}_{name}_eligible = yes '
+                        f'AND = {{ sed_{good}_found_site = yes can_construct_building = {variant["building"]} }} }}')
             if good in INPUT_DEPENDENCIES and len(vs) > 1:
                 eligible += (f' OR = {{ owner = {{ NOT = {{ AND = {{ has_variable = sed_mode_automatic '
                              f'has_variable = sed_input_priority_{good} }} }} }} '
-                             f'sed_{good}_{name}_preferred_supplier = yes }}')
+                             f'OR = {{ sed_{good}_{name}_preferred_supplier = yes '
+                             f'AND = {{ sed_{good}_found_site = yes can_construct_building = {variant["building"]} }} }} }}')
             enqueue += f'''  {branch} = {{
    limit = {{ {eligible} }}
-   # Baseline level before queuing; the monthly review compares it after the queue.
-   set_variable = {{ name = sed_{good}_intent_level value = b:{variant['building']}.level }}
+   # A founding reads level 0; the monthly review then infers completion from the queue.
+   set_variable = {{ name = sed_{good}_intent_level value = 0 }}
+   if = {{ limit = {{ has_building = {variant['building']} }}
+    set_variable = {{ name = sed_{good}_intent_level value = b:{variant['building']}.level }}
+   }}
    set_variable = {{ name = sed_{good}_intent_variant value = {index + 1} }}
    start_building_construction = {variant['building']}
   }}
@@ -1619,6 +1624,8 @@ def supply_triggers():
         if good in INPUT_DEPENDENCIES:
             demand = (f'OR = {{ {shortage} AND = {{ has_variable = sed_input_priority_{good} '
                       f'NOT = {{ any_scope_state = {{ sed_{good}_queued_supply = yes }} }} }} }}')
+        absent = ' '.join(f'NOT = {{ has_building = {variant["building"]} }}' for variant in vs)
+        constructible = ' '.join(f'can_construct_building = {variant["building"]}' for variant in vs)
         result.append(f'''sed_{good}_supply_demand = {{ {demand} }}
 sed_{good}_candidate_site = {{
  is_incorporated = yes
@@ -1627,9 +1634,16 @@ sed_{good}_candidate_site = {{
  NOT = {{ has_variable = sed_{good}_request_pending }}
 {military_gate}
 }}
+# No verified producer in the country: found the base in a state that can host it.
+sed_{good}_found_site = {{
+ sed_{good}_candidate_site = yes
+ owner = {{ var:sed_plan_missing_{good} = 1 }}
+ {absent}
+ OR = {{ {constructible} }}
+}}
 sed_{good}_supplier_available = {{
  sed_{good}_candidate_site = yes
- OR = {{ {alternatives} }}
+ OR = {{ {alternatives} sed_{good}_found_site = yes }}
 }}
 sed_{good}_candidate_eligible = {{
  owner = {{ sed_{good}_supply_demand = yes }}
@@ -1947,7 +1961,7 @@ def localization(language):
         'sed_ignore_recommendation': ('Ignorar neste estado', 'Ignore in this state'),
         'sed_recommendations_intro': ('Expansões de ferrovias existentes quando falta infraestrutura. Aprovar adiciona um nível público.', 'Expand existing railways where infrastructure is insufficient. Approval adds one government level.'),
         'sed_construction_intro': ('Expandir um setor existente quando há pelo menos três projetos públicos.', 'Expand an existing sector when at least three government projects are queued.'),
-        'sed_supply_intro': ('Expansões de produtores existentes para atender à escassez do mercado ou abastecer outra expansão.', 'Existing producer expansions to address market shortages or supply another expansion.'),
+        'sed_supply_intro': ('Expansões de produtores existentes ou fundação da indústria ausente para atender à escassez do mercado ou abastecer outra expansão.', 'Existing producer expansions or founding of the missing industry to address market shortages or supply another expansion.'),
         'sed_supply_no_candidate': ('Nenhum produtor elegível nesta leitura. Esta versão só expande prédios existentes.', 'No eligible producer in this reading. This version only expands existing buildings.'),
     })
     for name in ACTION_NAMES:
@@ -1994,7 +2008,7 @@ def localization(language):
         'sed_fiscal_4': ('Fiscal: emergência por inadimplência. Nenhuma expansão autorizada.', 'Fiscal: default emergency. No expansion authorized.'),
         'sed_goal_0': ('Objetivo atual: observar e preservar recursos; sem expansão elegível.', 'Current objective: observe and preserve resources; no eligible expansion.'),
         'sed_goal_1': ('Objetivo atual: aliviar o gargalo de infraestrutura.', 'Current objective: relieve the infrastructure bottleneck.'),
-        'sed_goal_2': ('Objetivo atual: reduzir escassez de bens com produtores viáveis.', 'Current objective: reduce goods shortages using viable producers.'),
+        'sed_goal_2': ('Objetivo atual: reduzir escassez de bens ampliando produtores viáveis ou fundando a indústria ausente em estado apto.', 'Current objective: reduce goods shortages by expanding viable producers or founding the missing industry in a suitable state.'),
         'sed_goal_3': ('Objetivo atual: ampliar capacidade para a demanda da fila pública, com aprovação Assistida.', 'Current objective: expand capacity for government queue demand, with Assisted approval.'),
         'sed_goal_4': ('Objetivo atual: estabilizar as finanças antes de ampliar compromissos.', 'Current objective: stabilize finances before expanding commitments.'),
         'sed_auto_current_fiscal': ('Agora: política fiscal bloqueia novas tentativas automáticas. Requer saldos não negativos, reservas de quatro semanas de despesas fixas e dívida até 75% do crédito. A política de impostos e salários civis continua ativa no Automático.', 'Now: fiscal policy blocks new automatic attempts. Requires nonnegative balances, reserves covering four weeks of fixed expenses and debt up to 75% of credit. Tax and civilian government wage policy remains active in Automatic.'),
@@ -2030,14 +2044,14 @@ def localization(language):
         pairs[f'sed_{policy}_last_command'] = (
             f'Último comando do Director para {pt}: ' + command_date + ', nível ' + levels + '. Escala de 1 (muito baixo) a 5 (muito alto). Confira o resultado no orçamento.',
             f'Last Director command for {en}: ' + command_date + ', level ' + levels + '. Scale from 1 (very low) to 5 (very high). Check the outcome in the budget.')
-    pairs['sed_goal_5'] = ('Objetivo atual: investigar ausência dos produtores atendidos pelo protótipo para bens em escassez. A construção direta do Director ainda exige produtor existente; a ferramenta externa mantém sua própria seleção.', 'Current objective: investigate missing prototype-supported producers for scarce goods. Direct Director construction still requires an existing producer; the external tool keeps its own selection.')
+    pairs['sed_goal_5'] = ('Objetivo atual: fundar a indústria ausente para bens em escassez. Nenhum estado incorporado pode hospedar o produtor agora, por tecnologia, terra ou infraestrutura; o Director aguarda uma leitura que abra um local apto e não força a construção.', 'Current objective: found the missing industry for scarce goods. No incorporated state can host the producer now because of technology, land or infrastructure; the Director waits for a reading that opens a suitable site and does not force construction.')
     for item in SUPPLY_TARGETS:
         name = item['good']
         names_pt = [variant['building_pt'] for variant in variants(item)]
         names_en = [variant['building_en'] for variant in variants(item)]
         producers_pt = ', '.join(names_pt[:-1]) + (' ou ' if len(names_pt) > 1 else '') + names_pt[-1]
         producers_en = ', '.join(names_en[:-1]) + (' or ' if len(names_en) > 1 else '') + names_en[-1]
-        pairs[f'sed_plan_missing_{name}'] = (f"Setor a investigar: {item['label_pt']} em escassez no mercado, sem produtor verificado ({producers_pt}) nos estados do país. Importação ou outros produtores podem suprir o bem; não é ordem de autossuficiência.", f"Sector to investigate: market shortage of {item['label_en']}, with no verified producer ({producers_en}) in the country's states. Imports or other producers may supply it; this is not a self-sufficiency mandate.")
+        pairs[f'sed_plan_missing_{name}'] = (f"Setor a fundar: {item['label_pt']} em escassez no mercado, sem produtor verificado ({producers_pt}) nos estados do país. O Director funda a base quando há estado incorporado apto, sob as guardas fiscais, de materiais e de fila. Importação ou outros produtores podem suprir o bem; não é ordem de autossuficiência.", f"Sector to found: market shortage of {item['label_en']}, with no verified producer ({producers_en}) in the country's states. The Director founds the base when an incorporated state can host it, under the fiscal, material and queue guards. Imports or other producers may supply it; this is not a self-sufficiency mandate.")
         pairs[f'sed_book_{name}'] = (f"Histórico de {item['label_pt']}: {v(name + '_intents', '0')} pedidos, {v(name + '_completed', '0')} concluídos, {v(name + '_abandoned', '0')} abandonados. Conclusão inferida quando o nível do produtor sobe ao sair da fila; cancelamento ou obra externa podem distorcer a leitura.", f"{item['label_en'].capitalize()} history: {v(name + '_intents', '0')} requested, {v(name + '_completed', '0')} completed, {v(name + '_abandoned', '0')} abandoned. Completion is inferred when the producer level rises after leaving the queue; cancellation or external work can distort it.")
         pairs[f'sed_meta_{name}'] = (f"Meta industrial anual: ampliar a oferta de {item['label_pt']}. A escassez foi observada em três meses de calendário consecutivos; ele mantém prioridade no plano até o fim do ano. A meta não dispensa os filtros de trabalhadores, insumos, fila, infraestrutura e proteção fiscal.", f"Annual industrial goal: expand the supply of {item['label_en']}. Shortage was observed in three consecutive calendar months; it keeps priority in the plan until the end of the year. The goal does not bypass the worker, input, queue, infrastructure and fiscal guards.")
     pairs['sed_book_railway'] = (f"Histórico de ferrovias: {v('railway_intents', '0')} pedidos, {v('railway_completed', '0')} concluídos, {v('railway_abandoned', '0')} abandonados. Conclusão inferida quando o nível sobe ao sair da fila.", f"Railway history: {v('railway_intents', '0')} requested, {v('railway_completed', '0')} completed, {v('railway_abandoned', '0')} abandoned. Completion is inferred when the level rises after leaving the queue.")
@@ -2057,8 +2071,8 @@ def localization(language):
     pairs['sed_construction_candidate_reason'] = ('Setor operante e fila pública com demanda. Custo e contratação futura não estimados.', 'Operating sector with demand in the government queue. Cost and future hiring not estimated.')
     for item in SUPPLY_TARGETS:
         pairs[f"sed_{item['good']}_candidate_reason"] = (
-            f"Escassez de {item['label_pt']}; produtor operante, sem falta de insumos ou expansão enfileirada.",
-            f"Shortage of {item['label_en']}; operating producer, without input shortage or queued expansion.")
+            f"Escassez de {item['label_pt']}; amplia produtor operante ou funda a base em estado apto, sem falta de insumos ou expansão enfileirada.",
+            f"Shortage of {item['label_en']}; expands an operating producer or founds the base in a suitable state, without input shortage or queued expansion.")
     for name in ('railway', 'construction'):
         key = f'sed_{name}_breakdown'
         pairs[key] = (pairs[key][0] + ' Ignorados por você: ' + v(name + '_ignored_states', '0') + '.',

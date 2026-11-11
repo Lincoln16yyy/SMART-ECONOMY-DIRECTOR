@@ -1,5 +1,33 @@
 # Planejamento e coordenação — 0.6.8
 
+## 0.7.0 — Fundação da indústria ausente
+
+Até a 0.6.26, um bem em escassez sem produtor no país entrava apenas no
+objetivo 5: o Director registrava a ausência, mas a construção direta exigia
+um produtor existente para expandir. A 0.7.0 fecha essa lacuna. Quando há
+escassez de mercado, nenhum estado do país tem um dos produtores do bem e ao
+menos um estado incorporado aceita `can_construct_building` para alguma
+variante, esse estado entra no ranking normal como qualquer alvo de oferta.
+O dirigente automático escolhe a primeira prioridade, e a aprovação enfileira
+um nível do prédio novo com nível inicial 0.
+
+A fundação não cria um caminho paralelo: usa o mesmo candidato, o mesmo plano
+de até três prioridades, a mesma aprovação (também disponível no Assistido)
+e as mesmas guardas fiscais, de materiais, de fila privada, de pausa e o
+limite de uma tentativa por mês. Não inicia obra em estado que já tem a
+variante; nesse caso a expansão normal continua valendo. O livro de resultados
+passa a contar a fundação como pedido e infere a conclusão quando o nível sai
+de 0 ao deixar a fila.
+
+Quando nenhum estado pode hospedar o prédio, o objetivo 5 permanece e a
+interface diz que o Director aguarda tecnologia, terra ou infraestrutura; a
+construção não é forçada e a importação continua fora do escopo. 243 testes
+sintéticos aprovados, incluindo fundação automática, ausência de estado apto
+e as regressões anteriores. Geração e validação
+estática locais aprovadas. Sem engine ou campanha nesta etapa: custo real,
+terra disponível e comportamento de `can_construct_building` no jogo ainda
+precisam de confirmação.
+
 ## 0.6.26 — Setor de construção e segunda revisão no Automático
 
 O Automático passou a tratar o setor de construção como alvo do dispatcher,

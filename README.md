@@ -1,5 +1,12 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.0, o Automático pode fundar a indústria ausente que causa escassez: se
+um bem está em falta, o país não tem produtor verificado e algum estado
+incorporado pode hospedar a construção, o Director enfileira um nível do
+prédio novo sob as mesmas guardas fiscais, de materiais, de fila e o limite
+de uma tentativa por mês. Sem estado apto, o objetivo 5 registra o bloqueio e
+nada é forçado.
+
 Na 0.6.26, o Automático age com a fila pública ocupada, pode expandir o setor
 de construção quando ele é a primeira prioridade do plano e agenda uma segunda
 revisão no mesmo mês quando a fila privada bloqueia a primeira. A expansão
