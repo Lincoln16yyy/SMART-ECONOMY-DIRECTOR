@@ -1,5 +1,10 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.1, um estado com déficit de infraestrutura e sem ferrovia pode receber
+a primeira ferrovia pelo Automático, com as mesmas guardas de orçamento,
+materiais e fila. O pedido continua pendente enquanto a obra está na fila,
+mesmo antes de existir prédio, e não é duplicado em outro estado.
+
 Na 0.7.0, o Automático pode fundar a indústria ausente que causa escassez: se
 um bem está em falta, o país não tem produtor verificado e algum estado
 incorporado pode hospedar a construção, o Director enfileira um nível do

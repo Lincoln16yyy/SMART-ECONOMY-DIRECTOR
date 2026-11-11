@@ -1,5 +1,27 @@
 # Planejamento e coordenação — 0.6.8
 
+## 0.7.1 — Primeira ferrovia e pedido de fundação persistente
+
+Até a 0.7.0, ferrovia só entrava no plano quando já existia e estava operante.
+Um estado com infraestrutura negativa e nenhuma ferrovia ficava apenas na
+contagem "sem ferrovia" e nunca recebia obra. A 0.7.1 inclui o primeiro nível
+como fundação: estado incorporado, déficit atual, sem `building_railway`, sem
+pedido pendente e com `can_construct_building` aceito. O candidato mantém o
+ranking por déficit, a aprovação (também no Assistido) e o livro de ferrovias;
+a intenção registra nível 0 e a conclusão é inferida quando o prédio aparece.
+
+A mesma entrega corrige a persistência da fundação. Sem prédio, a limpeza de
+pendências tratava o pedido como abandonado na leitura seguinte, antes de a
+obra concluir; isso liberava o gatilho e permitia fundar de novo. Agora o
+pedido de fundação, de ferrovia ou de indústria, permanece pendente enquanto
+houver níveis na fila pública e nenhum prédio; a pendência só é encerrada
+quando o prédio aparece (conclusão) ou a fila esvazia (abandono).
+
+246 testes sintéticos aprovados, incluindo fundação automática de ferrovia e
+persistência do pedido após uma leitura intermediária. Geração e validação
+estática locais aprovadas. Sem engine ou campanha nesta etapa: terra,
+permissão e concorrência reais continuam pendentes de confirmação.
+
 ## 0.7.0 — Fundação da indústria ausente
 
 Até a 0.6.26, um bem em escassez sem produtor no país entrava apenas no
@@ -24,8 +46,11 @@ de 0 ao deixar a fila.
 
 Quando nenhum estado pode hospedar o prédio, o objetivo 5 permanece e a
 interface diz que o Director aguarda tecnologia, terra ou infraestrutura; a
-construção não é forçada e a importação continua fora do escopo.244 testes sintéticos aprovados, incluindo fundação automática, ausência de estado apto,
-fundação única por país enquanto a obra está na fila e as regressões anteriores. Geração e validação
+construção não é forçada e a importação continua fora do escopo.
+
+244 testes sintéticos aprovados à época, incluindo fundação automática,
+ausência de estado apto, fundação única por país enquanto a obra está na fila e
+as regressões anteriores. Geração e validação
 estática locais aprovadas. Sem engine ou campanha nesta etapa: custo real,
 terra disponível e comportamento de `can_construct_building` no jogo ainda
 precisam de confirmação.

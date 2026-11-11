@@ -1,18 +1,33 @@
 ﻿# State scope. Candidate is limited to an operating railway with a live infrastructure deficit.
+# State scope. A deficit state with no railway can found the base.
+sed_railway_found_site = {
+ is_incorporated = yes
+ infrastructure_delta < 0
+ NOT = { has_variable = sed_railway_ignored }
+ NOT = { has_variable = sed_railway_request_pending }
+ NOT = { has_building = building_railway }
+ can_construct_building = building_railway
+}
+
 sed_railway_candidate_eligible = {
  is_incorporated = yes
  infrastructure_delta < 0
  NOT = { has_variable = sed_railway_ignored }
  NOT = { has_variable = sed_railway_request_pending }
- has_building = building_railway
- b:building_railway = {
-  level > 0
-  occupancy >= 0.8
-  has_failed_hires = no
-  building_has_goods_shortage = no
-  level_after_queued_constructions <= level
+ OR = {
+  sed_railway_found_site = yes
+  AND = {
+   has_building = building_railway
+   b:building_railway = {
+    level > 0
+    occupancy >= 0.8
+    has_failed_hires = no
+    building_has_goods_shortage = no
+    level_after_queued_constructions <= level
+   }
+   can_construct_building = building_railway
+  }
  }
- can_construct_building = building_railway
 }
 
 sed_railway_approval_valid = {

@@ -1,7 +1,19 @@
 # Contexto de continuidade
 
-Última entrega documentada: 0.6.20 instalada com jogo fechado. A 0.7.0 foi
+Última entrega documentada: 0.6.20 instalada com jogo fechado. A 0.7.1 foi
 gerada e validada localmente, sem instalação ou execução na engine.
+
+## 0.7.1 — Primeira ferrovia e pendência de fundação
+
+Estado incorporado com déficit de infraestrutura e sem `building_railway`
+entra no plano como `sed_railway_found_site`, desde que aceite
+`can_construct_building` e não tenha pedido pendente. A aprovação de ferrovia
+lê nível 0 quando não há prédio e infere conclusão quando ele aparece. A
+limpeza de pendências agora mantém o pedido de fundação (ferrovia ou
+indústria) enquanto houver níveis na fila pública e nenhum prédio; antes, a
+primeira leitura após enfileirar marcava a fundação como abandonada e liberava
+uma duplicação. Testes em `tests/test_planning.py`; 246 testes sintéticos
+aprovados. Engine e campanha pendentes.
 
 ## 0.7.0 — Fundação da indústria ausente
 

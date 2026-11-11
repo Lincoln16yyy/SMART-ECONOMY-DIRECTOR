@@ -20,6 +20,13 @@ textbox = {
  text = "sed_railway_candidate_reason"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_railway_found_reason_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 468 -1 } maximumsize = { 468 -1 }
+ text = "sed_railway_found_reason"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_plan_railway_score_visible_sgui').IsShown(GuiScope.SetRoot(State.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large

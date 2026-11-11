@@ -1725,3 +1725,25 @@ ausente e a expansão normal assume.
 244 testes sintéticos aprovados, incluindo duas revisões mensais com dois
 estados aptos e apenas uma inclusão. Geração e validação estática locais
 aprovadas; comportamento na engine continua pendente.
+
+## 2026-11-10 — Primeira ferrovia e pendência de fundação (0.7.1)
+
+A 0.7.0 permitia fundar indústria, mas não ferrovia: um estado com
+infraestrutura negativa e nenhuma ferrovia ficava só na contagem e nunca
+recebia obra. A 0.7.1 aceita esse estado como candidato normal quando ele é
+incorporado, aceita `can_construct_building` e não tem pedido pendente. A
+aprovação grava nível 0 e o livro de ferrovias infere a conclusão quando o
+prédio aparece, como já fazia com a indústria.
+
+Ao revisar o caminho, apareceu uma falha da 0.7.0: sem prédio, a limpeza de
+pendências marcava a fundação como abandonada na primeira leitura seguinte e
+removia o marcador, permitindo fundar de novo em outro estado. Agora o pedido
+de fundação permanece enquanto houver níveis na fila pública; só encerra
+quando o prédio aparece ou a fila esvazia. A regra vale para ferrovia e para
+os onze bens.
+
+246 testes sintéticos aprovados, incluindo fundação automática de ferrovia e
+persistência do pedido após diagnóstico intermediário. Geração, validação
+estática e verificação de artefatos locais aprovadas. Sem instalação, engine
+ou campanha nesta etapa; terra, permissão e concorrência reais seguem sem
+confirmação.
