@@ -2189,3 +2189,38 @@ mesmos três `unknown-field` de diário. Avisos passaram de 912 para 915: três
 Não verificado: layout real do painel, formatação do número e save/reload.
 Instalada a 0.7.19 com jogo fechado, 14 arquivos conferidos, ordem preservada e
 backup `mod_before_0.7.19_20261111_193151_185694`.
+
+## 2026-11-11 — 0.7.20: leis delegadas ao Smart Government
+
+Objetivo: fechar o item "leis" da lista de lacunas como fronteira explícita, em
+vez de silêncio, aproveitando o Smart Government Advisor que o jogador já usa.
+
+Leitura do mod de terceiro — pasta instalada `mod/Smart Government Advisor`
+(`descriptor.mod` 1.0.0, `supported_version 1.15.*`). Encontrei:
+- `sg_enabled` (país), `sg_schema_version` = 2, `sg_top_1_law` a `sg_top_3_law`
+  com ids estáveis de `data/law_ids.json`, `sg_ignored_1..3`, `sg_selected_index`;
+- efeitos próprios (`sg_rank_laws`, `sg_initialize_country`, `sg_disable_country`)
+  e um diário com widget `sg_law_advisor.gui`;
+- `data/law_ids.json` mapeia id numérico para lei, e o esquema 2 troca índices
+  posicionais por ids estáveis.
+
+Decisão — o Director não lê `sg_top_*`. Traduzir o id exigiria copiar o
+`law_ids.json` deles, que muda entre versões; o custo de manter isso correto
+não paga o ganho. O Director só lê `sg_enabled` para declarar no painel que a
+recomendação de leis está delegada. Nenhum efeito novo altera leis.
+
+Código — `sed_laws_scope` (sempre visível com o Director ativo) e
+`sed_laws_external` (visível com `sg_enabled`), com
+`sed_laws_external_visible_sgui`. Textos em PT/EN.
+
+Teste sintético — 363 aprovados; a regressão nova cobre as linhas do painel,
+a visibilidade condicional pelo `sg_enabled` no harness e a ausência de
+`activate_law` nos efeitos gerados.
+
+Estático — geração consistente, validação local 1.15, Tiger 1.19.0 com os
+mesmos três `unknown-field` de diário; avisos 915 → 917 (dois
+`brace-placement` no GUI, mesma classe dos existentes).
+
+Não verificado: exibição com os dois mods na engine e convivência dos diários.
+Instalada a 0.7.20 com jogo fechado, 14 arquivos conferidos, ordem preservada e
+backup `mod_before_0.7.20_20261111_194507_214722`.

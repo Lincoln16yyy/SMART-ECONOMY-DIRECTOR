@@ -408,6 +408,21 @@ class DiagnosisTests(unittest.TestCase):
                 self.assertEqual(child(entry.value, 'multiline'), 'yes')
                 self.assertEqual(child(entry.value, 'minimumsize'), child(entry.value, 'maximumsize'))
 
+    def test_law_guidance_is_delegated_to_the_external_advisor(self):
+        gui = outputs()['gui/journal_entry_widgets/sed_diagnostics.gui'].decode('utf-8-sig')
+        self.assertIn('text = "sed_laws_scope"', gui)
+        self.assertIn('text = "sed_laws_external"', gui)
+        definitions = script_definitions()
+        shown = child(definitions['sed_laws_external_visible_sgui'], 'is_shown')
+        c = Country(definitions)
+        c.variables['sed_enabled'] = True
+        self.assertFalse(c.condition(shown, c.country_scope()))
+        c.variables['sg_enabled'] = True
+        self.assertTrue(c.condition(shown, c.country_scope()))
+        # The Director never enacts laws; that stays with Smart Government/the player.
+        self.assertNotIn('activate_law',
+                         outputs()['common/scripted_effects/sed_effects.txt'].decode('utf-8-sig'))
+
     def test_recommendation_cards_grow_with_content_and_precede_diagnostics(self):
         text = outputs()['gui/journal_entry_widgets/sed_diagnostics.gui'].decode('utf-8-sig')
         tree = parse(text)

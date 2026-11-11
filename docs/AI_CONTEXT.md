@@ -1,23 +1,46 @@
 # Contexto de continuidade
 
-Última entrega do mod — 0.7.19 instalada com jogo fechado e 14 arquivos
-conferidos. Backup `sed_backups/mod_before_0.7.19_20261111_193151_185694`.
-Código — o painel mostra a unidade salarial observada e o seu fallback material;
-comércio exterior foi descartado por evidência (efeito removido na 1.9).
-Teste sintético — 362 testes aprovados.
+Última entrega do mod — 0.7.20 instalada com jogo fechado e 14 arquivos
+conferidos. Backup `sed_backups/mod_before_0.7.20_20261111_194507_214722`.
+Código — painel declara a fronteira de leis e reconhece o Smart Government
+Advisor instalado; unidade salarial observada no painel desde a 0.7.19.
+Comércio exterior foi descartado por evidência (efeito removido na 1.9).
+Teste sintético — 363 testes aprovados.
 Estático — geração consistente e validação local 1.15 aprovadas. Tiger 1.19.0:
-mesmos três campos de diário do vanilla 1.15 e 915 avisos de estilo (765 de
-colocação de chaves no GUI, 150 de OR de item único; +3 do mesmo tipo no GUI).
+mesmos três campos de diário do vanilla 1.15 e 917 avisos (767 de colocação de
+chaves no GUI, 150 de OR de item único).
 Carregou e Campanha — retorno com salários, unidade por estado, painel e
 pontuação de PMs seguem NÃO VERIFICADO.
 
 Ler `AGENTS.md`, `docs/agent/vic3-modding/SKILL.md` e suas referências.
-O ambiente registra o binário Tiger em `dist/tools/`, sua versão e o comando,
-e o resultado da sondagem de comércio. A pasta de documentação exportada do
-jogo continua ausente.
+O ambiente registra o Tiger, o resultado da sondagem de comércio e o Smart
+Government instalado (1.0.0, esquema 2, variáveis `sg_*`). A pasta de
+documentação exportada do jogo continua ausente.
 Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.17–0.7.19:
 conferir a unidade no painel, o desvio de fornecedor, a pontuação de PMs,
 save/reload e limpeza. Depois retomar as leituras fiscais e a fundação básica.
+
+## 0.7.20 — Leis delegadas ao Smart Government
+
+Código — o painel ganhou duas linhas: `sed_laws_scope` (leis, imposto de
+consumo e gasto discricionário ficam fora do Director) e `sed_laws_external`
+(exibida só quando o país tem `sg_enabled`), que informa que o Smart Government
+Advisor está detectado e que as recomendações dele não são repetidas aqui.
+Visibilidade por `sed_laws_external_visible_sgui`, em escopo de país. Nenhum
+efeito novo altera leis.
+
+Evidência — li o mod instalado em
+`mod/Smart Government Advisor` (1.0.0, `supported_version 1.15.*`). Ele define
+`sg_enabled`, `sg_schema_version` (esquema 2), `sg_top_1..3_law` com ids
+estáveis de `data/law_ids.json`, `sg_ignored_*` e um diário próprio. O Director
+só lê `sg_enabled`; não lê `sg_top_*` porque traduzir o id exigiria copiar o
+`law_ids.json` deles, que pode mudar entre versões.
+
+Teste sintético — regressão nova cobre as duas linhas, a visibilidade condicional
+(sem `sg_enabled` fica oculta) e a ausência de `activate_law` nos efeitos gerados.
+
+Não verificado — exibição do painel com os dois mods na engine e interação
+com os diários. Roteiro curto em `docs/MANUAL_RUNTIME_TEST.md`.
 
 ## 0.7.19 — Unidade salarial visível no painel
 

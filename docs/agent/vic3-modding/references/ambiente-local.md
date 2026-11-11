@@ -22,6 +22,10 @@ houver mudança observada no ambiente.
 - Advisor em `/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/mod/3778129206_Economy_Advisor`.
 - Supply Chain em `/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/mod/3357811223_Supply_Chain_Semi-Auto_Builder`.
 - Saves em `/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/save games`.
+- Smart Government Advisor em `mod/Smart Government Advisor` (1.0.0,
+  `supported_version 1.15.*`, do jogador). Define `sg_enabled`,
+  `sg_schema_version` (esquema 2), `sg_top_1..3_law` com ids de
+  `data/law_ids.json`, `sg_ignored_*` e diário próprio. [confirmado 2026-11-11]
 - Backups em `/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/sed_backups`.
 
 Todos esses caminhos existem. [confirmado 2026-11-11]
@@ -64,7 +68,7 @@ python3 tools/package_mod.py
 python3 tools/install_mod.py --user-data '/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3'
 ```
 
-A última entrega executou 362 testes sintéticos e instalou a versão 0.7.19
+A última entrega executou 363 testes sintéticos e instalou a versão 0.7.20
 com conferência de 14 arquivos. O último `--check` confirmou sincronia.
 [confirmado 2026-11-11]
 

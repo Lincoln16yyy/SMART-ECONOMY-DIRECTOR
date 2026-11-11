@@ -80,6 +80,8 @@ sed_set_mode_automatic_sgui = {
  effect = { sed_set_mode_automatic = yes }
 }
 sed_mode_automatic_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_mode_automatic } }
+sed_laws_external_visible_sgui = { scope = country
+ is_shown = { has_variable = sed_enabled has_variable = sg_enabled } }
 sed_investment_wage_visible_sgui = { scope = country
  is_shown = { has_variable = sed_enabled
   has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 } }

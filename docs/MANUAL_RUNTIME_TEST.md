@@ -598,3 +598,11 @@ Limites conhecidos: a unidade é média por emprego ponderado, não salário por
 profissão; `earnings` semanal está documentado apenas pela localização vanilla;
 o painel mostra a média nacional, não a leitura por estado. Divergência grande
 deve ser registrada para calibragem, não ajustada sem evidência.
+
+## Leis delegadas 0.7.20 (pendente)
+
+Com o Smart Government Advisor ativo e o Director no Automático, abrir o painel
+do Director e conferir a linha "Smart Government Advisor detectado". Sem o
+outro mod, deve aparecer apenas a linha de escopo das leis. Clicar "Atualizar
+diagnóstico" e avançar um mês não pode alterar leis, nem criar diário duplicado.
+Devolver captura do painel com e sem o mod e o trecho do `logs/error.log`.

@@ -1,5 +1,9 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.20, o painel declara que leis, imposto de consumo e gasto discricionário
+ficam fora do Director e reconhece o Smart Government Advisor quando instalado,
+sem repetir as recomendações de leis dele.
+
 Na 0.7.19, o painel mostra a unidade salarial observada (ou o fallback
 material) usada pelas decisões de oferta e pela pontuação de PMs.
 

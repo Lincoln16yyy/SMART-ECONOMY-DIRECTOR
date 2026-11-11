@@ -1286,3 +1286,10 @@ O painel exibe a unidade salarial nacional (`sed_investment_wage_unit`) quando
 `sed_investment_wage_known = 1`, com texto próprio para o fallback material.
 A leitura por estado continua interna. O comércio exterior foi descartado por
 evidência: `create_trade_route` foi removido na 1.9.
+
+## 0.7.20 — Leis delegadas ao Smart Government
+
+O painel declara que leis, imposto de consumo e gasto discricionário estão fora
+do Director e reconhece o Smart Government Advisor quando `sg_enabled` existe.
+O Director lê apenas esse marcador; os ids `sg_top_*` não são traduzidos para
+evitar duplicar o `law_ids.json` do outro mod.
