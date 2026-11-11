@@ -416,7 +416,7 @@ def effects(actions, dependencies, buildings):
             result.append(f'''   set_variable = {{ name = sed_plan_{name}_margin value = 0 }}
    set_variable = {{ name = sed_plan_{name}_output value = 0 }}
    if = {{ limit = {{ var:sed_plan_{name}_score > 0 }}
-    set_variable = {{ name = sed_plan_{name}_margin value = sed_investment_{name}_margin }}
+    set_variable = {{ name = sed_plan_{name}_margin value = sed_investment_{name}_return }}
     set_variable = {{ name = sed_plan_{name}_output value = sed_investment_{name}_output }}
    }}''')
     result.append('  }')

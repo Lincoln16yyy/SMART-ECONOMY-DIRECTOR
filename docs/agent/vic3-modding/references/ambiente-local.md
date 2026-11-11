@@ -64,7 +64,7 @@ python3 tools/package_mod.py
 python3 tools/install_mod.py --user-data '/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3'
 ```
 
-A última entrega executou 352 testes sintéticos e instalou a versão 0.7.16
+A última entrega executou 359 testes sintéticos e instalou a versão 0.7.17
 com conferência de 14 arquivos. O último `--check` confirmou sincronia.
 [confirmado 2026-11-11]
 
@@ -75,6 +75,15 @@ Os passos de inicialização em debug, abertura do console e diretório final
 precisam ser confirmados na engine antes de serem registrados como verificados.
 
 ## Evidência de comportamento
+
+- No vanilla 1.15 instalado, `earnings` é valor adicionado semanal de escopo de
+  prédio: `EARNINGS_BREAKDOWN` mostra `Value: GetEarnings` contra
+  `Revenue: GetLastRevenue` mais despesas de material, e
+  `BUILDING_BALANCE_BREAKDOWN` chama essa base de "Weekly Revenue".
+  `TOOLTIP_BUILDING_HEALTH_WORLD` mostra `Earnings` ao lado de
+  `GetLastWagesExpenses`, e `TRIGGER_WEEKLY_PROFIT` confirma `weekly_profit`.
+  Todos em `localization/english/interfaces_l_english.yml` e
+  `triggers_l_english.yml`. [confirmado 2026-11-11]
 
 - A captura enviada pelo usuário mostrou a construção básica de papel
   permitida, com 30 de madeira e 40 de papel por nível. A captura confirma

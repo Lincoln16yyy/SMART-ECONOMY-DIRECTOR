@@ -453,6 +453,10 @@ sed_disable_country = {
  remove_variable = sed_investment_market_paper_upper
  remove_variable = sed_investment_market_sulfur_lower
  remove_variable = sed_investment_market_sulfur_upper
+ remove_variable = sed_investment_wage_cost
+ remove_variable = sed_investment_wage_jobs
+ remove_variable = sed_investment_wage_unit
+ remove_variable = sed_investment_wage_known
  remove_variable = sed_plan_count
  remove_variable = sed_plan_goal
  remove_variable = sed_fiscal_status
@@ -821,6 +825,10 @@ sed_disable_country = {
   remove_variable = sed_investment_local_paper_upper
   remove_variable = sed_investment_local_sulfur_lower
   remove_variable = sed_investment_local_sulfur_upper
+  remove_variable = sed_investment_wage_cost
+  remove_variable = sed_investment_wage_jobs
+  remove_variable = sed_investment_wage_unit
+  remove_variable = sed_investment_wage_known
   remove_variable = sed_wood_found_pm_pending
   remove_variable = sed_iron_found_pm_pending
   remove_variable = sed_coal_found_pm_pending
@@ -4632,7 +4640,7 @@ sed_refresh_national_plan = {
    set_variable = { name = sed_plan_wood_margin value = 0 }
    set_variable = { name = sed_plan_wood_output value = 0 }
    if = { limit = { var:sed_plan_wood_score > 0 }
-    set_variable = { name = sed_plan_wood_margin value = sed_investment_wood_margin }
+    set_variable = { name = sed_plan_wood_margin value = sed_investment_wood_return }
     set_variable = { name = sed_plan_wood_output value = sed_investment_wood_output }
    }
    set_variable = { name = sed_plan_iron_rank value = 0 }
@@ -4645,7 +4653,7 @@ sed_refresh_national_plan = {
    set_variable = { name = sed_plan_iron_margin value = 0 }
    set_variable = { name = sed_plan_iron_output value = 0 }
    if = { limit = { var:sed_plan_iron_score > 0 }
-    set_variable = { name = sed_plan_iron_margin value = sed_investment_iron_margin }
+    set_variable = { name = sed_plan_iron_margin value = sed_investment_iron_return }
     set_variable = { name = sed_plan_iron_output value = sed_investment_iron_output }
    }
    set_variable = { name = sed_plan_coal_rank value = 0 }
@@ -4658,7 +4666,7 @@ sed_refresh_national_plan = {
    set_variable = { name = sed_plan_coal_margin value = 0 }
    set_variable = { name = sed_plan_coal_output value = 0 }
    if = { limit = { var:sed_plan_coal_score > 0 }
-    set_variable = { name = sed_plan_coal_margin value = sed_investment_coal_margin }
+    set_variable = { name = sed_plan_coal_margin value = sed_investment_coal_return }
     set_variable = { name = sed_plan_coal_output value = sed_investment_coal_output }
    }
    set_variable = { name = sed_plan_grain_rank value = 0 }
@@ -4671,7 +4679,7 @@ sed_refresh_national_plan = {
    set_variable = { name = sed_plan_grain_margin value = 0 }
    set_variable = { name = sed_plan_grain_output value = 0 }
    if = { limit = { var:sed_plan_grain_score > 0 }
-    set_variable = { name = sed_plan_grain_margin value = sed_investment_grain_margin }
+    set_variable = { name = sed_plan_grain_margin value = sed_investment_grain_return }
     set_variable = { name = sed_plan_grain_output value = sed_investment_grain_output }
    }
    set_variable = { name = sed_plan_fabric_rank value = 0 }
@@ -4684,7 +4692,7 @@ sed_refresh_national_plan = {
    set_variable = { name = sed_plan_fabric_margin value = 0 }
    set_variable = { name = sed_plan_fabric_output value = 0 }
    if = { limit = { var:sed_plan_fabric_score > 0 }
-    set_variable = { name = sed_plan_fabric_margin value = sed_investment_fabric_margin }
+    set_variable = { name = sed_plan_fabric_margin value = sed_investment_fabric_return }
     set_variable = { name = sed_plan_fabric_output value = sed_investment_fabric_output }
    }
    set_variable = { name = sed_plan_tools_rank value = 0 }
@@ -4697,7 +4705,7 @@ sed_refresh_national_plan = {
    set_variable = { name = sed_plan_tools_margin value = 0 }
    set_variable = { name = sed_plan_tools_output value = 0 }
    if = { limit = { var:sed_plan_tools_score > 0 }
-    set_variable = { name = sed_plan_tools_margin value = sed_investment_tools_margin }
+    set_variable = { name = sed_plan_tools_margin value = sed_investment_tools_return }
     set_variable = { name = sed_plan_tools_output value = sed_investment_tools_output }
    }
    set_variable = { name = sed_plan_groceries_rank value = 0 }
@@ -4709,7 +4717,7 @@ sed_refresh_national_plan = {
    set_variable = { name = sed_plan_groceries_margin value = 0 }
    set_variable = { name = sed_plan_groceries_output value = 0 }
    if = { limit = { var:sed_plan_groceries_score > 0 }
-    set_variable = { name = sed_plan_groceries_margin value = sed_investment_groceries_margin }
+    set_variable = { name = sed_plan_groceries_margin value = sed_investment_groceries_return }
     set_variable = { name = sed_plan_groceries_output value = sed_investment_groceries_output }
    }
    set_variable = { name = sed_plan_clothes_rank value = 0 }
@@ -4721,7 +4729,7 @@ sed_refresh_national_plan = {
    set_variable = { name = sed_plan_clothes_margin value = 0 }
    set_variable = { name = sed_plan_clothes_output value = 0 }
    if = { limit = { var:sed_plan_clothes_score > 0 }
-    set_variable = { name = sed_plan_clothes_margin value = sed_investment_clothes_margin }
+    set_variable = { name = sed_plan_clothes_margin value = sed_investment_clothes_return }
     set_variable = { name = sed_plan_clothes_output value = sed_investment_clothes_output }
    }
    set_variable = { name = sed_plan_small_arms_rank value = 0 }
@@ -4734,7 +4742,7 @@ sed_refresh_national_plan = {
    set_variable = { name = sed_plan_small_arms_margin value = 0 }
    set_variable = { name = sed_plan_small_arms_output value = 0 }
    if = { limit = { var:sed_plan_small_arms_score > 0 }
-    set_variable = { name = sed_plan_small_arms_margin value = sed_investment_small_arms_margin }
+    set_variable = { name = sed_plan_small_arms_margin value = sed_investment_small_arms_return }
     set_variable = { name = sed_plan_small_arms_output value = sed_investment_small_arms_output }
    }
    set_variable = { name = sed_plan_artillery_rank value = 0 }
@@ -4747,7 +4755,7 @@ sed_refresh_national_plan = {
    set_variable = { name = sed_plan_artillery_margin value = 0 }
    set_variable = { name = sed_plan_artillery_output value = 0 }
    if = { limit = { var:sed_plan_artillery_score > 0 }
-    set_variable = { name = sed_plan_artillery_margin value = sed_investment_artillery_margin }
+    set_variable = { name = sed_plan_artillery_margin value = sed_investment_artillery_return }
     set_variable = { name = sed_plan_artillery_output value = sed_investment_artillery_output }
    }
    set_variable = { name = sed_plan_ammunition_rank value = 0 }
@@ -4760,7 +4768,7 @@ sed_refresh_national_plan = {
    set_variable = { name = sed_plan_ammunition_margin value = 0 }
    set_variable = { name = sed_plan_ammunition_output value = 0 }
    if = { limit = { var:sed_plan_ammunition_score > 0 }
-    set_variable = { name = sed_plan_ammunition_margin value = sed_investment_ammunition_margin }
+    set_variable = { name = sed_plan_ammunition_margin value = sed_investment_ammunition_return }
     set_variable = { name = sed_plan_ammunition_output value = sed_investment_ammunition_output }
    }
    set_variable = { name = sed_plan_paper_rank value = 0 }
@@ -4772,7 +4780,7 @@ sed_refresh_national_plan = {
    set_variable = { name = sed_plan_paper_margin value = 0 }
    set_variable = { name = sed_plan_paper_output value = 0 }
    if = { limit = { var:sed_plan_paper_score > 0 }
-    set_variable = { name = sed_plan_paper_margin value = sed_investment_paper_margin }
+    set_variable = { name = sed_plan_paper_margin value = sed_investment_paper_return }
     set_variable = { name = sed_plan_paper_output value = sed_investment_paper_output }
    }
   }
@@ -8403,6 +8411,343 @@ sed_refresh_investment_prices = {
    set_variable = { name = sed_investment_local_paper_upper value = sed_investment_observed_price_paper_upper }
    set_variable = { name = sed_investment_local_sulfur_lower value = sed_investment_observed_price_sulfur_lower }
    set_variable = { name = sed_investment_local_sulfur_upper value = sed_investment_observed_price_sulfur_upper }
+  }
+  sed_refresh_investment_wages = yes
+ }
+}
+sed_refresh_investment_wages = {
+ set_variable = { name = sed_investment_wage_cost value = 0 }
+ set_variable = { name = sed_investment_wage_jobs value = 0 }
+ set_variable = { name = sed_investment_wage_unit value = 0 }
+ set_variable = { name = sed_investment_wage_known value = 0 }
+ every_scope_state = {
+  set_variable = { name = sed_investment_wage_cost value = 0 }
+  set_variable = { name = sed_investment_wage_jobs value = 0 }
+  if = { limit = { has_building = building_logging_camp
+   b:building_logging_camp = { level > 0 occupancy >= 0.8 has_failed_hires = no
+    building_has_goods_shortage = no is_subsidized = no earnings > 0
+    OR = { has_active_production_method = pm_simple_forestry has_active_production_method = pm_saw_mills has_active_production_method = pm_electric_saw_mills }
+    OR = { has_active_production_method = pm_no_hardwood has_active_production_method = pm_hardwood has_active_production_method = pm_increased_hardwood }
+    OR = { has_active_production_method = pm_no_equipment has_active_production_method = pm_steam_donkey_building_logging_camp has_active_production_method = pm_chainsaws }
+    OR = { has_active_production_method = pm_road_carts has_active_production_method = pm_rail_transport_building_logging_camp has_active_production_method = pm_log_carts }
+    weekly_profit <= earnings
+   }
+   sed_investment_logging_camp_weighted_jobs > 0
+  }
+   change_variable = { name = sed_investment_wage_cost add = {
+    value = b:building_logging_camp.earnings subtract = b:building_logging_camp.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_logging_camp_weighted_jobs
+    multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy
+   } }
+  }
+  if = { limit = { has_building = building_iron_mine
+   b:building_iron_mine = { level > 0 occupancy >= 0.8 has_failed_hires = no
+    building_has_goods_shortage = no is_subsidized = no earnings > 0
+    OR = { has_active_production_method = pm_picks_and_shovels_building_iron_mine has_active_production_method = pm_atmospheric_engine_pump_building_iron_mine has_active_production_method = pm_condensing_engine_pump_building_iron_mine has_active_production_method = pm_diesel_pump_building_iron_mine }
+    OR = { has_active_production_method = pm_no_explosives has_active_production_method = pm_nitroglycerin_building_iron_mine has_active_production_method = pm_dynamite_building_iron_mine }
+    OR = { has_active_production_method = pm_no_steam_automation has_active_production_method = pm_steam_donkey_mine }
+    OR = { has_active_production_method = pm_road_carts has_active_production_method = pm_rail_transport_mine }
+    weekly_profit <= earnings
+   }
+   sed_investment_iron_mine_weighted_jobs > 0
+  }
+   change_variable = { name = sed_investment_wage_cost add = {
+    value = b:building_iron_mine.earnings subtract = b:building_iron_mine.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_iron_mine_weighted_jobs
+    multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy
+   } }
+  }
+  if = { limit = { has_building = building_coal_mine
+   b:building_coal_mine = { level > 0 occupancy >= 0.8 has_failed_hires = no
+    building_has_goods_shortage = no is_subsidized = no earnings > 0
+    OR = { has_active_production_method = pm_picks_and_shovels_building_coal_mine has_active_production_method = pm_atmospheric_engine_pump_building_coal_mine has_active_production_method = pm_condensing_engine_pump_building_coal_mine has_active_production_method = pm_diesel_pump_building_coal_mine }
+    OR = { has_active_production_method = pm_no_explosives has_active_production_method = pm_nitroglycerin_building_coal_mine has_active_production_method = pm_dynamite_building_coal_mine }
+    OR = { has_active_production_method = pm_no_steam_automation has_active_production_method = pm_steam_donkey_building_coal_mine }
+    OR = { has_active_production_method = pm_road_carts has_active_production_method = pm_rail_transport_mine }
+    weekly_profit <= earnings
+   }
+   sed_investment_coal_mine_weighted_jobs > 0
+  }
+   change_variable = { name = sed_investment_wage_cost add = {
+    value = b:building_coal_mine.earnings subtract = b:building_coal_mine.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_coal_mine_weighted_jobs
+    multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy
+   } }
+  }
+  if = { limit = { has_building = building_wheat_farm
+   b:building_wheat_farm = { level > 0 occupancy >= 0.8 has_failed_hires = no
+    building_has_goods_shortage = no is_subsidized = no earnings > 0
+    OR = { has_active_production_method = pm_simple_farming has_active_production_method = pm_herring_meal_farming has_active_production_method = pm_soil_enriching_farming has_active_production_method = pm_fertilization has_active_production_method = pm_chemical_fertilizer }
+    OR = { has_active_production_method = pm_no_secondary has_active_production_method = pm_citrus_orchards has_active_production_method = pm_sugar_beets }
+    OR = { has_active_production_method = pm_tools_disabled has_active_production_method = pm_tools has_active_production_method = pm_steam_threshers has_active_production_method = pm_tractors has_active_production_method = pm_compression_ignition_tractors }
+    weekly_profit <= earnings
+   }
+   sed_investment_wheat_farm_weighted_jobs > 0
+  }
+   change_variable = { name = sed_investment_wage_cost add = {
+    value = b:building_wheat_farm.earnings subtract = b:building_wheat_farm.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_wheat_farm_weighted_jobs
+    multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy
+   } }
+  }
+  if = { limit = { has_building = building_rye_farm
+   b:building_rye_farm = { level > 0 occupancy >= 0.8 has_failed_hires = no
+    building_has_goods_shortage = no is_subsidized = no earnings > 0
+    OR = { has_active_production_method = pm_simple_farming has_active_production_method = pm_soil_enriching_farming has_active_production_method = pm_fertilization has_active_production_method = pm_chemical_fertilizer }
+    OR = { has_active_production_method = pm_no_secondary has_active_production_method = pm_potatoes has_active_production_method = pm_apple_orchards has_active_production_method = pm_sugar_beets }
+    OR = { has_active_production_method = pm_tools_disabled has_active_production_method = pm_tools has_active_production_method = pm_steam_threshers has_active_production_method = pm_tractors has_active_production_method = pm_compression_ignition_tractors }
+    weekly_profit <= earnings
+   }
+   sed_investment_rye_farm_weighted_jobs > 0
+  }
+   change_variable = { name = sed_investment_wage_cost add = {
+    value = b:building_rye_farm.earnings subtract = b:building_rye_farm.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_rye_farm_weighted_jobs
+    multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy
+   } }
+  }
+  if = { limit = { has_building = building_rice_farm
+   b:building_rice_farm = { level > 0 occupancy >= 0.8 has_failed_hires = no
+    building_has_goods_shortage = no is_subsidized = no earnings > 0
+    OR = { has_active_production_method = pm_simple_farming_building_rice_farm has_active_production_method = pm_herring_meal_farming_building_rice_farm has_active_production_method = pm_soil_enriching_farming_building_rice_farm has_active_production_method = pm_fertilization_building_rice_farm has_active_production_method = pm_chemical_fertilizer_building_rice_farm }
+    OR = { has_active_production_method = pm_no_secondary has_active_production_method = pm_fig_orchards_building_rice_farm }
+    OR = { has_active_production_method = pm_tools_disabled has_active_production_method = pm_tools_building_rice_farm has_active_production_method = pm_steam_threshers_building_rice_farm }
+    weekly_profit <= earnings
+   }
+   sed_investment_rice_farm_weighted_jobs > 0
+  }
+   change_variable = { name = sed_investment_wage_cost add = {
+    value = b:building_rice_farm.earnings subtract = b:building_rice_farm.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_rice_farm_weighted_jobs
+    multiply = b:building_rice_farm.level multiply = b:building_rice_farm.occupancy
+   } }
+  }
+  if = { limit = { has_building = building_maize_farm
+   b:building_maize_farm = { level > 0 occupancy >= 0.8 has_failed_hires = no
+    building_has_goods_shortage = no is_subsidized = no earnings > 0
+    OR = { has_active_production_method = pm_simple_farming has_active_production_method = pm_soil_enriching_farming has_active_production_method = pm_fertilization has_active_production_method = pm_chemical_fertilizer }
+    OR = { has_active_production_method = pm_no_secondary has_active_production_method = pm_citrus_orchards }
+    OR = { has_active_production_method = pm_tools_disabled has_active_production_method = pm_tools has_active_production_method = pm_steam_threshers has_active_production_method = pm_tractors has_active_production_method = pm_compression_ignition_tractors }
+    weekly_profit <= earnings
+   }
+   sed_investment_maize_farm_weighted_jobs > 0
+  }
+   change_variable = { name = sed_investment_wage_cost add = {
+    value = b:building_maize_farm.earnings subtract = b:building_maize_farm.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_maize_farm_weighted_jobs
+    multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy
+   } }
+  }
+  if = { limit = { has_building = building_millet_farm
+   b:building_millet_farm = { level > 0 occupancy >= 0.8 has_failed_hires = no
+    building_has_goods_shortage = no is_subsidized = no earnings > 0
+    OR = { has_active_production_method = pm_simple_farming has_active_production_method = pm_soil_enriching_farming has_active_production_method = pm_fertilization has_active_production_method = pm_chemical_fertilizer }
+    OR = { has_active_production_method = pm_no_secondary has_active_production_method = pm_fig_orchards }
+    OR = { has_active_production_method = pm_tools_disabled has_active_production_method = pm_tools has_active_production_method = pm_steam_threshers has_active_production_method = pm_tractors has_active_production_method = pm_compression_ignition_tractors }
+    weekly_profit <= earnings
+   }
+   sed_investment_millet_farm_weighted_jobs > 0
+  }
+   change_variable = { name = sed_investment_wage_cost add = {
+    value = b:building_millet_farm.earnings subtract = b:building_millet_farm.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_millet_farm_weighted_jobs
+    multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy
+   } }
+  }
+  if = { limit = { has_building = building_cotton_plantation
+   b:building_cotton_plantation = { level > 0 occupancy >= 0.8 has_failed_hires = no
+    building_has_goods_shortage = no is_subsidized = no earnings > 0
+    OR = { has_active_production_method = default_building_cotton_plantation has_active_production_method = automatic_irrigation_building_cotton_plantation }
+    OR = { has_active_production_method = slave_exploitation_cotton has_active_production_method = worker_exploitation_cotton has_active_production_method = default_labour }
+    OR = { has_active_production_method = pm_road_carts has_active_production_method = pm_steam_rail_transport }
+    weekly_profit <= earnings
+   }
+   sed_investment_cotton_plantation_weighted_jobs > 0
+  }
+   change_variable = { name = sed_investment_wage_cost add = {
+    value = b:building_cotton_plantation.earnings subtract = b:building_cotton_plantation.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_cotton_plantation_weighted_jobs
+    multiply = b:building_cotton_plantation.level multiply = b:building_cotton_plantation.occupancy
+   } }
+  }
+  if = { limit = { has_building = building_livestock_ranch
+   b:building_livestock_ranch = { level > 0 occupancy >= 0.8 has_failed_hires = no
+    building_has_goods_shortage = no is_subsidized = no earnings > 0
+    OR = { has_active_production_method = pm_open_air_stockyards has_active_production_method = pm_butchering_tools has_active_production_method = pm_slaughterhouses has_active_production_method = pm_mechanized_slaughtering }
+    OR = { has_active_production_method = pm_simple_ranch has_active_production_method = pm_sheep_farms has_active_production_method = pm_intensive_grazing_ranch }
+    OR = { has_active_production_method = pm_standard_fences has_active_production_method = pm_barbed_wire_fences has_active_production_method = pm_electric_fencing }
+    OR = { has_active_production_method = pm_unrefrigerated has_active_production_method = pm_refrigerated_storage_building_livestock_ranch has_active_production_method = pm_refrigerated_rail_cars_building_livestock_ranch }
+    weekly_profit <= earnings
+   }
+   sed_investment_livestock_ranch_weighted_jobs > 0
+  }
+   change_variable = { name = sed_investment_wage_cost add = {
+    value = b:building_livestock_ranch.earnings subtract = b:building_livestock_ranch.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_livestock_ranch_weighted_jobs
+    multiply = b:building_livestock_ranch.level multiply = b:building_livestock_ranch.occupancy
+   } }
+  }
+  if = { limit = { has_building = building_tooling_workshop
+   b:building_tooling_workshop = { level > 0 occupancy >= 0.8 has_failed_hires = no
+    building_has_goods_shortage = no is_subsidized = no earnings > 0
+    OR = { has_active_production_method = pm_crude_tools has_active_production_method = pm_pig_iron has_active_production_method = pm_steel has_active_production_method = pm_rubber_grips }
+    OR = { has_active_production_method = pm_automation_disabled has_active_production_method = pm_watertube_boiler_building_tooling_workshop has_active_production_method = pm_rotary_valve_engine_building_tooling_workshop has_active_production_method = pm_assembly_lines_building_tooling_workshop }
+    weekly_profit <= earnings
+   }
+   sed_investment_tooling_workshop_weighted_jobs > 0
+  }
+   change_variable = { name = sed_investment_wage_cost add = {
+    value = b:building_tooling_workshop.earnings subtract = b:building_tooling_workshop.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_tooling_workshop_weighted_jobs
+    multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy
+   } }
+  }
+  if = { limit = { has_building = building_food_industry
+   b:building_food_industry = { level > 0 occupancy >= 0.8 has_failed_hires = no
+    building_has_goods_shortage = no is_subsidized = no earnings > 0
+    OR = { has_active_production_method = pm_bakery has_active_production_method = pm_sweeteners has_active_production_method = pm_baking_powder }
+    OR = { has_active_production_method = pm_disabled_canning has_active_production_method = pm_cannery has_active_production_method = pm_cannery_fish has_active_production_method = pm_vacuum_canning has_active_production_method = pm_vacuum_canning_principle_3 }
+    OR = { has_active_production_method = pm_disabled_distillery has_active_production_method = pm_pot_stills has_active_production_method = pm_patent_stills }
+    OR = { has_active_production_method = pm_manual_dough_processing has_active_production_method = pm_automated_bakery }
+    weekly_profit <= earnings
+   }
+   sed_investment_food_industry_weighted_jobs > 0
+  }
+   change_variable = { name = sed_investment_wage_cost add = {
+    value = b:building_food_industry.earnings subtract = b:building_food_industry.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_food_industry_weighted_jobs
+    multiply = b:building_food_industry.level multiply = b:building_food_industry.occupancy
+   } }
+  }
+  if = { limit = { has_building = building_textile_mill
+   b:building_textile_mill = { level > 0 occupancy >= 0.8 has_failed_hires = no
+    building_has_goods_shortage = no is_subsidized = no earnings > 0
+    OR = { has_active_production_method = pm_handsewn_clothes has_active_production_method = pm_dye_workshops has_active_production_method = pm_sewing_machines has_active_production_method = pm_electric_sewing_machines }
+    OR = { has_active_production_method = pm_no_luxury_clothes has_active_production_method = pm_craftsman_sewing has_active_production_method = pm_elastics }
+    OR = { has_active_production_method = pm_traditional_looms has_active_production_method = pm_mechanized_looms has_active_production_method = pm_automatic_power_looms }
+    weekly_profit <= earnings
+   }
+   sed_investment_textile_mill_weighted_jobs > 0
+  }
+   change_variable = { name = sed_investment_wage_cost add = {
+    value = b:building_textile_mill.earnings subtract = b:building_textile_mill.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_textile_mill_weighted_jobs
+    multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy
+   } }
+  }
+  if = { limit = { has_building = building_arms_industry
+   b:building_arms_industry = { level > 0 occupancy >= 0.8 has_failed_hires = no
+    building_has_goods_shortage = no is_subsidized = no earnings > 0
+    OR = { has_active_production_method = pm_muskets has_active_production_method = pm_rifles has_active_production_method = pm_repeaters has_active_production_method = pm_bolt_action_rifles }
+    OR = { has_active_production_method = pm_automation_disabled has_active_production_method = pm_rotary_valve_engine_building_arms_industry has_active_production_method = pm_assembly_lines_building_arms_industry }
+    weekly_profit <= earnings
+   }
+   sed_investment_arms_industry_weighted_jobs > 0
+  }
+   change_variable = { name = sed_investment_wage_cost add = {
+    value = b:building_arms_industry.earnings subtract = b:building_arms_industry.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_arms_industry_weighted_jobs
+    multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy
+   } }
+  }
+  if = { limit = { has_building = building_artillery_foundry
+   b:building_artillery_foundry = { level > 0 occupancy >= 0.8 has_failed_hires = no
+    building_has_goods_shortage = no is_subsidized = no earnings > 0
+    OR = { has_active_production_method = pm_cannons has_active_production_method = pm_bronze_cannons has_active_production_method = pm_smoothbores has_active_production_method = pm_bronze_smoothbores has_active_production_method = pm_breech_loaders has_active_production_method = pm_recoiled_barrels }
+    OR = { has_active_production_method = pm_automation_disabled has_active_production_method = pm_rotary_valve_engine_building_arms_industry has_active_production_method = pm_assembly_lines_building_arms_industry }
+    weekly_profit <= earnings
+   }
+   sed_investment_artillery_foundry_weighted_jobs > 0
+  }
+   change_variable = { name = sed_investment_wage_cost add = {
+    value = b:building_artillery_foundry.earnings subtract = b:building_artillery_foundry.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_artillery_foundry_weighted_jobs
+    multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy
+   } }
+  }
+  if = { limit = { has_building = building_munition_plant
+   b:building_munition_plant = { level > 0 occupancy >= 0.8 has_failed_hires = no
+    building_has_goods_shortage = no is_subsidized = no earnings > 0
+    OR = { has_active_production_method = pm_percussion_caps has_active_production_method = pm_explosive_shells }
+    OR = { has_active_production_method = pm_automation_disabled has_active_production_method = pm_rotary_valve_engine_building_munition_plant has_active_production_method = pm_assembly_lines_building_munition_plant }
+    weekly_profit <= earnings
+   }
+   sed_investment_munition_plant_weighted_jobs > 0
+  }
+   change_variable = { name = sed_investment_wage_cost add = {
+    value = b:building_munition_plant.earnings subtract = b:building_munition_plant.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_munition_plant_weighted_jobs
+    multiply = b:building_munition_plant.level multiply = b:building_munition_plant.occupancy
+   } }
+  }
+  if = { limit = { has_building = building_paper_mill
+   b:building_paper_mill = { level > 0 occupancy >= 0.8 has_failed_hires = no
+    building_has_goods_shortage = no is_subsidized = no earnings > 0
+    OR = { has_active_production_method = pm_pulp_pressing has_active_production_method = pm_sulfite_pulping has_active_production_method = pm_bleached_paper }
+    OR = { has_active_production_method = pm_automation_disabled has_active_production_method = pm_watertube_boiler_building_paper_mill has_active_production_method = pm_rotary_valve_engine_building_paper_mill }
+    weekly_profit <= earnings
+   }
+   sed_investment_paper_mill_weighted_jobs > 0
+  }
+   change_variable = { name = sed_investment_wage_cost add = {
+    value = b:building_paper_mill.earnings subtract = b:building_paper_mill.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_paper_mill_weighted_jobs
+    multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy
+   } }
+  }
+  owner = {
+   change_variable = { name = sed_investment_wage_cost add = prev.var:sed_investment_wage_cost }
+   change_variable = { name = sed_investment_wage_jobs add = prev.var:sed_investment_wage_jobs }
+  }
+ }
+ if = { limit = { var:sed_investment_wage_jobs > 0 }
+  set_variable = { name = sed_investment_wage_unit value = {
+   value = var:sed_investment_wage_cost divide = var:sed_investment_wage_jobs
+  } }
+  set_variable = { name = sed_investment_wage_known value = 1 }
+ }
+ every_scope_state = {
+  set_variable = { name = sed_investment_wage_known value = owner.var:sed_investment_wage_known }
+  set_variable = { name = sed_investment_wage_unit value = owner.var:sed_investment_wage_unit }
+  if = { limit = { var:sed_investment_wage_jobs > 0 }
+   set_variable = { name = sed_investment_wage_unit value = {
+    value = var:sed_investment_wage_cost divide = var:sed_investment_wage_jobs
+   } }
+   set_variable = { name = sed_investment_wage_known value = 1 }
   }
  }
 }

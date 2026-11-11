@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.16'
+VERSION = '0.7.17'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -1732,7 +1732,7 @@ sed_{good}_candidate_eligible = {{
  OR = {{
   owner = {{ {shortage} }}
   owner = {{ has_variable = sed_input_priority_{good} }}
-  sed_investment_{good}_margin > 0
+  sed_investment_{good}_return > 0
  }}
 }}
 ''')
@@ -1808,16 +1808,16 @@ sed_{good}_{variant_id(variant)}_operable = {{
                     comparison = '>' if other_index < index else '>='
                     result.append(f''' OR = {{
   NOT = {{ sed_{good}_{other_name}_investment_eligible = yes }}
-  AND = {{ sed_investment_{name}_margin >= 0 sed_investment_{other_name}_margin < 0 }}
+  AND = {{ sed_investment_{name}_return >= 0 sed_investment_{other_name}_return < 0 }}
   AND = {{
    OR = {{
-    AND = {{ sed_investment_{name}_margin >= 0 sed_investment_{other_name}_margin >= 0 }}
-    AND = {{ sed_investment_{name}_margin < 0 sed_investment_{other_name}_margin < 0 }}
+    AND = {{ sed_investment_{name}_return >= 0 sed_investment_{other_name}_return >= 0 }}
+    AND = {{ sed_investment_{name}_return < 0 sed_investment_{other_name}_return < 0 }}
    }}
    OR = {{
     sed_investment_{name}_output > sed_investment_{other_name}_output
     AND = {{ sed_investment_{name}_output = sed_investment_{other_name}_output
-     sed_investment_{name}_margin {comparison} sed_investment_{other_name}_margin
+     sed_investment_{name}_return {comparison} sed_investment_{other_name}_return
     }}
    }}
   }}

@@ -1,17 +1,17 @@
-# Estado dos requisitos — 0.7.16
+# Estado dos requisitos — 0.7.17
 
 ## Protocolo de evidência adotado
 
 As orientações do usuário estão em `AGENTS.md` e
 `docs/agent/vic3-modding/SKILL.md`, com fontes e ambiente em `references/`.
 Código, Teste sintético, Estático, Carregou e Campanha identificam evidências
-distintas. A 0.7.16 tem Código e Estático registrados, com execução do Tiger 1.19.0.
+distintas. A 0.7.17 tem Código e Estático registrados, com execução do Tiger 1.19.0.
 A verificação pelo Tiger levou à correção de nove leituras removidas e de um escopo inadequado.
 Restam três campos do diário apontados como desconhecidos, presentes no vanilla
 1.15 e documentados no jogo. O Tiger declara suporte até 1.13.5. Os avisos de
 formatação e de OR de um item permanecem visíveis. A documentação exportada
-continua ausente. Carregou e Campanha das novas leituras e da prontidão seguem
-NÃO VERIFICADO. Teste sintético — 352 testes aprovados.
+continua ausente. Carregou e Campanha das leituras fiscais, da prontidão e do
+novo retorno salarial seguem NÃO VERIFICADO. Teste sintético — 359 testes aprovados.
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.
@@ -21,7 +21,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | --- | --- | --- |
 | Diagnóstico econômico e diário | Implementados, com métricas, data e atualização manual/mensal | Leitura e correção de snapshot observadas na campanha de 1842. Atualização do executor no diagnóstico corrigida na 0.6.16, pendente de confirmação |
 | Objetivo nacional atual | Implementado para gargalos, fiscal, crescimento/diversificação e meta industrial anual por escassez persistente | Amostragem mensal corrigida na 0.6.9. Validar seleção e transições em campanha |
-| Até três prioridades nacionais | Implementado sobre pares estado/tipo elegíveis. Desde a 0.7.11, fornecedores do mesmo bem são comparados por oferta e margem material estimada, incluindo subprodutos e insumos dos PMs. Desde a 0.7.12, preços observados do mercado e faixas locais alimentam a referência | Validar layout e dados das novas prioridades na engine |
+| Até três prioridades nacionais | Implementado sobre pares estado/tipo elegíveis. Desde a 0.7.11, fornecedores do mesmo bem são comparados por oferta e margem material estimada, incluindo subprodutos e insumos dos PMs. Desde a 0.7.12, preços observados do mercado e faixas locais alimentam a referência. Desde a 0.7.17, elegibilidade, preferência e plano usam o retorno após a folha salarial observada | Validar layout, unidade salarial e desvios de preferência na engine |
 | Setores estratégicos ausentes | Doze bens, incluindo papel desde a 0.7.14, armas, artilharia e munição; cereais cobrem cinco tipos de fazenda e tecido cobre plantação e pecuária. Desde a 0.7.0 o Automático funda a base em estado incorporado apto quando o país não tem produtor verificado | Demais bens ainda têm um único produtor. Confirmar `can_construct_building`, terra e custo real em campanha. Importações continuam fora do escopo |
 | Emprego e insumos | Na 0.7.15, fundações industriais próprias usam os insumos da configuração básica verificada e respeitam o controle externo de PMs. Filtros de ocupação, contratação e insumos, mais reserva de mão de obra na 0.6.19 e previsão de insumos adicionais por PMs e compromissos conhecidos na 0.6.20 | Na 0.7.3, fundações e pedidos próprios sem prédio também reservam trabalho e insumos. Calibrar aproximação demográfica e coeficientes. Incluir qualificações, migração e atração de trabalhadores. Calibrar insumos projetados e cobrir modificadores, comércio e produção futuros |
 | Reserva, dívida e ritmo | Guarda proporcional inicial, classificações 1–4 e construção financiada por reservas (5). Desde a 0.7.6 a reserva exigida considera a fila e o novo projeto, sem teto de 56 semanas, e o executor direto pode usar financiamento por reservas | Referência de materiais implementada na 0.6.17 e limitada por níveis/ocupação na 0.6.18. Calibrar limiares e custo real incremental, duração com fila concorrente e serviço da dívida |
@@ -35,7 +35,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Histórico | Resultado mensal datado, status externo e livro dos oito bens, ferrovia e setor de construção | Conclusão é inferida pela fila e nível; reduzir ambiguidade de cancelamento |
 | Fila sem duplicação | Guardas agregadas, nível após fila e marcas por tipo/estado | Acompanhamento relacionado na 0.6.12. Identidade, lado, investidor e reconciliação completa permanecem pendentes. Com a fila pública ocupada (0.6.25), a não duplicação depende de `level_after_queued_constructions` e das marcas por estado |
 | Planejamento de longo prazo | Direção atual, reavaliação periódica e meta anual de oferta para escassez persistente | Na 0.7.4, propagação por vários elos do catálogo, com espera por obra, alternativas e término de ciclos. Metas plurianuais, bens fora do catálogo, diversificação medida e feedback de resultados |
-| Métodos de produção | Configuração inicial em fundações acompanhadas desde a 0.7.7. Seleção inicial e, desde a 0.7.9, modernização contínua do grupo principal para gargalos, por saída e margem material estimada a preços-base, com reserva mensal de insumos. Desde a 0.7.10, recuperação de escassez por método com menor dependência de insumos e piso de saída nominal | Confirmar na engine. Preços reais, qualificações, salários por profissão, automação dos demais grupos e otimização por lucro real pendentes |
+| Métodos de produção | Configuração inicial em fundações acompanhadas desde a 0.7.7. Seleção inicial e, desde a 0.7.9, modernização contínua do grupo principal para gargalos, por saída e margem material estimada a preços-base, com reserva mensal de insumos. Desde a 0.7.10, recuperação de escassez por método com menor dependência de insumos e piso de saída nominal. A 0.7.17 fornece a unidade salarial observada aos filtros de oferta | Confirmar na engine. Preços reais, qualificações, salários por profissão, automação dos demais grupos e otimização por lucro real pendentes. A modernização ainda compara apenas margem material |
 | Economia militar | Custos, participação das despesas, guerra e cinco bens monitorados. Expansões de armas, artilharia e munição na 0.6.14, com bônus de prioridade em guerra | Confirmar leituras na engine, identificar consumo nacional, planejar indústria bélica, modernização e coordenação do recrutamento |
 | Leis, guerra e diplomacia | Fora das mutações econômicas implementadas | Mantidas sob responsabilidade dos módulos e decisões previstos pelo briefing |
 | Haiti, país rico e crise | Cenários sintéticos fiscais e de seleção | Campanhas registradas e comparáveis permanecem pendentes |

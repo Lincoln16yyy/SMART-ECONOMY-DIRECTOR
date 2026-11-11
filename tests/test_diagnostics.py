@@ -4,6 +4,7 @@ import unittest
 import zipfile
 
 from tools.build_mod import ROOT, ACTION_NAMES, INPUT_DEPENDENCIES, STATE_VARIABLES, SUPPLY_DIAGNOSTICS, SUPPLY_TARGETS, country_variables, outputs, runtime_variables
+from tools import investment
 from tools.package_mod import package
 from tools.pdx_script import parse, child, walk
 from tools.validate import validate
@@ -1154,8 +1155,12 @@ class DiagnosisTests(unittest.TestCase):
         self.assertNotIn('sed_railway_request_pending', target['variables'])
 
     def test_state_variables_are_separate_from_the_country_cleanup_registry(self):
+        # Wage readings live in both scopes; every other state variable is state-only.
+        shared = set(investment.WAGE_VARIABLES)
         self.assertEqual(set(runtime_variables()) - set(country_variables()),
-                         set(STATE_VARIABLES))
+                         set(STATE_VARIABLES) - shared)
+        self.assertLessEqual(shared, set(country_variables()))
+        self.assertLessEqual(shared, set(STATE_VARIABLES))
 
     def test_construction_candidate_requires_staffed_sector_and_free_queue(self):
         c = self.country()

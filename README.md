@@ -1,5 +1,9 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.17, a decisão de oferta desconta a folha salarial observada nos prédios
+saudáveis. A elegibilidade, a preferência entre fornecedores e o plano usam o
+retorno após salários, com a margem material como referência de reserva.
+
 Na 0.7.16, as reservas e guardas fiscais usam receitas fixas menos saldo
 operacional para medir despesas fixas. A proteção dos salários militares
 reconhece os papéis diplomáticos no escopo de país.

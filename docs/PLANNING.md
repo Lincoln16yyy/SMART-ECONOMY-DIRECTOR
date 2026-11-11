@@ -1259,3 +1259,15 @@ Avisos de formatação e OR de item único permanecem no relatório.
 Carregou e Campanha — alterações fiscais e de prontidão da 0.7.16 seguem
 NÃO VERIFICADO. A restauração e a confirmação após save/reload permanecem
 no roteiro de campanha. Previsão de lucro com salários continua pendente.
+
+## 0.7.17 — Folha salarial observada no retorno do investimento
+
+`sed_refresh_investment_wages` roda no fim da atualização de preços. Soma
+`earnings - weekly_profit` dos prédios saudáveis de cada estado e divide pelos
+empregos ponderados por `wage_weight`, gerando `sed_investment_wage_unit` por
+estado, com a média nacional como reserva. `sed_investment_<tipo>_return`
+desconta a folha do novo nível da margem material e passa a alimentar
+elegibilidade, preferência entre variantes e `sed_plan_<ação>_margin`. Sem
+amostra saudável, `sed_investment_wage_known = 0` mantém o comportamento
+anterior. Coeficientes em `data/employment_profiles.json`. Comportamento real,
+aderência ao salário pago e calibragem seguem NÃO VERIFICADO.

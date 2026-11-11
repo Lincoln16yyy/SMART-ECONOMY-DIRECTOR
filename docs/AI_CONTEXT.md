@@ -1,22 +1,57 @@
 # Contexto de continuidade
 
-Última entrega do mod — 0.7.16 instalada com jogo fechado e 14 arquivos
-conferidos. Backup `sed_backups/mod_before_0.7.16_20261111_121819_447354`.
-Código — despesas fixas derivadas de receitas e saldo fixos. Prontidão militar
-usa papéis diplomáticos no escopo de país. Variáveis e snapshots preservados.
-Teste sintético — 352 testes aprovados.
+Última entrega do mod — 0.7.17 instalada com jogo fechado e 14 arquivos
+conferidos. Backup `sed_backups/mod_before_0.7.17_20261111_184820_865266`.
+Código — retorno de investimento passa a descontar a folha salarial observada.
+`earnings` menos `weekly_profit` por prédio saudável alimenta uma unidade
+salarial por emprego ponderado; `sed_investment_<tipo>_return` substitui a
+margem material nas elegibilidades, preferências e no plano.
+Teste sintético — 359 testes aprovados (7 novos em `tests/test_investment_wages.py`).
 Estático — geração consistente e validação local 1.15 aprovadas. Tiger 1.19.0
-executado. Os nove apontamentos de leitura removida e o de escopo foram retirados.
-O Tiger declara suporte até 1.13.5. Restam três campos de diário aceitos pelo
-vanilla 1.15, além de avisos de estilo. A evidência está na seção desta entrega.
-Carregou e Campanha — leituras da 0.7.16 e fundação da 0.7.15 seguem NÃO VERIFICADO.
+executado: mesmos três campos de diário do vanilla 1.15 e 912 avisos de estilo.
+Carregou e Campanha — o novo retorno, o desvio de preferência e a unidade por
+estado seguem NÃO VERIFICADO. Gasto salarial real e calibragem pendentes.
 
 Ler `AGENTS.md`, `docs/agent/vic3-modding/SKILL.md` e suas referências.
 O ambiente registra o binário Tiger em `dist/tools/`, sua versão e o comando.
 A pasta de documentação exportada do jogo continua ausente.
-Próximo passo — avaliação econômica de custos e retorno, incluindo salários,
-usando primitivas aceitas pelo Tiger e confrontadas com o vanilla. Confirmar
-em campanha as leituras, restauração, save/reload e a fundação básica.
+Próximo passo — confirmar em campanha os valores de `sed_investment_wage_unit`
+e a classificação resultante, e retomar as leituras fiscais, a restauração,
+save/reload e a fundação básica da 0.7.15/0.7.16.
+
+## 0.7.17 — Folha salarial observada no retorno do investimento
+
+Código — `sed_refresh_investment_wages` é chamado no fim de
+`sed_refresh_investment_prices`. Para cada prédio de estado próprio, com nível
+positivo, ocupação de ao menos 80%, sem contratação falha, sem escassez de
+insumos, não subsidiado, com `earnings > 0` e `weekly_profit <= earnings`,
+soma-se `earnings - weekly_profit` como folha salarial semanal e
+`pesos de emprego × nível × ocupação` como denominador. `sed_investment_wage_unit`
+guarda o gasto por emprego ponderado; cada estado usa a própria amostra quando
+existe e, senão, a média do país. `sed_investment_wage_known = 0` mantém a
+margem material anterior.
+
+Código — `sed_investment_<tipo>_return` desconta do valor material a folha
+prevista do novo nível: pesos da configuração ativa, quando o prédio existe, e
+pesos da configuração básica, quando é fundação. `data/employment_profiles.json`
+traz emprego e `weighted_jobs` por método de 17 tipos de prédio, extraídos de
+`common/production_methods` e dos `wage_weight` de `common/pop_types` locais.
+As elegibilidades, as preferências entre variantes e `sed_plan_<ação>_margin`
+passam a usar `_return`; o nome da variável do plano foi preservado.
+
+Evidência — `earnings` aparece como valor semanal ao lado de salários em
+`TOOLTIP_BUILDING_HEALTH_WORLD` e em `EARNINGS_BREAKDOWN`, ambos da
+localização vanilla; `weekly_profit` consta em `TRIGGER_WEEKLY_PROFIT` e em
+diários vanilla. `is_subsidized`, `occupancy`, `has_failed_hires` e
+`building_has_goods_shortage` têm uso vanilla no escopo de prédio.
+`owner.var:` é usado em `04_country_specific_ideological_movements.txt`.
+
+Não verificado — a folha observada inclui o que a engine classificar como
+lucro e pode divergir de salário pago; `earnings` semanal só está documentado
+pela localização; a unidade é uma média nacional/estadual, não salário por
+profissão. A renda do novo nível usa 75% da receita e 125% dos insumos, então
+o retorno é conservador e pode bloquear obras viáveis. Sem amostra saudável,
+o comportamento antigo é retomado. Confirmação em campanha pendente.
 
 ## 0.7.16 — Leituras fiscais e prontidão verificadas
 

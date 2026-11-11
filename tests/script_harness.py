@@ -50,12 +50,13 @@ def construction_sector(level=1, occupancy=1, failed_hires=False,
 
 
 def building(kind, level=1, occupancy=1, failed_hires=False, shortage=False,
-             queued_levels=0):
+             queued_levels=0, earnings=0, weekly_profit=0, subsidized=False):
     return dict(building=kind, level=level,
                 level_after_queued_constructions=level + queued_levels,
                 occupancy=occupancy, has_failed_hires=failed_hires,
                 building_has_goods_shortage=shortage,
-                __scope__=BUILDING)
+                earnings=earnings, weekly_profit=weekly_profit,
+                is_subsidized=subsidized, __scope__=BUILDING)
 
 
 class Country:

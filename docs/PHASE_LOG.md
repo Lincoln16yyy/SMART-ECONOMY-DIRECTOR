@@ -2069,3 +2069,51 @@ diplomáticos que protegem salários militares. Estático — geração consiste
 validação local 1.15, revisão Tiger, pacote e espaçamento conferidos.
 Instalada a 0.7.16 com jogo fechado e backup
 `mod_before_0.7.16_20261111_121819_447354`, com 14 arquivos conferidos.
+
+## 2026-11-11 — 0.7.17: folha salarial observada no retorno do investimento
+
+Objetivo: tirar a decisão de oferta da margem apenas material, descontando a
+folha salarial que o próprio jogo expõe por prédio.
+
+Evidência levantada antes do código:
+`TOOLTIP_BUILDING_HEALTH_WORLD` mostra `Building.GetEarnings` ao lado de
+`Building.GetLastWagesExpenses`; `EARNINGS_BREAKDOWN` mostra `Value:
+GetEarnings` contra `Revenue: GetLastRevenue` com despesas de material, e
+`BUILDING_BALANCE_BREAKDOWN` chama essa mesma base de "Weekly Revenue". Logo
+`earnings` é valor adicionado semanal e `earnings - weekly_profit` é a folha
+paga. `weekly_profit` consta em `TRIGGER_WEEKLY_PROFIT` e em diários vanilla.
+Ambas as leituras são de escopo de prédio.
+
+Código:
+- `tools/build_economy_data.py --employment-output` grava
+  `data/employment_profiles.json` com emprego e `weighted_jobs` por método dos
+  17 tipos do catálogo, usando `wage_weight` de `common/pop_types` e as
+  definições vanilla de `common/production_methods`.
+- `tools/investment.py` gera `sed_investment_<tipo>_weighted_jobs` (escopo de
+  estado, via `b:<tipo> = { has_active_production_method }`), o efeito
+  `sed_refresh_investment_wages` e `sed_investment_<tipo>_return`.
+- A amostra exige nível, ocupação de 80%, contratação sem falha, sem escassez,
+  não subsidiado, `earnings > 0`, `weekly_profit <= earnings` e todos os grupos
+  de PM reconhecidos. A unidade é por emprego ponderado; cada estado tem a sua
+  média e a média nacional serve de reserva quando não há amostra local.
+- `sed_investment_<tipo>_return` = margem material menos os pesos do novo nível
+  vezes a unidade. Elegibilidades, preferências entre variantes e
+  `sed_plan_<ação>_margin` usam o retorno.
+- Registro de variáveis: as leituras salariais vivem nos dois escopos, então
+  `tests/test_diagnostics.py` passou a tratar `investment.WAGE_VARIABLES` como
+  conjunto compartilhado.
+
+Teste sintético — 359 testes aprovados, sete novos em
+`tests/test_investment_wages.py`: unidade observada, métodos ativos, filtros de
+saúde da amostra, PM desconhecido, amostra por estado sobre a média nacional,
+desvio da preferência de cereal e limpeza na desativação.
+
+Estático — geração consistente, validação local 1.15 aprovada e Tiger 1.19.0
+com os mesmos três `unknown-field` de diário do vanilla 1.15 e 912 avisos de
+estilo.
+
+Não verificado: valor real de `earnings` semanal (só documentado na
+localização), aderência da unidade ao salário pago por profissão, possíveis
+bloqueios de obras viáveis por conservadorismo e comportamento em save/reload.
+Instalada a 0.7.17 com jogo fechado, 14 arquivos conferidos, ordem preservada e
+backup `mod_before_0.7.17_20261111_184820_865266`.
