@@ -22,6 +22,8 @@ LABELS_PT = {
 MARKET_GOODS = [good for good in GOODS if good not in LOCAL_GOODS]
 COUNTRY_VARIABLES = ['sed_input_market_margin_' + good for good in MARKET_GOODS]
 STATE_VARIABLES = ['sed_input_local_margin_' + good for good in sorted(LOCAL_GOODS & set(GOODS))]
+COUNTRY_VARIABLES += ['sed_pm_inputs_month'] + ['sed_pm_reserved_' + good for good in MARKET_GOODS]
+STATE_VARIABLES += ['sed_pm_reserved_' + good for good in sorted(LOCAL_GOODS & set(GOODS))]
 
 
 def amount_name(building, good, founding=False):
@@ -84,6 +86,9 @@ def values(founding_projects=()):
  value = 0
  sg:{good} ?= {{ add = {{ value = state_goods_production min = 0 multiply = 2 subtract = {{ value = state_goods_consumption min = 0 }} }} }}
  subtract = sed_input_pending_{good}
+ if = {{ limit = {{ owner = {{ has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key }}
+  has_variable = sed_pm_reserved_{good}
+ }} subtract = var:sed_pm_reserved_{good} }}
 }}
 sed_input_headroom_{good} = {{
  value = 0
@@ -95,6 +100,9 @@ sed_input_headroom_{good} = {{
  value = 0
  market ?= {{ mg:{good} ?= {{ add = {{ value = market_goods_sell_orders min = 0 multiply = 2 subtract = {{ value = market_goods_buy_orders min = 0 }} }} }} }}
  subtract = {{ value = 0 every_scope_state = {{ limit = {{ }} add = sed_input_pending_{good} }} }}
+ if = {{ limit = {{ has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_{good}
+ }} subtract = var:sed_pm_reserved_{good} }}
 }}
 sed_input_headroom_{good} = {{ value = owner.var:sed_input_market_margin_{good} }}''')
     return '\n'.join(result) + '\n'

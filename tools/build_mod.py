@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.7'
+VERSION = '0.7.8'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -421,7 +421,7 @@ sed_refresh_supply_candidates = {
         cleanup = '\n'.join(f' remove_variable = sed_mode_{value}' for value in other_modes)
         release = ' sed_coord_restore = yes\n sed_restore_fiscal_policy = yes\n sed_restore_wage_policy = yes\n sed_restore_military_wage_policy = yes\n' if mode != 'automatic' else ''
         if mode != 'automatic':
-            release += ' every_scope_state = {\n' + '\n'.join('  remove_variable = ' + name for name in production_methods.state_variables(SUPPLY_TARGETS)) + '\n }\n'
+            release += ' sed_clear_pm_input_reservations = yes\n every_scope_state = {\n' + '\n'.join('  remove_variable = ' + name for name in production_methods.state_variables(SUPPLY_TARGETS)) + '\n }\n'
         takeover = ''
         if mode == 'automatic':
             takeover = ' if = { limit = { has_variable = sed_enabled NOT = { has_variable = sed_coord_active } sed_coord_tools_available = yes } sed_coord_enable = yes }\n'

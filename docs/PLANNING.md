@@ -4,6 +4,31 @@
 
 
 
+
+## 0.7.8 — Escolha econômica inicial de PMs
+
+A configuração das fundações compara os métodos do grupo principal. O cálculo
+usa 75% da receita a preços-base e 125% dos insumos a preços-base. Uma
+alternativa precisa aumentar a saída do bem-alvo, melhorar a margem material
+sobre a básica, ter margem positiva e não aumentar a soma de empregos do grupo.
+Entre alternativas elegíveis, a maior margem de referência é tentada primeiro.
+Os outros grupos usam a configuração básica anterior. Tecnologia, permissão
+do jogo, insumos e reserva demográfica continuam revalidados antes da mudança.
+
+O novo `data/founding_method_economics.json` contém coeficientes de entradas,
+saídas, empregos e tecnologias do grupo principal, extraídos dos arquivos
+vanilla locais, e preços-base dos bens. A seleção é inicial e ocorre nas
+fundações acompanhadas. Modernização contínua dos prédios estabelecidos,
+salários por profissão, preços locais, qualificações e lucro real ainda
+exigem desenvolvimento e calibração.
+
+A reserva integral estressada de insumos das configurações efetivamente
+alteradas passa a integrar as leituras de margem até o fim do mês civil.
+Assim, a atualização do plano ou um diagnóstico no mesmo mês preserva o
+compromisso quando a demanda de mercado ainda não foi recalculada. A reserva
+expira na mudança do mês e é limpa na saída do Automático ou desativação.
+Essa regra pode adiar ações mesmo depois de a demanda real já incorporar o PM.
+
 ## 0.7.7 — Configuração inicial das indústrias fundadas
 
 Fundações automáticas de produtores recebem uma marca de configuração inicial

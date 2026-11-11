@@ -57,6 +57,8 @@ def validate(root=ROOT, game=None):
     startup_profiles = json.loads((ROOT / 'data/founding_production_methods.json').read_text())
     startup_methods = {(building, group['method']) for building, groups in startup_profiles.items()
                        for group in groups}
+    startup_methods.update((building, method) for building, groups in startup_profiles.items()
+                           for method in groups[0]['alternatives'])
     tax_effects = {'sed_apply_fiscal_policy', 'sed_restore_fiscal_policy'}
     wage_effects = {'sed_apply_wage_policy', 'sed_restore_wage_policy'}
     military_wage_effects = {'sed_apply_military_wage_policy', 'sed_restore_military_wage_policy'}

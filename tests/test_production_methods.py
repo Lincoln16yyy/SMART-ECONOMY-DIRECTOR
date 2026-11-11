@@ -135,6 +135,52 @@ class FoundingMethodTests(unittest.TestCase):
         self.c.run('sed_auto_apply_monthly')
         self.assertNotIn('sed_tools_found_pm_pending', self.target['variables'])
 
+    def test_higher_material_margin_selects_a_researched_logging_method(self):
+        producer = building('building_logging_camp')
+        producer['production_methods'] = ['pm_simple_forestry']
+        target = state(buildings=[producer])
+        target['variables']['sed_wood_found_pm_pending'] = 1
+        self.c.states = [target]
+        self.c.readings['technologies'] = ['steelworking']
+        self.c.run('sed_configure_founded_industries')
+        self.assertIn('pm_saw_mills', producer['production_methods'])
+        self.assertNotIn('sed_wood_found_pm_pending', target['variables'])
+
+    def test_input_shortage_falls_back_to_a_basic_configuration(self):
+        producer = building('building_logging_camp')
+        producer['production_methods'] = ['pm_simple_forestry']
+        target = state(buildings=[producer])
+        target['variables']['sed_wood_found_pm_pending'] = 1
+        self.c.states = [target]
+        self.c.readings['technologies'] = ['steelworking']
+        self.c.market_goods['tools'].update(market_goods_buy_orders=100, market_goods_sell_orders=50)
+        self.c.run('sed_configure_founded_industries')
+        self.assertIn('pm_simple_forestry', producer['production_methods'])
+        self.assertNotIn('pm_saw_mills', producer['production_methods'])
+
+    def test_more_output_with_a_worse_material_margin_keeps_the_basic_method(self):
+        self.producer['production_methods'] = ['pm_crude_tools']
+        self.c.readings['technologies'] = ['steelworking']
+        self.c.run('sed_configure_founded_industries')
+        self.assertIn('pm_crude_tools', self.producer['production_methods'])
+        self.assertNotIn('pm_pig_iron', self.producer['production_methods'])
+
+    def test_material_margin_can_select_a_stronger_tooling_configuration(self):
+        self.c.readings['technologies'] = ['steelworking', 'mechanical_tools']
+        self.c.run('sed_configure_founded_industries')
+        self.assertIn('pm_steel', self.producer['production_methods'])
+
+    def test_input_reservations_survive_refresh_and_expire_with_the_month(self):
+        self.c.market_goods['wood'].update(market_goods_buy_orders=100, market_goods_sell_orders=75)
+        self.c.run('sed_configure_founded_industries')
+        self.c.run('sed_refresh_input_readings')
+        self.assertEqual(self.c.variables['sed_input_market_margin_wood'], 12.5)
+        self.c.readings['month'] = 1
+        self.c.run('sed_refresh_input_readings')
+        self.assertEqual(self.c.variables['sed_input_market_margin_wood'], 50)
+        self.c.run('sed_configure_founded_industries')
+        self.assertEqual(self.c.variables['sed_pm_reserved_wood'], 0)
+
 
 if __name__ == '__main__':
     unittest.main()

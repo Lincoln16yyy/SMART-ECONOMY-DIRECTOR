@@ -1856,3 +1856,21 @@ falha de inclusão, confirmação, escassez, trabalho, preflight por grupo, modo
 limpeza e disputa por insumos. Gerador, validação estática, pacote e whitespace
 aprovados. Instalada com backup `mod_before_0.7.7_20261111_000840_381639`,
 conferindo os 14 arquivos. Aplicação real na engine e efeito econômico pendentes.
+
+
+## 2026-11-11 — Seleção econômica inicial de PMs (0.7.8)
+
+A configuração inicial compara métodos do grupo principal por saída e margem
+material estressada a preços-base, sem aumento de empregos no grupo. A melhor
+alternativa pesquisada e abastecida é tentada antes da configuração básica.
+Os coeficientes foram extraídos do vanilla local. As reservas de insumos das
+mudanças passam a sobreviver a releituras no mesmo mês e expiram na troca de
+mês ou na saída do Automático.
+
+291 testes sintéticos aprovados. Regressões incluem método mais produtivo,
+margem pior apesar de maior saída, falta de insumos, retorno à configuração
+básica e persistência/expiração das reservas. Gerador, validação estática,
+pacote e whitespace aprovados. Instalada com backup
+`mod_before_0.7.8_20261111_002618_879011` e conferência dos 14 arquivos.
+Lucro real, preços locais, qualificações, modernização contínua e campanha
+permanecem pendentes.

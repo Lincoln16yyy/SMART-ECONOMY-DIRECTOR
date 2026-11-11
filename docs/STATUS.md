@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.7
+# Estado dos requisitos — 0.7.8
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.
@@ -22,7 +22,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Histórico | Resultado mensal datado, status externo e livro dos oito bens, ferrovia e setor de construção | Conclusão é inferida pela fila e nível; reduzir ambiguidade de cancelamento |
 | Fila sem duplicação | Guardas agregadas, nível após fila e marcas por tipo/estado | Acompanhamento relacionado na 0.6.12. Identidade, lado, investidor e reconciliação completa permanecem pendentes. Com a fila pública ocupada (0.6.25), a não duplicação depende de `level_after_queued_constructions` e das marcas por estado |
 | Planejamento de longo prazo | Direção atual, reavaliação periódica e meta anual de oferta para escassez persistente | Na 0.7.4, propagação por vários elos do catálogo, com espera por obra, alternativas e término de ciclos. Metas plurianuais, bens fora do catálogo, diversificação medida e feedback de resultados |
-| Métodos de produção | Configuração inicial básica em fundações acompanhadas desde a 0.7.7, com verificação por grupo e reserva de insumos | Confirmar na engine. Seleção por produtividade, preços e qualificações, modernização e otimização contínua pendentes |
+| Métodos de produção | Configuração inicial em fundações acompanhadas desde a 0.7.7. Na 0.7.8, seleção do grupo principal por saída e margem material estimada a preços-base, com reserva mensal de insumos | Confirmar na engine. Preços reais, qualificações, salários por profissão, modernização e otimização contínua pendentes |
 | Economia militar | Custos, participação das despesas, guerra e cinco bens monitorados. Expansões de armas, artilharia e munição na 0.6.14, com bônus de prioridade em guerra | Confirmar leituras na engine, identificar consumo nacional, planejar indústria bélica, modernização e coordenação do recrutamento |
 | Leis, guerra e diplomacia | Fora das mutações econômicas implementadas | Mantidas sob responsabilidade dos módulos e decisões previstos pelo briefing |
 | Haiti, país rico e crise | Cenários sintéticos fiscais e de seleção | Campanhas registradas e comparáveis permanecem pendentes |

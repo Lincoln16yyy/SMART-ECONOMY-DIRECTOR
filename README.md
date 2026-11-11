@@ -1,5 +1,11 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.8, a escolha inicial de PMs compara saída e margem material de referência.
+O Automático pode selecionar um método mais produtivo com insumos disponíveis,
+ou iniciar com a configuração básica. A margem usa preços-base e estresse de
+receitas e custos. As reservas de insumos das trocas são mantidas no mês civil.
+
+
 Na 0.7.7, o Automático configura métodos básicos de produção nas indústrias
 que fundou e acompanha. A configuração passa por verificações de insumos,
 trabalho estimado e permissão do jogo. A escolha inicial de PMs está
