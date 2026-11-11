@@ -77,6 +77,7 @@ sed_disable_country = {
  sed_coord_restore = yes
  sed_restore_fiscal_policy = yes
  sed_restore_wage_policy = yes
+ sed_restore_military_wage_policy = yes
  remove_variable = sed_enabled
  remove_variable = sed_monthly_refresh
  remove_variable = sed_balance
@@ -138,6 +139,7 @@ sed_disable_country = {
  remove_variable = sed_details_visible
  remove_variable = sed_tax_level_saved
  remove_variable = sed_gov_wage_saved
+ remove_variable = sed_military_wage_saved
  remove_variable = sed_tax_last_from
  remove_variable = sed_tax_last_to
  remove_variable = sed_tax_last_year
@@ -146,6 +148,10 @@ sed_disable_country = {
  remove_variable = sed_wage_last_to
  remove_variable = sed_wage_last_year
  remove_variable = sed_wage_last_month
+ remove_variable = sed_military_wage_last_from
+ remove_variable = sed_military_wage_last_to
+ remove_variable = sed_military_wage_last_year
+ remove_variable = sed_military_wage_last_month
  remove_variable = sed_auto_review_status
  remove_variable = sed_auto_review_year
  remove_variable = sed_auto_review_month
@@ -3105,6 +3111,7 @@ sed_set_mode_manual = {
  sed_coord_restore = yes
  sed_restore_fiscal_policy = yes
  sed_restore_wage_policy = yes
+ sed_restore_military_wage_policy = yes
  remove_variable = sed_mode_manual remove_variable = sed_mode_assisted
  remove_variable = sed_mode_automatic
  set_variable = { name = sed_mode_manual value = yes }
@@ -3115,6 +3122,7 @@ sed_set_mode_assisted = {
  sed_coord_restore = yes
  sed_restore_fiscal_policy = yes
  sed_restore_wage_policy = yes
+ sed_restore_military_wage_policy = yes
  remove_variable = sed_mode_assisted remove_variable = sed_mode_manual
  remove_variable = sed_mode_automatic
  set_variable = { name = sed_mode_assisted value = yes }
@@ -3150,6 +3158,7 @@ sed_auto_apply_monthly = {
  sed_refresh_national_plan = yes
  sed_apply_fiscal_policy = yes
  sed_apply_wage_policy = yes
+ sed_apply_military_wage_policy = yes
  set_variable = { name = sed_auto_action_status value = 2 }
  if = {
   limit = { has_variable = sed_coord_active }
@@ -5586,6 +5595,68 @@ sed_restore_wage_policy = {
   else_if = { limit = { var:sed_gov_wage_saved = 4 } set_government_wage_level = high }
   else_if = { limit = { var:sed_gov_wage_saved = 5 } set_government_wage_level = very_high }
   remove_variable = sed_gov_wage_saved
+ }
+}
+sed_save_military_wage = {
+ if = { limit = { is_player = yes NOT = { has_variable = sed_military_wage_saved } }
+  if = { limit = { military_wage_level = very_low } set_variable = { name = sed_military_wage_saved value = 1 } }
+  else_if = { limit = { military_wage_level = low } set_variable = { name = sed_military_wage_saved value = 2 } }
+  else_if = { limit = { military_wage_level = medium } set_variable = { name = sed_military_wage_saved value = 3 } }
+  else_if = { limit = { military_wage_level = high } set_variable = { name = sed_military_wage_saved value = 4 } }
+  else_if = { limit = { military_wage_level = very_high } set_variable = { name = sed_military_wage_saved value = 5 } }
+ }
+}
+
+sed_apply_military_wage_policy = {
+ if = { limit = {
+  is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic
+  has_variable = sed_fiscal_status
+  NOT = { has_variable = sed_mode_manual }
+  NOT = { has_variable = sed_mode_assisted }
+  NOT = { sed_military_wage_month_limit_reached = yes }
+ }
+  if = { limit = {
+   OR = { var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 }
+   net_fixed_income < 0 military_expenses > 0
+   NOT = { sed_military_readiness_required = yes }
+  }
+   if = { limit = { military_wage_level = medium } sed_save_military_wage = yes set_variable = { name = sed_military_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_military_wage_last_from value = 3 } set_variable = { name = sed_military_wage_last_to value = 2 } set_variable = { name = sed_military_wage_last_year value = year } set_variable = { name = sed_military_wage_last_month value = { value = month add = 1 } } set_military_wage_level = low }
+   else_if = { limit = { military_wage_level = high } sed_save_military_wage = yes set_variable = { name = sed_military_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_military_wage_last_from value = 4 } set_variable = { name = sed_military_wage_last_to value = 3 } set_variable = { name = sed_military_wage_last_year value = year } set_variable = { name = sed_military_wage_last_month value = { value = month add = 1 } } set_military_wage_level = medium }
+   else_if = { limit = { military_wage_level = very_high } sed_save_military_wage = yes set_variable = { name = sed_military_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_military_wage_last_from value = 5 } set_variable = { name = sed_military_wage_last_to value = 4 } set_variable = { name = sed_military_wage_last_year value = year } set_variable = { name = sed_military_wage_last_month value = { value = month add = 1 } } set_military_wage_level = high }
+  }
+  else_if = { limit = { has_variable = sed_military_wage_saved }
+   if = { limit = {
+    military_wage_level = very_low
+    var:sed_military_wage_saved > 1
+    OR = { sed_military_wage_recovery_affordable = yes sed_military_readiness_required = yes }
+   } set_variable = { name = sed_military_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_military_wage_last_from value = 1 } set_variable = { name = sed_military_wage_last_to value = 2 } set_variable = { name = sed_military_wage_last_year value = year } set_variable = { name = sed_military_wage_last_month value = { value = month add = 1 } } set_military_wage_level = low }
+   else_if = { limit = {
+    military_wage_level = low
+    var:sed_military_wage_saved > 2
+    OR = { sed_military_wage_recovery_affordable = yes sed_military_readiness_required = yes }
+   } set_variable = { name = sed_military_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_military_wage_last_from value = 2 } set_variable = { name = sed_military_wage_last_to value = 3 } set_variable = { name = sed_military_wage_last_year value = year } set_variable = { name = sed_military_wage_last_month value = { value = month add = 1 } } set_military_wage_level = medium }
+   else_if = { limit = {
+    military_wage_level = medium
+    var:sed_military_wage_saved > 3
+    OR = { sed_military_wage_recovery_affordable = yes  }
+   } set_variable = { name = sed_military_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_military_wage_last_from value = 3 } set_variable = { name = sed_military_wage_last_to value = 4 } set_variable = { name = sed_military_wage_last_year value = year } set_variable = { name = sed_military_wage_last_month value = { value = month add = 1 } } set_military_wage_level = high }
+   else_if = { limit = {
+    military_wage_level = high
+    var:sed_military_wage_saved > 4
+    OR = { sed_military_wage_recovery_affordable = yes  }
+   } set_variable = { name = sed_military_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_military_wage_last_from value = 4 } set_variable = { name = sed_military_wage_last_to value = 5 } set_variable = { name = sed_military_wage_last_year value = year } set_variable = { name = sed_military_wage_last_month value = { value = month add = 1 } } set_military_wage_level = very_high }
+  }
+ }
+}
+
+sed_restore_military_wage_policy = {
+ if = { limit = { is_player = yes has_variable = sed_military_wage_saved }
+  if = { limit = { var:sed_military_wage_saved = 1 } set_military_wage_level = very_low }
+  else_if = { limit = { var:sed_military_wage_saved = 2 } set_military_wage_level = low }
+  else_if = { limit = { var:sed_military_wage_saved = 3 } set_military_wage_level = medium }
+  else_if = { limit = { var:sed_military_wage_saved = 4 } set_military_wage_level = high }
+  else_if = { limit = { var:sed_military_wage_saved = 5 } set_military_wage_level = very_high }
+  remove_variable = sed_military_wage_saved
  }
 }
 sed_coord_capture_supply_policy = {

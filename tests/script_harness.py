@@ -70,7 +70,8 @@ class Country:
                              construction_queue_num_queued_private_levels=0,
                              military_expenses=0, military_expenses_share=0, is_at_war=False,
                              bureaucracy=0, year=1836, month=0, is_player=True, in_default=False,
-                             tax_level='medium', government_wage_level='medium',
+                             tax_level='medium', government_wage_level='medium', military_wage_level='medium',
+                             has_diplomatic_play=False,
                              is_game_paused=True, is_construction_paused=False)
         self.readings.update(readings)
         self.variables = {}
@@ -81,6 +82,8 @@ class Country:
         self.constructions = []
         self.tax_changes = []
         self.wage_changes = []
+        self.military_wage_changes = []
+        self.military_formations = []
         self.construction_accepted = True
         self.market_goods = {good: {'market_goods_buy_orders': 1000,
                                     'market_goods_sell_orders': 1000,
@@ -100,7 +103,7 @@ class Country:
         return scope.setdefault('variables', {})
 
     def lookup(self, name, scope):
-        if name in ('tax_level', 'government_wage_level'):
+        if name in ('tax_level', 'government_wage_level', 'military_wage_level'):
             return self.tax_level_rank(scope.get(name, self.readings[name]))
         if name.startswith('b:') and '.' in name:
             building_name, attribute = name[2:].split('.', 1)
@@ -216,6 +219,8 @@ class Country:
             return good is not None and self.condition(entry.value, good)
         if key == 'any_scope_state':
             return any(self.condition(entry.value, target) for target in self.states)
+        if key == 'any_military_formation':
+            return any(self.condition(entry.value, formation) for formation in self.military_formations)
         if key == 'has_active_production_method':
             return entry.value in scope.get('production_methods', [])
         if key == 'has_technology_researched':
@@ -320,6 +325,9 @@ class Country:
             elif key == 'set_government_wage_level':
                 self.readings['government_wage_level'] = value
                 self.wage_changes.append(value)
+            elif key == 'set_military_wage_level':
+                self.readings['military_wage_level'] = value
+                self.military_wage_changes.append(value)
             elif key == 'start_building_construction':
                 target = scope if scope.get('__scope__') == STATE else None
                 self.constructions.append(dict(building=value, state=target))

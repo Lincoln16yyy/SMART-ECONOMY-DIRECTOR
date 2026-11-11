@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.4'
+VERSION = '0.7.5'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -47,7 +47,8 @@ SUPPLY_TARGETS = [
     {'good': 'ammunition', 'building': 'building_munition_plant', 'methods': ['pm_percussion_caps', 'pm_explosive_shells'], 'label_pt': 'munição', 'label_en': 'ammunition', 'building_pt': 'fábrica de munição', 'building_en': 'munition plant'},
 ]
 PERSISTENT_VARIABLES = ['sed_schema_version', 'sed_auto_last_attempt_month',
-                        'sed_tax_last_change_month', 'sed_wage_last_change_month']
+                        'sed_tax_last_change_month', 'sed_wage_last_change_month',
+                        'sed_military_wage_last_change_month']
 
 
 def variants(item):
@@ -192,8 +193,8 @@ sed_construction_blocked_states sed_construction_infrastructure_states
 sed_queue_levels_before'''.split() + [
     'sed_mode_manual', 'sed_mode_assisted', 'sed_mode_automatic',
     'sed_auto_action_status', 'sed_auto_event_pending', 'sed_details_visible',
-    'sed_tax_level_saved', 'sed_gov_wage_saved',
-    *[f'sed_{policy}_last_{field}' for policy in ('tax', 'wage')
+    'sed_tax_level_saved', 'sed_gov_wage_saved', 'sed_military_wage_saved',
+    *[f'sed_{policy}_last_{field}' for policy in ('tax', 'wage', 'military_wage')
       for field in ('from', 'to', 'year', 'month')],
     'sed_auto_review_status', 'sed_auto_review_year', 'sed_auto_review_month',
     *[f"sed_{item['good']}_action_status" for item in SUPPLY_TARGETS],
@@ -406,7 +407,7 @@ sed_refresh_supply_candidates = {
     for mode in ('manual', 'assisted', 'automatic'):
         other_modes = [value for value in ('manual', 'assisted', 'automatic') if value != mode]
         cleanup = '\n'.join(f' remove_variable = sed_mode_{value}' for value in other_modes)
-        release = ' sed_coord_restore = yes\n sed_restore_fiscal_policy = yes\n sed_restore_wage_policy = yes\n' if mode != 'automatic' else ''
+        release = ' sed_coord_restore = yes\n sed_restore_fiscal_policy = yes\n sed_restore_wage_policy = yes\n sed_restore_military_wage_policy = yes\n' if mode != 'automatic' else ''
         takeover = ''
         if mode == 'automatic':
             takeover = ' if = { limit = { has_variable = sed_enabled NOT = { has_variable = sed_coord_active } sed_coord_tools_available = yes } sed_coord_enable = yes }\n'
@@ -438,6 +439,7 @@ sed_refresh_supply_candidates = {
  sed_refresh_national_plan = yes
  sed_apply_fiscal_policy = yes
  sed_apply_wage_policy = yes
+ sed_apply_military_wage_policy = yes
  set_variable = { name = sed_auto_action_status value = 2 }
  if = {
   limit = { has_variable = sed_coord_active }
@@ -815,6 +817,7 @@ sed_disable_country = {
  sed_coord_restore = yes
  sed_restore_fiscal_policy = yes
  sed_restore_wage_policy = yes
+ sed_restore_military_wage_policy = yes
 ''' + '\n'.join(' remove_variable = ' + name for name in country_variables()) + '''
  clear_variable_list = sed_railway_candidates
  clear_variable_list = sed_construction_candidates
@@ -1263,7 +1266,7 @@ sed_update_growth = {
     state_cleanup = '\n'.join('  remove_variable = ' + name for name in planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES)
     script = script.replace(' # Schema and automatic attempt month',
                             ' every_scope_state = {\n' + state_cleanup + '\n }\n # Schema and automatic attempt month', 1)
-    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, INPUT_DEPENDENCIES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + input_forecast.effects() + input_priority_effect() + labor.effects() + construction_budget.effects() + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + coordination.effects()
+    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, INPUT_DEPENDENCIES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + input_forecast.effects() + input_priority_effect() + labor.effects() + construction_budget.effects() + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + planning.military_wage_policy_effects() + coordination.effects()
 
 
 def scripted_guis():
@@ -2053,7 +2056,7 @@ def localization(language):
         'sed_plan_date': ('Plano de ' + v('plan_month', '0') + '/' + v('plan_year', '0') + '.', 'Plan for ' + v('plan_month', '0') + '/' + v('plan_year', '0') + '.'),
         'sed_plan_policy': ('Até três expansões elegíveis, comparadas entre estados e setores. Pontos combinam déficit de infraestrutura, falta relativa de oferta e prioridade a bens essenciais. São uma regra inicial, não retorno previsto. Curto prazo: tratar a primeira prioridade; médio prazo: reavaliar oferta e infraestrutura após a obra; longo prazo: diversificação e desenvolvimento ainda sem modelo validado.', 'Up to three eligible expansions compared across states and sectors. Scores combine infrastructure deficit, relative supply gap and essential goods priority. Initial policy, not predicted returns. Short term: address first priority; medium term: reassess supply and infrastructure after construction; long term: diversification and development still lack a validated model.'),
         'sed_tax_policy': ('Impostos sob o Director: no Automático, uma alteração por revisão mensal. Sobe um nível em cautela, crise ou default; desce um nível com saldo positivo, sem dívida e reservas de doze semanas de despesas fixas. O nível original é restaurado ao sair do Automático ou desativar. Não altera despesas ou alíquotas de consumo.', 'Taxes under the Director: in Automatic, one change per monthly review. One step up under caution, crisis or default; one step down with positive balance, no debt and twelve weeks of fixed expenses in reserves. The original level is restored when leaving Automatic or disabling. Does not change spending or consumption tax rates.'),
-        'sed_wage_policy': ('Salários do governo sob o Director: no Automático, caem um nível em crise ou default (mínimo baixo) e sobem um nível com saúde fiscal (máximo médio). O nível original é restaurado ao sair do Automático ou desativar. Salários militares e despesas não são alterados.', 'Government wages under the Director: in Automatic, one step down under crisis or default (floor low) and one step up with fiscal health (ceiling medium). The original level is restored when leaving Automatic or disabling. Military wages and spending are not changed.'),
+        'sed_wage_policy': ('Salários do governo sob o Director: no Automático, caem um nível em crise ou default (mínimo baixo) e sobem um nível com saúde fiscal (máximo médio). O nível original é restaurado ao sair do Automático ou desativar. Salários militares podem cair em crise com déficit operacional durante a paz, com recuperação conforme prontidão e orçamento.', 'Government wages under the Director: in Automatic, one step down under crisis or default (floor low) and one step up with fiscal health (ceiling medium). The original level is restored when leaving Automatic or disabling. Military wages can fall during a peacetime crisis with an operating deficit, with recovery according to readiness and budget.'),
         'sed_plan_empty': ('Sem expansão elegível no escopo atual. Não construir é um resultado válido; consulte os detalhes para os motivos.', 'No eligible expansion in the current scope. Not building is a valid outcome; see details for rejection reasons.'),
         'sed_fiscal_1': ('Fiscal: condições iniciais para expansão. Saldo e saldo operacional não negativos, reservas de ao menos quatro semanas de despesas fixas e dívida até 75% do crédito. Isso não garante capacidade de pagar a próxima obra.', 'Fiscal: initial expansion conditions. Nonnegative balance and operating balance, reserves covering at least four weeks of fixed expenses and debt up to 75% of credit. This does not guarantee affordability of the next project.'),
         'sed_fiscal_2': ('Fiscal: cautela. A política inicial suspende novas tentativas automáticas; aprovação Assistida continua explícita.', 'Fiscal: caution. Initial policy suspends new automatic attempts; Assisted approval remains explicit.'),

@@ -11,6 +11,96 @@ class MilitaryEconomyTests(unittest.TestCase):
         self.c = Country(script_definitions(), construction_queue_num_queued_government_levels=0)
         self.c.run('sed_enable_country')
 
+    def crisis(self, **readings):
+        self.c.readings.update(net_total_income=-100, net_fixed_income=-50,
+                               gold_reserves=0, military_expenses=50,
+                               military_wage_level='high')
+        self.c.readings.update(readings)
+        self.c.run('sed_set_mode_automatic')
+
+    def test_structural_peacetime_crisis_cuts_monthly_to_low_and_restores_original(self):
+        c = self.c
+        self.crisis()
+        c.run('sed_auto_apply_monthly')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.military_wage_changes, ['medium'])
+        self.assertEqual(c.variables['sed_military_wage_saved'], 4)
+        c.readings['month'] = 1
+        c.run('sed_auto_apply_monthly')
+        c.readings['month'] = 2
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.military_wage_changes, ['medium', 'low'])
+        c.run('sed_set_mode_assisted')
+        self.assertEqual(c.readings['military_wage_level'], 'high')
+        self.assertNotIn('sed_military_wage_saved', c.variables)
+
+    def test_war_diplomatic_play_and_mobilization_each_prevent_cuts(self):
+        c = self.c
+        self.crisis(is_at_war=True)
+        c.run('sed_auto_apply_monthly')
+        c.readings.update(is_at_war=False, has_diplomatic_play=True)
+        c.run('sed_auto_apply_monthly')
+        c.readings['has_diplomatic_play'] = False
+        c.military_formations = [dict(is_mobilized=True)]
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.military_wage_changes, [])
+        self.assertNotIn('sed_military_wage_saved', c.variables)
+
+    def test_construction_deficit_without_operating_deficit_preserves_military_wages(self):
+        self.crisis(net_fixed_income=10)
+        self.c.run('sed_auto_apply_monthly')
+        self.assertEqual(self.c.military_wage_changes, [])
+
+    def test_readiness_recovers_director_cut_to_medium_even_during_crisis(self):
+        c = self.c
+        self.crisis(military_wage_level='medium')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.readings['military_wage_level'], 'low')
+        c.readings.update(month=1, is_at_war=True)
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.readings['military_wage_level'], 'medium')
+        c.readings['month'] = 2
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.military_wage_changes, ['low', 'medium'])
+
+    def test_recovery_requires_budget_and_stops_at_original_level(self):
+        c = self.c
+        self.crisis()
+        c.run('sed_auto_apply_monthly')
+        c.readings.update(month=1, net_total_income=24, net_fixed_income=100,
+                          gold_reserves=1000, principal=0)
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.readings['military_wage_level'], 'medium')
+        c.readings.update(month=2, net_total_income=25)
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.readings['military_wage_level'], 'high')
+        c.readings['month'] = 3
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.military_wage_changes, ['medium', 'high'])
+
+    def test_manual_assisted_and_conflicting_modes_do_not_change_military_wages(self):
+        c = self.c
+        self.crisis()
+        c.run('sed_refresh_national_plan')
+        for mode in ('manual', 'assisted'):
+            c.run('sed_set_mode_' + mode)
+            c.variables['sed_mode_automatic'] = True
+            c.run('sed_apply_military_wage_policy')
+            self.assertEqual(c.military_wage_changes, [])
+
+    def test_disable_restores_snapshot_and_preserves_monthly_limit(self):
+        c = self.c
+        self.crisis()
+        c.run('sed_auto_apply_monthly')
+        c.run('sed_disable_country')
+        self.assertEqual(c.readings['military_wage_level'], 'high')
+        self.assertIn('sed_military_wage_last_change_month', c.variables)
+        self.assertNotIn('sed_military_wage_saved', c.variables)
+        c.run('sed_enable_country')
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.readings['military_wage_level'], 'high')
+
     def test_normal_plan_entry_reads_costs_war_and_market_shortages(self):
         c = self.c
         c.readings.update(military_expenses=40, military_expenses_share=0.2, is_at_war=True)

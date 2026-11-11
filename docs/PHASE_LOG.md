@@ -1806,3 +1806,19 @@ intermediária, obra pendente, alternativa em outro estado e ciclo com posterior
 fim da escassez. Gerador, validação estática, pacote e whitespace aprovados.
 Instalada com backup `mod_before_0.7.4_20261110_232207_422360` e conferência dos
 14 arquivos. Campanha ainda pendente para essas mudanças.
+
+
+## 2026-11-10 — Recuperação fiscal com salários militares (0.7.5)
+
+Salários militares passam a ter política automática de crise operacional na
+paz, com um passo mensal e piso baixo. Guerra, jogada diplomática ou formação
+mobilizada impedem cortes. A recuperação se limita ao nível capturado, exige
+margem financeira na paz e permite recompor até médio quando há necessidade
+de prontidão. Sair do Automático ou desativar restaura o nível original.
+
+266 testes sintéticos aprovados, incluindo fronteiras de orçamento, déficit
+de construção, prontidão, modos conflitantes e persistência do limite mensal.
+Gerador, validação estática, pacote e whitespace aprovados. Efeito e triggers
+verificados no executável, localização e scripts vanilla locais.
+Instalada com backup `mod_before_0.7.5_20261110_233730_175392` e conferência dos
+14 arquivos. Efeitos financeiros e funcionamento na engine ainda pendentes.

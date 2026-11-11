@@ -1,5 +1,12 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.5, a recuperação fiscal inclui salários militares na paz. Em crise com
+déficit operacional, o Automático corta um nível por mês até baixo. Guerra,
+jogada diplomática e mobilização impedem cortes. Os cortes feitos pelo
+Director podem ser recuperados conforme prontidão militar e orçamento. Sair
+do Automático restaura o nível original.
+
+
 Na 0.7.4, o Automático percorre vários elos de fornecedores para chegar a uma
 expansão ou fundação viável. Ele considera alternativas disponíveis, espera
 obras relacionadas e encerra a análise de dependências circulares. As
