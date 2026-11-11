@@ -85,6 +85,114 @@ class InputForecastTests(unittest.TestCase):
         self.assertEqual([project['building'] for project in c.constructions],
                          ['building_logging_camp'])
 
+    def test_automatic_follows_a_three_input_chain_to_the_viable_supplier(self):
+        c = self.c
+        producers = [
+            ('building_arms_industry', 'pm_muskets'),
+            ('building_iron_mine', 'pm_picks_and_shovels_building_iron_mine'),
+            ('building_tooling_workshop', 'pm_crude_tools'),
+            ('building_logging_camp', 'pm_simple_forestry'),
+        ]
+        c.states = []
+        for kind, method in producers:
+            producer = building(kind)
+            producer['production_methods'] = [method]
+            c.states.append(state(buildings=[producer]))
+        c.readings['military_expenses'] = 100
+        for good in ('iron', 'tools', 'wood'):
+            c.market_goods[good].update(market_goods_buy_orders=100,
+                                        market_goods_sell_orders=50,
+                                        market_goods_has_goods_shortage=False)
+        c.market_goods['small_arms'] = dict(market_goods_has_goods_shortage=True,
+                                            market_goods_buy_orders=100,
+                                            market_goods_sell_orders=40)
+        c.market_goods['tools']['market_goods_has_goods_shortage'] = False
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertTrue(all('sed_input_priority_' + good in c.variables
+                            for good in ('iron', 'tools', 'wood')))
+        self.assertEqual([project['building'] for project in c.constructions],
+                         ['building_logging_camp'])
+        self.assertNotIn('sed_input_pass_changed', c.variables)
+        c.readings['month'] = 1
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(len(c.constructions), 1)
+
+    def test_automatic_propagates_through_a_missing_intermediate_industry(self):
+        c = self.c
+        iron = building('building_iron_mine')
+        iron['production_methods'] = ['pm_picks_and_shovels_building_iron_mine']
+        logging = building('building_logging_camp')
+        logging['production_methods'] = ['pm_simple_forestry']
+        c.states = [state(buildings=[iron]), state(buildings=[logging])]
+        c.market_goods['iron']['market_goods_has_goods_shortage'] = True
+        c.market_goods['tools'].update(market_goods_buy_orders=100,
+                                       market_goods_sell_orders=50,
+                                       market_goods_has_goods_shortage=False)
+        self.wood(100, 50)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertIn('sed_input_priority_tools', c.variables)
+        self.assertIn('sed_input_priority_wood', c.variables)
+        self.assertEqual([project['building'] for project in c.constructions],
+                         ['building_logging_camp'])
+
+    def test_queued_missing_intermediate_stops_further_supplier_orders(self):
+        c = self.c
+        iron = building('building_iron_mine')
+        iron['production_methods'] = ['pm_picks_and_shovels_building_iron_mine']
+        target = state(buildings=[iron])
+        target['variables'].update(sed_tools_request_pending=True, sed_tools_intent_level=0,
+                                   sed_tools_intent_variant=1)
+        c.states = [target]
+        c.readings['construction_queue_num_queued_government_levels'] = 1
+        c.market_goods['iron']['market_goods_has_goods_shortage'] = True
+        c.market_goods['tools'].update(market_goods_buy_orders=100,
+                                       market_goods_sell_orders=50,
+                                       market_goods_has_goods_shortage=False)
+        self.wood(100, 50)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertIn('sed_tools_request_pending', target['variables'])
+        self.assertNotIn('sed_input_priority_wood', c.variables)
+        self.assertEqual(c.constructions, [])
+
+    def test_a_viable_alternative_stops_unnecessary_input_propagation(self):
+        c = self.c
+        blocked = building('building_wheat_farm')
+        blocked['production_methods'] = ['pm_fertilization', 'pm_tools']
+        viable = building('building_rye_farm')
+        viable['production_methods'] = ['pm_simple_farming']
+        c.states = [state(buildings=[blocked]), state(buildings=[viable])]
+        c.market_goods['grain']['market_goods_has_goods_shortage'] = True
+        c.market_goods['tools']['market_goods_has_goods_shortage'] = False
+        c.market_goods['tools'].update(market_goods_buy_orders=100,
+                                       market_goods_sell_orders=50)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertNotIn('sed_input_priority_tools', c.variables)
+        self.assertEqual([project['building'] for project in c.constructions],
+                         ['building_rye_farm'])
+
+    def test_circular_dependencies_terminate_and_clear_when_shortage_ends(self):
+        c = self.c
+        logging = building('building_logging_camp')
+        logging['production_methods'] = ['pm_saw_mills']
+        c.states = [self.target, state(buildings=[logging])]
+        c.market_goods['tools'].update(market_goods_buy_orders=100,
+                                       market_goods_sell_orders=50)
+        self.wood(100, 50)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.constructions, [])
+        self.assertIn('sed_input_priority_wood', c.variables)
+        self.assertIn('sed_input_priority_tools', c.variables)
+        self.assertNotIn('sed_input_pass_changed', c.variables)
+        c.market_goods['tools']['market_goods_has_goods_shortage'] = False
+        c.run('sed_refresh_diagnostics')
+        self.assertNotIn('sed_input_priority_wood', c.variables)
+        self.assertNotIn('sed_input_priority_tools', c.variables)
+
     def test_projected_wood_shortfall_prioritizes_a_viable_logging_camp(self):
         c = self.c
         logging = building('building_logging_camp')

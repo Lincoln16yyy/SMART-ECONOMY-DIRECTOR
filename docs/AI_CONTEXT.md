@@ -1,9 +1,29 @@
 # Contexto de continuidade
 
-Última entrega documentada: 0.7.3 instalada com jogo fechado e 14 arquivos
-conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.3_20261110_230839_169721`.
-254 testes sintéticos aprovados. As novas fundações ainda exigem confirmação na engine.
+Última entrega documentada: 0.7.4 instalada com jogo fechado e 14 arquivos
+conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.4_20261110_232207_422360`.
+259 testes sintéticos aprovados. As novas cadeias ainda exigem confirmação na engine.
 
+
+
+## 0.7.4 — Planejamento de insumos em vários elos
+
+O Automático recalcula as prioridades a partir da escassez atual e propaga a
+necessidade pelos fornecedores intermediários. Expansões e fundações podem
+participar da cadeia. A propagação para quando encontra um fornecedor elegível
+ou uma obra relacionada já enfileirada. Uma alternativa elegível em outro
+estado evita priorizar os insumos de um produtor bloqueado.
+
+Cada leitura limpa as prioridades anteriores. A propagação tem no máximo uma
+passagem por bem de insumo suportado, encerrando antes quando nada muda. Isso
+cobre os caminhos simples do catálogo e termina em dependências circulares.
+O livro de fundações próprias passa a contar também na identificação de oferta
+enfileirada, mesmo antes de existir prédio.
+
+A execução continua limitada a uma tentativa por mês e ao catálogo atual.
+Bens fora do catálogo, comércio, escolha de PMs e ciclos sem fornecedor viável
+continuam pendentes. Nenhuma produção futura é creditada como oferta atual.
+O plano volta a avaliar o gargalo após a mudança real da oferta.
 
 ## 0.7.3 — Fundações com reserva de trabalho e insumos
 

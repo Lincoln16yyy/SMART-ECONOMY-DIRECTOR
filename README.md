@@ -1,5 +1,11 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.4, o Automático percorre vários elos de fornecedores para chegar a uma
+expansão ou fundação viável. Ele considera alternativas disponíveis, espera
+obras relacionadas e encerra a análise de dependências circulares. As
+prioridades são recalculadas em cada leitura conforme a oferta observada.
+
+
 Na 0.7.3, fundações de indústrias e ferrovias passam a exigir reserva estimada
 de trabalhadores e insumos. Para prédios ausentes, os insumos usam o maior
 consumo por grupo de PM entre os métodos tecnologicamente disponíveis. Esse
