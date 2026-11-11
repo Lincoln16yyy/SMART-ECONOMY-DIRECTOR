@@ -16,9 +16,19 @@ PROFILES = (
     ('pm_arc_welded_buildings', 15, {'steel': 50, 'glass': 40, 'explosives': 20,
                                   'tools': 30, 'electricity': 40, 'copper': 10}),
 )
+# Vanilla required_construction values per level, in construction points.
+# Every action has a single cost category across its producer variants.
+PROJECT_POINTS = {
+    'railway': 800, 'construction': 25,
+    'wood': 200, 'iron': 400, 'coal': 400, 'grain': 200, 'fabric': 200,
+    'tools': 600, 'groceries': 600, 'clothes': 600,
+    'small_arms': 600, 'artillery': 600, 'ammunition': 800,
+}
 VARIABLES = ['sed_build_budget_known', 'sed_build_budget_points',
              'sed_build_budget_point_cost', 'sed_build_budget_weekly',
-             'sed_build_budget_required_gold', 'sed_build_budget_material_capacity']
+             'sed_build_budget_required_gold', 'sed_build_budget_material_capacity',
+             'sed_build_budget_project_points', 'sed_build_budget_project_weeks',
+             'sed_build_budget_project_materials']
 
 
 def effects():
@@ -63,9 +73,28 @@ def effects():
    value = var:sed_build_budget_points multiply = var:sed_build_budget_point_cost
    max = var:sed_build_budget_material_capacity
   } }
+  # Duration and full material reference for the plan's first priority.
+  set_variable = { name = sed_build_budget_project_points value = 0 }
+''')
+    for action, points in PROJECT_POINTS.items():
+        result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0
+   any_scope_state = {{ has_variable = sed_plan_{action}_rank var:sed_plan_{action}_rank = 1 }} }}
+   set_variable = {{ name = sed_build_budget_project_points value = {points} }}
+  }}''')
+    result.append('''  set_variable = { name = sed_build_budget_project_weeks value = 0 }
+  set_variable = { name = sed_build_budget_project_materials value = {
+   value = var:sed_build_budget_project_points multiply = var:sed_build_budget_point_cost
+  } }
+  if = { limit = { var:sed_build_budget_project_points > 0 var:sed_build_budget_points > 0 }
+   set_variable = { name = sed_build_budget_project_weeks value = {
+    value = var:sed_build_budget_project_points divide = var:sed_build_budget_points
+   } }
+  }
   set_variable = { name = sed_build_budget_required_gold value = {
    value = fixed_expenses min = 0 multiply = 4
-   add = { value = var:sed_build_budget_weekly subtract = net_total_income min = 0 multiply = 26 }
+   add = { value = var:sed_build_budget_weekly subtract = net_total_income min = 0
+    multiply = { value = var:sed_build_budget_project_weeks add = 4 min = 26 max = 56 }
+   }
   } }
  }
 }

@@ -1,7 +1,17 @@
 # Contexto de continuidade
 
-Última entrega documentada: 0.6.20 instalada com jogo fechado. A 0.7.1 foi
+Última entrega documentada: 0.6.20 instalada com jogo fechado. A 0.7.2 foi
 gerada e validada localmente, sem instalação ou execução na engine.
+
+## 0.7.2 — Duração e materiais do primeiro projeto
+
+`sed_refresh_direct_budget` identifica a ação com `sed_plan_<ação>_rank = 1` e
+usa `PROJECT_POINTS` (vanilla `required_construction` por tipo) para gravar
+pontos, semanas estimadas e materiais do projeto. A reserva exigida usa
+`max(26, semanas + 4)` com teto de 56 semanas. Novas variáveis em
+`sed_build_budget_project_*`, painel e localização PT/EN. 247 testes
+sintéticos aprovados; duração real de fila concorrente e salários continuam
+fora da estimativa.
 
 ## 0.7.1 — Primeira ferrovia e pendência de fundação
 

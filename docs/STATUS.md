@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.1
+# Estado dos requisitos — 0.7.2
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.
@@ -11,7 +11,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Até três prioridades nacionais | Implementado sobre pares estado/tipo elegíveis | Validar layout e dados das novas prioridades na engine |
 | Setores estratégicos ausentes | Onze bens, incluindo armas, artilharia e munição; cereais cobrem cinco tipos de fazenda e tecido cobre plantação e pecuária. Desde a 0.7.0 o Automático funda a base em estado incorporado apto quando o país não tem produtor verificado | Demais bens ainda têm um único produtor. Confirmar `can_construct_building`, terra e custo real em campanha. Importações continuam fora do escopo |
 | Emprego e insumos | Filtros de ocupação, contratação e insumos, mais reserva de mão de obra na 0.6.19 e previsão de insumos adicionais por PMs e compromissos conhecidos na 0.6.20 | Calibrar aproximação demográfica e coeficientes. Incluir qualificações, migração e atração de trabalhadores. Calibrar insumos projetados e cobrir modificadores, comércio e produção futuros |
-| Reserva, dívida e ritmo | Guarda proporcional inicial, classificações 1–4 e construção financiada por reservas (5) | Referência de materiais implementada na 0.6.17 e limitada por níveis/ocupação na 0.6.18. Calibrar limiares e custo real incremental, duração e serviço da dívida |
+| Reserva, dívida e ritmo | Guarda proporcional inicial, classificações 1–4 e construção financiada por reservas (5). Desde a 0.7.2 a reserva exigida cresce com a duração estimada do primeiro projeto, até 56 semanas | Referência de materiais implementada na 0.6.17 e limitada por níveis/ocupação na 0.6.18. Calibrar limiares e custo real incremental, duração com fila concorrente e serviço da dívida |
 | Impostos e gastos | Nível de imposto e salário civil do governo no Automático, com um passo mensal, snapshot e restauração | Leitura das rotinas aceita no menu da engine. Observar alterações em campanha e calibrar limiares |
 | Coordenação Advisor/Supply Chain | Adaptadores de sete opções de construção, quatro de objetivo/orçamento e três de política do Supply Chain, com restauração | Verificar efeitos reais, save/reload e compatibilidade das versões instaladas |
 | Ativar somente caminho necessário | Automático usa rotinas específicas para administração, tributação, energia e, preferencialmente, setores de construção | Oferta elegível pode usar alvo direto do plano. Nas rotas externas, a seleção continua sob o algoritmo da ferramenta escolhida |
@@ -74,6 +74,9 @@ Os testes implementados ficam em `tests/test_planning.py`,
 `tests/test_coordination.py` e na suíte anterior. As fontes e decisões de
 política estão em [PLANNING.md](PLANNING.md). O roteiro de engine permanece em
 [MANUAL_RUNTIME_TEST.md](MANUAL_RUNTIME_TEST.md).
+
+A 0.7.2 estima duração e materiais do primeiro projeto e amplia a reserva
+requerida conforme a duração, com teto de 56 semanas.
 
 A 0.7.1 permite fundar a primeira ferrovia em estado com déficit e sem
 ferrovia, com as mesmas guardas. Também corrige a pendência da fundação: sem

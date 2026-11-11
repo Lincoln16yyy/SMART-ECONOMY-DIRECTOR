@@ -1,5 +1,10 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.2, o orçamento direto estima a duração e os materiais do primeiro projeto
+pelo tipo de prédio, sua construção exigida e a capacidade semanal. A reserva
+exigida acompanha essa duração, até 56 semanas, em vez de usar só a janela fixa
+de 26 semanas.
+
 Na 0.7.1, um estado com déficit de infraestrutura e sem ferrovia pode receber
 a primeira ferrovia pelo Automático, com as mesmas guardas de orçamento,
 materiais e fila. O pedido continua pendente enquanto a obra está na fila,

@@ -460,6 +460,9 @@ sed_disable_country = {
  remove_variable = sed_build_budget_weekly
  remove_variable = sed_build_budget_required_gold
  remove_variable = sed_build_budget_material_capacity
+ remove_variable = sed_build_budget_project_points
+ remove_variable = sed_build_budget_project_weeks
+ remove_variable = sed_build_budget_project_materials
  remove_variable = sed_input_market_margin_coal
  remove_variable = sed_input_market_margin_copper
  remove_variable = sed_input_market_margin_dye
@@ -5558,9 +5561,75 @@ sed_refresh_direct_budget = {
    value = var:sed_build_budget_points multiply = var:sed_build_budget_point_cost
    max = var:sed_build_budget_material_capacity
   } }
+  # Duration and full material reference for the plan's first priority.
+  set_variable = { name = sed_build_budget_project_points value = 0 }
+
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_railway_rank var:sed_plan_railway_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 800 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_construction_rank var:sed_plan_construction_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 25 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_wood_rank var:sed_plan_wood_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 200 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_iron_rank var:sed_plan_iron_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 400 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_coal_rank var:sed_plan_coal_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 400 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_grain_rank var:sed_plan_grain_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 200 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_fabric_rank var:sed_plan_fabric_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 200 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_tools_rank var:sed_plan_tools_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 600 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_groceries_rank var:sed_plan_groceries_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 600 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_clothes_rank var:sed_plan_clothes_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 600 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_small_arms_rank var:sed_plan_small_arms_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 600 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_artillery_rank var:sed_plan_artillery_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 600 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { has_variable = sed_plan_ammunition_rank var:sed_plan_ammunition_rank = 1 } }
+   set_variable = { name = sed_build_budget_project_points value = 800 }
+  }
+  set_variable = { name = sed_build_budget_project_weeks value = 0 }
+  set_variable = { name = sed_build_budget_project_materials value = {
+   value = var:sed_build_budget_project_points multiply = var:sed_build_budget_point_cost
+  } }
+  if = { limit = { var:sed_build_budget_project_points > 0 var:sed_build_budget_points > 0 }
+   set_variable = { name = sed_build_budget_project_weeks value = {
+    value = var:sed_build_budget_project_points divide = var:sed_build_budget_points
+   } }
+  }
   set_variable = { name = sed_build_budget_required_gold value = {
    value = fixed_expenses min = 0 multiply = 4
-   add = { value = var:sed_build_budget_weekly subtract = net_total_income min = 0 multiply = 26 }
+   add = { value = var:sed_build_budget_weekly subtract = net_total_income min = 0
+    multiply = { value = var:sed_build_budget_project_weeks add = 4 min = 26 max = 56 }
+   }
   } }
  }
 }

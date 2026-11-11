@@ -1,5 +1,28 @@
 # Planejamento e coordenação — 0.6.8
 
+## 0.7.2 — Duração e materiais do primeiro projeto
+
+O orçamento direto continuava usando uma janela fixa de 26 semanas de déficit
+para a reserva exigida e não estimava o tamanho do projeto escolhido. A 0.7.2
+identifica a primeira prioridade do plano e lê a construção exigida por nível
+na base vanilla: 200 pontos para fazendas, madeira e tecido; 400 para ferro e
+carvão; 600 para ferramentas, alimentos, roupas e indústria bélica; 800 para
+ferrovia, aço e munição; 25 para o setor de construção.
+
+Com a capacidade semanal (`country_construction_add`, limitada pelo progresso
+máximo), o painel mostra pontos, semanas estimadas e materiais de referência do
+projeto inteiro. A reserva exigida passa a usar a maior janela entre 26 e a
+duração do projeto mais quatro semanas, limitada a 56 semanas. Projetos curtos
+mantêm o piso anterior; ferrovias e munição, que duram mais, exigem mais ouro
+sem bloquear obras de até um ano de déficit coberto. A estimativa assume o
+maior custo entre métodos ativos e preços-base com 75% de estresse; fila
+concorrente, salários, subsídios e modificadores ainda podem alongar o prazo.
+
+247 testes sintéticos aprovados, incluindo o primeiro projeto de ferrovia com
+800 pontos, 80 semanas e reserva de 56 semanas. Geração e validação estática
+locais aprovadas. Sem engine ou campanha nesta etapa: a duração real depende da
+fila e de efeitos que o script não observa.
+
 ## 0.7.1 — Primeira ferrovia e pedido de fundação persistente
 
 Até a 0.7.0, ferrovia só entrava no plano quando já existia e estava operante.

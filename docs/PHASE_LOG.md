@@ -1747,3 +1747,23 @@ persistência do pedido após diagnóstico intermediário. Geração, validaçã
 estática e verificação de artefatos locais aprovadas. Sem instalação, engine
 ou campanha nesta etapa; terra, permissão e concorrência reais seguem sem
 confirmação.
+
+## 2026-11-10 — Duração e materiais do primeiro projeto (0.7.2)
+
+O orçamento direto ainda media a reserva por uma janela fixa de 26 semanas e
+não dizia o tamanho da obra escolhida. A 0.7.2 identifica a ação em primeiro
+lugar no plano e usa a construção exigida do prédio na base vanilla
+(`required_construction`): 200 pontos para fazendas, madeira e tecido; 400 para
+ferro e carvão; 600 para ferramentas, alimentos, roupas e indústria bélica;
+800 para ferrovia, aço e munição; 25 para o setor de construção.
+
+O painel passa a mostrar pontos, semanas e materiais de referência do projeto
+inteiro. A reserva exigida usa a maior janela entre 26 e a duração mais quatro
+semanas, limitada a 56. Projetos curtos mantêm o piso anterior; ferrovia e
+munição exigem mais ouro, mas uma obra de até um ano de déficit coberto segue
+autorizada. Fila concorrente, salários, subsídios e modificadores ainda podem
+alongar o prazo e não entram na conta.
+
+247 testes sintéticos aprovados, incluindo ferrovia de 800 pontos, 80 semanas e
+reserva limitada a 56 semanas. Geração, validação estática e verificação de
+artefatos locais aprovadas. Sem instalação, engine ou campanha nesta etapa.
