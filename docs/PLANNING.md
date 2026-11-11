@@ -1303,3 +1303,11 @@ três opções sem efeito econômico: reconhecer a importação (cooldown de 12
 meses), recalcular o plano e adiar por 24 meses. O Director continua sem
 qualquer efeito de comércio — a sondagem com Tiger mostra que rota comercial
 não é scriptável na 1.15.
+
+## 0.7.22 — Pedidos do mercado no evento de importação
+
+O evento passa a mostrar os pedidos de compra e venda do bem no mercado, que
+dão a dimensão da lacuna a importar. Continua sem estimar custo, frete ou
+comboios, e sem qualquer efeito de comércio. Próximo refinamento possível:
+apontar qual filtro barrou a melhor candidata (insumos, trabalho, fila,
+orçamento ou infraestrutura) em vez de listar todos.

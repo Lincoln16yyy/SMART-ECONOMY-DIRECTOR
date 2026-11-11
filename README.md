@@ -1,5 +1,9 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.22, o evento de escassez mostra os pedidos de compra e venda do bem no
+mercado, para você medir a lacuna antes de abrir a importação. Os números vêm
+direto do mercado; o Director não estima custo, frete nem comboios.
+
 Na 0.7.21, quando a escassez de um bem não tem expansão local elegível nem
 pedido pendente, o Director dispara um evento próprio com prazo e três opções:
 reconhecer a importação (silêncio de 12 meses), recalcular o plano agora ou

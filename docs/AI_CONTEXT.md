@@ -1,11 +1,10 @@
 # Contexto de continuidade
 
-Última entrega do mod — 0.7.21 gerada, testada e instalada com jogo fechado.
-Código — evento consultivo de importação (com prazo e três opções) quando há
-escassez e nenhuma expansão local passa nos filtros; painel desde a 0.7.20
-declara a fronteira de leis e reconhece o Smart Government Advisor.
-Comércio: script não abre rota (efeito removido na 1.9); o aviso é só orientação.
-Teste sintético — 370 testes aprovados.
+Última entrega do mod — 0.7.22 gerada, testada e instalada com jogo fechado.
+Código — evento consultivo de importação (prazo, três opções) mostra pedidos de
+compra e venda do mercado do bem; dispara quando há escassez e nenhuma expansão
+local passa nos filtros. Comércio: script não abre rota (removido na 1.9).
+Teste sintético — 372 testes aprovados.
 Estático — geração consistente e validação local 1.15 aprovadas. Tiger 1.19.0:
 mesmos três campos de diário do vanilla 1.15 e 917 avisos (767 de colocação de
 chaves no GUI, 150 de OR de item único).
@@ -20,6 +19,16 @@ Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.21 (event
 importação) e depois a seção 0.7.17–0.7.19:
 conferir a unidade no painel, o desvio de fornecedor, a pontuação de PMs,
 save/reload e limpeza. Depois retomar as leituras fiscais e a fundação básica.
+
+## 0.7.22 — Pedidos do mercado no evento de importação
+
+Antes de disparar, `sed_check_import_notices` grava
+`sed_import_notice_<bem>_buy`/`_sell` a partir de `market_goods_buy_orders` e
+`market_goods_sell_orders`. A descrição do evento imprime os dois valores com
+`[ROOT.GetCountry.MakeScope.Var('…').GetValue|D]` — padrão verificado em
+`negotiation.1.d6` do vanilla. A diferença indica o tamanho da lacuna; custo,
+frete e comboios não são estimados. Unidade/período dos pedidos (semana) e a
+exibição em evento seguem NÃO VERIFICADO na engine.
 
 ## 0.7.21 — Evento consultivo de importação
 

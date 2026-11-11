@@ -607,14 +607,18 @@ outro mod, deve aparecer apenas a linha de escopo das leis. Clicar "Atualizar
 diagnóstico" e avançar um mês não pode alterar leis, nem criar diário duplicado.
 Devolver captura do painel com e sem o mod e o trecho do `logs/error.log`.
 
-## Evento de importação 0.7.21 (pendente)
+## Evento de importação 0.7.21–0.7.22 (pendente)
 
 Com o Director ativo e uma escassez real sem expansão local possível (por
 exemplo, nenhum produtor do bem com insumos, trabalho e fila liberados):
 
 1. Avançar um mês. Deve aparecer um evento com ícone industrial, prazo de
    leitura e três opções: "Vou abrir a rota de importação", "Recalcular o plano
-   agora" e "Só me avise em 2 anos". Conferir que a descrição cita o bem certo.
+   agora" e "Só me avise em 2 anos". Conferir que a descrição cita o bem certo
+   e que os pedidos de compra e venda aparecem como números (desde a 0.7.22),
+   batendo com a aba de mercado do bem no mesmo mês; se aparecer texto cru do
+   tipo `GetValue` ou a chave da variável, o formato de loc do evento está
+   errado — reportar.
 2. Escolher "Vou abrir a rota de importação": o mesmo evento não pode reaparecer
    nos 12 meses seguintes. Abrir a rota é ação sua na interface de comércio; o
    Director não deve criar rota, nem registrar erro no `logs/error.log`.

@@ -387,17 +387,41 @@ sed_disable_country = {
  remove_variable = sed_paper_labor_states
  remove_variable = sed_paper_forecast_states
  remove_variable = sed_import_notice_wood_month
+ remove_variable = sed_import_notice_wood_buy
+ remove_variable = sed_import_notice_wood_sell
  remove_variable = sed_import_notice_iron_month
+ remove_variable = sed_import_notice_iron_buy
+ remove_variable = sed_import_notice_iron_sell
  remove_variable = sed_import_notice_coal_month
+ remove_variable = sed_import_notice_coal_buy
+ remove_variable = sed_import_notice_coal_sell
  remove_variable = sed_import_notice_grain_month
+ remove_variable = sed_import_notice_grain_buy
+ remove_variable = sed_import_notice_grain_sell
  remove_variable = sed_import_notice_fabric_month
+ remove_variable = sed_import_notice_fabric_buy
+ remove_variable = sed_import_notice_fabric_sell
  remove_variable = sed_import_notice_tools_month
+ remove_variable = sed_import_notice_tools_buy
+ remove_variable = sed_import_notice_tools_sell
  remove_variable = sed_import_notice_groceries_month
+ remove_variable = sed_import_notice_groceries_buy
+ remove_variable = sed_import_notice_groceries_sell
  remove_variable = sed_import_notice_clothes_month
+ remove_variable = sed_import_notice_clothes_buy
+ remove_variable = sed_import_notice_clothes_sell
  remove_variable = sed_import_notice_small_arms_month
+ remove_variable = sed_import_notice_small_arms_buy
+ remove_variable = sed_import_notice_small_arms_sell
  remove_variable = sed_import_notice_artillery_month
+ remove_variable = sed_import_notice_artillery_buy
+ remove_variable = sed_import_notice_artillery_sell
  remove_variable = sed_import_notice_ammunition_month
+ remove_variable = sed_import_notice_ammunition_buy
+ remove_variable = sed_import_notice_ammunition_sell
  remove_variable = sed_import_notice_paper_month
+ remove_variable = sed_import_notice_paper_buy
+ remove_variable = sed_import_notice_paper_sell
  remove_variable = sed_pm_upgrade_status
  remove_variable = sed_investment_market_wood_lower
  remove_variable = sed_investment_market_wood_upper
@@ -12611,6 +12635,10 @@ sed_check_import_notices = {
    NOT = { any_scope_state = { sed_wood_candidate_eligible = yes } }
    NOT = { any_scope_state = { has_variable = sed_wood_request_pending } }
   }
+  set_variable = { name = sed_import_notice_wood_buy
+   value = { value = 0 market = { mg:wood ?= { add = market_goods_buy_orders } } } }
+  set_variable = { name = sed_import_notice_wood_sell
+   value = { value = 0 market = { mg:wood ?= { add = market_goods_sell_orders } } } }
   trigger_event = { id = sed_pulse.2 days = 0 }
  }
  if = {
@@ -12623,6 +12651,10 @@ sed_check_import_notices = {
    NOT = { any_scope_state = { sed_iron_candidate_eligible = yes } }
    NOT = { any_scope_state = { has_variable = sed_iron_request_pending } }
   }
+  set_variable = { name = sed_import_notice_iron_buy
+   value = { value = 0 market = { mg:iron ?= { add = market_goods_buy_orders } } } }
+  set_variable = { name = sed_import_notice_iron_sell
+   value = { value = 0 market = { mg:iron ?= { add = market_goods_sell_orders } } } }
   trigger_event = { id = sed_pulse.3 days = 0 }
  }
  if = {
@@ -12635,6 +12667,10 @@ sed_check_import_notices = {
    NOT = { any_scope_state = { sed_coal_candidate_eligible = yes } }
    NOT = { any_scope_state = { has_variable = sed_coal_request_pending } }
   }
+  set_variable = { name = sed_import_notice_coal_buy
+   value = { value = 0 market = { mg:coal ?= { add = market_goods_buy_orders } } } }
+  set_variable = { name = sed_import_notice_coal_sell
+   value = { value = 0 market = { mg:coal ?= { add = market_goods_sell_orders } } } }
   trigger_event = { id = sed_pulse.4 days = 0 }
  }
  if = {
@@ -12647,6 +12683,10 @@ sed_check_import_notices = {
    NOT = { any_scope_state = { sed_grain_candidate_eligible = yes } }
    NOT = { any_scope_state = { has_variable = sed_grain_request_pending } }
   }
+  set_variable = { name = sed_import_notice_grain_buy
+   value = { value = 0 market = { mg:grain ?= { add = market_goods_buy_orders } } } }
+  set_variable = { name = sed_import_notice_grain_sell
+   value = { value = 0 market = { mg:grain ?= { add = market_goods_sell_orders } } } }
   trigger_event = { id = sed_pulse.5 days = 0 }
  }
  if = {
@@ -12659,6 +12699,10 @@ sed_check_import_notices = {
    NOT = { any_scope_state = { sed_fabric_candidate_eligible = yes } }
    NOT = { any_scope_state = { has_variable = sed_fabric_request_pending } }
   }
+  set_variable = { name = sed_import_notice_fabric_buy
+   value = { value = 0 market = { mg:fabric ?= { add = market_goods_buy_orders } } } }
+  set_variable = { name = sed_import_notice_fabric_sell
+   value = { value = 0 market = { mg:fabric ?= { add = market_goods_sell_orders } } } }
   trigger_event = { id = sed_pulse.6 days = 0 }
  }
  if = {
@@ -12671,6 +12715,10 @@ sed_check_import_notices = {
    NOT = { any_scope_state = { sed_tools_candidate_eligible = yes } }
    NOT = { any_scope_state = { has_variable = sed_tools_request_pending } }
   }
+  set_variable = { name = sed_import_notice_tools_buy
+   value = { value = 0 market = { mg:tools ?= { add = market_goods_buy_orders } } } }
+  set_variable = { name = sed_import_notice_tools_sell
+   value = { value = 0 market = { mg:tools ?= { add = market_goods_sell_orders } } } }
   trigger_event = { id = sed_pulse.7 days = 0 }
  }
  if = {
@@ -12683,6 +12731,10 @@ sed_check_import_notices = {
    NOT = { any_scope_state = { sed_groceries_candidate_eligible = yes } }
    NOT = { any_scope_state = { has_variable = sed_groceries_request_pending } }
   }
+  set_variable = { name = sed_import_notice_groceries_buy
+   value = { value = 0 market = { mg:groceries ?= { add = market_goods_buy_orders } } } }
+  set_variable = { name = sed_import_notice_groceries_sell
+   value = { value = 0 market = { mg:groceries ?= { add = market_goods_sell_orders } } } }
   trigger_event = { id = sed_pulse.8 days = 0 }
  }
  if = {
@@ -12695,6 +12747,10 @@ sed_check_import_notices = {
    NOT = { any_scope_state = { sed_clothes_candidate_eligible = yes } }
    NOT = { any_scope_state = { has_variable = sed_clothes_request_pending } }
   }
+  set_variable = { name = sed_import_notice_clothes_buy
+   value = { value = 0 market = { mg:clothes ?= { add = market_goods_buy_orders } } } }
+  set_variable = { name = sed_import_notice_clothes_sell
+   value = { value = 0 market = { mg:clothes ?= { add = market_goods_sell_orders } } } }
   trigger_event = { id = sed_pulse.9 days = 0 }
  }
  if = {
@@ -12707,6 +12763,10 @@ sed_check_import_notices = {
    NOT = { any_scope_state = { sed_small_arms_candidate_eligible = yes } }
    NOT = { any_scope_state = { has_variable = sed_small_arms_request_pending } }
   }
+  set_variable = { name = sed_import_notice_small_arms_buy
+   value = { value = 0 market = { mg:small_arms ?= { add = market_goods_buy_orders } } } }
+  set_variable = { name = sed_import_notice_small_arms_sell
+   value = { value = 0 market = { mg:small_arms ?= { add = market_goods_sell_orders } } } }
   trigger_event = { id = sed_pulse.10 days = 0 }
  }
  if = {
@@ -12719,6 +12779,10 @@ sed_check_import_notices = {
    NOT = { any_scope_state = { sed_artillery_candidate_eligible = yes } }
    NOT = { any_scope_state = { has_variable = sed_artillery_request_pending } }
   }
+  set_variable = { name = sed_import_notice_artillery_buy
+   value = { value = 0 market = { mg:artillery ?= { add = market_goods_buy_orders } } } }
+  set_variable = { name = sed_import_notice_artillery_sell
+   value = { value = 0 market = { mg:artillery ?= { add = market_goods_sell_orders } } } }
   trigger_event = { id = sed_pulse.11 days = 0 }
  }
  if = {
@@ -12731,6 +12795,10 @@ sed_check_import_notices = {
    NOT = { any_scope_state = { sed_ammunition_candidate_eligible = yes } }
    NOT = { any_scope_state = { has_variable = sed_ammunition_request_pending } }
   }
+  set_variable = { name = sed_import_notice_ammunition_buy
+   value = { value = 0 market = { mg:ammunition ?= { add = market_goods_buy_orders } } } }
+  set_variable = { name = sed_import_notice_ammunition_sell
+   value = { value = 0 market = { mg:ammunition ?= { add = market_goods_sell_orders } } } }
   trigger_event = { id = sed_pulse.12 days = 0 }
  }
  if = {
@@ -12743,6 +12811,10 @@ sed_check_import_notices = {
    NOT = { any_scope_state = { sed_paper_candidate_eligible = yes } }
    NOT = { any_scope_state = { has_variable = sed_paper_request_pending } }
   }
+  set_variable = { name = sed_import_notice_paper_buy
+   value = { value = 0 market = { mg:paper ?= { add = market_goods_buy_orders } } } }
+  set_variable = { name = sed_import_notice_paper_sell
+   value = { value = 0 market = { mg:paper ?= { add = market_goods_sell_orders } } } }
   trigger_event = { id = sed_pulse.13 days = 0 }
  }
 }

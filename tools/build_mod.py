@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.21'
+VERSION = '0.7.22'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -218,7 +218,8 @@ sed_queue_levels_before'''.split() + [
       for field in ('intents', 'completed', 'abandoned', 'result', 'result_month')],
     *[f"sed_{item['good']}_{reason}" for item in SUPPLY_TARGETS
       for reason in SUPPLY_DIAGNOSTICS],
-    *[f"sed_import_notice_{item['good']}_month" for item in SUPPLY_TARGETS],
+    *[f"sed_import_notice_{item['good']}_{field}" for item in SUPPLY_TARGETS
+      for field in ('month', 'buy', 'sell')],
 ]
 
 
@@ -1620,6 +1621,10 @@ sed_check_import_notices = {"""]
    NOT = {{ any_scope_state = {{ sed_{good}_candidate_eligible = yes }} }}
    NOT = {{ any_scope_state = {{ has_variable = sed_{good}_request_pending }} }}
   }}
+  set_variable = {{ name = sed_import_notice_{good}_buy
+   value = {{ value = 0 market = {{ mg:{good} ?= {{ add = market_goods_buy_orders }} }} }} }}
+  set_variable = {{ name = sed_import_notice_{good}_sell
+   value = {{ value = 0 market = {{ mg:{good} ?= {{ add = market_goods_sell_orders }} }} }} }}
   trigger_event = {{ id = sed_pulse.{index} days = 0 }}
  }}''')
     result.append('}')
@@ -2092,8 +2097,8 @@ def localization(language):
             f'Escassez de {label_pt}: importar ou ampliar?',
             f'{label_en[:1].upper() + label_en[1:]} shortage: import or expand?')
         pairs[f'sed_import_notice_{good}_desc'] = (
-            f'A demanda de {label_pt} supera a oferta e nenhuma expansão local passou nos filtros agora — trabalhadores, insumos, fila, orçamento ou infraestrutura barraram as candidatas. O Director não pode abrir rota comercial por script: a alternativa restante é você abrir a importação pela interface de comércio. Ampliar produção local segue possível quando um filtro liberar.',
-            f'Demand for {label_en} exceeds supply and no local expansion passed the filters this time — workers, inputs, queue, budget or infrastructure blocked the candidates. The Director cannot open a trade route by script: the remaining lever is you opening the import in the trade interface. Local expansion becomes possible again once a filter clears.')
+            f'A demanda de {label_pt} supera a oferta e nenhuma expansão local passou nos filtros agora — trabalhadores, insumos, fila, orçamento ou infraestrutura barraram as candidatas. Pedidos do mercado agora: compra #variable [ROOT.GetCountry.MakeScope.Var(\'sed_import_notice_{good}_buy\').GetValue|D]#!, venda #variable [ROOT.GetCountry.MakeScope.Var(\'sed_import_notice_{good}_sell\').GetValue|D]#!. A diferença indica o tamanho da lacuna que uma importação cobriria; não é estimativa de custo, frete ou comboios. O Director não pode abrir rota comercial por script: a alternativa restante é você abrir a importação pela interface de comércio. Ampliar produção local segue possível quando um filtro liberar.',
+            f'Demand for {label_en} exceeds supply and no local expansion passed the filters this time — workers, inputs, queue, budget or infrastructure blocked the candidates. Market orders now: buy #variable [ROOT.GetCountry.MakeScope.Var(\'sed_import_notice_{good}_buy\').GetValue|D]#!, sell #variable [ROOT.GetCountry.MakeScope.Var(\'sed_import_notice_{good}_sell\').GetValue|D]#!. The difference shows the size of the gap an import would cover; it is not a cost, convoy or freight estimate. The Director cannot open a trade route by script: the remaining lever is you opening the import in the trade interface. Local expansion becomes possible again once a filter clears.')
         pairs[f'sed_import_notice_{good}_option_trade'] = (
             'Vou abrir a rota de importação',
             'I will open the import route')

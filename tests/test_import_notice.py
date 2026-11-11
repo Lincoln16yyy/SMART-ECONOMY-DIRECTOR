@@ -105,6 +105,23 @@ class ImportNoticeTests(unittest.TestCase):
                 self.assertIn(key + ':', english)
                 self.assertIn(key + ':', portuguese)
 
+    def test_notice_records_market_orders_for_the_description(self):
+        c = self.country()
+        c.market_goods['wood']['market_goods_buy_orders'] = 1250
+        c.market_goods['wood']['market_goods_sell_orders'] = 900
+        c.run('sed_check_import_notices')
+        self.assertEqual(c.variables['sed_import_notice_wood_buy'], 1250)
+        self.assertEqual(c.variables['sed_import_notice_wood_sell'], 900)
+
+    def test_description_shows_the_recorded_orders(self):
+        portuguese = outputs()['localization/braz_por/sed_l_braz_por.yml'].decode('utf-8-sig')
+        for item in SUPPLY_TARGETS:
+            good = item['good']
+            self.assertIn(
+                f".Var('sed_import_notice_{good}_buy').GetValue|D", portuguese)
+            self.assertIn(
+                f".Var('sed_import_notice_{good}_sell').GetValue|D", portuguese)
+
     def test_notice_is_advisory_and_never_opens_a_trade_route(self):
         events = outputs()['events/sed_events.txt'].decode('utf-8-sig')
         self.assertNotIn('create_trade_route', events)

@@ -2256,3 +2256,28 @@ três `unknown-field` de diário e 917 avisos (sem novos).
 
 Não verificado: prazo em meses, escolha automática ao expirar e exibição na
 engine. Instalada com jogo fechado e backup; conferir `logs/error.log` e o save.
+
+## 0.7.22 — Pedidos do mercado no evento de importação
+
+O evento da 0.7.21 dizia qual bem faltava, mas não quanto. Antes de disparar
+`sed_pulse.2..13`, `sed_check_import_notices` grava
+`sed_import_notice_<bem>_buy` e `_sell` com `market_goods_buy_orders` e
+`market_goods_sell_orders` do mercado em escopo; a descrição imprime os dois com
+`[ROOT.GetCountry.MakeScope.Var('…').GetValue|D]`.
+
+Evidência do formato — `negotiation.1.d6` no vanilla usa exatamente
+`[ROOT.GetCountry.MakeScope.Var('supporting_ig')…]` em descrição de evento; o
+helper `value()` do mod já usava `.MakeScope.Var(...).GetValue|fmt]` no painel
+(aqui sem `JournalEntry`, porque a loc roda no evento).
+
+A descrição é explícita: a diferença entre os pedidos indica o tamanho da lacuna,
+não custo, frete ou comboios. Nada é estimado além dos dois números do mercado.
+
+Teste sintético — 372 aprovados; dois novos: as variáveis recebem 1250/900 do
+mercado do teste e as doze descrições citam as chaves de compra e venda.
+
+Estático — geração consistente, Tiger 1.19.0 nos mesmos 3 `unknown-field` de
+diário e 917 avisos.
+
+Não verificado na engine: se a loc de evento resolve `ROOT.GetCountry.MakeScope`
+com a variável presente e se o texto cabe na janela do evento.
