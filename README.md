@@ -1,5 +1,9 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.15, a fundação das indústrias próprias considera os insumos da
+configuração básica verificada. Métodos avançados são avaliados na configuração
+inicial do prédio conforme tecnologia, oferta e referência econômica.
+
 Na 0.7.14, papel entra na construção própria e no planejamento de insumos.
 O Automático pode fundar a primeira fábrica ou ampliar um produtor elegível.
 A cadeia considera a disponibilidade de madeira e dos insumos de seus PMs.

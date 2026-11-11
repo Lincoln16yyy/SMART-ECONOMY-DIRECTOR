@@ -91,8 +91,20 @@ def configuration_branch(building, methods, marker):
     confirmed = ' '.join(f'has_active_production_method = {method}' for method in methods)
     input_checks = '\n'.join(inputs)
     reservation_commands = '\n'.join(reservations)
+    labor_guard = 'sed_state_labor_pool >= sed_state_labor_committed'
+    baseline = [group['method'] for group in PROFILES[building]]
+    if methods == baseline:
+        jobs = ECONOMICS['buildings'][building][methods[0]]['workers']
+        main_methods = ' '.join(
+            f'has_active_production_method = {method}'
+            for method, profile in ECONOMICS['buildings'][building].items()
+            if profile['workers'] >= jobs)
+        auxiliaries = ' '.join(f'has_active_production_method = {method}' for method in methods[1:])
+        # A tracked startup may remain partially staffed. Returning its main PM
+        # to basic does not add jobs when its auxiliary groups are already basic.
+        labor_guard = f'OR = {{ {labor_guard} b:{building} = {{ {auxiliaries} OR = {{ {main_methods} }} }} }}'
     return f'''    else_if = {{ limit = {{ has_building = {building}
-     sed_state_labor_pool >= sed_state_labor_committed
+     {labor_guard}
      owner = {{ {technologies} }}
 {activation}
 {input_checks}

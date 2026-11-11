@@ -9,6 +9,7 @@ from pathlib import Path
 
 PROFILES = json.loads((Path(__file__).resolve().parents[1] / 'data/input_profiles.json').read_text())
 FOUNDING_GROUPS = json.loads((Path(__file__).resolve().parents[1] / 'data/founding_method_groups.json').read_text())
+STARTUP_METHODS = json.loads((Path(__file__).resolve().parents[1] / 'data/founding_production_methods.json').read_text())
 LOCAL_GOODS = {'electricity', 'transportation', 'services'}
 GOODS = sorted({good for methods in PROFILES.values() for goods in methods.values() for good in goods})
 LABELS_PT = {
@@ -44,9 +45,14 @@ def values(founding_projects=()):
                 if good in inputs:
                     result.append(f' if = {{ limit = {{ b:{building} = {{ has_active_production_method = {method} }} }} add = {inputs[good]} }}')
             result.append(' min = 0\n}')
-            # A new building has no active PM to inspect. Reserve enough for any
-            # technologically available method, taking one maximum per group.
+            # First industries use the verified basic configuration. External PM
+            # managers retain the broader forecast because they own initial setup.
             result.append(f'{amount_name(building, good, founding=True)} = {{\n value = 0')
+            if building in STARTUP_METHODS:
+                baseline = sum(PROFILES[building].get(group['method'], {}).get(good, 0)
+                               for group in STARTUP_METHODS[building])
+                result.append(f" if = {{ limit = {{ owner = {{ has_variable = sed_mode_automatic NOT = {{ OR = {{ has_variable = advisor_pm_balance_enabled has_variable = advisor_labor_auto_enabled }} }} }} }} add = {baseline:g} }}")
+                result.append(' if = { limit = { owner = { OR = { NOT = { has_variable = sed_mode_automatic } has_variable = advisor_pm_balance_enabled has_variable = advisor_labor_auto_enabled } } }')
             for group in FOUNDING_GROUPS[building]:
                 result.append(' add = { value = 0')
                 for method, technologies in group.items():
@@ -55,6 +61,8 @@ def values(founding_projects=()):
                         continue
                     gates = ' '.join(f'has_technology_researched = {tech}' for tech in technologies)
                     result.append(f' min = {{ value = 0 if = {{ limit = {{ owner = {{ {gates} }} }} add = {amount} }} }}')
+                result.append(' }')
+            if building in STARTUP_METHODS:
                 result.append(' }')
             result.append('}')
     for good in GOODS:

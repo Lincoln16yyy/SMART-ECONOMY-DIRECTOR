@@ -43,21 +43,23 @@ class InputForecastTests(unittest.TestCase):
         c.run('sed_run_tools_approval', target)
         self.assertEqual(c.constructions, [])
 
-    def test_founding_accounts_for_technologically_available_methods(self):
+    def test_founding_uses_basic_inputs_after_unlocking_advanced_methods(self):
         c = self.c
+        c.run('sed_set_mode_automatic')
         target = state()
         c.states = [target]
         self.assertEqual(c.number('sed_founding_input_iron_mine_coal', target), 0)
         c.readings['technologies'] = ['atmospheric_engine']
-        self.assertGreater(c.number('sed_founding_input_iron_mine_coal', target), 0)
+        self.assertEqual(c.number('sed_founding_input_iron_mine_coal', target), 0)
 
-    def test_founding_takes_one_maximum_per_method_group(self):
+    def test_founding_does_not_combine_alternative_method_inputs(self):
         c = self.c
+        c.run('sed_set_mode_automatic')
         target = state()
         c.states = [target]
         c.readings['technologies'] = ['steelworking', 'mechanical_tools', 'vulcanization']
         self.assertEqual(c.number('sed_founding_input_tooling_workshop_wood', target), 30)
-        self.assertEqual(c.number('sed_founding_input_tooling_workshop_steel', target), 30)
+        self.assertEqual(c.number('sed_founding_input_tooling_workshop_steel', target), 0)
 
     def test_pending_founding_reserves_inputs_without_double_counting(self):
         c = self.c
