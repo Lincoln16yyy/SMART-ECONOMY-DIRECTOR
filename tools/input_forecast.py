@@ -17,7 +17,7 @@ LABELS_PT = {
     'fertilizer': 'fertilizante', 'fish': 'peixe', 'glass': 'vidro', 'grain': 'cereais',
     'hardwood': 'madeira de lei', 'iron': 'ferro', 'lead': 'chumbo', 'meat': 'carne',
     'oil': 'petróleo', 'rubber': 'borracha', 'silk': 'seda', 'steel': 'aço',
-    'sugar': 'açúcar', 'tools': 'ferramentas', 'transportation': 'transporte', 'wood': 'madeira',
+    'sugar': 'açúcar', 'sulfur': 'enxofre', 'tools': 'ferramentas', 'transportation': 'transporte', 'wood': 'madeira',
 }
 MARKET_GOODS = [good for good in GOODS if good not in LOCAL_GOODS]
 COUNTRY_VARIABLES = ['sed_input_market_margin_' + good for good in MARKET_GOODS]

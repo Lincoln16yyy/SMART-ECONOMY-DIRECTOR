@@ -163,6 +163,9 @@ class Country:
                 result += sum(self.number(rest, target) for target in self.states
                               if self.condition(limit, target))
                 continue
+            if entry.key == 'owner':
+                result += self.number(entry.value, self.country_scope())
+                continue
             if entry.key == 'market':
                 result += self.number(entry.value, {'goods': self.market_goods})
                 continue

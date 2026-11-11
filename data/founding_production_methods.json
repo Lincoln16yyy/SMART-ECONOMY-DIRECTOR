@@ -488,5 +488,25 @@
         "pm_assembly_lines_building_munition_plant"
       ]
     }
+  ],
+  "building_paper_mill": [
+    {
+      "group": "pmg_base_building_paper_mill",
+      "method": "pm_pulp_pressing",
+      "alternatives": [
+        "pm_pulp_pressing",
+        "pm_sulfite_pulping",
+        "pm_bleached_paper"
+      ]
+    },
+    {
+      "group": "pmg_automation_building_paper_mill",
+      "method": "pm_automation_disabled",
+      "alternatives": [
+        "pm_automation_disabled",
+        "pm_watertube_boiler_building_paper_mill",
+        "pm_rotary_valve_engine_building_paper_mill"
+      ]
+    }
   ]
 }

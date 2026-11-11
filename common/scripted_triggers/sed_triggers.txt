@@ -91,6 +91,24 @@ sed_input_blocks_wood_tools_tooling_workshop_constraint = {
  }
 }
 
+sed_input_blocks_wood_paper_paper_mill = {
+ owner = { market = { mg:paper ?= { market_goods_has_goods_shortage = yes } } }
+ sed_input_blocks_wood_paper_paper_mill_constraint = yes
+}
+sed_input_blocks_wood_paper_paper_mill_constraint = {
+ sed_paper_candidate_site = yes
+ OR = {
+ AND = { sed_paper_paper_mill_operable = yes
+ sed_input_paper_mill_wood > 0
+     sed_input_headroom_wood < { value = sed_input_paper_mill_wood multiply = 1.25 }
+ }
+ AND = { sed_paper_paper_mill_found_operable = yes
+ sed_founding_input_paper_mill_wood > 0
+     sed_input_headroom_wood < { value = sed_founding_input_paper_mill_wood multiply = 1.25 }
+ }
+ }
+}
+
 sed_input_blocks_iron_fabric_livestock_ranch = {
  owner = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } } }
  sed_input_blocks_iron_fabric_livestock_ranch_constraint = yes
@@ -393,6 +411,24 @@ sed_input_blocks_coal_ammunition_munition_plant_constraint = {
  AND = { sed_ammunition_munition_plant_found_operable = yes
  sed_founding_input_munition_plant_coal > 0
      sed_input_headroom_coal < { value = sed_founding_input_munition_plant_coal multiply = 1.25 }
+ }
+ }
+}
+
+sed_input_blocks_coal_paper_paper_mill = {
+ owner = { market = { mg:paper ?= { market_goods_has_goods_shortage = yes } } }
+ sed_input_blocks_coal_paper_paper_mill_constraint = yes
+}
+sed_input_blocks_coal_paper_paper_mill_constraint = {
+ sed_paper_candidate_site = yes
+ OR = {
+ AND = { sed_paper_paper_mill_operable = yes
+ sed_input_paper_mill_coal > 0
+     sed_input_headroom_coal < { value = sed_input_paper_mill_coal multiply = 1.25 }
+ }
+ AND = { sed_paper_paper_mill_found_operable = yes
+ sed_founding_input_paper_mill_coal > 0
+     sed_input_headroom_coal < { value = sed_founding_input_paper_mill_coal multiply = 1.25 }
  }
  }
 }
@@ -703,6 +739,24 @@ sed_input_blocks_tools_ammunition_munition_plant_constraint = {
  }
 }
 
+sed_input_blocks_tools_paper_paper_mill = {
+ owner = { market = { mg:paper ?= { market_goods_has_goods_shortage = yes } } }
+ sed_input_blocks_tools_paper_paper_mill_constraint = yes
+}
+sed_input_blocks_tools_paper_paper_mill_constraint = {
+ sed_paper_candidate_site = yes
+ OR = {
+ AND = { sed_paper_paper_mill_operable = yes
+ sed_input_paper_mill_tools > 0
+     sed_input_headroom_tools < { value = sed_input_paper_mill_tools multiply = 1.25 }
+ }
+ AND = { sed_paper_paper_mill_found_operable = yes
+ sed_founding_input_paper_mill_tools > 0
+     sed_input_headroom_tools < { value = sed_founding_input_paper_mill_tools multiply = 1.25 }
+ }
+ }
+}
+
 sed_wood_supply_demand = { OR = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:wood ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } AND = { has_variable = sed_input_priority_wood NOT = { any_scope_state = { sed_wood_queued_supply = yes } } } } }
 sed_wood_candidate_site = {
  is_incorporated = yes
@@ -752,7 +806,23 @@ sed_wood_logging_camp_found_eligible = {
 sed_wood_logging_camp_found_operable = {
  sed_wood_found_site = yes
  can_construct_building = building_logging_camp
- sed_state_labor_available >= 5000
+ OR = {
+  sed_state_labor_available >= 5000
+  AND = {
+
+   owner = { has_variable = sed_mode_automatic market = { mg:wood ?= {
+    market_goods_has_goods_shortage = yes market_goods_buy_orders > 0
+   } } }
+   sed_state_labor_available >= 1250
+   sed_state_labor_available >= { value = 0
+    owner = { market = { mg:wood ?= {
+     add = market_goods_buy_orders subtract = market_goods_sell_orders min = 0
+    } } }
+    multiply = 6250
+    divide = 30
+   }
+  }
+ }
 }
 sed_wood_logging_camp_eligible = {
  sed_wood_logging_camp_operable = yes
@@ -839,7 +909,23 @@ sed_iron_iron_mine_found_eligible = {
 sed_iron_iron_mine_found_operable = {
  sed_iron_found_site = yes
  can_construct_building = building_iron_mine
- sed_state_labor_available >= 5250
+ OR = {
+  sed_state_labor_available >= 5250
+  AND = {
+
+   owner = { has_variable = sed_mode_automatic market = { mg:iron ?= {
+    market_goods_has_goods_shortage = yes market_goods_buy_orders > 0
+   } } }
+   sed_state_labor_available >= 1312.5
+   sed_state_labor_available >= { value = 0
+    owner = { market = { mg:iron ?= {
+     add = market_goods_buy_orders subtract = market_goods_sell_orders min = 0
+    } } }
+    multiply = 6562.5
+    divide = 20
+   }
+  }
+ }
 }
 sed_iron_iron_mine_eligible = {
  sed_iron_iron_mine_operable = yes
@@ -929,7 +1015,23 @@ sed_coal_coal_mine_found_eligible = {
 sed_coal_coal_mine_found_operable = {
  sed_coal_found_site = yes
  can_construct_building = building_coal_mine
- sed_state_labor_available >= 5250
+ OR = {
+  sed_state_labor_available >= 5250
+  AND = {
+
+   owner = { has_variable = sed_mode_automatic market = { mg:coal ?= {
+    market_goods_has_goods_shortage = yes market_goods_buy_orders > 0
+   } } }
+   sed_state_labor_available >= 1312.5
+   sed_state_labor_available >= { value = 0
+    owner = { market = { mg:coal ?= {
+     add = market_goods_buy_orders subtract = market_goods_sell_orders min = 0
+    } } }
+    multiply = 6562.5
+    divide = 25
+   }
+  }
+ }
 }
 sed_coal_coal_mine_eligible = {
  sed_coal_coal_mine_operable = yes
@@ -1031,7 +1133,23 @@ sed_grain_wheat_farm_found_eligible = {
 sed_grain_wheat_farm_found_operable = {
  sed_grain_found_site = yes
  can_construct_building = building_wheat_farm
- sed_state_labor_available >= 5000
+ OR = {
+  sed_state_labor_available >= 5000
+  AND = {
+
+   owner = { has_variable = sed_mode_automatic market = { mg:grain ?= {
+    market_goods_has_goods_shortage = yes market_goods_buy_orders > 0
+   } } }
+   sed_state_labor_available >= 1250
+   sed_state_labor_available >= { value = 0
+    owner = { market = { mg:grain ?= {
+     add = market_goods_buy_orders subtract = market_goods_sell_orders min = 0
+    } } }
+    multiply = 6250
+    divide = 20
+   }
+  }
+ }
 }
 sed_grain_wheat_farm_eligible = {
  sed_grain_wheat_farm_operable = yes
@@ -1069,7 +1187,23 @@ sed_grain_rye_farm_found_eligible = {
 sed_grain_rye_farm_found_operable = {
  sed_grain_found_site = yes
  can_construct_building = building_rye_farm
- sed_state_labor_available >= 5000
+ OR = {
+  sed_state_labor_available >= 5000
+  AND = {
+
+   owner = { has_variable = sed_mode_automatic market = { mg:grain ?= {
+    market_goods_has_goods_shortage = yes market_goods_buy_orders > 0
+   } } }
+   sed_state_labor_available >= 1250
+   sed_state_labor_available >= { value = 0
+    owner = { market = { mg:grain ?= {
+     add = market_goods_buy_orders subtract = market_goods_sell_orders min = 0
+    } } }
+    multiply = 6250
+    divide = 20
+   }
+  }
+ }
 }
 sed_grain_rye_farm_eligible = {
  sed_grain_rye_farm_operable = yes
@@ -1106,7 +1240,23 @@ sed_grain_rice_farm_found_eligible = {
 sed_grain_rice_farm_found_operable = {
  sed_grain_found_site = yes
  can_construct_building = building_rice_farm
- sed_state_labor_available >= 10000
+ OR = {
+  sed_state_labor_available >= 10000
+  AND = {
+
+   owner = { has_variable = sed_mode_automatic market = { mg:grain ?= {
+    market_goods_has_goods_shortage = yes market_goods_buy_orders > 0
+   } } }
+   sed_state_labor_available >= 2500
+   sed_state_labor_available >= { value = 0
+    owner = { market = { mg:grain ?= {
+     add = market_goods_buy_orders subtract = market_goods_sell_orders min = 0
+    } } }
+    multiply = 12500
+    divide = 35
+   }
+  }
+ }
 }
 sed_grain_rice_farm_eligible = {
  sed_grain_rice_farm_operable = yes
@@ -1144,7 +1294,23 @@ sed_grain_maize_farm_found_eligible = {
 sed_grain_maize_farm_found_operable = {
  sed_grain_found_site = yes
  can_construct_building = building_maize_farm
- sed_state_labor_available >= 5000
+ OR = {
+  sed_state_labor_available >= 5000
+  AND = {
+
+   owner = { has_variable = sed_mode_automatic market = { mg:grain ?= {
+    market_goods_has_goods_shortage = yes market_goods_buy_orders > 0
+   } } }
+   sed_state_labor_available >= 1250
+   sed_state_labor_available >= { value = 0
+    owner = { market = { mg:grain ?= {
+     add = market_goods_buy_orders subtract = market_goods_sell_orders min = 0
+    } } }
+    multiply = 6250
+    divide = 20
+   }
+  }
+ }
 }
 sed_grain_maize_farm_eligible = {
  sed_grain_maize_farm_operable = yes
@@ -1181,7 +1347,23 @@ sed_grain_millet_farm_found_eligible = {
 sed_grain_millet_farm_found_operable = {
  sed_grain_found_site = yes
  can_construct_building = building_millet_farm
- sed_state_labor_available >= 5000
+ OR = {
+  sed_state_labor_available >= 5000
+  AND = {
+
+   owner = { has_variable = sed_mode_automatic market = { mg:grain ?= {
+    market_goods_has_goods_shortage = yes market_goods_buy_orders > 0
+   } } }
+   sed_state_labor_available >= 1250
+   sed_state_labor_available >= { value = 0
+    owner = { market = { mg:grain ?= {
+     add = market_goods_buy_orders subtract = market_goods_sell_orders min = 0
+    } } }
+    multiply = 6250
+    divide = 20
+   }
+  }
+ }
 }
 sed_grain_millet_farm_eligible = {
  sed_grain_millet_farm_operable = yes
@@ -1609,7 +1791,23 @@ sed_fabric_cotton_plantation_found_eligible = {
 sed_fabric_cotton_plantation_found_operable = {
  sed_fabric_found_site = yes
  can_construct_building = building_cotton_plantation
- sed_state_labor_available >= 8000
+ OR = {
+  sed_state_labor_available >= 8000
+  AND = {
+
+   owner = { has_variable = sed_mode_automatic market = { mg:fabric ?= {
+    market_goods_has_goods_shortage = yes market_goods_buy_orders > 0
+   } } }
+   sed_state_labor_available >= 2000
+   sed_state_labor_available >= { value = 0
+    owner = { market = { mg:fabric ?= {
+     add = market_goods_buy_orders subtract = market_goods_sell_orders min = 0
+    } } }
+    multiply = 10000
+    divide = 45
+   }
+  }
+ }
 }
 sed_fabric_cotton_plantation_eligible = {
  sed_fabric_cotton_plantation_operable = yes
@@ -1646,7 +1844,23 @@ sed_fabric_livestock_ranch_found_eligible = {
 sed_fabric_livestock_ranch_found_operable = {
  sed_fabric_found_site = yes
  can_construct_building = building_livestock_ranch
- sed_state_labor_available >= 5000
+ OR = {
+  sed_state_labor_available >= 5000
+  AND = {
+   always = no
+   owner = { has_variable = sed_mode_automatic market = { mg:fabric ?= {
+    market_goods_has_goods_shortage = yes market_goods_buy_orders > 0
+   } } }
+   sed_state_labor_available >= 1250
+   sed_state_labor_available >= { value = 0
+    owner = { market = { mg:fabric ?= {
+     add = market_goods_buy_orders subtract = market_goods_sell_orders min = 0
+    } } }
+    multiply = 6250
+    divide = 1
+   }
+  }
+ }
 }
 sed_fabric_livestock_ranch_eligible = {
  sed_fabric_livestock_ranch_operable = yes
@@ -1771,7 +1985,23 @@ sed_tools_tooling_workshop_found_eligible = {
 sed_tools_tooling_workshop_found_operable = {
  sed_tools_found_site = yes
  can_construct_building = building_tooling_workshop
- sed_state_labor_available >= 5000
+ OR = {
+  sed_state_labor_available >= 5000
+  AND = {
+
+   owner = { has_variable = sed_mode_automatic market = { mg:tools ?= {
+    market_goods_has_goods_shortage = yes market_goods_buy_orders > 0
+   } } }
+   sed_state_labor_available >= 1250
+   sed_state_labor_available >= { value = 0
+    owner = { market = { mg:tools ?= {
+     add = market_goods_buy_orders subtract = market_goods_sell_orders min = 0
+    } } }
+    multiply = 6250
+    divide = 30
+   }
+  }
+ }
 }
 sed_tools_tooling_workshop_eligible = {
  sed_tools_tooling_workshop_operable = yes
@@ -1860,7 +2090,23 @@ sed_groceries_food_industry_found_eligible = {
 sed_groceries_food_industry_found_operable = {
  sed_groceries_found_site = yes
  can_construct_building = building_food_industry
- sed_state_labor_available >= 6600
+ OR = {
+  sed_state_labor_available >= 6600
+  AND = {
+
+   owner = { has_variable = sed_mode_automatic market = { mg:groceries ?= {
+    market_goods_has_goods_shortage = yes market_goods_buy_orders > 0
+   } } }
+   sed_state_labor_available >= 1650
+   sed_state_labor_available >= { value = 0
+    owner = { market = { mg:groceries ?= {
+     add = market_goods_buy_orders subtract = market_goods_sell_orders min = 0
+    } } }
+    multiply = 8250
+    divide = 45
+   }
+  }
+ }
 }
 sed_groceries_food_industry_eligible = {
  sed_groceries_food_industry_operable = yes
@@ -1949,7 +2195,23 @@ sed_clothes_textile_mill_found_eligible = {
 sed_clothes_textile_mill_found_operable = {
  sed_clothes_found_site = yes
  can_construct_building = building_textile_mill
- sed_state_labor_available >= 6000
+ OR = {
+  sed_state_labor_available >= 6000
+  AND = {
+
+   owner = { has_variable = sed_mode_automatic market = { mg:clothes ?= {
+    market_goods_has_goods_shortage = yes market_goods_buy_orders > 0
+   } } }
+   sed_state_labor_available >= 1500
+   sed_state_labor_available >= { value = 0
+    owner = { market = { mg:clothes ?= {
+     add = market_goods_buy_orders subtract = market_goods_sell_orders min = 0
+    } } }
+    multiply = 7500
+    divide = 45
+   }
+  }
+ }
 }
 sed_clothes_textile_mill_eligible = {
  sed_clothes_textile_mill_operable = yes
@@ -2035,7 +2297,23 @@ sed_small_arms_arms_industry_found_eligible = {
 sed_small_arms_arms_industry_found_operable = {
  sed_small_arms_found_site = yes
  can_construct_building = building_arms_industry
- sed_state_labor_available >= 5000
+ OR = {
+  sed_state_labor_available >= 5000
+  AND = {
+
+   owner = { has_variable = sed_mode_automatic market = { mg:small_arms ?= {
+    market_goods_has_goods_shortage = yes market_goods_buy_orders > 0
+   } } }
+   sed_state_labor_available >= 1250
+   sed_state_labor_available >= { value = 0
+    owner = { market = { mg:small_arms ?= {
+     add = market_goods_buy_orders subtract = market_goods_sell_orders min = 0
+    } } }
+    multiply = 6250
+    divide = 30
+   }
+  }
+ }
 }
 sed_small_arms_arms_industry_eligible = {
  sed_small_arms_arms_industry_operable = yes
@@ -2123,7 +2401,23 @@ sed_artillery_artillery_foundry_found_eligible = {
 sed_artillery_artillery_foundry_found_operable = {
  sed_artillery_found_site = yes
  can_construct_building = building_artillery_foundry
- sed_state_labor_available >= 5250
+ OR = {
+  sed_state_labor_available >= 5250
+  AND = {
+
+   owner = { has_variable = sed_mode_automatic market = { mg:artillery ?= {
+    market_goods_has_goods_shortage = yes market_goods_buy_orders > 0
+   } } }
+   sed_state_labor_available >= 1312.5
+   sed_state_labor_available >= { value = 0
+    owner = { market = { mg:artillery ?= {
+     add = market_goods_buy_orders subtract = market_goods_sell_orders min = 0
+    } } }
+    multiply = 6562.5
+    divide = 25
+   }
+  }
+ }
 }
 sed_artillery_artillery_foundry_eligible = {
  sed_artillery_artillery_foundry_operable = yes
@@ -2209,7 +2503,23 @@ sed_ammunition_munition_plant_found_eligible = {
 sed_ammunition_munition_plant_found_operable = {
  sed_ammunition_found_site = yes
  can_construct_building = building_munition_plant
- sed_state_labor_available >= 5000
+ OR = {
+  sed_state_labor_available >= 5000
+  AND = {
+
+   owner = { has_variable = sed_mode_automatic market = { mg:ammunition ?= {
+    market_goods_has_goods_shortage = yes market_goods_buy_orders > 0
+   } } }
+   sed_state_labor_available >= 1250
+   sed_state_labor_available >= { value = 0
+    owner = { market = { mg:ammunition ?= {
+     add = market_goods_buy_orders subtract = market_goods_sell_orders min = 0
+    } } }
+    multiply = 6250
+    divide = 50
+   }
+  }
+ }
 }
 sed_ammunition_munition_plant_eligible = {
  sed_ammunition_munition_plant_operable = yes
@@ -2235,6 +2545,106 @@ sed_ammunition_munition_plant_operable = {
 sed_ammunition_approval_valid = {
  sed_ammunition_candidate_eligible = yes
  OR = { owner = { NOT = { has_variable = sed_coord_active } } var:sed_plan_ammunition_rank = 1 }
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+  sed_execution_mode_permits_approval = yes
+ }
+}
+sed_paper_supply_demand = { OR = { market = { mg:paper ?= { market_goods_has_goods_shortage = yes } } AND = { has_variable = sed_mode_automatic market = { mg:paper ?= { market_goods_buy_orders > 0 market_goods_buy_orders > market_goods_sell_orders market_goods_pricier >= 0.2 } } } } }
+sed_paper_candidate_site = {
+ is_incorporated = yes
+ infrastructure_delta >= 0
+ NOT = { has_variable = sed_paper_ignored }
+ NOT = { has_variable = sed_paper_request_pending }
+
+}
+# No verified producer in the country: found the base in a state that can host it.
+sed_paper_found_site = {
+ sed_paper_candidate_site = yes
+ owner = {
+  NOT = { any_scope_state = { OR = { has_building = building_paper_mill } } }
+  # One base per country: a queued founding has no building yet, so the
+  # missing flag alone would let later reviews duplicate it elsewhere.
+  NOT = { any_scope_state = { has_variable = sed_paper_request_pending } }
+ }
+ NOT = { has_building = building_paper_mill }
+}
+sed_paper_supplier_available = {
+ sed_paper_candidate_site = yes
+ OR = { sed_paper_paper_mill_investment_eligible = yes }
+}
+sed_paper_candidate_eligible = {
+ owner = { sed_paper_supply_demand = yes }
+ sed_paper_supplier_available = yes
+ OR = {
+  owner = { market = { mg:paper ?= { market_goods_has_goods_shortage = yes } } }
+  owner = { has_variable = sed_input_priority_paper }
+  sed_investment_paper_margin > 0
+ }
+}
+
+sed_paper_queued_supply = { OR = { has_variable = sed_paper_request_pending AND = { has_building = building_paper_mill b:building_paper_mill = { level_after_queued_constructions > level OR = {   has_active_production_method = pm_pulp_pressing
+  has_active_production_method = pm_sulfite_pulping
+  has_active_production_method = pm_bleached_paper } } } } }
+
+# State scope: one verified producer type for paper; output checked by active method.
+sed_paper_paper_mill_investment_eligible = {
+ OR = { sed_paper_paper_mill_eligible = yes sed_paper_paper_mill_found_eligible = yes }
+ sed_investment_paper_mill_output > 0
+}
+sed_paper_paper_mill_found_eligible = {
+ sed_paper_paper_mill_found_operable = yes
+ sed_founding_input_paper_mill_safe = yes
+}
+sed_paper_paper_mill_found_operable = {
+ sed_paper_found_site = yes
+ can_construct_building = building_paper_mill
+ OR = {
+  sed_state_labor_available >= 5000
+  AND = {
+
+   owner = { has_variable = sed_mode_automatic market = { mg:paper ?= {
+    market_goods_has_goods_shortage = yes market_goods_buy_orders > 0
+   } } }
+   sed_state_labor_available >= 1250
+   sed_state_labor_available >= { value = 0
+    owner = { market = { mg:paper ?= {
+     add = market_goods_buy_orders subtract = market_goods_sell_orders min = 0
+    } } }
+    multiply = 6250
+    divide = 40
+   }
+  }
+ }
+}
+sed_paper_paper_mill_eligible = {
+ sed_paper_paper_mill_operable = yes
+ sed_input_paper_mill_safe = yes
+}
+sed_paper_paper_mill_operable = {
+ has_building = building_paper_mill
+ b:building_paper_mill = {
+  level > 0
+  occupancy >= 0.8
+  has_failed_hires = no
+  building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  OR = {
+  has_active_production_method = pm_pulp_pressing
+  has_active_production_method = pm_sulfite_pulping
+  has_active_production_method = pm_bleached_paper
+  }
+ }
+ sed_state_labor_available >= 5000
+ can_construct_building = building_paper_mill
+}
+
+sed_paper_approval_valid = {
+ sed_paper_candidate_eligible = yes
+ OR = { owner = { NOT = { has_variable = sed_coord_active } } var:sed_plan_paper_rank = 1 }
  owner = {
   is_player = yes
   has_variable = sed_enabled
@@ -2295,6 +2705,7 @@ sed_direct_supply_priority_exists = {
   any_scope_state = { var:sed_plan_small_arms_rank = 1 sed_small_arms_candidate_eligible = yes }
   any_scope_state = { var:sed_plan_artillery_rank = 1 sed_artillery_candidate_eligible = yes }
   any_scope_state = { var:sed_plan_ammunition_rank = 1 sed_ammunition_candidate_eligible = yes }
+  any_scope_state = { var:sed_plan_paper_rank = 1 sed_paper_candidate_eligible = yes }
  }
 }
 sed_competing_builder_configured = {
@@ -3349,6 +3760,50 @@ sed_founding_input_munition_plant_safe = {
  NOT = {
  sed_founding_input_munition_plant_tools > 0
  sed_input_headroom_tools < { value = sed_founding_input_munition_plant_tools multiply = 1.25 }
+ }
+}
+sed_input_paper_mill_safe = {
+ NOT = {
+  sed_input_paper_mill_coal > 0
+     sed_input_headroom_coal < { value = sed_input_paper_mill_coal multiply = 1.25 }
+ }
+ NOT = {
+  sed_input_paper_mill_dye > 0
+     sed_input_headroom_dye < { value = sed_input_paper_mill_dye multiply = 1.25 }
+ }
+ NOT = {
+  sed_input_paper_mill_sulfur > 0
+     sed_input_headroom_sulfur < { value = sed_input_paper_mill_sulfur multiply = 1.25 }
+ }
+ NOT = {
+  sed_input_paper_mill_tools > 0
+     sed_input_headroom_tools < { value = sed_input_paper_mill_tools multiply = 1.25 }
+ }
+ NOT = {
+  sed_input_paper_mill_wood > 0
+     sed_input_headroom_wood < { value = sed_input_paper_mill_wood multiply = 1.25 }
+ }
+}
+sed_founding_input_paper_mill_safe = {
+ NOT = {
+ sed_founding_input_paper_mill_coal > 0
+ sed_input_headroom_coal < { value = sed_founding_input_paper_mill_coal multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_paper_mill_dye > 0
+ sed_input_headroom_dye < { value = sed_founding_input_paper_mill_dye multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_paper_mill_sulfur > 0
+ sed_input_headroom_sulfur < { value = sed_founding_input_paper_mill_sulfur multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_paper_mill_tools > 0
+ sed_input_headroom_tools < { value = sed_founding_input_paper_mill_tools multiply = 1.25 }
+ }
+ NOT = {
+ sed_founding_input_paper_mill_wood > 0
+ sed_input_headroom_wood < { value = sed_founding_input_paper_mill_wood multiply = 1.25 }
  }
 }
 sed_coord_tools_available = {
@@ -4486,6 +4941,72 @@ sed_pm_upgrade_50_eligible = {
  }
  sed_input_headroom_hardwood >= {
   value = 6.25 multiply = b:building_artillery_foundry.level
+ }
+}
+sed_pm_upgrade_51_eligible = {
+ sed_paper_candidate_site = yes
+ NOT = { has_variable = sed_paper_found_pm_pending }
+ OR = { NOT = { has_variable = sed_pm_cooldown_paper_mill } var:sed_pm_cooldown_paper_mill <= sed_live_month_key }
+ owner = {
+  OR = { market = { mg:paper ?= { market_goods_has_goods_shortage = yes } }
+   has_variable = sed_input_priority_paper
+  }
+  has_technology_researched = mechanical_tools
+ }
+ has_building = building_paper_mill
+ b:building_paper_mill = {
+  level > 0 occupancy >= 0.9 has_failed_hires = no building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  has_active_production_method = pm_pulp_pressing
+ }
+ can_activate_production_method = { building_type = building_paper_mill production_method = pm_sulfite_pulping }
+ sed_input_headroom_sulfur >= {
+  value = 12.5 multiply = b:building_paper_mill.level
+ }
+}
+sed_pm_upgrade_52_eligible = {
+ sed_paper_candidate_site = yes
+ NOT = { has_variable = sed_paper_found_pm_pending }
+ OR = { NOT = { has_variable = sed_pm_cooldown_paper_mill } var:sed_pm_cooldown_paper_mill <= sed_live_month_key }
+ owner = {
+  OR = { market = { mg:paper ?= { market_goods_has_goods_shortage = yes } }
+   has_variable = sed_input_priority_paper
+  }
+  has_technology_researched = chemical_bleaching
+ }
+ has_building = building_paper_mill
+ b:building_paper_mill = {
+  level > 0 occupancy >= 0.9 has_failed_hires = no building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  has_active_production_method = pm_pulp_pressing
+ }
+ can_activate_production_method = { building_type = building_paper_mill production_method = pm_bleached_paper }
+ sed_input_headroom_sulfur >= {
+  value = 12.5 multiply = b:building_paper_mill.level
+ }
+ sed_input_headroom_dye >= {
+  value = 12.5 multiply = b:building_paper_mill.level
+ }
+}
+sed_pm_upgrade_53_eligible = {
+ sed_paper_candidate_site = yes
+ NOT = { has_variable = sed_paper_found_pm_pending }
+ OR = { NOT = { has_variable = sed_pm_cooldown_paper_mill } var:sed_pm_cooldown_paper_mill <= sed_live_month_key }
+ owner = {
+  OR = { market = { mg:paper ?= { market_goods_has_goods_shortage = yes } }
+   has_variable = sed_input_priority_paper
+  }
+  has_technology_researched = chemical_bleaching
+ }
+ has_building = building_paper_mill
+ b:building_paper_mill = {
+  level > 0 occupancy >= 0.9 has_failed_hires = no building_has_goods_shortage = no
+  level_after_queued_constructions <= level
+  has_active_production_method = pm_sulfite_pulping
+ }
+ can_activate_production_method = { building_type = building_paper_mill production_method = pm_bleached_paper }
+ sed_input_headroom_dye >= {
+  value = 12.5 multiply = b:building_paper_mill.level
  }
 }
 sed_pm_recovery_1_eligible = {
@@ -6162,5 +6683,129 @@ sed_pm_recovery_37_eligible = {
  NOT = {
   sed_input_arms_industry_tools > 10
   owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_38_eligible = {
+ NOT = { has_variable = sed_paper_ignored }
+ NOT = { has_variable = sed_paper_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_paper_mill
+ b:building_paper_mill = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_sulfite_pulping
+ }
+ can_activate_production_method = { building_type = building_paper_mill production_method = pm_pulp_pressing }
+ sed_supplier_paper_mill_output > 0
+ sed_supplier_paper_mill_output >= 60
+ OR = {
+  owner = { market = { mg:sulfur ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_paper_mill_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_paper_mill_dye > 0
+  owner = { market = { mg:dye ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_paper_mill_sulfur > 10
+  owner = { market = { mg:sulfur ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_paper_mill_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_paper_mill_wood > 0
+  owner = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_39_eligible = {
+ NOT = { has_variable = sed_paper_ignored }
+ NOT = { has_variable = sed_paper_found_pm_pending }
+
+ owner = {
+
+
+ }
+ has_building = building_paper_mill
+ b:building_paper_mill = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_bleached_paper
+ }
+ can_activate_production_method = { building_type = building_paper_mill production_method = pm_pulp_pressing }
+ sed_supplier_paper_mill_output > 0
+ sed_supplier_paper_mill_output >= 120
+ OR = {
+  owner = { market = { mg:sulfur ?= { market_goods_has_goods_shortage = yes } } }
+  owner = { market = { mg:dye ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_paper_mill_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_paper_mill_dye > 10
+  owner = { market = { mg:dye ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_paper_mill_sulfur > 10
+  owner = { market = { mg:sulfur ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_paper_mill_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_paper_mill_wood > 0
+  owner = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } }
+ }
+}
+sed_pm_recovery_40_eligible = {
+ NOT = { has_variable = sed_paper_ignored }
+ NOT = { has_variable = sed_paper_found_pm_pending }
+
+ owner = {
+
+  has_technology_researched = mechanical_tools
+ }
+ has_building = building_paper_mill
+ b:building_paper_mill = {
+  level > 0 occupancy >= 0.5 building_has_goods_shortage = yes
+
+  has_active_production_method = pm_bleached_paper
+ }
+ can_activate_production_method = { building_type = building_paper_mill production_method = pm_sulfite_pulping }
+ sed_supplier_paper_mill_output > 0
+ sed_supplier_paper_mill_output >= 60
+ OR = {
+  owner = { market = { mg:dye ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_paper_mill_coal > 0
+  owner = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_paper_mill_dye > 10
+  owner = { market = { mg:dye ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_paper_mill_sulfur > 0
+  owner = { market = { mg:sulfur ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_paper_mill_tools > 0
+  owner = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } } }
+ }
+ NOT = {
+  sed_input_paper_mill_wood > 0
+  owner = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } } }
  }
 }

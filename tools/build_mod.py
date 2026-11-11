@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.13'
+VERSION = '0.7.14'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -45,6 +45,7 @@ SUPPLY_TARGETS = [
     {'good': 'small_arms', 'building': 'building_arms_industry', 'methods': ['pm_muskets', 'pm_rifles', 'pm_repeaters', 'pm_bolt_action_rifles'], 'label_pt': 'armas leves', 'label_en': 'small arms', 'building_pt': 'indústria de armas', 'building_en': 'arms industry'},
     {'good': 'artillery', 'building': 'building_artillery_foundry', 'methods': ['pm_cannons', 'pm_bronze_cannons', 'pm_smoothbores', 'pm_bronze_smoothbores', 'pm_breech_loaders', 'pm_recoiled_barrels'], 'label_pt': 'artilharia', 'label_en': 'artillery', 'building_pt': 'fundição de artilharia', 'building_en': 'artillery foundry'},
     {'good': 'ammunition', 'building': 'building_munition_plant', 'methods': ['pm_percussion_caps', 'pm_explosive_shells'], 'label_pt': 'munição', 'label_en': 'ammunition', 'building_pt': 'fábrica de munição', 'building_en': 'munition plant'},
+    {'good': 'paper', 'building': 'building_paper_mill', 'methods': ['pm_pulp_pressing', 'pm_sulfite_pulping', 'pm_bleached_paper'], 'label_pt': 'papel', 'label_en': 'paper', 'building_pt': 'fábrica de papel', 'building_en': 'paper mill'},
 ]
 PERSISTENT_VARIABLES = ['sed_schema_version', 'sed_auto_last_attempt_month',
                         'sed_tax_last_change_month', 'sed_wage_last_change_month',
@@ -1743,6 +1744,8 @@ sed_{good}_candidate_eligible = {{
         for variant in vs:
             building = variant['building']
             methods = variant_methods(variant, '  ')
+            baseline_method = production_methods.PROFILES[building][0]['method']
+            baseline_output = production_methods.ECONOMICS['buildings'][building][baseline_method]['outputs'].get(good, 0)
             result.append(f'''# State scope: one verified producer type for {good}; output checked by active method.
 sed_{good}_{variant_id(variant)}_investment_eligible = {{
  OR = {{ sed_{good}_{variant_id(variant)}_eligible = yes sed_{good}_{variant_id(variant)}_found_eligible = yes }}
@@ -1755,7 +1758,23 @@ sed_{good}_{variant_id(variant)}_found_eligible = {{
 sed_{good}_{variant_id(variant)}_found_operable = {{
  sed_{good}_found_site = yes
  can_construct_building = {building}
- sed_state_labor_available >= {labor.REQUIREMENTS[building]}
+ OR = {{
+  sed_state_labor_available >= {labor.REQUIREMENTS[building]}
+  AND = {{
+{'   always = no' if baseline_output <= 0 else ''}
+   owner = {{ has_variable = sed_mode_automatic market = {{ mg:{good} ?= {{
+    market_goods_has_goods_shortage = yes market_goods_buy_orders > 0
+   }} }} }}
+   sed_state_labor_available >= {labor.REQUIREMENTS[building] * 0.25:g}
+   sed_state_labor_available >= {{ value = 0
+    owner = {{ market = {{ mg:{good} ?= {{
+     add = market_goods_buy_orders subtract = market_goods_sell_orders min = 0
+    }} }} }}
+    multiply = {labor.REQUIREMENTS[building] * 1.25:g}
+    divide = {max(baseline_output, 1):g}
+   }}
+  }}
+ }}
 }}
 sed_{good}_{variant_id(variant)}_eligible = {{
  sed_{good}_{variant_id(variant)}_operable = yes

@@ -121,6 +121,12 @@ sed_state_labor_committed = {
    min = 0 multiply = 5000
   }
  }
+ if = { limit = { has_building = building_paper_mill }
+  add = { value = b:building_paper_mill.level_after_queued_constructions
+   subtract = { value = b:building_paper_mill.level multiply = { value = b:building_paper_mill.occupancy min = 0 max = 1 } }
+   min = 0 multiply = 5000
+  }
+ }
  if = { limit = {
   NOT = { has_building = building_logging_camp }
   has_variable = sed_wood_request_pending
@@ -216,6 +222,12 @@ var:sed_artillery_intent_variant = 1
   has_variable = sed_ammunition_request_pending
   var:sed_ammunition_intent_level = 0
 var:sed_ammunition_intent_variant = 1
+ } add = 5000 }
+ if = { limit = {
+  NOT = { has_building = building_paper_mill }
+  has_variable = sed_paper_request_pending
+  var:sed_paper_intent_level = 0
+var:sed_paper_intent_variant = 1
  } add = 5000 }
  if = { limit = {
   NOT = { has_building = building_railway }
@@ -2052,6 +2064,81 @@ sed_founding_input_munition_plant_tools = {
  min = { value = 0 if = { limit = { owner = { has_technology_researched = conveyors } } add = 4 } }
  }
 }
+sed_input_paper_mill_coal = {
+ value = 0
+ if = { limit = { b:building_paper_mill = { has_active_production_method = pm_watertube_boiler_building_paper_mill } } add = 5.0 }
+ if = { limit = { b:building_paper_mill = { has_active_production_method = pm_rotary_valve_engine_building_paper_mill } } add = 10.0 }
+ min = 0
+}
+sed_founding_input_paper_mill_coal = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = watertube_boiler } } add = 5.0 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = rotary_valve_engine } } add = 10.0 } }
+ }
+}
+sed_input_paper_mill_dye = {
+ value = 0
+ if = { limit = { b:building_paper_mill = { has_active_production_method = pm_bleached_paper } } add = 10.0 }
+ min = 0
+}
+sed_founding_input_paper_mill_dye = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = chemical_bleaching } } add = 10.0 } }
+ }
+ add = { value = 0
+ }
+}
+sed_input_paper_mill_sulfur = {
+ value = 0
+ if = { limit = { b:building_paper_mill = { has_active_production_method = pm_sulfite_pulping } } add = 10.0 }
+ if = { limit = { b:building_paper_mill = { has_active_production_method = pm_bleached_paper } } add = 10.0 }
+ min = 0
+}
+sed_founding_input_paper_mill_sulfur = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanical_tools } } add = 10.0 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = chemical_bleaching } } add = 10.0 } }
+ }
+ add = { value = 0
+ }
+}
+sed_input_paper_mill_tools = {
+ value = 0
+ if = { limit = { b:building_paper_mill = { has_active_production_method = pm_watertube_boiler_building_paper_mill } } add = 5.0 }
+ if = { limit = { b:building_paper_mill = { has_active_production_method = pm_rotary_valve_engine_building_paper_mill } } add = 5.0 }
+ min = 0
+}
+sed_founding_input_paper_mill_tools = {
+ value = 0
+ add = { value = 0
+ }
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = watertube_boiler } } add = 5.0 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = rotary_valve_engine } } add = 5.0 } }
+ }
+}
+sed_input_paper_mill_wood = {
+ value = 0
+ if = { limit = { b:building_paper_mill = { has_active_production_method = pm_pulp_pressing } } add = 30.0 }
+ if = { limit = { b:building_paper_mill = { has_active_production_method = pm_sulfite_pulping } } add = 30.0 }
+ if = { limit = { b:building_paper_mill = { has_active_production_method = pm_bleached_paper } } add = 30.0 }
+ min = 0
+}
+sed_founding_input_paper_mill_wood = {
+ value = 0
+ add = { value = 0
+ min = { value = 0 if = { limit = { owner = {  } } add = 30.0 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = mechanical_tools } } add = 30.0 } }
+ min = { value = 0 if = { limit = { owner = { has_technology_researched = chemical_bleaching } } add = 30.0 } }
+ }
+ add = { value = 0
+ }
+}
 sed_input_pending_coal = {
  value = 0
  if = { limit = { has_building = building_railway }
@@ -2171,6 +2258,15 @@ sed_input_pending_coal = {
    multiply = 1.25
   }
  }
+ if = { limit = { has_building = building_paper_mill }
+  add = { value = sed_input_paper_mill_coal
+   multiply = { value = b:building_paper_mill.level_after_queued_constructions
+    subtract = { value = b:building_paper_mill.level multiply = { value = b:building_paper_mill.occupancy min = 0 max = 1 } }
+    min = 0
+   }
+   multiply = 1.25
+  }
+ }
  if = { limit = {
   NOT = { has_building = building_logging_camp }
   has_variable = sed_wood_request_pending
@@ -2243,6 +2339,12 @@ var:sed_artillery_intent_variant = 1
   var:sed_ammunition_intent_level = 0
 var:sed_ammunition_intent_variant = 1
  } add = { value = sed_founding_input_munition_plant_coal multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_paper_mill }
+  has_variable = sed_paper_request_pending
+  var:sed_paper_intent_level = 0
+var:sed_paper_intent_variant = 1
+ } add = { value = sed_founding_input_paper_mill_coal multiply = 1.25 } }
  if = { limit = {
   NOT = { has_building = building_railway }
   has_variable = sed_railway_request_pending
@@ -2381,12 +2483,27 @@ sed_input_pending_dye = {
    multiply = 1.25
   }
  }
+ if = { limit = { has_building = building_paper_mill }
+  add = { value = sed_input_paper_mill_dye
+   multiply = { value = b:building_paper_mill.level_after_queued_constructions
+    subtract = { value = b:building_paper_mill.level multiply = { value = b:building_paper_mill.occupancy min = 0 max = 1 } }
+    min = 0
+   }
+   multiply = 1.25
+  }
+ }
  if = { limit = {
   NOT = { has_building = building_textile_mill }
   has_variable = sed_clothes_request_pending
   var:sed_clothes_intent_level = 0
 var:sed_clothes_intent_variant = 1
  } add = { value = sed_founding_input_textile_mill_dye multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_paper_mill }
+  has_variable = sed_paper_request_pending
+  var:sed_paper_intent_level = 0
+var:sed_paper_intent_variant = 1
+ } add = { value = sed_founding_input_paper_mill_dye multiply = 1.25 } }
 }
 sed_input_country_headroom_dye = {
  value = 0
@@ -3604,6 +3721,33 @@ sed_input_country_headroom_sugar = {
  } subtract = var:sed_pm_reserved_sugar }
 }
 sed_input_headroom_sugar = { value = owner.var:sed_input_market_margin_sugar }
+sed_input_pending_sulfur = {
+ value = 0
+ if = { limit = { has_building = building_paper_mill }
+  add = { value = sed_input_paper_mill_sulfur
+   multiply = { value = b:building_paper_mill.level_after_queued_constructions
+    subtract = { value = b:building_paper_mill.level multiply = { value = b:building_paper_mill.occupancy min = 0 max = 1 } }
+    min = 0
+   }
+   multiply = 1.25
+  }
+ }
+ if = { limit = {
+  NOT = { has_building = building_paper_mill }
+  has_variable = sed_paper_request_pending
+  var:sed_paper_intent_level = 0
+var:sed_paper_intent_variant = 1
+ } add = { value = sed_founding_input_paper_mill_sulfur multiply = 1.25 } }
+}
+sed_input_country_headroom_sulfur = {
+ value = 0
+ market ?= { mg:sulfur ?= { add = { value = market_goods_sell_orders min = 0 multiply = 2 subtract = { value = market_goods_buy_orders min = 0 } } } }
+ subtract = { value = 0 every_scope_state = { limit = { } add = sed_input_pending_sulfur } }
+ if = { limit = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+  has_variable = sed_pm_reserved_sulfur
+ } subtract = var:sed_pm_reserved_sulfur }
+}
+sed_input_headroom_sulfur = { value = owner.var:sed_input_market_margin_sulfur }
 sed_input_pending_tools = {
  value = 0
  if = { limit = { has_building = building_construction_sector }
@@ -3741,6 +3885,15 @@ sed_input_pending_tools = {
    multiply = 1.25
   }
  }
+ if = { limit = { has_building = building_paper_mill }
+  add = { value = sed_input_paper_mill_tools
+   multiply = { value = b:building_paper_mill.level_after_queued_constructions
+    subtract = { value = b:building_paper_mill.level multiply = { value = b:building_paper_mill.occupancy min = 0 max = 1 } }
+    min = 0
+   }
+   multiply = 1.25
+  }
+ }
  if = { limit = {
   NOT = { has_building = building_logging_camp }
   has_variable = sed_wood_request_pending
@@ -3825,6 +3978,12 @@ var:sed_artillery_intent_variant = 1
   var:sed_ammunition_intent_level = 0
 var:sed_ammunition_intent_variant = 1
  } add = { value = sed_founding_input_munition_plant_tools multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_paper_mill }
+  has_variable = sed_paper_request_pending
+  var:sed_paper_intent_level = 0
+var:sed_paper_intent_variant = 1
+ } add = { value = sed_founding_input_paper_mill_tools multiply = 1.25 } }
 }
 sed_input_country_headroom_tools = {
  value = 0
@@ -3955,12 +4114,27 @@ sed_input_pending_wood = {
    multiply = 1.25
   }
  }
+ if = { limit = { has_building = building_paper_mill }
+  add = { value = sed_input_paper_mill_wood
+   multiply = { value = b:building_paper_mill.level_after_queued_constructions
+    subtract = { value = b:building_paper_mill.level multiply = { value = b:building_paper_mill.occupancy min = 0 max = 1 } }
+    min = 0
+   }
+   multiply = 1.25
+  }
+ }
  if = { limit = {
   NOT = { has_building = building_tooling_workshop }
   has_variable = sed_tools_request_pending
   var:sed_tools_intent_level = 0
 var:sed_tools_intent_variant = 1
  } add = { value = sed_founding_input_tooling_workshop_wood multiply = 1.25 } }
+ if = { limit = {
+  NOT = { has_building = building_paper_mill }
+  has_variable = sed_paper_request_pending
+  var:sed_paper_intent_level = 0
+var:sed_paper_intent_variant = 1
+ } add = { value = sed_founding_input_paper_mill_wood multiply = 1.25 } }
  if = { limit = {
   NOT = { has_building = building_railway }
   has_variable = sed_railway_request_pending
@@ -4154,6 +4328,13 @@ sed_supplier_munition_plant_output = {
  value = 0
  if = { limit = { b:building_munition_plant = { has_active_production_method = pm_percussion_caps } } add = 50 }
  if = { limit = { b:building_munition_plant = { has_active_production_method = pm_explosive_shells } } add = 90 }
+ min = 0
+}
+sed_supplier_paper_mill_output = {
+ value = 0
+ if = { limit = { b:building_paper_mill = { has_active_production_method = pm_pulp_pressing } } add = 40.0 }
+ if = { limit = { b:building_paper_mill = { has_active_production_method = pm_sulfite_pulping } } add = 70.0 }
+ if = { limit = { b:building_paper_mill = { has_active_production_method = pm_bleached_paper } } add = 100.0 }
  min = 0
 }
 sed_investment_market_price_wood_lower = {
@@ -6760,6 +6941,174 @@ sed_investment_price_silk_upper = {
  if = { limit = { has_variable = sed_investment_local_silk_upper } add = var:sed_investment_local_silk_upper }
  if = { limit = { NOT = { has_variable = sed_investment_local_silk_upper } } add = sed_investment_observed_price_silk_upper }
 }
+sed_investment_market_price_paper_lower = {
+ value = 22.5
+ market ?= { mg:paper ?= {
+ if = { limit = { market_goods_pricier > 0 } add = { value = market_goods_pricier multiply = 30 } }
+ if = { limit = { market_goods_cheaper > 0 } subtract = { value = market_goods_cheaper multiply = 30 } }
+ } }
+ min = 0
+ max = 60
+}
+sed_investment_observed_price_paper_lower = {
+ value = 0
+ if = { limit = { sg:paper ?= { state_goods_production >= 0 } }
+  add = 22.5
+  sg:paper ?= {
+ if = { limit = { state_goods_cheaper > 0 } subtract = 3 }
+ if = { limit = { state_goods_pricier >= 0.1 } add = 3 }
+ if = { limit = { state_goods_cheaper >= 0.1 } subtract = 3 }
+ if = { limit = { state_goods_pricier >= 0.2 } add = 3 }
+ if = { limit = { state_goods_cheaper >= 0.2 } subtract = 3 }
+ if = { limit = { state_goods_pricier >= 0.3 } add = 3 }
+ if = { limit = { state_goods_cheaper >= 0.3 } subtract = 3 }
+ if = { limit = { state_goods_pricier >= 0.4 } add = 3 }
+ if = { limit = { state_goods_cheaper >= 0.4 } subtract = 3 }
+ if = { limit = { state_goods_pricier >= 0.5 } add = 3 }
+ if = { limit = { state_goods_cheaper >= 0.5 } subtract = 3 }
+ if = { limit = { state_goods_pricier >= 0.6 } add = 3 }
+ if = { limit = { state_goods_cheaper >= 0.6 } subtract = 3 }
+ if = { limit = { state_goods_pricier >= 0.7 } add = 3 }
+ if = { limit = { state_goods_cheaper >= 0.7 } subtract = 3 }
+ if = { limit = { state_goods_pricier >= 0.75 } add = 1.5 }
+ if = { limit = { state_goods_cheaper >= 0.75 } subtract = 1.5 }
+  }
+ }
+ if = { limit = { NOT = { sg:paper ?= { state_goods_production >= 0 } } } add = owner.var:sed_investment_market_paper_lower }
+ min = 0
+ max = 60
+}
+sed_investment_price_paper_lower = {
+ value = 0
+ if = { limit = { has_variable = sed_investment_local_paper_lower } add = var:sed_investment_local_paper_lower }
+ if = { limit = { NOT = { has_variable = sed_investment_local_paper_lower } } add = sed_investment_observed_price_paper_lower }
+}
+sed_investment_market_price_paper_upper = {
+ value = 37.5
+ market ?= { mg:paper ?= {
+ if = { limit = { market_goods_pricier > 0 } add = { value = market_goods_pricier multiply = 30 } }
+ if = { limit = { market_goods_cheaper > 0 } subtract = { value = market_goods_cheaper multiply = 30 } }
+ } }
+ min = 0
+ max = 60
+}
+sed_investment_observed_price_paper_upper = {
+ value = 0
+ if = { limit = { sg:paper ?= { state_goods_production >= 0 } }
+  add = 37.5
+  sg:paper ?= {
+ if = { limit = { state_goods_pricier > 0 } add = 3 }
+ if = { limit = { state_goods_pricier >= 0.1 } add = 3 }
+ if = { limit = { state_goods_cheaper >= 0.1 } subtract = 3 }
+ if = { limit = { state_goods_pricier >= 0.2 } add = 3 }
+ if = { limit = { state_goods_cheaper >= 0.2 } subtract = 3 }
+ if = { limit = { state_goods_pricier >= 0.3 } add = 3 }
+ if = { limit = { state_goods_cheaper >= 0.3 } subtract = 3 }
+ if = { limit = { state_goods_pricier >= 0.4 } add = 3 }
+ if = { limit = { state_goods_cheaper >= 0.4 } subtract = 3 }
+ if = { limit = { state_goods_pricier >= 0.5 } add = 3 }
+ if = { limit = { state_goods_cheaper >= 0.5 } subtract = 3 }
+ if = { limit = { state_goods_pricier >= 0.6 } add = 3 }
+ if = { limit = { state_goods_cheaper >= 0.6 } subtract = 3 }
+ if = { limit = { state_goods_pricier >= 0.7 } add = 3 }
+ if = { limit = { state_goods_cheaper >= 0.7 } subtract = 3 }
+ if = { limit = { state_goods_pricier >= 0.75 } add = 1.5 }
+ if = { limit = { state_goods_cheaper >= 0.75 } subtract = 1.5 }
+  }
+ }
+ if = { limit = { NOT = { sg:paper ?= { state_goods_production >= 0 } } } add = owner.var:sed_investment_market_paper_upper }
+ min = 0
+ max = 60
+}
+sed_investment_price_paper_upper = {
+ value = 0
+ if = { limit = { has_variable = sed_investment_local_paper_upper } add = var:sed_investment_local_paper_upper }
+ if = { limit = { NOT = { has_variable = sed_investment_local_paper_upper } } add = sed_investment_observed_price_paper_upper }
+}
+sed_investment_market_price_sulfur_lower = {
+ value = 37.5
+ market ?= { mg:sulfur ?= {
+ if = { limit = { market_goods_pricier > 0 } add = { value = market_goods_pricier multiply = 50 } }
+ if = { limit = { market_goods_cheaper > 0 } subtract = { value = market_goods_cheaper multiply = 50 } }
+ } }
+ min = 0
+ max = 100
+}
+sed_investment_observed_price_sulfur_lower = {
+ value = 0
+ if = { limit = { sg:sulfur ?= { state_goods_production >= 0 } }
+  add = 37.5
+  sg:sulfur ?= {
+ if = { limit = { state_goods_cheaper > 0 } subtract = 5 }
+ if = { limit = { state_goods_pricier >= 0.1 } add = 5 }
+ if = { limit = { state_goods_cheaper >= 0.1 } subtract = 5 }
+ if = { limit = { state_goods_pricier >= 0.2 } add = 5 }
+ if = { limit = { state_goods_cheaper >= 0.2 } subtract = 5 }
+ if = { limit = { state_goods_pricier >= 0.3 } add = 5 }
+ if = { limit = { state_goods_cheaper >= 0.3 } subtract = 5 }
+ if = { limit = { state_goods_pricier >= 0.4 } add = 5 }
+ if = { limit = { state_goods_cheaper >= 0.4 } subtract = 5 }
+ if = { limit = { state_goods_pricier >= 0.5 } add = 5 }
+ if = { limit = { state_goods_cheaper >= 0.5 } subtract = 5 }
+ if = { limit = { state_goods_pricier >= 0.6 } add = 5 }
+ if = { limit = { state_goods_cheaper >= 0.6 } subtract = 5 }
+ if = { limit = { state_goods_pricier >= 0.7 } add = 5 }
+ if = { limit = { state_goods_cheaper >= 0.7 } subtract = 5 }
+ if = { limit = { state_goods_pricier >= 0.75 } add = 2.5 }
+ if = { limit = { state_goods_cheaper >= 0.75 } subtract = 2.5 }
+  }
+ }
+ if = { limit = { NOT = { sg:sulfur ?= { state_goods_production >= 0 } } } add = owner.var:sed_investment_market_sulfur_lower }
+ min = 0
+ max = 100
+}
+sed_investment_price_sulfur_lower = {
+ value = 0
+ if = { limit = { has_variable = sed_investment_local_sulfur_lower } add = var:sed_investment_local_sulfur_lower }
+ if = { limit = { NOT = { has_variable = sed_investment_local_sulfur_lower } } add = sed_investment_observed_price_sulfur_lower }
+}
+sed_investment_market_price_sulfur_upper = {
+ value = 62.5
+ market ?= { mg:sulfur ?= {
+ if = { limit = { market_goods_pricier > 0 } add = { value = market_goods_pricier multiply = 50 } }
+ if = { limit = { market_goods_cheaper > 0 } subtract = { value = market_goods_cheaper multiply = 50 } }
+ } }
+ min = 0
+ max = 100
+}
+sed_investment_observed_price_sulfur_upper = {
+ value = 0
+ if = { limit = { sg:sulfur ?= { state_goods_production >= 0 } }
+  add = 62.5
+  sg:sulfur ?= {
+ if = { limit = { state_goods_pricier > 0 } add = 5 }
+ if = { limit = { state_goods_pricier >= 0.1 } add = 5 }
+ if = { limit = { state_goods_cheaper >= 0.1 } subtract = 5 }
+ if = { limit = { state_goods_pricier >= 0.2 } add = 5 }
+ if = { limit = { state_goods_cheaper >= 0.2 } subtract = 5 }
+ if = { limit = { state_goods_pricier >= 0.3 } add = 5 }
+ if = { limit = { state_goods_cheaper >= 0.3 } subtract = 5 }
+ if = { limit = { state_goods_pricier >= 0.4 } add = 5 }
+ if = { limit = { state_goods_cheaper >= 0.4 } subtract = 5 }
+ if = { limit = { state_goods_pricier >= 0.5 } add = 5 }
+ if = { limit = { state_goods_cheaper >= 0.5 } subtract = 5 }
+ if = { limit = { state_goods_pricier >= 0.6 } add = 5 }
+ if = { limit = { state_goods_cheaper >= 0.6 } subtract = 5 }
+ if = { limit = { state_goods_pricier >= 0.7 } add = 5 }
+ if = { limit = { state_goods_cheaper >= 0.7 } subtract = 5 }
+ if = { limit = { state_goods_pricier >= 0.75 } add = 2.5 }
+ if = { limit = { state_goods_cheaper >= 0.75 } subtract = 2.5 }
+  }
+ }
+ if = { limit = { NOT = { sg:sulfur ?= { state_goods_production >= 0 } } } add = owner.var:sed_investment_market_sulfur_upper }
+ min = 0
+ max = 100
+}
+sed_investment_price_sulfur_upper = {
+ value = 0
+ if = { limit = { has_variable = sed_investment_local_sulfur_upper } add = var:sed_investment_local_sulfur_upper }
+ if = { limit = { NOT = { has_variable = sed_investment_local_sulfur_upper } } add = sed_investment_observed_price_sulfur_upper }
+}
 
 sed_investment_logging_camp_output_hardwood = {
  value = 0
@@ -7581,4 +7930,45 @@ sed_investment_ammunition_margin = {
 sed_investment_ammunition_output = {
  value = 0
  if = { limit = { sed_ammunition_munition_plant_investment_eligible = yes } add = sed_investment_munition_plant_output }
+}
+sed_investment_paper_mill_output_paper = {
+ value = 0
+ if = { limit = { b:building_paper_mill = { has_active_production_method = pm_pulp_pressing } } add = 40 }
+ if = { limit = { b:building_paper_mill = { has_active_production_method = pm_sulfite_pulping } } add = 70 }
+ if = { limit = { b:building_paper_mill = { has_active_production_method = pm_bleached_paper } } add = 100 }
+ min = 0
+}
+sed_investment_paper_mill_margin = {
+ value = 0
+ if = { limit = { NOT = { has_building = building_paper_mill } }
+
+  add = { value = 40 multiply = sed_investment_price_paper_lower }
+  subtract = { value = 0 multiply = sed_investment_price_coal_upper }
+  subtract = { value = 0 multiply = sed_investment_price_dye_upper }
+  subtract = { value = 0 multiply = sed_investment_price_sulfur_upper }
+  subtract = { value = 0 multiply = sed_investment_price_tools_upper }
+  subtract = { value = 30 multiply = sed_investment_price_wood_upper }
+ }
+ if = { limit = { has_building = building_paper_mill }
+
+  add = { value = sed_investment_paper_mill_output_paper multiply = sed_investment_price_paper_lower }
+  subtract = { value = sed_input_paper_mill_coal multiply = sed_investment_price_coal_upper }
+  subtract = { value = sed_input_paper_mill_dye multiply = sed_investment_price_dye_upper }
+  subtract = { value = sed_input_paper_mill_sulfur multiply = sed_investment_price_sulfur_upper }
+  subtract = { value = sed_input_paper_mill_tools multiply = sed_investment_price_tools_upper }
+  subtract = { value = sed_input_paper_mill_wood multiply = sed_investment_price_wood_upper }
+ }
+}
+sed_investment_paper_mill_output = {
+ value = 0
+ if = { limit = { NOT = { has_building = building_paper_mill } } add = 40 }
+ if = { limit = { has_building = building_paper_mill } add = sed_investment_paper_mill_output_paper }
+}
+sed_investment_paper_margin = {
+ value = 0
+ if = { limit = { sed_paper_paper_mill_investment_eligible = yes } add = sed_investment_paper_mill_margin }
+}
+sed_investment_paper_output = {
+ value = 0
+ if = { limit = { sed_paper_paper_mill_investment_eligible = yes } add = sed_investment_paper_mill_output }
 }

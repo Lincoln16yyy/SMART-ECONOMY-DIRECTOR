@@ -146,6 +146,12 @@ sed_approve_ammunition_sgui = {
  is_valid = { owner = { has_variable = sed_mode_assisted } sed_ammunition_approval_valid = yes }
  effect = { if = { limit = { owner = { has_variable = sed_mode_assisted } sed_ammunition_approval_valid = yes } sed_run_ammunition_approval = yes } }
 }
+sed_approve_paper_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } }
+ is_valid = { owner = { has_variable = sed_mode_assisted } sed_paper_approval_valid = yes }
+ effect = { if = { limit = { owner = { has_variable = sed_mode_assisted } sed_paper_approval_valid = yes } sed_run_paper_approval = yes } }
+}
 sed_construction_infrastructure_blocked_sgui = {
  scope = state
  is_shown = { owner = { is_player = yes has_variable = sed_enabled }
@@ -229,6 +235,13 @@ sed_ammunition_infrastructure_blocked_sgui = {
   OR = { has_building = building_munition_plant } infrastructure_delta < 0
   NOT = { has_variable = sed_ammunition_request_pending }
   NOT = { has_variable = sed_ammunition_ignored } }
+}
+sed_paper_infrastructure_blocked_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled }
+  OR = { has_building = building_paper_mill } infrastructure_delta < 0
+  NOT = { has_variable = sed_paper_request_pending }
+  NOT = { has_variable = sed_paper_ignored } }
 }
 sed_railway_ready_sgui = {
  scope = state
@@ -438,6 +451,22 @@ sed_ammunition_refresh_card_sgui = {
  is_valid = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_ammunition_candidate_eligible = yes } NOT = { has_variable = sed_ammunition_request_pending } }
  effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_ammunition_candidate_eligible = yes } NOT = { has_variable = sed_ammunition_request_pending } } owner = { sed_refresh_diagnostics = yes } } }
 }
+sed_paper_ready_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } owner = { has_variable = sed_mode_assisted } sed_paper_approval_valid = yes }
+}
+sed_paper_switch_assisted_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } sed_paper_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } sed_paper_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } sed_paper_candidate_eligible = yes owner = { NOT = { has_variable = sed_mode_assisted } } } owner = { sed_set_mode_assisted = yes } } }
+}
+sed_paper_refresh_card_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_paper_candidate_eligible = yes } NOT = { has_variable = sed_paper_request_pending } }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_paper_candidate_eligible = yes } NOT = { has_variable = sed_paper_request_pending } }
+ effect = { if = { limit = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_paper_candidate_eligible = yes } NOT = { has_variable = sed_paper_request_pending } } owner = { sed_refresh_diagnostics = yes } } }
+}
 sed_ignore_railway_sgui = {
  scope = state
  is_shown = { owner = { is_player = yes has_variable = sed_enabled } sed_railway_candidate_eligible = yes }
@@ -516,10 +545,16 @@ sed_ignore_ammunition_sgui = {
  is_valid = { owner = { is_player = yes has_variable = sed_enabled } sed_ammunition_candidate_eligible = yes }
  effect = { sed_ignore_ammunition = yes }
 }
+sed_ignore_paper_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } sed_paper_candidate_eligible = yes }
+ is_valid = { owner = { is_player = yes has_variable = sed_enabled } sed_paper_candidate_eligible = yes }
+ effect = { sed_ignore_paper = yes }
+}
 sed_restore_ignored_sgui = {
  scope = country
- is_shown = { is_player = yes has_variable = sed_enabled any_scope_state = { OR = { has_variable = sed_railway_ignored has_variable = sed_construction_ignored has_variable = sed_wood_ignored has_variable = sed_iron_ignored has_variable = sed_coal_ignored has_variable = sed_grain_ignored has_variable = sed_fabric_ignored has_variable = sed_tools_ignored has_variable = sed_groceries_ignored has_variable = sed_clothes_ignored has_variable = sed_small_arms_ignored has_variable = sed_artillery_ignored has_variable = sed_ammunition_ignored } } }
- is_valid = { is_player = yes has_variable = sed_enabled any_scope_state = { OR = { has_variable = sed_railway_ignored has_variable = sed_construction_ignored has_variable = sed_wood_ignored has_variable = sed_iron_ignored has_variable = sed_coal_ignored has_variable = sed_grain_ignored has_variable = sed_fabric_ignored has_variable = sed_tools_ignored has_variable = sed_groceries_ignored has_variable = sed_clothes_ignored has_variable = sed_small_arms_ignored has_variable = sed_artillery_ignored has_variable = sed_ammunition_ignored } } }
+ is_shown = { is_player = yes has_variable = sed_enabled any_scope_state = { OR = { has_variable = sed_railway_ignored has_variable = sed_construction_ignored has_variable = sed_wood_ignored has_variable = sed_iron_ignored has_variable = sed_coal_ignored has_variable = sed_grain_ignored has_variable = sed_fabric_ignored has_variable = sed_tools_ignored has_variable = sed_groceries_ignored has_variable = sed_clothes_ignored has_variable = sed_small_arms_ignored has_variable = sed_artillery_ignored has_variable = sed_ammunition_ignored has_variable = sed_paper_ignored } } }
+ is_valid = { is_player = yes has_variable = sed_enabled any_scope_state = { OR = { has_variable = sed_railway_ignored has_variable = sed_construction_ignored has_variable = sed_wood_ignored has_variable = sed_iron_ignored has_variable = sed_coal_ignored has_variable = sed_grain_ignored has_variable = sed_fabric_ignored has_variable = sed_tools_ignored has_variable = sed_groceries_ignored has_variable = sed_clothes_ignored has_variable = sed_small_arms_ignored has_variable = sed_artillery_ignored has_variable = sed_ammunition_ignored has_variable = sed_paper_ignored } } }
  effect = { sed_restore_ignored = yes }
 }
 sed_railway_blocked_private_sgui = {
@@ -786,6 +821,26 @@ sed_ammunition_finance_caution_sgui = {
  scope = state
  is_shown = { owner = { is_player = yes has_variable = sed_enabled net_total_income < 0 } }
 }
+sed_paper_blocked_private_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_paper_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels > 0 } }
+}
+sed_paper_blocked_default_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted } sed_paper_candidate_eligible = yes owner = { construction_queue_num_queued_private_levels = 0 in_default = yes } }
+}
+sed_paper_stale_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } NOT = { sed_paper_candidate_eligible = yes } NOT = { has_variable = sed_paper_request_pending } }
+}
+sed_paper_pending_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled } has_variable = sed_paper_request_pending }
+}
+sed_paper_finance_caution_sgui = {
+ scope = state
+ is_shown = { owner = { is_player = yes has_variable = sed_enabled net_total_income < 0 } }
+}
 sed_monthly_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable = sed_monthly_refresh }
@@ -896,6 +951,7 @@ sed_construction_action_failed_visible_sgui = {
 }
 sed_wood_input_priority_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_input_blocked_wood } }
 sed_input_blocks_wood_tools_tooling_workshop_visible_sgui = { scope = state is_shown = { sed_input_blocks_wood_tools_tooling_workshop = yes } }
+sed_input_blocks_wood_paper_paper_mill_visible_sgui = { scope = state is_shown = { sed_input_blocks_wood_paper_paper_mill = yes } }
 sed_wood_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_wood_candidates }
@@ -955,6 +1011,7 @@ sed_input_blocks_coal_tools_tooling_workshop_visible_sgui = { scope = state is_s
 sed_input_blocks_coal_small_arms_arms_industry_visible_sgui = { scope = state is_shown = { sed_input_blocks_coal_small_arms_arms_industry = yes } }
 sed_input_blocks_coal_artillery_artillery_foundry_visible_sgui = { scope = state is_shown = { sed_input_blocks_coal_artillery_artillery_foundry = yes } }
 sed_input_blocks_coal_ammunition_munition_plant_visible_sgui = { scope = state is_shown = { sed_input_blocks_coal_ammunition_munition_plant = yes } }
+sed_input_blocks_coal_paper_paper_mill_visible_sgui = { scope = state is_shown = { sed_input_blocks_coal_paper_paper_mill = yes } }
 sed_coal_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_coal_candidates }
@@ -1035,6 +1092,7 @@ sed_input_blocks_tools_clothes_textile_mill_visible_sgui = { scope = state is_sh
 sed_input_blocks_tools_small_arms_arms_industry_visible_sgui = { scope = state is_shown = { sed_input_blocks_tools_small_arms_arms_industry = yes } }
 sed_input_blocks_tools_artillery_artillery_foundry_visible_sgui = { scope = state is_shown = { sed_input_blocks_tools_artillery_artillery_foundry = yes } }
 sed_input_blocks_tools_ammunition_munition_plant_visible_sgui = { scope = state is_shown = { sed_input_blocks_tools_ammunition_munition_plant = yes } }
+sed_input_blocks_tools_paper_paper_mill_visible_sgui = { scope = state is_shown = { sed_input_blocks_tools_paper_paper_mill = yes } }
 sed_tools_recommendations_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled has_variable_list = sed_tools_candidates }
@@ -1154,6 +1212,26 @@ sed_ammunition_action_success_visible_sgui = {
 sed_ammunition_action_failed_visible_sgui = {
  scope = country
  is_shown = { has_variable = sed_enabled var:sed_ammunition_action_status = 2 }
+}
+sed_paper_recommendations_visible_sgui = {
+ scope = country
+ is_shown = { has_variable = sed_enabled has_variable_list = sed_paper_candidates }
+}
+sed_paper_section_visible_sgui = {
+ scope = country
+ is_shown = { has_variable = sed_enabled sed_paper_supply_demand = yes }
+}
+sed_paper_no_candidates_visible_sgui = {
+ scope = country
+ is_shown = { has_variable = sed_enabled sed_paper_supply_demand = yes NOT = { has_variable_list = sed_paper_candidates } }
+}
+sed_paper_action_success_visible_sgui = {
+ scope = country
+ is_shown = { has_variable = sed_enabled var:sed_paper_action_status = 1 }
+}
+sed_paper_action_failed_visible_sgui = {
+ scope = country
+ is_shown = { has_variable = sed_enabled var:sed_paper_action_status = 2 }
 }
 sed_auto_status_success_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 1 } }
 sed_auto_status_no_action_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 2 } }
@@ -1328,6 +1406,11 @@ sed_input_ref_munition_plant_explosives_visible_sgui = { scope = state is_shown 
 sed_input_ref_munition_plant_lead_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_munition_plant sed_input_munition_plant_lead > 0 } }
 sed_input_ref_munition_plant_oil_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_munition_plant sed_input_munition_plant_oil > 0 } }
 sed_input_ref_munition_plant_tools_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_munition_plant sed_input_munition_plant_tools > 0 } }
+sed_input_ref_paper_mill_coal_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_paper_mill sed_input_paper_mill_coal > 0 } }
+sed_input_ref_paper_mill_dye_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_paper_mill sed_input_paper_mill_dye > 0 } }
+sed_input_ref_paper_mill_sulfur_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_paper_mill sed_input_paper_mill_sulfur > 0 } }
+sed_input_ref_paper_mill_tools_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_paper_mill sed_input_paper_mill_tools > 0 } }
+sed_input_ref_paper_mill_wood_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_building = building_paper_mill sed_input_paper_mill_wood > 0 } }
 sed_auto_status_fiscal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 17 } }
 sed_fiscal_1_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = 1 } }
 sed_fiscal_2_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_fiscal_status var:sed_fiscal_status = 2 } }
@@ -1355,6 +1438,7 @@ sed_meta_clothes_visible_sgui = { scope = country is_shown = { has_variable = se
 sed_meta_small_arms_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_small_arms_meta_year var:sed_small_arms_meta_year = year } }
 sed_meta_artillery_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_artillery_meta_year var:sed_artillery_meta_year = year } }
 sed_meta_ammunition_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_ammunition_meta_year var:sed_ammunition_meta_year = year } }
+sed_meta_paper_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_paper_meta_year var:sed_paper_meta_year = year } }
 sed_book_wood_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_wood_intents var:sed_wood_intents > 0 } }
 sed_book_iron_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_iron_intents var:sed_iron_intents > 0 } }
 sed_book_coal_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_coal_intents var:sed_coal_intents > 0 } }
@@ -1366,6 +1450,7 @@ sed_book_clothes_visible_sgui = { scope = country is_shown = { has_variable = se
 sed_book_small_arms_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_small_arms_intents var:sed_small_arms_intents > 0 } }
 sed_book_artillery_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_artillery_intents var:sed_artillery_intents > 0 } }
 sed_book_ammunition_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_ammunition_intents var:sed_ammunition_intents > 0 } }
+sed_book_paper_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_paper_intents var:sed_paper_intents > 0 } }
 sed_book_railway_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_railway_intents var:sed_railway_intents > 0 } }
 sed_book_construction_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_construction_intents var:sed_construction_intents > 0 } }
 sed_plan_missing_wood_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_missing_wood var:sed_plan_missing_wood = 1 } }
@@ -1379,6 +1464,7 @@ sed_plan_missing_clothes_visible_sgui = { scope = country is_shown = { has_varia
 sed_plan_missing_small_arms_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_missing_small_arms var:sed_plan_missing_small_arms = 1 } }
 sed_plan_missing_artillery_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_missing_artillery var:sed_plan_missing_artillery = 1 } }
 sed_plan_missing_ammunition_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_missing_ammunition var:sed_plan_missing_ammunition = 1 } }
+sed_plan_missing_paper_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_missing_paper var:sed_plan_missing_paper = 1 } }
 sed_plan_empty_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_count var:sed_plan_count = 0 } }
 sed_plan_rank_1_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_count var:sed_plan_count >= 1 } }
 sed_plan_rank_2_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_plan_count var:sed_plan_count >= 2 } }
@@ -1396,6 +1482,7 @@ sed_plan_1_clothes_visible_sgui = { scope = country is_shown = { has_variable = 
 sed_plan_1_small_arms_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_1_small_arms } }
 sed_plan_1_artillery_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_1_artillery } }
 sed_plan_1_ammunition_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_1_ammunition } }
+sed_plan_1_paper_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_1_paper } }
 sed_plan_2_railway_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_2_railway } }
 sed_plan_2_construction_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_2_construction } }
 sed_plan_2_wood_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_2_wood } }
@@ -1409,6 +1496,7 @@ sed_plan_2_clothes_visible_sgui = { scope = country is_shown = { has_variable = 
 sed_plan_2_small_arms_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_2_small_arms } }
 sed_plan_2_artillery_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_2_artillery } }
 sed_plan_2_ammunition_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_2_ammunition } }
+sed_plan_2_paper_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_2_paper } }
 sed_plan_3_railway_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_3_railway } }
 sed_plan_3_construction_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_3_construction } }
 sed_plan_3_wood_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_3_wood } }
@@ -1422,6 +1510,7 @@ sed_plan_3_clothes_visible_sgui = { scope = country is_shown = { has_variable = 
 sed_plan_3_small_arms_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_3_small_arms } }
 sed_plan_3_artillery_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_3_artillery } }
 sed_plan_3_ammunition_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_3_ammunition } }
+sed_plan_3_paper_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable_list = sed_plan_3_paper } }
 sed_plan_railway_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_railway_score var:sed_plan_railway_score > 0 } }
 sed_plan_construction_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_construction_score var:sed_plan_construction_score > 0 } }
 sed_plan_wood_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_wood_score var:sed_plan_wood_score > 0 } }
@@ -1435,6 +1524,7 @@ sed_plan_clothes_score_visible_sgui = { scope = state is_shown = { owner = { has
 sed_plan_small_arms_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_small_arms_score var:sed_plan_small_arms_score > 0 } }
 sed_plan_artillery_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_artillery_score var:sed_plan_artillery_score > 0 } }
 sed_plan_ammunition_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_ammunition_score var:sed_plan_ammunition_score > 0 } }
+sed_plan_paper_score_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } has_variable = sed_plan_paper_score var:sed_plan_paper_score > 0 } }
 sed_railway_found_reason_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } sed_railway_found_site = yes } }
 sed_tax_policy_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_mode_automatic } }
 sed_details_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_details_visible } }

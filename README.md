@@ -1,5 +1,9 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.14, papel entra na construção própria e no planejamento de insumos.
+O Automático pode fundar a primeira fábrica ou ampliar um produtor elegível.
+A cadeia considera a disponibilidade de madeira e dos insumos de seus PMs.
+
 Na 0.7.13, o Automático também avalia bens civis caros com demanda superior à
 oferta. A obra própria exige margem material estimada positiva e os filtros
 de trabalho, insumos e orçamento. O limiar inicial de preço é 20% acima da base.

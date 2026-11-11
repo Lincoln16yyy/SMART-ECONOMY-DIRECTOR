@@ -30,7 +30,9 @@
     "transportation": 30.0,
     "glass": 40.0,
     "luxury_clothes": 60.0,
-    "silk": 40.0
+    "silk": 40.0,
+    "paper": 30.0,
+    "sulfur": 50.0
   },
   "buildings": {
     "building_logging_camp": {
@@ -794,6 +796,45 @@
           "dynamite"
         ]
       }
+    },
+    "building_paper_mill": {
+      "pm_pulp_pressing": {
+        "inputs": {
+          "wood": 30.0
+        },
+        "outputs": {
+          "paper": 40.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_sulfite_pulping": {
+        "inputs": {
+          "wood": 30.0,
+          "sulfur": 10.0
+        },
+        "outputs": {
+          "paper": 70.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "mechanical_tools"
+        ]
+      },
+      "pm_bleached_paper": {
+        "inputs": {
+          "wood": 30.0,
+          "sulfur": 10.0,
+          "dye": 10.0
+        },
+        "outputs": {
+          "paper": 100.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "chemical_bleaching"
+        ]
+      }
     }
   },
   "all_outputs": {
@@ -1118,6 +1159,17 @@
       },
       "pm_explosive_shells": {
         "ammunition": 90.0
+      }
+    },
+    "building_paper_mill": {
+      "pm_pulp_pressing": {
+        "paper": 40.0
+      },
+      "pm_sulfite_pulping": {
+        "paper": 70.0
+      },
+      "pm_bleached_paper": {
+        "paper": 100.0
       }
     }
   }
