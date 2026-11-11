@@ -1936,3 +1936,19 @@ aprovação assistida e fundações. Gerador, validação estática, pacote e
 whitespace aprovados. Instalada com backup
 `mod_before_0.7.11_20261111_015138_269433`, conferindo os 14 arquivos.
 Preços locais, lucro real, salários e qualificações seguem pendentes.
+
+
+## 2026-11-11 — Preços nas referências de investimento (0.7.12)
+
+A seleção de fornecedores passa a usar variação de preços observada no mercado
+e faixas locais com margem de incerteza. O mercado tem leitura numérica nativa
+verificada nos artigos vanilla de transferência de bens. Os estados usam
+comparações nativas de preços. As referências são renovadas no plano e na
+aprovação e ficam em cache por país e estado. O diagnóstico renova dados.
+
+330 testes sintéticos aprovados. Regressões cobrem variações fracionárias,
+referência local e de mercado, atualização dos caches, escolha de destino por
+preços de saída/entrada, fundações, revalidação da variante e limpeza. Gerador,
+validação estática, pacote e whitespace aprovados. Instalada com backup
+`mod_before_0.7.12_20261111_102922_823642`, conferindo os 14 arquivos.
+Lucro real, salários, qualificações e confirmação em campanha seguem pendentes.

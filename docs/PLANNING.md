@@ -8,6 +8,32 @@
 
 
 
+
+## 0.7.12 — Preços observados nas referências de investimento
+
+A escolha de fornecedores incorpora sinais de preços atuais. O mercado usa
+leitura direta de `market_goods_pricier` e `market_goods_cheaper`, cuja forma
+numérica foi verificada nos artigos vanilla de transferência de bens. Os
+estados usam comparações nativas de preços locais em faixas de 10%, com ponto
+adicional em 75%. Os preços-base continuam fornecendo a unidade monetária.
+
+A referência inferior de receita e superior de insumos conservam folga de
+25% do preço-base e incluem a incerteza da faixa local. As referências são
+limitadas ao intervalo de zero a duas vezes o preço-base. A definição vanilla
+`PRICE_RANGE = 0.75` e as comparações locais foram verificadas no jogo instalado.
+
+Informação local tem precedência. Na ausência dela, a leitura usa o mercado.
+A ausência de ambas as observações deixa a referência em torno do preço-base.
+As leituras ficam em cache por país e estado e são renovadas na atualização
+do plano e na aprovação. Os estados adicionados após uma leitura também têm
+cálculo de referência disponível. Desativar limpa os caches.
+
+Essas referências alimentam a seleção de fornecedores das obras próprias,
+incluindo fundações. O diagnóstico renova dados. Ações econômicas continuam
+sob as autorizações de execução. Retorno real, salários, qualificações,
+modificadores de produtividade e impacto futuro da nova oferta nos preços
+precisam de modelo e calibração. Confirmação na engine segue pendente.
+
 ## 0.7.11 — Escolha econômica dos fornecedores
 
 A necessidade nacional escolhe o bem. No Automático, os fornecedores elegíveis

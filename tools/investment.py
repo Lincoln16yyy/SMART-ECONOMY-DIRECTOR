@@ -5,10 +5,81 @@ except ImportError:
     import input_forecast
     import production_methods
 
+PRICES = production_methods.ECONOMICS['prices']
+COUNTRY_VARIABLES = [f'sed_investment_market_{good}_{bound}' for good in PRICES
+                     for bound in ('lower', 'upper')]
+STATE_VARIABLES = [f'sed_investment_local_{good}_{bound}' for good in PRICES
+                   for bound in ('lower', 'upper')]
+
+
+def price_adjustments(scope, base, bound):
+    if scope == 'market':
+        return f''' if = {{ limit = {{ market_goods_pricier > 0 }} add = {{ value = market_goods_pricier multiply = {base:g} }} }}
+ if = {{ limit = {{ market_goods_cheaper > 0 }} subtract = {{ value = market_goods_cheaper multiply = {base:g} }} }}'''
+    result = []
+    if bound == 'lower':
+        result.append(f' if = {{ limit = {{ state_goods_cheaper > 0 }} subtract = {base * 0.1:g} }}')
+    else:
+        result.append(f' if = {{ limit = {{ state_goods_pricier > 0 }} add = {base * 0.1:g} }}')
+    previous = 0
+    for threshold in (0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.75):
+        change = base * (threshold - previous)
+        result.append(f' if = {{ limit = {{ {scope}_goods_pricier >= {threshold:g} }} add = {change:g} }}')
+        result.append(f' if = {{ limit = {{ {scope}_goods_cheaper >= {threshold:g} }} subtract = {change:g} }}')
+        previous = threshold
+    return '\n'.join(result)
+
+
+def price_values():
+    result = []
+    for good, base in PRICES.items():
+        for bound, factor in [('lower', 0.75), ('upper', 1.25)]:
+            market = price_adjustments('market', base, bound)
+            local = price_adjustments('state', base, bound)
+            present = f'sg:{good} ?= {{ state_goods_production >= 0 }}'
+            result.append(f'''sed_investment_market_price_{good}_{bound} = {{
+ value = {base * factor:g}
+ market ?= {{ mg:{good} ?= {{
+{market}
+ }} }}
+ min = 0
+ max = {base * 2:g}
+}}
+sed_investment_observed_price_{good}_{bound} = {{
+ value = 0
+ if = {{ limit = {{ {present} }}
+  add = {base * factor:g}
+  sg:{good} ?= {{
+{local}
+  }}
+ }}
+ if = {{ limit = {{ NOT = {{ {present} }} }} add = owner.var:sed_investment_market_{good}_{bound} }}
+ min = 0
+ max = {base * 2:g}
+}}
+sed_investment_price_{good}_{bound} = {{
+ value = 0
+ if = {{ limit = {{ has_variable = sed_investment_local_{good}_{bound} }} add = var:sed_investment_local_{good}_{bound} }}
+ if = {{ limit = {{ NOT = {{ has_variable = sed_investment_local_{good}_{bound} }} }} add = sed_investment_observed_price_{good}_{bound} }}
+}}''')
+    return '\n'.join(result) + '\n'
+
+
+def effects():
+    result = ['''sed_refresh_investment_prices = {
+ if = { limit = { is_player = yes has_variable = sed_enabled }''']
+    for good in PRICES:
+        for bound in ('lower', 'upper'):
+            result.append(f'  set_variable = {{ name = sed_investment_market_{good}_{bound} value = sed_investment_market_price_{good}_{bound} }}')
+    result.append('  every_scope_state = {')
+    for good in PRICES:
+        for bound in ('lower', 'upper'):
+            result.append(f'   set_variable = {{ name = sed_investment_local_{good}_{bound} value = sed_investment_observed_price_{good}_{bound} }}')
+    return '\n'.join(result) + '\n  }\n }\n}\n'
+
 
 def values(targets, variants):
-    result = []
-    prices = production_methods.ECONOMICS['prices']
+    result = [price_values()]
     outputs = production_methods.ECONOMICS['all_outputs']
     for item in targets:
         good = item['good']
@@ -24,8 +95,6 @@ def values(targets, variants):
             baseline_inputs = {input_good: sum(input_forecast.PROFILES[building].get(method, {}).get(input_good, 0)
                                                for method in baseline)
                                for input_good in input_forecast.building_goods(building)}
-            baseline_margin = (sum(amount * prices[output] * 0.75 for output, amount in baseline_outputs.items())
-                               - sum(amount * prices[input_good] * 1.25 for input_good, amount in baseline_inputs.items()))
             for output in output_goods:
                 result.append(f'sed_investment_{name}_output_{output} = {{\n value = 0')
                 for method, amounts in methods.items():
@@ -34,13 +103,19 @@ def values(targets, variants):
                 result.append(' min = 0\n}')
             result.append(f'''sed_investment_{name}_margin = {{
  value = 0
- if = {{ limit = {{ NOT = {{ has_building = {building} }} }} add = {baseline_margin:g} }}
+ if = {{ limit = {{ NOT = {{ has_building = {building} }} }}
+''')
+            for output, amount in baseline_outputs.items():
+                result.append(f'  add = {{ value = {amount:g} multiply = sed_investment_price_{output}_lower }}')
+            for input_good, amount in baseline_inputs.items():
+                result.append(f'  subtract = {{ value = {amount:g} multiply = sed_investment_price_{input_good}_upper }}')
+            result.append(f''' }}
  if = {{ limit = {{ has_building = {building} }}
 ''')
             for output in output_goods:
-                result.append(f'  add = {{ value = sed_investment_{name}_output_{output} multiply = {prices[output] * 0.75:g} }}')
+                result.append(f'  add = {{ value = sed_investment_{name}_output_{output} multiply = sed_investment_price_{output}_lower }}')
             for input_good in input_forecast.building_goods(building):
-                result.append(f'  subtract = {{ value = {input_forecast.amount_name(building, input_good)} multiply = {prices[input_good] * 1.25:g} }}')
+                result.append(f'  subtract = {{ value = {input_forecast.amount_name(building, input_good)} multiply = sed_investment_price_{input_good}_upper }}')
             result.append(' }\n}')
             result.append(f'''sed_investment_{name}_output = {{
  value = 0

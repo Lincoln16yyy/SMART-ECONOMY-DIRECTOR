@@ -307,6 +307,7 @@ def effects(actions, dependencies, buildings):
     result = ['''sed_refresh_national_plan = {
  if = {
   limit = { is_player = yes has_variable = sed_enabled }
+  sed_refresh_investment_prices = yes
   sed_refresh_input_readings = yes
   set_variable = { name = sed_plan_count value = 0 }
   set_variable = { name = sed_plan_missing_count value = 0 }

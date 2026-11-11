@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.11
+# Estado dos requisitos — 0.7.12
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.
@@ -8,7 +8,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | --- | --- | --- |
 | Diagnóstico econômico e diário | Implementados, com métricas, data e atualização manual/mensal | Leitura e correção de snapshot observadas na campanha de 1842. Atualização do executor no diagnóstico corrigida na 0.6.16, pendente de confirmação |
 | Objetivo nacional atual | Implementado para gargalos, fiscal, crescimento/diversificação e meta industrial anual por escassez persistente | Amostragem mensal corrigida na 0.6.9. Validar seleção e transições em campanha |
-| Até três prioridades nacionais | Implementado sobre pares estado/tipo elegíveis. Desde a 0.7.11, fornecedores do mesmo bem são comparados por oferta e margem material estimada, incluindo subprodutos e insumos dos PMs | Validar layout e dados das novas prioridades na engine |
+| Até três prioridades nacionais | Implementado sobre pares estado/tipo elegíveis. Desde a 0.7.11, fornecedores do mesmo bem são comparados por oferta e margem material estimada, incluindo subprodutos e insumos dos PMs. Desde a 0.7.12, preços observados do mercado e faixas locais alimentam a referência | Validar layout e dados das novas prioridades na engine |
 | Setores estratégicos ausentes | Onze bens, incluindo armas, artilharia e munição; cereais cobrem cinco tipos de fazenda e tecido cobre plantação e pecuária. Desde a 0.7.0 o Automático funda a base em estado incorporado apto quando o país não tem produtor verificado | Demais bens ainda têm um único produtor. Confirmar `can_construct_building`, terra e custo real em campanha. Importações continuam fora do escopo |
 | Emprego e insumos | Filtros de ocupação, contratação e insumos, mais reserva de mão de obra na 0.6.19 e previsão de insumos adicionais por PMs e compromissos conhecidos na 0.6.20 | Na 0.7.3, fundações e pedidos próprios sem prédio também reservam trabalho e insumos. Calibrar aproximação demográfica e coeficientes. Incluir qualificações, migração e atração de trabalhadores. Calibrar insumos projetados e cobrir modificadores, comércio e produção futuros |
 | Reserva, dívida e ritmo | Guarda proporcional inicial, classificações 1–4 e construção financiada por reservas (5). Desde a 0.7.6 a reserva exigida considera a fila e o novo projeto, sem teto de 56 semanas, e o executor direto pode usar financiamento por reservas | Referência de materiais implementada na 0.6.17 e limitada por níveis/ocupação na 0.6.18. Calibrar limiares e custo real incremental, duração com fila concorrente e serviço da dívida |

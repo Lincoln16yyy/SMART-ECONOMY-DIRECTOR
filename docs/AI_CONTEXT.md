@@ -1,8 +1,8 @@
 # Contexto de continuidade
 
-Última entrega documentada: 0.7.11 instalada com jogo fechado e 14 arquivos
-conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.11_20261111_015138_269433`.
-321 testes sintéticos aprovados. A seleção econômica ainda exige confirmação na engine.
+Última entrega documentada: 0.7.12 instalada com jogo fechado e 14 arquivos
+conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.12_20261111_102922_823642`.
+330 testes sintéticos aprovados. As referências de preço ainda exigem confirmação na engine.
 
 
 
@@ -12,6 +12,32 @@ conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.11_20261111_01513
 
 
 
+
+
+## 0.7.12 — Preços observados nas referências de investimento
+
+A escolha de fornecedores incorpora sinais de preços atuais. O mercado usa
+leitura direta de `market_goods_pricier` e `market_goods_cheaper`, cuja forma
+numérica foi verificada nos artigos vanilla de transferência de bens. Os
+estados usam comparações nativas de preços locais em faixas de 10%, com ponto
+adicional em 75%. Os preços-base continuam fornecendo a unidade monetária.
+
+A referência inferior de receita e superior de insumos conservam folga de
+25% do preço-base e incluem a incerteza da faixa local. As referências são
+limitadas ao intervalo de zero a duas vezes o preço-base. A definição vanilla
+`PRICE_RANGE = 0.75` e as comparações locais foram verificadas no jogo instalado.
+
+Informação local tem precedência. Na ausência dela, a leitura usa o mercado.
+A ausência de ambas as observações deixa a referência em torno do preço-base.
+As leituras ficam em cache por país e estado e são renovadas na atualização
+do plano e na aprovação. Os estados adicionados após uma leitura também têm
+cálculo de referência disponível. Desativar limpa os caches.
+
+Essas referências alimentam a seleção de fornecedores das obras próprias,
+incluindo fundações. O diagnóstico renova dados. Ações econômicas continuam
+sob as autorizações de execução. Retorno real, salários, qualificações,
+modificadores de produtividade e impacto futuro da nova oferta nos preços
+precisam de modelo e calibração. Confirmação na engine segue pendente.
 
 ## 0.7.11 — Escolha econômica dos fornecedores
 
