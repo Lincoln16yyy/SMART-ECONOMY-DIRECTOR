@@ -140,6 +140,11 @@ def effects(founding_projects=()):
    any_scope_state = {{ sed_core_{good}_eligible = yes }} }}
    set_variable = {{ name = sed_build_budget_project_points value = {points} }}
   }}''')
+    # Growth lane also covers the construction sector, the cheapest project.
+    result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0
+   any_scope_state = {{ sed_core_construction_eligible = yes }} }}
+   set_variable = {{ name = sed_build_budget_project_points value = {PROJECT_POINTS['construction']} }}
+  }}''')
     # No ranked project this month: the Trade Center fallback is the next work.
     result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0
    any_scope_state = {{ sed_trade_center_candidate_eligible = yes }} }}

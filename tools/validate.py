@@ -168,7 +168,8 @@ def validate(root=ROOT, game=None):
                         'sed_run_power_approval': {'building_power_plant'},
                         'sed_run_core_wood_approval': {'building_logging_camp'},
                         'sed_run_core_iron_approval': {'building_iron_mine'},
-                        'sed_run_core_tools_approval': {'building_tooling_workshop'}}
+                        'sed_run_core_tools_approval': {'building_tooling_workshop'},
+                        'sed_run_core_construction_approval': {'building_construction_sector'}}
     try:
         from .build_mod import SUPPLY_TARGETS, variants
     except ImportError:
@@ -238,7 +239,8 @@ def validate(root=ROOT, game=None):
                            'power': 'sed_power_candidate_eligible',
                            'core_wood': 'sed_core_wood_eligible',
                            'core_iron': 'sed_core_iron_eligible',
-                           'core_tools': 'sed_core_tools_eligible'}
+                           'core_tools': 'sed_core_tools_eligible',
+                           'core_construction': 'sed_core_construction_eligible'}
         if name in fallback_guards:
             # Fallbacks run only after every ranked target failed this month, so
             # they have no plan rank. They must still prove their own eligibility.

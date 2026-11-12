@@ -38,8 +38,45 @@ TARGETS = (
 )
 
 
+# The construction sector is the throttle of every other expansion. Vanilla
+# charges only construction_cost_construction_sector (25 points,
+# common/script_values/building_values.txt) and the plan only ranks it when the
+# public queue already holds three projects, so a long queue never buys capacity.
+# `construction_queue_government_duration` (weeks, country scope) is the gate
+# here: with a queue of 12+ weeks a new sector level pays for itself.
+CONSTRUCTION_BUILDING = 'building_construction_sector'
+CONSTRUCTION_QUEUE_WEEKS = 12
+
+
 def triggers():
-    parts = []
+    parts = [f'''# State scope. Growth expansion of the construction sector while the public
+# queue is long; a level already queued waits for the queue.
+sed_core_construction_eligible = {{
+ is_incorporated = yes
+ infrastructure_delta >= 0
+ can_construct_building = {CONSTRUCTION_BUILDING}
+ has_building = {CONSTRUCTION_BUILDING}
+ NOT = {{ has_variable = sed_construction_ignored }}
+ NOT = {{ has_variable = sed_construction_request_pending }}
+ b:{CONSTRUCTION_BUILDING} = {{
+  level_after_queued_constructions <= level
+  occupancy >= 0.5
+  has_failed_hires = no
+ }}
+ owner = {{ sed_develop_core = yes }}
+ owner = {{ construction_queue_government_duration >= {CONSTRUCTION_QUEUE_WEEKS} }}
+}}
+
+sed_core_construction_approval_valid = {{
+ sed_core_construction_eligible = yes
+ owner = {{
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = {{ in_default = yes }}
+  construction_queue_num_queued_private_levels = 0
+  sed_execution_mode_permits_approval = yes
+ }}
+}}''']
     for item in TARGETS:
         good, building, variant = item['good'], item['building'], item['variant']
         parts.append(f'''# State scope. Growth expansion of {good}: the building must already exist.
@@ -76,7 +113,34 @@ sed_core_{good}_approval_valid = {{
 
 
 def effects():
-    parts = []
+    parts = [f'''# State scope. Queue one sector level under the growth lane.
+sed_run_core_construction_approval = {{
+ owner = {{ if = {{ limit = {{ is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic }} sed_refresh_direct_budget = yes }} }}
+ if = {{
+  limit = {{ sed_core_construction_approval_valid = yes }}
+  owner = {{
+   set_variable = {{ name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }}
+  }}
+  owner = {{ sed_record_auto_attempt = yes }}
+  set_variable = {{ name = sed_construction_intent_level value = b:{CONSTRUCTION_BUILDING}.level }}
+  start_building_construction = {CONSTRUCTION_BUILDING}
+  owner = {{
+   if = {{
+    limit = {{ construction_queue_num_queued_government_levels > var:sed_queue_levels_before }}
+    set_variable = {{ name = sed_construction_action_status value = 1 }}
+    if = {{ limit = {{ has_variable = sed_mode_automatic }}
+     set_variable = {{ name = sed_auto_action_status value = 1 }}
+    }}
+    prev = {{ set_variable = {{ name = sed_construction_request_pending value = yes }} }}
+   }}
+   else = {{
+    set_variable = {{ name = sed_construction_action_status value = 2 }}
+    prev = {{ remove_variable = sed_construction_intent_level }}
+   }}
+   remove_variable = sed_queue_levels_before
+  }}
+ }}
+}}''']
     for item in TARGETS:
         good, building = item['good'], item['building']
         parts.append(f'''# State scope. Queue one public level under the growth lane. Reuses the ledger

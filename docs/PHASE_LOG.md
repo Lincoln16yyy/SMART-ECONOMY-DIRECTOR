@@ -2693,3 +2693,39 @@ referência negativa virou teste explícito da nova regra do núcleo.
 Não verificado na engine: a trilha em campanha, o respeito ao orçamento e o
 painel encurtado nos dois idiomas. Roteiro em `docs/MANUAL_RUNTIME_TEST.md`,
 seção 0.7.33.
+
+## 2026-11-12 — 0.7.34: setor de construção na trilha de crescimento
+
+O plano só ranqueia o setor de construção quando a fila pública já tem três
+projetos (`num_queued_government_constructions >= 3`), então uma fila longa
+nunca comprava capacidade — justamente o gargalo de todas as outras obras.
+
+Código — `sed_core_construction_eligible` (estado) exige setor existente,
+ocupação ≥ 50%, sem contratação falha, sem nível enfileirado e
+`construction_queue_government_duration >= 12` semanas; sob `sed_develop_core`.
+`sed_run_core_construction_approval` enfileira um nível (25 pontos). Fecha a
+trilha de crescimento, depois de madeira, ferro e ferramentas.
+
+Dois defeitos meus no caminho: um `}` extra no guarda do efeito novo (o
+validador acusou "Unexpected closing brace" e reportou o arquivo de efeitos
+inteiro como indefinido) e o teste do setor sem `production_methods` no prédio
+de construção, o que deixava o orçamento "desconhecido" (sem capacidade
+material) e bloqueava a execução.
+
+Achado de calibragem (hipótese) — a guarda `sed_direct_budget_safe` exige
+`despesas fixas × 4 + max(0, custo semanal de materiais − renda líquida) ×
+semanas de financiamento`. Com setor de construção, o custo semanal é
+`pontos ativos × custo do ponto`. No harness (país pequeno, 10 pontos, madeira)
+isso dá 88.600 de ouro exigidos contra 1.000 disponíveis — status 22, nada é
+construído. Se a mesma conta aparecer em campanha, essa guarda é o bloqueio
+real do relato "caixa positivo e nenhuma obra", mais até que a ausência de
+prioridade corrigida na 0.7.33. Não alterei a fórmula: o número precisa de
+confronto com um save real antes de recalibrar. Roteiro em
+`docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.34, passo 4.
+
+Teste sintético — 422 aprovados; 3 novos cobrem fila longa, fila curta e nível
+já enfileirado. O teste de fila longa usa tesouro de 400.000 porque a guarda
+exige a cobertura da fila.
+
+Não verificado na engine: entrada do nível na fila, duração medida pela engine
+contra as 12 semanas do gatilho e efeito no ritmo de obras.

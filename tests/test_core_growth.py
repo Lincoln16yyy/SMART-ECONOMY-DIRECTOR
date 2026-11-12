@@ -92,6 +92,44 @@ class CoreGrowthTests(unittest.TestCase):
         c.run('sed_refresh_direct_budget')
         self.assertEqual(c.variables['sed_build_budget_project_points'], 200)
 
+    def add_construction_sector(self, level=1, queued_levels=0):
+        # The sector's own methods give the material budget its capacity; without
+        # them the budget stays unknown and the executor guard blocks everything.
+        sector = building('building_construction_sector', level=level, queued_levels=queued_levels)
+        sector['production_methods'] = ['pm_wooden_buildings']
+        self.c.states[0]['buildings'].append(sector)
+        return sector
+
+    def test_a_long_public_queue_buys_a_sector_level(self):
+        c = self.c
+        self.add_construction_sector()
+        c.readings['construction_queue_government_duration'] = 20
+        # The material guard requires gold for the queue weeks the income does
+        # not cover; a country able to pay a 20-week queue holds that treasure.
+        c.readings['gold_reserves'] = 400000
+        c.readings['principal'] = 0
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual([item.get('building') for item in c.constructions],
+                         ['building_construction_sector'])
+        self.assertEqual(c.states[0]['variables'].get('sed_construction_intent_level'), 1)
+
+    def test_a_short_queue_does_not_buy_a_sector_level(self):
+        c = self.c
+        self.add_construction_sector()
+        c.readings['construction_queue_government_duration'] = 5
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.constructions, [])
+
+    def test_a_sector_level_already_queued_waits(self):
+        c = self.c
+        self.add_construction_sector(queued_levels=1)
+        c.readings['construction_queue_government_duration'] = 20
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.constructions, [])
+
     def test_panel_does_not_promise_new_buildings(self):
         # The growth lane expands only existing buildings; the supply panel text
         # must not claim otherwise.

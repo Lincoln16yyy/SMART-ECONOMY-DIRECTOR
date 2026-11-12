@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.33'
+VERSION = '0.7.34'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -626,6 +626,19 @@ def core_growth_branches():
     sed_run_core_{good}_approval = yes
    }}
   }}
+''')
+    # The construction sector closes the lane: it throttles every other project.
+    parts.append('''  else_if = {
+   limit = { any_scope_state = { sed_core_construction_eligible = yes } }
+   ordered_scope_state = {
+    limit = { sed_core_construction_eligible = yes }
+    order_by = { value = state_population multiply = -1 }
+    max = 1
+    check_range_bounds = no
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
+    sed_run_core_construction_approval = yes
+   }
+  }
 ''')
     return ''.join(parts)
 

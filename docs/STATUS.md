@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.33
+# Estado dos requisitos — 0.7.34
 
 ## Protocolo de evidência adotado
 
@@ -237,3 +237,33 @@ um teste explícito da nova regra para o núcleo.
 NÃO VERIFICADO na engine: se a trilha de crescimento aparece em campanha com
 fila andando, se ela respeita o orçamento como esperado e o painel encurtado nos
 dois idiomas. Roteiro em `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.33.
+
+## 0.7.34 — Setor de construção na trilha de crescimento
+
+Código — `sed_core_construction_eligible` (estado) exige setor existente,
+ocupação ≥ 50%, sem contratação falha, sem nível já enfileirado e
+`construction_queue_government_duration >= 12` semanas no país, sob
+`sed_develop_core`. `sed_run_core_construction_approval` enfileira um nível
+(25 pontos, `construction_cost_construction_sector`); a ramificação fica por
+último no despachante.
+
+Motivo — o plano só ranqueia o setor quando `num_queued_government_constructions
+>= 3`, então fila longa nunca comprava capacidade, embora o setor seja o gargalo
+de todas as outras obras.
+
+Achado de calibragem (hipótese, não confirmada em campanha) — a guarda de
+materiais exige
+`despesas fixas × 4 + max(0, custo semanal − renda líquida) × semanas de
+financiamento`. Com um setor de construção presente, o custo semanal é
+`pontos ativos × custo do ponto`; no harness isso resulta em 88.600 de ouro
+para um país pequeno. Se a conta se confirmar em campanha, essa guarda pode ser
+o motivo real de o Automático não construir mesmo com caixa positivo — o painel
+mostra status 22 nesse caso. Precisa de leitura do save para calibrar.
+
+Teste sintético — 422 aprovados; 3 novos: fila longa compra um nível de setor,
+fila curta não compra e nível já enfileirado espera. O teste usa tesouro de
+400.000 porque a guarda de materiais exige a cobertura da fila.
+
+NÃO VERIFICADO na engine: se a ampliação do setor entra na fila, se a duração
+medida pela engine bate com as 12 semanas do gatilho e o efeito real no ritmo de
+obras. Roteiro em `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.34.

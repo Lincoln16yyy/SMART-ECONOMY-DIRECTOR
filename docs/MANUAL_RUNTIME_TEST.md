@@ -725,6 +725,18 @@ de um bem do catálogo (ex.: madeira) e um prédio operante do tipo.
 3. Troque o jogo para inglês e confirme que o texto está em inglês (antes da
    0.7.29 o arquivo inglês saía em português).
 
+## Setor de construção 0.7.34 (pendente)
+
+1. Save com setor de construção existente, fila pública com 12+ semanas e caixa
+   saudável. Automático por um mês. Esperado: um nível de
+   `building_construction_sector` na fila e status 1 no painel.
+2. Fila curta (< 12 semanas): nada deve ser enfileirado.
+3. Nível já na fila: o mês seguinte deve esperar.
+4. **Diagnóstico da guarda de materiais:** se o painel mostrar status 22 com
+   caixa positivo, anote os valores de `sed_build_budget_weekly`,
+   `sed_build_budget_required_gold` e `gold_reserves` no save. É a evidência que
+   falta para calibrar a reserva exigida.
+
 ## Crescimento com economia equilibrada 0.7.33 (pendente)
 
 1. Save do Paraguai saudável (caixa positivo, nada em escassez, preços na base)

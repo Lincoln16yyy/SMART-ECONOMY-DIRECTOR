@@ -1,5 +1,11 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.34, a trilha de crescimento também compra capacidade de construção: com
+fila pública de 12 semanas ou mais, o Automático amplia o setor de construção
+um nível por mês. É o projeto mais barato do jogo (25 pontos) e destrava todos
+os outros, mas continua sujeito à guarda de materiais — que exige ouro para as
+semanas de fila que a renda não cobre.
+
 Na 0.7.33, o Automático deixa de ficar parado numa economia equilibrada. Antes,
 o plano só criava prioridade com escassez, bem 20% acima da base ou insumo
 bloqueante — com o país saudável, o mês terminava sem obra nenhuma. Agora, sem
@@ -279,7 +285,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.7.33.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.7.34.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 
