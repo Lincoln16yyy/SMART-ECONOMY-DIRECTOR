@@ -122,6 +122,20 @@ class ImportNoticeTests(unittest.TestCase):
             self.assertIn(
                 f".Var('sed_import_notice_{good}_sell').GetValue|D", portuguese)
 
+    def test_description_teaches_the_post_1_9_import_path(self):
+        # Terms verified in the installed game 1.15 (concepts, diplomacy and law
+        # localization): Trade Center, Trade Capacity, Subventions, Goods
+        # Transfer and law_isolationism's country_disallow_trade_bool.
+        english = outputs()['localization/english/sed_l_english.yml'].decode('utf-8-sig')
+        portuguese = outputs()['localization/braz_por/sed_l_braz_por.yml'].decode('utf-8-sig')
+        for text, terms in ((portuguese, ('Centro de Comércio', 'capacidade de comércio',
+                                          'subvenção', 'Transferência de Bens', 'Isolacionismo')),
+                            (english, ('Trade Center', 'Trade Capacity',
+                                       'subvention', 'Goods Transfer', 'Isolationism'))):
+            for term in terms:
+                with self.subTest(term=term):
+                    self.assertIn(term, text)
+
     def test_notice_is_advisory_and_never_opens_a_trade_route(self):
         events = outputs()['events/sed_events.txt'].decode('utf-8-sig')
         self.assertNotIn('create_trade_route', events)

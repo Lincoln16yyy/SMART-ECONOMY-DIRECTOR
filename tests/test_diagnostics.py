@@ -19,6 +19,34 @@ def script_definitions():
     return result
 
 
+class LocalizationTests(unittest.TestCase):
+    def test_each_language_file_uses_its_own_column(self):
+        # Until 0.7.29 the language flag was reused as a loop label, so the
+        # English file was generated with Portuguese text.
+        english = outputs()['localization/english/sed_l_english.yml'].decode('utf-8-sig')
+        portuguese = outputs()['localization/braz_por/sed_l_braz_por.yml'].decode('utf-8-sig')
+        self.assertNotIn('Ignorar', english)
+        self.assertNotIn('Approve', portuguese)
+        self.assertIn('sed_ignore_recommendation:0 "Ignore in this state"', english)
+        self.assertIn('sed_ignore_recommendation:0 "Ignorar neste estado"', portuguese)
+        english_lines = english.splitlines()[1:]
+        portuguese_lines = portuguese.splitlines()[1:]
+        self.assertEqual(len(english_lines), len(portuguese_lines))
+        differing = sum(1 for left, right in zip(english_lines, portuguese_lines) if left != right)
+        self.assertGreater(differing, len(english_lines) // 4)
+
+    def test_entries_stay_on_one_line_with_escaped_newlines(self):
+        # A literal newline inside a quoted entry breaks the game's parser.
+        for path in ('localization/english/sed_l_english.yml',
+                     'localization/braz_por/sed_l_braz_por.yml'):
+            text = outputs()[path].decode('utf-8-sig')
+            for line in text.splitlines()[1:]:
+                with self.subTest(path=path, line=line[:60]):
+                    self.assertTrue(line.startswith(' ') and ':0 "' in line
+                                    and line.endswith('"'), line)
+        self.assertIn('\\n\\n', outputs()['localization/braz_por/sed_l_braz_por.yml'].decode('utf-8-sig'))
+
+
 class DiagnosisTests(unittest.TestCase):
     def setUp(self):
         self.definitions = script_definitions()

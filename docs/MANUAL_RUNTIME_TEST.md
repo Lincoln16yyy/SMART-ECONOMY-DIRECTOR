@@ -713,3 +713,14 @@ de um bem do catálogo (ex.: madeira) e um prédio operante do tipo.
    linha deve aparecer, e a cessão deve valer para trigo, centeio, arroz, milho e
    milhete. Devolver: captura do painel nos dois estados e trecho do
    `error.log`.
+
+## Evento de importação 0.7.29 (pendente)
+
+1. Com escassez de papel e sem candidata local, avance o mês até o evento
+   `sed_pulse` de papel aparecer. A descrição deve listar os quatro passos
+   (Centro de Comércio, tarifa/subvenção, Transferência de Bens, Isolacionismo)
+   com parágrafos separados.
+2. Confira o botão de opção: "Vou tentar importar pelo Mercado Mundial"; ao
+   clicar, o aviso de papel não deve voltar por 12 meses.
+3. Troque o jogo para inglês e confirme que o texto está em inglês (antes da
+   0.7.29 o arquivo inglês saía em português).

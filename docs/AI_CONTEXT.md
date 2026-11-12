@@ -1,7 +1,11 @@
 # Contexto de continuidade
 
-Última entrega do mod — 0.7.28 gerada, testada e instalada com jogo fechado.
-Código — a modernização de PM cede o prédio quando o Auto-Apply PMs tem o botão
+Última entrega do mod — 0.7.29 gerada, testada e instalada com jogo fechado.
+Código — o evento de escassez agora ensina a importação da 1.9+ (Centro de
+Comércio/capacidade, tarifa ou subvenção, Transferência de Bens, Isolacionismo),
+e corrige dois defeitos de localização: o arquivo inglês saía em português (a
+bandeira do idioma era reutilizada como rótulo nos laços `for policy, pt, en` e
+`for good, pt, en`) e parágrafos tinham quebra real, inválida em loc. Antes: a modernização de PM cede o prédio quando o Auto-Apply PMs tem o botão
 do prédio ou do grupo ligado (`owner = { NOT = { has_variable = ... } }` na
 elegibilidade, que roda em escopo de estado). Auditoria dos 12 mods instalados
 em `docs/COMPATIBILITY.md`. Antes: leitura das doze restrições do Controllable Private Construction
@@ -11,7 +15,7 @@ diário daquele mod quando a fila privada bloqueia o Automático. Antes: unidade
 salarial por família de prédio, meta plurianual, fila com duração da engine e
 contagem de projetos. Comércio: script não abre rota (removido na 1.9);
 autor/investidor e qualificações não têm primitiva legível.
-Teste sintético — 384 testes aprovados.
+Teste sintético — 387 testes aprovados.
 Estático — geração consistente e validação local 1.15 aprovadas. Tiger 1.19.0:
 mesmos três campos de diário do vanilla 1.15 e 933 avisos (todos de colocação de
 chaves no GUI e de OR de item único).
@@ -22,12 +26,39 @@ Ler `AGENTS.md`, `docs/agent/vic3-modding/SKILL.md` e suas referências.
 O ambiente registra o Tiger, o resultado da sondagem de comércio e o Smart
 Government instalado (1.0.0, esquema 2, variáveis `sg_*`). A pasta de
 documentação exportada do jogo continua ausente.
-Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.28 (PM cedido
+Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.29 (evento
+de importação com o novo texto, nos dois idiomas), 0.7.28 (PM cedido
 com o Auto-Apply PMs ligado), 0.7.27 (seção de controle privado só com o outro
 mod ativo), depois 0.7.23 (duração da
 fila), 0.7.21 (evento de importação) e 0.7.17–0.7.19: unidade no painel, desvio
 de fornecedor, pontuação de PMs, save/reload e limpeza. Depois retomar as
 leituras fiscais e a fundação básica.
+
+## 0.7.29 — Evento de importação ensina o caminho da 1.9+ e loc em inglês
+
+Relato do jogador: recebeu o evento de escassez de papel, não sabia como
+importar, construiu a fábrica e descobriu depois que a 1.9 acabou com rota
+manual. A descrição só dizia "abra a importação pela interface de comércio".
+
+Código — a descrição do evento agora lista o caminho com termos conferidos no
+jogo instalado 1.15: `building_trade_center` / `concept_trade_capacity`,
+`concept_subventions` e `concept_tariffs`, `goods_transfer` (cláusula de
+tratado) e `law_isolationism` com `country_disallow_trade_bool = yes`. A opção
+passou a ser "Vou tentar importar pelo Mercado Mundial".
+
+Dois defeitos de localização achados pelo teste novo: (a) `pt` era reutilizada
+como rótulo em `for policy, pt, en` e `for good, pt, en`, então
+`localization('english')` gravava português — o arquivo inglês estava errado
+desde que esses laços entraram; agora a coluna é fixada antes dos laços.
+(b) Quebras de parágrafo saíam como newline real, inválido em loc; agora são
+`\n` escapado.
+
+Teste sintético — 387 aprovados; três novos: termos do caminho de importação
+nos dois idiomas, coluna de idioma correta (inglês sem "Ignorar", português sem
+"Approve") e uma entrada por linha com `\n` escapado.
+
+NÃO VERIFICADO na engine: exibição do texto longo do evento e das opções nos
+dois idiomas; se as quebras escapadas aparecem corretamente no jogo.
 
 ## 0.7.28 — Cessão de PM ao Auto-Apply PMs
 

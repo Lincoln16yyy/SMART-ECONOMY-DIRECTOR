@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.28
+# Estado dos requisitos — 0.7.29
 
 ## Protocolo de evidência adotado
 
@@ -12,7 +12,7 @@ Restam três campos do diário apontados como desconhecidos, presentes no vanill
 formatação e de OR de um item permanecem visíveis. A documentação exportada
 continua ausente. Carregou e Campanha das leituras fiscais, da prontidão e do
 novo retorno salarial e da pontuação de PMs seguem NÃO VERIFICADO. Teste
-sintético — 384 testes aprovados. O evento consultivo de importação (com os
+sintético — 387 testes aprovados. O evento consultivo de importação (com os
 pedidos de compra e venda do bem) segue NÃO VERIFICADO na engine.
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
@@ -41,9 +41,10 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Métodos de produção | Configuração inicial em fundações acompanhadas desde a 0.7.7. Seleção inicial e, desde a 0.7.9, modernização contínua do grupo principal para gargalos, por saída e margem material estimada a preços-base, com reserva mensal de insumos. Desde a 0.7.10, recuperação de escassez por método com menor dependência de insumos e piso de saída nominal. A 0.7.17 fornece a unidade salarial observada aos filtros de oferta; a 0.7.18 desconta a folha da mudança na pontuação de modernização e recuperação | Confirmar na engine. Preços reais pendentes. Qualificações e salários por profissão **não têm primitiva legível** (sondagem Tiger 1.19.0: `pop_qualifications`, `state_pop_qualifications`, `wages`, `wage_rate`, `average_wage` são tokens desconhecidos); o proxy é `occupancy` + `has_failed_hires`, e desde a 0.7.26 a unidade salarial é por família de prédio com fallback nacional. Desde a 0.7.28 a modernização cede o prédio que o Auto-Apply PMs já administra (`zw_var_auto_pm_building_<prédio>` e os botões de grupo de fazendas/plantações), em vez de disputar o mesmo grupo. Automação dos demais grupos pendente. A ordem dos pares e a configuração inicial seguem apenas materiais |
 | Economia militar | Custos, participação das despesas, guerra e cinco bens monitorados. Expansões de armas, artilharia e munição na 0.6.14, com bônus de prioridade em guerra | Confirmar leituras na engine, identificar consumo nacional, planejar indústria bélica, modernização e coordenação do recrutamento |
 | Leis, guerra e diplomacia | Fora das mutações econômicas implementadas. Desde a 0.7.20 o painel declara a fronteira e reconhece o Smart Government Advisor instalado (`sg_enabled`), sem repetir recomendações de leis | Mantidas sob responsabilidade dos módulos e decisões previstos pelo briefing. Conferir a exibição com os dois mods na engine |
-| Comércio exterior | Limitação de engine confirmada: `create_trade_route` foi removido na 1.9 (Tiger 1.19.0) e `add_trade_route_level`, `cancel_trade_route` e `establish_trade_route` são tokens desconhecidos. Desde a 0.7.21, `sed_pulse.2..13` avisam em evento quando a escassez não tem candidata local, com prazo e três opções; desde a 0.7.22 a descrição mostra os pedidos de compra e venda do mercado | Abrir rota continua ação do jogador. Confirmar no jogo a exibição do evento e dos números, o prazo de 3 e o cooldown de 6/12/24 meses |
+| Comércio exterior | Limitação de engine confirmada: `create_trade_route` foi removido na 1.9 (Tiger 1.19.0) e `add_trade_route_level`, `cancel_trade_route` e `establish_trade_route` são tokens desconhecidos. Desde a 0.7.21, `sed_pulse.2..13` avisam em evento quando a escassez não tem candidata local, com prazo e três opções; desde a 0.7.22 a descrição mostra os pedidos de compra e venda do mercado | Abrir rota continua ação do jogador. Desde a 0.7.29 a descrição ensina o caminho da 1.9+ com termos conferidos no jogo instalado (Centro de Comércio, capacidade de comércio, tarifa/subvenção, Transferência de Bens, `country_disallow_trade_bool` do Isolacionismo). Confirmar no jogo a exibição do evento e dos números, o prazo de 3 e o cooldown de 6/12/24 meses |
 | Haiti, país rico e crise | Cenários sintéticos fiscais e de seleção | Campanhas registradas e comparáveis permanecem pendentes |
 | Crescimento em campanha longa | Ainda sem evidência | Medir PIB, SoL, emprego, dívida, reservas e diversificação durante vários anos |
+| Localização | Desde a 0.7.29 o arquivo inglês recebe a coluna em inglês. Até a 0.7.28 a bandeira do idioma era reutilizada como rótulo de laço (`for policy, pt, en` e `for good, pt, en`), então `localization('english')` gerava português. Também desde a 0.7.29 parágrafos usam `\n` escapado, porque quebra real invalida a entrada | Conferir no jogo a exibição nos dois idiomas. Não havia teste de idioma antes da 0.7.29 |
 | Compatibilidade com mods instalados | Auditoria dos 12 mods instalados em `docs/COMPATIBILITY.md`. Desde a 0.7.27 o painel lê o Controllable Private Construction; desde a 0.7.28 a modernização cede o prédio ao Auto-Apply PMs (`zw_var_auto_pm_building_*`) | Conferir em campanha a seção de controle privado e a cessão de PM. `OGAS for CWE` é de 1.13 + Cold War Era e não deve ser usado nesta campanha; Government Administration Auto Expand remove `ai_value` do prédio vanilla |
 | Entrega | Gerador, validador, testes, ZIP e instalador com backup | Entrega da 0.6.9 com backup, conferência dos outputs e PR de revisão |
 

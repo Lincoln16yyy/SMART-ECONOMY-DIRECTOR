@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.28'
+VERSION = '0.7.29'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -2019,7 +2019,10 @@ def value(name, fmt='1'):
 
 
 def localization(language):
-    pt = language == 'braz_por'
+    # Index into each (portuguese, english) pair. Keep this separate from the
+    # loop labels below: reusing it silently emitted Portuguese in the English
+    # file until 0.7.29.
+    column = 0 if language == 'braz_por' else 1
     v = value
     pairs = {
         'sed_ignore_recommendation': ('Ignorar esta expansão neste estado', 'Ignore this expansion in this state'),
@@ -2144,14 +2147,14 @@ def localization(language):
             f'Escassez de {label_pt}: importar ou ampliar?',
             f'{label_en[:1].upper() + label_en[1:]} shortage: import or expand?')
         pairs[f'sed_import_notice_{good}_desc'] = (
-            f'A demanda de {label_pt} supera a oferta e nenhuma expansão local passou nos filtros agora — trabalhadores, insumos, fila, orçamento ou infraestrutura barraram as candidatas. Pedidos do mercado agora: compra #variable [ROOT.GetCountry.MakeScope.Var(\'sed_import_notice_{good}_buy\').GetValue|D]#!, venda #variable [ROOT.GetCountry.MakeScope.Var(\'sed_import_notice_{good}_sell\').GetValue|D]#!. A diferença indica o tamanho da lacuna que uma importação cobriria; não é estimativa de custo, frete ou comboios. O Director não pode abrir rota comercial por script: a alternativa restante é você abrir a importação pela interface de comércio. Ampliar produção local segue possível quando um filtro liberar.',
-            f'Demand for {label_en} exceeds supply and no local expansion passed the filters this time — workers, inputs, queue, budget or infrastructure blocked the candidates. Market orders now: buy #variable [ROOT.GetCountry.MakeScope.Var(\'sed_import_notice_{good}_buy\').GetValue|D]#!, sell #variable [ROOT.GetCountry.MakeScope.Var(\'sed_import_notice_{good}_sell\').GetValue|D]#!. The difference shows the size of the gap an import would cover; it is not a cost, convoy or freight estimate. The Director cannot open a trade route by script: the remaining lever is you opening the import in the trade interface. Local expansion becomes possible again once a filter clears.')
+            f'A demanda de {label_pt} supera a oferta e nenhuma expansão local passou nos filtros agora — trabalhadores, insumos, fila, orçamento ou infraestrutura barraram as candidatas. Pedidos do mercado agora: compra #variable [ROOT.GetCountry.MakeScope.Var(\'sed_import_notice_{good}_buy\').GetValue|D]#!, venda #variable [ROOT.GetCountry.MakeScope.Var(\'sed_import_notice_{good}_sell\').GetValue|D]#!. A diferença indica o tamanho da lacuna que uma importação cobriria; não é estimativa de custo, frete ou comboios.\n\nDesde a 1.9 não existe rota comercial manual: quem traz de fora é o Centro de Comércio, pelo Mercado Mundial. Para tentar importar {label_pt}:\n1. Tenha Centro de Comércio (grupo Comércio, dentro da infraestrutura privada) no seu mercado — ele gera capacidade de comércio. Portos nos estados costeiros geram a Marinha Mercante usada no transporte.\n2. No painel do bem, no Mercado, reduza a tarifa de importação e/ou pague subvenção à importação: isso deixa a compra externa lucrativa para os comerciantes.\n3. Se quiser acordo direto, use a cláusula Transferência de Bens num tratado com outro país (envio semanal fixo).\n4. Isolacionismo desliga o comércio com o Mercado Mundial.\n\nO Director não pode abrir comércio por script. Ampliar a produção local segue possível quando um filtro liberar.',
+            f'Demand for {label_en} exceeds supply and no local expansion passed the filters this time — workers, inputs, queue, budget or infrastructure blocked the candidates. Market orders now: buy #variable [ROOT.GetCountry.MakeScope.Var(\'sed_import_notice_{good}_buy\').GetValue|D]#!, sell #variable [ROOT.GetCountry.MakeScope.Var(\'sed_import_notice_{good}_sell\').GetValue|D]#!. The difference shows the size of the gap an import would cover; it is not a cost, convoy or freight estimate.\n\nSince 1.9 there is no manual trade route: the Trade Center brings goods from abroad through the World Market. To try to import {label_en}:\n1. Have a Trade Center (Trade group, under private infrastructure) in your market — it generates Trade Capacity. Ports in coastal states generate the Merchant Marine used for shipping.\n2. In the good’s panel in the Market, lower the import tariff and/or pay an import subvention: that makes buying abroad profitable for traders.\n3. For a direct deal, use the Goods Transfer clause in a treaty with another country (fixed weekly amount).\n4. Isolationism disables World Market trade.\n\nThe Director cannot open trade by script. Local expansion becomes possible again once a filter clears.')
         pairs[f'sed_import_notice_{good}_option_trade'] = (
-            'Vou abrir a rota de importação',
-            'I will open the import route')
+            'Vou tentar importar pelo Mercado Mundial',
+            'I will try to import through the World Market')
         pairs[f'sed_import_notice_{good}_option_trade_tt'] = (
-            f'O Director não enfileira obras de {label_pt} e volta a avaliar este aviso em 12 meses. Abrir a rota é ação sua na interface de comércio.',
-            f'The Director queues no {label_en} construction and re-evaluates this notice in 12 months. Opening the route is your action in the trade interface.')
+            f'O Director não enfileira obras de {label_pt} e volta a avaliar este aviso em 12 meses. Importar é ação sua: Centro de Comércio, tarifa ou subvenção no painel do bem, tratado com Transferência de Bens, e conferir se a lei não é Isolacionismo.',
+            f'The Director queues no {label_en} construction and re-evaluates this notice in 12 months. Importing is your action: Trade Center, tariff or subvention in the good’s panel, a Goods Transfer treaty, and check that the law is not Isolationism.')
         pairs[f'sed_import_notice_{good}_option_plan'] = (
             'Recalcular o plano agora',
             'Recompute the plan now')
@@ -2430,7 +2433,10 @@ def localization(language):
         pairs['sed_metric_' + metric['id']] = (metric['pt'] + ': ' + reading, metric['en'] + ': ' + reading)
     lines = [f'l_{language}:']
     for key, pair in pairs.items():
-        text = pair[0 if pt else 1].replace('"', '\\"')
+        text = pair[column].replace('"', '\\"')
+        # Paradox localization is one line per key: a real newline breaks the
+        # parser, so multi-paragraph texts must carry a literal \n escape.
+        text = text.replace('\n', '\\n')
         lines.append(f' {key}:0 "{text}"')
     return '\n'.join(lines) + '\n'
 

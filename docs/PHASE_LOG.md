@@ -2462,3 +2462,49 @@ Estático — geração consistente, validação local 1.15 aprovada, Tiger 1.19
 mesmos 3 `unknown-field` de diário e 933 avisos (um novo, colocação de chaves).
 
 Não verificado na engine: se a cessão evita a disputa de PM em campanha real.
+
+## 0.7.29 — Evento de importação ensina o caminho da 1.9+ (e loc em inglês)
+
+Relato do jogador: apareceu o evento de escassez de papel, ele não sabia como
+comprar, construiu a fábrica de papel e só depois descobriu que a 1.9 removeu a
+rota comercial manual. A descrição do evento dizia apenas "abra a importação
+pela interface de comércio".
+
+Termos conferidos no jogo instalado 1.15 (não só em resultado de busca):
+
+- `building_trade_center` = "Trade Center"; `concept_trade_capacity` = "Trade
+  Capacity" gerada por níveis do Centro de Comércio.
+- `concept_subventions` e `concept_tariffs`: pagos por bem importado/exportado,
+  teto definido pela lei.
+- `goods_transfer` em `common/treaty_articles/13_goods_transfer.txt`:
+  "Goods Transfer", envio semanal fixo entre dois países.
+- `law_isolationism` tem `country_disallow_trade_bool = yes`.
+- `bg_trade` (pai `bg_private_infrastructure`) tem `default_building =
+  building_trade_center`.
+
+Código — descrição e tooltip da opção reescritas com esse caminho em quatro
+passos; a opção virou "Vou tentar importar pelo Mercado Mundial".
+
+Dois defeitos de localização encontrados pelo teste novo (o teste falhou e a
+investigação foi ao código):
+
+1. `localization('english')` gravava português: `pt` era reutilizada como
+   rótulo em `for policy, pt, en` (comandos fiscais) e `for good, pt, en` (bens
+   militares), então `pair[0 if pt else 1]` recebia sempre um valor verdadeiro.
+   Corrigido com `column = 0 if language == 'braz_por' else 1` antes dos laços.
+   O arquivo inglês estava em português desde que esses laços entraram; não
+   havia teste de idioma.
+2. Parágrafos do evento saíam com quebra de linha real dentro da entrada, o que
+   o Tiger acusou como 168 avisos de localização. A função agora troca newline
+   por `\n` escapado antes de escrever.
+
+Teste sintético — 387 aprovados; três novos: termos do caminho de importação nos
+dois idiomas, coluna de idioma correta (inglês sem "Ignorar", português sem
+"Approve") e uma entrada por linha com `\n` escapado.
+
+Estático — geração consistente, validação local 1.15 aprovada, Tiger 1.19.0 nos
+mesmos 3 `unknown-field` de diário e 933 avisos (783 de colocação de chaves, 150
+de OR de item único); os avisos de localização sumiram.
+
+Não verificado na engine: o texto longo do evento nos dois idiomas e a exibição
+das quebras escapadas.

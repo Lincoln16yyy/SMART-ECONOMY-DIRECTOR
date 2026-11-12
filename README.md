@@ -1,5 +1,11 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.29, o evento de escassez ensina o caminho de importação da 1.9+:
+Centro de Comércio e capacidade de comércio, tarifa ou subvenção no painel do
+bem, cláusula Transferência de Bens em tratado e o bloqueio do Isolacionismo.
+Também corrige a localização em inglês, que era gerada em português desde que a
+bandeira de idioma passou a ser reutilizada como rótulo de laço.
+
 Na 0.7.28, a modernização de métodos de produção cede os prédios que o
 Auto-Apply PMs já administra (botão do prédio ou do grupo ligado), em vez de
 disputar o mesmo grupo de PM. A auditoria dos mods instalados está em
