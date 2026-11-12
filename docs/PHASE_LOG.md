@@ -2334,3 +2334,26 @@ mesmos 3 `unknown-field` de diário e 917 avisos.
 
 Não verificado na engine: se as contagens de projeto batem com os ícones da fila
 de obras e como a contagem trata projetos de vários níveis.
+
+## 0.7.25 — Meta plurianual de escassez
+
+A meta industrial da 0.6.4 durava até janeiro. Agora, quando o mesmo bem volta a
+ser meta em anos consecutivos, `sed_<bem>_goal_streak` sobe até 5,
+`sed_<bem>_meta_since` guarda o primeiro ano da sequência e o plano soma 15
+pontos a mais a partir da segunda ocorrência. A linha da meta também fica
+visível fora do ano da meta enquanto a escassez for observada
+(`sed_<bem>_short_months` presente), para o jogador ver a meta estrutural sem
+esperar janeiro. Um ano pulado reinicia a sequência em 1 e a data de início.
+
+A comparação com o ano anterior usa `sed_prev_year`, calculada no início de
+`sed_refresh_national_plan`, porque o validador do projeto recusa aritmética
+inline em igualdade de variável (`var:x = { value = year subtract = 1 }`).
+
+Teste sintético — 377 aprovados; dois novos: continuidade 1836→1837 com
+pontuação 195→210 e reinício após ano pulado, com teto de 5 anos.
+
+Estático — geração consistente, validação local 1.15 aprovada, Tiger 1.19.0 nos
+mesmos 3 `unknown-field` de diário e 917 avisos.
+
+Não verificado na engine: exibição da meta plurianual em janeiro e efeito dos 15
+pontos na ordem real do plano.

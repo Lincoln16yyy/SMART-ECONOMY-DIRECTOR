@@ -647,3 +647,16 @@ expirar seguem NÃO VERIFICADO; as três opções são inofensivas por desenho.
 4. Conferir que a reserva de ouro exigida não mudou de fórmula — ela continua
    baseada na referência do plano, não na leitura da engine.
 5. Devolver captura do painel, o `logs/error.log` e o save.
+
+## Meta plurianual 0.7.25 (pendente)
+
+1. Provocar escassez de um bem por três meses consecutivos e conferir a linha
+   "Meta industrial anual" no painel.
+2. Avançar para o ano seguinte e repetir a escassez por três meses: a linha da
+   meta deve continuar visível em janeiro (sem esperar os três meses) enquanto a
+   falta persistir, e o bem deve manter prioridade no plano.
+3. Deixar a escassez sumir e passar um ano inteiro sem meta para o bem: ao
+   reaparecer, a meta deve voltar como primeira ocorrência (sem bônus
+   plurianual).
+4. Desativar o Director e conferir que `sed_<bem>_goal_streak`, `meta_since` e
+   `meta_year` não sobram.

@@ -1,5 +1,9 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.25, a meta de escassez que volta em anos consecutivos vira plurianual:
+ganha prioridade extra, fica visível enquanto a falta persistir e reinicia se
+passar um ano sem escassez (limite de cinco anos).
+
 Na 0.7.24, o painel mostra quantos projetos do governo e quantos privados
 estão na fila, ao lado dos níveis. O autor de cada item não é exposto pelo
 script, então o Director não afirma quem enfileirou a obra.

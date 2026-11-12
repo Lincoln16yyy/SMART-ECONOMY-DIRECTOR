@@ -168,3 +168,10 @@ zero erros:
   `construction_queue_size`.
 - Conclusão: autor/investidor por item não é scriptável na 1.15. Não prometer
   reconciliação de identidade; usar as contagens por lado e as marcas próprias.
+
+## Regra do validador: aritmética em igualdade de variável (2026-11-11)
+
+`tools/validate.py` recusa `var:x = { value = year subtract = 1 }` com
+"Inline arithmetic in variable equality requires a named script value". Para
+comparar com um valor calculado, criar variável própria no início do efeito
+(ex.: `sed_prev_year = year - 1`) e comparar `var:x = var:sed_prev_year`.

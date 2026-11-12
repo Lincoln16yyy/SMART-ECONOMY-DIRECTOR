@@ -1329,3 +1329,11 @@ reconhecida pelo Tiger 1.19.0. Ficam apenas contagens de país por lado
 (governo/privado), agora no painel, e `is_under_construction` por prédio. Para
 quando houver documentação exportada do jogo: procurar primitiva de investidor
 por item antes de prometer reconciliação de identidade.
+
+## 0.7.25 — Meta plurianual de escassez
+
+Metas de escassez deixam de morrer em janeiro: anos consecutivos elevam a
+sequência até cinco, com bônus de prioridade e visibilidade enquanto a escassez
+persistir. O próximo passo desta frente é registrar no histórico quantos anos a
+meta durou e se a oferta do bem subiu, para dar retorno de resultado em vez de só
+prioridade.

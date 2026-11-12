@@ -26,8 +26,11 @@ def country_variables(actions):
     missing = [f'sed_plan_missing_{name}' for name in supply]
     months = [f'sed_{name}_short_months' for name in supply]
     meta = [f'sed_{name}_meta_year' for name in supply]
+    streak = [f'sed_{name}_{field}' for name in supply for field in ('goal_streak', 'meta_since')]
+    streak.append('sed_prev_year')
     samples = [f'sed_{name}_short_sample_month' for name in supply]
-    return COUNTRY_VARIABLES + pressure + missing + months + meta + samples + ['sed_short_sample_gap']
+    return (COUNTRY_VARIABLES + pressure + missing + months + meta + streak + samples
+            + ['sed_short_sample_gap'])
 
 
 def state_variables(actions):
@@ -316,6 +319,7 @@ def effects(actions, dependencies, buildings):
   set_variable = { name = sed_plan_goal value = 0 }
   set_variable = { name = sed_plan_waiting value = 0 }
   set_variable = { name = sed_plan_year value = year }
+  set_variable = { name = sed_prev_year value = { value = year subtract = 1 } }
   set_variable = { name = sed_plan_month value = { value = month add = 1 } }
   set_variable = { name = sed_reserve_floor value = { value = sed_fixed_expenses_value min = 0 multiply = 12 } }
   set_variable = { name = sed_reserve_required value = {
@@ -385,7 +389,23 @@ def effects(actions, dependencies, buildings):
     set_variable = {{ name = sed_{name}_short_months value = 1 }}
    }}
    if = {{ limit = {{ var:sed_{name}_short_months >= 3 }}
-    set_variable = {{ name = sed_{name}_meta_year value = year }}
+    if = {{ limit = {{ NOT = {{ has_variable = sed_{name}_meta_year }} }}
+     set_variable = {{ name = sed_{name}_meta_year value = year }}
+     set_variable = {{ name = sed_{name}_goal_streak value = 1 }}
+     set_variable = {{ name = sed_{name}_meta_since value = year }}
+    }}
+    else_if = {{ limit = {{ var:sed_{name}_meta_year < year }}
+     # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
+     if = {{ limit = {{ var:sed_{name}_meta_year = var:sed_prev_year }}
+      change_variable = {{ name = sed_{name}_goal_streak add = 1 }}
+      set_variable = {{ name = sed_{name}_goal_streak value = {{ value = var:sed_{name}_goal_streak max = 5 }} }}
+     }}
+     else = {{
+      set_variable = {{ name = sed_{name}_goal_streak value = 1 }}
+      set_variable = {{ name = sed_{name}_meta_since value = year }}
+     }}
+     set_variable = {{ name = sed_{name}_meta_year value = year }}
+    }}
    }}
   }}
   else = {{ remove_variable = sed_{name}_short_months }}
@@ -404,7 +424,8 @@ def effects(actions, dependencies, buildings):
         else:
             bonus = 20 if name in ('grain', 'groceries', 'clothes') else 10
             score = f'''value = owner.var:sed_plan_pressure_{name} add = {80 + bonus}
-    if = {{ limit = {{ owner = {{ has_variable = sed_{name}_meta_year var:sed_{name}_meta_year = year }} }} add = 25 }}'''
+    if = {{ limit = {{ owner = {{ has_variable = sed_{name}_meta_year var:sed_{name}_meta_year = year }} }} add = 25 }}
+    if = {{ limit = {{ owner = {{ has_variable = sed_{name}_goal_streak var:sed_{name}_goal_streak >= 2 }} }} add = 15 }}'''
             if name in dependencies:
                 score += f'\n    if = {{ limit = {{ owner = {{ has_variable = sed_input_priority_{name} }} }} add = 75 }}'
             if name in MILITARY_INDUSTRY_GOODS:

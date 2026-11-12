@@ -1,10 +1,11 @@
 # Contexto de continuidade
 
-Última entrega do mod — 0.7.24 gerada, testada e instalada com jogo fechado.
-Código — painel mostra níveis, duração real da fila (faixas de 0 a 260 semanas)
-e contagem de projetos do governo e privados. Autor/investidor por item não tem
-primitiva (sondado com Tiger). Comércio: script não abre rota (removido na 1.9).
-Teste sintético — 375 testes aprovados.
+Última entrega do mod — 0.7.25 gerada, testada e instalada com jogo fechado.
+Código — meta anual de escassez vira plurianual após anos consecutivos
+(`sed_<bem>_goal_streak` 1–5, +15 de prioridade e visível enquanto a escassez
+persistir); painel mostra duração real da fila e contagem de projetos. Comércio:
+script não abre rota (removido na 1.9); autor/investidor por item não existe.
+Teste sintético — 377 testes aprovados.
 Estático — geração consistente e validação local 1.15 aprovadas. Tiger 1.19.0:
 mesmos três campos de diário do vanilla 1.15 e 917 avisos (767 de colocação de
 chaves no GUI, 150 de OR de item único).
@@ -19,6 +20,21 @@ Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.23 (dura�
 fila), 0.7.21 (evento de importação) e depois a seção 0.7.17–0.7.19:
 conferir a unidade no painel, o desvio de fornecedor, a pontuação de PMs,
 save/reload e limpeza. Depois retomar as leituras fiscais e a fundação básica.
+
+## 0.7.25 — Meta plurianual de escassez
+
+Código — a meta anual da 0.6.4 continua; quando o bem volta a ser meta em anos
+consecutivos, `sed_<bem>_goal_streak` sobe (máx. 5) e `sed_<bem>_meta_since`
+guarda o primeiro ano. Estreak ≥ 2 dá +15 de prioridade e mantém a linha da meta
+visível enquanto `sed_<bem>_short_months` existir; um ano pulado reinicia a
+contagem. `sed_prev_year` (= `year - 1`) existe porque o validador do projeto
+rejeita aritmética inline em igualdade de variável.
+
+Teste sintético — 377 aprovados; dois novos cobrem a continuidade entre 1836/1837
+(pontuação 195 → 210) e o reinício após ano pulado com teto em 5.
+
+NÃO VERIFICADO na engine: exibição da meta plurianual em janeiro e peso de +15
+na decisão real.
 
 ## 0.7.24 — Contagem de projetos e limite de autoria
 

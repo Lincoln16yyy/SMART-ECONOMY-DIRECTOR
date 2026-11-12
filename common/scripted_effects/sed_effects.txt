@@ -562,6 +562,31 @@ sed_disable_country = {
  remove_variable = sed_artillery_meta_year
  remove_variable = sed_ammunition_meta_year
  remove_variable = sed_paper_meta_year
+ remove_variable = sed_wood_goal_streak
+ remove_variable = sed_wood_meta_since
+ remove_variable = sed_iron_goal_streak
+ remove_variable = sed_iron_meta_since
+ remove_variable = sed_coal_goal_streak
+ remove_variable = sed_coal_meta_since
+ remove_variable = sed_grain_goal_streak
+ remove_variable = sed_grain_meta_since
+ remove_variable = sed_fabric_goal_streak
+ remove_variable = sed_fabric_meta_since
+ remove_variable = sed_tools_goal_streak
+ remove_variable = sed_tools_meta_since
+ remove_variable = sed_groceries_goal_streak
+ remove_variable = sed_groceries_meta_since
+ remove_variable = sed_clothes_goal_streak
+ remove_variable = sed_clothes_meta_since
+ remove_variable = sed_small_arms_goal_streak
+ remove_variable = sed_small_arms_meta_since
+ remove_variable = sed_artillery_goal_streak
+ remove_variable = sed_artillery_meta_since
+ remove_variable = sed_ammunition_goal_streak
+ remove_variable = sed_ammunition_meta_since
+ remove_variable = sed_paper_goal_streak
+ remove_variable = sed_paper_meta_since
+ remove_variable = sed_prev_year
  remove_variable = sed_wood_short_sample_month
  remove_variable = sed_iron_short_sample_month
  remove_variable = sed_coal_short_sample_month
@@ -4081,6 +4106,7 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_plan_goal value = 0 }
   set_variable = { name = sed_plan_waiting value = 0 }
   set_variable = { name = sed_plan_year value = year }
+  set_variable = { name = sed_prev_year value = { value = year subtract = 1 } }
   set_variable = { name = sed_plan_month value = { value = month add = 1 } }
   set_variable = { name = sed_reserve_floor value = { value = sed_fixed_expenses_value min = 0 multiply = 12 } }
   set_variable = { name = sed_reserve_required value = {
@@ -4182,7 +4208,23 @@ sed_refresh_national_plan = {
     set_variable = { name = sed_wood_short_months value = 1 }
    }
    if = { limit = { var:sed_wood_short_months >= 3 }
-    set_variable = { name = sed_wood_meta_year value = year }
+    if = { limit = { NOT = { has_variable = sed_wood_meta_year } }
+     set_variable = { name = sed_wood_meta_year value = year }
+     set_variable = { name = sed_wood_goal_streak value = 1 }
+     set_variable = { name = sed_wood_meta_since value = year }
+    }
+    else_if = { limit = { var:sed_wood_meta_year < year }
+     # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
+     if = { limit = { var:sed_wood_meta_year = var:sed_prev_year }
+      change_variable = { name = sed_wood_goal_streak add = 1 }
+      set_variable = { name = sed_wood_goal_streak value = { value = var:sed_wood_goal_streak max = 5 } }
+     }
+     else = {
+      set_variable = { name = sed_wood_goal_streak value = 1 }
+      set_variable = { name = sed_wood_meta_since value = year }
+     }
+     set_variable = { name = sed_wood_meta_year value = year }
+    }
    }
   }
   else = { remove_variable = sed_wood_short_months }
@@ -4225,7 +4267,23 @@ sed_refresh_national_plan = {
     set_variable = { name = sed_iron_short_months value = 1 }
    }
    if = { limit = { var:sed_iron_short_months >= 3 }
-    set_variable = { name = sed_iron_meta_year value = year }
+    if = { limit = { NOT = { has_variable = sed_iron_meta_year } }
+     set_variable = { name = sed_iron_meta_year value = year }
+     set_variable = { name = sed_iron_goal_streak value = 1 }
+     set_variable = { name = sed_iron_meta_since value = year }
+    }
+    else_if = { limit = { var:sed_iron_meta_year < year }
+     # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
+     if = { limit = { var:sed_iron_meta_year = var:sed_prev_year }
+      change_variable = { name = sed_iron_goal_streak add = 1 }
+      set_variable = { name = sed_iron_goal_streak value = { value = var:sed_iron_goal_streak max = 5 } }
+     }
+     else = {
+      set_variable = { name = sed_iron_goal_streak value = 1 }
+      set_variable = { name = sed_iron_meta_since value = year }
+     }
+     set_variable = { name = sed_iron_meta_year value = year }
+    }
    }
   }
   else = { remove_variable = sed_iron_short_months }
@@ -4268,7 +4326,23 @@ sed_refresh_national_plan = {
     set_variable = { name = sed_coal_short_months value = 1 }
    }
    if = { limit = { var:sed_coal_short_months >= 3 }
-    set_variable = { name = sed_coal_meta_year value = year }
+    if = { limit = { NOT = { has_variable = sed_coal_meta_year } }
+     set_variable = { name = sed_coal_meta_year value = year }
+     set_variable = { name = sed_coal_goal_streak value = 1 }
+     set_variable = { name = sed_coal_meta_since value = year }
+    }
+    else_if = { limit = { var:sed_coal_meta_year < year }
+     # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
+     if = { limit = { var:sed_coal_meta_year = var:sed_prev_year }
+      change_variable = { name = sed_coal_goal_streak add = 1 }
+      set_variable = { name = sed_coal_goal_streak value = { value = var:sed_coal_goal_streak max = 5 } }
+     }
+     else = {
+      set_variable = { name = sed_coal_goal_streak value = 1 }
+      set_variable = { name = sed_coal_meta_since value = year }
+     }
+     set_variable = { name = sed_coal_meta_year value = year }
+    }
    }
   }
   else = { remove_variable = sed_coal_short_months }
@@ -4311,7 +4385,23 @@ sed_refresh_national_plan = {
     set_variable = { name = sed_grain_short_months value = 1 }
    }
    if = { limit = { var:sed_grain_short_months >= 3 }
-    set_variable = { name = sed_grain_meta_year value = year }
+    if = { limit = { NOT = { has_variable = sed_grain_meta_year } }
+     set_variable = { name = sed_grain_meta_year value = year }
+     set_variable = { name = sed_grain_goal_streak value = 1 }
+     set_variable = { name = sed_grain_meta_since value = year }
+    }
+    else_if = { limit = { var:sed_grain_meta_year < year }
+     # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
+     if = { limit = { var:sed_grain_meta_year = var:sed_prev_year }
+      change_variable = { name = sed_grain_goal_streak add = 1 }
+      set_variable = { name = sed_grain_goal_streak value = { value = var:sed_grain_goal_streak max = 5 } }
+     }
+     else = {
+      set_variable = { name = sed_grain_goal_streak value = 1 }
+      set_variable = { name = sed_grain_meta_since value = year }
+     }
+     set_variable = { name = sed_grain_meta_year value = year }
+    }
    }
   }
   else = { remove_variable = sed_grain_short_months }
@@ -4354,7 +4444,23 @@ sed_refresh_national_plan = {
     set_variable = { name = sed_fabric_short_months value = 1 }
    }
    if = { limit = { var:sed_fabric_short_months >= 3 }
-    set_variable = { name = sed_fabric_meta_year value = year }
+    if = { limit = { NOT = { has_variable = sed_fabric_meta_year } }
+     set_variable = { name = sed_fabric_meta_year value = year }
+     set_variable = { name = sed_fabric_goal_streak value = 1 }
+     set_variable = { name = sed_fabric_meta_since value = year }
+    }
+    else_if = { limit = { var:sed_fabric_meta_year < year }
+     # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
+     if = { limit = { var:sed_fabric_meta_year = var:sed_prev_year }
+      change_variable = { name = sed_fabric_goal_streak add = 1 }
+      set_variable = { name = sed_fabric_goal_streak value = { value = var:sed_fabric_goal_streak max = 5 } }
+     }
+     else = {
+      set_variable = { name = sed_fabric_goal_streak value = 1 }
+      set_variable = { name = sed_fabric_meta_since value = year }
+     }
+     set_variable = { name = sed_fabric_meta_year value = year }
+    }
    }
   }
   else = { remove_variable = sed_fabric_short_months }
@@ -4397,7 +4503,23 @@ sed_refresh_national_plan = {
     set_variable = { name = sed_tools_short_months value = 1 }
    }
    if = { limit = { var:sed_tools_short_months >= 3 }
-    set_variable = { name = sed_tools_meta_year value = year }
+    if = { limit = { NOT = { has_variable = sed_tools_meta_year } }
+     set_variable = { name = sed_tools_meta_year value = year }
+     set_variable = { name = sed_tools_goal_streak value = 1 }
+     set_variable = { name = sed_tools_meta_since value = year }
+    }
+    else_if = { limit = { var:sed_tools_meta_year < year }
+     # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
+     if = { limit = { var:sed_tools_meta_year = var:sed_prev_year }
+      change_variable = { name = sed_tools_goal_streak add = 1 }
+      set_variable = { name = sed_tools_goal_streak value = { value = var:sed_tools_goal_streak max = 5 } }
+     }
+     else = {
+      set_variable = { name = sed_tools_goal_streak value = 1 }
+      set_variable = { name = sed_tools_meta_since value = year }
+     }
+     set_variable = { name = sed_tools_meta_year value = year }
+    }
    }
   }
   else = { remove_variable = sed_tools_short_months }
@@ -4440,7 +4562,23 @@ sed_refresh_national_plan = {
     set_variable = { name = sed_groceries_short_months value = 1 }
    }
    if = { limit = { var:sed_groceries_short_months >= 3 }
-    set_variable = { name = sed_groceries_meta_year value = year }
+    if = { limit = { NOT = { has_variable = sed_groceries_meta_year } }
+     set_variable = { name = sed_groceries_meta_year value = year }
+     set_variable = { name = sed_groceries_goal_streak value = 1 }
+     set_variable = { name = sed_groceries_meta_since value = year }
+    }
+    else_if = { limit = { var:sed_groceries_meta_year < year }
+     # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
+     if = { limit = { var:sed_groceries_meta_year = var:sed_prev_year }
+      change_variable = { name = sed_groceries_goal_streak add = 1 }
+      set_variable = { name = sed_groceries_goal_streak value = { value = var:sed_groceries_goal_streak max = 5 } }
+     }
+     else = {
+      set_variable = { name = sed_groceries_goal_streak value = 1 }
+      set_variable = { name = sed_groceries_meta_since value = year }
+     }
+     set_variable = { name = sed_groceries_meta_year value = year }
+    }
    }
   }
   else = { remove_variable = sed_groceries_short_months }
@@ -4483,7 +4621,23 @@ sed_refresh_national_plan = {
     set_variable = { name = sed_clothes_short_months value = 1 }
    }
    if = { limit = { var:sed_clothes_short_months >= 3 }
-    set_variable = { name = sed_clothes_meta_year value = year }
+    if = { limit = { NOT = { has_variable = sed_clothes_meta_year } }
+     set_variable = { name = sed_clothes_meta_year value = year }
+     set_variable = { name = sed_clothes_goal_streak value = 1 }
+     set_variable = { name = sed_clothes_meta_since value = year }
+    }
+    else_if = { limit = { var:sed_clothes_meta_year < year }
+     # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
+     if = { limit = { var:sed_clothes_meta_year = var:sed_prev_year }
+      change_variable = { name = sed_clothes_goal_streak add = 1 }
+      set_variable = { name = sed_clothes_goal_streak value = { value = var:sed_clothes_goal_streak max = 5 } }
+     }
+     else = {
+      set_variable = { name = sed_clothes_goal_streak value = 1 }
+      set_variable = { name = sed_clothes_meta_since value = year }
+     }
+     set_variable = { name = sed_clothes_meta_year value = year }
+    }
    }
   }
   else = { remove_variable = sed_clothes_short_months }
@@ -4526,7 +4680,23 @@ sed_refresh_national_plan = {
     set_variable = { name = sed_small_arms_short_months value = 1 }
    }
    if = { limit = { var:sed_small_arms_short_months >= 3 }
-    set_variable = { name = sed_small_arms_meta_year value = year }
+    if = { limit = { NOT = { has_variable = sed_small_arms_meta_year } }
+     set_variable = { name = sed_small_arms_meta_year value = year }
+     set_variable = { name = sed_small_arms_goal_streak value = 1 }
+     set_variable = { name = sed_small_arms_meta_since value = year }
+    }
+    else_if = { limit = { var:sed_small_arms_meta_year < year }
+     # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
+     if = { limit = { var:sed_small_arms_meta_year = var:sed_prev_year }
+      change_variable = { name = sed_small_arms_goal_streak add = 1 }
+      set_variable = { name = sed_small_arms_goal_streak value = { value = var:sed_small_arms_goal_streak max = 5 } }
+     }
+     else = {
+      set_variable = { name = sed_small_arms_goal_streak value = 1 }
+      set_variable = { name = sed_small_arms_meta_since value = year }
+     }
+     set_variable = { name = sed_small_arms_meta_year value = year }
+    }
    }
   }
   else = { remove_variable = sed_small_arms_short_months }
@@ -4569,7 +4739,23 @@ sed_refresh_national_plan = {
     set_variable = { name = sed_artillery_short_months value = 1 }
    }
    if = { limit = { var:sed_artillery_short_months >= 3 }
-    set_variable = { name = sed_artillery_meta_year value = year }
+    if = { limit = { NOT = { has_variable = sed_artillery_meta_year } }
+     set_variable = { name = sed_artillery_meta_year value = year }
+     set_variable = { name = sed_artillery_goal_streak value = 1 }
+     set_variable = { name = sed_artillery_meta_since value = year }
+    }
+    else_if = { limit = { var:sed_artillery_meta_year < year }
+     # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
+     if = { limit = { var:sed_artillery_meta_year = var:sed_prev_year }
+      change_variable = { name = sed_artillery_goal_streak add = 1 }
+      set_variable = { name = sed_artillery_goal_streak value = { value = var:sed_artillery_goal_streak max = 5 } }
+     }
+     else = {
+      set_variable = { name = sed_artillery_goal_streak value = 1 }
+      set_variable = { name = sed_artillery_meta_since value = year }
+     }
+     set_variable = { name = sed_artillery_meta_year value = year }
+    }
    }
   }
   else = { remove_variable = sed_artillery_short_months }
@@ -4612,7 +4798,23 @@ sed_refresh_national_plan = {
     set_variable = { name = sed_ammunition_short_months value = 1 }
    }
    if = { limit = { var:sed_ammunition_short_months >= 3 }
-    set_variable = { name = sed_ammunition_meta_year value = year }
+    if = { limit = { NOT = { has_variable = sed_ammunition_meta_year } }
+     set_variable = { name = sed_ammunition_meta_year value = year }
+     set_variable = { name = sed_ammunition_goal_streak value = 1 }
+     set_variable = { name = sed_ammunition_meta_since value = year }
+    }
+    else_if = { limit = { var:sed_ammunition_meta_year < year }
+     # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
+     if = { limit = { var:sed_ammunition_meta_year = var:sed_prev_year }
+      change_variable = { name = sed_ammunition_goal_streak add = 1 }
+      set_variable = { name = sed_ammunition_goal_streak value = { value = var:sed_ammunition_goal_streak max = 5 } }
+     }
+     else = {
+      set_variable = { name = sed_ammunition_goal_streak value = 1 }
+      set_variable = { name = sed_ammunition_meta_since value = year }
+     }
+     set_variable = { name = sed_ammunition_meta_year value = year }
+    }
    }
   }
   else = { remove_variable = sed_ammunition_short_months }
@@ -4655,7 +4857,23 @@ sed_refresh_national_plan = {
     set_variable = { name = sed_paper_short_months value = 1 }
    }
    if = { limit = { var:sed_paper_short_months >= 3 }
-    set_variable = { name = sed_paper_meta_year value = year }
+    if = { limit = { NOT = { has_variable = sed_paper_meta_year } }
+     set_variable = { name = sed_paper_meta_year value = year }
+     set_variable = { name = sed_paper_goal_streak value = 1 }
+     set_variable = { name = sed_paper_meta_since value = year }
+    }
+    else_if = { limit = { var:sed_paper_meta_year < year }
+     # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
+     if = { limit = { var:sed_paper_meta_year = var:sed_prev_year }
+      change_variable = { name = sed_paper_goal_streak add = 1 }
+      set_variable = { name = sed_paper_goal_streak value = { value = var:sed_paper_goal_streak max = 5 } }
+     }
+     else = {
+      set_variable = { name = sed_paper_goal_streak value = 1 }
+      set_variable = { name = sed_paper_meta_since value = year }
+     }
+     set_variable = { name = sed_paper_meta_year value = year }
+    }
    }
   }
   else = { remove_variable = sed_paper_short_months }
@@ -4676,6 +4894,7 @@ sed_refresh_national_plan = {
    if = { limit = { sed_wood_candidate_eligible = yes }
     set_variable = { name = sed_plan_wood_score value = { value = owner.var:sed_plan_pressure_wood add = 90
     if = { limit = { owner = { has_variable = sed_wood_meta_year var:sed_wood_meta_year = year } } add = 25 }
+    if = { limit = { owner = { has_variable = sed_wood_goal_streak var:sed_wood_goal_streak >= 2 } } add = 15 }
     if = { limit = { owner = { has_variable = sed_input_priority_wood } } add = 75 } } }
    }
    set_variable = { name = sed_plan_wood_margin value = 0 }
@@ -4689,6 +4908,7 @@ sed_refresh_national_plan = {
    if = { limit = { sed_iron_candidate_eligible = yes }
     set_variable = { name = sed_plan_iron_score value = { value = owner.var:sed_plan_pressure_iron add = 90
     if = { limit = { owner = { has_variable = sed_iron_meta_year var:sed_iron_meta_year = year } } add = 25 }
+    if = { limit = { owner = { has_variable = sed_iron_goal_streak var:sed_iron_goal_streak >= 2 } } add = 15 }
     if = { limit = { owner = { has_variable = sed_input_priority_iron } } add = 75 } } }
    }
    set_variable = { name = sed_plan_iron_margin value = 0 }
@@ -4702,6 +4922,7 @@ sed_refresh_national_plan = {
    if = { limit = { sed_coal_candidate_eligible = yes }
     set_variable = { name = sed_plan_coal_score value = { value = owner.var:sed_plan_pressure_coal add = 90
     if = { limit = { owner = { has_variable = sed_coal_meta_year var:sed_coal_meta_year = year } } add = 25 }
+    if = { limit = { owner = { has_variable = sed_coal_goal_streak var:sed_coal_goal_streak >= 2 } } add = 15 }
     if = { limit = { owner = { has_variable = sed_input_priority_coal } } add = 75 } } }
    }
    set_variable = { name = sed_plan_coal_margin value = 0 }
@@ -4715,6 +4936,7 @@ sed_refresh_national_plan = {
    if = { limit = { sed_grain_candidate_eligible = yes }
     set_variable = { name = sed_plan_grain_score value = { value = owner.var:sed_plan_pressure_grain add = 100
     if = { limit = { owner = { has_variable = sed_grain_meta_year var:sed_grain_meta_year = year } } add = 25 }
+    if = { limit = { owner = { has_variable = sed_grain_goal_streak var:sed_grain_goal_streak >= 2 } } add = 15 }
     if = { limit = { owner = { has_variable = sed_input_priority_grain } } add = 75 } } }
    }
    set_variable = { name = sed_plan_grain_margin value = 0 }
@@ -4728,6 +4950,7 @@ sed_refresh_national_plan = {
    if = { limit = { sed_fabric_candidate_eligible = yes }
     set_variable = { name = sed_plan_fabric_score value = { value = owner.var:sed_plan_pressure_fabric add = 90
     if = { limit = { owner = { has_variable = sed_fabric_meta_year var:sed_fabric_meta_year = year } } add = 25 }
+    if = { limit = { owner = { has_variable = sed_fabric_goal_streak var:sed_fabric_goal_streak >= 2 } } add = 15 }
     if = { limit = { owner = { has_variable = sed_input_priority_fabric } } add = 75 } } }
    }
    set_variable = { name = sed_plan_fabric_margin value = 0 }
@@ -4741,6 +4964,7 @@ sed_refresh_national_plan = {
    if = { limit = { sed_tools_candidate_eligible = yes }
     set_variable = { name = sed_plan_tools_score value = { value = owner.var:sed_plan_pressure_tools add = 90
     if = { limit = { owner = { has_variable = sed_tools_meta_year var:sed_tools_meta_year = year } } add = 25 }
+    if = { limit = { owner = { has_variable = sed_tools_goal_streak var:sed_tools_goal_streak >= 2 } } add = 15 }
     if = { limit = { owner = { has_variable = sed_input_priority_tools } } add = 75 } } }
    }
    set_variable = { name = sed_plan_tools_margin value = 0 }
@@ -4753,7 +4977,8 @@ sed_refresh_national_plan = {
    set_variable = { name = sed_plan_groceries_score value = 0 }
    if = { limit = { sed_groceries_candidate_eligible = yes }
     set_variable = { name = sed_plan_groceries_score value = { value = owner.var:sed_plan_pressure_groceries add = 100
-    if = { limit = { owner = { has_variable = sed_groceries_meta_year var:sed_groceries_meta_year = year } } add = 25 } } }
+    if = { limit = { owner = { has_variable = sed_groceries_meta_year var:sed_groceries_meta_year = year } } add = 25 }
+    if = { limit = { owner = { has_variable = sed_groceries_goal_streak var:sed_groceries_goal_streak >= 2 } } add = 15 } } }
    }
    set_variable = { name = sed_plan_groceries_margin value = 0 }
    set_variable = { name = sed_plan_groceries_output value = 0 }
@@ -4765,7 +4990,8 @@ sed_refresh_national_plan = {
    set_variable = { name = sed_plan_clothes_score value = 0 }
    if = { limit = { sed_clothes_candidate_eligible = yes }
     set_variable = { name = sed_plan_clothes_score value = { value = owner.var:sed_plan_pressure_clothes add = 100
-    if = { limit = { owner = { has_variable = sed_clothes_meta_year var:sed_clothes_meta_year = year } } add = 25 } } }
+    if = { limit = { owner = { has_variable = sed_clothes_meta_year var:sed_clothes_meta_year = year } } add = 25 }
+    if = { limit = { owner = { has_variable = sed_clothes_goal_streak var:sed_clothes_goal_streak >= 2 } } add = 15 } } }
    }
    set_variable = { name = sed_plan_clothes_margin value = 0 }
    set_variable = { name = sed_plan_clothes_output value = 0 }
@@ -4778,6 +5004,7 @@ sed_refresh_national_plan = {
    if = { limit = { sed_small_arms_candidate_eligible = yes }
     set_variable = { name = sed_plan_small_arms_score value = { value = owner.var:sed_plan_pressure_small_arms add = 90
     if = { limit = { owner = { has_variable = sed_small_arms_meta_year var:sed_small_arms_meta_year = year } } add = 25 }
+    if = { limit = { owner = { has_variable = sed_small_arms_goal_streak var:sed_small_arms_goal_streak >= 2 } } add = 15 }
     if = { limit = { owner = { is_at_war = yes } } add = 20 } } }
    }
    set_variable = { name = sed_plan_small_arms_margin value = 0 }
@@ -4791,6 +5018,7 @@ sed_refresh_national_plan = {
    if = { limit = { sed_artillery_candidate_eligible = yes }
     set_variable = { name = sed_plan_artillery_score value = { value = owner.var:sed_plan_pressure_artillery add = 90
     if = { limit = { owner = { has_variable = sed_artillery_meta_year var:sed_artillery_meta_year = year } } add = 25 }
+    if = { limit = { owner = { has_variable = sed_artillery_goal_streak var:sed_artillery_goal_streak >= 2 } } add = 15 }
     if = { limit = { owner = { is_at_war = yes } } add = 20 } } }
    }
    set_variable = { name = sed_plan_artillery_margin value = 0 }
@@ -4804,6 +5032,7 @@ sed_refresh_national_plan = {
    if = { limit = { sed_ammunition_candidate_eligible = yes }
     set_variable = { name = sed_plan_ammunition_score value = { value = owner.var:sed_plan_pressure_ammunition add = 90
     if = { limit = { owner = { has_variable = sed_ammunition_meta_year var:sed_ammunition_meta_year = year } } add = 25 }
+    if = { limit = { owner = { has_variable = sed_ammunition_goal_streak var:sed_ammunition_goal_streak >= 2 } } add = 15 }
     if = { limit = { owner = { is_at_war = yes } } add = 20 } } }
    }
    set_variable = { name = sed_plan_ammunition_margin value = 0 }
@@ -4816,7 +5045,8 @@ sed_refresh_national_plan = {
    set_variable = { name = sed_plan_paper_score value = 0 }
    if = { limit = { sed_paper_candidate_eligible = yes }
     set_variable = { name = sed_plan_paper_score value = { value = owner.var:sed_plan_pressure_paper add = 90
-    if = { limit = { owner = { has_variable = sed_paper_meta_year var:sed_paper_meta_year = year } } add = 25 } } }
+    if = { limit = { owner = { has_variable = sed_paper_meta_year var:sed_paper_meta_year = year } } add = 25 }
+    if = { limit = { owner = { has_variable = sed_paper_goal_streak var:sed_paper_goal_streak >= 2 } } add = 15 } } }
    }
    set_variable = { name = sed_plan_paper_margin value = 0 }
    set_variable = { name = sed_plan_paper_output value = 0 }

@@ -485,6 +485,48 @@ class PlanningTests(unittest.TestCase):
         c.readings['year'] = 1837
         self.assertFalse(c.condition(child(visible, 'is_shown'), c.country_scope()))
 
+    def test_consecutive_annual_goals_become_a_multi_year_goal(self):
+        grain = self.producer('grain', buy=100, sell=30)
+        c = self.c
+        for month in range(3):
+            c.readings['month'] = month
+            c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_grain_meta_year'], 1836)
+        self.assertEqual(c.variables['sed_grain_goal_streak'], 1)
+        self.assertEqual(c.variables['sed_grain_meta_since'], 1836)
+        self.assertEqual(grain['variables']['sed_plan_grain_score'], 195)
+        # Next year, a fresh three-month shortage extends the same goal.
+        c.readings['year'] = 1837
+        for month in range(3):
+            c.readings['month'] = month
+            c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_grain_meta_year'], 1837)
+        self.assertEqual(c.variables['sed_grain_goal_streak'], 2)
+        self.assertEqual(c.variables['sed_grain_meta_since'], 1836)
+        self.assertEqual(grain['variables']['sed_plan_grain_score'], 210)
+        visible = c.definitions['sed_meta_grain_visible_sgui']
+        self.assertTrue(c.condition(child(visible, 'is_shown'), c.country_scope()))
+
+    def test_multi_year_goal_restarts_after_a_skipped_year_and_caps_at_five(self):
+        self.producer('grain', buy=100, sell=30)
+        c = self.c
+        for month in range(3):
+            c.readings['month'] = month
+            c.run('sed_refresh_national_plan')
+        c.readings['year'] = 1839
+        for month in range(3):
+            c.readings['month'] = month
+            c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_grain_goal_streak'], 1)
+        self.assertEqual(c.variables['sed_grain_meta_since'], 1839)
+        for year in (1840, 1841, 1842, 1843, 1844):
+            c.readings['year'] = year
+            for month in range(3):
+                c.readings['month'] = month
+                c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_grain_goal_streak'], 5)
+        self.assertEqual(c.variables['sed_grain_meta_since'], 1839)
+
     def test_annual_goal_keeps_priority_over_a_newer_higher_gap(self):
         grain = self.producer('grain', buy=100, sell=40)
         clothes = self.producer('clothes', buy=100, sell=30)
