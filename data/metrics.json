@@ -1,7 +1,7 @@
 [
   {"id":"balance","expression":"net_total_income","unit":"money_week","pt":"Saldo semanal","en":"Weekly balance","source":"Economy Advisor/advisor_economy_health_effects.txt"},
   {"id":"operating_balance","expression":"net_fixed_income","unit":"money_week","pt":"Saldo sem itens temporários","en":"Balance without temporary items","source":"Economy Advisor/advisor_core_values.txt"},
-  {"id":"fixed_expenses","expression":"fixed_expenses","unit":"money_week","pt":"Despesas fixas semanais","en":"Weekly fixed expenses","source":"Economy Advisor/advisor_core_values.txt"},
+  {"id":"fixed_expenses","expression":"sed_fixed_expenses_value","unit":"money_week","pt":"Despesas fixas semanais","en":"Weekly fixed expenses","source":"fixed_income menos net_fixed_income; vanilla/common/script_values/ip4_je_values.txt e tabela de triggers Tiger 1.19.0"},
   {"id":"gold","expression":"gold_reserves","unit":"money","pt":"Reservas de ouro","en":"Gold reserves","source":"vanilla/common/script_values/war_support_values.txt"},
   {"id":"debt","expression":"principal","unit":"money","pt":"Dívida","en":"Debt","source":"Economy Advisor/advisor_economy_health_effects.txt"},
   {"id":"credit","expression":"credit","unit":"money","pt":"Limite de crédito","en":"Credit limit","source":"Economy Advisor/advisor_economy_health_effects.txt"},

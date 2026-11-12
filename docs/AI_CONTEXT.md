@@ -1,10 +1,53 @@
 # Contexto de continuidade
 
-Última entrega documentada — 0.7.15 instalada com jogo fechado e 14 arquivos
-conferidos pelo instalador. Backup `sed_backups/mod_before_0.7.15_20261111_115337_758673`.
-349 testes sintéticos aprovados. Geração consistente, validação estática
-local 1.15, pacote e verificação de espaçamento aprovados. Configuração
-inicial e contratação real ainda exigem confirmação em campanha.
+Última entrega do mod — 0.7.16 instalada com jogo fechado e 14 arquivos
+conferidos. Backup `sed_backups/mod_before_0.7.16_20261111_121819_447354`.
+Código — despesas fixas derivadas de receitas e saldo fixos. Prontidão militar
+usa papéis diplomáticos no escopo de país. Variáveis e snapshots preservados.
+Teste sintético — 352 testes aprovados.
+Estático — geração consistente e validação local 1.15 aprovadas. Tiger 1.19.0
+executado. Os nove apontamentos de leitura removida e o de escopo foram retirados.
+O Tiger declara suporte até 1.13.5. Restam três campos de diário aceitos pelo
+vanilla 1.15, além de avisos de estilo. A evidência está na seção desta entrega.
+Carregou e Campanha — leituras da 0.7.16 e fundação da 0.7.15 seguem NÃO VERIFICADO.
+
+Ler `AGENTS.md`, `docs/agent/vic3-modding/SKILL.md` e suas referências.
+O ambiente registra o binário Tiger em `dist/tools/`, sua versão e o comando.
+A pasta de documentação exportada do jogo continua ausente.
+Próximo passo — avaliação econômica de custos e retorno, incluindo salários,
+usando primitivas aceitas pelo Tiger e confrontadas com o vanilla. Confirmar
+em campanha as leituras, restauração, save/reload e a fundação básica.
+
+## 0.7.16 — Leituras fiscais e prontidão verificadas
+
+Código — despesas fixas passam a ser calculadas por `fixed_income` menos
+`net_fixed_income`, com piso zero. A mesma leitura alimenta diagnóstico,
+reservas, política fiscal, recuperação salarial e orçamento de construção.
+O nome da variável de diagnóstico foi preservado para os saves existentes.
+O valor numérico antigo `fixed_expenses` consta como removido na versão 1.12
+em `src/vic3/tables/targets.rs` do Tiger 1.19.0. Os dois operandos novos são
+aceitos pelo validador. `fixed_income` tem exemplo no vanilla instalado em
+`common/script_values/ip4_je_values.txt`, no valor `yearly_gross_income`.
+
+Código — prontidão usa `is_diplomatic_play_committed_participant`,
+`is_diplomatic_play_initiator`, `is_diplomatic_play_target` e
+`is_diplomatic_play_undecided_participant`, todos de escopo país nas tabelas
+Tiger. Os três primeiros aparecem no trigger vanilla
+`is_active_in_diplomatic_play`, em `common/scripted_triggers/00_scripted_triggers.txt`.
+A leitura anterior `has_diplomatic_play` é de região estratégica.
+
+Estático — Tiger 1.19.0 executado contra o jogo instalado. A execução inicial
+registrou nove usos numéricos removidos e um aviso de escopo nessa guarda.
+Esses dez apontamentos desapareceram após as correções. Restam três erros
+`unknown-field` para `activation_description`, `disable_evaluation` e `outcome`
+no diário. Os campos constam do vanilla 1.15, em exemplos de journal entries
+e em `common/journal_entries/journal_entries.md`. O Tiger declara suporte
+até 1.13.5 e alerta sobre o jogo 1.15. Não foram aplicadas supressões.
+Avisos de formatação e OR de item único permanecem no relatório.
+
+Carregou e Campanha — alterações fiscais e de prontidão da 0.7.16 seguem
+NÃO VERIFICADO. A restauração e a confirmação após save/reload permanecem
+no roteiro de campanha. Previsão de lucro com salários continua pendente.
 
 ## 0.7.15 — Insumos de uma configuração inicial concreta
 
