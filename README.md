@@ -1,5 +1,9 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.23, o painel compara a referência de semanas da fila com a duração
+restante medida pela própria engine (`construction_queue_government_duration`,
+arredondada para cima em faixas), sem trocar a reserva de ouro.
+
 Na 0.7.22, o evento de escassez mostra os pedidos de compra e venda do bem no
 mercado, para você medir a lacuna antes de abrir a importação. Os números vêm
 direto do mercado; o Director não estima custo, frete nem comboios.

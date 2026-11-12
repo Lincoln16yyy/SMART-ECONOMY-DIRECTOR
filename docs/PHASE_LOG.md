@@ -2281,3 +2281,29 @@ diário e 917 avisos.
 
 Não verificado na engine: se a loc de evento resolve `ROOT.GetCountry.MakeScope`
 com a variável presente e se o texto cabe na janela do evento.
+
+## 0.7.23 — Duração real da fila no orçamento direto
+
+A referência de semanas da fila era só estimativa (pontos da fila divididos pela
+capacidade semanal). O vanilla expõe a duração restante da fila como trigger:
+`construction_queue_duration`, `construction_queue_government_duration` e
+`construction_queue_private_duration`, descritos em `triggers_l_english.yml`
+como "Remaining duration of construction queue is X weeks". Sondagem em
+`/tmp/sed_dur` com o Tiger 1.19.0: aceitos sem erro, inclusive comparação com
+script value à direita.
+
+O script não lê o valor, então `sed_refresh_direct_budget` o arredonda para cima
+com uma cadeia `if/else_if` guardada por `> 0`, publicando
+`sed_build_budget_queue_weeks_engine` nas faixas 2, 4, 6, 8, 12, 16, 20, 26, 32,
+40, 52, 78, 104, 156, 208 e 260. Zero continua significando fila do governo
+vazia. A linha do painel mostra as duas leituras lado a lado, sem trocar a
+referência que alimenta a reserva de ouro.
+
+Teste sintético — 374 aprovados. Os dois novos cobrem nove durações (0, 1, 3, 7,
+9, 30, 52, 53 e 500) e a presença da variável nas localizações PT e EN.
+
+Estático — geração consistente, validação local 1.15 aprovada, Tiger 1.19.0 nos
+mesmos 3 `unknown-field` de diário e 917 avisos.
+
+Não verificado na engine: comportamento do trigger em país sem fila de governo e
+se a faixa exibida bate com a barra de obras do jogo.

@@ -1311,3 +1311,12 @@ dão a dimensão da lacuna a importar. Continua sem estimar custo, frete ou
 comboios, e sem qualquer efeito de comércio. Próximo refinamento possível:
 apontar qual filtro barrou a melhor candidata (insumos, trabalho, fila,
 orçamento ou infraestrutura) em vez de listar todos.
+
+## 0.7.23 — Duração real da fila no orçamento direto
+
+A duração restante da fila do governo vem agora da própria engine
+(`construction_queue_government_duration`), arredondada para cima em faixas e
+exibida ao lado da referência estimada pelo plano. O próximo passo nesta frente
+é usar a leitura para calibrar a espera por obra (hoje baseada só na
+estimativa) e, se houver primitiva, medir progresso já executado do primeiro
+item.

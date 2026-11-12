@@ -610,6 +610,7 @@ sed_disable_country = {
  remove_variable = sed_build_budget_queue_weeks
  remove_variable = sed_build_budget_queue_levels_unknown
  remove_variable = sed_build_budget_funding_weeks
+ remove_variable = sed_build_budget_queue_weeks_engine
  remove_variable = sed_build_budget_active_points
  remove_variable = sed_input_market_margin_coal
  remove_variable = sed_input_market_margin_copper
@@ -8055,6 +8056,40 @@ var:sed_paper_intent_variant = 1
    set_variable = { name = sed_build_budget_queue_weeks value = {
     value = var:sed_build_budget_queue_points divide = modifier:country_construction_add
    } }
+  }
+  set_variable = { name = sed_build_budget_queue_weeks_engine value = 0 }
+  if = { limit = { construction_queue_government_duration > 0 }
+   if = { limit = { construction_queue_government_duration <= 2 }
+    set_variable = { name = sed_build_budget_queue_weeks_engine value = 2 } }
+   else_if = { limit = { construction_queue_government_duration <= 4 }
+    set_variable = { name = sed_build_budget_queue_weeks_engine value = 4 } }
+   else_if = { limit = { construction_queue_government_duration <= 6 }
+    set_variable = { name = sed_build_budget_queue_weeks_engine value = 6 } }
+   else_if = { limit = { construction_queue_government_duration <= 8 }
+    set_variable = { name = sed_build_budget_queue_weeks_engine value = 8 } }
+   else_if = { limit = { construction_queue_government_duration <= 12 }
+    set_variable = { name = sed_build_budget_queue_weeks_engine value = 12 } }
+   else_if = { limit = { construction_queue_government_duration <= 16 }
+    set_variable = { name = sed_build_budget_queue_weeks_engine value = 16 } }
+   else_if = { limit = { construction_queue_government_duration <= 20 }
+    set_variable = { name = sed_build_budget_queue_weeks_engine value = 20 } }
+   else_if = { limit = { construction_queue_government_duration <= 26 }
+    set_variable = { name = sed_build_budget_queue_weeks_engine value = 26 } }
+   else_if = { limit = { construction_queue_government_duration <= 32 }
+    set_variable = { name = sed_build_budget_queue_weeks_engine value = 32 } }
+   else_if = { limit = { construction_queue_government_duration <= 40 }
+    set_variable = { name = sed_build_budget_queue_weeks_engine value = 40 } }
+   else_if = { limit = { construction_queue_government_duration <= 52 }
+    set_variable = { name = sed_build_budget_queue_weeks_engine value = 52 } }
+   else_if = { limit = { construction_queue_government_duration <= 78 }
+    set_variable = { name = sed_build_budget_queue_weeks_engine value = 78 } }
+   else_if = { limit = { construction_queue_government_duration <= 104 }
+    set_variable = { name = sed_build_budget_queue_weeks_engine value = 104 } }
+   else_if = { limit = { construction_queue_government_duration <= 156 }
+    set_variable = { name = sed_build_budget_queue_weeks_engine value = 156 } }
+   else_if = { limit = { construction_queue_government_duration <= 208 }
+    set_variable = { name = sed_build_budget_queue_weeks_engine value = 208 } }
+   else = { set_variable = { name = sed_build_budget_queue_weeks_engine value = 260 } }
   }
 
   set_variable = { name = sed_build_budget_project_weeks value = 0 }

@@ -632,3 +632,18 @@ exemplo, nenhum produtor do bem com insumos, trabalho e fila liberados):
 
 Limites conhecidos: o prazo do evento em meses e a escolha automática ao
 expirar seguem NÃO VERIFICADO; as três opções são inofensivas por desenho.
+
+## Duração real da fila 0.7.23 (pendente)
+
+1. Com o Director ativo e alguma obra pública na fila, abrir o painel e ler a
+   linha do orçamento direto: deve aparecer "a engine mede até N semanas
+   restantes na fila do governo", ao lado da referência do plano.
+2. Comparar N com a barra de obras do jogo (tempo restante da fila do governo).
+   A leitura é arredondada **para cima** na faixa seguinte (2, 4, 6, 8, 12, 16,
+   20, 26, 32, 40, 52, 78, 104, 156, 208 ou 260), então N pode ser maior que o
+   valor exato da barra, nunca menor.
+3. Pausar/cancelar todas as obras públicas e atualizar o diagnóstico: N deve
+   voltar a 0, e nenhuma obra deve ser enfileirada por causa disso.
+4. Conferir que a reserva de ouro exigida não mudou de fórmula — ela continua
+   baseada na referência do plano, não na leitura da engine.
+5. Devolver captura do painel, o `logs/error.log` e o save.

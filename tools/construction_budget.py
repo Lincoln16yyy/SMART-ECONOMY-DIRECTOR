@@ -35,7 +35,25 @@ VARIABLES = ['sed_build_budget_known', 'sed_build_budget_points',
              'sed_build_budget_project_materials', 'sed_build_budget_queue_levels_known',
              'sed_build_budget_queue_points', 'sed_build_budget_queue_weeks',
              'sed_build_budget_queue_levels_unknown', 'sed_build_budget_funding_weeks',
+             'sed_build_budget_queue_weeks_engine',
              'sed_build_budget_active_points']
+
+
+# Vanilla trigger `construction_queue_government_duration` counts the remaining
+# weeks of the government queue. Script cannot read the number, so it is rounded
+# up to the next band with a comparison chain.
+QUEUE_WEEK_BANDS = (2, 4, 6, 8, 12, 16, 20, 26, 32, 40, 52, 78, 104, 156, 208)
+
+
+def queue_bands():
+    lines = ['''  if = { limit = { construction_queue_government_duration > 0 }''']
+    for index, weeks in enumerate(QUEUE_WEEK_BANDS):
+        keyword = 'if' if index == 0 else 'else_if'
+        lines.append(f'''   {keyword} = {{ limit = {{ construction_queue_government_duration <= {weeks} }}
+    set_variable = {{ name = sed_build_budget_queue_weeks_engine value = {weeks} }} }}''')
+    lines.append('''   else = { set_variable = { name = sed_build_budget_queue_weeks_engine value = 260 } }
+  }''')
+    return '\n'.join(lines) + '\n'
 
 
 def effects(founding_projects=()):
@@ -129,7 +147,8 @@ def effects(founding_projects=()):
     value = var:sed_build_budget_queue_points divide = modifier:country_construction_add
    }} }}
   }}
-''')
+  set_variable = {{ name = sed_build_budget_queue_weeks_engine value = 0 }}
+{queue_bands()}''')
     result.append('''  set_variable = { name = sed_build_budget_project_weeks value = 0 }
   set_variable = { name = sed_build_budget_project_materials value = {
    value = var:sed_build_budget_project_points multiply = var:sed_build_budget_point_cost

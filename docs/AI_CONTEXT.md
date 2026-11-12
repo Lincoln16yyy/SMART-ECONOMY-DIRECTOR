@@ -1,10 +1,11 @@
 # Contexto de continuidade
 
-Última entrega do mod — 0.7.22 gerada, testada e instalada com jogo fechado.
-Código — evento consultivo de importação (prazo, três opções) mostra pedidos de
-compra e venda do mercado do bem; dispara quando há escassez e nenhuma expansão
-local passa nos filtros. Comércio: script não abre rota (removido na 1.9).
-Teste sintético — 372 testes aprovados.
+Última entrega do mod — 0.7.23 gerada, testada e instalada com jogo fechado.
+Código — painel compara a duração estimada da fila com a leitura da engine
+(`construction_queue_government_duration`, faixas de 0 a 260 semanas) e o evento
+de importação mostra pedidos de compra e venda do mercado. Comércio: script não
+abre rota (removido na 1.9).
+Teste sintético — 374 testes aprovados.
 Estático — geração consistente e validação local 1.15 aprovadas. Tiger 1.19.0:
 mesmos três campos de diário do vanilla 1.15 e 917 avisos (767 de colocação de
 chaves no GUI, 150 de OR de item único).
@@ -15,10 +16,31 @@ Ler `AGENTS.md`, `docs/agent/vic3-modding/SKILL.md` e suas referências.
 O ambiente registra o Tiger, o resultado da sondagem de comércio e o Smart
 Government instalado (1.0.0, esquema 2, variáveis `sg_*`). A pasta de
 documentação exportada do jogo continua ausente.
-Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.21 (evento de
-importação) e depois a seção 0.7.17–0.7.19:
+Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.23 (duração da
+fila), 0.7.21 (evento de importação) e depois a seção 0.7.17–0.7.19:
 conferir a unidade no painel, o desvio de fornecedor, a pontuação de PMs,
 save/reload e limpeza. Depois retomar as leituras fiscais e a fundação básica.
+
+## 0.7.23 — Duração real da fila no orçamento direto
+
+Evidência — `common/trigger_localization/00_trigger_localization.txt` registra
+`construction_queue_duration`, `construction_queue_government_duration` e
+`construction_queue_private_duration`; `triggers_l_english.yml` diz "Remaining
+duration of construction queue is X weeks". Sondagem em `/tmp/sed_dur` com o
+Tiger 1.19.0: zero erros, inclusive comparação contra script value à direita.
+
+Código — o script não consegue ler o número, então `sed_refresh_direct_budget`
+usa uma cadeia `if/else_if` guardada por `> 0` e publica
+`sed_build_budget_queue_weeks_engine` arredondado para cima em faixas (2, 4, 6,
+8, 12, 16, 20, 26, 32, 40, 52, 78, 104, 156, 208; acima disso 260). 0 significa
+fila do governo vazia. A linha `sed_build_budget_project` do painel mostra as
+duas leituras: referência do plano e leitura da engine.
+
+Teste sintético — 374 aprovados; dois novos cobrem nove durações nas faixas e a
+presença da variável nos dois idiomas.
+
+NÃO VERIFICADO na engine: se o trigger aceita `> 0` em país sem fila de governo e
+se a faixa exibida bate com a barra de obras.
 
 ## 0.7.22 — Pedidos do mercado no evento de importação
 

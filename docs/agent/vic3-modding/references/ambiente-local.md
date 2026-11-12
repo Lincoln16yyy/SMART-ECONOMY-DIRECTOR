@@ -135,3 +135,20 @@ Formato de evento (vanilla `events/1848.txt`, evento `1848.1`): `type`, `placeme
 
 `duration` do evento é tratado como meses na documentação interna do mod;
 semântica e escolha automática ao expirar seguem NÃO VERIFICADO.
+
+## Sondagem: duração da fila de construção (2026-11-11)
+
+`/tmp/sed_dur` (metadata + `common/scripted_effects/probe.txt`), Tiger 1.19.0,
+zero erros:
+
+- `construction_queue_duration`, `construction_queue_government_duration` e
+  `construction_queue_private_duration` são triggers de país relativos ao tempo
+  restante da fila em **semanas** (`triggers_l_english.yml`: "Remaining duration
+  of construction queue is X weeks").
+- Aceitam comparação contra script value à direita: `... > var:probe_b` passou.
+- São triggers, não script values: não dá para ler o número. Para exibir, usar
+  cadeia `if/else_if` com faixas (ver `queue_bands()` em
+  `tools/construction_budget.py`).
+- `if` dentro do `value = { }` de `set_variable` é `unknown-field`: efeitos
+  condicionais precisam ficar fora do cálculo (comportamento do Tiger já
+  conhecido, reconfirmado aqui).

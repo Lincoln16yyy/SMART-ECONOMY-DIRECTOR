@@ -69,6 +69,7 @@ class Country:
                                 'modifier:country_max_weekly_construction_progress_add': 25},
                              num_queued_government_constructions=2, num_queued_private_constructions=1,
                              construction_queue_num_queued_government_levels=2,
+                             construction_queue_government_duration=0,
                              construction_queue_num_queued_private_levels=0,
                              military_expenses=0, military_expenses_share=0, is_at_war=False,
                              bureaucracy=0, year=1836, month=0, is_player=True, in_default=False,
