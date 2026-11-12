@@ -75,9 +75,14 @@ python3 tools/package_mod.py
 python3 tools/install_mod.py --user-data '/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3'
 ```
 
-A 0.7.30 executou 394 testes sintéticos (205 s) e o último `--check`
-confirmou sincronia. A instalação local verificada mais recente é a 0.7.27,
-com conferência de 14 arquivos; a 0.7.28–0.7.30 ainda não foi instalada.
+A 0.7.33 executou 419 testes sintéticos (186 s), `--check` sincronizado,
+validação local aprovada e Tiger 1.19.0 com 0 fatais, 3 `unknown-field` de
+diário do vanilla 1.15 e 949 avisos. Instalação local da 0.7.33 confirmada:
+14 arquivos, backup em
+`sed_backups/mod_before_0.7.33_20261112_201035_100577`, ordem de mods
+inalterada e `descriptor.mod` instalado com `version="0.7.33"`. O
+`logs/error.log` da sessão anterior (0.7.30, 1832 linhas) não tem nenhuma
+referência a `sed_`. Nenhuma partida foi aberta com a 0.7.33.
 [confirmado 2026-11-12]
 
 ## Documentação exportada do jogo
