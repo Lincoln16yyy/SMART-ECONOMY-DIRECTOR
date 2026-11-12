@@ -5,14 +5,14 @@ import json
 from pathlib import Path
 
 try:
-    from . import planning, coordination, construction_budget, labor, input_forecast, production_methods, investment, trade_capacity, admin_capacity
+    from . import planning, coordination, construction_budget, labor, input_forecast, production_methods, investment, trade_capacity, admin_capacity, power_capacity
 except ImportError:
-    import planning, coordination, construction_budget, labor, input_forecast, production_methods, investment, trade_capacity, admin_capacity
+    import planning, coordination, construction_budget, labor, input_forecast, production_methods, investment, trade_capacity, admin_capacity, power_capacity
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.31'
+VERSION = '0.7.32'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -253,7 +253,7 @@ sed_queue_levels_before'''.split() + [
 
 
 EXTRA_VARIABLES += production_methods.COUNTRY_VARIABLES + investment.COUNTRY_VARIABLES
-EXTRA_VARIABLES += planning.country_variables(ACTION_NAMES) + coordination.VARIABLES + construction_budget.VARIABLES + input_forecast.COUNTRY_VARIABLES + trade_capacity.VARIABLES + admin_capacity.VARIABLES
+EXTRA_VARIABLES += planning.country_variables(ACTION_NAMES) + coordination.VARIABLES + construction_budget.VARIABLES + input_forecast.COUNTRY_VARIABLES + trade_capacity.VARIABLES + admin_capacity.VARIABLES + power_capacity.VARIABLES
 EXTRA_VARIABLES += ['sed_input_pass_changed', *(f'sed_input_priority_{good}' for good in INPUT_DEPENDENCIES)]
 
 
@@ -488,6 +488,7 @@ sed_refresh_supply_candidates = {
  sed_configure_founded_industries = yes
  sed_refresh_trade_center = yes
  sed_refresh_admin = yes
+ sed_refresh_power = yes
  sed_refresh_national_plan = yes
  sed_recover_existing_industry = yes
  sed_modernize_existing_industry = yes
@@ -568,6 +569,18 @@ sed_auto_run_direct = {
     check_range_bounds = no
     owner = { set_variable = { name = sed_auto_action_status value = 15 } }
     sed_run_admin_approval = yes
+   }
+  }''')
+    # Goal 9 follows the same rule: the power plant has no ranked producer.
+    result.append('''  else_if = {
+   limit = { any_scope_state = { sed_power_candidate_eligible = yes } }
+   ordered_scope_state = {
+    limit = { sed_power_candidate_eligible = yes }
+    order_by = { value = state_population multiply = -1 }
+    max = 1
+    check_range_bounds = no
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
+    sed_run_power_approval = yes
    }
   }''')
     # Last resort: no local action was eligible, so buy trade capacity instead of
@@ -867,6 +880,11 @@ def widget():
     all_candidates += textbox('sed_admin_needed', 'sed_admin_needed_visible_sgui')
     all_candidates += textbox('sed_admin_success', 'sed_admin_success_visible_sgui')
     all_candidates += textbox('sed_admin_failed', 'sed_admin_failed_visible_sgui')
+    all_candidates += textbox('sed_power_title', heading=True)
+    all_candidates += textbox('sed_power_note')
+    all_candidates += textbox('sed_power_needed', 'sed_power_needed_visible_sgui')
+    all_candidates += textbox('sed_power_success', 'sed_power_success_visible_sgui')
+    all_candidates += textbox('sed_power_failed', 'sed_power_failed_visible_sgui')
     all_candidates += textbox('sed_trade_center_title', heading=True)
     all_candidates += textbox('sed_trade_center_note')
     all_candidates += textbox('sed_trade_center_needed', 'sed_trade_center_needed_visible_sgui')
@@ -1378,7 +1396,7 @@ sed_update_growth = {
     state_cleanup = '\n'.join('  remove_variable = ' + name for name in planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES + investment.STATE_VARIABLES + production_methods.state_variables(SUPPLY_TARGETS))
     script = script.replace(' # Schema and automatic attempt month',
                             ' every_scope_state = {\n' + state_cleanup + '\n }\n # Schema and automatic attempt month', 1)
-    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, INPUT_DEPENDENCIES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + input_forecast.effects() + input_priority_effect() + labor.effects() + construction_budget.effects(founding_projects()) + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + planning.military_wage_policy_effects() + investment.effects() + production_methods.effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants, recovery=True) + coordination.effects() + trade_capacity.effects() + admin_capacity.effects() + import_notice_effect()
+    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, INPUT_DEPENDENCIES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + input_forecast.effects() + input_priority_effect() + labor.effects() + construction_budget.effects(founding_projects()) + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + planning.military_wage_policy_effects() + investment.effects() + production_methods.effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants, recovery=True) + coordination.effects() + trade_capacity.effects() + admin_capacity.effects() + power_capacity.effects() + import_notice_effect()
 
 
 def scripted_guis():
@@ -1686,6 +1704,9 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
     result += 'sed_admin_success_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_admin_action_status var:sed_admin_action_status = 1 } }\n'
     result += 'sed_admin_failed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_admin_action_status var:sed_admin_action_status = 2 } }\n'
     result += 'sed_admin_needed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled sed_admin_needed = yes } }\n'
+    result += 'sed_power_success_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_power_action_status var:sed_power_action_status = 1 } }\n'
+    result += 'sed_power_failed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_power_action_status var:sed_power_action_status = 2 } }\n'
+    result += 'sed_power_needed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled sed_power_needed = yes } }\n'
     result += 'sed_trade_center_success_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_trade_center_action_status var:sed_trade_center_action_status = 1 } }\n'
     result += 'sed_trade_center_failed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_trade_center_action_status var:sed_trade_center_action_status = 2 } }\n'
     result += 'sed_trade_center_needed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled sed_trade_center_needed = yes } }\n'
@@ -2056,7 +2077,7 @@ sed_auto_executor_safe = {
     # flag is false, so this trigger is also the detection test.
     control = '\n'.join(f'  has_variable = {option}' for name, option, pt, en in PRIVATE_CONTROL_FLAGS)
     result.append('sed_private_control_configured = {\n OR = {\n' + control + '\n }\n}')
-    return '\n'.join(result).rstrip() + '\n' + planning.triggers() + construction_budget.triggers() + input_forecast.triggers() + coordination.triggers() + trade_capacity.triggers([item['good'] for item in SUPPLY_TARGETS]) + admin_capacity.triggers() + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants) + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants, recovery=True)
+    return '\n'.join(result).rstrip() + '\n' + planning.triggers() + construction_budget.triggers() + input_forecast.triggers() + coordination.triggers() + trade_capacity.triggers([item['good'] for item in SUPPLY_TARGETS]) + admin_capacity.triggers() + power_capacity.triggers() + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants) + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants, recovery=True)
 
 
 def value(name, fmt='1'):
@@ -2309,6 +2330,11 @@ def localization(language):
         'sed_admin_needed': ('O objetivo atual é recuperar capacidade administrativa ou tributária. Esta é a obra que o Automático pode enfileirar.', 'The current objective is to restore administrative or tax capacity. This is the work Automatic can queue.'),
         'sed_admin_success': ('Pedido de administração pública enfileirado (+1 nível). Confira custo e prazo na fila do jogo.', 'Government administration request queued (+1 level). Check cost and time in the game queue.'),
         'sed_admin_failed': ('O jogo não confirmou a inclusão da administração pública na fila.', 'The game did not confirm government administration was added to the queue.'),
+        'sed_power_title': ('Usina elétrica', 'Power plant'),
+        'sed_power_note': ('Quando o plano pede capacidade elétrica (energia local ao menos 20% acima da base em algum estado), o Automático amplia a usina elétrica um nível por mês no estado com energia cara que aceite a obra. A tecnologia de geração elétrica é exigida pelo próprio jogo; sem ela, nenhum estado fica elegível. É a mesma obra que o Supply Chain faria. Respeita fila privada, pausa, guarda fiscal, orçamento de materiais (400 pontos) e o limite de uma tentativa por mês.', 'When the plan asks for electrical capacity (local power at least 20% above base in a state), Automatic expands the power plant one level per month in the state with costly power that accepts the building. The game itself requires the electrical generation technology; without it no state is eligible. It is the same work the Supply Chain would do. It respects the private queue, pause, fiscal guard, material budget (400 points) and the one-attempt-per-month limit.'),
+        'sed_power_needed': ('O objetivo atual é energia local cara. Esta é a obra que o Automático pode enfileirar.', 'The current objective is costly local power. This is the work Automatic can queue.'),
+        'sed_power_success': ('Pedido de usina elétrica enfileirado (+1 nível). Confira custo e prazo na fila do jogo.', 'Power plant request queued (+1 level). Check cost and time in the game queue.'),
+        'sed_power_failed': ('O jogo não confirmou a inclusão da usina elétrica na fila.', 'The game did not confirm the power plant was added to the queue.'),
         'sed_trade_center_title': ('Centro de Comércio', 'Trade Center'),
         'sed_trade_center_note': ('Quando um bem em escassez não tem produtor no país e nenhum estado pode receber a fábrica, o Automático pode ampliar um Centro de Comércio existente ou fundar o primeiro num estado que aceite a obra. Ali não há como produzir o bem: resta trazê-lo pelo Mercado Mundial. O nível compra capacidade de comércio para o Mercado Mundial; o Director não abre rota, não altera tarifa ou subvenção e não constrói sob Isolacionismo. Respeita as guardas de fila, orçamento e uma tentativa por mês.', 'When a short good has no producer in the country and no state can host the industry, Automatic may expand an existing Trade Center or found the first one in a state that accepts the building. Nothing local can make the good: the only way left is the World Market. The level buys Trade Capacity for the World Market; the Director does not open a route, does not change tariffs or subventions and does not build under Isolationism. It respects the queue, budget and one-attempt-per-month guards.'),
         'sed_trade_center_needed': ('Sem produtor nacional e sem estado apto a receber a fábrica, o Centro de Comércio é a alternativa para trazer o bem pelo Mercado Mundial.', 'With no national producer and no state able to host the industry, the Trade Center is the way to bring the good through the World Market.'),
@@ -2373,7 +2399,7 @@ def localization(language):
         'sed_goal_6': ('Objetivo atual: recuperar capacidade administrativa; burocracia nacional negativa. Sem o Supply Chain, o Director amplia a administração pública por conta própria.', 'Current objective: restore administrative capacity; national bureaucracy is negative. Without Supply Chain, the Director expands government administration itself.'),
         'sed_goal_7': ('Objetivo atual: recuperar capacidade tributária em estados incorporados. Sem o Supply Chain, o Director amplia a administração pública no estado que excede a capacidade.', 'Current objective: restore tax capacity in incorporated states. Without Supply Chain, the Director expands government administration in the state that exceeds its capacity.'),
         'sed_goal_8': ('Objetivo atual: buscar crescimento e diversificação. Sem gargalo elegível no escopo direto, o executor externo avalia novos investimentos com seus próprios filtros.', 'Current objective: seek growth and diversification. With no eligible bottleneck in direct scope, the external executor evaluates new investment using its own filters.'),
-        'sed_goal_9': ('Objetivo atual: investigar energia local cara, com preço ao menos 20% acima da base em algum estado. A ferramenta externa verifica viabilidade.', 'Current objective: investigate costly local power, priced at least 20% above base in a state. The external tool checks feasibility.'),
+        'sed_goal_9': ('Objetivo atual: energia local cara, com preço ao menos 20% acima da base em algum estado. Sem o Supply Chain, o Director amplia a usina elétrica por conta própria; com ele, a obra segue a ferramenta externa.', 'Current objective: costly local power, priced at least 20% above base in a state. Without Supply Chain, the Director expands the power plant itself; with it, the external tool does the work.'),
         'sed_coord_supply_policy': ('Política do Supply Chain sob o Director. Expansões em estados incorporados; administração trata o déficit atual de burocracia. Limites numéricos de construção em um nível por local escolhido, conforme a rotina externa. A soma nacional pode superar um nível. Tributação é avaliada em junho/dezembro e setores em fevereiro/agosto. Opções anteriores são restauradas ao sair do Automático.', 'Supply Chain policy under the Director. Expansion in incorporated states; administration addresses the current bureaucracy deficit. Numeric construction limits are one level per selected location, according to the external routine. The national total may exceed one level. Tax capacity is evaluated in June/December and construction sectors in February/August. Previous settings are restored when leaving Automatic.'),
         'sed_auto_current_budget': ('Agora: orçamento direto aguarda cobertura da referência de materiais, capacidade de construção ou método reconhecido. Confira os valores no plano nacional.', 'Now: direct execution awaits material-reference coverage, construction capacity or a recognized method. Check the national plan values.'),
         'sed_candidate_labor': ("Última leitura de mão de obra. Reserva estimada após vagas e filas conhecidas: [State.MakeScope.Var('sed_labor_available').GetValue|0]. Compromissos estimados: [State.MakeScope.Var('sed_labor_committed').GetValue|0]. Referência demográfica; qualificações e migração futura ainda precisam de avaliação.", "Last labor reading. Estimated reserve after known vacancies and queues: [State.MakeScope.Var('sed_labor_available').GetValue|0]. Estimated commitments: [State.MakeScope.Var('sed_labor_committed').GetValue|0]. Demographic reference; qualifications and future migration still require assessment."),

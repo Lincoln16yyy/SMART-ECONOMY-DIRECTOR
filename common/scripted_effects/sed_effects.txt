@@ -769,6 +769,14 @@ sed_disable_country = {
  remove_variable = sed_admin_abandoned
  remove_variable = sed_admin_result
  remove_variable = sed_admin_result_month
+ remove_variable = sed_power_action_status
+ remove_variable = sed_power_intent_level
+ remove_variable = sed_power_request_pending
+ remove_variable = sed_power_intents
+ remove_variable = sed_power_completed
+ remove_variable = sed_power_abandoned
+ remove_variable = sed_power_result
+ remove_variable = sed_power_result_month
  remove_variable = sed_input_pass_changed
  remove_variable = sed_input_priority_wood
  remove_variable = sed_input_priority_iron
@@ -3891,6 +3899,7 @@ sed_auto_apply_monthly = {
  sed_configure_founded_industries = yes
  sed_refresh_trade_center = yes
  sed_refresh_admin = yes
+ sed_refresh_power = yes
  sed_refresh_national_plan = yes
  sed_recover_existing_industry = yes
  sed_modernize_existing_industry = yes
@@ -4116,6 +4125,17 @@ sed_auto_run_direct = {
     check_range_bounds = no
     owner = { set_variable = { name = sed_auto_action_status value = 15 } }
     sed_run_admin_approval = yes
+   }
+  }
+  else_if = {
+   limit = { any_scope_state = { sed_power_candidate_eligible = yes } }
+   ordered_scope_state = {
+    limit = { sed_power_candidate_eligible = yes }
+    order_by = { value = state_population multiply = -1 }
+    max = 1
+    check_range_bounds = no
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
+    sed_run_power_approval = yes
    }
   }
   else_if = {
@@ -7754,6 +7774,10 @@ sed_refresh_direct_budget = {
   if = { limit = { var:sed_build_budget_project_points = 0
    any_scope_state = { sed_admin_candidate_eligible = yes } }
    set_variable = { name = sed_build_budget_project_points value = 100 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { sed_power_candidate_eligible = yes } }
+   set_variable = { name = sed_build_budget_project_points value = 400 }
   }
   if = { limit = { var:sed_build_budget_project_points = 0
    any_scope_state = { sed_trade_center_candidate_eligible = yes } }
@@ -13716,6 +13740,78 @@ sed_refresh_admin = {
     }
     remove_variable = sed_admin_intent_level
     remove_variable = sed_admin_request_pending
+   }
+  }
+ }
+}
+# State scope. Queue one public level and record the intent for the monthly
+# review; only a queue count increase confirms the insertion.
+sed_run_power_approval = {
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
+ if = {
+  limit = { sed_power_approval_valid = yes }
+  owner = {
+   set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }
+  }
+  owner = { sed_record_auto_attempt = yes }
+  if = { limit = { has_building = building_power_plant }
+   set_variable = { name = sed_power_intent_level value = b:building_power_plant.level }
+  }
+  else = { set_variable = { name = sed_power_intent_level value = 0 } }
+  start_building_construction = building_power_plant
+  owner = {
+   if = {
+    limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_power_action_status value = 1 }
+    if = { limit = { has_variable = sed_power_intents }
+     change_variable = { name = sed_power_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_power_intents value = 1 } }
+    prev = { set_variable = { name = sed_power_request_pending value = yes } }
+   }
+   else = {
+    set_variable = { name = sed_power_action_status value = 2 }
+    prev = { remove_variable = sed_power_intent_level }
+   }
+   remove_variable = sed_queue_levels_before
+  }
+ }
+}
+
+# Completion is inferred from the queue leaving and the level rising.
+sed_refresh_power = {
+ if = { limit = { is_player = yes has_variable = sed_enabled }
+  every_scope_state = {
+   if = {
+    limit = { has_variable = sed_power_request_pending
+     OR = {
+      NOT = { has_building = building_power_plant }
+      b:building_power_plant = { level_after_queued_constructions <= level }
+     }
+    }
+    if = { limit = { has_variable = sed_power_intent_level
+     has_building = building_power_plant b:building_power_plant.level > var:sed_power_intent_level }
+     owner = {
+      if = { limit = { has_variable = sed_power_completed }
+       change_variable = { name = sed_power_completed add = 1 }
+      }
+      else = { set_variable = { name = sed_power_completed value = 1 } }
+      set_variable = { name = sed_power_result value = 1 }
+      set_variable = { name = sed_power_result_month value = sed_live_month_key }
+     }
+    }
+    else_if = { limit = { has_variable = sed_power_intent_level }
+     owner = {
+      if = { limit = { has_variable = sed_power_abandoned }
+       change_variable = { name = sed_power_abandoned add = 1 }
+      }
+      else = { set_variable = { name = sed_power_abandoned value = 1 } }
+      set_variable = { name = sed_power_result value = 2 }
+      set_variable = { name = sed_power_result_month value = sed_live_month_key }
+     }
+    }
+    remove_variable = sed_power_intent_level
+    remove_variable = sed_power_request_pending
    }
   }
  }

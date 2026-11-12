@@ -164,7 +164,8 @@ def validate(root=ROOT, game=None):
     approved_actions = {'sed_run_railway_approval': {'building_railway'},
                         'sed_run_construction_approval': {'building_construction_sector'},
                         'sed_run_trade_center_approval': {'building_trade_center'},
-                        'sed_run_admin_approval': {'building_government_administration'}}
+                        'sed_run_admin_approval': {'building_government_administration'},
+                        'sed_run_power_approval': {'building_power_plant'}}
     try:
         from .build_mod import SUPPLY_TARGETS, variants
     except ImportError:
@@ -230,7 +231,8 @@ def validate(root=ROOT, game=None):
         if not any(entry.key == 'sed_refresh_direct_budget' for entry in walk(custom.get(action, []))):
             errors.append('Approval lacks material budget revalidation: ' + name)
         fallback_guards = {'trade_center': 'sed_trade_center_candidate_eligible',
-                           'admin': 'sed_admin_candidate_eligible'}
+                           'admin': 'sed_admin_candidate_eligible',
+                           'power': 'sed_power_candidate_eligible'}
         if name in fallback_guards:
             # Fallbacks run only after every ranked target failed this month, so
             # they have no plan rank. They must still prove their own eligibility.

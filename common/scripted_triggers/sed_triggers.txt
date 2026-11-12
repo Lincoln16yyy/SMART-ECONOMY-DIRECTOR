@@ -3931,6 +3931,41 @@ sed_admin_approval_valid = {
   sed_execution_mode_permits_approval = yes
  }
 }
+# Country scope. Goal 9 is computed by the national plan.
+sed_power_needed = {
+ has_variable = sed_plan_goal
+ var:sed_plan_goal = 9
+}
+
+# State scope. Local electricity must be dear where the plant goes; the plan
+# uses the same reading to set the goal.
+sed_power_candidate_eligible = {
+ is_incorporated = yes
+ infrastructure_delta >= 0
+ can_construct_building = building_power_plant
+ NOT = { has_variable = sed_power_request_pending }
+ owner = { sed_power_needed = yes }
+ sg:electricity ?= { state_goods_pricier >= 0.2 }
+ OR = {
+  NOT = { has_building = building_power_plant }
+  b:building_power_plant = {
+   level_after_queued_constructions <= level
+   occupancy >= 0.5
+   has_failed_hires = no
+  }
+ }
+}
+
+sed_power_approval_valid = {
+ sed_power_candidate_eligible = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+  sed_execution_mode_permits_approval = yes
+ }
+}
 sed_pm_upgrade_month_limit_reached = {
  has_variable = sed_pm_upgrade_last_attempt_month
  var:sed_pm_upgrade_last_attempt_month = sed_live_month_key

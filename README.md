@@ -1,5 +1,11 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.32, o objetivo 9 (energia local 20% acima da base) ganha o mesmo
+tratamento: sem Supply Chain detectado, o Automático amplia a usina elétrica um
+nível por mês no estado com energia cara que aceite a obra, reservando 400
+pontos e exigindo a tecnologia de geração elétrica pelo próprio jogo. Com a
+ferramenta externa, o caminho dela continua sendo o usado.
+
 Na 0.7.31, os objetivos 6 e 7 do plano (burocracia nacional negativa e estado
 usando mais capacidade tributária do que tem) deixam de ficar só na mão do
 Supply Chain: sem ferramenta externa detectada, o Automático amplia a
@@ -264,7 +270,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.7.31.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.7.32.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 

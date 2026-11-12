@@ -2599,3 +2599,45 @@ Não verificado na engine: se `start_building_construction` de
 campanha, se o nível entregue move burocracia e capacidade tributária como o
 vanilla promete, e o comportamento do painel após save/reload. Roteiro em
 `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.31.
+
+## 2026-11-12 — 0.7.32: usina elétrica com executor próprio
+
+Objetivo: fechar o último objetivo do plano que só o Supply Chain sabia
+executar. O objetivo 9 é definido quando algum estado incorporado vê
+eletricidade local 20% acima da base; sem ferramenta externa, nenhuma ação
+existia.
+
+Evidência: `common/buildings/06_urban_center.txt:96` define
+`building_power_plant` sem `can_build_*`, com `unlocking_technologies =
+{ electrical_generation }`, `required_construction = construction_cost_medium`
+(400 pontos; `building_values.txt:5` e `data/queued_building_costs.json`) e
+`ai_value` afirmando que o país precisa de um nível em todo lugar como
+pré-requisito dos PMs elétricos. `can_construct_building` aplica tecnologia e
+tipo de cidade, então país sem a tecnologia simplesmente não tem estado
+elegível.
+
+Implementação: `tools/power_capacity.py` (novo) com `sed_power_needed`,
+`sed_power_candidate_eligible`, `sed_power_approval_valid`,
+`sed_run_power_approval` e `sed_refresh_power`; ligado ao pulso mensal, ao
+painel, ao orçamento (400 pontos) e ao despachante (depois de administração e
+antes do Centro de Comércio). `validate.py` ganhou a ação aprovada e a exceção
+de guarda própria.
+
+Decisão: a condição de preço local usa a mesma leitura do plano
+(`sg:electricity ?= { state_goods_pricier >= 0.2 }`), então o executor só age
+onde o objetivo foi levantado. Com Supply Chain detectado, o caminho externo
+(`sed_coord_executor = 8`) não mudou.
+
+Teste sintético — 410 aprovados; 8 novos em `tests/test_power_capacity.py`.
+Um teste novo falhou na primeira execução e o defeito era do teste: ele não
+simulava o nível ainda na fila (`level_after_queued_constructions`), então a
+revisão mensal concluía cedo demais e marcava abandono. O código não mudou;
+o teste seguiu o formato já usado nas 0.7.30 e 0.7.31.
+
+Estático — geração consistente, validação local 1.15 aprovada e Tiger 1.19.0
+com 0 fatais, os mesmos 3 `unknown-field` de diário do vanilla 1.15 e 948
+avisos (943 + os 5 textboxes novos do painel).
+
+Não verificado na engine: entrada da usina na fila, efeito do nível no preço
+local de eletricidade, exigência da tecnologia em campanha e save/reload.
+Roteiro em `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.32.

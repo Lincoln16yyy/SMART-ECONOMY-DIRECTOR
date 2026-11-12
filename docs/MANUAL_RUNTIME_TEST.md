@@ -725,6 +725,26 @@ de um bem do catálogo (ex.: madeira) e um prédio operante do tipo.
 3. Troque o jogo para inglês e confirme que o texto está em inglês (antes da
    0.7.29 o arquivo inglês saía em português).
 
+## Usina elétrica 0.7.32 (pendente)
+
+1. Save de teste **sem** Supply Chain, com a tecnologia de geração elétrica já
+   pesquisada e um estado incorporado onde a eletricidade local esteja ao menos
+   20% acima da base. Automático por um mês. Esperado: um nível de
+   `building_power_plant` na fila do governo e a seção "Usina elétrica" no
+   painel com o pedido enfileirado. Devolver: captura do painel e da fila.
+2. Sem a tecnologia: nenhuma obra, nenhum estado elegível e o objetivo deve cair
+   para 8 no mês seguinte.
+3. Estado com energia barata (< 20% acima da base) não deve receber a obra,
+   mesmo sendo o mais populoso.
+4. Com fila privada ocupada, status 11 e nenhuma obra; a segunda revisão deve
+   ocorrer 7 dias depois, se a fila esvaziar.
+5. Confira o custo de 400 pontos por nível na fila e a reserva de orçamento do
+   painel cobrindo o projeto.
+6. Salve e recarregue no Automático: pedido pendente reconhecido e
+   `sed_power_completed` subindo ao concluir.
+7. Com Supply Chain ativo, confirme que a opção `zw_var_scsab_construct_power_plant`
+   continua sendo o caminho e que o Director não enfileira obra própria.
+
 ## Administração pública 0.7.31 (pendente)
 
 1. Save de teste **sem** Economy Advisor e **sem** Supply Chain ativos, com

@@ -1554,6 +1554,9 @@ sed_details_visible_sgui = { scope = country is_shown = { has_variable = sed_ena
 sed_admin_success_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_admin_action_status var:sed_admin_action_status = 1 } }
 sed_admin_failed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_admin_action_status var:sed_admin_action_status = 2 } }
 sed_admin_needed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled sed_admin_needed = yes } }
+sed_power_success_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_power_action_status var:sed_power_action_status = 1 } }
+sed_power_failed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_power_action_status var:sed_power_action_status = 2 } }
+sed_power_needed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled sed_power_needed = yes } }
 sed_trade_center_success_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_trade_center_action_status var:sed_trade_center_action_status = 1 } }
 sed_trade_center_failed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_trade_center_action_status var:sed_trade_center_action_status = 2 } }
 sed_trade_center_needed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled sed_trade_center_needed = yes } }
