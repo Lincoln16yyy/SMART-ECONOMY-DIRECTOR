@@ -2424,3 +2424,41 @@ chaves no GUI, mesmo padrão das caixas existentes).
 Não verificado na engine: exibição da seção em campanha, recusa de obra pública
 pela intervenção no investimento estrangeiro aparecendo como falha de ação e
 sumiço da seção ao desativar o outro mod.
+
+## 0.7.28 — Cessão de PM ao Auto-Apply PMs e auditoria dos mods
+
+Pedido: "pode seguir" após a leitura do mod de construção privada. Feita a
+auditoria dos 12 mods instalados (`docs/COMPATIBILITY.md`) e corrigido o único
+conflito que o Director podia resolver sem sobrepor arquivos de outro mod.
+
+Achados da auditoria:
+
+- Auto-Apply PMs (3353797125) aplica o "melhor" método principal por prédio,
+  com botão individual (`zw_var_auto_pm_building_<prédio>`) e botões de grupo
+  (`zw_var_auto_pm_building_group_farms`, `_mines`, `_plantations`). É o mesmo
+  grupo de PM que a modernização do Director disputa.
+- Auto-Apply Automation PMs (3344726320) mexe em PMs de automação/transporte por
+  estado (`zw_var_auto_pm_automation_*`, `zw_var_auto_pm_transportation`), grupos
+  diferentes; conflito apenas indireto por ocupação.
+- OGAS for CWE (3770300244) declara 1.13.x + Cold War Era e referencia prédios
+  do CWE; não deve rodar na campanha vanilla 1.15.
+- Government Administration Auto Expand (2934542706) faz `REPLACE:` inteiro de
+  `building_government_administration`, sem `ai_value` do vanilla 1.15, e disputa
+  a definição com o `INJECT_OR_CREATE` do Controllable Private Construction.
+
+Código — `EXTERNAL_PM_VARIABLES` (prédio → botões do outro mod) e guarda
+`owner = { NOT = { has_variable = ... } }` nas elegibilidades
+`sed_pm_upgrade_N_eligible` e `sed_pm_recovery_N_eligible`. A elegibilidade é
+avaliada dentro de `every_scope_state`; o primeiro teste falhou justamente por
+ler `has_variable` no estado, o que mostrou a necessidade de `owner`. Trigger
+`sed_pm_external_managed` e linha `sed_pm_external` no painel explicam a cessão.
+A fundação continua configurando os PMs iniciais verificados.
+
+Teste sintético — 384 aprovados; dois novos cobrem a cessão pelo botão do prédio
+e o alcance dos botões de grupo (fazendas e plantações, sem vazar para a
+serraria).
+
+Estático — geração consistente, validação local 1.15 aprovada, Tiger 1.19.0 nos
+mesmos 3 `unknown-field` de diário e 933 avisos (um novo, colocação de chaves).
+
+Não verificado na engine: se a cessão evita a disputa de PM em campanha real.

@@ -3390,6 +3390,13 @@ textbox = {
  text = "sed_private_control_help"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_pm_external_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_pm_external"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_tax_last_command_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large

@@ -696,3 +696,20 @@ Anote a versão dos dois mods. Save de teste antes de mexer nos botões.
    uma obra pública que o Director pediria e registre se a recusa aparece como
    falha de ação. Devolver: trecho do `error.log`, captura da seção antes/depois
    de ligar o botão e o save se a recusa ocorrer.
+
+## Cessão de PM ao Auto-Apply PMs 0.7.28 (pendente)
+
+Pré-requisito: Auto-Apply PMs ativo, Director em Automático, país com escassez
+de um bem do catálogo (ex.: madeira) e um prédio operante do tipo.
+
+1. No diário do Auto-Apply PMs, ligue o botão do prédio (ex.: serraria). No
+   painel do Director deve aparecer a linha *Auto-Apply PMs detectado*.
+2. Avance um mês. Esperado: o Director não troca o método principal daquele
+   prédio; o `sed_pm_upgrade_status` não deve indicar modernização confirmada.
+   Confira que o outro mod aplicou a mudança dele (ou nenhuma).
+3. Desligue o botão do Auto-Apply PMs e avance um mês. Esperado: o Director
+   volta a modernizar aquele tipo e a linha do painel some.
+4. Repita com o botão de grupo de fazendas ligado e uma fazenda de trigo: a
+   linha deve aparecer, e a cessão deve valer para trigo, centeio, arroz, milho e
+   milhete. Devolver: captura do painel nos dois estados e trecho do
+   `error.log`.

@@ -1,17 +1,20 @@
 # Contexto de continuidade
 
-Última entrega do mod — 0.7.27 gerada, testada e instalada com jogo fechado.
-Código — leitura das doze restrições do Controllable Private Construction
+Última entrega do mod — 0.7.28 gerada, testada e instalada com jogo fechado.
+Código — a modernização de PM cede o prédio quando o Auto-Apply PMs tem o botão
+do prédio ou do grupo ligado (`owner = { NOT = { has_variable = ... } }` na
+elegibilidade, que roda em escopo de estado). Auditoria dos 12 mods instalados
+em `docs/COMPATIBILITY.md`. Antes: leitura das doze restrições do Controllable Private Construction
 (`zw_var_auto_invest_*`, `zw_var_no_foreign_private_investment_*`,
 `zw_var_intervene_investment_from_abroad_*`) no painel, mais apontamento do
 diário daquele mod quando a fila privada bloqueia o Automático. Antes: unidade
 salarial por família de prédio, meta plurianual, fila com duração da engine e
 contagem de projetos. Comércio: script não abre rota (removido na 1.9);
 autor/investidor e qualificações não têm primitiva legível.
-Teste sintético — 382 testes aprovados.
+Teste sintético — 384 testes aprovados.
 Estático — geração consistente e validação local 1.15 aprovadas. Tiger 1.19.0:
-mesmos três campos de diário do vanilla 1.15 e 932 avisos (todos de colocação de
-chaves no GUI e de OR de item único; as 15 caixas novas seguem o mesmo padrão).
+mesmos três campos de diário do vanilla 1.15 e 933 avisos (todos de colocação de
+chaves no GUI e de OR de item único).
 Carregou e Campanha — retorno com salários, unidade por estado, painel e
 pontuação de PMs seguem NÃO VERIFICADO.
 
@@ -19,11 +22,35 @@ Ler `AGENTS.md`, `docs/agent/vic3-modding/SKILL.md` e suas referências.
 O ambiente registra o Tiger, o resultado da sondagem de comércio e o Smart
 Government instalado (1.0.0, esquema 2, variáveis `sg_*`). A pasta de
 documentação exportada do jogo continua ausente.
-Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.27 (seção de
-controle privado ligada só com o outro mod ativo), depois 0.7.23 (duração da
+Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.28 (PM cedido
+com o Auto-Apply PMs ligado), 0.7.27 (seção de controle privado só com o outro
+mod ativo), depois 0.7.23 (duração da
 fila), 0.7.21 (evento de importação) e 0.7.17–0.7.19: unidade no painel, desvio
 de fornecedor, pontuação de PMs, save/reload e limpeza. Depois retomar as
 leituras fiscais e a fundação básica.
+
+## 0.7.28 — Cessão de PM ao Auto-Apply PMs
+
+Auditoria dos 12 mods instalados: `docs/COMPATIBILITY.md`. Achados que mudam
+código: Auto-Apply PMs (3353797125) mexe nos mesmos grupos de PM principais que
+o Director moderniza, com um botão por prédio e botões de grupo
+(`..._group_farms`, `..._group_mines`, `..._group_plantations`); OGAS for CWE é
+de 1.13 + Cold War Era e não deve rodar nesta campanha; Government
+Administration Auto Expand faz `REPLACE` inteiro do prédio vanilla e perde
+`ai_value`.
+
+Código — `EXTERNAL_PM_VARIABLES` em `tools/production_methods.py` mapeia prédio
+→ botões do outro mod; a elegibilidade de modernização/recuperação ganhou
+`owner = { NOT = { has_variable = ... } }` (a elegibilidade roda em escopo de
+estado, então a variável de país precisa de `owner`). `sed_pm_external_managed`
+e a linha `sed_pm_external` no painel avisam quando há cessão. Fundações novas
+continuam recebendo a configuração inicial.
+
+Teste sintético — 384 aprovados; dois novos cobrem a cessão pelo botão do
+prédio e o alcance dos botões de grupo (fazendas/plantações, sem vazar para
+serraria).
+
+NÃO VERIFICADO na engine: se a cessão evita de fato a disputa de PM em campanha.
 
 ## 0.7.27 — Leitura do controle de construção privada
 

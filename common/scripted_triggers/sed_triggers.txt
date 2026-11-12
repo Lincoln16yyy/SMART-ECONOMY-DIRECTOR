@@ -3848,6 +3848,7 @@ sed_pm_upgrade_month_limit_reached = {
 sed_pm_upgrade_1_eligible = {
  sed_wood_candidate_site = yes
  NOT = { has_variable = sed_wood_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_logging_camp } }
  OR = { NOT = { has_variable = sed_pm_cooldown_logging_camp } var:sed_pm_cooldown_logging_camp <= sed_live_month_key }
  owner = {
   OR = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } }
@@ -3869,6 +3870,7 @@ sed_pm_upgrade_1_eligible = {
 sed_pm_upgrade_2_eligible = {
  sed_wood_candidate_site = yes
  NOT = { has_variable = sed_wood_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_logging_camp } }
  OR = { NOT = { has_variable = sed_pm_cooldown_logging_camp } var:sed_pm_cooldown_logging_camp <= sed_live_month_key }
  owner = {
   OR = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } }
@@ -3893,6 +3895,7 @@ sed_pm_upgrade_2_eligible = {
 sed_pm_upgrade_3_eligible = {
  sed_wood_candidate_site = yes
  NOT = { has_variable = sed_wood_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_logging_camp } }
  OR = { NOT = { has_variable = sed_pm_cooldown_logging_camp } var:sed_pm_cooldown_logging_camp <= sed_live_month_key }
  owner = {
   OR = { market = { mg:wood ?= { market_goods_has_goods_shortage = yes } }
@@ -3917,6 +3920,7 @@ sed_pm_upgrade_3_eligible = {
 sed_pm_upgrade_4_eligible = {
  sed_iron_candidate_site = yes
  NOT = { has_variable = sed_iron_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_iron_mine } }
  OR = { NOT = { has_variable = sed_pm_cooldown_iron_mine } var:sed_pm_cooldown_iron_mine <= sed_live_month_key }
  owner = {
   OR = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } }
@@ -3941,6 +3945,7 @@ sed_pm_upgrade_4_eligible = {
 sed_pm_upgrade_5_eligible = {
  sed_iron_candidate_site = yes
  NOT = { has_variable = sed_iron_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_iron_mine } }
  OR = { NOT = { has_variable = sed_pm_cooldown_iron_mine } var:sed_pm_cooldown_iron_mine <= sed_live_month_key }
  owner = {
   OR = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } }
@@ -3965,6 +3970,7 @@ sed_pm_upgrade_5_eligible = {
 sed_pm_upgrade_6_eligible = {
  sed_iron_candidate_site = yes
  NOT = { has_variable = sed_iron_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_iron_mine } }
  OR = { NOT = { has_variable = sed_pm_cooldown_iron_mine } var:sed_pm_cooldown_iron_mine <= sed_live_month_key }
  owner = {
   OR = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } }
@@ -3989,6 +3995,7 @@ sed_pm_upgrade_6_eligible = {
 sed_pm_upgrade_7_eligible = {
  sed_iron_candidate_site = yes
  NOT = { has_variable = sed_iron_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_iron_mine } }
  OR = { NOT = { has_variable = sed_pm_cooldown_iron_mine } var:sed_pm_cooldown_iron_mine <= sed_live_month_key }
  owner = {
   OR = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } }
@@ -4013,6 +4020,7 @@ sed_pm_upgrade_7_eligible = {
 sed_pm_upgrade_8_eligible = {
  sed_iron_candidate_site = yes
  NOT = { has_variable = sed_iron_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_iron_mine } }
  OR = { NOT = { has_variable = sed_pm_cooldown_iron_mine } var:sed_pm_cooldown_iron_mine <= sed_live_month_key }
  owner = {
   OR = { market = { mg:iron ?= { market_goods_has_goods_shortage = yes } }
@@ -4034,6 +4042,7 @@ sed_pm_upgrade_8_eligible = {
 sed_pm_upgrade_9_eligible = {
  sed_coal_candidate_site = yes
  NOT = { has_variable = sed_coal_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_coal_mine } }
  OR = { NOT = { has_variable = sed_pm_cooldown_coal_mine } var:sed_pm_cooldown_coal_mine <= sed_live_month_key }
  owner = {
   OR = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } }
@@ -4055,6 +4064,7 @@ sed_pm_upgrade_9_eligible = {
 sed_pm_upgrade_10_eligible = {
  sed_coal_candidate_site = yes
  NOT = { has_variable = sed_coal_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_coal_mine } }
  OR = { NOT = { has_variable = sed_pm_cooldown_coal_mine } var:sed_pm_cooldown_coal_mine <= sed_live_month_key }
  owner = {
   OR = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } }
@@ -4076,6 +4086,7 @@ sed_pm_upgrade_10_eligible = {
 sed_pm_upgrade_11_eligible = {
  sed_coal_candidate_site = yes
  NOT = { has_variable = sed_coal_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_coal_mine } }
  OR = { NOT = { has_variable = sed_pm_cooldown_coal_mine } var:sed_pm_cooldown_coal_mine <= sed_live_month_key }
  owner = {
   OR = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } }
@@ -4100,6 +4111,7 @@ sed_pm_upgrade_11_eligible = {
 sed_pm_upgrade_12_eligible = {
  sed_coal_candidate_site = yes
  NOT = { has_variable = sed_coal_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_coal_mine } }
  OR = { NOT = { has_variable = sed_pm_cooldown_coal_mine } var:sed_pm_cooldown_coal_mine <= sed_live_month_key }
  owner = {
   OR = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } }
@@ -4121,6 +4133,7 @@ sed_pm_upgrade_12_eligible = {
 sed_pm_upgrade_13_eligible = {
  sed_coal_candidate_site = yes
  NOT = { has_variable = sed_coal_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_coal_mine } }
  OR = { NOT = { has_variable = sed_pm_cooldown_coal_mine } var:sed_pm_cooldown_coal_mine <= sed_live_month_key }
  owner = {
   OR = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } }
@@ -4145,6 +4158,7 @@ sed_pm_upgrade_13_eligible = {
 sed_pm_upgrade_14_eligible = {
  sed_coal_candidate_site = yes
  NOT = { has_variable = sed_coal_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_coal_mine } }
  OR = { NOT = { has_variable = sed_pm_cooldown_coal_mine } var:sed_pm_cooldown_coal_mine <= sed_live_month_key }
  owner = {
   OR = { market = { mg:coal ?= { market_goods_has_goods_shortage = yes } }
@@ -4166,6 +4180,8 @@ sed_pm_upgrade_14_eligible = {
 sed_pm_upgrade_15_eligible = {
  sed_grain_candidate_site = yes
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_wheat_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
  OR = { NOT = { has_variable = sed_pm_cooldown_wheat_farm } var:sed_pm_cooldown_wheat_farm <= sed_live_month_key }
  owner = {
   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -4187,6 +4203,8 @@ sed_pm_upgrade_15_eligible = {
 sed_pm_upgrade_16_eligible = {
  sed_grain_candidate_site = yes
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_wheat_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
  OR = { NOT = { has_variable = sed_pm_cooldown_wheat_farm } var:sed_pm_cooldown_wheat_farm <= sed_live_month_key }
  owner = {
   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -4208,6 +4226,8 @@ sed_pm_upgrade_16_eligible = {
 sed_pm_upgrade_17_eligible = {
  sed_grain_candidate_site = yes
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_wheat_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
  OR = { NOT = { has_variable = sed_pm_cooldown_wheat_farm } var:sed_pm_cooldown_wheat_farm <= sed_live_month_key }
  owner = {
   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -4229,6 +4249,8 @@ sed_pm_upgrade_17_eligible = {
 sed_pm_upgrade_18_eligible = {
  sed_grain_candidate_site = yes
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_wheat_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
  OR = { NOT = { has_variable = sed_pm_cooldown_wheat_farm } var:sed_pm_cooldown_wheat_farm <= sed_live_month_key }
  owner = {
   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -4250,6 +4272,8 @@ sed_pm_upgrade_18_eligible = {
 sed_pm_upgrade_19_eligible = {
  sed_grain_candidate_site = yes
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_wheat_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
  OR = { NOT = { has_variable = sed_pm_cooldown_wheat_farm } var:sed_pm_cooldown_wheat_farm <= sed_live_month_key }
  owner = {
   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -4271,6 +4295,8 @@ sed_pm_upgrade_19_eligible = {
 sed_pm_upgrade_20_eligible = {
  sed_grain_candidate_site = yes
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_wheat_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
  OR = { NOT = { has_variable = sed_pm_cooldown_wheat_farm } var:sed_pm_cooldown_wheat_farm <= sed_live_month_key }
  owner = {
   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -4292,6 +4318,8 @@ sed_pm_upgrade_20_eligible = {
 sed_pm_upgrade_21_eligible = {
  sed_grain_candidate_site = yes
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_wheat_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
  OR = { NOT = { has_variable = sed_pm_cooldown_wheat_farm } var:sed_pm_cooldown_wheat_farm <= sed_live_month_key }
  owner = {
   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -4313,6 +4341,8 @@ sed_pm_upgrade_21_eligible = {
 sed_pm_upgrade_22_eligible = {
  sed_grain_candidate_site = yes
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_rye_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
  OR = { NOT = { has_variable = sed_pm_cooldown_rye_farm } var:sed_pm_cooldown_rye_farm <= sed_live_month_key }
  owner = {
   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -4334,6 +4364,8 @@ sed_pm_upgrade_22_eligible = {
 sed_pm_upgrade_23_eligible = {
  sed_grain_candidate_site = yes
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_rye_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
  OR = { NOT = { has_variable = sed_pm_cooldown_rye_farm } var:sed_pm_cooldown_rye_farm <= sed_live_month_key }
  owner = {
   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -4355,6 +4387,8 @@ sed_pm_upgrade_23_eligible = {
 sed_pm_upgrade_24_eligible = {
  sed_grain_candidate_site = yes
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_rye_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
  OR = { NOT = { has_variable = sed_pm_cooldown_rye_farm } var:sed_pm_cooldown_rye_farm <= sed_live_month_key }
  owner = {
   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -4376,6 +4410,8 @@ sed_pm_upgrade_24_eligible = {
 sed_pm_upgrade_25_eligible = {
  sed_grain_candidate_site = yes
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_rye_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
  OR = { NOT = { has_variable = sed_pm_cooldown_rye_farm } var:sed_pm_cooldown_rye_farm <= sed_live_month_key }
  owner = {
   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -4397,6 +4433,8 @@ sed_pm_upgrade_25_eligible = {
 sed_pm_upgrade_26_eligible = {
  sed_grain_candidate_site = yes
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_maize_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
  OR = { NOT = { has_variable = sed_pm_cooldown_maize_farm } var:sed_pm_cooldown_maize_farm <= sed_live_month_key }
  owner = {
   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -4418,6 +4456,8 @@ sed_pm_upgrade_26_eligible = {
 sed_pm_upgrade_27_eligible = {
  sed_grain_candidate_site = yes
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_maize_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
  OR = { NOT = { has_variable = sed_pm_cooldown_maize_farm } var:sed_pm_cooldown_maize_farm <= sed_live_month_key }
  owner = {
   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -4439,6 +4479,8 @@ sed_pm_upgrade_27_eligible = {
 sed_pm_upgrade_28_eligible = {
  sed_grain_candidate_site = yes
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_maize_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
  OR = { NOT = { has_variable = sed_pm_cooldown_maize_farm } var:sed_pm_cooldown_maize_farm <= sed_live_month_key }
  owner = {
   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -4460,6 +4502,8 @@ sed_pm_upgrade_28_eligible = {
 sed_pm_upgrade_29_eligible = {
  sed_grain_candidate_site = yes
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_maize_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
  OR = { NOT = { has_variable = sed_pm_cooldown_maize_farm } var:sed_pm_cooldown_maize_farm <= sed_live_month_key }
  owner = {
   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -4481,6 +4525,8 @@ sed_pm_upgrade_29_eligible = {
 sed_pm_upgrade_30_eligible = {
  sed_grain_candidate_site = yes
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_millet_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
  OR = { NOT = { has_variable = sed_pm_cooldown_millet_farm } var:sed_pm_cooldown_millet_farm <= sed_live_month_key }
  owner = {
   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -4502,6 +4548,8 @@ sed_pm_upgrade_30_eligible = {
 sed_pm_upgrade_31_eligible = {
  sed_grain_candidate_site = yes
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_millet_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
  OR = { NOT = { has_variable = sed_pm_cooldown_millet_farm } var:sed_pm_cooldown_millet_farm <= sed_live_month_key }
  owner = {
   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -4523,6 +4571,8 @@ sed_pm_upgrade_31_eligible = {
 sed_pm_upgrade_32_eligible = {
  sed_grain_candidate_site = yes
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_millet_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
  OR = { NOT = { has_variable = sed_pm_cooldown_millet_farm } var:sed_pm_cooldown_millet_farm <= sed_live_month_key }
  owner = {
   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -4544,6 +4594,8 @@ sed_pm_upgrade_32_eligible = {
 sed_pm_upgrade_33_eligible = {
  sed_grain_candidate_site = yes
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_millet_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
  OR = { NOT = { has_variable = sed_pm_cooldown_millet_farm } var:sed_pm_cooldown_millet_farm <= sed_live_month_key }
  owner = {
   OR = { market = { mg:grain ?= { market_goods_has_goods_shortage = yes } }
@@ -4565,6 +4617,8 @@ sed_pm_upgrade_33_eligible = {
 sed_pm_upgrade_34_eligible = {
  sed_fabric_candidate_site = yes
  NOT = { has_variable = sed_fabric_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_cotton_plantation } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_plantations } }
  OR = { NOT = { has_variable = sed_pm_cooldown_cotton_plantation } var:sed_pm_cooldown_cotton_plantation <= sed_live_month_key }
  owner = {
   OR = { market = { mg:fabric ?= { market_goods_has_goods_shortage = yes } }
@@ -4586,6 +4640,7 @@ sed_pm_upgrade_34_eligible = {
 sed_pm_upgrade_35_eligible = {
  sed_tools_candidate_site = yes
  NOT = { has_variable = sed_tools_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_tooling_workshop } }
  OR = { NOT = { has_variable = sed_pm_cooldown_tooling_workshop } var:sed_pm_cooldown_tooling_workshop <= sed_live_month_key }
  owner = {
   OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } }
@@ -4607,6 +4662,7 @@ sed_pm_upgrade_35_eligible = {
 sed_pm_upgrade_36_eligible = {
  sed_tools_candidate_site = yes
  NOT = { has_variable = sed_tools_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_tooling_workshop } }
  OR = { NOT = { has_variable = sed_pm_cooldown_tooling_workshop } var:sed_pm_cooldown_tooling_workshop <= sed_live_month_key }
  owner = {
   OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } }
@@ -4631,6 +4687,7 @@ sed_pm_upgrade_36_eligible = {
 sed_pm_upgrade_37_eligible = {
  sed_tools_candidate_site = yes
  NOT = { has_variable = sed_tools_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_tooling_workshop } }
  OR = { NOT = { has_variable = sed_pm_cooldown_tooling_workshop } var:sed_pm_cooldown_tooling_workshop <= sed_live_month_key }
  owner = {
   OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } }
@@ -4652,6 +4709,7 @@ sed_pm_upgrade_37_eligible = {
 sed_pm_upgrade_38_eligible = {
  sed_tools_candidate_site = yes
  NOT = { has_variable = sed_tools_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_tooling_workshop } }
  OR = { NOT = { has_variable = sed_pm_cooldown_tooling_workshop } var:sed_pm_cooldown_tooling_workshop <= sed_live_month_key }
  owner = {
   OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } }
@@ -4676,6 +4734,7 @@ sed_pm_upgrade_38_eligible = {
 sed_pm_upgrade_39_eligible = {
  sed_tools_candidate_site = yes
  NOT = { has_variable = sed_tools_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_tooling_workshop } }
  OR = { NOT = { has_variable = sed_pm_cooldown_tooling_workshop } var:sed_pm_cooldown_tooling_workshop <= sed_live_month_key }
  owner = {
   OR = { market = { mg:tools ?= { market_goods_has_goods_shortage = yes } }
@@ -4700,6 +4759,7 @@ sed_pm_upgrade_39_eligible = {
 sed_pm_upgrade_40_eligible = {
  sed_clothes_candidate_site = yes
  NOT = { has_variable = sed_clothes_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_textile_mill } }
  OR = { NOT = { has_variable = sed_pm_cooldown_textile_mill } var:sed_pm_cooldown_textile_mill <= sed_live_month_key }
  owner = {
   OR = { market = { mg:clothes ?= { market_goods_has_goods_shortage = yes } }
@@ -4721,6 +4781,7 @@ sed_pm_upgrade_40_eligible = {
 sed_pm_upgrade_41_eligible = {
  sed_small_arms_candidate_site = yes
  NOT = { has_variable = sed_small_arms_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_arms_industry } }
  OR = { NOT = { has_variable = sed_pm_cooldown_arms_industry } var:sed_pm_cooldown_arms_industry <= sed_live_month_key }
  owner = {
   OR = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }
@@ -4745,6 +4806,7 @@ sed_pm_upgrade_41_eligible = {
 sed_pm_upgrade_42_eligible = {
  sed_small_arms_candidate_site = yes
  NOT = { has_variable = sed_small_arms_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_arms_industry } }
  OR = { NOT = { has_variable = sed_pm_cooldown_arms_industry } var:sed_pm_cooldown_arms_industry <= sed_live_month_key }
  owner = {
   OR = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }
@@ -4769,6 +4831,7 @@ sed_pm_upgrade_42_eligible = {
 sed_pm_upgrade_43_eligible = {
  sed_small_arms_candidate_site = yes
  NOT = { has_variable = sed_small_arms_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_arms_industry } }
  OR = { NOT = { has_variable = sed_pm_cooldown_arms_industry } var:sed_pm_cooldown_arms_industry <= sed_live_month_key }
  owner = {
   OR = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }
@@ -4796,6 +4859,7 @@ sed_pm_upgrade_43_eligible = {
 sed_pm_upgrade_44_eligible = {
  sed_small_arms_candidate_site = yes
  NOT = { has_variable = sed_small_arms_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_arms_industry } }
  OR = { NOT = { has_variable = sed_pm_cooldown_arms_industry } var:sed_pm_cooldown_arms_industry <= sed_live_month_key }
  owner = {
   OR = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }
@@ -4820,6 +4884,7 @@ sed_pm_upgrade_44_eligible = {
 sed_pm_upgrade_45_eligible = {
  sed_small_arms_candidate_site = yes
  NOT = { has_variable = sed_small_arms_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_arms_industry } }
  OR = { NOT = { has_variable = sed_pm_cooldown_arms_industry } var:sed_pm_cooldown_arms_industry <= sed_live_month_key }
  owner = {
   OR = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }
@@ -4847,6 +4912,7 @@ sed_pm_upgrade_45_eligible = {
 sed_pm_upgrade_46_eligible = {
  sed_small_arms_candidate_site = yes
  NOT = { has_variable = sed_small_arms_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_arms_industry } }
  OR = { NOT = { has_variable = sed_pm_cooldown_arms_industry } var:sed_pm_cooldown_arms_industry <= sed_live_month_key }
  owner = {
   OR = { market = { mg:small_arms ?= { market_goods_has_goods_shortage = yes } }
@@ -4871,6 +4937,7 @@ sed_pm_upgrade_46_eligible = {
 sed_pm_upgrade_47_eligible = {
  sed_artillery_candidate_site = yes
  NOT = { has_variable = sed_artillery_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_artillery_foundry } }
  OR = { NOT = { has_variable = sed_pm_cooldown_artillery_foundry } var:sed_pm_cooldown_artillery_foundry <= sed_live_month_key }
  owner = {
   OR = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }
@@ -4895,6 +4962,7 @@ sed_pm_upgrade_47_eligible = {
 sed_pm_upgrade_48_eligible = {
  sed_artillery_candidate_site = yes
  NOT = { has_variable = sed_artillery_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_artillery_foundry } }
  OR = { NOT = { has_variable = sed_pm_cooldown_artillery_foundry } var:sed_pm_cooldown_artillery_foundry <= sed_live_month_key }
  owner = {
   OR = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }
@@ -4919,6 +4987,7 @@ sed_pm_upgrade_48_eligible = {
 sed_pm_upgrade_49_eligible = {
  sed_artillery_candidate_site = yes
  NOT = { has_variable = sed_artillery_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_artillery_foundry } }
  OR = { NOT = { has_variable = sed_pm_cooldown_artillery_foundry } var:sed_pm_cooldown_artillery_foundry <= sed_live_month_key }
  owner = {
   OR = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }
@@ -4940,6 +5009,7 @@ sed_pm_upgrade_49_eligible = {
 sed_pm_upgrade_50_eligible = {
  sed_artillery_candidate_site = yes
  NOT = { has_variable = sed_artillery_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_artillery_foundry } }
  OR = { NOT = { has_variable = sed_pm_cooldown_artillery_foundry } var:sed_pm_cooldown_artillery_foundry <= sed_live_month_key }
  owner = {
   OR = { market = { mg:artillery ?= { market_goods_has_goods_shortage = yes } }
@@ -4964,6 +5034,7 @@ sed_pm_upgrade_50_eligible = {
 sed_pm_upgrade_51_eligible = {
  sed_paper_candidate_site = yes
  NOT = { has_variable = sed_paper_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_paper_mill } }
  OR = { NOT = { has_variable = sed_pm_cooldown_paper_mill } var:sed_pm_cooldown_paper_mill <= sed_live_month_key }
  owner = {
   OR = { market = { mg:paper ?= { market_goods_has_goods_shortage = yes } }
@@ -4985,6 +5056,7 @@ sed_pm_upgrade_51_eligible = {
 sed_pm_upgrade_52_eligible = {
  sed_paper_candidate_site = yes
  NOT = { has_variable = sed_paper_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_paper_mill } }
  OR = { NOT = { has_variable = sed_pm_cooldown_paper_mill } var:sed_pm_cooldown_paper_mill <= sed_live_month_key }
  owner = {
   OR = { market = { mg:paper ?= { market_goods_has_goods_shortage = yes } }
@@ -5009,6 +5081,7 @@ sed_pm_upgrade_52_eligible = {
 sed_pm_upgrade_53_eligible = {
  sed_paper_candidate_site = yes
  NOT = { has_variable = sed_paper_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_paper_mill } }
  OR = { NOT = { has_variable = sed_pm_cooldown_paper_mill } var:sed_pm_cooldown_paper_mill <= sed_live_month_key }
  owner = {
   OR = { market = { mg:paper ?= { market_goods_has_goods_shortage = yes } }
@@ -5027,9 +5100,33 @@ sed_pm_upgrade_53_eligible = {
   value = 12.5 multiply = b:building_paper_mill.level
  }
 }
+sed_pm_external_managed = {
+ OR = {
+  has_variable = zw_var_auto_pm_building_logging_camp
+  has_variable = zw_var_auto_pm_building_iron_mine
+  has_variable = zw_var_auto_pm_building_coal_mine
+  has_variable = zw_var_auto_pm_building_wheat_farm
+  has_variable = zw_var_auto_pm_building_group_farms
+  has_variable = zw_var_auto_pm_building_rye_farm
+  has_variable = zw_var_auto_pm_building_rice_farm
+  has_variable = zw_var_auto_pm_building_maize_farm
+  has_variable = zw_var_auto_pm_building_millet_farm
+  has_variable = zw_var_auto_pm_building_cotton_plantation
+  has_variable = zw_var_auto_pm_building_group_plantations
+  has_variable = zw_var_auto_pm_building_livestock_ranch
+  has_variable = zw_var_auto_pm_building_tooling_workshop
+  has_variable = zw_var_auto_pm_building_food_industry
+  has_variable = zw_var_auto_pm_building_textile_mill
+  has_variable = zw_var_auto_pm_building_arms_industry
+  has_variable = zw_var_auto_pm_building_artillery_foundry
+  has_variable = zw_var_auto_pm_building_munition_plant
+  has_variable = zw_var_auto_pm_building_paper_mill
+ }
+}
 sed_pm_recovery_1_eligible = {
  NOT = { has_variable = sed_wood_ignored }
  NOT = { has_variable = sed_wood_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_logging_camp } }
 
  owner = {
 
@@ -5075,6 +5172,7 @@ sed_pm_recovery_1_eligible = {
 sed_pm_recovery_2_eligible = {
  NOT = { has_variable = sed_wood_ignored }
  NOT = { has_variable = sed_wood_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_logging_camp } }
 
  owner = {
 
@@ -5121,6 +5219,7 @@ sed_pm_recovery_2_eligible = {
 sed_pm_recovery_3_eligible = {
  NOT = { has_variable = sed_wood_ignored }
  NOT = { has_variable = sed_wood_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_logging_camp } }
 
  owner = {
 
@@ -5166,6 +5265,7 @@ sed_pm_recovery_3_eligible = {
 sed_pm_recovery_4_eligible = {
  NOT = { has_variable = sed_iron_ignored }
  NOT = { has_variable = sed_iron_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_iron_mine } }
 
  owner = {
 
@@ -5211,6 +5311,7 @@ sed_pm_recovery_4_eligible = {
 sed_pm_recovery_5_eligible = {
  NOT = { has_variable = sed_iron_ignored }
  NOT = { has_variable = sed_iron_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_iron_mine } }
 
  owner = {
 
@@ -5256,6 +5357,7 @@ sed_pm_recovery_5_eligible = {
 sed_pm_recovery_6_eligible = {
  NOT = { has_variable = sed_iron_ignored }
  NOT = { has_variable = sed_iron_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_iron_mine } }
 
  owner = {
 
@@ -5301,6 +5403,7 @@ sed_pm_recovery_6_eligible = {
 sed_pm_recovery_7_eligible = {
  NOT = { has_variable = sed_coal_ignored }
  NOT = { has_variable = sed_coal_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_coal_mine } }
 
  owner = {
 
@@ -5342,6 +5445,7 @@ sed_pm_recovery_7_eligible = {
 sed_pm_recovery_8_eligible = {
  NOT = { has_variable = sed_coal_ignored }
  NOT = { has_variable = sed_coal_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_coal_mine } }
 
  owner = {
 
@@ -5383,6 +5487,7 @@ sed_pm_recovery_8_eligible = {
 sed_pm_recovery_9_eligible = {
  NOT = { has_variable = sed_coal_ignored }
  NOT = { has_variable = sed_coal_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_coal_mine } }
 
  owner = {
 
@@ -5424,6 +5529,8 @@ sed_pm_recovery_9_eligible = {
 sed_pm_recovery_10_eligible = {
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_wheat_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
 
  owner = {
 
@@ -5469,6 +5576,8 @@ sed_pm_recovery_10_eligible = {
 sed_pm_recovery_11_eligible = {
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_wheat_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
 
  owner = {
 
@@ -5514,6 +5623,8 @@ sed_pm_recovery_11_eligible = {
 sed_pm_recovery_12_eligible = {
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_wheat_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
 
  owner = {
 
@@ -5559,6 +5670,8 @@ sed_pm_recovery_12_eligible = {
 sed_pm_recovery_13_eligible = {
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_wheat_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
 
  owner = {
 
@@ -5604,6 +5717,8 @@ sed_pm_recovery_13_eligible = {
 sed_pm_recovery_14_eligible = {
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_rye_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
 
  owner = {
 
@@ -5645,6 +5760,8 @@ sed_pm_recovery_14_eligible = {
 sed_pm_recovery_15_eligible = {
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_rye_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
 
  owner = {
 
@@ -5686,6 +5803,8 @@ sed_pm_recovery_15_eligible = {
 sed_pm_recovery_16_eligible = {
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_rye_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
 
  owner = {
 
@@ -5727,6 +5846,8 @@ sed_pm_recovery_16_eligible = {
 sed_pm_recovery_17_eligible = {
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_rice_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
 
  owner = {
 
@@ -5764,6 +5885,8 @@ sed_pm_recovery_17_eligible = {
 sed_pm_recovery_18_eligible = {
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_rice_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
 
  owner = {
 
@@ -5801,6 +5924,8 @@ sed_pm_recovery_18_eligible = {
 sed_pm_recovery_19_eligible = {
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_rice_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
 
  owner = {
 
@@ -5838,6 +5963,8 @@ sed_pm_recovery_19_eligible = {
 sed_pm_recovery_20_eligible = {
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_rice_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
 
  owner = {
 
@@ -5875,6 +6002,8 @@ sed_pm_recovery_20_eligible = {
 sed_pm_recovery_21_eligible = {
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_maize_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
 
  owner = {
 
@@ -5916,6 +6045,8 @@ sed_pm_recovery_21_eligible = {
 sed_pm_recovery_22_eligible = {
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_maize_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
 
  owner = {
 
@@ -5957,6 +6088,8 @@ sed_pm_recovery_22_eligible = {
 sed_pm_recovery_23_eligible = {
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_maize_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
 
  owner = {
 
@@ -5998,6 +6131,8 @@ sed_pm_recovery_23_eligible = {
 sed_pm_recovery_24_eligible = {
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_millet_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
 
  owner = {
 
@@ -6039,6 +6174,8 @@ sed_pm_recovery_24_eligible = {
 sed_pm_recovery_25_eligible = {
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_millet_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
 
  owner = {
 
@@ -6080,6 +6217,8 @@ sed_pm_recovery_25_eligible = {
 sed_pm_recovery_26_eligible = {
  NOT = { has_variable = sed_grain_ignored }
  NOT = { has_variable = sed_grain_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_millet_farm } }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_group_farms } }
 
  owner = {
 
@@ -6121,6 +6260,7 @@ sed_pm_recovery_26_eligible = {
 sed_pm_recovery_27_eligible = {
  NOT = { has_variable = sed_tools_ignored }
  NOT = { has_variable = sed_tools_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_tooling_workshop } }
 
  owner = {
 
@@ -6174,6 +6314,7 @@ sed_pm_recovery_27_eligible = {
 sed_pm_recovery_28_eligible = {
  NOT = { has_variable = sed_tools_ignored }
  NOT = { has_variable = sed_tools_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_tooling_workshop } }
 
  owner = {
 
@@ -6227,6 +6368,7 @@ sed_pm_recovery_28_eligible = {
 sed_pm_recovery_29_eligible = {
  NOT = { has_variable = sed_groceries_ignored }
  NOT = { has_variable = sed_groceries_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_food_industry } }
 
  owner = {
 
@@ -6288,6 +6430,7 @@ sed_pm_recovery_29_eligible = {
 sed_pm_recovery_30_eligible = {
  NOT = { has_variable = sed_groceries_ignored }
  NOT = { has_variable = sed_groceries_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_food_industry } }
 
  owner = {
 
@@ -6349,6 +6492,7 @@ sed_pm_recovery_30_eligible = {
 sed_pm_recovery_31_eligible = {
  NOT = { has_variable = sed_clothes_ignored }
  NOT = { has_variable = sed_clothes_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_textile_mill } }
 
  owner = {
 
@@ -6398,6 +6542,7 @@ sed_pm_recovery_31_eligible = {
 sed_pm_recovery_32_eligible = {
  NOT = { has_variable = sed_clothes_ignored }
  NOT = { has_variable = sed_clothes_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_textile_mill } }
 
  owner = {
 
@@ -6448,6 +6593,7 @@ sed_pm_recovery_32_eligible = {
 sed_pm_recovery_33_eligible = {
  NOT = { has_variable = sed_clothes_ignored }
  NOT = { has_variable = sed_clothes_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_textile_mill } }
 
  owner = {
 
@@ -6497,6 +6643,7 @@ sed_pm_recovery_33_eligible = {
 sed_pm_recovery_34_eligible = {
  NOT = { has_variable = sed_clothes_ignored }
  NOT = { has_variable = sed_clothes_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_textile_mill } }
 
  owner = {
 
@@ -6549,6 +6696,7 @@ sed_pm_recovery_34_eligible = {
 sed_pm_recovery_35_eligible = {
  NOT = { has_variable = sed_clothes_ignored }
  NOT = { has_variable = sed_clothes_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_textile_mill } }
 
  owner = {
 
@@ -6600,6 +6748,7 @@ sed_pm_recovery_35_eligible = {
 sed_pm_recovery_36_eligible = {
  NOT = { has_variable = sed_small_arms_ignored }
  NOT = { has_variable = sed_small_arms_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_arms_industry } }
 
  owner = {
 
@@ -6653,6 +6802,7 @@ sed_pm_recovery_36_eligible = {
 sed_pm_recovery_37_eligible = {
  NOT = { has_variable = sed_small_arms_ignored }
  NOT = { has_variable = sed_small_arms_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_arms_industry } }
 
  owner = {
 
@@ -6706,6 +6856,7 @@ sed_pm_recovery_37_eligible = {
 sed_pm_recovery_38_eligible = {
  NOT = { has_variable = sed_paper_ignored }
  NOT = { has_variable = sed_paper_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_paper_mill } }
 
  owner = {
 
@@ -6747,6 +6898,7 @@ sed_pm_recovery_38_eligible = {
 sed_pm_recovery_39_eligible = {
  NOT = { has_variable = sed_paper_ignored }
  NOT = { has_variable = sed_paper_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_paper_mill } }
 
  owner = {
 
@@ -6789,6 +6941,7 @@ sed_pm_recovery_39_eligible = {
 sed_pm_recovery_40_eligible = {
  NOT = { has_variable = sed_paper_ignored }
  NOT = { has_variable = sed_paper_found_pm_pending }
+ owner = { NOT = { has_variable = zw_var_auto_pm_building_paper_mill } }
 
  owner = {
 

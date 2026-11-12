@@ -241,3 +241,22 @@ formas aceitas na 1.15. [confirmado 2026-11-11]
 Se um dia for preciso controlar de fato, a alternativa é oferecer o próprio
 `can_build_private` e pedir ao jogador para desativar o outro mod — não rodar
 os dois.
+
+## Mods de PM instalados (2026-11-11)
+
+- **Auto-Apply PMs** (`mod/3353797125_Auto-Apply_PMs`, z.260514.1): um botão por
+  prédio no diário `je_zw_auto_pm`; liga/desliga `zw_var_auto_pm_building_<prédio>`
+  (`building_` removido). Botões de grupo ligam
+  `zw_var_auto_pm_building_group_farms` / `_mines` / `_plantations`, e nesse caso
+  o efeito roda por prédio do grupo. Ajustes globais: `zw_var_auto_pm_num_3`,
+  `_higher_frequency`, `_electric`. Os métodos são decididos por
+  `zw_effect_auto_pm_building_<prédio>`, que usa preço local e
+  `can_activate_production_method`; escreve no mesmo grupo principal que o
+  Director moderniza. [confirmado 2026-11-11]
+- **Auto-Apply Automation PMs** (`mod/3344726320_Auto-Apply_Automation_PMs`):
+  variáveis `zw_var_auto_pm_automation_basic` / `_electric` / `_oil` /
+  `_transportation` / `_slower_automation`; mexe em PMs de automação e
+  transporte por estado (`zw_effect_change_state_pm_automation` /
+  `_transportation`). [confirmado 2026-11-11]
+- Ordem de carregamento não é controlada por nós. Para leitura por
+  `has_variable`, ordem não importa; para injeção em prédio, importa.

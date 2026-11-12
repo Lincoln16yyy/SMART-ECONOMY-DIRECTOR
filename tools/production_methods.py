@@ -12,6 +12,29 @@ PROFILES = json.loads((DATA / 'founding_production_methods.json').read_text())
 ECONOMICS = json.loads((DATA / 'founding_method_economics.json').read_text())
 EMPLOYMENT = json.loads((DATA / 'employment_profiles.json').read_text())
 COUNTRY_VARIABLES = ['sed_pm_upgrade_status']
+# Auto-Apply PMs (Workshop 3353797125) publishes one country flag per building
+# whose main methods it manages. Farm, mine and plantation buttons gate every
+# building of the group. The Director only reads these flags and yields the
+# building, because both mods change the same main method group.
+EXTERNAL_PM_VARIABLES = {
+    'building_logging_camp': ('zw_var_auto_pm_building_logging_camp',),
+    'building_iron_mine': ('zw_var_auto_pm_building_iron_mine',),
+    'building_coal_mine': ('zw_var_auto_pm_building_coal_mine',),
+    'building_wheat_farm': ('zw_var_auto_pm_building_wheat_farm', 'zw_var_auto_pm_building_group_farms'),
+    'building_rye_farm': ('zw_var_auto_pm_building_rye_farm', 'zw_var_auto_pm_building_group_farms'),
+    'building_rice_farm': ('zw_var_auto_pm_building_rice_farm', 'zw_var_auto_pm_building_group_farms'),
+    'building_maize_farm': ('zw_var_auto_pm_building_maize_farm', 'zw_var_auto_pm_building_group_farms'),
+    'building_millet_farm': ('zw_var_auto_pm_building_millet_farm', 'zw_var_auto_pm_building_group_farms'),
+    'building_cotton_plantation': ('zw_var_auto_pm_building_cotton_plantation', 'zw_var_auto_pm_building_group_plantations'),
+    'building_livestock_ranch': ('zw_var_auto_pm_building_livestock_ranch',),
+    'building_tooling_workshop': ('zw_var_auto_pm_building_tooling_workshop',),
+    'building_food_industry': ('zw_var_auto_pm_building_food_industry',),
+    'building_textile_mill': ('zw_var_auto_pm_building_textile_mill',),
+    'building_arms_industry': ('zw_var_auto_pm_building_arms_industry',),
+    'building_artillery_foundry': ('zw_var_auto_pm_building_artillery_foundry',),
+    'building_munition_plant': ('zw_var_auto_pm_building_munition_plant',),
+    'building_paper_mill': ('zw_var_auto_pm_building_paper_mill',),
+}
 
 
 def state_variables(targets):
@@ -256,9 +279,12 @@ def upgrade_triggers(targets, variants, recovery=False):
             inputs = recovery_constraints(building, current, target, good)
         site_guard = f'NOT = {{ has_variable = sed_{good}_ignored }}' if recovery else f'sed_{good}_candidate_site = yes'
         queue_guard = '' if recovery else 'level_after_queued_constructions <= level'
+        # Eligibility runs in state scope; these flags live on the country.
+        external_guard = ''.join(f'\n owner = {{ NOT = {{ has_variable = {option} }} }}'
+                                 for option in EXTERNAL_PM_VARIABLES.get(building, ()))
         result.append(f'''{prefix}_{index}_eligible = {{
  {site_guard}
- NOT = {{ has_variable = sed_{good}_found_pm_pending }}
+ NOT = {{ has_variable = sed_{good}_found_pm_pending }}{external_guard}
 {cooldown_guard}
  owner = {{
 {demand_guard}
@@ -272,6 +298,14 @@ def upgrade_triggers(targets, variants, recovery=False):
  }}
  can_activate_production_method = {{ building_type = {building} production_method = {target} }}
 {inputs}
+}}''')
+    if not recovery:
+        options = '\n'.join(f'  has_variable = {option}' for option in dict.fromkeys(
+            option for options in EXTERNAL_PM_VARIABLES.values() for option in options))
+        result.append(f'''sed_pm_external_managed = {{
+ OR = {{
+{options}
+ }}
 }}''')
     rendered = '\n'.join(result)
     return '\n'.join(line.rstrip() for line in rendered.splitlines()) + '\n'

@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.27'
+VERSION = '0.7.28'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -726,6 +726,7 @@ def widget():
     for name, option, pt, en in PRIVATE_CONTROL_FLAGS:
         body += textbox(f'sed_private_control_{name}', f'sed_private_control_{name}_visible_sgui')
     body += textbox('sed_private_control_help', 'sed_private_control_visible_sgui')
+    body += textbox('sed_pm_external', 'sed_pm_external_visible_sgui')
     for policy in ('tax', 'wage'):
         body += textbox(f'sed_{policy}_last_command', f'sed_{policy}_last_command_visible_sgui')
     body += textbox('sed_auto_last_review', 'sed_auto_last_review_visible_sgui')
@@ -1567,6 +1568,7 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
     for name, option, pt, en in COMPETING_BUILDERS:
         result += f'sed_auto_builder_{name}_visible_sgui = {{ scope = country is_shown = {{ {base} has_variable = {option} }} }}\n'
     result += 'sed_private_control_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled sed_private_control_configured = yes } }\n'
+    result += 'sed_pm_external_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled sed_pm_external_managed = yes } }\n'
     for name, option, pt, en in PRIVATE_CONTROL_FLAGS:
         result += f'sed_private_control_{name}_visible_sgui = {{ scope = country is_shown = {{ is_player = yes has_variable = sed_enabled has_variable = {option} }} }}\n'
     previous = ''
@@ -2367,6 +2369,9 @@ def localization(language):
     pairs['sed_private_control_help'] = (
         'O Director só lê estas opções; quem as altera é o diário Private Constructions Management do outro mod. Restrição ligada impede o investidor privado de abrir prédio novo do ramo indicado, o que reduz a disputa com o plano. A fila privada continua contando para os guardas do Director, e a intervenção no investimento estrangeiro pode fazer o jogo recusar uma obra pública pedida aqui; a recusa aparece como falha da ação. O Director não muda nem cancela nada disso.',
         'The Director only reads these options; the other mod’s Private Constructions Management journal entry changes them. An enabled restriction stops private investors from opening new buildings in that branch, which reduces competition with the plan. The private queue still counts for the Director’s guards, and inbound investment policing may make the game refuse government work requested here; the refusal appears as an action failure. The Director changes and cancels none of this.')
+    pairs['sed_pm_external'] = (
+        'Auto-Apply PMs detectado: o Director não troca os métodos principais dos prédios que aquele mod já administra (botão do prédio ou do grupo ligado no diário dele). Fundações novas continuam recebendo a configuração inicial verificada. Desligue o botão lá para o Director voltar a modernizar aquele tipo. Esta leitura deixa o método com quem já o controla e não confirma o resultado do outro mod.',
+        'Auto-Apply PMs detected: the Director does not change main methods of buildings that mod already manages (its journal’s building or group button is on). New foundations still receive the verified initial setup. Turn that button off for the Director to modernize that type again. This reading leaves the method with whoever already controls it and does not confirm the other mod’s result.')
     pairs['sed_auto_current_queue_control'] = (
         'A fila privada ocupada conta para os guardas do Director mesmo com o controle ativo. Se ela foi aberta por prédios que o Director já planeja, restrinja a autoexpansão no diário Private Constructions Management e aguarde a fila esvaziar. O Director não altera essas opções nem cancela obras.',
         'An occupied private queue counts for the Director’s guards even with the control active. If it was opened for buildings the Director already plans, restrict expansion in the Private Constructions Management journal entry and wait for the queue to empty. The Director changes neither the options nor existing projects.')

@@ -1,5 +1,10 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.28, a modernização de métodos de produção cede os prédios que o
+Auto-Apply PMs já administra (botão do prédio ou do grupo ligado), em vez de
+disputar o mesmo grupo de PM. A auditoria dos mods instalados está em
+`docs/COMPATIBILITY.md`.
+
 Na 0.7.27, o painel lê o Controllable Private Construction — o mod de controle
 da construção privada que o jogador mantém ativo — e lista apenas quais
 restrições estão ligadas. É leitura: o Director não altera essas opções, não

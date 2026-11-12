@@ -1267,6 +1267,7 @@ sed_auto_builder_admin_visible_sgui = { scope = country is_shown = { is_player =
 sed_auto_builder_tax_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic has_variable = zw_var_scsab_gov_admin_for_tax } }
 sed_auto_builder_aroai_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic has_variable = aroai_autobuild } }
 sed_private_control_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled sed_private_control_configured = yes } }
+sed_pm_external_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled sed_pm_external_managed = yes } }
 sed_private_control_incorporated_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled has_variable = zw_var_auto_invest_incorporated_states_only } }
 sed_private_control_profitable_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled has_variable = zw_var_auto_invest_profitable_buildings_only } }
 sed_private_control_existing_manufacture_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled has_variable = zw_var_auto_invest_existing_buildings_only_manufacture } }
