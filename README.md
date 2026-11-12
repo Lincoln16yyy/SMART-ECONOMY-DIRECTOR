@@ -1,5 +1,71 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.30, quando a escassez de um bem não tem produtor no país e nenhum
+estado pode receber a fundação, o Automático amplia um Centro de Comércio
+existente ou funda o primeiro para comprar capacidade de comércio. É o último
+recurso do plano: não abre rota, não mexe em tarifa ou subvenção e não constrói
+sob Isolacionismo nem em estado com infraestrutura negativa.
+
+Na 0.7.29, o evento de escassez ensina o caminho de importação da 1.9+:
+Centro de Comércio e capacidade de comércio, tarifa ou subvenção no painel do
+bem, cláusula Transferência de Bens em tratado e o bloqueio do Isolacionismo.
+Também corrige a localização em inglês, que era gerada em português desde que a
+bandeira de idioma passou a ser reutilizada como rótulo de laço.
+
+Na 0.7.28, a modernização de métodos de produção cede os prédios que o
+Auto-Apply PMs já administra (botão do prédio ou do grupo ligado), em vez de
+disputar o mesmo grupo de PM. A auditoria dos mods instalados está em
+`docs/COMPATIBILITY.md`.
+
+Na 0.7.27, o painel lê o Controllable Private Construction — o mod de controle
+da construção privada que o jogador mantém ativo — e lista apenas quais
+restrições estão ligadas. É leitura: o Director não altera essas opções, não
+injeta regras `can_build_*` e não cancela obras. Quando a fila privada bloqueia
+o Automático, o painel aponta o diário daquele mod como caminho para restringir
+a autoexpansão.
+
+Na 0.7.26, a unidade salarial usada no retorno é por família de prédio, com
+queda para a média nacional quando a família não tem amostra saudável. O
+jogo não expõe qualificação nem salário por profissão, então esses filtros
+continuam aproximados por ocupação e contratações falhas.
+
+Na 0.7.25, a meta de escassez que volta em anos consecutivos vira plurianual:
+ganha prioridade extra, fica visível enquanto a falta persistir e reinicia se
+passar um ano sem escassez (limite de cinco anos).
+
+Na 0.7.24, o painel mostra quantos projetos do governo e quantos privados
+estão na fila, ao lado dos níveis. O autor de cada item não é exposto pelo
+script, então o Director não afirma quem enfileirou a obra.
+
+Na 0.7.23, o painel compara a referência de semanas da fila com a duração
+restante medida pela própria engine (`construction_queue_government_duration`,
+arredondada para cima em faixas), sem trocar a reserva de ouro.
+
+Na 0.7.22, o evento de escassez mostra os pedidos de compra e venda do bem no
+mercado, para você medir a lacuna antes de abrir a importação. Os números vêm
+direto do mercado; o Director não estima custo, frete nem comboios.
+
+Na 0.7.21, quando a escassez de um bem não tem expansão local elegível nem
+pedido pendente, o Director dispara um evento próprio com prazo e três opções:
+reconhecer a importação (silêncio de 12 meses), recalcular o plano agora ou
+adiar por 24 meses. O evento orienta; abrir rota comercial é ação do jogador,
+porque o script não pode fazê-lo na 1.15.
+
+Na 0.7.20, o painel declara que leis, imposto de consumo e gasto discricionário
+ficam fora do Director e reconhece o Smart Government Advisor quando instalado,
+sem repetir as recomendações de leis dele.
+
+Na 0.7.19, o painel mostra a unidade salarial observada (ou o fallback
+material) usada pelas decisões de oferta e pela pontuação de PMs.
+
+Na 0.7.18, a pontuação de modernização e de recuperação de PMs desconta a
+folha salarial da mudança. Um par materialmente positivo pode ser descartado
+quando a troca adiciona emprego ponderado.
+
+Na 0.7.17, a decisão de oferta desconta a folha salarial observada nos prédios
+saudáveis. A elegibilidade, a preferência entre fornecedores e o plano usam o
+retorno após salários, com a margem material como referência de reserva.
+
 Na 0.7.16, as reservas e guardas fiscais usam receitas fixas menos saldo
 operacional para medir despesas fixas. A proteção dos salários militares
 reconhece os papéis diplomáticos no escopo de país.
@@ -167,8 +233,9 @@ do Advisor admite também financiamento por reservas com a cobertura descrita
 em PLANNING.md. Impostos e salários civis têm um ajuste automático por mês
 de calendário e restauração dos níveis anteriores ao sair do modo.
 
-O plano compara infraestrutura e produtores existentes de madeira, ferro,
-carvão, cereais, tecido, ferramentas, mantimentos e roupas. Também identifica
+O plano compara infraestrutura e produtores existentes de doze bens — madeira,
+ferro, carvão, cereais, tecido, ferramentas, mantimentos, roupas, armas leves,
+artilharia, munição e papel —, além de ferrovia e do setor de construção. Também identifica
 escassez desses bens sem o tipo de produtor atendido e objetivos administrativos
 ou de energia. A autorização do executor externo permite que ele avalie
 investimentos além do escopo das expansões próprias do Director.
@@ -190,7 +257,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.6.23.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.7.30.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 

@@ -1,22 +1,357 @@
 # Contexto de continuidade
 
-Última entrega do mod — 0.7.16 instalada com jogo fechado e 14 arquivos
-conferidos. Backup `sed_backups/mod_before_0.7.16_20261111_121819_447354`.
-Código — despesas fixas derivadas de receitas e saldo fixos. Prontidão militar
-usa papéis diplomáticos no escopo de país. Variáveis e snapshots preservados.
-Teste sintético — 352 testes aprovados.
-Estático — geração consistente e validação local 1.15 aprovadas. Tiger 1.19.0
-executado. Os nove apontamentos de leitura removida e o de escopo foram retirados.
-O Tiger declara suporte até 1.13.5. Restam três campos de diário aceitos pelo
-vanilla 1.15, além de avisos de estilo. A evidência está na seção desta entrega.
-Carregou e Campanha — leituras da 0.7.16 e fundação da 0.7.15 seguem NÃO VERIFICADO.
+Última entrega do mod — 0.7.30 gerada e testada; instalação e campanha pendentes.
+Código — novo último recurso do Automático: quando um bem em escassez não tem
+produtor no país (`var:sed_plan_missing_<bem> = 1`, escopo país) e nenhum estado
+pode receber a fundação, o Director amplia um Centro de Comércio existente ou
+funda o primeiro, comprando capacidade de comércio. Não abre rota, não altera
+tarifa/subvenção, não constrói sob Isolacionismo nem em estado com
+`infrastructure_delta < 0`. Respeita fila privada, orçamento (100 pontos) e uma
+tentativa por mês; conclusão inferida pelo nível. Antes: o evento de escassez
+ensina a importação da 1.9+ e a localização inglesa foi corrigida (coluna de
+idioma e `\n` escapado). Antes: cessão de PM ao Auto-Apply PMs; leitura do
+Controllable Private Construction; unidade salarial por família; meta
+plurianual; duração da fila pela engine. Comércio: script não abre rota
+(removido na 1.9); autor/investidor e qualificações não têm primitiva legível.
+Teste sintético — 394 testes aprovados.
+Documentação — README e STATUS foram sincronizados com a 0.7.30; a lista de
+lacunas herdada da 0.6.26 estava errada em PMs, fundação de prédios e salários
+militares, e o catálogo já tem doze bens (papel desde a 0.7.14). Nenhuma
+mudança de comportamento nesta sincronização.
+Estático — geração consistente e validação local 1.15 aprovadas. Tiger 1.19.0:
+mesmos três campos de diário do vanilla 1.15 e 938 avisos (colocação de chaves
+no GUI e OR de item único).
+Carregou e Campanha — Centro de Comércio, retorno com salários, unidade por
+estado, painel e pontuação de PMs seguem NÃO VERIFICADO.
 
 Ler `AGENTS.md`, `docs/agent/vic3-modding/SKILL.md` e suas referências.
-O ambiente registra o binário Tiger em `dist/tools/`, sua versão e o comando.
-A pasta de documentação exportada do jogo continua ausente.
-Próximo passo — avaliação econômica de custos e retorno, incluindo salários,
-usando primitivas aceitas pelo Tiger e confrontadas com o vanilla. Confirmar
-em campanha as leituras, restauração, save/reload e a fundação básica.
+O ambiente registra o Tiger, o resultado da sondagem de comércio e o Smart
+Government instalado (1.0.0, esquema 2, variáveis `sg_*`). A pasta de
+documentação exportada do jogo continua ausente.
+Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.30 (Centro de
+Comércio como último recurso, Isolacionismo e estado com infraestrutura
+negativa), 0.7.29 (evento de importação com o novo texto, nos dois idiomas),
+0.7.28 (PM cedido
+com o Auto-Apply PMs ligado), 0.7.27 (seção de controle privado só com o outro
+mod ativo), depois 0.7.23 (duração da
+fila), 0.7.21 (evento de importação) e 0.7.17–0.7.19: unidade no painel, desvio
+de fornecedor, pontuação de PMs, save/reload e limpeza. Depois retomar as
+leituras fiscais e a fundação básica.
+
+## 0.7.30 — Centro de Comércio como último recurso
+
+Código — `sed_trade_center_needed` (país) exige bem em escassez com
+`sed_plan_missing_<bem> = 1`, nenhuma candidata local elegível, nenhum pedido
+próprio pendente e ausência de `law_type:law_isolationism`.
+`sed_trade_center_candidate_eligible` (estado) exige `is_incorporated`,
+`infrastructure_delta >= 0`, `can_construct_building = building_trade_center`,
+sem pedido pendente, e ou nenhum Centro de Comércio, ou um com
+`level_after_queued_constructions <= level`, ocupação ≥ 50% e sem contratação
+falha. O despachante tenta a rota só depois de todas as candidatas locais falharem
+(status 15) e `sed_run_trade_center_approval` confirma pela contagem de níveis do
+governo. `sed_refresh_trade_center` roda no pulso mensal e infere conclusão pelo
+nível. Orçamento: `TRADE_CENTER_POINTS = 100`
+(`required_construction = construction_cost_very_low`,
+`common/script_values/building_values.txt:7` no 1.15 instalado).
+
+Descartes decididos por teste — a primeira versão usava
+`sed_<bem>_supply_demand`, e 33 testes existentes quebraram: ela também cobre a
+oportunidade de preço (bem caro sem escassez) e dispara com produtor apenas
+esperando mão de obra ou insumo. Passou-se a exigir `sed_plan_missing_<bem>`,
+que é exatamente "sem produtor no país", e `infrastructure_delta >= 0`, guarda
+que o resto do mod já usa. Nenhum teste antigo foi alterado.
+
+Teste sintético — 394 aprovados; 7 novos em `tests/test_trade_capacity.py`:
+fundação sem produtor, expansão lendo o nível, bloqueio por Isolacionismo,
+conclusão inferida no pulso, reserva de 100 pontos no orçamento, ausência de
+compra de capacidade com produtor existente e texto do painel nos dois idiomas.
+
+Estático — geração consistente, validação local 1.15 aprovada e Tiger 1.19.0
+com 0 fatais, os mesmos 3 `unknown-field` de diário do vanilla 1.15 e 938
+avisos.
+
+NÃO VERIFICADO na engine: se o nível do Centro de Comércio realmente aumenta a
+capacidade de comércio usada pelo Mercado Mundial, se a obra aparece na fila
+do governo em campanha, se o fallback respeita o orçamento como esperado e como
+o painel se comporta após save/reload.
+
+## 0.7.29 — Evento de importação ensina o caminho da 1.9+ e loc em inglês
+
+Relato do jogador: recebeu o evento de escassez de papel, não sabia como
+importar, construiu a fábrica e descobriu depois que a 1.9 acabou com rota
+manual. A descrição só dizia "abra a importação pela interface de comércio".
+
+Código — a descrição do evento agora lista o caminho com termos conferidos no
+jogo instalado 1.15: `building_trade_center` / `concept_trade_capacity`,
+`concept_subventions` e `concept_tariffs`, `goods_transfer` (cláusula de
+tratado) e `law_isolationism` com `country_disallow_trade_bool = yes`. A opção
+passou a ser "Vou tentar importar pelo Mercado Mundial".
+
+Dois defeitos de localização achados pelo teste novo: (a) `pt` era reutilizada
+como rótulo em `for policy, pt, en` e `for good, pt, en`, então
+`localization('english')` gravava português — o arquivo inglês estava errado
+desde que esses laços entraram; agora a coluna é fixada antes dos laços.
+(b) Quebras de parágrafo saíam como newline real, inválido em loc; agora são
+`\n` escapado.
+
+Teste sintético — 387 aprovados; três novos: termos do caminho de importação
+nos dois idiomas, coluna de idioma correta (inglês sem "Ignorar", português sem
+"Approve") e uma entrada por linha com `\n` escapado.
+
+NÃO VERIFICADO na engine: exibição do texto longo do evento e das opções nos
+dois idiomas; se as quebras escapadas aparecem corretamente no jogo.
+
+## 0.7.28 — Cessão de PM ao Auto-Apply PMs
+
+Auditoria dos 12 mods instalados: `docs/COMPATIBILITY.md`. Achados que mudam
+código: Auto-Apply PMs (3353797125) mexe nos mesmos grupos de PM principais que
+o Director moderniza, com um botão por prédio e botões de grupo
+(`..._group_farms`, `..._group_mines`, `..._group_plantations`); OGAS for CWE é
+de 1.13 + Cold War Era e não deve rodar nesta campanha; Government
+Administration Auto Expand faz `REPLACE` inteiro do prédio vanilla e perde
+`ai_value`.
+
+Código — `EXTERNAL_PM_VARIABLES` em `tools/production_methods.py` mapeia prédio
+→ botões do outro mod; a elegibilidade de modernização/recuperação ganhou
+`owner = { NOT = { has_variable = ... } }` (a elegibilidade roda em escopo de
+estado, então a variável de país precisa de `owner`). `sed_pm_external_managed`
+e a linha `sed_pm_external` no painel avisam quando há cessão. Fundações novas
+continuam recebendo a configuração inicial.
+
+Teste sintético — 384 aprovados; dois novos cobrem a cessão pelo botão do
+prédio e o alcance dos botões de grupo (fazendas/plantações, sem vazar para
+serraria).
+
+NÃO VERIFICADO na engine: se a cessão evita de fato a disputa de PM em campanha.
+
+## 0.7.27 — Leitura do controle de construção privada
+
+O jogador mantém ativo o Controllable Private Construction (3278770055). Ele
+injeta `can_build_private`/`can_build_government` por prédio com
+`INJECT_OR_CREATE:` e substitui `default_auto_expand_rule` com `REPLACE:`, e
+publica uma variável de país por botão do diário dele.
+
+Código — `sed_private_control_configured` (OR de 12 `has_variable`) e uma seção
+no painel com uma linha por restrição ligada. `sed_auto_current_queue_control`
+aparece quando a fila privada bloqueia o Automático e o controle está ativo.
+
+Por que não controlar de fato: injetar `can_build_private` nos mesmos prédios
+colidiria com a injeção do outro mod (mesma chave, ordem de carregamento
+define o vencedor) e quebraria os botões dele em silêncio. O Director só lê.
+A escrita dessas variáveis continua proibida pelo validador (variável externa).
+
+Teste sintético — 382 aprovados; quatro novos cobrem a lista das 12 variáveis,
+a ausência delas em `sed_competing_builder_configured` (ler não bloqueia o
+executor próprio), a visibilidade da seção/aviso e a localização nos dois idiomas.
+
+NÃO VERIFICADO na engine: se a leitura aparece em campanha, se a recusa de obra
+pela intervenção no investimento estrangeiro surge como falha de ação e se a seção
+some ao desativar o outro mod.
+
+## 0.7.26 — Unidade salarial por família de prédio
+
+Sondagem em `/tmp/sed_dur` com Tiger 1.19.0: `pop_qualifications`,
+`state_pop_qualifications`, `has_pop_qualifications`, `wages`, `wage_rate` e
+`average_wage` são `unknown token`. Só existe `average_sol` para leitura social e
+`set_pop_qualifications` como efeito (escrita). Portanto qualificação e salário
+por profissão não são filtráveis por script; o proxy continua sendo
+`occupancy` e `has_failed_hires`, já usados desde as versões anteriores.
+
+Código — `sed_refresh_investment_wages` passou a acumular custo e empregos por
+família de prédio e a publicar `sed_investment_wage_unit_<prédio>` /
+`_known_<prédio>` (país e estado). `sed_investment_<prédio>_return` usa a amostra
+da família quando existe; caso contrário cai na média nacional, que agora o
+`sed_investment_<prédio>_return_national` isola para teste.
+
+Teste sintético — 378 aprovados; um novo compara a amostra da família com a
+média nacional e confere o fallback.
+
+NÃO VERIFICADO na engine: se a amostra por família melhora a escolha de fornecedor
+em campanha real.
+
+## 0.7.25 — Meta plurianual de escassez
+
+Código — a meta anual da 0.6.4 continua; quando o bem volta a ser meta em anos
+consecutivos, `sed_<bem>_goal_streak` sobe (máx. 5) e `sed_<bem>_meta_since`
+guarda o primeiro ano. Estreak ≥ 2 dá +15 de prioridade e mantém a linha da meta
+visível enquanto `sed_<bem>_short_months` existir; um ano pulado reinicia a
+contagem. `sed_prev_year` (= `year - 1`) existe porque o validador do projeto
+rejeita aritmética inline em igualdade de variável.
+
+Teste sintético — 377 aprovados; dois novos cobrem a continuidade entre 1836/1837
+(pontuação 195 → 210) e o reinício após ano pulado com teto em 5.
+
+NÃO VERIFICADO na engine: exibição da meta plurianual em janeiro e peso de +15
+na decisão real.
+
+## 0.7.24 — Contagem de projetos e limite de autoria
+
+Sondagem em `/tmp/sed_dur` com Tiger 1.19.0: `num_queued_constructions`,
+`num_queued_government_constructions` e `num_queued_private_constructions` são
+triggers de **país** (contam projetos, não níveis). `is_under_construction`
+existe em escopo de prédio. `is_government_construction`, `is_privately_constructed`
+e `construction_owner_is_government` são `unknown token`, e `construction_queue_size`
+o Tiger 1.19.0 ainda não conhece.
+
+Conclusão — não há primitiva para saber o autor/investidor de um item da fila.
+O mod continua reconciliando por `level_after_queued_constructions` e marcas por
+estado; a 0.7.24 só acrescenta o que a engine oferece: as contagens de projetos
+do governo e privados no painel, ao lado dos níveis.
+
+## 0.7.23 — Duração real da fila no orçamento direto
+
+Evidência — `common/trigger_localization/00_trigger_localization.txt` registra
+`construction_queue_duration`, `construction_queue_government_duration` e
+`construction_queue_private_duration`; `triggers_l_english.yml` diz "Remaining
+duration of construction queue is X weeks". Sondagem em `/tmp/sed_dur` com o
+Tiger 1.19.0: zero erros, inclusive comparação contra script value à direita.
+
+Código — o script não consegue ler o número, então `sed_refresh_direct_budget`
+usa uma cadeia `if/else_if` guardada por `> 0` e publica
+`sed_build_budget_queue_weeks_engine` arredondado para cima em faixas (2, 4, 6,
+8, 12, 16, 20, 26, 32, 40, 52, 78, 104, 156, 208; acima disso 260). 0 significa
+fila do governo vazia. A linha `sed_build_budget_project` do painel mostra as
+duas leituras: referência do plano e leitura da engine.
+
+Teste sintético — 374 aprovados; dois novos cobrem nove durações nas faixas e a
+presença da variável nos dois idiomas.
+
+NÃO VERIFICADO na engine: se o trigger aceita `> 0` em país sem fila de governo e
+se a faixa exibida bate com a barra de obras.
+
+## 0.7.22 — Pedidos do mercado no evento de importação
+
+Antes de disparar, `sed_check_import_notices` grava
+`sed_import_notice_<bem>_buy`/`_sell` a partir de `market_goods_buy_orders` e
+`market_goods_sell_orders`. A descrição do evento imprime os dois valores com
+`[ROOT.GetCountry.MakeScope.Var('…').GetValue|D]` — padrão verificado em
+`negotiation.1.d6` do vanilla. A diferença indica o tamanho da lacuna; custo,
+frete e comboios não são estimados. Unidade/período dos pedidos (semana) e a
+exibição em evento seguem NÃO VERIFICADO na engine.
+
+## 0.7.21 — Evento consultivo de importação
+
+Código — `sed_check_import_notices` roda no pulso mensal e, para cada um dos
+doze bens, dispara `sed_pulse.2..13` quando há escassez (`sed_<bem>_supply_demand`)
+e nenhum estado tem candidata elegível nem pedido pendente. O evento é visível,
+tem `duration = 3`, ícone vanilla `event_industry.dds` e três opções inline
+(sem `effect = {}`, como no vanilla `1848.1`): "vou abrir a rota" (cooldown 12
+meses), "recalcular o plano agora" (`sed_refresh_diagnostics`, padrão) e "só me
+avise em 2 anos" (24 meses). O `immediate` grava 6 meses de cooldown em
+`sed_import_notice_<bem>_month`, variável limpa ao desativar.
+
+Evidência — sondagem com Tiger: `create_trade_route` removido na 1.9;
+`add_trade_route_level`, `cancel_trade_route` e `establish_trade_route` são
+tokens desconhecidos. Portanto o evento orienta, não age. `duration` em meses e
+a escolha automática de opção ao expirar seguem NÃO VERIFICADO; as três opções
+são inofensivas por desenho.
+
+## 0.7.20 — Leis delegadas ao Smart Government
+
+Código — o painel ganhou duas linhas: `sed_laws_scope` (leis, imposto de
+consumo e gasto discricionário ficam fora do Director) e `sed_laws_external`
+(exibida só quando o país tem `sg_enabled`), que informa que o Smart Government
+Advisor está detectado e que as recomendações dele não são repetidas aqui.
+Visibilidade por `sed_laws_external_visible_sgui`, em escopo de país. Nenhum
+efeito novo altera leis.
+
+Evidência — li o mod instalado em
+`mod/Smart Government Advisor` (1.0.0, `supported_version 1.15.*`). Ele define
+`sg_enabled`, `sg_schema_version` (esquema 2), `sg_top_1..3_law` com ids
+estáveis de `data/law_ids.json`, `sg_ignored_*` e um diário próprio. O Director
+só lê `sg_enabled`; não lê `sg_top_*` porque traduzir o id exigiria copiar o
+`law_ids.json` deles, que pode mudar entre versões.
+
+Teste sintético — regressão nova cobre as duas linhas, a visibilidade condicional
+(sem `sg_enabled` fica oculta) e a ausência de `activate_law` nos efeitos gerados.
+
+Não verificado — exibição do painel com os dois mods na engine e interação
+com os diários. Roteiro curto em `docs/MANUAL_RUNTIME_TEST.md`.
+
+## 0.7.19 — Unidade salarial visível no painel
+
+Código — o painel do diário ganhou duas linhas fixas e três chaves de
+texto PT/EN: `sed_investment_policy` (regra de retorno), `sed_investment_wage`
+(unidade nacional por emprego ponderado, visível quando
+`sed_investment_wage_known = 1`) e `sed_investment_wage_unknown` (fallback
+material). Visibilidade por `sed_investment_wage_visible_sgui` e
+`sed_investment_wage_unknown_visible_sgui`, ambas em escopo de país.
+A unidade mostrada é a média nacional; a leitura por estado continua interna.
+
+Evidência — comércio exterior não é scriptável na 1.15. Uma sondagem isolada
+(`create_trade_route` em mod de teste, Tiger 1.19.0) respondeu
+"`create_trade_route` was removed in 1.9 — replaced with world trade system".
+O item "comércio" da lista de lacunas fica como limitação de engine, não como
+pendência de implementação. No binário do jogo só restam comandos internos.
+
+Teste sintético — nova regressão verifica as duas linhas no GUI, a visibilidade
+e que a chave de fallback não referencia a variável da unidade.
+
+Não verificado — layout do painel na engine, formatação `|2` da unidade e
+comportamento após save/reload. Roteiro em `docs/MANUAL_RUNTIME_TEST.md`.
+
+## 0.7.18 — Salários na pontuação de modernização e recuperação
+
+Código — `tools/production_methods.py` calcula `wage_delta`, a diferença de
+`weighted_jobs` entre o método alvo e o atual de cada par estático. Na
+pontuação nacional de `sed_modernize_existing_industry` e de
+`sed_recover_existing_industry`, o ganho material continua escalado por nível
+e ocupação e passa a subtrair `wage_delta × nível × ocupação ×
+var:sed_investment_wage_unit` quando `sed_investment_wage_known = 1` e a troca
+adiciona emprego ponderado. A escolha global exige pontuação acima de zero,
+então um par materialmente positivo pode ser descartado. Sem amostra salarial
+do estado, a pontuação é a anterior.
+
+Não mudou — o filtro estático de pares, as guardas de ocupação, insumos,
+tecnologia, contratação, fila, pausa, limites mensais, reserva de insumos e
+o intervalo de três meses por prédio seguem iguais. A configuração inicial
+das fundações continua apenas material. Taxas por profissão e salário real
+pago não são modelados.
+
+Evidência — comparação com bloco de valor à direita é forma vanilla:
+`common/diplomatic_actions/30_fund_lobby.txt` usa `net_fixed_income >= { ... }`.
+`var:sed_investment_wage_unit` e `sed_investment_wage_known` são gerados pela
+0.7.17 em escopo de estado.
+
+Teste sintético — 2 regressões novas: unidade observada reduz a pontuação
+(200 − 250 × 0,2 = 150) e unidade alta zera a pontuação e impede a troca.
+
+Não verificado — ordem dos pares ainda é material; o ganho real da troca,
+o impacto em ocupação futura e a calibragem da unidade seguem pendentes.
+
+## 0.7.17 — Folha salarial observada no retorno do investimento
+
+Código — `sed_refresh_investment_wages` é chamado no fim de
+`sed_refresh_investment_prices`. Para cada prédio de estado próprio, com nível
+positivo, ocupação de ao menos 80%, sem contratação falha, sem escassez de
+insumos, não subsidiado, com `earnings > 0` e `weekly_profit <= earnings`,
+soma-se `earnings - weekly_profit` como folha salarial semanal e
+`pesos de emprego × nível × ocupação` como denominador. `sed_investment_wage_unit`
+guarda o gasto por emprego ponderado; cada estado usa a própria amostra quando
+existe e, senão, a média do país. `sed_investment_wage_known = 0` mantém a
+margem material anterior.
+
+Código — `sed_investment_<tipo>_return` desconta do valor material a folha
+prevista do novo nível: pesos da configuração ativa, quando o prédio existe, e
+pesos da configuração básica, quando é fundação. `data/employment_profiles.json`
+traz emprego e `weighted_jobs` por método de 17 tipos de prédio, extraídos de
+`common/production_methods` e dos `wage_weight` de `common/pop_types` locais.
+As elegibilidades, as preferências entre variantes e `sed_plan_<ação>_margin`
+passam a usar `_return`; o nome da variável do plano foi preservado.
+
+Evidência — `earnings` aparece como valor semanal ao lado de salários em
+`TOOLTIP_BUILDING_HEALTH_WORLD` e em `EARNINGS_BREAKDOWN`, ambos da
+localização vanilla; `weekly_profit` consta em `TRIGGER_WEEKLY_PROFIT` e em
+diários vanilla. `is_subsidized`, `occupancy`, `has_failed_hires` e
+`building_has_goods_shortage` têm uso vanilla no escopo de prédio.
+`owner.var:` é usado em `04_country_specific_ideological_movements.txt`.
+
+Não verificado — a folha observada inclui o que a engine classificar como
+lucro e pode divergir de salário pago; `earnings` semanal só está documentado
+pela localização; a unidade é uma média nacional/estadual, não salário por
+profissão. A renda do novo nível usa 75% da receita e 125% dos insumos, então
+o retorno é conservador e pode bloquear obras viáveis. Sem amostra saudável,
+o comportamento antigo é retomado. Confirmação em campanha pendente.
 
 ## 0.7.16 — Leituras fiscais e prontidão verificadas
 

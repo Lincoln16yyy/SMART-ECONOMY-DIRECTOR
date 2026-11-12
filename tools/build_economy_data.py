@@ -212,6 +212,54 @@ def possible_output_index(definitions):
 
 
 
+def export_employment_profiles(game, output):
+    """Extrai emprego e pesos salariais apenas das definições vanilla."""
+    profiles = json.loads((Path(__file__).resolve().parents[1] /
+                           'data/founding_production_methods.json').read_text())
+    definitions = {category: defaultdict(list) for category in CATEGORIES}
+    issues = []
+    read_layer(game, 'vanilla', 0, definitions, issues)
+    if issues:
+        raise ValueError(f'Falhas ao ler o vanilla para perfis de emprego: {issues}')
+    weights = {}
+    sources = {}
+    for path in sorted((game / 'common/pop_types').glob('*.txt')):
+        for entry in parse(path.read_text(encoding='utf-8-sig')):
+            if not isinstance(entry.value, list):
+                continue
+            weight = one(entry.value, 'wage_weight')
+            if weight is not None:
+                weights[entry.key] = float(weight)
+                sources[path.relative_to(game).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
+    buildings = {}
+    for building, groups in profiles.items():
+        methods = {}
+        for group in groups:
+            for method in group['alternatives']:
+                layers = definitions['production_methods'][method]
+                if len(layers) != 1 or layers[0]['operation'] != 'definition':
+                    raise ValueError(f'Definição vanilla ambígua para {method}')
+                layer = layers[0]
+                employment = {}
+                for modifiers in layer['fields']['building_modifiers'].values():
+                    for key, amount in modifiers.items():
+                        if key.startswith('building_employment_') and key.endswith('_add'):
+                            profession = key[len('building_employment_'):-len('_add')]
+                            employment[profession] = employment.get(profession, 0) + float(amount)
+                methods[method] = {
+                    'employment': employment,
+                    'jobs': sum(employment.values()),
+                    'weighted_jobs': sum(amount * weights[profession] for profession, amount in employment.items()),
+                }
+                sources[layer['path']] = layer['source_sha256']
+        buildings[building] = methods
+    version = json.loads((game.parent / 'launcher/launcher-settings.json').read_text(encoding='utf-8-sig')).get('rawVersion')
+    data = {'game_version': version, 'wage_weights': weights,
+            'sources': sources, 'buildings': buildings}
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--game', type=Path, required=True, help='Victoria 3/game directory')
@@ -219,7 +267,10 @@ def main():
                         help='Victoria 3 user data directory containing content_load.json and mod/')
     parser.add_argument('--output', type=Path, required=True,
                         help='Local output JSON path (review before sharing)')
+    parser.add_argument('--employment-output', type=Path, help='Perfis vanilla de emprego e pesos salariais')
     args = parser.parse_args()
+    if args.employment_output:
+        export_employment_profiles(args.game, args.employment_output)
     report = build(args.game, args.user_dir)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')

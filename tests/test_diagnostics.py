@@ -4,6 +4,7 @@ import unittest
 import zipfile
 
 from tools.build_mod import ROOT, ACTION_NAMES, INPUT_DEPENDENCIES, STATE_VARIABLES, SUPPLY_DIAGNOSTICS, SUPPLY_TARGETS, country_variables, outputs, runtime_variables
+from tools import investment
 from tools.package_mod import package
 from tools.pdx_script import parse, child, walk
 from tools.validate import validate
@@ -16,6 +17,34 @@ def script_definitions():
         if name.startswith('common/'):
             result.update((entry.key, entry.value) for entry in parse(data.decode('utf-8-sig')))
     return result
+
+
+class LocalizationTests(unittest.TestCase):
+    def test_each_language_file_uses_its_own_column(self):
+        # Until 0.7.29 the language flag was reused as a loop label, so the
+        # English file was generated with Portuguese text.
+        english = outputs()['localization/english/sed_l_english.yml'].decode('utf-8-sig')
+        portuguese = outputs()['localization/braz_por/sed_l_braz_por.yml'].decode('utf-8-sig')
+        self.assertNotIn('Ignorar', english)
+        self.assertNotIn('Approve', portuguese)
+        self.assertIn('sed_ignore_recommendation:0 "Ignore in this state"', english)
+        self.assertIn('sed_ignore_recommendation:0 "Ignorar neste estado"', portuguese)
+        english_lines = english.splitlines()[1:]
+        portuguese_lines = portuguese.splitlines()[1:]
+        self.assertEqual(len(english_lines), len(portuguese_lines))
+        differing = sum(1 for left, right in zip(english_lines, portuguese_lines) if left != right)
+        self.assertGreater(differing, len(english_lines) // 4)
+
+    def test_entries_stay_on_one_line_with_escaped_newlines(self):
+        # A literal newline inside a quoted entry breaks the game's parser.
+        for path in ('localization/english/sed_l_english.yml',
+                     'localization/braz_por/sed_l_braz_por.yml'):
+            text = outputs()[path].decode('utf-8-sig')
+            for line in text.splitlines()[1:]:
+                with self.subTest(path=path, line=line[:60]):
+                    self.assertTrue(line.startswith(' ') and ':0 "' in line
+                                    and line.endswith('"'), line)
+        self.assertIn('\\n\\n', outputs()['localization/braz_por/sed_l_braz_por.yml'].decode('utf-8-sig'))
 
 
 class DiagnosisTests(unittest.TestCase):
@@ -406,6 +435,21 @@ class DiagnosisTests(unittest.TestCase):
                 self.assertTrue({'fontsize_large', 'fontsize_xxl'} & set(styles))
                 self.assertEqual(child(entry.value, 'multiline'), 'yes')
                 self.assertEqual(child(entry.value, 'minimumsize'), child(entry.value, 'maximumsize'))
+
+    def test_law_guidance_is_delegated_to_the_external_advisor(self):
+        gui = outputs()['gui/journal_entry_widgets/sed_diagnostics.gui'].decode('utf-8-sig')
+        self.assertIn('text = "sed_laws_scope"', gui)
+        self.assertIn('text = "sed_laws_external"', gui)
+        definitions = script_definitions()
+        shown = child(definitions['sed_laws_external_visible_sgui'], 'is_shown')
+        c = Country(definitions)
+        c.variables['sed_enabled'] = True
+        self.assertFalse(c.condition(shown, c.country_scope()))
+        c.variables['sg_enabled'] = True
+        self.assertTrue(c.condition(shown, c.country_scope()))
+        # The Director never enacts laws; that stays with Smart Government/the player.
+        self.assertNotIn('activate_law',
+                         outputs()['common/scripted_effects/sed_effects.txt'].decode('utf-8-sig'))
 
     def test_recommendation_cards_grow_with_content_and_precede_diagnostics(self):
         text = outputs()['gui/journal_entry_widgets/sed_diagnostics.gui'].decode('utf-8-sig')
@@ -1154,8 +1198,12 @@ class DiagnosisTests(unittest.TestCase):
         self.assertNotIn('sed_railway_request_pending', target['variables'])
 
     def test_state_variables_are_separate_from_the_country_cleanup_registry(self):
+        # Wage readings live in both scopes; every other state variable is state-only.
+        shared = set(investment.WAGE_VARIABLES)
         self.assertEqual(set(runtime_variables()) - set(country_variables()),
-                         set(STATE_VARIABLES))
+                         set(STATE_VARIABLES) - shared)
+        self.assertLessEqual(shared, set(country_variables()))
+        self.assertLessEqual(shared, set(STATE_VARIABLES))
 
     def test_construction_candidate_requires_staffed_sector_and_free_queue(self):
         c = self.country()

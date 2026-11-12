@@ -50,12 +50,13 @@ def construction_sector(level=1, occupancy=1, failed_hires=False,
 
 
 def building(kind, level=1, occupancy=1, failed_hires=False, shortage=False,
-             queued_levels=0):
+             queued_levels=0, earnings=0, weekly_profit=0, subsidized=False):
     return dict(building=kind, level=level,
                 level_after_queued_constructions=level + queued_levels,
                 occupancy=occupancy, has_failed_hires=failed_hires,
                 building_has_goods_shortage=shortage,
-                __scope__=BUILDING)
+                earnings=earnings, weekly_profit=weekly_profit,
+                is_subsidized=subsidized, __scope__=BUILDING)
 
 
 class Country:
@@ -68,6 +69,7 @@ class Country:
                                 'modifier:country_max_weekly_construction_progress_add': 25},
                              num_queued_government_constructions=2, num_queued_private_constructions=1,
                              construction_queue_num_queued_government_levels=2,
+                             construction_queue_government_duration=0,
                              construction_queue_num_queued_private_levels=0,
                              military_expenses=0, military_expenses_share=0, is_at_war=False,
                              bureaucracy=0, year=1836, month=0, is_player=True, in_default=False,
@@ -240,6 +242,8 @@ class Country:
             return entry.value in scope.get('production_methods', [])
         if key == 'has_technology_researched':
             return entry.value in self.readings.get('technologies', [])
+        if key == 'has_law':
+            return entry.value.split(':', 1)[-1] in self.readings.get('laws', [])
         if key == 'has_variable':
             return entry.value in self.variables_for(scope)
         if key == 'has_journal_entry':

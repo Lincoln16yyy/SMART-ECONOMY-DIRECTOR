@@ -1,7 +1,7 @@
 """Regressions for the direct executor's material stress benchmark."""
 import unittest
 
-from tools.build_mod import SUPPLY_TARGETS
+from tools.build_mod import SUPPLY_TARGETS, outputs
 from tools.construction_budget import BASE_PRICES, PROFILES
 from test_diagnostics import script_definitions
 from script_harness import Country, building, construction_sector, railway, state
@@ -190,6 +190,29 @@ class ConstructionBudgetTests(unittest.TestCase):
         c.run('sed_refresh_direct_budget')
         self.assertEqual(c.variables['sed_build_budget_queue_weeks'], 0)
         self.assertFalse(c.condition(c.definitions['sed_direct_budget_safe'], c.country_scope()))
+
+    def test_engine_queue_duration_is_rounded_up_to_a_week_band(self):
+        c = self.c
+        for duration, expected in ((0, 0), (1, 2), (3, 4), (7, 8), (9, 12),
+                                   (30, 32), (52, 52), (53, 78), (500, 260)):
+            c.readings['construction_queue_government_duration'] = duration
+            c.run('sed_refresh_direct_budget')
+            self.assertEqual(c.variables['sed_build_budget_queue_weeks_engine'], expected,
+                             f'duration {duration}')
+
+    def test_engine_project_counts_distinguish_government_and_private_work(self):
+        c = self.c
+        c.readings['num_queued_government_constructions'] = 3
+        c.readings['num_queued_private_constructions'] = 2
+        c.run('sed_refresh_direct_budget')
+        self.assertEqual(c.variables['sed_build_budget_queue_projects'], 3)
+        self.assertEqual(c.variables['sed_build_budget_queue_private_projects'], 2)
+
+    def test_panel_text_reports_the_engine_queue_reading(self):
+        portuguese = outputs()['localization/braz_por/sed_l_braz_por.yml'].decode('utf-8-sig')
+        english = outputs()['localization/english/sed_l_english.yml'].decode('utf-8-sig')
+        for text in (portuguese, english):
+            self.assertIn("Var('sed_build_budget_queue_weeks_engine')", text)
 
     def test_tracked_founding_is_budgeted_before_the_building_exists(self):
         c = self.c

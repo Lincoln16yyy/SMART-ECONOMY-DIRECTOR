@@ -15,3 +15,410 @@ sed_pulse.1 = {
   }
  }
 }
+# Advisory: no local expansion is eligible, so importing is the remaining lever.
+sed_pulse.2 = {
+ type = country_event
+ placement = root
+ title = sed_import_notice_wood_title
+ desc = sed_import_notice_wood_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  set_variable = { name = sed_import_notice_wood_month value = { value = sed_live_month_key add = 6 } }
+ }
+ option = {
+  name = sed_import_notice_wood_option_trade
+  custom_tooltip = sed_import_notice_wood_option_trade_tt
+  ai_chance = { base = 40 }
+  set_variable = { name = sed_import_notice_wood_month value = { value = sed_live_month_key add = 12 } }
+ }
+ option = {
+  name = sed_import_notice_wood_option_plan
+  custom_tooltip = sed_import_notice_wood_option_plan_tt
+  default_option = yes
+  ai_chance = { base = 40 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_import_notice_wood_option_mute
+  custom_tooltip = sed_import_notice_wood_option_mute_tt
+  ai_chance = { base = 20 }
+  set_variable = { name = sed_import_notice_wood_month value = { value = sed_live_month_key add = 24 } }
+ }
+}
+
+# Advisory: no local expansion is eligible, so importing is the remaining lever.
+sed_pulse.3 = {
+ type = country_event
+ placement = root
+ title = sed_import_notice_iron_title
+ desc = sed_import_notice_iron_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  set_variable = { name = sed_import_notice_iron_month value = { value = sed_live_month_key add = 6 } }
+ }
+ option = {
+  name = sed_import_notice_iron_option_trade
+  custom_tooltip = sed_import_notice_iron_option_trade_tt
+  ai_chance = { base = 40 }
+  set_variable = { name = sed_import_notice_iron_month value = { value = sed_live_month_key add = 12 } }
+ }
+ option = {
+  name = sed_import_notice_iron_option_plan
+  custom_tooltip = sed_import_notice_iron_option_plan_tt
+  default_option = yes
+  ai_chance = { base = 40 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_import_notice_iron_option_mute
+  custom_tooltip = sed_import_notice_iron_option_mute_tt
+  ai_chance = { base = 20 }
+  set_variable = { name = sed_import_notice_iron_month value = { value = sed_live_month_key add = 24 } }
+ }
+}
+
+# Advisory: no local expansion is eligible, so importing is the remaining lever.
+sed_pulse.4 = {
+ type = country_event
+ placement = root
+ title = sed_import_notice_coal_title
+ desc = sed_import_notice_coal_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  set_variable = { name = sed_import_notice_coal_month value = { value = sed_live_month_key add = 6 } }
+ }
+ option = {
+  name = sed_import_notice_coal_option_trade
+  custom_tooltip = sed_import_notice_coal_option_trade_tt
+  ai_chance = { base = 40 }
+  set_variable = { name = sed_import_notice_coal_month value = { value = sed_live_month_key add = 12 } }
+ }
+ option = {
+  name = sed_import_notice_coal_option_plan
+  custom_tooltip = sed_import_notice_coal_option_plan_tt
+  default_option = yes
+  ai_chance = { base = 40 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_import_notice_coal_option_mute
+  custom_tooltip = sed_import_notice_coal_option_mute_tt
+  ai_chance = { base = 20 }
+  set_variable = { name = sed_import_notice_coal_month value = { value = sed_live_month_key add = 24 } }
+ }
+}
+
+# Advisory: no local expansion is eligible, so importing is the remaining lever.
+sed_pulse.5 = {
+ type = country_event
+ placement = root
+ title = sed_import_notice_grain_title
+ desc = sed_import_notice_grain_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  set_variable = { name = sed_import_notice_grain_month value = { value = sed_live_month_key add = 6 } }
+ }
+ option = {
+  name = sed_import_notice_grain_option_trade
+  custom_tooltip = sed_import_notice_grain_option_trade_tt
+  ai_chance = { base = 40 }
+  set_variable = { name = sed_import_notice_grain_month value = { value = sed_live_month_key add = 12 } }
+ }
+ option = {
+  name = sed_import_notice_grain_option_plan
+  custom_tooltip = sed_import_notice_grain_option_plan_tt
+  default_option = yes
+  ai_chance = { base = 40 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_import_notice_grain_option_mute
+  custom_tooltip = sed_import_notice_grain_option_mute_tt
+  ai_chance = { base = 20 }
+  set_variable = { name = sed_import_notice_grain_month value = { value = sed_live_month_key add = 24 } }
+ }
+}
+
+# Advisory: no local expansion is eligible, so importing is the remaining lever.
+sed_pulse.6 = {
+ type = country_event
+ placement = root
+ title = sed_import_notice_fabric_title
+ desc = sed_import_notice_fabric_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  set_variable = { name = sed_import_notice_fabric_month value = { value = sed_live_month_key add = 6 } }
+ }
+ option = {
+  name = sed_import_notice_fabric_option_trade
+  custom_tooltip = sed_import_notice_fabric_option_trade_tt
+  ai_chance = { base = 40 }
+  set_variable = { name = sed_import_notice_fabric_month value = { value = sed_live_month_key add = 12 } }
+ }
+ option = {
+  name = sed_import_notice_fabric_option_plan
+  custom_tooltip = sed_import_notice_fabric_option_plan_tt
+  default_option = yes
+  ai_chance = { base = 40 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_import_notice_fabric_option_mute
+  custom_tooltip = sed_import_notice_fabric_option_mute_tt
+  ai_chance = { base = 20 }
+  set_variable = { name = sed_import_notice_fabric_month value = { value = sed_live_month_key add = 24 } }
+ }
+}
+
+# Advisory: no local expansion is eligible, so importing is the remaining lever.
+sed_pulse.7 = {
+ type = country_event
+ placement = root
+ title = sed_import_notice_tools_title
+ desc = sed_import_notice_tools_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  set_variable = { name = sed_import_notice_tools_month value = { value = sed_live_month_key add = 6 } }
+ }
+ option = {
+  name = sed_import_notice_tools_option_trade
+  custom_tooltip = sed_import_notice_tools_option_trade_tt
+  ai_chance = { base = 40 }
+  set_variable = { name = sed_import_notice_tools_month value = { value = sed_live_month_key add = 12 } }
+ }
+ option = {
+  name = sed_import_notice_tools_option_plan
+  custom_tooltip = sed_import_notice_tools_option_plan_tt
+  default_option = yes
+  ai_chance = { base = 40 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_import_notice_tools_option_mute
+  custom_tooltip = sed_import_notice_tools_option_mute_tt
+  ai_chance = { base = 20 }
+  set_variable = { name = sed_import_notice_tools_month value = { value = sed_live_month_key add = 24 } }
+ }
+}
+
+# Advisory: no local expansion is eligible, so importing is the remaining lever.
+sed_pulse.8 = {
+ type = country_event
+ placement = root
+ title = sed_import_notice_groceries_title
+ desc = sed_import_notice_groceries_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  set_variable = { name = sed_import_notice_groceries_month value = { value = sed_live_month_key add = 6 } }
+ }
+ option = {
+  name = sed_import_notice_groceries_option_trade
+  custom_tooltip = sed_import_notice_groceries_option_trade_tt
+  ai_chance = { base = 40 }
+  set_variable = { name = sed_import_notice_groceries_month value = { value = sed_live_month_key add = 12 } }
+ }
+ option = {
+  name = sed_import_notice_groceries_option_plan
+  custom_tooltip = sed_import_notice_groceries_option_plan_tt
+  default_option = yes
+  ai_chance = { base = 40 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_import_notice_groceries_option_mute
+  custom_tooltip = sed_import_notice_groceries_option_mute_tt
+  ai_chance = { base = 20 }
+  set_variable = { name = sed_import_notice_groceries_month value = { value = sed_live_month_key add = 24 } }
+ }
+}
+
+# Advisory: no local expansion is eligible, so importing is the remaining lever.
+sed_pulse.9 = {
+ type = country_event
+ placement = root
+ title = sed_import_notice_clothes_title
+ desc = sed_import_notice_clothes_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  set_variable = { name = sed_import_notice_clothes_month value = { value = sed_live_month_key add = 6 } }
+ }
+ option = {
+  name = sed_import_notice_clothes_option_trade
+  custom_tooltip = sed_import_notice_clothes_option_trade_tt
+  ai_chance = { base = 40 }
+  set_variable = { name = sed_import_notice_clothes_month value = { value = sed_live_month_key add = 12 } }
+ }
+ option = {
+  name = sed_import_notice_clothes_option_plan
+  custom_tooltip = sed_import_notice_clothes_option_plan_tt
+  default_option = yes
+  ai_chance = { base = 40 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_import_notice_clothes_option_mute
+  custom_tooltip = sed_import_notice_clothes_option_mute_tt
+  ai_chance = { base = 20 }
+  set_variable = { name = sed_import_notice_clothes_month value = { value = sed_live_month_key add = 24 } }
+ }
+}
+
+# Advisory: no local expansion is eligible, so importing is the remaining lever.
+sed_pulse.10 = {
+ type = country_event
+ placement = root
+ title = sed_import_notice_small_arms_title
+ desc = sed_import_notice_small_arms_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  set_variable = { name = sed_import_notice_small_arms_month value = { value = sed_live_month_key add = 6 } }
+ }
+ option = {
+  name = sed_import_notice_small_arms_option_trade
+  custom_tooltip = sed_import_notice_small_arms_option_trade_tt
+  ai_chance = { base = 40 }
+  set_variable = { name = sed_import_notice_small_arms_month value = { value = sed_live_month_key add = 12 } }
+ }
+ option = {
+  name = sed_import_notice_small_arms_option_plan
+  custom_tooltip = sed_import_notice_small_arms_option_plan_tt
+  default_option = yes
+  ai_chance = { base = 40 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_import_notice_small_arms_option_mute
+  custom_tooltip = sed_import_notice_small_arms_option_mute_tt
+  ai_chance = { base = 20 }
+  set_variable = { name = sed_import_notice_small_arms_month value = { value = sed_live_month_key add = 24 } }
+ }
+}
+
+# Advisory: no local expansion is eligible, so importing is the remaining lever.
+sed_pulse.11 = {
+ type = country_event
+ placement = root
+ title = sed_import_notice_artillery_title
+ desc = sed_import_notice_artillery_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  set_variable = { name = sed_import_notice_artillery_month value = { value = sed_live_month_key add = 6 } }
+ }
+ option = {
+  name = sed_import_notice_artillery_option_trade
+  custom_tooltip = sed_import_notice_artillery_option_trade_tt
+  ai_chance = { base = 40 }
+  set_variable = { name = sed_import_notice_artillery_month value = { value = sed_live_month_key add = 12 } }
+ }
+ option = {
+  name = sed_import_notice_artillery_option_plan
+  custom_tooltip = sed_import_notice_artillery_option_plan_tt
+  default_option = yes
+  ai_chance = { base = 40 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_import_notice_artillery_option_mute
+  custom_tooltip = sed_import_notice_artillery_option_mute_tt
+  ai_chance = { base = 20 }
+  set_variable = { name = sed_import_notice_artillery_month value = { value = sed_live_month_key add = 24 } }
+ }
+}
+
+# Advisory: no local expansion is eligible, so importing is the remaining lever.
+sed_pulse.12 = {
+ type = country_event
+ placement = root
+ title = sed_import_notice_ammunition_title
+ desc = sed_import_notice_ammunition_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  set_variable = { name = sed_import_notice_ammunition_month value = { value = sed_live_month_key add = 6 } }
+ }
+ option = {
+  name = sed_import_notice_ammunition_option_trade
+  custom_tooltip = sed_import_notice_ammunition_option_trade_tt
+  ai_chance = { base = 40 }
+  set_variable = { name = sed_import_notice_ammunition_month value = { value = sed_live_month_key add = 12 } }
+ }
+ option = {
+  name = sed_import_notice_ammunition_option_plan
+  custom_tooltip = sed_import_notice_ammunition_option_plan_tt
+  default_option = yes
+  ai_chance = { base = 40 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_import_notice_ammunition_option_mute
+  custom_tooltip = sed_import_notice_ammunition_option_mute_tt
+  ai_chance = { base = 20 }
+  set_variable = { name = sed_import_notice_ammunition_month value = { value = sed_live_month_key add = 24 } }
+ }
+}
+
+# Advisory: no local expansion is eligible, so importing is the remaining lever.
+sed_pulse.13 = {
+ type = country_event
+ placement = root
+ title = sed_import_notice_paper_title
+ desc = sed_import_notice_paper_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  set_variable = { name = sed_import_notice_paper_month value = { value = sed_live_month_key add = 6 } }
+ }
+ option = {
+  name = sed_import_notice_paper_option_trade
+  custom_tooltip = sed_import_notice_paper_option_trade_tt
+  ai_chance = { base = 40 }
+  set_variable = { name = sed_import_notice_paper_month value = { value = sed_live_month_key add = 12 } }
+ }
+ option = {
+  name = sed_import_notice_paper_option_plan
+  custom_tooltip = sed_import_notice_paper_option_plan_tt
+  default_option = yes
+  ai_chance = { base = 40 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_import_notice_paper_option_mute
+  custom_tooltip = sed_import_notice_paper_option_mute_tt
+  ai_chance = { base = 20 }
+  set_variable = { name = sed_import_notice_paper_month value = { value = sed_live_month_key add = 24 } }
+ }
+}

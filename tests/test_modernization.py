@@ -1,6 +1,7 @@
 """Continuous main-method upgrades through the normal automatic review."""
 import unittest
 
+from tools.production_methods import EXTERNAL_PM_VARIABLES
 from test_diagnostics import script_definitions
 from script_harness import Country, building, state
 
@@ -66,6 +67,29 @@ class ModernizationTests(unittest.TestCase):
         self.c.run('sed_modernize_existing_industry')
         self.assertEqual(self.c.production_method_changes, [])
 
+    def test_auto_apply_pms_flag_leaves_that_building_to_the_other_mod(self):
+        # Auto-Apply PMs publishes one toggle per building. The Director yields
+        # instead of fighting for the same main method group.
+        c = self.c
+        c.variables['zw_var_auto_pm_building_logging_camp'] = True
+        c.run('sed_modernize_existing_industry')
+        self.assertEqual(c.production_method_changes, [])
+        del c.variables['zw_var_auto_pm_building_logging_camp']
+        c.run('sed_modernize_existing_industry')
+        self.assertIn('pm_saw_mills', self.producer['production_methods'])
+
+    def test_auto_apply_pms_group_flag_covers_every_farm_type(self):
+        for farm in ('building_wheat_farm', 'building_rye_farm', 'building_rice_farm',
+                     'building_maize_farm', 'building_millet_farm'):
+            with self.subTest(farm=farm):
+                self.assertIn('zw_var_auto_pm_building_group_farms',
+                              EXTERNAL_PM_VARIABLES[farm])
+        self.assertIn('zw_var_auto_pm_building_group_plantations',
+                      EXTERNAL_PM_VARIABLES['building_cotton_plantation'])
+        # A group toggle must not leak to a building outside that group.
+        self.assertNotIn('zw_var_auto_pm_building_group_farms',
+                         EXTERNAL_PM_VARIABLES['building_logging_camp'])
+
     def test_three_month_cooldown_prevents_immediate_followup_upgrade(self):
         c = self.c
         c.run('sed_modernize_existing_industry')
@@ -105,6 +129,19 @@ class ModernizationTests(unittest.TestCase):
         self.c.variables['aroai_autobuild'] = True
         self.c.run('sed_modernize_existing_industry')
         self.assertEqual(self.c.production_method_changes, [])
+
+    def test_observed_wage_unit_reduces_the_upgrade_score(self):
+        self.target['variables'].update(sed_investment_wage_known=1, sed_investment_wage_unit=0.2)
+        self.c.run('sed_modernize_existing_industry')
+        self.assertIn('pm_saw_mills', self.producer['production_methods'])
+        # Scenario gain 200 and 250 extra wage-weighted jobs per level.
+        self.assertAlmostEqual(self.target['variables']['sed_pm_upgrade_score'], 150)
+
+    def test_wage_cost_can_block_a_materially_positive_upgrade(self):
+        self.target['variables'].update(sed_investment_wage_known=1, sed_investment_wage_unit=1)
+        self.c.run('sed_modernize_existing_industry')
+        self.assertEqual(self.c.production_method_changes, [])
+        self.assertEqual(self.target['variables']['sed_pm_upgrade_score'], 0)
 
     def test_coordinator_suspends_external_construction_after_the_upgrade(self):
         c = self.c

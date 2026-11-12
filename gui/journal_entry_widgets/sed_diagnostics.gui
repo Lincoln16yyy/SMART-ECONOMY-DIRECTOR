@@ -3215,6 +3215,13 @@ textbox = {
  text = "sed_auto_current_clear"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_auto_current_queue_control_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_current_queue_control"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_auto_builders_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
@@ -3283,6 +3290,111 @@ textbox = {
  using = fontsize_large
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_auto_builders_help"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_private_control_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_private_control_title"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_private_control_incorporated_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_private_control_incorporated"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_private_control_profitable_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_private_control_profitable"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_private_control_existing_manufacture_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_private_control_existing_manufacture"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_private_control_existing_agro_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_private_control_existing_agro"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_private_control_existing_resource_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_private_control_existing_resource"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_private_control_existing_infrastructure_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_private_control_existing_infrastructure"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_private_control_no_foreign_manufacture_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_private_control_no_foreign_manufacture"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_private_control_no_foreign_agro_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_private_control_no_foreign_agro"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_private_control_no_foreign_resource_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_private_control_no_foreign_resource"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_private_control_no_foreign_infrastructure_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_private_control_no_foreign_infrastructure"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_private_control_intervene_industry_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_private_control_intervene_industry"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_private_control_intervene_agriculture_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_private_control_intervene_agriculture"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_private_control_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_private_control_help"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_pm_external_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_pm_external"
 }
 textbox = {
  visible = "[GetScriptedGui('sed_tax_last_command_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
@@ -3810,7 +3922,40 @@ textbox = {
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_laws_scope"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_laws_external_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_laws_external"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_input_forecast_policy"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_investment_policy"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_investment_wage_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_investment_wage"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_investment_wage_unknown_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_investment_wage_unknown"
 }
 textbox = {
  autoresize = yes multiline = yes align = left|nobaseline
@@ -5151,6 +5296,39 @@ textbox = {
  using = fontsize_large
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_paper_action_failed"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_xxl
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_trade_center_title"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_trade_center_note"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_trade_center_needed_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_trade_center_needed"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_trade_center_success_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_trade_center_success"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_trade_center_failed_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_trade_center_failed"
 }
 }
 flowcontainer = { direction = vertical spacing = 10 ignoreinvisible = yes

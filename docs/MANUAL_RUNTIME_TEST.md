@@ -559,3 +559,188 @@ Assistido, conferir a restauração dos níveis originais.
 
 O teste de inicialização já chegou ao menu com as rotinas carregadas. A
 conferência acima verifica o comportamento em campanha e permanece pendente.
+
+## Retorno com salários 0.7.17–0.7.19 (pendente)
+
+Objetivo: confirmar na engine a unidade salarial observada, o retorno que
+desconta folha e a pontuação de PMs. Guardar uma cópia do save antes de cada
+passo e registrar data, país e estado.
+
+1. Abrir o painel do Director com o mod ativo e o Automático ligado. Localizar
+   a linha "Unidade salarial observada" acima da política do plano. Se não
+   houver prédio saudável, deve aparecer a linha de ausência de amostra.
+2. Escolher um produtor de madeira saudável (ocupação de ao menos 80%, sem
+   escassez, sem contratação falha, não subsidiado). Anotar `earnings` e
+   `weekly_profit` no painel do prédio. A unidade esperada é
+   `(earnings − weekly_profit) ÷ (pesos de emprego × nível × ocupação)`.
+   Comparar com o número mostrado no Director.
+3. Repetir com um prédio subsidiado ou com escassez de insumos: a unidade não
+   deve mudar por causa dele.
+4. Avançar um mês sem alterar prédios: a unidade deve ficar estável. Subsidiar
+   um prédio que estava na amostra e avançar um mês: a unidade deve mudar na
+   revisão seguinte.
+5. Oferta: numa escassez com margem material pequena, comparar o fornecedor
+   escolhido antes e depois de a unidade salarial subir. Registrar a unidade,
+   a margem e o cartão da prioridade. Mudança de fornecedor aqui é o sinal que
+   a 0.7.17 tenta produzir.
+6. PMs: com prédio elegível (ocupação ≥ 90%, sem escassez, insumo e tecnologia
+   ok), observar a modernização. Se a troca aumenta emprego ponderado e a
+   folha estimada zera a pontuação, a revisão deve registrar método mantido.
+   Anotar o método antes e depois e a mensagem da revisão.
+7. Salvar e recarregar no Automático: a unidade deve ser recalculada na próxima
+   revisão. Conferir `logs/error.log` sem erro novo citando `sed_`.
+8. Desativar o Director: as duas linhas novas somem do painel e as variáveis
+   `sed_investment_wage_*` não devem sobrar (conferir no save, se possível).
+9. Devolver: trecho do `logs/error.log`, captura do painel nas duas revisões,
+   captura do cartão da prioridade, método antes/depois e o save.
+
+Limites conhecidos: a unidade é média por emprego ponderado, não salário por
+profissão; `earnings` semanal está documentado apenas pela localização vanilla;
+o painel mostra a média nacional, não a leitura por estado. Divergência grande
+deve ser registrada para calibragem, não ajustada sem evidência.
+
+## Leis delegadas 0.7.20 (pendente)
+
+Com o Smart Government Advisor ativo e o Director no Automático, abrir o painel
+do Director e conferir a linha "Smart Government Advisor detectado". Sem o
+outro mod, deve aparecer apenas a linha de escopo das leis. Clicar "Atualizar
+diagnóstico" e avançar um mês não pode alterar leis, nem criar diário duplicado.
+Devolver captura do painel com e sem o mod e o trecho do `logs/error.log`.
+
+## Evento de importação 0.7.21–0.7.22 (pendente)
+
+Com o Director ativo e uma escassez real sem expansão local possível (por
+exemplo, nenhum produtor do bem com insumos, trabalho e fila liberados):
+
+1. Avançar um mês. Deve aparecer um evento com ícone industrial, prazo de
+   leitura e três opções: "Vou abrir a rota de importação", "Recalcular o plano
+   agora" e "Só me avise em 2 anos". Conferir que a descrição cita o bem certo
+   e que os pedidos de compra e venda aparecem como números (desde a 0.7.22),
+   batendo com a aba de mercado do bem no mesmo mês; se aparecer texto cru do
+   tipo `GetValue` ou a chave da variável, o formato de loc do evento está
+   errado — reportar.
+2. Escolher "Vou abrir a rota de importação": o mesmo evento não pode reaparecer
+   nos 12 meses seguintes. Abrir a rota é ação sua na interface de comércio; o
+   Director não deve criar rota, nem registrar erro no `logs/error.log`.
+3. Sem responder, deixar expirar: o evento deve resolver sozinho na opção
+   padrão (recalcular o plano) e não alterar impostos, salários ou obras.
+4. Clicar "Só me avise em 2 anos" e avançar 24 meses: o aviso pode voltar se a
+   escassez continuar.
+5. Desativar o Director: nenhum aviso novo deve aparecer, e as variáveis
+   `sed_import_notice_*` não devem sobrar na próxima leitura.
+6. Devolver captura do evento, o texto do `logs/error.log` e o save.
+
+Limites conhecidos: o prazo do evento em meses e a escolha automática ao
+expirar seguem NÃO VERIFICADO; as três opções são inofensivas por desenho.
+
+## Duração real da fila 0.7.23 (pendente)
+
+1. Com o Director ativo e alguma obra pública na fila, abrir o painel e ler a
+   linha do orçamento direto: deve aparecer "a engine mede até N semanas
+   restantes na fila do governo", ao lado da referência do plano.
+2. Comparar N com a barra de obras do jogo (tempo restante da fila do governo).
+   A leitura é arredondada **para cima** na faixa seguinte (2, 4, 6, 8, 12, 16,
+   20, 26, 32, 40, 52, 78, 104, 156, 208 ou 260), então N pode ser maior que o
+   valor exato da barra, nunca menor.
+3. Pausar/cancelar todas as obras públicas e atualizar o diagnóstico: N deve
+   voltar a 0, e nenhuma obra deve ser enfileirada por causa disso.
+4. Conferir que a reserva de ouro exigida não mudou de fórmula — ela continua
+   baseada na referência do plano, não na leitura da engine.
+5. Devolver captura do painel, o `logs/error.log` e o save.
+
+## Meta plurianual 0.7.25 (pendente)
+
+1. Provocar escassez de um bem por três meses consecutivos e conferir a linha
+   "Meta industrial anual" no painel.
+2. Avançar para o ano seguinte e repetir a escassez por três meses: a linha da
+   meta deve continuar visível em janeiro (sem esperar os três meses) enquanto a
+   falta persistir, e o bem deve manter prioridade no plano.
+3. Deixar a escassez sumir e passar um ano inteiro sem meta para o bem: ao
+   reaparecer, a meta deve voltar como primeira ocorrência (sem bônus
+   plurianual).
+4. Desativar o Director e conferir que `sed_<bem>_goal_streak`, `meta_since` e
+   `meta_year` não sobram.
+
+## Unidade salarial por família 0.7.26 (pendente)
+
+1. Com o Director ativo, abrir o painel e conferir a linha "Unidade salarial
+   observada".
+2. Comparar a escolha de fornecedor de um bem com duas opções de prédio (ex.:
+   cereais em fazenda de trigo vs. arroz) com e sem prédios saudáveis de cada
+   família: quando existir amostra da família, o retorno dela deve usar essa
+   amostra, não a média nacional.
+3. Conferir que prédios subsidiados, com escassez de insumos, contratações
+   falhas ou ocupação abaixo de 80% continuam fora da amostra.
+4. Desativar o Director e verificar que as variáveis `sed_investment_wage_*_
+   <prédio>` não sobram.
+
+## Controle de construção privada 0.7.27 (pendente)
+
+Pré-requisito: Controllable Private Construction ativo e o Director ligado.
+Anote a versão dos dois mods. Save de teste antes de mexer nos botões.
+
+1. Abra o diário *Private Constructions Management* do outro mod e confira quais
+   botões estão ligados. Abra o painel do Director: a seção
+   *Controle de construção privada detectado* deve listar exatamente as mesmas
+   restrições, uma linha por botão ligado.
+2. Ligue um botão novo no diário do outro mod e atualize o Director. A linha
+   correspondente deve aparecer; desligue e ela deve sumir. Esperado: leitura,
+   sem nenhuma mensagem de erro no `logs/error.log`.
+3. Desative o Controllable Private Construction (jogo fechado, mudar o playset)
+   e carregue o save. A seção deve sumir por completo e o Director deve
+   continuar funcionando; nenhuma variável `zw_var_*` deve aparecer no save.
+4. Com a fila privada ocupada e o Automático ativo, confira o aviso
+   *A fila privada ocupada conta para os guardas do Director mesmo com o
+   controle ativo*. Ele deve apontar o diário do outro mod, sem botão novo.
+5. Se a intervenção no investimento estrangeiro estiver ligada, tente aprovar
+   uma obra pública que o Director pediria e registre se a recusa aparece como
+   falha de ação. Devolver: trecho do `error.log`, captura da seção antes/depois
+   de ligar o botão e o save se a recusa ocorrer.
+
+## Cessão de PM ao Auto-Apply PMs 0.7.28 (pendente)
+
+Pré-requisito: Auto-Apply PMs ativo, Director em Automático, país com escassez
+de um bem do catálogo (ex.: madeira) e um prédio operante do tipo.
+
+1. No diário do Auto-Apply PMs, ligue o botão do prédio (ex.: serraria). No
+   painel do Director deve aparecer a linha *Auto-Apply PMs detectado*.
+2. Avance um mês. Esperado: o Director não troca o método principal daquele
+   prédio; o `sed_pm_upgrade_status` não deve indicar modernização confirmada.
+   Confira que o outro mod aplicou a mudança dele (ou nenhuma).
+3. Desligue o botão do Auto-Apply PMs e avance um mês. Esperado: o Director
+   volta a modernizar aquele tipo e a linha do painel some.
+4. Repita com o botão de grupo de fazendas ligado e uma fazenda de trigo: a
+   linha deve aparecer, e a cessão deve valer para trigo, centeio, arroz, milho e
+   milhete. Devolver: captura do painel nos dois estados e trecho do
+   `error.log`.
+
+## Evento de importação 0.7.29 (pendente)
+
+1. Com escassez de papel e sem candidata local, avance o mês até o evento
+   `sed_pulse` de papel aparecer. A descrição deve listar os quatro passos
+   (Centro de Comércio, tarifa/subvenção, Transferência de Bens, Isolacionismo)
+   com parágrafos separados.
+2. Confira o botão de opção: "Vou tentar importar pelo Mercado Mundial"; ao
+   clicar, o aviso de papel não deve voltar por 12 meses.
+3. Troque o jogo para inglês e confirme que o texto está em inglês (antes da
+   0.7.29 o arquivo inglês saía em português).
+
+## Centro de Comércio 0.7.30 (pendente)
+
+1. Save de teste com um bem do catálogo em escassez real e **sem produtor** no
+   país (ex.: papel sem fábrica de papel), estado incorporado com infraestrutura
+   ≥ 0 e que aceite a obra. Automático por um mês. Esperado: um nível de
+   `building_trade_center` na fila do governo, linha "Centro de Comércio" no
+   painel com o pedido enfileirado. Devolver: captura do painel e da fila.
+2. Confirme que o nível aparece no prédio existente quando já há um Centro de
+   Comércio no estado (caso de expansão), e que nada é enfileirado de novo no
+   mês seguinte enquanto a obra está na fila.
+3. Com um produtor do bem presente mas parado por falta de trabalhadores, o
+   Director deve esperar (status 2) e **não** comprar capacidade.
+4. Ligue Isolacionismo (`law_isolationism`) e repita o passo 1: nada deve ser
+   enfileirado e a linha do painel não deve aparecer.
+5. Estado com `infrastructure_delta` negativo: nenhuma obra ali; com outro
+   estado saudável, a obra deve ir para o estado saudável.
+6. Salve e recarregue no Automático: o pedido pendente deve continuar
+   reconhecido e, ao concluir a obra, o contador `sed_trade_center_completed`
+   deve subir (inferência por nível, como na ferrovia).

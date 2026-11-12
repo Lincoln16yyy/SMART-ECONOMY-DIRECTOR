@@ -1259,3 +1259,89 @@ Avisos de formatação e OR de item único permanecem no relatório.
 Carregou e Campanha — alterações fiscais e de prontidão da 0.7.16 seguem
 NÃO VERIFICADO. A restauração e a confirmação após save/reload permanecem
 no roteiro de campanha. Previsão de lucro com salários continua pendente.
+
+## 0.7.17 — Folha salarial observada no retorno do investimento
+
+`sed_refresh_investment_wages` roda no fim da atualização de preços. Soma
+`earnings - weekly_profit` dos prédios saudáveis de cada estado e divide pelos
+empregos ponderados por `wage_weight`, gerando `sed_investment_wage_unit` por
+estado, com a média nacional como reserva. `sed_investment_<tipo>_return`
+desconta a folha do novo nível da margem material e passa a alimentar
+elegibilidade, preferência entre variantes e `sed_plan_<ação>_margin`. Sem
+amostra saudável, `sed_investment_wage_known = 0` mantém o comportamento
+anterior. Coeficientes em `data/employment_profiles.json`. Comportamento real,
+aderência ao salário pago e calibragem seguem NÃO VERIFICADO.
+
+## 0.7.18 — Salários na pontuação de modernização e recuperação
+
+`wage_delta` (diferença de `weighted_jobs` entre alvo e atual) entra na
+pontuação nacional de modernização e recuperação quando o estado tem unidade
+salarial observada. Um par materialmente positivo pode ser descartado por
+pontuação zero. Filtros de pares, guardas operacionais, cooldown e reservas
+permanecem iguais; a configuração inicial das fundações segue material.
+
+## 0.7.19 — Unidade salarial no painel
+
+O painel exibe a unidade salarial nacional (`sed_investment_wage_unit`) quando
+`sed_investment_wage_known = 1`, com texto próprio para o fallback material.
+A leitura por estado continua interna. O comércio exterior foi descartado por
+evidência: `create_trade_route` foi removido na 1.9.
+
+## 0.7.20 — Leis delegadas ao Smart Government
+
+O painel declara que leis, imposto de consumo e gasto discricionário estão fora
+do Director e reconhece o Smart Government Advisor quando `sg_enabled` existe.
+O Director lê apenas esse marcador; os ids `sg_top_*` não são traduzidos para
+evitar duplicar o `law_ids.json` do outro mod.
+
+## 0.7.21 — Evento consultivo de importação
+
+Quando a escassez de um dos doze bens não tem candidata local elegível nem
+pedido pendente, o pulso mensal dispara um evento próprio (`sed_pulse.2..13`)
+em vez de uma linha no painel. O evento tem prazo de leitura, ícone vanilla e
+três opções sem efeito econômico: reconhecer a importação (cooldown de 12
+meses), recalcular o plano e adiar por 24 meses. O Director continua sem
+qualquer efeito de comércio — a sondagem com Tiger mostra que rota comercial
+não é scriptável na 1.15.
+
+## 0.7.22 — Pedidos do mercado no evento de importação
+
+O evento passa a mostrar os pedidos de compra e venda do bem no mercado, que
+dão a dimensão da lacuna a importar. Continua sem estimar custo, frete ou
+comboios, e sem qualquer efeito de comércio. Próximo refinamento possível:
+apontar qual filtro barrou a melhor candidata (insumos, trabalho, fila,
+orçamento ou infraestrutura) em vez de listar todos.
+
+## 0.7.23 — Duração real da fila no orçamento direto
+
+A duração restante da fila do governo vem agora da própria engine
+(`construction_queue_government_duration`), arredondada para cima em faixas e
+exibida ao lado da referência estimada pelo plano. O próximo passo nesta frente
+é usar a leitura para calibrar a espera por obra (hoje baseada só na
+estimativa) e, se houver primitiva, medir progresso já executado do primeiro
+item.
+
+## 0.7.24 — Contagem de projetos e limite de autoria
+
+O item "autor/investidor" fecha como limitação de engine: as três primitivas
+plausíveis de autor são desconhecidas e `construction_queue_size` não é
+reconhecida pelo Tiger 1.19.0. Ficam apenas contagens de país por lado
+(governo/privado), agora no painel, e `is_under_construction` por prédio. Para
+quando houver documentação exportada do jogo: procurar primitiva de investidor
+por item antes de prometer reconciliação de identidade.
+
+## 0.7.25 — Meta plurianual de escassez
+
+Metas de escassez deixam de morrer em janeiro: anos consecutivos elevam a
+sequência até cinco, com bônus de prioridade e visibilidade enquanto a escassez
+persistir. O próximo passo desta frente é registrar no histórico quantos anos a
+meta durou e se a oferta do bem subiu, para dar retorno de resultado em vez de só
+prioridade.
+
+## 0.7.26 — Unidade salarial por família de prédio
+
+Cada tipo de prédio usa a própria amostra de salário por emprego ponderado, com
+fallback para a média nacional. Qualificações continuam fora de alcance
+(primitivas de leitura inexistentes); o item fecha com `occupancy` e
+`has_failed_hires` como proxy documentado. Próximo passo possível: medir em
+campanha se a amostra por família muda a escolha de fornecedor.

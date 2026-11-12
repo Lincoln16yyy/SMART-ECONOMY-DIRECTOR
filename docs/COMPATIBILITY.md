@@ -7,6 +7,38 @@ Economy Advisor e Supply Chain nesta sessão amplia o escopo dos adaptadores.
 As seções anteriores abaixo preservam a evolução histórica das versões.
 
 
+## Reauditoria de 2026-11-11 (código 0.7.28)
+
+Leitura direta dos arquivos de cada mod instalado na pasta de mods do usuário;
+nenhum arquivo de outro mod foi alterado. Esta seção atualiza a tabela de
+08/11, que dizia "Director não altera PMs" — ele altera desde a 0.7.9. Onde as
+duas discordarem, vale esta.
+
+| Mod | O que faz | Relação com o Director | Evidência |
+| --- | --- | --- | --- |
+| **Controllable Private Construction** (`3278770055`) | Injeta `can_build_private`/`can_build_government` por prédio e troca `default_auto_expand_rule`; 12 botões restringem a construção privada | Lido desde a 0.7.27 (só `has_variable`). Não escrever nem injetar: colidiria na mesma chave | Tiger 0 erros na pasta dele; seção "Controle de construção privada" |
+| **Private Investments Only Expand Existing Buildings** (`3278371002`) | Mesmo autor e técnica, fixa "só prédios existentes" | Mesma colisão se o Director injetar prédios; hoje irrelevante | `INJECT_OR_CREATE:` em `common/buildings/` |
+| **Auto-Apply PMs** (`3353797125`) | Um botão por prédio aplica o "melhor" método principal; botões de grupo para fazendas, minas e plantações | **Conflito real**: mesmos grupos de PM da modernização. A 0.7.28 cede o prédio com botão ligado | `zw_var_auto_pm_building_<prédio>`, `_group_farms/_mines/_plantations` |
+| **Auto-Apply Automation PMs** (`3344726320`) | PMs de automação/transporte por estado quando falta mão de obra | Conflito indireto: muda ocupação, que é guarda do Director. Não escreve os grupos do Director | `zw_var_auto_pm_automation_*`, `zw_var_auto_pm_transportation` |
+| **Supply Chain Semi-Auto Builder** (`3357811223`) | Constrói setores, ferrovias, energia, administração e cadeias | Já coordenado: sete opções em `COMPETING_BUILDERS` e `coordination.py` | `zw_var_expand_building`, `zw_var_scsab_*` |
+| **Economy Advisor** (`3778129206`, 1.0.0) | Construção automática e política de PM/orçamento | Já coordenado/cedido: `advisor_auto_construction_enabled`, `advisor_pm_balance_enabled`, `advisor_labor_auto_enabled` | arquivos do Advisor |
+| **ARoAI** (`ARoAI-1.3.5`) | Revisão da IA + autobuild com regra de jogo e evento de configuração | Já detectado: `aroai_autobuild` suspende a modernização e a execução | `ARoAI_events_l_english.yml` |
+| **Smart Government Advisor** (`1.0.0`) | Leis e instituições (`sg_*`, esquema 2) | Reconhecido no painel desde a 0.7.20; o Director não propõe leis | `sg_enabled`, `sg_schema_version` |
+| **Government Administration Auto Expand** (`2934542706`) | `REPLACE:building_government_administration` com regra de autoexpansão e **sem `ai_value`** | Não toca o Director, mas o `REPLACE` apaga campo do vanilla 1.15 e disputa a definição com o `INJECT_OR_CREATE` do Controllable Private Construction: vence quem carregar por último | comparado com `game/common/buildings/07_government.txt` |
+| **Auto-Recruit & One-Click Recruit Commanders** (`3279201462`) | Recruta comandantes por botão/decisão | Fora do escopo (militar não é mutado) | `zw_recruit_generals_*` |
+| **Auto-Diplomacy And Advanced Subject Management** (`3432933121`) | Diplomacia e súditos automáticos | Fora do escopo; pode mudar fronteiras, que afetam a leitura de PIB | `zw_adnasm_*` |
+| **OGAS for CWE** (`3770300244`) | Gestor completo de construção, pesos, PMs, setor e ferrovia | **Não usar nesta campanha**: README declara Victoria 3 1.13.x + Cold War Era (1950) e referencia prédios do CWE (`building_advanced_weaponry_factory`) inexistentes no vanilla 1.15. Já está instalado mas fora da lista habilitada | `README_OGAS_FOR_CWE.txt`, `supported_game_version 1.13.*` |
+
+Pendências de compatibilidade:
+
+- **Auto-Apply PMs por grupo**: o botão de grupo faz o Director ceder todos os
+  prédios do grupo, mesmo com o botão individual desligado. Se o outro mod mudar
+  essa regra, revisar `EXTERNAL_PM_VARIABLES` em `tools/production_methods.py`.
+- **Government Administration Auto Expand**: recomendo desativar. Substitui a
+  definição inteira do prédio e anula injeções de outros mods conforme a ordem.
+- **Ordem de carregamento** não é controlada pelo Director. Para leitura por
+  `has_variable`, ordem não importa; para injeção em prédio, importa.
+
 Atualização de 2026-11-09, código 0.4.1: há onze mods listados, incluindo o
 Director. A lista e a instalação foram reinspecionadas; opções efetivas no país
 continuam desconhecidas. Ver [auditoria, seção 7](AUDIT_2026-11-09.md#7-ecossistema-de-mods).

@@ -21,7 +21,18 @@ houver mudança observada no ambiente.
 - Log em `/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/logs/error.log`.
 - Advisor em `/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/mod/3778129206_Economy_Advisor`.
 - Supply Chain em `/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/mod/3357811223_Supply_Chain_Semi-Auto_Builder`.
+- Controllable Private Construction em `mod/3278770055_Controllable_Private_Construction`
+  (Workshop 3278770055; sem `descriptor.mod`, só `.metadata/metadata.json`).
+  O jogador mantém esse mod ativo. [confirmado 2026-11-11]
+- Private Investments Only Expand Existing Buildings em
+  `mod/3278371002_Private_Investments_Only_Expand_Existing_Buildings`
+  (mesmo autor, mesma técnica; o jogador não citou como ativo).
+  [confirmado 2026-11-11]
 - Saves em `/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/save games`.
+- Smart Government Advisor em `mod/Smart Government Advisor` (1.0.0,
+  `supported_version 1.15.*`, do jogador). Define `sg_enabled`,
+  `sg_schema_version` (esquema 2), `sg_top_1..3_law` com ids de
+  `data/law_ids.json`, `sg_ignored_*` e diário próprio. [confirmado 2026-11-11]
 - Backups em `/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/sed_backups`.
 
 Todos esses caminhos existem. [confirmado 2026-11-11]
@@ -64,9 +75,10 @@ python3 tools/package_mod.py
 python3 tools/install_mod.py --user-data '/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3'
 ```
 
-A última entrega executou 352 testes sintéticos e instalou a versão 0.7.16
-com conferência de 14 arquivos. O último `--check` confirmou sincronia.
-[confirmado 2026-11-11]
+A 0.7.30 executou 394 testes sintéticos (205 s) e o último `--check`
+confirmou sincronia. A instalação local verificada mais recente é a 0.7.27,
+com conferência de 14 arquivos; a 0.7.28–0.7.30 ainda não foi instalada.
+[confirmado 2026-11-12]
 
 ## Documentação exportada do jogo
 
@@ -75,6 +87,15 @@ Os passos de inicialização em debug, abertura do console e diretório final
 precisam ser confirmados na engine antes de serem registrados como verificados.
 
 ## Evidência de comportamento
+
+- No vanilla 1.15 instalado, `earnings` é valor adicionado semanal de escopo de
+  prédio: `EARNINGS_BREAKDOWN` mostra `Value: GetEarnings` contra
+  `Revenue: GetLastRevenue` mais despesas de material, e
+  `BUILDING_BALANCE_BREAKDOWN` chama essa base de "Weekly Revenue".
+  `TOOLTIP_BUILDING_HEALTH_WORLD` mostra `Earnings` ao lado de
+  `GetLastWagesExpenses`, e `TRIGGER_WEEKLY_PROFIT` confirma `weekly_profit`.
+  Todos em `localization/english/interfaces_l_english.yml` e
+  `triggers_l_english.yml`. [confirmado 2026-11-11]
 
 - A captura enviada pelo usuário mostrou a construção básica de papel
   permitida, com 30 de madeira e 40 de papel por nível. A captura confirma
@@ -86,7 +107,178 @@ precisam ser confirmados na engine antes de serem registrados como verificados.
 ## Pendências
 
 - Reavaliar os alertas Tiger quando houver versão compatível com o jogo 1.15.
+- Comparação com bloco de valor à direita é forma vanilla: `net_fixed_income >=
+  { ... }` em `common/diplomatic_actions/30_fund_lobby.txt`. [confirmado 2026-11-11]
+- Comércio não é scriptável na 1.15: a sondagem de `create_trade_route` em mod
+  isolado fez o Tiger 1.19.0 responder "removed in 1.9 — replaced with world
+  trade system". O binário só mantém comandos internos. Não insistir nesse
+  caminho. [confirmado 2026-11-11]
+- Sondagem de primitiva desconhecida: criar pasta temporária com
+  `common/scripted_effects/probe.txt` e `.metadata/metadata.json` mínimo e rodar
+  `vic3-tiger --game '<jogo>' <pasta>`. O relatório responde se o efeito existe,
+  foi removido ou quais campos aceita. [confirmado 2026-11-11]
 - Gerar e indexar a documentação exportada do jogo instalado.
 - Confirmar em campanha a fundação, os PMs iniciais e a contratação da 0.7.15,
   além das leituras fiscais e de prontidão da 0.7.16.
 - Confirmar save/reload, restauração e alterações fiscais em campanha.
+
+## Sondagem de primitivas: comércio e formato de opção de evento (2026-11-11)
+
+Pasta temporária com `.metadata/metadata.json` e `common/scripted_effects/probe.txt`,
+validada com o Tiger 1.19.0 (`--game '/home/lincoln-ii/Games/Victoria 3'`):
+
+- `create_trade_route` → `warning(removed): was removed in 1.9`, "replaced
+  with world trade system". Não usar.
+- `add_trade_route_level`, `cancel_trade_route`, `establish_trade_route` →
+  `error(unknown-field): unknown token`. Não existem como efeito de script.
+- Conclusão: script só lê comércio (pedidos, faixa de preço, escassez). Abrir
+  rota é ação da UI/IA do jogador.
+
+Formato de evento (vanilla `events/1848.txt`, evento `1848.1`): `type`, `placement`,
+`title`, `desc`, `flavor`, `duration`, `icon`, `on_created_soundeffect`,
+`trigger`, `immediate` e `option` com `name`, `custom_tooltip`, `ai_chance`,
+`default_option` e **efeitos inline**. `effect = { ... }` dentro de `option` é
+`unknown-field` na 1.15. Ícones disponíveis em
+`game/gfx/interface/icons/event_icons/` (`event_industry.dds` usado na 0.7.21).
+
+`duration` do evento é tratado como meses na documentação interna do mod;
+semântica e escolha automática ao expirar seguem NÃO VERIFICADO.
+
+## Sondagem: duração da fila de construção (2026-11-11)
+
+`/tmp/sed_dur` (metadata + `common/scripted_effects/probe.txt`), Tiger 1.19.0,
+zero erros:
+
+- `construction_queue_duration`, `construction_queue_government_duration` e
+  `construction_queue_private_duration` são triggers de país relativos ao tempo
+  restante da fila em **semanas** (`triggers_l_english.yml`: "Remaining duration
+  of construction queue is X weeks").
+- Aceitam comparação contra script value à direita: `... > var:probe_b` passou.
+- São triggers, não script values: não dá para ler o número. Para exibir, usar
+  cadeia `if/else_if` com faixas (ver `queue_bands()` em
+  `tools/construction_budget.py`).
+- `if` dentro do `value = { }` de `set_variable` é `unknown-field`: efeitos
+  condicionais precisam ficar fora do cálculo (comportamento do Tiger já
+  conhecido, reconfirmado aqui).
+
+## Sondagem: autor/investidor da fila e contagens de projeto (2026-11-11)
+
+`/tmp/sed_dur` com Tiger 1.19.0:
+
+- Existem e são de **país**: `num_queued_constructions`,
+  `num_queued_government_constructions`, `num_queued_private_constructions`
+  (projetos, não níveis). Usar em escopo de estado gera
+  `warning(scopes): ... is for country`.
+- `is_under_construction` existe em escopo de **prédio**
+  (`b:building_x = { is_under_construction = yes }`).
+- Não existem (todos `error(unknown-field)`): `is_government_construction`,
+  `is_privately_constructed`, `construction_owner_is_government`,
+  `construction_queue_size`.
+- Conclusão: autor/investidor por item não é scriptável na 1.15. Não prometer
+  reconciliação de identidade; usar as contagens por lado e as marcas próprias.
+
+## Regra do validador: aritmética em igualdade de variável (2026-11-11)
+
+`tools/validate.py` recusa `var:x = { value = year subtract = 1 }` com
+"Inline arithmetic in variable equality requires a named script value". Para
+comparar com um valor calculado, criar variável própria no início do efeito
+(ex.: `sed_prev_year = year - 1`) e comparar `var:x = var:sed_prev_year`.
+
+## Sondagem: qualificação e salário por profissão (2026-11-11)
+
+`/tmp/sed_dur`, Tiger 1.19.0 — todos `error(unknown-field)`:
+`pop_qualifications`, `state_pop_qualifications`, `has_pop_qualifications`,
+`wages`, `wage_rate`, `average_wage`.
+
+O que existe: `average_sol` (leitura, país) e o efeito `set_pop_qualifications`
+(escrita, `common/effect_localization/00_pop_effects_loc.txt`). Modificadores de
+qualificação são só `*_mult` em leis/tecnologias, não leitura de estoque.
+
+Conclusão: não prometer filtro por qualificação nem salário por profissão. Proxy
+do mod: `occupancy` + `has_failed_hires`; salário observado sai de
+`earnings - weekly_profit` por prédio.
+
+## Mod de construção privada do jogador: Controllable Private Construction (2026-11-11)
+
+Lido em `mod/3278770055_Controllable_Private_Construction` (Workshop 3278770055,
+autor `zw_*`). Nada dele foi alterado. É o mod que o jogador "sempre ativa".
+
+Mecânica, com evidência dos arquivos dele:
+
+- `common/buildings/zw_cpc_0*.txt` usam `INJECT_OR_CREATE:building_<x> = { ... }`
+  para sobrescrever `can_build_private` e `can_build_government` em cada prédio.
+  Os testes chamam `zw_trigger_autonom_investment_<ramo>` e
+  `zw_trigger_gov_investment`, que leem `scope:investor_country` e variáveis de
+  país. Conclusão: **é possível restringir a autoexpansão privada nativa**, mas
+  só por injeção em `can_build_private` (campo por prédio).
+- `common/scripted_triggers/zw_cpc_triggers_auto_expand.txt` usa
+  `REPLACE:default_auto_expand_rule`, contra o vanilla
+  `game/common/scripted_triggers/00_scripted_triggers.txt:985`
+  (`cash_reserves_ratio > 0.95`, `state.market_access >= 0.95`,
+  `occupancy >= 0.95`). O mod troca por lucro semanal ≥ 200 × nível etc.
+  Os grupos de prédio apontam para essa regra em `should_auto_expand`
+  (`game/common/building_groups/00_building_groups.txt`).
+- Botões em `common/scripted_buttons/` e diário
+  `je_zw_autonom_invest_management` (loc pt-br mantém o nome em inglês,
+  "Private Constructions Management"). Cada botão liga/desliga uma variável de
+  país `zw_var_auto_invest_*` / `zw_var_no_foreign_private_investment_*` /
+  `zw_var_intervene_investment_from_abroad_*`; presença = restrição ligada.
+- `decree_zw_no_state_private_investment` ("Ban Private Constructions", custo 0,
+  só jogador) bloqueia construção privada no estado; é decreto, ocupa slot.
+- Os dois modificadores de intervenção em investimento estrangeiro custam
+  `country_bureaucracy_mult = -0.05`.
+
+Regra para o Director: **ler** essas variáveis é seguro (`has_variable`;
+ausente = falso). **Escrever** é variável externa para `tools/validate.py`, e
+injetar `can_build_private` nos mesmos prédios colide com a injeção do outro mod
+(mesma chave; a ordem de carregamento define o vencedor, sem aviso). Por isso a
+0.7.27 só lê. [confirmado 2026-11-11]
+
+Tiger 1.19.0 rodado só na pasta dele
+(`vic3-tiger --game '<jogo>' '<pasta do mod>'`): 0 erros, 88 avisos; portanto
+`INJECT_OR_CREATE:` em `common/buildings/` e `REPLACE:` em scripted trigger são
+formas aceitas na 1.15. [confirmado 2026-11-11]
+
+Se um dia for preciso controlar de fato, a alternativa é oferecer o próprio
+`can_build_private` e pedir ao jogador para desativar o outro mod — não rodar
+os dois.
+
+## Mods de PM instalados (2026-11-11)
+
+- **Auto-Apply PMs** (`mod/3353797125_Auto-Apply_PMs`, z.260514.1): um botão por
+  prédio no diário `je_zw_auto_pm`; liga/desliga `zw_var_auto_pm_building_<prédio>`
+  (`building_` removido). Botões de grupo ligam
+  `zw_var_auto_pm_building_group_farms` / `_mines` / `_plantations`, e nesse caso
+  o efeito roda por prédio do grupo. Ajustes globais: `zw_var_auto_pm_num_3`,
+  `_higher_frequency`, `_electric`. Os métodos são decididos por
+  `zw_effect_auto_pm_building_<prédio>`, que usa preço local e
+  `can_activate_production_method`; escreve no mesmo grupo principal que o
+  Director moderniza. [confirmado 2026-11-11]
+- **Auto-Apply Automation PMs** (`mod/3344726320_Auto-Apply_Automation_PMs`):
+  variáveis `zw_var_auto_pm_automation_basic` / `_electric` / `_oil` /
+  `_transportation` / `_slower_automation`; mexe em PMs de automação e
+  transporte por estado (`zw_effect_change_state_pm_automation` /
+  `_transportation`). [confirmado 2026-11-11]
+- Ordem de carregamento não é controlada por nós. Para leitura por
+  `has_variable`, ordem não importa; para injeção em prédio, importa.
+
+## Evidência de comércio e Centro de Comércio (2026-11-12)
+
+- `building_trade_center` é construível pelo governo e por investidores privados:
+  `can_build_government`/`can_build_private` leem
+  `trade_center_construction_allowed` (`common/buildings/` do 1.15 instalado).
+- `required_construction = construction_cost_very_low`; o valor está em
+  `common/script_values/building_values.txt:7` e vale **100 pontos** de
+  construção (usado em `tools/construction_budget.py` como
+  `TRADE_CENTER_POINTS`).
+- Capacidade de comércio é gerada por nível de Centro de Comércio e consumida
+  pelo Mercado Mundial (`concept_trade_capacity_desc`). O script não abre rota
+  (`create_trade_route` removido na 1.9); o caminho de script é ampliar/fundar
+  o prédio.
+- `law_isolationism` desliga o comércio com o Mercado Mundial
+  (`country_disallow_trade_bool = yes`), então capacidade extra é inútil sob
+  essa lei.
+- Tiger 1.19.0 na 0.7.30: 0 fatais, 3 `unknown-field` de diário (os mesmos do
+  vanilla 1.15) e **938** avisos (933 na 0.7.29; os cinco novos vêm das caixas
+  de texto do painel). O binário continua declarando suporte até 1.13.5.
+  [confirmado 2026-11-12]

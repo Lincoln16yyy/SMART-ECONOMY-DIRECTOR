@@ -5,14 +5,14 @@ import json
 from pathlib import Path
 
 try:
-    from . import planning, coordination, construction_budget, labor, input_forecast, production_methods, investment
+    from . import planning, coordination, construction_budget, labor, input_forecast, production_methods, investment, trade_capacity
 except ImportError:
-    import planning, coordination, construction_budget, labor, input_forecast, production_methods, investment
+    import planning, coordination, construction_budget, labor, input_forecast, production_methods, investment, trade_capacity
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.16'
+VERSION = '0.7.30'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -23,6 +23,35 @@ COMPETING_BUILDERS = (
     ('admin', 'zw_var_scsab_gov_admin', 'Supply Chain: administração geral', 'Supply Chain: general administration'),
     ('tax', 'zw_var_scsab_gov_admin_for_tax', 'Supply Chain: administração tributária', 'Supply Chain: tax administration'),
     ('aroai', 'aroai_autobuild', 'ARoAI: construção automática', 'ARoAI: automatic construction'),
+)
+# Controllable Private Construction (3278770055) publishes one country flag per
+# restriction the player toggles. Reading them is safe without the mod: an absent
+# flag is simply false. The Director never writes these variables.
+PRIVATE_CONTROL_FLAGS = (
+    ('incorporated', 'zw_var_auto_invest_incorporated_states_only',
+     'Prédios privados novos só em estados incorporados', 'New private buildings only in incorporated states'),
+    ('profitable', 'zw_var_auto_invest_profitable_buildings_only',
+     'Expansão privada só sob condições de lucro', 'Private expansion only under profit conditions'),
+    ('existing_manufacture', 'zw_var_auto_invest_existing_buildings_only_manufacture',
+     'Manufatura: privado só expande prédio existente', 'Manufacturing: private only expands existing buildings'),
+    ('existing_agro', 'zw_var_auto_invest_existing_buildings_only_agro',
+     'Agropecuária: privado só expande prédio existente', 'Agriculture: private only expands existing buildings'),
+    ('existing_resource', 'zw_var_auto_invest_existing_buildings_only_resource',
+     'Recursos: privado só expande prédio existente', 'Resources: private only expands existing buildings'),
+    ('existing_infrastructure', 'zw_var_auto_invest_existing_buildings_only_infrastructure',
+     'Infraestrutura: privado só expande prédio existente', 'Infrastructure: private only expands existing buildings'),
+    ('no_foreign_manufacture', 'zw_var_no_foreign_private_investment_manufacture',
+     'Investimento próprio no exterior bloqueado: manufatura', 'Outbound investment blocked: manufacturing'),
+    ('no_foreign_agro', 'zw_var_no_foreign_private_investment_agro',
+     'Investimento próprio no exterior bloqueado: agropecuária', 'Outbound investment blocked: agriculture'),
+    ('no_foreign_resource', 'zw_var_no_foreign_private_investment_resource',
+     'Investimento próprio no exterior bloqueado: recursos', 'Outbound investment blocked: resources'),
+    ('no_foreign_infrastructure', 'zw_var_no_foreign_private_investment_infrastructure',
+     'Investimento próprio no exterior bloqueado: infraestrutura', 'Outbound investment blocked: infrastructure'),
+    ('intervene_industry', 'zw_var_intervene_investment_from_abroad_industry',
+     'Investimento estrangeiro vigiado: indústria', 'Inbound investment policed: industry'),
+    ('intervene_agriculture', 'zw_var_intervene_investment_from_abroad_agriculture',
+     'Investimento estrangeiro vigiado: agropecuária', 'Inbound investment policed: agriculture'),
 )
 SUPPLY_TARGETS = [
     {'good': 'wood', 'building': 'building_logging_camp', 'methods': ['pm_electric_saw_mills', 'pm_saw_mills', 'pm_simple_forestry'], 'label_pt': 'madeira', 'label_en': 'wood', 'building_pt': 'acampamento madeireiro', 'building_en': 'logging camp'},
@@ -218,11 +247,13 @@ sed_queue_levels_before'''.split() + [
       for field in ('intents', 'completed', 'abandoned', 'result', 'result_month')],
     *[f"sed_{item['good']}_{reason}" for item in SUPPLY_TARGETS
       for reason in SUPPLY_DIAGNOSTICS],
+    *[f"sed_import_notice_{item['good']}_{field}" for item in SUPPLY_TARGETS
+      for field in ('month', 'buy', 'sell')],
 ]
 
 
 EXTRA_VARIABLES += production_methods.COUNTRY_VARIABLES + investment.COUNTRY_VARIABLES
-EXTRA_VARIABLES += planning.country_variables(ACTION_NAMES) + coordination.VARIABLES + construction_budget.VARIABLES + input_forecast.COUNTRY_VARIABLES
+EXTRA_VARIABLES += planning.country_variables(ACTION_NAMES) + coordination.VARIABLES + construction_budget.VARIABLES + input_forecast.COUNTRY_VARIABLES + trade_capacity.VARIABLES
 EXTRA_VARIABLES += ['sed_input_pass_changed', *(f'sed_input_priority_{good}' for good in INPUT_DEPENDENCIES)]
 
 
@@ -455,6 +486,7 @@ sed_refresh_supply_candidates = {
 }''')
     result.append('''sed_auto_apply_monthly = {
  sed_configure_founded_industries = yes
+ sed_refresh_trade_center = yes
  sed_refresh_national_plan = yes
  sed_recover_existing_industry = yes
  sed_modernize_existing_industry = yes
@@ -523,7 +555,20 @@ sed_auto_run_direct = {
     sed_run_{name}_approval = yes
    }}
   }}''')
-    result.append(''' }
+    # Last resort: no local action was eligible, so buy trade capacity instead of
+    # idling. The executor guard above already checked queue, budget and pause.
+    result.append('''  else_if = {
+   limit = { any_scope_state = { sed_trade_center_candidate_eligible = yes } }
+   ordered_scope_state = {
+    limit = { sed_trade_center_candidate_eligible = yes }
+    order_by = { value = state_population }
+    max = 1
+    check_range_bounds = no
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
+    sed_run_trade_center_approval = yes
+   }
+  }
+ }
  else_if = { limit = { in_default = yes } set_variable = { name = sed_auto_action_status value = 10 } }
  else_if = { limit = { sed_auto_month_limit_reached = yes } set_variable = { name = sed_auto_action_status value = 16 } }
  else_if = { limit = { construction_queue_num_queued_private_levels > 0 } set_variable = { name = sed_auto_action_status value = 11 } }
@@ -686,10 +731,16 @@ def widget():
         body += textbox(f'sed_auto_{state}', f'sed_auto_{state}_visible_sgui')
     for blocker in ('default', 'month_limit', 'queue', 'paused', 'competing', 'fiscal', 'budget', 'clear'):
         body += textbox(f'sed_auto_current_{blocker}', f'sed_auto_current_{blocker}_visible_sgui')
+    body += textbox('sed_auto_current_queue_control', 'sed_auto_current_queue_control_visible_sgui')
     body += textbox('sed_auto_builders_title', 'sed_auto_builders_visible_sgui')
     for name, option, pt, en in COMPETING_BUILDERS:
         body += textbox(f'sed_auto_builder_{name}', f'sed_auto_builder_{name}_visible_sgui')
     body += textbox('sed_auto_builders_help', 'sed_auto_builders_visible_sgui')
+    body += textbox('sed_private_control_title', 'sed_private_control_visible_sgui')
+    for name, option, pt, en in PRIVATE_CONTROL_FLAGS:
+        body += textbox(f'sed_private_control_{name}', f'sed_private_control_{name}_visible_sgui')
+    body += textbox('sed_private_control_help', 'sed_private_control_visible_sgui')
+    body += textbox('sed_pm_external', 'sed_pm_external_visible_sgui')
     for policy in ('tax', 'wage'):
         body += textbox(f'sed_{policy}_last_command', f'sed_{policy}_last_command_visible_sgui')
     body += textbox('sed_auto_last_review', 'sed_auto_last_review_visible_sgui')
@@ -729,7 +780,12 @@ def widget():
     for good, _, _ in planning.MILITARY_GOODS:
         body += textbox(f'sed_military_short_{good}', f'sed_military_short_{good}_visible_sgui')
     body += textbox('sed_military_scope')
+    body += textbox('sed_laws_scope')
+    body += textbox('sed_laws_external', 'sed_laws_external_visible_sgui')
     body += textbox('sed_input_forecast_policy')
+    body += textbox('sed_investment_policy')
+    body += textbox('sed_investment_wage', 'sed_investment_wage_visible_sgui')
+    body += textbox('sed_investment_wage_unknown', 'sed_investment_wage_unknown_visible_sgui')
     body += textbox('sed_plan_policy')
     body += textbox('sed_tax_policy', 'sed_tax_policy_visible_sgui')
     body += textbox('sed_wage_policy', 'sed_tax_policy_visible_sgui')
@@ -791,6 +847,11 @@ def widget():
                         + textbox(f'sed_{good}_rejection_details', f'sed_{good}_no_candidates_visible_sgui'))
         all_candidates += textbox(f'sed_{good}_action_success', f'sed_{good}_action_success_visible_sgui')
         all_candidates += textbox(f'sed_{good}_action_failed', f'sed_{good}_action_failed_visible_sgui')
+    all_candidates += textbox('sed_trade_center_title', heading=True)
+    all_candidates += textbox('sed_trade_center_note')
+    all_candidates += textbox('sed_trade_center_needed', 'sed_trade_center_needed_visible_sgui')
+    all_candidates += textbox('sed_trade_center_success', 'sed_trade_center_success_visible_sgui')
+    all_candidates += textbox('sed_trade_center_failed', 'sed_trade_center_failed_visible_sgui')
     body += details(all_candidates)
     diagnostic = textbox('sed_details_title', heading=True)
     for title, metrics in [('sed_finance_title', ['balance', 'operating_balance', 'fixed_expenses', 'gold', 'debt', 'credit']),
@@ -881,6 +942,8 @@ sed_monthly_update = {
   }
   if = { limit = { has_variable = sed_coord_active } sed_refresh_national_plan = yes sed_coord_sync = yes }
   sed_schedule_auto_event = yes
+  # Advisory only: never opens a trade route, because the script cannot do it.
+  sed_check_import_notices = yes
  }
 }
 
@@ -1295,7 +1358,7 @@ sed_update_growth = {
     state_cleanup = '\n'.join('  remove_variable = ' + name for name in planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES + investment.STATE_VARIABLES + production_methods.state_variables(SUPPLY_TARGETS))
     script = script.replace(' # Schema and automatic attempt month',
                             ' every_scope_state = {\n' + state_cleanup + '\n }\n # Schema and automatic attempt month', 1)
-    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, INPUT_DEPENDENCIES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + input_forecast.effects() + input_priority_effect() + labor.effects() + construction_budget.effects(founding_projects()) + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + planning.military_wage_policy_effects() + investment.effects() + production_methods.effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants, recovery=True) + coordination.effects()
+    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, INPUT_DEPENDENCIES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + input_forecast.effects() + input_priority_effect() + labor.effects() + construction_budget.effects(founding_projects()) + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + planning.military_wage_policy_effects() + investment.effects() + production_methods.effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants, recovery=True) + coordination.effects() + trade_capacity.effects() + import_notice_effect()
 
 
 def scripted_guis():
@@ -1333,6 +1396,15 @@ sed_approve_construction_sgui = {
  effect = {{ sed_set_mode_{mode} = yes }}
 }}
 sed_mode_{mode}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_mode_{mode} }} }}
+'''
+    result += '''sed_laws_external_visible_sgui = { scope = country
+ is_shown = { has_variable = sed_enabled has_variable = sg_enabled } }
+sed_investment_wage_visible_sgui = { scope = country
+ is_shown = { has_variable = sed_enabled
+  has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 } }
+sed_investment_wage_unknown_visible_sgui = { scope = country
+ is_shown = { has_variable = sed_enabled
+  NOT = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 } } }
 '''
     for item in SUPPLY_TARGETS:
         good = item['good']
@@ -1514,6 +1586,10 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
     result += f'sed_auto_builders_visible_sgui = {{ scope = country is_shown = {{ {base} sed_competing_builder_configured = yes }} }}\n'
     for name, option, pt, en in COMPETING_BUILDERS:
         result += f'sed_auto_builder_{name}_visible_sgui = {{ scope = country is_shown = {{ {base} has_variable = {option} }} }}\n'
+    result += 'sed_private_control_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled sed_private_control_configured = yes } }\n'
+    result += 'sed_pm_external_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled sed_pm_external_managed = yes } }\n'
+    for name, option, pt, en in PRIVATE_CONTROL_FLAGS:
+        result += f'sed_private_control_{name}_visible_sgui = {{ scope = country is_shown = {{ is_player = yes has_variable = sed_enabled has_variable = {option} }} }}\n'
     previous = ''
     for name, condition in [
         ('default', 'in_default = yes'),
@@ -1527,6 +1603,7 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
         result += f'sed_auto_current_{name}_visible_sgui = {{ scope = country is_shown = {{ {base} {previous} {condition} }} }}\n'
         previous += f' NOT = {{ {condition} }}'
     result += f'sed_auto_current_clear_visible_sgui = {{ scope = country is_shown = {{ {base} sed_auto_executor_safe = yes }} }}\n'
+    result += f'sed_auto_current_queue_control_visible_sgui = {{ scope = country is_shown = {{ {base} construction_queue_num_queued_private_levels > 0 sed_private_control_configured = yes }} }}\n'
     result += 'sed_auto_status_delegated_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 18 } }\n'
     for executor in range(14):
         result += f'sed_coord_executor_{executor}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = {executor} }} }}\n'
@@ -1563,7 +1640,10 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
         result += f'sed_goal_{goal}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_plan_goal var:sed_plan_goal = {goal} }} }}\n'
     for item in SUPPLY_TARGETS:
         name = item['good']
-        result += f'sed_meta_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_{name}_meta_year var:sed_{name}_meta_year = year }} }}\n'
+        result += (f'sed_meta_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled '
+                   f'OR = {{ AND = {{ has_variable = sed_{name}_meta_year var:sed_{name}_meta_year = year }} '
+                   f'AND = {{ has_variable = sed_{name}_goal_streak var:sed_{name}_goal_streak >= 2 '
+                   f'has_variable = sed_{name}_short_months }} }} }} }}\n')
     for item in SUPPLY_TARGETS:
         name = item['good']
         result += f'sed_book_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_{name}_intents var:sed_{name}_intents > 0 }} }}\n'
@@ -1583,7 +1663,77 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
     result += 'sed_railway_found_reason_visible_sgui = { scope = state is_shown = { owner = { has_variable = sed_enabled } sed_railway_found_site = yes } }\n'
     result += 'sed_tax_policy_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_mode_automatic } }\n'
     result += 'sed_details_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_details_visible } }\n'
+    result += 'sed_trade_center_success_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_trade_center_action_status var:sed_trade_center_action_status = 1 } }\n'
+    result += 'sed_trade_center_failed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_trade_center_action_status var:sed_trade_center_action_status = 2 } }\n'
+    result += 'sed_trade_center_needed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled sed_trade_center_needed = yes } }\n'
     return '# Generated by tools/build_mod.py.\n' + result
+
+
+def import_notice_effect():
+    result = ["""# Country scope. Fires a visible event only when local supply cannot respond.
+# The script has no trade-route effect in 1.15 (create_trade_route was removed in 1.9),
+# so the event advises the player instead of acting.
+sed_check_import_notices = {"""]
+    for index, item in enumerate(SUPPLY_TARGETS, start=2):
+        good = item['good']
+        result.append(f''' if = {{
+  limit = {{
+   sed_{good}_supply_demand = yes
+   OR = {{
+    NOT = {{ has_variable = sed_import_notice_{good}_month }}
+    var:sed_import_notice_{good}_month <= sed_live_month_key
+   }}
+   NOT = {{ any_scope_state = {{ sed_{good}_candidate_eligible = yes }} }}
+   NOT = {{ any_scope_state = {{ has_variable = sed_{good}_request_pending }} }}
+  }}
+  set_variable = {{ name = sed_import_notice_{good}_buy
+   value = {{ value = 0 market = {{ mg:{good} ?= {{ add = market_goods_buy_orders }} }} }} }}
+  set_variable = {{ name = sed_import_notice_{good}_sell
+   value = {{ value = 0 market = {{ mg:{good} ?= {{ add = market_goods_sell_orders }} }} }} }}
+  trigger_event = {{ id = sed_pulse.{index} days = 0 }}
+ }}''')
+    result.append('}')
+    return '\n'.join(result) + '\n'
+
+
+def import_notice_events():
+    result = []
+    for index, item in enumerate(SUPPLY_TARGETS, start=2):
+        good = item['good']
+        result.append(f'''# Advisory: no local expansion is eligible, so importing is the remaining lever.
+sed_pulse.{index} = {{
+ type = country_event
+ placement = root
+ title = sed_import_notice_{good}_title
+ desc = sed_import_notice_{good}_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = {{ is_player = yes has_variable = sed_enabled }}
+ immediate = {{
+  set_variable = {{ name = sed_import_notice_{good}_month value = {{ value = sed_live_month_key add = 6 }} }}
+ }}
+ option = {{
+  name = sed_import_notice_{good}_option_trade
+  custom_tooltip = sed_import_notice_{good}_option_trade_tt
+  ai_chance = {{ base = 40 }}
+  set_variable = {{ name = sed_import_notice_{good}_month value = {{ value = sed_live_month_key add = 12 }} }}
+ }}
+ option = {{
+  name = sed_import_notice_{good}_option_plan
+  custom_tooltip = sed_import_notice_{good}_option_plan_tt
+  default_option = yes
+  ai_chance = {{ base = 40 }}
+  sed_refresh_diagnostics = yes
+ }}
+ option = {{
+  name = sed_import_notice_{good}_option_mute
+  custom_tooltip = sed_import_notice_{good}_option_mute_tt
+  ai_chance = {{ base = 20 }}
+  set_variable = {{ name = sed_import_notice_{good}_month value = {{ value = sed_live_month_key add = 24 }} }}
+ }}
+}}''')
+    return '\n\n'.join(result) + '\n'
 
 
 def scripted_triggers():
@@ -1732,7 +1882,7 @@ sed_{good}_candidate_eligible = {{
  OR = {{
   owner = {{ {shortage} }}
   owner = {{ has_variable = sed_input_priority_{good} }}
-  sed_investment_{good}_margin > 0
+  sed_investment_{good}_return > 0
  }}
 }}
 ''')
@@ -1808,16 +1958,16 @@ sed_{good}_{variant_id(variant)}_operable = {{
                     comparison = '>' if other_index < index else '>='
                     result.append(f''' OR = {{
   NOT = {{ sed_{good}_{other_name}_investment_eligible = yes }}
-  AND = {{ sed_investment_{name}_margin >= 0 sed_investment_{other_name}_margin < 0 }}
+  AND = {{ sed_investment_{name}_return >= 0 sed_investment_{other_name}_return < 0 }}
   AND = {{
    OR = {{
-    AND = {{ sed_investment_{name}_margin >= 0 sed_investment_{other_name}_margin >= 0 }}
-    AND = {{ sed_investment_{name}_margin < 0 sed_investment_{other_name}_margin < 0 }}
+    AND = {{ sed_investment_{name}_return >= 0 sed_investment_{other_name}_return >= 0 }}
+    AND = {{ sed_investment_{name}_return < 0 sed_investment_{other_name}_return < 0 }}
    }}
    OR = {{
     sed_investment_{name}_output > sed_investment_{other_name}_output
     AND = {{ sed_investment_{name}_output = sed_investment_{other_name}_output
-     sed_investment_{name}_margin {comparison} sed_investment_{other_name}_margin
+     sed_investment_{name}_return {comparison} sed_investment_{other_name}_return
     }}
    }}
   }}
@@ -1879,7 +2029,11 @@ sed_auto_executor_safe = {
     result.append('sed_direct_supply_priority_exists = {\n OR = {\n' + priorities + '\n }\n}')
     options = '\n'.join(f'  has_variable = {option}' for name, option, pt, en in COMPETING_BUILDERS)
     result.append('sed_competing_builder_configured = {\n OR = {\n' + options + '\n }\n}')
-    return '\n'.join(result).rstrip() + '\n' + planning.triggers() + construction_budget.triggers() + input_forecast.triggers() + coordination.triggers() + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants) + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants, recovery=True)
+    # Read-only view of Controllable Private Construction. Absent mod = every
+    # flag is false, so this trigger is also the detection test.
+    control = '\n'.join(f'  has_variable = {option}' for name, option, pt, en in PRIVATE_CONTROL_FLAGS)
+    result.append('sed_private_control_configured = {\n OR = {\n' + control + '\n }\n}')
+    return '\n'.join(result).rstrip() + '\n' + planning.triggers() + construction_budget.triggers() + input_forecast.triggers() + coordination.triggers() + trade_capacity.triggers([item['good'] for item in SUPPLY_TARGETS]) + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants) + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants, recovery=True)
 
 
 def value(name, fmt='1'):
@@ -1887,7 +2041,10 @@ def value(name, fmt='1'):
 
 
 def localization(language):
-    pt = language == 'braz_por'
+    # Index into each (portuguese, english) pair. Keep this separate from the
+    # loop labels below: reusing it silently emitted Portuguese in the English
+    # file until 0.7.29.
+    column = 0 if language == 'braz_por' else 1
     v = value
     pairs = {
         'sed_ignore_recommendation': ('Ignorar esta expansão neste estado', 'Ignore this expansion in this state'),
@@ -1898,6 +2055,11 @@ def localization(language):
         'je_sed_diagnostics': ('Smart Economy Director', 'Smart Economy Director'),
         'je_sed_diagnostics_reason': ('Indicadores econômicos do país, atualizados sob solicitação ou todo mês.', 'National economic indicators, refreshed on request or monthly.'),
         'sed_activation_tt': ('Ative o Director pela decisão Ativar Smart Economy Director.', 'Use the Enable Smart Economy Director decision.'),
+        'sed_laws_scope': ('Leis e política ficam fora do Director: ele não propõe nem aplica leis, impostos de consumo ou gastos discricionários. Estas decisões continuam sendo do jogador e de mods dedicados.', 'Laws and politics stay outside the Director: it neither proposes nor enacts laws, consumption taxes or discretionary spending. Those decisions remain with the player and dedicated mods.'),
+        'sed_laws_external': ('Smart Government Advisor detectado. As recomendações de leis daquele mod continuam valendo e não são repetidas aqui; o Director só usa imposto geral, salário civil e salário militar com restauração.', 'Smart Government Advisor detected. That mod’s law recommendations remain in force and are not repeated here; the Director only sets general taxes, civil wages and military wages with restoration.'),
+        'sed_investment_policy': ('Decisões de oferta e a pontuação de modernização descontam a folha salarial observada. A referência usa o ganho material a 75% da receita e 125% dos insumos, menos os pesos de emprego do nível multiplicados pelo gasto por emprego ponderado. Preços futuros e lucro real continuam fora.', 'Supply decisions and modernization scoring subtract the observed wage bill. The reference uses the material gain at 75% of revenue and 125% of inputs, minus the level’s employment weights times the cost per weighted job. Future prices and realized profit remain outside.'),
+        'sed_investment_wage': ('Unidade salarial observada: @money!' + v('investment_wage_unit', '2') + ' por emprego ponderado por semana, a partir dos prédios saudáveis do país. Estados com amostra própria usam a própria média, e cada tipo de prédio usa a amostra da própria família quando ela existe; sem amostra própria, vale a média nacional.', 'Observed wage unit: @money!' + v('investment_wage_unit', '2') + ' per weighted job per week, from the country’s healthy buildings. States with their own sample use their own average, and each building type uses its own family sample when one exists; otherwise the national average applies.'),
+        'sed_investment_wage_unknown': ('Sem amostra salarial utilizável. Elegibilidade, preferência entre fornecedores e pontuação de PMs usam apenas a margem material.', 'No usable wage sample. Eligibility, supplier preference and PM scoring use the material margin only.'),
         'sed_disabled_desc': ('Diagnóstico desativado.', 'Diagnostics disabled.'),
         'sed_enable': ('Ativar Smart Economy Director', 'Enable Smart Economy Director'),
         'sed_enable_desc': ('Abre um diagnóstico econômico no diário e lê os indicadores atuais. A ativação é opcional, inclusive em saves existentes.', 'Opens an economic diagnosis in the journal and reads current indicators. Enabling is optional, including in existing saves.'),
@@ -2003,6 +2165,30 @@ def localization(language):
         vs = variants(item)
         building_pt = ' / '.join(variant['building_pt'] for variant in vs)
         building_en = ' / '.join(variant['building_en'] for variant in vs)
+        pairs[f'sed_import_notice_{good}_title'] = (
+            f'Escassez de {label_pt}: importar ou ampliar?',
+            f'{label_en[:1].upper() + label_en[1:]} shortage: import or expand?')
+        pairs[f'sed_import_notice_{good}_desc'] = (
+            f'A demanda de {label_pt} supera a oferta e nenhuma expansão local passou nos filtros agora — trabalhadores, insumos, fila, orçamento ou infraestrutura barraram as candidatas. Pedidos do mercado agora: compra #variable [ROOT.GetCountry.MakeScope.Var(\'sed_import_notice_{good}_buy\').GetValue|D]#!, venda #variable [ROOT.GetCountry.MakeScope.Var(\'sed_import_notice_{good}_sell\').GetValue|D]#!. A diferença indica o tamanho da lacuna que uma importação cobriria; não é estimativa de custo, frete ou comboios.\n\nDesde a 1.9 não existe rota comercial manual: quem traz de fora é o Centro de Comércio, pelo Mercado Mundial. Para tentar importar {label_pt}:\n1. Tenha Centro de Comércio (grupo Comércio, dentro da infraestrutura privada) no seu mercado — ele gera capacidade de comércio. Portos nos estados costeiros geram a Marinha Mercante usada no transporte.\n2. No painel do bem, no Mercado, reduza a tarifa de importação e/ou pague subvenção à importação: isso deixa a compra externa lucrativa para os comerciantes.\n3. Se quiser acordo direto, use a cláusula Transferência de Bens num tratado com outro país (envio semanal fixo).\n4. Isolacionismo desliga o comércio com o Mercado Mundial.\n\nO Director não pode abrir comércio por script. Ampliar a produção local segue possível quando um filtro liberar.',
+            f'Demand for {label_en} exceeds supply and no local expansion passed the filters this time — workers, inputs, queue, budget or infrastructure blocked the candidates. Market orders now: buy #variable [ROOT.GetCountry.MakeScope.Var(\'sed_import_notice_{good}_buy\').GetValue|D]#!, sell #variable [ROOT.GetCountry.MakeScope.Var(\'sed_import_notice_{good}_sell\').GetValue|D]#!. The difference shows the size of the gap an import would cover; it is not a cost, convoy or freight estimate.\n\nSince 1.9 there is no manual trade route: the Trade Center brings goods from abroad through the World Market. To try to import {label_en}:\n1. Have a Trade Center (Trade group, under private infrastructure) in your market — it generates Trade Capacity. Ports in coastal states generate the Merchant Marine used for shipping.\n2. In the good’s panel in the Market, lower the import tariff and/or pay an import subvention: that makes buying abroad profitable for traders.\n3. For a direct deal, use the Goods Transfer clause in a treaty with another country (fixed weekly amount).\n4. Isolationism disables World Market trade.\n\nThe Director cannot open trade by script. Local expansion becomes possible again once a filter clears.')
+        pairs[f'sed_import_notice_{good}_option_trade'] = (
+            'Vou tentar importar pelo Mercado Mundial',
+            'I will try to import through the World Market')
+        pairs[f'sed_import_notice_{good}_option_trade_tt'] = (
+            f'O Director não enfileira obras de {label_pt} e volta a avaliar este aviso em 12 meses. Importar é ação sua: Centro de Comércio, tarifa ou subvenção no painel do bem, tratado com Transferência de Bens, e conferir se a lei não é Isolacionismo.',
+            f'The Director queues no {label_en} construction and re-evaluates this notice in 12 months. Importing is your action: Trade Center, tariff or subvention in the good’s panel, a Goods Transfer treaty, and check that the law is not Isolationism.')
+        pairs[f'sed_import_notice_{good}_option_plan'] = (
+            'Recalcular o plano agora',
+            'Recompute the plan now')
+        pairs[f'sed_import_notice_{good}_option_plan_tt'] = (
+            'Atualiza o diagnóstico e as prioridades imediatamente, sem enfileirar obras nem alterar impostos ou salários.',
+            'Refreshes diagnosis and priorities immediately, without queueing construction or changing taxes or wages.')
+        pairs[f'sed_import_notice_{good}_option_mute'] = (
+            'Só me avise em 2 anos',
+            'Warn me again in 2 years')
+        pairs[f'sed_import_notice_{good}_option_mute_tt'] = (
+            f'Adia este aviso de {label_pt} por 24 meses. A escassez continua no diagnóstico e nas recomendações.',
+            f'Postpones this {label_en} notice for 24 months. The shortage stays in the diagnosis and recommendations.')
         plural_pt = 'estados com ' + building_pt
         if len(vs) == 1:
             plural_en = 'states with a ' + vs[0]['building_en']
@@ -2094,6 +2280,13 @@ def localization(language):
         'sed_supply_intro': ('Expansões de produtores existentes ou fundação da indústria ausente para atender à escassez do mercado ou abastecer outra expansão.', 'Existing producer expansions or founding of the missing industry to address market shortages or supply another expansion.'),
         'sed_supply_no_candidate': ('Nenhum produtor elegível nesta leitura. Esta versão só expande prédios existentes.', 'No eligible producer in this reading. This version only expands existing buildings.'),
     })
+    pairs.update({
+        'sed_trade_center_title': ('Centro de Comércio', 'Trade Center'),
+        'sed_trade_center_note': ('Quando um bem em escassez não tem produtor no país e nenhum estado pode receber a fábrica, o Automático pode ampliar um Centro de Comércio existente ou fundar o primeiro num estado que aceite a obra. Ali não há como produzir o bem: resta trazê-lo pelo Mercado Mundial. O nível compra capacidade de comércio para o Mercado Mundial; o Director não abre rota, não altera tarifa ou subvenção e não constrói sob Isolacionismo. Respeita as guardas de fila, orçamento e uma tentativa por mês.', 'When a short good has no producer in the country and no state can host the industry, Automatic may expand an existing Trade Center or found the first one in a state that accepts the building. Nothing local can make the good: the only way left is the World Market. The level buys Trade Capacity for the World Market; the Director does not open a route, does not change tariffs or subventions and does not build under Isolationism. It respects the queue, budget and one-attempt-per-month guards.'),
+        'sed_trade_center_needed': ('Sem produtor nacional e sem estado apto a receber a fábrica, o Centro de Comércio é a alternativa para trazer o bem pelo Mercado Mundial.', 'With no national producer and no state able to host the industry, the Trade Center is the way to bring the good through the World Market.'),
+        'sed_trade_center_success': ('Pedido de Centro de Comércio enfileirado (+1 nível). Confira custo e prazo na fila do jogo.', 'Trade Center request queued (+1 level). Check cost and time in the game queue.'),
+        'sed_trade_center_failed': ('O jogo não confirmou a inclusão do Centro de Comércio na fila pública.', 'The game did not confirm the Trade Center was added to the government queue.'),
+    })
     for name in ACTION_NAMES:
         key = f'sed_{name}_approve' if name not in ('railway', 'construction') else f'sed_approve_{name}'
         pairs[key] = ('Aprovar expansão: +1 nível', 'Approve expansion: +1 level')
@@ -2159,7 +2352,7 @@ def localization(language):
         'sed_auto_status_budget': ('Última revisão: referência de materiais da próxima obra sem cobertura ou método de construção desconhecido. Nenhuma tentativa consumida. Confira o orçamento direto no plano.', 'Last review: next-project material benchmark is uncovered or construction method is unknown. No attempt consumed. See the direct budget in the plan.'),
         'sed_build_budget_unknown': ('Orçamento direto pendente. Um setor ativo usa método de construção fora dos quatro perfis verificados. O Automático direto aguarda uma leitura reconhecida; aprovação Assistida permanece explícita.', 'Direct budget pending. An active sector uses a construction method outside the four verified profiles. Direct Automatic awaits recognized data; Assisted approval remains explicit.'),
         'sed_build_budget': ('Referência conservadora para materiais da próxima obra direta: @money!' + v('build_budget_weekly', 'K') + '/semana, para até ' + v('build_budget_points', '1') + ' pontos. Teto de materiais pelos níveis e ocupação dos setores: @money!' + v('build_budget_material_capacity', 'K') + '/semana. Ouro exigido se o saldo não cobrir a referência: @money!' + v('build_budget_required_gold', 'K') + ', com ausência de dívida. Usa o maior custo entre métodos ativos, limitado pelos materiais dos setores existentes, com preços-base acrescidos de 75%. A duração estimada do primeiro projeto amplia a reserva exigida; salários futuros, subsídios e modificadores continuam fora.', 'Conservative material benchmark for the next direct project: @money!' + v('build_budget_weekly', 'K') + '/week, for up to ' + v('build_budget_points', '1') + ' points. Sector level/occupancy material cap: @money!' + v('build_budget_material_capacity', 'K') + '/week. Gold required if the balance does not cover the benchmark: @money!' + v('build_budget_required_gold', 'K') + ', with no debt. Uses the highest active-method cost, capped by existing sector materials, with base prices plus 75%. The first project\u2019s estimated duration extends the required reserve; future wages, subsidies and modifiers remain outside.'),
-        'sed_build_budget_project': ('O primeiro projeto requer ' + v('build_budget_project_points', '0') + ' pontos, estimados em ' + v('build_budget_project_weeks', '1') + ' semanas. A fila existente acrescenta uma referência de ' + v('build_budget_queue_weeks', '1') + ' semanas. A janela de financiamento é de ' + v('build_budget_funding_weeks', '1') + ' semanas. Progresso já executado e eficiência local seguem fora da estimativa.', 'The first project requires ' + v('build_budget_project_points', '0') + ' points, estimated at ' + v('build_budget_project_weeks', '1') + ' weeks. The existing queue adds a reference of ' + v('build_budget_queue_weeks', '1') + ' weeks. The funding window is ' + v('build_budget_funding_weeks', '1') + ' weeks. Completed progress and local efficiency remain outside the estimate.'),
+        'sed_build_budget_project': ('O primeiro projeto requer ' + v('build_budget_project_points', '0') + ' pontos, estimados em ' + v('build_budget_project_weeks', '1') + ' semanas. A fila existente acrescenta uma referência de ' + v('build_budget_queue_weeks', '1') + ' semanas; a engine mede até ' + v('build_budget_queue_weeks_engine', '0') + ' semanas restantes na fila do governo (0 = vazia, arredondada para cima). A fila contém ' + v('build_budget_queue_projects', '0') + ' projetos do governo e ' + v('build_budget_queue_private_projects', '0') + ' privados. A janela de financiamento é de ' + v('build_budget_funding_weeks', '1') + ' semanas. Progresso já executado, autor de cada projeto e eficiência local seguem fora da estimativa.', 'The first project requires ' + v('build_budget_project_points', '0') + ' points, estimated at ' + v('build_budget_project_weeks', '1') + ' weeks. The existing queue adds a reference of ' + v('build_budget_queue_weeks', '1') + ' weeks; the engine reports up to ' + v('build_budget_queue_weeks_engine', '0') + ' weeks remaining in the government queue (0 = empty, rounded up). The queue holds ' + v('build_budget_queue_projects', '0') + ' government projects and ' + v('build_budget_queue_private_projects', '0') + ' private ones. The funding window is ' + v('build_budget_funding_weeks', '1') + ' weeks. Completed progress, each project\u2019s author and local efficiency remain outside the estimate.'),
         'sed_coord_executor_12': ('Ritmo por reservas: aguardando a fila pública existente. Com déficit financiado por ouro, novas autorizações externas ficam suspensas enquanto houver níveis públicos enfileirados. A política fiscal continua ativa e o orçamento é reavaliado nas revisões.', 'Reserve-funded pace: waiting for the existing government queue. While gold funds a deficit, new external authorizations remain suspended while government levels are queued. Fiscal policy remains active and the budget is reassessed on reviews.'),
         'sed_auto_status_reserve_queue': ('Última revisão: preservação de reservas, aguardando obras públicas já enfileiradas antes de autorizar novos investimentos.', 'Last review: preserving reserves, waiting for already queued government projects before authorizing new investment.'),
         'sed_reserve_budget': ('Orçamento por reservas nesta leitura. Piso de doze semanas de despesas fixas: @money!' + v('reserve_floor', 'K') + '. Ouro acima do piso: @money!' + v('reserve_spare', 'K') + '. Cobertura do déficit atual acima do piso: ' + v('reserve_runway', '1') + ' semanas. Ouro exigido pela regra de 26 semanas: @money!' + v('reserve_required', 'K') + '. Estimativa com despesas e déficit atuais; custo de novas obras ainda precisa ser avaliado.', 'Reserve budget in this reading. Twelve-week fixed-expense floor: @money!' + v('reserve_floor', 'K') + '. Gold above the floor: @money!' + v('reserve_spare', 'K') + '. Current deficit coverage above the floor: ' + v('reserve_runway', '1') + ' weeks. Gold required by the 26-week rule: @money!' + v('reserve_required', 'K') + '. Estimate using current expenses and deficit; new construction costs still require assessment.'),
@@ -2188,7 +2381,7 @@ def localization(language):
         producers_en = ', '.join(names_en[:-1]) + (' or ' if len(names_en) > 1 else '') + names_en[-1]
         pairs[f'sed_plan_missing_{name}'] = (f"Setor a fundar: {item['label_pt']} em escassez no mercado, sem produtor verificado ({producers_pt}) nos estados do país. O Director funda a base quando há estado incorporado apto, sob as guardas fiscais, de materiais e de fila. Importação ou outros produtores podem suprir o bem; não é ordem de autossuficiência.", f"Sector to found: market shortage of {item['label_en']}, with no verified producer ({producers_en}) in the country's states. The Director founds the base when an incorporated state can host it, under the fiscal, material and queue guards. Imports or other producers may supply it; this is not a self-sufficiency mandate.")
         pairs[f'sed_book_{name}'] = (f"Histórico de {item['label_pt']}: {v(name + '_intents', '0')} pedidos, {v(name + '_completed', '0')} concluídos, {v(name + '_abandoned', '0')} abandonados. Conclusão inferida quando o nível do produtor sobe ao sair da fila; cancelamento ou obra externa podem distorcer a leitura.", f"{item['label_en'].capitalize()} history: {v(name + '_intents', '0')} requested, {v(name + '_completed', '0')} completed, {v(name + '_abandoned', '0')} abandoned. Completion is inferred when the producer level rises after leaving the queue; cancellation or external work can distort it.")
-        pairs[f'sed_meta_{name}'] = (f"Meta industrial anual: ampliar a oferta de {item['label_pt']}. A escassez foi observada em três meses de calendário consecutivos; ele mantém prioridade no plano até o fim do ano. A meta não dispensa os filtros de trabalhadores, insumos, fila, infraestrutura e proteção fiscal.", f"Annual industrial goal: expand the supply of {item['label_en']}. Shortage was observed in three consecutive calendar months; it keeps priority in the plan until the end of the year. The goal does not bypass the worker, input, queue, infrastructure and fiscal guards.")
+        pairs[f'sed_meta_{name}'] = (f"Meta industrial anual: ampliar a oferta de {item['label_pt']}. A escassez foi observada em três meses de calendário consecutivos; ela mantém prioridade no plano até o fim do ano. Repetida em anos seguidos, a meta vira plurianual (até cinco anos, +15 de prioridade) e continua visível enquanto a escassez for observada. A meta não dispensa os filtros de trabalhadores, insumos, fila, infraestrutura e proteção fiscal.", f"Annual industrial goal: expand the supply of {item['label_en']}. Shortage was observed in three consecutive calendar months; it keeps priority in the plan until the end of the year. Repeated in consecutive years it becomes a multi-year goal (up to five years, +15 priority) and stays visible while the shortage is observed. The goal does not bypass the worker, input, queue, infrastructure and fiscal guards.")
     pairs['sed_book_railway'] = (f"Histórico de ferrovias: {v('railway_intents', '0')} pedidos, {v('railway_completed', '0')} concluídos, {v('railway_abandoned', '0')} abandonados. Conclusão inferida quando o nível sobe ao sair da fila.", f"Railway history: {v('railway_intents', '0')} requested, {v('railway_completed', '0')} completed, {v('railway_abandoned', '0')} abandoned. Completion is inferred when the level rises after leaving the queue.")
     pairs['sed_book_construction'] = (f"Histórico de setores de construção: {v('construction_intents', '0')} pedidos, {v('construction_completed', '0')} concluídos, {v('construction_abandoned', '0')} abandonados. Conclusão inferida quando o nível sobe ao sair da fila.", f"Construction sector history: {v('construction_intents', '0')} requested, {v('construction_completed', '0')} completed, {v('construction_abandoned', '0')} abandoned. Completion is inferred when the level rises after leaving the queue.")
     for rank in planning.RANKS:
@@ -2202,6 +2395,18 @@ def localization(language):
         'Without active coordination, an enabled option suspends direct Director construction. During coordination, this list shows the authorized executor. Leaving Automatic restores original options. This list does not confirm external execution.')
     for name, option, pt_label, en_label in COMPETING_BUILDERS:
         pairs[f'sed_auto_builder_{name}'] = (pt_label, en_label)
+    pairs['sed_private_control_title'] = ('Controle de construção privada detectado (Controllable Private Construction):', 'Private construction control detected (Controllable Private Construction):')
+    for name, option, pt_label, en_label in PRIVATE_CONTROL_FLAGS:
+        pairs[f'sed_private_control_{name}'] = (pt_label, en_label)
+    pairs['sed_private_control_help'] = (
+        'O Director só lê estas opções; quem as altera é o diário Private Constructions Management do outro mod. Restrição ligada impede o investidor privado de abrir prédio novo do ramo indicado, o que reduz a disputa com o plano. A fila privada continua contando para os guardas do Director, e a intervenção no investimento estrangeiro pode fazer o jogo recusar uma obra pública pedida aqui; a recusa aparece como falha da ação. O Director não muda nem cancela nada disso.',
+        'The Director only reads these options; the other mod’s Private Constructions Management journal entry changes them. An enabled restriction stops private investors from opening new buildings in that branch, which reduces competition with the plan. The private queue still counts for the Director’s guards, and inbound investment policing may make the game refuse government work requested here; the refusal appears as an action failure. The Director changes and cancels none of this.')
+    pairs['sed_pm_external'] = (
+        'Auto-Apply PMs detectado: o Director não troca os métodos principais dos prédios que aquele mod já administra (botão do prédio ou do grupo ligado no diário dele). Fundações novas continuam recebendo a configuração inicial verificada. Desligue o botão lá para o Director voltar a modernizar aquele tipo. Esta leitura deixa o método com quem já o controla e não confirma o resultado do outro mod.',
+        'Auto-Apply PMs detected: the Director does not change main methods of buildings that mod already manages (its journal’s building or group button is on). New foundations still receive the verified initial setup. Turn that button off for the Director to modernize that type again. This reading leaves the method with whoever already controls it and does not confirm the other mod’s result.')
+    pairs['sed_auto_current_queue_control'] = (
+        'A fila privada ocupada conta para os guardas do Director mesmo com o controle ativo. Se ela foi aberta por prédios que o Director já planeja, restrinja a autoexpansão no diário Private Constructions Management e aguarde a fila esvaziar. O Director não altera essas opções nem cancela obras.',
+        'An occupied private queue counts for the Director’s guards even with the control active. If it was opened for buildings the Director already plans, restrict expansion in the Private Constructions Management journal entry and wait for the queue to empty. The Director changes neither the options nor existing projects.')
     pairs['sed_railway_candidate_reason'] = ('Ferrovia operante em estado com déficit de infraestrutura. Custo e retorno não estimados.', 'Operating railway in a state with an infrastructure deficit. Cost and return not estimated.')
     pairs['sed_railway_found_reason'] = ('Estado com déficit de infraestrutura e sem ferrovia: o Director funda a primeira. Custo e retorno não estimados.', 'State with an infrastructure deficit and no railway: the Director founds the first one. Cost and return not estimated.')
     pairs['sed_construction_candidate_reason'] = ('Setor operante e fila pública com demanda. Custo e contratação futura não estimados.', 'Operating sector with demand in the government queue. Cost and future hiring not estimated.')
@@ -2257,7 +2462,10 @@ def localization(language):
         pairs['sed_metric_' + metric['id']] = (metric['pt'] + ': ' + reading, metric['en'] + ': ' + reading)
     lines = [f'l_{language}:']
     for key, pair in pairs.items():
-        text = pair[0 if pt else 1].replace('"', '\\"')
+        text = pair[column].replace('"', '\\"')
+        # Paradox localization is one line per key: a real newline breaks the
+        # parser, so multi-paragraph texts must carry a literal \n escape.
+        text = text.replace('\n', '\\n')
         lines.append(f' {key}:0 "{text}"')
     return '\n'.join(lines) + '\n'
 
@@ -2322,7 +2530,7 @@ sed_pulse.1 = {
   }
  }
 }
-'''
+''' + import_notice_events()
     projects = founding_projects()
     result = {
         'common/decisions/sed_decisions.txt': decisions,
