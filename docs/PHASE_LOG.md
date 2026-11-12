@@ -2357,3 +2357,31 @@ mesmos 3 `unknown-field` de diário e 917 avisos.
 
 Não verificado na engine: exibição da meta plurianual em janeiro e efeito dos 15
 pontos na ordem real do plano.
+
+## 0.7.26 — Unidade salarial por família de prédio
+
+A unidade salarial da 0.7.19 era uma média nacional só: todos os prédios pagavam o
+mesmo por emprego ponderado no cálculo de retorno, o que distorcia a comparação
+entre famílias muito diferentes. Agora `sed_refresh_investment_wages` acumula
+custo e empregos por prédio e publica `sed_investment_wage_unit_<prédio>` com
+`_known_<prédio>` (no país e em cada estado, como a média nacional).
+`sed_investment_<prédio>_return` usa a amostra da família quando ela existe e cai
+na média nacional caso contrário; `sed_investment_<prédio>_return_national`
+mantém o cálculo antigo para comparação e teste.
+
+Sondagem de qualificações, em `/tmp/sed_dur` com Tiger 1.19.0:
+`pop_qualifications`, `state_pop_qualifications`, `has_pop_qualifications`,
+`wages`, `wage_rate` e `average_wage` são `unknown token`. Existe `average_sol`
+(leitura) e `set_pop_qualifications` (escrita). Não há como filtrar por
+qualificação ou salário de profissão; o proxy do mod continua sendo `occupancy`
+e `has_failed_hires`.
+
+Teste sintético — 378 aprovados; um novo confere que a família com amostra própria
+usa a própria unidade, que a média nacional difere e que família sem amostra
+mantém o fallback.
+
+Estático — geração consistente, validação local 1.15 aprovada, Tiger 1.19.0 nos
+mesmos 3 `unknown-field` de diário e 917 avisos.
+
+Não verificado na engine: efeito da amostra por família na escolha real de
+fornecedor em campanha.

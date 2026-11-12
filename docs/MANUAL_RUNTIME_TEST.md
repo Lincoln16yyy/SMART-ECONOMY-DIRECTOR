@@ -660,3 +660,16 @@ expirar seguem NÃO VERIFICADO; as três opções são inofensivas por desenho.
    plurianual).
 4. Desativar o Director e conferir que `sed_<bem>_goal_streak`, `meta_since` e
    `meta_year` não sobram.
+
+## Unidade salarial por família 0.7.26 (pendente)
+
+1. Com o Director ativo, abrir o painel e conferir a linha "Unidade salarial
+   observada".
+2. Comparar a escolha de fornecedor de um bem com duas opções de prédio (ex.:
+   cereais em fazenda de trigo vs. arroz) com e sem prédios saudáveis de cada
+   família: quando existir amostra da família, o retorno dela deve usar essa
+   amostra, não a média nacional.
+3. Conferir que prédios subsidiados, com escassez de insumos, contratações
+   falhas ou ocupação abaixo de 80% continuam fora da amostra.
+4. Desativar o Director e verificar que as variáveis `sed_investment_wage_*_
+   <prédio>` não sobram.

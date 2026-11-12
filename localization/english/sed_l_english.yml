@@ -10,7 +10,7 @@
  sed_laws_scope:0 "Leis e política ficam fora do Director: ele não propõe nem aplica leis, impostos de consumo ou gastos discricionários. Estas decisões continuam sendo do jogador e de mods dedicados."
  sed_laws_external:0 "Smart Government Advisor detectado. As recomendações de leis daquele mod continuam valendo e não são repetidas aqui; o Director só usa imposto geral, salário civil e salário militar com restauração."
  sed_investment_policy:0 "Decisões de oferta e a pontuação de modernização descontam a folha salarial observada. A referência usa o ganho material a 75% da receita e 125% dos insumos, menos os pesos de emprego do nível multiplicados pelo gasto por emprego ponderado. Preços futuros e lucro real continuam fora."
- sed_investment_wage:0 "Unidade salarial observada: @money![JournalEntry.GetCountry.MakeScope.Var('sed_investment_wage_unit').GetValue|2] por emprego ponderado por semana, a partir dos prédios saudáveis do país. Estados com amostra própria usam a própria média."
+ sed_investment_wage:0 "Unidade salarial observada: @money![JournalEntry.GetCountry.MakeScope.Var('sed_investment_wage_unit').GetValue|2] por emprego ponderado por semana, a partir dos prédios saudáveis do país. Estados com amostra própria usam a própria média, e cada tipo de prédio usa a amostra da própria família quando ela existe; sem amostra própria, vale a média nacional."
  sed_investment_wage_unknown:0 "Sem amostra salarial utilizável. Elegibilidade, preferência entre fornecedores e pontuação de PMs usam apenas a margem material."
  sed_disabled_desc:0 "Diagnóstico desativado."
  sed_enable:0 "Ativar Smart Economy Director"

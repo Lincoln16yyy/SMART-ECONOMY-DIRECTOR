@@ -79,6 +79,26 @@ class InvestmentWageTests(unittest.TestCase):
         self.assertEqual(self.unit(other), 0.45)
         self.assertEqual(self.c.number('sed_investment_logging_camp_return', other), -2250)
 
+    def test_target_building_uses_its_own_family_wage_sample(self):
+        # Logging camps pay 0.5 per weighted job; wheat farms pay 0.1.
+        camp = state(buildings=[self.producer(earnings=4800, weekly_profit=1800)])
+        wheat = building('building_wheat_farm', earnings=1300, weekly_profit=1200)
+        wheat['production_methods'] = ['pm_simple_farming', 'pm_no_secondary', 'pm_tools_disabled']
+        farm = state(buildings=[wheat])
+        other = state()
+        self.refresh(camp, farm, other)
+        own = self.c.variables['sed_investment_wage_unit_wheat_farm']
+        national = self.c.variables['sed_investment_wage_unit']
+        self.assertEqual(self.c.variables['sed_investment_wage_known_wheat_farm'], 1)
+        self.assertAlmostEqual(own, self.c.variables['sed_investment_wage_cost_wheat_farm']
+                               / self.c.variables['sed_investment_wage_jobs_wheat_farm'])
+        self.assertLess(own, national)
+        own_return = self.c.number('sed_investment_wheat_farm_return', other)
+        national_return = self.c.number('sed_investment_wheat_farm_return_national', other)
+        self.assertGreater(own_return, national_return)
+        # A family without its own sample keeps the country blend.
+        self.assertEqual(self.c.number('sed_investment_logging_camp_return', other), -2550)
+
     def test_wage_aware_return_changes_the_preferred_grain_supplier(self):
         sample = state(buildings=[self.producer(earnings=1300, weekly_profit=1000)])
         wheat = building('building_wheat_farm')

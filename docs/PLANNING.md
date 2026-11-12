@@ -1337,3 +1337,11 @@ sequência até cinco, com bônus de prioridade e visibilidade enquanto a escass
 persistir. O próximo passo desta frente é registrar no histórico quantos anos a
 meta durou e se a oferta do bem subiu, para dar retorno de resultado em vez de só
 prioridade.
+
+## 0.7.26 — Unidade salarial por família de prédio
+
+Cada tipo de prédio usa a própria amostra de salário por emprego ponderado, com
+fallback para a média nacional. Qualificações continuam fora de alcance
+(primitivas de leitura inexistentes); o item fecha com `occupancy` e
+`has_failed_hires` como proxy documentado. Próximo passo possível: medir em
+campanha se a amostra por família muda a escolha de fornecedor.

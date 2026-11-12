@@ -1,5 +1,10 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.26, a unidade salarial usada no retorno é por família de prédio, com
+queda para a média nacional quando a família não tem amostra saudável. O
+jogo não expõe qualificação nem salário por profissão, então esses filtros
+continuam aproximados por ocupação e contratações falhas.
+
 Na 0.7.25, a meta de escassez que volta em anos consecutivos vira plurianual:
 ganha prioridade extra, fica visível enquanto a falta persistir e reinicia se
 passar um ano sem escassez (limite de cinco anos).

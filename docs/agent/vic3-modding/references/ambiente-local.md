@@ -175,3 +175,17 @@ zero erros:
 "Inline arithmetic in variable equality requires a named script value". Para
 comparar com um valor calculado, criar variável própria no início do efeito
 (ex.: `sed_prev_year = year - 1`) e comparar `var:x = var:sed_prev_year`.
+
+## Sondagem: qualificação e salário por profissão (2026-11-11)
+
+`/tmp/sed_dur`, Tiger 1.19.0 — todos `error(unknown-field)`:
+`pop_qualifications`, `state_pop_qualifications`, `has_pop_qualifications`,
+`wages`, `wage_rate`, `average_wage`.
+
+O que existe: `average_sol` (leitura, país) e o efeito `set_pop_qualifications`
+(escrita, `common/effect_localization/00_pop_effects_loc.txt`). Modificadores de
+qualificação são só `*_mult` em leis/tecnologias, não leitura de estoque.
+
+Conclusão: não prometer filtro por qualificação nem salário por profissão. Proxy
+do mod: `occupancy` + `has_failed_hires`; salário observado sai de
+`earnings - weekly_profit` por prédio.

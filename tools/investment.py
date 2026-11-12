@@ -9,7 +9,13 @@ except ImportError:
     import production_methods
 
 EMPLOYMENT = json.loads((Path(__file__).resolve().parents[1] / 'data/employment_profiles.json').read_text())
+BUILDINGS = list(production_methods.PROFILES)
+BUILDING_NAMES = [building.removeprefix('building_') for building in BUILDINGS]
 WAGE_VARIABLES = [f'sed_investment_wage_{field}' for field in ('cost', 'jobs', 'unit', 'known')]
+# Per-family wage unit: the national unit blends every building, so a target
+# building uses its own sample when the country has one.
+WAGE_VARIABLES += [f'sed_investment_wage_{field}_{name}' for name in BUILDING_NAMES
+                   for field in ('cost', 'jobs', 'unit', 'known')]
 PRICES = production_methods.ECONOMICS['prices']
 COUNTRY_VARIABLES = [f'sed_investment_market_{good}_{bound}' for good in PRICES
                      for bound in ('lower', 'upper')] + WAGE_VARIABLES
@@ -90,14 +96,16 @@ def wage_effects():
     (`TOOLTIP_BUILDING_HEALTH_WORLD`, `EARNINGS_BREAKDOWN`), so
     earnings minus weekly_profit is the building's weekly wage bill.
     """
-    result = ['''sed_refresh_investment_wages = {
- set_variable = { name = sed_investment_wage_cost value = 0 }
- set_variable = { name = sed_investment_wage_jobs value = 0 }
- set_variable = { name = sed_investment_wage_unit value = 0 }
- set_variable = { name = sed_investment_wage_known value = 0 }
- every_scope_state = {
-  set_variable = { name = sed_investment_wage_cost value = 0 }
-  set_variable = { name = sed_investment_wage_jobs value = 0 }''']
+    result = ['sed_refresh_investment_wages = {']
+    for field in ('cost', 'jobs', 'unit', 'known'):
+        result.append(f' set_variable = {{ name = sed_investment_wage_{field} value = 0 }}')
+        for name in BUILDING_NAMES:
+            result.append(f' set_variable = {{ name = sed_investment_wage_{field}_{name} value = 0 }}')
+    result.append(' every_scope_state = {')
+    for field in ('cost', 'jobs'):
+        result.append(f'  set_variable = {{ name = sed_investment_wage_{field} value = 0 }}')
+        for name in BUILDING_NAMES:
+            result.append(f'  set_variable = {{ name = sed_investment_wage_{field}_{name} value = 0 }}')
     for building, groups in production_methods.PROFILES.items():
         name = building.removeprefix('building_')
         known = '\n'.join('    OR = { ' + ' '.join(f'has_active_production_method = {method}'
@@ -118,11 +126,21 @@ def wage_effects():
     value = sed_investment_{name}_weighted_jobs
     multiply = b:{building}.level multiply = b:{building}.occupancy
    }} }}
+   change_variable = {{ name = sed_investment_wage_cost_{name} add = {{
+    value = b:{building}.earnings subtract = b:{building}.weekly_profit min = 0
+   }} }}
+   change_variable = {{ name = sed_investment_wage_jobs_{name} add = {{
+    value = sed_investment_{name}_weighted_jobs
+    multiply = b:{building}.level multiply = b:{building}.occupancy
+   }} }}
   }}''')
     result.append('''  owner = {
    change_variable = { name = sed_investment_wage_cost add = prev.var:sed_investment_wage_cost }
-   change_variable = { name = sed_investment_wage_jobs add = prev.var:sed_investment_wage_jobs }
-  }
+   change_variable = { name = sed_investment_wage_jobs add = prev.var:sed_investment_wage_jobs }''')
+    for name in BUILDING_NAMES:
+        result.append(f'   change_variable = {{ name = sed_investment_wage_cost_{name} add = prev.var:sed_investment_wage_cost_{name} }}')
+        result.append(f'   change_variable = {{ name = sed_investment_wage_jobs_{name} add = prev.var:sed_investment_wage_jobs_{name} }}')
+    result.append('''  }
  }
  if = { limit = { var:sed_investment_wage_jobs > 0 }
   set_variable = { name = sed_investment_wage_unit value = {
@@ -130,16 +148,34 @@ def wage_effects():
   } }
   set_variable = { name = sed_investment_wage_known value = 1 }
  }
- every_scope_state = {
+''')
+    for name in BUILDING_NAMES:
+        result.append(f''' if = {{ limit = {{ var:sed_investment_wage_jobs_{name} > 0 }}
+  set_variable = {{ name = sed_investment_wage_unit_{name} value = {{
+   value = var:sed_investment_wage_cost_{name} divide = var:sed_investment_wage_jobs_{name}
+  }} }}
+  set_variable = {{ name = sed_investment_wage_known_{name} value = 1 }}
+ }}''')
+    result.append(''' every_scope_state = {
   set_variable = { name = sed_investment_wage_known value = owner.var:sed_investment_wage_known }
-  set_variable = { name = sed_investment_wage_unit value = owner.var:sed_investment_wage_unit }
-  if = { limit = { var:sed_investment_wage_jobs > 0 }
+  set_variable = { name = sed_investment_wage_unit value = owner.var:sed_investment_wage_unit }''')
+    for name in BUILDING_NAMES:
+        result.append(f'  set_variable = {{ name = sed_investment_wage_known_{name} value = owner.var:sed_investment_wage_known_{name} }}')
+        result.append(f'  set_variable = {{ name = sed_investment_wage_unit_{name} value = owner.var:sed_investment_wage_unit_{name} }}')
+    result.append('''  if = { limit = { var:sed_investment_wage_jobs > 0 }
    set_variable = { name = sed_investment_wage_unit value = {
     value = var:sed_investment_wage_cost divide = var:sed_investment_wage_jobs
    } }
    set_variable = { name = sed_investment_wage_known value = 1 }
-  }
- }
+  }''')
+    for name in BUILDING_NAMES:
+        result.append(f'''  if = {{ limit = {{ var:sed_investment_wage_jobs_{name} > 0 }}
+   set_variable = {{ name = sed_investment_wage_unit_{name} value = {{
+    value = var:sed_investment_wage_cost_{name} divide = var:sed_investment_wage_jobs_{name}
+   }} }}
+   set_variable = {{ name = sed_investment_wage_known_{name} value = 1 }}
+  }}''')
+    result.append(''' }
 }
 ''')
     return '\n'.join(result)
@@ -204,16 +240,30 @@ def values(targets, variants):
  if = {{ limit = {{ has_building = {building} }} add = sed_investment_{name}_output_{good} }}
 }}''')
             weighted_jobs = sum(EMPLOYMENT['buildings'][building][method]['weighted_jobs'] for method in baseline)
+            def wage_block(flag, unit):
+                return (f' if = {{ limit = {{ has_variable = {flag} var:{flag} = 1 }}\n'
+                        f'  if = {{ limit = {{ NOT = {{ has_building = {building} }} }}\n'
+                        f'   subtract = {{ value = {max(0, weighted_jobs):g} multiply = var:{unit} }}\n'
+                        f'  }}\n'
+                        f'  if = {{ limit = {{ has_building = {building} }}\n'
+                        f'   subtract = {{ value = sed_investment_{name}_weighted_jobs multiply = var:{unit} }}\n'
+                        f'  }}\n'
+                        f' }}')
+            own_block = wage_block(f'sed_investment_wage_known_{name}',
+                                   f'sed_investment_wage_unit_{name}')
+            national_block = wage_block('sed_investment_wage_known',
+                                        'sed_investment_wage_unit')
+            # The family's own sample wins; without one, the country blend applies.
             result.append(f'''sed_investment_{name}_return = {{
  value = sed_investment_{name}_margin
- if = {{ limit = {{ has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }}
-  if = {{ limit = {{ NOT = {{ has_building = {building} }} }}
-   subtract = {{ value = {max(0, weighted_jobs):g} multiply = var:sed_investment_wage_unit }}
-  }}
-  if = {{ limit = {{ has_building = {building} }}
-   subtract = {{ value = sed_investment_{name}_weighted_jobs multiply = var:sed_investment_wage_unit }}
-  }}
+{own_block}
+ if = {{ limit = {{ NOT = {{ has_variable = sed_investment_wage_known_{name} var:sed_investment_wage_known_{name} = 1 }} }}
+{national_block}
  }}
+}}''')
+            result.append(f'''sed_investment_{name}_return_national = {{
+ value = sed_investment_{name}_margin
+{national_block}
 }}''')
         for field in ('margin', 'output', 'return'):
             result.append(f'sed_investment_{good}_{field} = {{\n value = 0')

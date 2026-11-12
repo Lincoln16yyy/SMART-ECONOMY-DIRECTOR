@@ -493,6 +493,74 @@ sed_disable_country = {
  remove_variable = sed_investment_wage_jobs
  remove_variable = sed_investment_wage_unit
  remove_variable = sed_investment_wage_known
+ remove_variable = sed_investment_wage_cost_logging_camp
+ remove_variable = sed_investment_wage_jobs_logging_camp
+ remove_variable = sed_investment_wage_unit_logging_camp
+ remove_variable = sed_investment_wage_known_logging_camp
+ remove_variable = sed_investment_wage_cost_iron_mine
+ remove_variable = sed_investment_wage_jobs_iron_mine
+ remove_variable = sed_investment_wage_unit_iron_mine
+ remove_variable = sed_investment_wage_known_iron_mine
+ remove_variable = sed_investment_wage_cost_coal_mine
+ remove_variable = sed_investment_wage_jobs_coal_mine
+ remove_variable = sed_investment_wage_unit_coal_mine
+ remove_variable = sed_investment_wage_known_coal_mine
+ remove_variable = sed_investment_wage_cost_wheat_farm
+ remove_variable = sed_investment_wage_jobs_wheat_farm
+ remove_variable = sed_investment_wage_unit_wheat_farm
+ remove_variable = sed_investment_wage_known_wheat_farm
+ remove_variable = sed_investment_wage_cost_rye_farm
+ remove_variable = sed_investment_wage_jobs_rye_farm
+ remove_variable = sed_investment_wage_unit_rye_farm
+ remove_variable = sed_investment_wage_known_rye_farm
+ remove_variable = sed_investment_wage_cost_rice_farm
+ remove_variable = sed_investment_wage_jobs_rice_farm
+ remove_variable = sed_investment_wage_unit_rice_farm
+ remove_variable = sed_investment_wage_known_rice_farm
+ remove_variable = sed_investment_wage_cost_maize_farm
+ remove_variable = sed_investment_wage_jobs_maize_farm
+ remove_variable = sed_investment_wage_unit_maize_farm
+ remove_variable = sed_investment_wage_known_maize_farm
+ remove_variable = sed_investment_wage_cost_millet_farm
+ remove_variable = sed_investment_wage_jobs_millet_farm
+ remove_variable = sed_investment_wage_unit_millet_farm
+ remove_variable = sed_investment_wage_known_millet_farm
+ remove_variable = sed_investment_wage_cost_cotton_plantation
+ remove_variable = sed_investment_wage_jobs_cotton_plantation
+ remove_variable = sed_investment_wage_unit_cotton_plantation
+ remove_variable = sed_investment_wage_known_cotton_plantation
+ remove_variable = sed_investment_wage_cost_livestock_ranch
+ remove_variable = sed_investment_wage_jobs_livestock_ranch
+ remove_variable = sed_investment_wage_unit_livestock_ranch
+ remove_variable = sed_investment_wage_known_livestock_ranch
+ remove_variable = sed_investment_wage_cost_tooling_workshop
+ remove_variable = sed_investment_wage_jobs_tooling_workshop
+ remove_variable = sed_investment_wage_unit_tooling_workshop
+ remove_variable = sed_investment_wage_known_tooling_workshop
+ remove_variable = sed_investment_wage_cost_food_industry
+ remove_variable = sed_investment_wage_jobs_food_industry
+ remove_variable = sed_investment_wage_unit_food_industry
+ remove_variable = sed_investment_wage_known_food_industry
+ remove_variable = sed_investment_wage_cost_textile_mill
+ remove_variable = sed_investment_wage_jobs_textile_mill
+ remove_variable = sed_investment_wage_unit_textile_mill
+ remove_variable = sed_investment_wage_known_textile_mill
+ remove_variable = sed_investment_wage_cost_arms_industry
+ remove_variable = sed_investment_wage_jobs_arms_industry
+ remove_variable = sed_investment_wage_unit_arms_industry
+ remove_variable = sed_investment_wage_known_arms_industry
+ remove_variable = sed_investment_wage_cost_artillery_foundry
+ remove_variable = sed_investment_wage_jobs_artillery_foundry
+ remove_variable = sed_investment_wage_unit_artillery_foundry
+ remove_variable = sed_investment_wage_known_artillery_foundry
+ remove_variable = sed_investment_wage_cost_munition_plant
+ remove_variable = sed_investment_wage_jobs_munition_plant
+ remove_variable = sed_investment_wage_unit_munition_plant
+ remove_variable = sed_investment_wage_known_munition_plant
+ remove_variable = sed_investment_wage_cost_paper_mill
+ remove_variable = sed_investment_wage_jobs_paper_mill
+ remove_variable = sed_investment_wage_unit_paper_mill
+ remove_variable = sed_investment_wage_known_paper_mill
  remove_variable = sed_plan_count
  remove_variable = sed_plan_goal
  remove_variable = sed_fiscal_status
@@ -893,6 +961,74 @@ sed_disable_country = {
   remove_variable = sed_investment_wage_jobs
   remove_variable = sed_investment_wage_unit
   remove_variable = sed_investment_wage_known
+  remove_variable = sed_investment_wage_cost_logging_camp
+  remove_variable = sed_investment_wage_jobs_logging_camp
+  remove_variable = sed_investment_wage_unit_logging_camp
+  remove_variable = sed_investment_wage_known_logging_camp
+  remove_variable = sed_investment_wage_cost_iron_mine
+  remove_variable = sed_investment_wage_jobs_iron_mine
+  remove_variable = sed_investment_wage_unit_iron_mine
+  remove_variable = sed_investment_wage_known_iron_mine
+  remove_variable = sed_investment_wage_cost_coal_mine
+  remove_variable = sed_investment_wage_jobs_coal_mine
+  remove_variable = sed_investment_wage_unit_coal_mine
+  remove_variable = sed_investment_wage_known_coal_mine
+  remove_variable = sed_investment_wage_cost_wheat_farm
+  remove_variable = sed_investment_wage_jobs_wheat_farm
+  remove_variable = sed_investment_wage_unit_wheat_farm
+  remove_variable = sed_investment_wage_known_wheat_farm
+  remove_variable = sed_investment_wage_cost_rye_farm
+  remove_variable = sed_investment_wage_jobs_rye_farm
+  remove_variable = sed_investment_wage_unit_rye_farm
+  remove_variable = sed_investment_wage_known_rye_farm
+  remove_variable = sed_investment_wage_cost_rice_farm
+  remove_variable = sed_investment_wage_jobs_rice_farm
+  remove_variable = sed_investment_wage_unit_rice_farm
+  remove_variable = sed_investment_wage_known_rice_farm
+  remove_variable = sed_investment_wage_cost_maize_farm
+  remove_variable = sed_investment_wage_jobs_maize_farm
+  remove_variable = sed_investment_wage_unit_maize_farm
+  remove_variable = sed_investment_wage_known_maize_farm
+  remove_variable = sed_investment_wage_cost_millet_farm
+  remove_variable = sed_investment_wage_jobs_millet_farm
+  remove_variable = sed_investment_wage_unit_millet_farm
+  remove_variable = sed_investment_wage_known_millet_farm
+  remove_variable = sed_investment_wage_cost_cotton_plantation
+  remove_variable = sed_investment_wage_jobs_cotton_plantation
+  remove_variable = sed_investment_wage_unit_cotton_plantation
+  remove_variable = sed_investment_wage_known_cotton_plantation
+  remove_variable = sed_investment_wage_cost_livestock_ranch
+  remove_variable = sed_investment_wage_jobs_livestock_ranch
+  remove_variable = sed_investment_wage_unit_livestock_ranch
+  remove_variable = sed_investment_wage_known_livestock_ranch
+  remove_variable = sed_investment_wage_cost_tooling_workshop
+  remove_variable = sed_investment_wage_jobs_tooling_workshop
+  remove_variable = sed_investment_wage_unit_tooling_workshop
+  remove_variable = sed_investment_wage_known_tooling_workshop
+  remove_variable = sed_investment_wage_cost_food_industry
+  remove_variable = sed_investment_wage_jobs_food_industry
+  remove_variable = sed_investment_wage_unit_food_industry
+  remove_variable = sed_investment_wage_known_food_industry
+  remove_variable = sed_investment_wage_cost_textile_mill
+  remove_variable = sed_investment_wage_jobs_textile_mill
+  remove_variable = sed_investment_wage_unit_textile_mill
+  remove_variable = sed_investment_wage_known_textile_mill
+  remove_variable = sed_investment_wage_cost_arms_industry
+  remove_variable = sed_investment_wage_jobs_arms_industry
+  remove_variable = sed_investment_wage_unit_arms_industry
+  remove_variable = sed_investment_wage_known_arms_industry
+  remove_variable = sed_investment_wage_cost_artillery_foundry
+  remove_variable = sed_investment_wage_jobs_artillery_foundry
+  remove_variable = sed_investment_wage_unit_artillery_foundry
+  remove_variable = sed_investment_wage_known_artillery_foundry
+  remove_variable = sed_investment_wage_cost_munition_plant
+  remove_variable = sed_investment_wage_jobs_munition_plant
+  remove_variable = sed_investment_wage_unit_munition_plant
+  remove_variable = sed_investment_wage_known_munition_plant
+  remove_variable = sed_investment_wage_cost_paper_mill
+  remove_variable = sed_investment_wage_jobs_paper_mill
+  remove_variable = sed_investment_wage_unit_paper_mill
+  remove_variable = sed_investment_wage_known_paper_mill
   remove_variable = sed_wood_found_pm_pending
   remove_variable = sed_iron_found_pm_pending
   remove_variable = sed_coal_found_pm_pending
@@ -8727,12 +8863,114 @@ sed_refresh_investment_prices = {
 }
 sed_refresh_investment_wages = {
  set_variable = { name = sed_investment_wage_cost value = 0 }
+ set_variable = { name = sed_investment_wage_cost_logging_camp value = 0 }
+ set_variable = { name = sed_investment_wage_cost_iron_mine value = 0 }
+ set_variable = { name = sed_investment_wage_cost_coal_mine value = 0 }
+ set_variable = { name = sed_investment_wage_cost_wheat_farm value = 0 }
+ set_variable = { name = sed_investment_wage_cost_rye_farm value = 0 }
+ set_variable = { name = sed_investment_wage_cost_rice_farm value = 0 }
+ set_variable = { name = sed_investment_wage_cost_maize_farm value = 0 }
+ set_variable = { name = sed_investment_wage_cost_millet_farm value = 0 }
+ set_variable = { name = sed_investment_wage_cost_cotton_plantation value = 0 }
+ set_variable = { name = sed_investment_wage_cost_livestock_ranch value = 0 }
+ set_variable = { name = sed_investment_wage_cost_tooling_workshop value = 0 }
+ set_variable = { name = sed_investment_wage_cost_food_industry value = 0 }
+ set_variable = { name = sed_investment_wage_cost_textile_mill value = 0 }
+ set_variable = { name = sed_investment_wage_cost_arms_industry value = 0 }
+ set_variable = { name = sed_investment_wage_cost_artillery_foundry value = 0 }
+ set_variable = { name = sed_investment_wage_cost_munition_plant value = 0 }
+ set_variable = { name = sed_investment_wage_cost_paper_mill value = 0 }
  set_variable = { name = sed_investment_wage_jobs value = 0 }
+ set_variable = { name = sed_investment_wage_jobs_logging_camp value = 0 }
+ set_variable = { name = sed_investment_wage_jobs_iron_mine value = 0 }
+ set_variable = { name = sed_investment_wage_jobs_coal_mine value = 0 }
+ set_variable = { name = sed_investment_wage_jobs_wheat_farm value = 0 }
+ set_variable = { name = sed_investment_wage_jobs_rye_farm value = 0 }
+ set_variable = { name = sed_investment_wage_jobs_rice_farm value = 0 }
+ set_variable = { name = sed_investment_wage_jobs_maize_farm value = 0 }
+ set_variable = { name = sed_investment_wage_jobs_millet_farm value = 0 }
+ set_variable = { name = sed_investment_wage_jobs_cotton_plantation value = 0 }
+ set_variable = { name = sed_investment_wage_jobs_livestock_ranch value = 0 }
+ set_variable = { name = sed_investment_wage_jobs_tooling_workshop value = 0 }
+ set_variable = { name = sed_investment_wage_jobs_food_industry value = 0 }
+ set_variable = { name = sed_investment_wage_jobs_textile_mill value = 0 }
+ set_variable = { name = sed_investment_wage_jobs_arms_industry value = 0 }
+ set_variable = { name = sed_investment_wage_jobs_artillery_foundry value = 0 }
+ set_variable = { name = sed_investment_wage_jobs_munition_plant value = 0 }
+ set_variable = { name = sed_investment_wage_jobs_paper_mill value = 0 }
  set_variable = { name = sed_investment_wage_unit value = 0 }
+ set_variable = { name = sed_investment_wage_unit_logging_camp value = 0 }
+ set_variable = { name = sed_investment_wage_unit_iron_mine value = 0 }
+ set_variable = { name = sed_investment_wage_unit_coal_mine value = 0 }
+ set_variable = { name = sed_investment_wage_unit_wheat_farm value = 0 }
+ set_variable = { name = sed_investment_wage_unit_rye_farm value = 0 }
+ set_variable = { name = sed_investment_wage_unit_rice_farm value = 0 }
+ set_variable = { name = sed_investment_wage_unit_maize_farm value = 0 }
+ set_variable = { name = sed_investment_wage_unit_millet_farm value = 0 }
+ set_variable = { name = sed_investment_wage_unit_cotton_plantation value = 0 }
+ set_variable = { name = sed_investment_wage_unit_livestock_ranch value = 0 }
+ set_variable = { name = sed_investment_wage_unit_tooling_workshop value = 0 }
+ set_variable = { name = sed_investment_wage_unit_food_industry value = 0 }
+ set_variable = { name = sed_investment_wage_unit_textile_mill value = 0 }
+ set_variable = { name = sed_investment_wage_unit_arms_industry value = 0 }
+ set_variable = { name = sed_investment_wage_unit_artillery_foundry value = 0 }
+ set_variable = { name = sed_investment_wage_unit_munition_plant value = 0 }
+ set_variable = { name = sed_investment_wage_unit_paper_mill value = 0 }
  set_variable = { name = sed_investment_wage_known value = 0 }
+ set_variable = { name = sed_investment_wage_known_logging_camp value = 0 }
+ set_variable = { name = sed_investment_wage_known_iron_mine value = 0 }
+ set_variable = { name = sed_investment_wage_known_coal_mine value = 0 }
+ set_variable = { name = sed_investment_wage_known_wheat_farm value = 0 }
+ set_variable = { name = sed_investment_wage_known_rye_farm value = 0 }
+ set_variable = { name = sed_investment_wage_known_rice_farm value = 0 }
+ set_variable = { name = sed_investment_wage_known_maize_farm value = 0 }
+ set_variable = { name = sed_investment_wage_known_millet_farm value = 0 }
+ set_variable = { name = sed_investment_wage_known_cotton_plantation value = 0 }
+ set_variable = { name = sed_investment_wage_known_livestock_ranch value = 0 }
+ set_variable = { name = sed_investment_wage_known_tooling_workshop value = 0 }
+ set_variable = { name = sed_investment_wage_known_food_industry value = 0 }
+ set_variable = { name = sed_investment_wage_known_textile_mill value = 0 }
+ set_variable = { name = sed_investment_wage_known_arms_industry value = 0 }
+ set_variable = { name = sed_investment_wage_known_artillery_foundry value = 0 }
+ set_variable = { name = sed_investment_wage_known_munition_plant value = 0 }
+ set_variable = { name = sed_investment_wage_known_paper_mill value = 0 }
  every_scope_state = {
   set_variable = { name = sed_investment_wage_cost value = 0 }
+  set_variable = { name = sed_investment_wage_cost_logging_camp value = 0 }
+  set_variable = { name = sed_investment_wage_cost_iron_mine value = 0 }
+  set_variable = { name = sed_investment_wage_cost_coal_mine value = 0 }
+  set_variable = { name = sed_investment_wage_cost_wheat_farm value = 0 }
+  set_variable = { name = sed_investment_wage_cost_rye_farm value = 0 }
+  set_variable = { name = sed_investment_wage_cost_rice_farm value = 0 }
+  set_variable = { name = sed_investment_wage_cost_maize_farm value = 0 }
+  set_variable = { name = sed_investment_wage_cost_millet_farm value = 0 }
+  set_variable = { name = sed_investment_wage_cost_cotton_plantation value = 0 }
+  set_variable = { name = sed_investment_wage_cost_livestock_ranch value = 0 }
+  set_variable = { name = sed_investment_wage_cost_tooling_workshop value = 0 }
+  set_variable = { name = sed_investment_wage_cost_food_industry value = 0 }
+  set_variable = { name = sed_investment_wage_cost_textile_mill value = 0 }
+  set_variable = { name = sed_investment_wage_cost_arms_industry value = 0 }
+  set_variable = { name = sed_investment_wage_cost_artillery_foundry value = 0 }
+  set_variable = { name = sed_investment_wage_cost_munition_plant value = 0 }
+  set_variable = { name = sed_investment_wage_cost_paper_mill value = 0 }
   set_variable = { name = sed_investment_wage_jobs value = 0 }
+  set_variable = { name = sed_investment_wage_jobs_logging_camp value = 0 }
+  set_variable = { name = sed_investment_wage_jobs_iron_mine value = 0 }
+  set_variable = { name = sed_investment_wage_jobs_coal_mine value = 0 }
+  set_variable = { name = sed_investment_wage_jobs_wheat_farm value = 0 }
+  set_variable = { name = sed_investment_wage_jobs_rye_farm value = 0 }
+  set_variable = { name = sed_investment_wage_jobs_rice_farm value = 0 }
+  set_variable = { name = sed_investment_wage_jobs_maize_farm value = 0 }
+  set_variable = { name = sed_investment_wage_jobs_millet_farm value = 0 }
+  set_variable = { name = sed_investment_wage_jobs_cotton_plantation value = 0 }
+  set_variable = { name = sed_investment_wage_jobs_livestock_ranch value = 0 }
+  set_variable = { name = sed_investment_wage_jobs_tooling_workshop value = 0 }
+  set_variable = { name = sed_investment_wage_jobs_food_industry value = 0 }
+  set_variable = { name = sed_investment_wage_jobs_textile_mill value = 0 }
+  set_variable = { name = sed_investment_wage_jobs_arms_industry value = 0 }
+  set_variable = { name = sed_investment_wage_jobs_artillery_foundry value = 0 }
+  set_variable = { name = sed_investment_wage_jobs_munition_plant value = 0 }
+  set_variable = { name = sed_investment_wage_jobs_paper_mill value = 0 }
   if = { limit = { has_building = building_logging_camp
    b:building_logging_camp = { level > 0 occupancy >= 0.8 has_failed_hires = no
     building_has_goods_shortage = no is_subsidized = no earnings > 0
@@ -8748,6 +8986,13 @@ sed_refresh_investment_wages = {
     value = b:building_logging_camp.earnings subtract = b:building_logging_camp.weekly_profit min = 0
    } }
    change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_logging_camp_weighted_jobs
+    multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy
+   } }
+   change_variable = { name = sed_investment_wage_cost_logging_camp add = {
+    value = b:building_logging_camp.earnings subtract = b:building_logging_camp.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs_logging_camp add = {
     value = sed_investment_logging_camp_weighted_jobs
     multiply = b:building_logging_camp.level multiply = b:building_logging_camp.occupancy
    } }
@@ -8770,6 +9015,13 @@ sed_refresh_investment_wages = {
     value = sed_investment_iron_mine_weighted_jobs
     multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy
    } }
+   change_variable = { name = sed_investment_wage_cost_iron_mine add = {
+    value = b:building_iron_mine.earnings subtract = b:building_iron_mine.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs_iron_mine add = {
+    value = sed_investment_iron_mine_weighted_jobs
+    multiply = b:building_iron_mine.level multiply = b:building_iron_mine.occupancy
+   } }
   }
   if = { limit = { has_building = building_coal_mine
    b:building_coal_mine = { level > 0 occupancy >= 0.8 has_failed_hires = no
@@ -8786,6 +9038,13 @@ sed_refresh_investment_wages = {
     value = b:building_coal_mine.earnings subtract = b:building_coal_mine.weekly_profit min = 0
    } }
    change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_coal_mine_weighted_jobs
+    multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy
+   } }
+   change_variable = { name = sed_investment_wage_cost_coal_mine add = {
+    value = b:building_coal_mine.earnings subtract = b:building_coal_mine.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs_coal_mine add = {
     value = sed_investment_coal_mine_weighted_jobs
     multiply = b:building_coal_mine.level multiply = b:building_coal_mine.occupancy
    } }
@@ -8807,6 +9066,13 @@ sed_refresh_investment_wages = {
     value = sed_investment_wheat_farm_weighted_jobs
     multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy
    } }
+   change_variable = { name = sed_investment_wage_cost_wheat_farm add = {
+    value = b:building_wheat_farm.earnings subtract = b:building_wheat_farm.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs_wheat_farm add = {
+    value = sed_investment_wheat_farm_weighted_jobs
+    multiply = b:building_wheat_farm.level multiply = b:building_wheat_farm.occupancy
+   } }
   }
   if = { limit = { has_building = building_rye_farm
    b:building_rye_farm = { level > 0 occupancy >= 0.8 has_failed_hires = no
@@ -8822,6 +9088,13 @@ sed_refresh_investment_wages = {
     value = b:building_rye_farm.earnings subtract = b:building_rye_farm.weekly_profit min = 0
    } }
    change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_rye_farm_weighted_jobs
+    multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy
+   } }
+   change_variable = { name = sed_investment_wage_cost_rye_farm add = {
+    value = b:building_rye_farm.earnings subtract = b:building_rye_farm.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs_rye_farm add = {
     value = sed_investment_rye_farm_weighted_jobs
     multiply = b:building_rye_farm.level multiply = b:building_rye_farm.occupancy
    } }
@@ -8843,6 +9116,13 @@ sed_refresh_investment_wages = {
     value = sed_investment_rice_farm_weighted_jobs
     multiply = b:building_rice_farm.level multiply = b:building_rice_farm.occupancy
    } }
+   change_variable = { name = sed_investment_wage_cost_rice_farm add = {
+    value = b:building_rice_farm.earnings subtract = b:building_rice_farm.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs_rice_farm add = {
+    value = sed_investment_rice_farm_weighted_jobs
+    multiply = b:building_rice_farm.level multiply = b:building_rice_farm.occupancy
+   } }
   }
   if = { limit = { has_building = building_maize_farm
    b:building_maize_farm = { level > 0 occupancy >= 0.8 has_failed_hires = no
@@ -8858,6 +9138,13 @@ sed_refresh_investment_wages = {
     value = b:building_maize_farm.earnings subtract = b:building_maize_farm.weekly_profit min = 0
    } }
    change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_maize_farm_weighted_jobs
+    multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy
+   } }
+   change_variable = { name = sed_investment_wage_cost_maize_farm add = {
+    value = b:building_maize_farm.earnings subtract = b:building_maize_farm.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs_maize_farm add = {
     value = sed_investment_maize_farm_weighted_jobs
     multiply = b:building_maize_farm.level multiply = b:building_maize_farm.occupancy
    } }
@@ -8879,6 +9166,13 @@ sed_refresh_investment_wages = {
     value = sed_investment_millet_farm_weighted_jobs
     multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy
    } }
+   change_variable = { name = sed_investment_wage_cost_millet_farm add = {
+    value = b:building_millet_farm.earnings subtract = b:building_millet_farm.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs_millet_farm add = {
+    value = sed_investment_millet_farm_weighted_jobs
+    multiply = b:building_millet_farm.level multiply = b:building_millet_farm.occupancy
+   } }
   }
   if = { limit = { has_building = building_cotton_plantation
    b:building_cotton_plantation = { level > 0 occupancy >= 0.8 has_failed_hires = no
@@ -8894,6 +9188,13 @@ sed_refresh_investment_wages = {
     value = b:building_cotton_plantation.earnings subtract = b:building_cotton_plantation.weekly_profit min = 0
    } }
    change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_cotton_plantation_weighted_jobs
+    multiply = b:building_cotton_plantation.level multiply = b:building_cotton_plantation.occupancy
+   } }
+   change_variable = { name = sed_investment_wage_cost_cotton_plantation add = {
+    value = b:building_cotton_plantation.earnings subtract = b:building_cotton_plantation.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs_cotton_plantation add = {
     value = sed_investment_cotton_plantation_weighted_jobs
     multiply = b:building_cotton_plantation.level multiply = b:building_cotton_plantation.occupancy
    } }
@@ -8916,6 +9217,13 @@ sed_refresh_investment_wages = {
     value = sed_investment_livestock_ranch_weighted_jobs
     multiply = b:building_livestock_ranch.level multiply = b:building_livestock_ranch.occupancy
    } }
+   change_variable = { name = sed_investment_wage_cost_livestock_ranch add = {
+    value = b:building_livestock_ranch.earnings subtract = b:building_livestock_ranch.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs_livestock_ranch add = {
+    value = sed_investment_livestock_ranch_weighted_jobs
+    multiply = b:building_livestock_ranch.level multiply = b:building_livestock_ranch.occupancy
+   } }
   }
   if = { limit = { has_building = building_tooling_workshop
    b:building_tooling_workshop = { level > 0 occupancy >= 0.8 has_failed_hires = no
@@ -8930,6 +9238,13 @@ sed_refresh_investment_wages = {
     value = b:building_tooling_workshop.earnings subtract = b:building_tooling_workshop.weekly_profit min = 0
    } }
    change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_tooling_workshop_weighted_jobs
+    multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy
+   } }
+   change_variable = { name = sed_investment_wage_cost_tooling_workshop add = {
+    value = b:building_tooling_workshop.earnings subtract = b:building_tooling_workshop.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs_tooling_workshop add = {
     value = sed_investment_tooling_workshop_weighted_jobs
     multiply = b:building_tooling_workshop.level multiply = b:building_tooling_workshop.occupancy
    } }
@@ -8952,6 +9267,13 @@ sed_refresh_investment_wages = {
     value = sed_investment_food_industry_weighted_jobs
     multiply = b:building_food_industry.level multiply = b:building_food_industry.occupancy
    } }
+   change_variable = { name = sed_investment_wage_cost_food_industry add = {
+    value = b:building_food_industry.earnings subtract = b:building_food_industry.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs_food_industry add = {
+    value = sed_investment_food_industry_weighted_jobs
+    multiply = b:building_food_industry.level multiply = b:building_food_industry.occupancy
+   } }
   }
   if = { limit = { has_building = building_textile_mill
    b:building_textile_mill = { level > 0 occupancy >= 0.8 has_failed_hires = no
@@ -8967,6 +9289,13 @@ sed_refresh_investment_wages = {
     value = b:building_textile_mill.earnings subtract = b:building_textile_mill.weekly_profit min = 0
    } }
    change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_textile_mill_weighted_jobs
+    multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy
+   } }
+   change_variable = { name = sed_investment_wage_cost_textile_mill add = {
+    value = b:building_textile_mill.earnings subtract = b:building_textile_mill.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs_textile_mill add = {
     value = sed_investment_textile_mill_weighted_jobs
     multiply = b:building_textile_mill.level multiply = b:building_textile_mill.occupancy
    } }
@@ -8987,6 +9316,13 @@ sed_refresh_investment_wages = {
     value = sed_investment_arms_industry_weighted_jobs
     multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy
    } }
+   change_variable = { name = sed_investment_wage_cost_arms_industry add = {
+    value = b:building_arms_industry.earnings subtract = b:building_arms_industry.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs_arms_industry add = {
+    value = sed_investment_arms_industry_weighted_jobs
+    multiply = b:building_arms_industry.level multiply = b:building_arms_industry.occupancy
+   } }
   }
   if = { limit = { has_building = building_artillery_foundry
    b:building_artillery_foundry = { level > 0 occupancy >= 0.8 has_failed_hires = no
@@ -9001,6 +9337,13 @@ sed_refresh_investment_wages = {
     value = b:building_artillery_foundry.earnings subtract = b:building_artillery_foundry.weekly_profit min = 0
    } }
    change_variable = { name = sed_investment_wage_jobs add = {
+    value = sed_investment_artillery_foundry_weighted_jobs
+    multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy
+   } }
+   change_variable = { name = sed_investment_wage_cost_artillery_foundry add = {
+    value = b:building_artillery_foundry.earnings subtract = b:building_artillery_foundry.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs_artillery_foundry add = {
     value = sed_investment_artillery_foundry_weighted_jobs
     multiply = b:building_artillery_foundry.level multiply = b:building_artillery_foundry.occupancy
    } }
@@ -9021,6 +9364,13 @@ sed_refresh_investment_wages = {
     value = sed_investment_munition_plant_weighted_jobs
     multiply = b:building_munition_plant.level multiply = b:building_munition_plant.occupancy
    } }
+   change_variable = { name = sed_investment_wage_cost_munition_plant add = {
+    value = b:building_munition_plant.earnings subtract = b:building_munition_plant.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs_munition_plant add = {
+    value = sed_investment_munition_plant_weighted_jobs
+    multiply = b:building_munition_plant.level multiply = b:building_munition_plant.occupancy
+   } }
   }
   if = { limit = { has_building = building_paper_mill
    b:building_paper_mill = { level > 0 occupancy >= 0.8 has_failed_hires = no
@@ -9038,10 +9388,51 @@ sed_refresh_investment_wages = {
     value = sed_investment_paper_mill_weighted_jobs
     multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy
    } }
+   change_variable = { name = sed_investment_wage_cost_paper_mill add = {
+    value = b:building_paper_mill.earnings subtract = b:building_paper_mill.weekly_profit min = 0
+   } }
+   change_variable = { name = sed_investment_wage_jobs_paper_mill add = {
+    value = sed_investment_paper_mill_weighted_jobs
+    multiply = b:building_paper_mill.level multiply = b:building_paper_mill.occupancy
+   } }
   }
   owner = {
    change_variable = { name = sed_investment_wage_cost add = prev.var:sed_investment_wage_cost }
    change_variable = { name = sed_investment_wage_jobs add = prev.var:sed_investment_wage_jobs }
+   change_variable = { name = sed_investment_wage_cost_logging_camp add = prev.var:sed_investment_wage_cost_logging_camp }
+   change_variable = { name = sed_investment_wage_jobs_logging_camp add = prev.var:sed_investment_wage_jobs_logging_camp }
+   change_variable = { name = sed_investment_wage_cost_iron_mine add = prev.var:sed_investment_wage_cost_iron_mine }
+   change_variable = { name = sed_investment_wage_jobs_iron_mine add = prev.var:sed_investment_wage_jobs_iron_mine }
+   change_variable = { name = sed_investment_wage_cost_coal_mine add = prev.var:sed_investment_wage_cost_coal_mine }
+   change_variable = { name = sed_investment_wage_jobs_coal_mine add = prev.var:sed_investment_wage_jobs_coal_mine }
+   change_variable = { name = sed_investment_wage_cost_wheat_farm add = prev.var:sed_investment_wage_cost_wheat_farm }
+   change_variable = { name = sed_investment_wage_jobs_wheat_farm add = prev.var:sed_investment_wage_jobs_wheat_farm }
+   change_variable = { name = sed_investment_wage_cost_rye_farm add = prev.var:sed_investment_wage_cost_rye_farm }
+   change_variable = { name = sed_investment_wage_jobs_rye_farm add = prev.var:sed_investment_wage_jobs_rye_farm }
+   change_variable = { name = sed_investment_wage_cost_rice_farm add = prev.var:sed_investment_wage_cost_rice_farm }
+   change_variable = { name = sed_investment_wage_jobs_rice_farm add = prev.var:sed_investment_wage_jobs_rice_farm }
+   change_variable = { name = sed_investment_wage_cost_maize_farm add = prev.var:sed_investment_wage_cost_maize_farm }
+   change_variable = { name = sed_investment_wage_jobs_maize_farm add = prev.var:sed_investment_wage_jobs_maize_farm }
+   change_variable = { name = sed_investment_wage_cost_millet_farm add = prev.var:sed_investment_wage_cost_millet_farm }
+   change_variable = { name = sed_investment_wage_jobs_millet_farm add = prev.var:sed_investment_wage_jobs_millet_farm }
+   change_variable = { name = sed_investment_wage_cost_cotton_plantation add = prev.var:sed_investment_wage_cost_cotton_plantation }
+   change_variable = { name = sed_investment_wage_jobs_cotton_plantation add = prev.var:sed_investment_wage_jobs_cotton_plantation }
+   change_variable = { name = sed_investment_wage_cost_livestock_ranch add = prev.var:sed_investment_wage_cost_livestock_ranch }
+   change_variable = { name = sed_investment_wage_jobs_livestock_ranch add = prev.var:sed_investment_wage_jobs_livestock_ranch }
+   change_variable = { name = sed_investment_wage_cost_tooling_workshop add = prev.var:sed_investment_wage_cost_tooling_workshop }
+   change_variable = { name = sed_investment_wage_jobs_tooling_workshop add = prev.var:sed_investment_wage_jobs_tooling_workshop }
+   change_variable = { name = sed_investment_wage_cost_food_industry add = prev.var:sed_investment_wage_cost_food_industry }
+   change_variable = { name = sed_investment_wage_jobs_food_industry add = prev.var:sed_investment_wage_jobs_food_industry }
+   change_variable = { name = sed_investment_wage_cost_textile_mill add = prev.var:sed_investment_wage_cost_textile_mill }
+   change_variable = { name = sed_investment_wage_jobs_textile_mill add = prev.var:sed_investment_wage_jobs_textile_mill }
+   change_variable = { name = sed_investment_wage_cost_arms_industry add = prev.var:sed_investment_wage_cost_arms_industry }
+   change_variable = { name = sed_investment_wage_jobs_arms_industry add = prev.var:sed_investment_wage_jobs_arms_industry }
+   change_variable = { name = sed_investment_wage_cost_artillery_foundry add = prev.var:sed_investment_wage_cost_artillery_foundry }
+   change_variable = { name = sed_investment_wage_jobs_artillery_foundry add = prev.var:sed_investment_wage_jobs_artillery_foundry }
+   change_variable = { name = sed_investment_wage_cost_munition_plant add = prev.var:sed_investment_wage_cost_munition_plant }
+   change_variable = { name = sed_investment_wage_jobs_munition_plant add = prev.var:sed_investment_wage_jobs_munition_plant }
+   change_variable = { name = sed_investment_wage_cost_paper_mill add = prev.var:sed_investment_wage_cost_paper_mill }
+   change_variable = { name = sed_investment_wage_jobs_paper_mill add = prev.var:sed_investment_wage_jobs_paper_mill }
   }
  }
  if = { limit = { var:sed_investment_wage_jobs > 0 }
@@ -9050,14 +9441,253 @@ sed_refresh_investment_wages = {
   } }
   set_variable = { name = sed_investment_wage_known value = 1 }
  }
+
+ if = { limit = { var:sed_investment_wage_jobs_logging_camp > 0 }
+  set_variable = { name = sed_investment_wage_unit_logging_camp value = {
+   value = var:sed_investment_wage_cost_logging_camp divide = var:sed_investment_wage_jobs_logging_camp
+  } }
+  set_variable = { name = sed_investment_wage_known_logging_camp value = 1 }
+ }
+ if = { limit = { var:sed_investment_wage_jobs_iron_mine > 0 }
+  set_variable = { name = sed_investment_wage_unit_iron_mine value = {
+   value = var:sed_investment_wage_cost_iron_mine divide = var:sed_investment_wage_jobs_iron_mine
+  } }
+  set_variable = { name = sed_investment_wage_known_iron_mine value = 1 }
+ }
+ if = { limit = { var:sed_investment_wage_jobs_coal_mine > 0 }
+  set_variable = { name = sed_investment_wage_unit_coal_mine value = {
+   value = var:sed_investment_wage_cost_coal_mine divide = var:sed_investment_wage_jobs_coal_mine
+  } }
+  set_variable = { name = sed_investment_wage_known_coal_mine value = 1 }
+ }
+ if = { limit = { var:sed_investment_wage_jobs_wheat_farm > 0 }
+  set_variable = { name = sed_investment_wage_unit_wheat_farm value = {
+   value = var:sed_investment_wage_cost_wheat_farm divide = var:sed_investment_wage_jobs_wheat_farm
+  } }
+  set_variable = { name = sed_investment_wage_known_wheat_farm value = 1 }
+ }
+ if = { limit = { var:sed_investment_wage_jobs_rye_farm > 0 }
+  set_variable = { name = sed_investment_wage_unit_rye_farm value = {
+   value = var:sed_investment_wage_cost_rye_farm divide = var:sed_investment_wage_jobs_rye_farm
+  } }
+  set_variable = { name = sed_investment_wage_known_rye_farm value = 1 }
+ }
+ if = { limit = { var:sed_investment_wage_jobs_rice_farm > 0 }
+  set_variable = { name = sed_investment_wage_unit_rice_farm value = {
+   value = var:sed_investment_wage_cost_rice_farm divide = var:sed_investment_wage_jobs_rice_farm
+  } }
+  set_variable = { name = sed_investment_wage_known_rice_farm value = 1 }
+ }
+ if = { limit = { var:sed_investment_wage_jobs_maize_farm > 0 }
+  set_variable = { name = sed_investment_wage_unit_maize_farm value = {
+   value = var:sed_investment_wage_cost_maize_farm divide = var:sed_investment_wage_jobs_maize_farm
+  } }
+  set_variable = { name = sed_investment_wage_known_maize_farm value = 1 }
+ }
+ if = { limit = { var:sed_investment_wage_jobs_millet_farm > 0 }
+  set_variable = { name = sed_investment_wage_unit_millet_farm value = {
+   value = var:sed_investment_wage_cost_millet_farm divide = var:sed_investment_wage_jobs_millet_farm
+  } }
+  set_variable = { name = sed_investment_wage_known_millet_farm value = 1 }
+ }
+ if = { limit = { var:sed_investment_wage_jobs_cotton_plantation > 0 }
+  set_variable = { name = sed_investment_wage_unit_cotton_plantation value = {
+   value = var:sed_investment_wage_cost_cotton_plantation divide = var:sed_investment_wage_jobs_cotton_plantation
+  } }
+  set_variable = { name = sed_investment_wage_known_cotton_plantation value = 1 }
+ }
+ if = { limit = { var:sed_investment_wage_jobs_livestock_ranch > 0 }
+  set_variable = { name = sed_investment_wage_unit_livestock_ranch value = {
+   value = var:sed_investment_wage_cost_livestock_ranch divide = var:sed_investment_wage_jobs_livestock_ranch
+  } }
+  set_variable = { name = sed_investment_wage_known_livestock_ranch value = 1 }
+ }
+ if = { limit = { var:sed_investment_wage_jobs_tooling_workshop > 0 }
+  set_variable = { name = sed_investment_wage_unit_tooling_workshop value = {
+   value = var:sed_investment_wage_cost_tooling_workshop divide = var:sed_investment_wage_jobs_tooling_workshop
+  } }
+  set_variable = { name = sed_investment_wage_known_tooling_workshop value = 1 }
+ }
+ if = { limit = { var:sed_investment_wage_jobs_food_industry > 0 }
+  set_variable = { name = sed_investment_wage_unit_food_industry value = {
+   value = var:sed_investment_wage_cost_food_industry divide = var:sed_investment_wage_jobs_food_industry
+  } }
+  set_variable = { name = sed_investment_wage_known_food_industry value = 1 }
+ }
+ if = { limit = { var:sed_investment_wage_jobs_textile_mill > 0 }
+  set_variable = { name = sed_investment_wage_unit_textile_mill value = {
+   value = var:sed_investment_wage_cost_textile_mill divide = var:sed_investment_wage_jobs_textile_mill
+  } }
+  set_variable = { name = sed_investment_wage_known_textile_mill value = 1 }
+ }
+ if = { limit = { var:sed_investment_wage_jobs_arms_industry > 0 }
+  set_variable = { name = sed_investment_wage_unit_arms_industry value = {
+   value = var:sed_investment_wage_cost_arms_industry divide = var:sed_investment_wage_jobs_arms_industry
+  } }
+  set_variable = { name = sed_investment_wage_known_arms_industry value = 1 }
+ }
+ if = { limit = { var:sed_investment_wage_jobs_artillery_foundry > 0 }
+  set_variable = { name = sed_investment_wage_unit_artillery_foundry value = {
+   value = var:sed_investment_wage_cost_artillery_foundry divide = var:sed_investment_wage_jobs_artillery_foundry
+  } }
+  set_variable = { name = sed_investment_wage_known_artillery_foundry value = 1 }
+ }
+ if = { limit = { var:sed_investment_wage_jobs_munition_plant > 0 }
+  set_variable = { name = sed_investment_wage_unit_munition_plant value = {
+   value = var:sed_investment_wage_cost_munition_plant divide = var:sed_investment_wage_jobs_munition_plant
+  } }
+  set_variable = { name = sed_investment_wage_known_munition_plant value = 1 }
+ }
+ if = { limit = { var:sed_investment_wage_jobs_paper_mill > 0 }
+  set_variable = { name = sed_investment_wage_unit_paper_mill value = {
+   value = var:sed_investment_wage_cost_paper_mill divide = var:sed_investment_wage_jobs_paper_mill
+  } }
+  set_variable = { name = sed_investment_wage_known_paper_mill value = 1 }
+ }
  every_scope_state = {
   set_variable = { name = sed_investment_wage_known value = owner.var:sed_investment_wage_known }
   set_variable = { name = sed_investment_wage_unit value = owner.var:sed_investment_wage_unit }
+  set_variable = { name = sed_investment_wage_known_logging_camp value = owner.var:sed_investment_wage_known_logging_camp }
+  set_variable = { name = sed_investment_wage_unit_logging_camp value = owner.var:sed_investment_wage_unit_logging_camp }
+  set_variable = { name = sed_investment_wage_known_iron_mine value = owner.var:sed_investment_wage_known_iron_mine }
+  set_variable = { name = sed_investment_wage_unit_iron_mine value = owner.var:sed_investment_wage_unit_iron_mine }
+  set_variable = { name = sed_investment_wage_known_coal_mine value = owner.var:sed_investment_wage_known_coal_mine }
+  set_variable = { name = sed_investment_wage_unit_coal_mine value = owner.var:sed_investment_wage_unit_coal_mine }
+  set_variable = { name = sed_investment_wage_known_wheat_farm value = owner.var:sed_investment_wage_known_wheat_farm }
+  set_variable = { name = sed_investment_wage_unit_wheat_farm value = owner.var:sed_investment_wage_unit_wheat_farm }
+  set_variable = { name = sed_investment_wage_known_rye_farm value = owner.var:sed_investment_wage_known_rye_farm }
+  set_variable = { name = sed_investment_wage_unit_rye_farm value = owner.var:sed_investment_wage_unit_rye_farm }
+  set_variable = { name = sed_investment_wage_known_rice_farm value = owner.var:sed_investment_wage_known_rice_farm }
+  set_variable = { name = sed_investment_wage_unit_rice_farm value = owner.var:sed_investment_wage_unit_rice_farm }
+  set_variable = { name = sed_investment_wage_known_maize_farm value = owner.var:sed_investment_wage_known_maize_farm }
+  set_variable = { name = sed_investment_wage_unit_maize_farm value = owner.var:sed_investment_wage_unit_maize_farm }
+  set_variable = { name = sed_investment_wage_known_millet_farm value = owner.var:sed_investment_wage_known_millet_farm }
+  set_variable = { name = sed_investment_wage_unit_millet_farm value = owner.var:sed_investment_wage_unit_millet_farm }
+  set_variable = { name = sed_investment_wage_known_cotton_plantation value = owner.var:sed_investment_wage_known_cotton_plantation }
+  set_variable = { name = sed_investment_wage_unit_cotton_plantation value = owner.var:sed_investment_wage_unit_cotton_plantation }
+  set_variable = { name = sed_investment_wage_known_livestock_ranch value = owner.var:sed_investment_wage_known_livestock_ranch }
+  set_variable = { name = sed_investment_wage_unit_livestock_ranch value = owner.var:sed_investment_wage_unit_livestock_ranch }
+  set_variable = { name = sed_investment_wage_known_tooling_workshop value = owner.var:sed_investment_wage_known_tooling_workshop }
+  set_variable = { name = sed_investment_wage_unit_tooling_workshop value = owner.var:sed_investment_wage_unit_tooling_workshop }
+  set_variable = { name = sed_investment_wage_known_food_industry value = owner.var:sed_investment_wage_known_food_industry }
+  set_variable = { name = sed_investment_wage_unit_food_industry value = owner.var:sed_investment_wage_unit_food_industry }
+  set_variable = { name = sed_investment_wage_known_textile_mill value = owner.var:sed_investment_wage_known_textile_mill }
+  set_variable = { name = sed_investment_wage_unit_textile_mill value = owner.var:sed_investment_wage_unit_textile_mill }
+  set_variable = { name = sed_investment_wage_known_arms_industry value = owner.var:sed_investment_wage_known_arms_industry }
+  set_variable = { name = sed_investment_wage_unit_arms_industry value = owner.var:sed_investment_wage_unit_arms_industry }
+  set_variable = { name = sed_investment_wage_known_artillery_foundry value = owner.var:sed_investment_wage_known_artillery_foundry }
+  set_variable = { name = sed_investment_wage_unit_artillery_foundry value = owner.var:sed_investment_wage_unit_artillery_foundry }
+  set_variable = { name = sed_investment_wage_known_munition_plant value = owner.var:sed_investment_wage_known_munition_plant }
+  set_variable = { name = sed_investment_wage_unit_munition_plant value = owner.var:sed_investment_wage_unit_munition_plant }
+  set_variable = { name = sed_investment_wage_known_paper_mill value = owner.var:sed_investment_wage_known_paper_mill }
+  set_variable = { name = sed_investment_wage_unit_paper_mill value = owner.var:sed_investment_wage_unit_paper_mill }
   if = { limit = { var:sed_investment_wage_jobs > 0 }
    set_variable = { name = sed_investment_wage_unit value = {
     value = var:sed_investment_wage_cost divide = var:sed_investment_wage_jobs
    } }
    set_variable = { name = sed_investment_wage_known value = 1 }
+  }
+  if = { limit = { var:sed_investment_wage_jobs_logging_camp > 0 }
+   set_variable = { name = sed_investment_wage_unit_logging_camp value = {
+    value = var:sed_investment_wage_cost_logging_camp divide = var:sed_investment_wage_jobs_logging_camp
+   } }
+   set_variable = { name = sed_investment_wage_known_logging_camp value = 1 }
+  }
+  if = { limit = { var:sed_investment_wage_jobs_iron_mine > 0 }
+   set_variable = { name = sed_investment_wage_unit_iron_mine value = {
+    value = var:sed_investment_wage_cost_iron_mine divide = var:sed_investment_wage_jobs_iron_mine
+   } }
+   set_variable = { name = sed_investment_wage_known_iron_mine value = 1 }
+  }
+  if = { limit = { var:sed_investment_wage_jobs_coal_mine > 0 }
+   set_variable = { name = sed_investment_wage_unit_coal_mine value = {
+    value = var:sed_investment_wage_cost_coal_mine divide = var:sed_investment_wage_jobs_coal_mine
+   } }
+   set_variable = { name = sed_investment_wage_known_coal_mine value = 1 }
+  }
+  if = { limit = { var:sed_investment_wage_jobs_wheat_farm > 0 }
+   set_variable = { name = sed_investment_wage_unit_wheat_farm value = {
+    value = var:sed_investment_wage_cost_wheat_farm divide = var:sed_investment_wage_jobs_wheat_farm
+   } }
+   set_variable = { name = sed_investment_wage_known_wheat_farm value = 1 }
+  }
+  if = { limit = { var:sed_investment_wage_jobs_rye_farm > 0 }
+   set_variable = { name = sed_investment_wage_unit_rye_farm value = {
+    value = var:sed_investment_wage_cost_rye_farm divide = var:sed_investment_wage_jobs_rye_farm
+   } }
+   set_variable = { name = sed_investment_wage_known_rye_farm value = 1 }
+  }
+  if = { limit = { var:sed_investment_wage_jobs_rice_farm > 0 }
+   set_variable = { name = sed_investment_wage_unit_rice_farm value = {
+    value = var:sed_investment_wage_cost_rice_farm divide = var:sed_investment_wage_jobs_rice_farm
+   } }
+   set_variable = { name = sed_investment_wage_known_rice_farm value = 1 }
+  }
+  if = { limit = { var:sed_investment_wage_jobs_maize_farm > 0 }
+   set_variable = { name = sed_investment_wage_unit_maize_farm value = {
+    value = var:sed_investment_wage_cost_maize_farm divide = var:sed_investment_wage_jobs_maize_farm
+   } }
+   set_variable = { name = sed_investment_wage_known_maize_farm value = 1 }
+  }
+  if = { limit = { var:sed_investment_wage_jobs_millet_farm > 0 }
+   set_variable = { name = sed_investment_wage_unit_millet_farm value = {
+    value = var:sed_investment_wage_cost_millet_farm divide = var:sed_investment_wage_jobs_millet_farm
+   } }
+   set_variable = { name = sed_investment_wage_known_millet_farm value = 1 }
+  }
+  if = { limit = { var:sed_investment_wage_jobs_cotton_plantation > 0 }
+   set_variable = { name = sed_investment_wage_unit_cotton_plantation value = {
+    value = var:sed_investment_wage_cost_cotton_plantation divide = var:sed_investment_wage_jobs_cotton_plantation
+   } }
+   set_variable = { name = sed_investment_wage_known_cotton_plantation value = 1 }
+  }
+  if = { limit = { var:sed_investment_wage_jobs_livestock_ranch > 0 }
+   set_variable = { name = sed_investment_wage_unit_livestock_ranch value = {
+    value = var:sed_investment_wage_cost_livestock_ranch divide = var:sed_investment_wage_jobs_livestock_ranch
+   } }
+   set_variable = { name = sed_investment_wage_known_livestock_ranch value = 1 }
+  }
+  if = { limit = { var:sed_investment_wage_jobs_tooling_workshop > 0 }
+   set_variable = { name = sed_investment_wage_unit_tooling_workshop value = {
+    value = var:sed_investment_wage_cost_tooling_workshop divide = var:sed_investment_wage_jobs_tooling_workshop
+   } }
+   set_variable = { name = sed_investment_wage_known_tooling_workshop value = 1 }
+  }
+  if = { limit = { var:sed_investment_wage_jobs_food_industry > 0 }
+   set_variable = { name = sed_investment_wage_unit_food_industry value = {
+    value = var:sed_investment_wage_cost_food_industry divide = var:sed_investment_wage_jobs_food_industry
+   } }
+   set_variable = { name = sed_investment_wage_known_food_industry value = 1 }
+  }
+  if = { limit = { var:sed_investment_wage_jobs_textile_mill > 0 }
+   set_variable = { name = sed_investment_wage_unit_textile_mill value = {
+    value = var:sed_investment_wage_cost_textile_mill divide = var:sed_investment_wage_jobs_textile_mill
+   } }
+   set_variable = { name = sed_investment_wage_known_textile_mill value = 1 }
+  }
+  if = { limit = { var:sed_investment_wage_jobs_arms_industry > 0 }
+   set_variable = { name = sed_investment_wage_unit_arms_industry value = {
+    value = var:sed_investment_wage_cost_arms_industry divide = var:sed_investment_wage_jobs_arms_industry
+   } }
+   set_variable = { name = sed_investment_wage_known_arms_industry value = 1 }
+  }
+  if = { limit = { var:sed_investment_wage_jobs_artillery_foundry > 0 }
+   set_variable = { name = sed_investment_wage_unit_artillery_foundry value = {
+    value = var:sed_investment_wage_cost_artillery_foundry divide = var:sed_investment_wage_jobs_artillery_foundry
+   } }
+   set_variable = { name = sed_investment_wage_known_artillery_foundry value = 1 }
+  }
+  if = { limit = { var:sed_investment_wage_jobs_munition_plant > 0 }
+   set_variable = { name = sed_investment_wage_unit_munition_plant value = {
+    value = var:sed_investment_wage_cost_munition_plant divide = var:sed_investment_wage_jobs_munition_plant
+   } }
+   set_variable = { name = sed_investment_wage_known_munition_plant value = 1 }
+  }
+  if = { limit = { var:sed_investment_wage_jobs_paper_mill > 0 }
+   set_variable = { name = sed_investment_wage_unit_paper_mill value = {
+    value = var:sed_investment_wage_cost_paper_mill divide = var:sed_investment_wage_jobs_paper_mill
+   } }
+   set_variable = { name = sed_investment_wage_known_paper_mill value = 1 }
   }
  }
 }

@@ -7659,6 +7659,27 @@ sed_investment_logging_camp_output = {
 }
 sed_investment_logging_camp_return = {
  value = sed_investment_logging_camp_margin
+ if = { limit = { has_variable = sed_investment_wage_known_logging_camp var:sed_investment_wage_known_logging_camp = 1 }
+  if = { limit = { NOT = { has_building = building_logging_camp } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit_logging_camp }
+  }
+  if = { limit = { has_building = building_logging_camp }
+   subtract = { value = sed_investment_logging_camp_weighted_jobs multiply = var:sed_investment_wage_unit_logging_camp }
+  }
+ }
+ if = { limit = { NOT = { has_variable = sed_investment_wage_known_logging_camp var:sed_investment_wage_known_logging_camp = 1 } }
+ if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+  if = { limit = { NOT = { has_building = building_logging_camp } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit }
+  }
+  if = { limit = { has_building = building_logging_camp }
+   subtract = { value = sed_investment_logging_camp_weighted_jobs multiply = var:sed_investment_wage_unit }
+  }
+ }
+ }
+}
+sed_investment_logging_camp_return_national = {
+ value = sed_investment_logging_camp_margin
  if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
   if = { limit = { NOT = { has_building = building_logging_camp } }
    subtract = { value = 6000 multiply = var:sed_investment_wage_unit }
@@ -7720,6 +7741,27 @@ sed_investment_iron_mine_output = {
 }
 sed_investment_iron_mine_return = {
  value = sed_investment_iron_mine_margin
+ if = { limit = { has_variable = sed_investment_wage_known_iron_mine var:sed_investment_wage_known_iron_mine = 1 }
+  if = { limit = { NOT = { has_building = building_iron_mine } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit_iron_mine }
+  }
+  if = { limit = { has_building = building_iron_mine }
+   subtract = { value = sed_investment_iron_mine_weighted_jobs multiply = var:sed_investment_wage_unit_iron_mine }
+  }
+ }
+ if = { limit = { NOT = { has_variable = sed_investment_wage_known_iron_mine var:sed_investment_wage_known_iron_mine = 1 } }
+ if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+  if = { limit = { NOT = { has_building = building_iron_mine } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit }
+  }
+  if = { limit = { has_building = building_iron_mine }
+   subtract = { value = sed_investment_iron_mine_weighted_jobs multiply = var:sed_investment_wage_unit }
+  }
+ }
+ }
+}
+sed_investment_iron_mine_return_national = {
+ value = sed_investment_iron_mine_margin
  if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
   if = { limit = { NOT = { has_building = building_iron_mine } }
    subtract = { value = 6000 multiply = var:sed_investment_wage_unit }
@@ -7779,6 +7821,27 @@ sed_investment_coal_mine_output = {
  if = { limit = { has_building = building_coal_mine } add = sed_investment_coal_mine_output_coal }
 }
 sed_investment_coal_mine_return = {
+ value = sed_investment_coal_mine_margin
+ if = { limit = { has_variable = sed_investment_wage_known_coal_mine var:sed_investment_wage_known_coal_mine = 1 }
+  if = { limit = { NOT = { has_building = building_coal_mine } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit_coal_mine }
+  }
+  if = { limit = { has_building = building_coal_mine }
+   subtract = { value = sed_investment_coal_mine_weighted_jobs multiply = var:sed_investment_wage_unit_coal_mine }
+  }
+ }
+ if = { limit = { NOT = { has_variable = sed_investment_wage_known_coal_mine var:sed_investment_wage_known_coal_mine = 1 } }
+ if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+  if = { limit = { NOT = { has_building = building_coal_mine } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit }
+  }
+  if = { limit = { has_building = building_coal_mine }
+   subtract = { value = sed_investment_coal_mine_weighted_jobs multiply = var:sed_investment_wage_unit }
+  }
+ }
+ }
+}
+sed_investment_coal_mine_return_national = {
  value = sed_investment_coal_mine_margin
  if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
   if = { limit = { NOT = { has_building = building_coal_mine } }
@@ -7857,6 +7920,27 @@ sed_investment_wheat_farm_output = {
 }
 sed_investment_wheat_farm_return = {
  value = sed_investment_wheat_farm_margin
+ if = { limit = { has_variable = sed_investment_wage_known_wheat_farm var:sed_investment_wage_known_wheat_farm = 1 }
+  if = { limit = { NOT = { has_building = building_wheat_farm } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit_wheat_farm }
+  }
+  if = { limit = { has_building = building_wheat_farm }
+   subtract = { value = sed_investment_wheat_farm_weighted_jobs multiply = var:sed_investment_wage_unit_wheat_farm }
+  }
+ }
+ if = { limit = { NOT = { has_variable = sed_investment_wage_known_wheat_farm var:sed_investment_wage_known_wheat_farm = 1 } }
+ if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+  if = { limit = { NOT = { has_building = building_wheat_farm } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit }
+  }
+  if = { limit = { has_building = building_wheat_farm }
+   subtract = { value = sed_investment_wheat_farm_weighted_jobs multiply = var:sed_investment_wage_unit }
+  }
+ }
+ }
+}
+sed_investment_wheat_farm_return_national = {
+ value = sed_investment_wheat_farm_margin
  if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
   if = { limit = { NOT = { has_building = building_wheat_farm } }
    subtract = { value = 6000 multiply = var:sed_investment_wage_unit }
@@ -7927,6 +8011,27 @@ sed_investment_rye_farm_output = {
 }
 sed_investment_rye_farm_return = {
  value = sed_investment_rye_farm_margin
+ if = { limit = { has_variable = sed_investment_wage_known_rye_farm var:sed_investment_wage_known_rye_farm = 1 }
+  if = { limit = { NOT = { has_building = building_rye_farm } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit_rye_farm }
+  }
+  if = { limit = { has_building = building_rye_farm }
+   subtract = { value = sed_investment_rye_farm_weighted_jobs multiply = var:sed_investment_wage_unit_rye_farm }
+  }
+ }
+ if = { limit = { NOT = { has_variable = sed_investment_wage_known_rye_farm var:sed_investment_wage_known_rye_farm = 1 } }
+ if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+  if = { limit = { NOT = { has_building = building_rye_farm } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit }
+  }
+  if = { limit = { has_building = building_rye_farm }
+   subtract = { value = sed_investment_rye_farm_weighted_jobs multiply = var:sed_investment_wage_unit }
+  }
+ }
+ }
+}
+sed_investment_rye_farm_return_national = {
+ value = sed_investment_rye_farm_margin
  if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
   if = { limit = { NOT = { has_building = building_rye_farm } }
    subtract = { value = 6000 multiply = var:sed_investment_wage_unit }
@@ -7985,6 +8090,27 @@ sed_investment_rice_farm_output = {
  if = { limit = { has_building = building_rice_farm } add = sed_investment_rice_farm_output_grain }
 }
 sed_investment_rice_farm_return = {
+ value = sed_investment_rice_farm_margin
+ if = { limit = { has_variable = sed_investment_wage_known_rice_farm var:sed_investment_wage_known_rice_farm = 1 }
+  if = { limit = { NOT = { has_building = building_rice_farm } }
+   subtract = { value = 12000 multiply = var:sed_investment_wage_unit_rice_farm }
+  }
+  if = { limit = { has_building = building_rice_farm }
+   subtract = { value = sed_investment_rice_farm_weighted_jobs multiply = var:sed_investment_wage_unit_rice_farm }
+  }
+ }
+ if = { limit = { NOT = { has_variable = sed_investment_wage_known_rice_farm var:sed_investment_wage_known_rice_farm = 1 } }
+ if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+  if = { limit = { NOT = { has_building = building_rice_farm } }
+   subtract = { value = 12000 multiply = var:sed_investment_wage_unit }
+  }
+  if = { limit = { has_building = building_rice_farm }
+   subtract = { value = sed_investment_rice_farm_weighted_jobs multiply = var:sed_investment_wage_unit }
+  }
+ }
+ }
+}
+sed_investment_rice_farm_return_national = {
  value = sed_investment_rice_farm_margin
  if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
   if = { limit = { NOT = { has_building = building_rice_farm } }
@@ -8046,6 +8172,27 @@ sed_investment_maize_farm_output = {
 }
 sed_investment_maize_farm_return = {
  value = sed_investment_maize_farm_margin
+ if = { limit = { has_variable = sed_investment_wage_known_maize_farm var:sed_investment_wage_known_maize_farm = 1 }
+  if = { limit = { NOT = { has_building = building_maize_farm } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit_maize_farm }
+  }
+  if = { limit = { has_building = building_maize_farm }
+   subtract = { value = sed_investment_maize_farm_weighted_jobs multiply = var:sed_investment_wage_unit_maize_farm }
+  }
+ }
+ if = { limit = { NOT = { has_variable = sed_investment_wage_known_maize_farm var:sed_investment_wage_known_maize_farm = 1 } }
+ if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+  if = { limit = { NOT = { has_building = building_maize_farm } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit }
+  }
+  if = { limit = { has_building = building_maize_farm }
+   subtract = { value = sed_investment_maize_farm_weighted_jobs multiply = var:sed_investment_wage_unit }
+  }
+ }
+ }
+}
+sed_investment_maize_farm_return_national = {
+ value = sed_investment_maize_farm_margin
  if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
   if = { limit = { NOT = { has_building = building_maize_farm } }
    subtract = { value = 6000 multiply = var:sed_investment_wage_unit }
@@ -8105,6 +8252,27 @@ sed_investment_millet_farm_output = {
  if = { limit = { has_building = building_millet_farm } add = sed_investment_millet_farm_output_grain }
 }
 sed_investment_millet_farm_return = {
+ value = sed_investment_millet_farm_margin
+ if = { limit = { has_variable = sed_investment_wage_known_millet_farm var:sed_investment_wage_known_millet_farm = 1 }
+  if = { limit = { NOT = { has_building = building_millet_farm } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit_millet_farm }
+  }
+  if = { limit = { has_building = building_millet_farm }
+   subtract = { value = sed_investment_millet_farm_weighted_jobs multiply = var:sed_investment_wage_unit_millet_farm }
+  }
+ }
+ if = { limit = { NOT = { has_variable = sed_investment_wage_known_millet_farm var:sed_investment_wage_known_millet_farm = 1 } }
+ if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+  if = { limit = { NOT = { has_building = building_millet_farm } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit }
+  }
+  if = { limit = { has_building = building_millet_farm }
+   subtract = { value = sed_investment_millet_farm_weighted_jobs multiply = var:sed_investment_wage_unit }
+  }
+ }
+ }
+}
+sed_investment_millet_farm_return_national = {
  value = sed_investment_millet_farm_margin
  if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
   if = { limit = { NOT = { has_building = building_millet_farm } }
@@ -8169,6 +8337,27 @@ sed_investment_cotton_plantation_output = {
 }
 sed_investment_cotton_plantation_return = {
  value = sed_investment_cotton_plantation_margin
+ if = { limit = { has_variable = sed_investment_wage_known_cotton_plantation var:sed_investment_wage_known_cotton_plantation = 1 }
+  if = { limit = { NOT = { has_building = building_cotton_plantation } }
+   subtract = { value = 9000 multiply = var:sed_investment_wage_unit_cotton_plantation }
+  }
+  if = { limit = { has_building = building_cotton_plantation }
+   subtract = { value = sed_investment_cotton_plantation_weighted_jobs multiply = var:sed_investment_wage_unit_cotton_plantation }
+  }
+ }
+ if = { limit = { NOT = { has_variable = sed_investment_wage_known_cotton_plantation var:sed_investment_wage_known_cotton_plantation = 1 } }
+ if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+  if = { limit = { NOT = { has_building = building_cotton_plantation } }
+   subtract = { value = 9000 multiply = var:sed_investment_wage_unit }
+  }
+  if = { limit = { has_building = building_cotton_plantation }
+   subtract = { value = sed_investment_cotton_plantation_weighted_jobs multiply = var:sed_investment_wage_unit }
+  }
+ }
+ }
+}
+sed_investment_cotton_plantation_return_national = {
+ value = sed_investment_cotton_plantation_margin
  if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
   if = { limit = { NOT = { has_building = building_cotton_plantation } }
    subtract = { value = 9000 multiply = var:sed_investment_wage_unit }
@@ -8232,6 +8421,27 @@ sed_investment_livestock_ranch_output = {
  if = { limit = { has_building = building_livestock_ranch } add = sed_investment_livestock_ranch_output_fabric }
 }
 sed_investment_livestock_ranch_return = {
+ value = sed_investment_livestock_ranch_margin
+ if = { limit = { has_variable = sed_investment_wage_known_livestock_ranch var:sed_investment_wage_known_livestock_ranch = 1 }
+  if = { limit = { NOT = { has_building = building_livestock_ranch } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit_livestock_ranch }
+  }
+  if = { limit = { has_building = building_livestock_ranch }
+   subtract = { value = sed_investment_livestock_ranch_weighted_jobs multiply = var:sed_investment_wage_unit_livestock_ranch }
+  }
+ }
+ if = { limit = { NOT = { has_variable = sed_investment_wage_known_livestock_ranch var:sed_investment_wage_known_livestock_ranch = 1 } }
+ if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+  if = { limit = { NOT = { has_building = building_livestock_ranch } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit }
+  }
+  if = { limit = { has_building = building_livestock_ranch }
+   subtract = { value = sed_investment_livestock_ranch_weighted_jobs multiply = var:sed_investment_wage_unit }
+  }
+ }
+ }
+}
+sed_investment_livestock_ranch_return_national = {
  value = sed_investment_livestock_ranch_margin
  if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
   if = { limit = { NOT = { has_building = building_livestock_ranch } }
@@ -8298,6 +8508,27 @@ sed_investment_tooling_workshop_output = {
  if = { limit = { has_building = building_tooling_workshop } add = sed_investment_tooling_workshop_output_tools }
 }
 sed_investment_tooling_workshop_return = {
+ value = sed_investment_tooling_workshop_margin
+ if = { limit = { has_variable = sed_investment_wage_known_tooling_workshop var:sed_investment_wage_known_tooling_workshop = 1 }
+  if = { limit = { NOT = { has_building = building_tooling_workshop } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit_tooling_workshop }
+  }
+  if = { limit = { has_building = building_tooling_workshop }
+   subtract = { value = sed_investment_tooling_workshop_weighted_jobs multiply = var:sed_investment_wage_unit_tooling_workshop }
+  }
+ }
+ if = { limit = { NOT = { has_variable = sed_investment_wage_known_tooling_workshop var:sed_investment_wage_known_tooling_workshop = 1 } }
+ if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+  if = { limit = { NOT = { has_building = building_tooling_workshop } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit }
+  }
+  if = { limit = { has_building = building_tooling_workshop }
+   subtract = { value = sed_investment_tooling_workshop_weighted_jobs multiply = var:sed_investment_wage_unit }
+  }
+ }
+ }
+}
+sed_investment_tooling_workshop_return_national = {
  value = sed_investment_tooling_workshop_margin
  if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
   if = { limit = { NOT = { has_building = building_tooling_workshop } }
@@ -8379,6 +8610,27 @@ sed_investment_food_industry_output = {
 }
 sed_investment_food_industry_return = {
  value = sed_investment_food_industry_margin
+ if = { limit = { has_variable = sed_investment_wage_known_food_industry var:sed_investment_wage_known_food_industry = 1 }
+  if = { limit = { NOT = { has_building = building_food_industry } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit_food_industry }
+  }
+  if = { limit = { has_building = building_food_industry }
+   subtract = { value = sed_investment_food_industry_weighted_jobs multiply = var:sed_investment_wage_unit_food_industry }
+  }
+ }
+ if = { limit = { NOT = { has_variable = sed_investment_wage_known_food_industry var:sed_investment_wage_known_food_industry = 1 } }
+ if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+  if = { limit = { NOT = { has_building = building_food_industry } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit }
+  }
+  if = { limit = { has_building = building_food_industry }
+   subtract = { value = sed_investment_food_industry_weighted_jobs multiply = var:sed_investment_wage_unit }
+  }
+ }
+ }
+}
+sed_investment_food_industry_return_national = {
+ value = sed_investment_food_industry_margin
  if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
   if = { limit = { NOT = { has_building = building_food_industry } }
    subtract = { value = 6000 multiply = var:sed_investment_wage_unit }
@@ -8450,6 +8702,27 @@ sed_investment_textile_mill_output = {
 }
 sed_investment_textile_mill_return = {
  value = sed_investment_textile_mill_margin
+ if = { limit = { has_variable = sed_investment_wage_known_textile_mill var:sed_investment_wage_known_textile_mill = 1 }
+  if = { limit = { NOT = { has_building = building_textile_mill } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit_textile_mill }
+  }
+  if = { limit = { has_building = building_textile_mill }
+   subtract = { value = sed_investment_textile_mill_weighted_jobs multiply = var:sed_investment_wage_unit_textile_mill }
+  }
+ }
+ if = { limit = { NOT = { has_variable = sed_investment_wage_known_textile_mill var:sed_investment_wage_known_textile_mill = 1 } }
+ if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+  if = { limit = { NOT = { has_building = building_textile_mill } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit }
+  }
+  if = { limit = { has_building = building_textile_mill }
+   subtract = { value = sed_investment_textile_mill_weighted_jobs multiply = var:sed_investment_wage_unit }
+  }
+ }
+ }
+}
+sed_investment_textile_mill_return_national = {
+ value = sed_investment_textile_mill_margin
  if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
   if = { limit = { NOT = { has_building = building_textile_mill } }
    subtract = { value = 6000 multiply = var:sed_investment_wage_unit }
@@ -8512,6 +8785,27 @@ sed_investment_arms_industry_output = {
  if = { limit = { has_building = building_arms_industry } add = sed_investment_arms_industry_output_small_arms }
 }
 sed_investment_arms_industry_return = {
+ value = sed_investment_arms_industry_margin
+ if = { limit = { has_variable = sed_investment_wage_known_arms_industry var:sed_investment_wage_known_arms_industry = 1 }
+  if = { limit = { NOT = { has_building = building_arms_industry } }
+   subtract = { value = 6250 multiply = var:sed_investment_wage_unit_arms_industry }
+  }
+  if = { limit = { has_building = building_arms_industry }
+   subtract = { value = sed_investment_arms_industry_weighted_jobs multiply = var:sed_investment_wage_unit_arms_industry }
+  }
+ }
+ if = { limit = { NOT = { has_variable = sed_investment_wage_known_arms_industry var:sed_investment_wage_known_arms_industry = 1 } }
+ if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+  if = { limit = { NOT = { has_building = building_arms_industry } }
+   subtract = { value = 6250 multiply = var:sed_investment_wage_unit }
+  }
+  if = { limit = { has_building = building_arms_industry }
+   subtract = { value = sed_investment_arms_industry_weighted_jobs multiply = var:sed_investment_wage_unit }
+  }
+ }
+ }
+}
+sed_investment_arms_industry_return_national = {
  value = sed_investment_arms_industry_margin
  if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
   if = { limit = { NOT = { has_building = building_arms_industry } }
@@ -8578,6 +8872,27 @@ sed_investment_artillery_foundry_output = {
 }
 sed_investment_artillery_foundry_return = {
  value = sed_investment_artillery_foundry_margin
+ if = { limit = { has_variable = sed_investment_wage_known_artillery_foundry var:sed_investment_wage_known_artillery_foundry = 1 }
+  if = { limit = { NOT = { has_building = building_artillery_foundry } }
+   subtract = { value = 6500 multiply = var:sed_investment_wage_unit_artillery_foundry }
+  }
+  if = { limit = { has_building = building_artillery_foundry }
+   subtract = { value = sed_investment_artillery_foundry_weighted_jobs multiply = var:sed_investment_wage_unit_artillery_foundry }
+  }
+ }
+ if = { limit = { NOT = { has_variable = sed_investment_wage_known_artillery_foundry var:sed_investment_wage_known_artillery_foundry = 1 } }
+ if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+  if = { limit = { NOT = { has_building = building_artillery_foundry } }
+   subtract = { value = 6500 multiply = var:sed_investment_wage_unit }
+  }
+  if = { limit = { has_building = building_artillery_foundry }
+   subtract = { value = sed_investment_artillery_foundry_weighted_jobs multiply = var:sed_investment_wage_unit }
+  }
+ }
+ }
+}
+sed_investment_artillery_foundry_return_national = {
+ value = sed_investment_artillery_foundry_margin
  if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
   if = { limit = { NOT = { has_building = building_artillery_foundry } }
    subtract = { value = 6500 multiply = var:sed_investment_wage_unit }
@@ -8637,6 +8952,27 @@ sed_investment_munition_plant_output = {
 }
 sed_investment_munition_plant_return = {
  value = sed_investment_munition_plant_margin
+ if = { limit = { has_variable = sed_investment_wage_known_munition_plant var:sed_investment_wage_known_munition_plant = 1 }
+  if = { limit = { NOT = { has_building = building_munition_plant } }
+   subtract = { value = 7500 multiply = var:sed_investment_wage_unit_munition_plant }
+  }
+  if = { limit = { has_building = building_munition_plant }
+   subtract = { value = sed_investment_munition_plant_weighted_jobs multiply = var:sed_investment_wage_unit_munition_plant }
+  }
+ }
+ if = { limit = { NOT = { has_variable = sed_investment_wage_known_munition_plant var:sed_investment_wage_known_munition_plant = 1 } }
+ if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+  if = { limit = { NOT = { has_building = building_munition_plant } }
+   subtract = { value = 7500 multiply = var:sed_investment_wage_unit }
+  }
+  if = { limit = { has_building = building_munition_plant }
+   subtract = { value = sed_investment_munition_plant_weighted_jobs multiply = var:sed_investment_wage_unit }
+  }
+ }
+ }
+}
+sed_investment_munition_plant_return_national = {
+ value = sed_investment_munition_plant_margin
  if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
   if = { limit = { NOT = { has_building = building_munition_plant } }
    subtract = { value = 7500 multiply = var:sed_investment_wage_unit }
@@ -8692,6 +9028,27 @@ sed_investment_paper_mill_output = {
  if = { limit = { has_building = building_paper_mill } add = sed_investment_paper_mill_output_paper }
 }
 sed_investment_paper_mill_return = {
+ value = sed_investment_paper_mill_margin
+ if = { limit = { has_variable = sed_investment_wage_known_paper_mill var:sed_investment_wage_known_paper_mill = 1 }
+  if = { limit = { NOT = { has_building = building_paper_mill } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit_paper_mill }
+  }
+  if = { limit = { has_building = building_paper_mill }
+   subtract = { value = sed_investment_paper_mill_weighted_jobs multiply = var:sed_investment_wage_unit_paper_mill }
+  }
+ }
+ if = { limit = { NOT = { has_variable = sed_investment_wage_known_paper_mill var:sed_investment_wage_known_paper_mill = 1 } }
+ if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
+  if = { limit = { NOT = { has_building = building_paper_mill } }
+   subtract = { value = 6000 multiply = var:sed_investment_wage_unit }
+  }
+  if = { limit = { has_building = building_paper_mill }
+   subtract = { value = sed_investment_paper_mill_weighted_jobs multiply = var:sed_investment_wage_unit }
+  }
+ }
+ }
+}
+sed_investment_paper_mill_return_national = {
  value = sed_investment_paper_mill_margin
  if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
   if = { limit = { NOT = { has_building = building_paper_mill } }
