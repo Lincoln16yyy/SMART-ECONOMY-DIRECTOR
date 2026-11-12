@@ -134,6 +134,14 @@ validada com o Tiger 1.19.0 (`--game '/home/lincoln-ii/Games/Victoria 3'`):
 - Conclusão: script só lê comércio (pedidos, faixa de preço, escassez). Abrir
   rota é ação da UI/IA do jogador.
 
+- Tarifa e subvenção (sondagem 2026-11-12, `/tmp/sed_tariff`, Tiger 1.19.0):
+  `set_tariff`, `set_tariffs`, `set_tariff_rate`, `add_tariff`,
+  `set_trade_route_tariff`, `set_goods_tariff`, `set_subvention`,
+  `add_subvention`, `set_goods_subvention`, `set_market_subvention`,
+  `add_tariff_to_goods`, `set_country_tariff` e `change_tariff` são todos
+  `unknown token`. O sistema de presença/vantagem da 1.9+ não tem efeito de
+  script; não insistir nesse caminho. [confirmado 2026-11-12]
+
 Formato de evento (vanilla `events/1848.txt`, evento `1848.1`): `type`, `placement`,
 `title`, `desc`, `flavor`, `duration`, `icon`, `on_created_soundeffect`,
 `trigger`, `immediate` e `option` com `name`, `custom_tooltip`, `ai_chance`,

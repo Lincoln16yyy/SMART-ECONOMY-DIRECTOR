@@ -1,5 +1,14 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.33, o Automático deixa de ficar parado numa economia equilibrada. Antes,
+o plano só criava prioridade com escassez, bem 20% acima da base ou insumo
+bloqueante — com o país saudável, o mês terminava sem obra nenhuma. Agora, sem
+desvio administrativo, tributário, de energia ou de bem sem produtor, o
+despachante expande madeira, ferro e ferramentas enquanto o mercado não estiver
+mais barato que a base, um nível por mês e sob as mesmas guardas. A expansão só
+vale para prédios que já existem. Também nesta versão os blocos explicativos do
+painel passam para trás do botão de detalhes, deixando a tela padrão curta.
+
 Na 0.7.32, o objetivo 9 (energia local 20% acima da base) ganha o mesmo
 tratamento: sem Supply Chain detectado, o Automático amplia a usina elétrica um
 nível por mês no estado com energia cara que aceite a obra, reservando 400
@@ -270,7 +279,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.7.32.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.7.33.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 

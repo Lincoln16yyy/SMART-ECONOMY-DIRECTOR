@@ -725,6 +725,23 @@ de um bem do catálogo (ex.: madeira) e um prédio operante do tipo.
 3. Troque o jogo para inglês e confirme que o texto está em inglês (antes da
    0.7.29 o arquivo inglês saía em português).
 
+## Crescimento com economia equilibrada 0.7.33 (pendente)
+
+1. Save do Paraguai saudável (caixa positivo, nada em escassez, preços na base)
+   com serraria, mina de ferro ou oficina de ferramentas existentes. Automático
+   por 3 meses. Esperado: uma obra de expansão desses tipos por mês, sem esperar
+   escassez. Devolver: captura do painel resumido e da fila.
+2. Confirme que **não** há fundação de prédio novo por essa trilha: só tipos que
+   já existem no estado são ampliados.
+3. Burocracia negativa, estado acima da capacidade tributária ou energia 20%
+   acima da base: a trilha de crescimento deve ceder lugar ao executor do
+   objetivo correspondente (administração ou usina).
+4. Bem mais barato que a base: aquele tipo não deve ser ampliado.
+5. Com fila privada ocupada: status 11, nenhuma obra.
+6. Painel: confirme que a tela padrão mostra objetivo, situação fiscal e
+   prioridades, e que os blocos longos aparecem só depois de "Mostrar
+   indicadores e detalhes". Conferir nos dois idiomas.
+
 ## Usina elétrica 0.7.32 (pendente)
 
 1. Save de teste **sem** Supply Chain, com a tecnologia de geração elétrica já

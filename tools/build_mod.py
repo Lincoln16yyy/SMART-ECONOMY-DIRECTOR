@@ -5,14 +5,14 @@ import json
 from pathlib import Path
 
 try:
-    from . import planning, coordination, construction_budget, labor, input_forecast, production_methods, investment, trade_capacity, admin_capacity, power_capacity
+    from . import planning, coordination, construction_budget, labor, input_forecast, production_methods, investment, trade_capacity, admin_capacity, power_capacity, core_growth
 except ImportError:
-    import planning, coordination, construction_budget, labor, input_forecast, production_methods, investment, trade_capacity, admin_capacity, power_capacity
+    import planning, coordination, construction_budget, labor, input_forecast, production_methods, investment, trade_capacity, admin_capacity, power_capacity, core_growth
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.32'
+VERSION = '0.7.33'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -596,7 +596,7 @@ sed_auto_run_direct = {
     sed_run_trade_center_approval = yes
    }
   }
- }
+''' + core_growth_branches() + ''' }
  else_if = { limit = { in_default = yes } set_variable = { name = sed_auto_action_status value = 10 } }
  else_if = { limit = { sed_auto_month_limit_reached = yes } set_variable = { name = sed_auto_action_status value = 16 } }
  else_if = { limit = { construction_queue_num_queued_private_levels > 0 } set_variable = { name = sed_auto_action_status value = 11 } }
@@ -608,6 +608,26 @@ sed_auto_run_direct = {
 }
 ''')
     return '\n'.join(result).rstrip() + '\n'
+
+
+def core_growth_branches():
+    """Last-resort branches of the direct dispatcher for the core inputs."""
+    parts = []
+    for item in core_growth.TARGETS:
+        good = item['good']
+        parts.append(f'''  else_if = {{
+   limit = {{ any_scope_state = {{ sed_core_{good}_eligible = yes }} }}
+   ordered_scope_state = {{
+    limit = {{ sed_core_{good}_eligible = yes }}
+    order_by = {{ value = state_population multiply = -1 }}
+    max = 1
+    check_range_bounds = no
+    owner = {{ set_variable = {{ name = sed_auto_action_status value = 15 }} }}
+    sed_run_core_{good}_approval = yes
+   }}
+  }}
+''')
+    return ''.join(parts)
 
 
 def preference_effects():
@@ -807,14 +827,16 @@ def widget():
         body += textbox(f'sed_military_posture_{posture}', f'sed_military_posture_{posture}_visible_sgui')
     for good, _, _ in planning.MILITARY_GOODS:
         body += textbox(f'sed_military_short_{good}', f'sed_military_short_{good}_visible_sgui')
-    body += textbox('sed_military_scope')
-    body += textbox('sed_laws_scope')
-    body += textbox('sed_laws_external', 'sed_laws_external_visible_sgui')
-    body += textbox('sed_input_forecast_policy')
-    body += textbox('sed_investment_policy')
-    body += textbox('sed_investment_wage', 'sed_investment_wage_visible_sgui')
-    body += textbox('sed_investment_wage_unknown', 'sed_investment_wage_unknown_visible_sgui')
-    body += textbox('sed_plan_policy')
+    # Long explanatory blocks live behind the existing details toggle so the
+    # default panel stays short: objective, fiscal status and the priorities.
+    body += details(textbox('sed_military_scope')
+                    + textbox('sed_laws_scope')
+                    + textbox('sed_laws_external', 'sed_laws_external_visible_sgui')
+                    + textbox('sed_input_forecast_policy')
+                    + textbox('sed_investment_policy')
+                    + textbox('sed_investment_wage', 'sed_investment_wage_visible_sgui')
+                    + textbox('sed_investment_wage_unknown', 'sed_investment_wage_unknown_visible_sgui')
+                    + textbox('sed_plan_policy'))
     body += textbox('sed_tax_policy', 'sed_tax_policy_visible_sgui')
     body += textbox('sed_wage_policy', 'sed_tax_policy_visible_sgui')
     for item in SUPPLY_TARGETS:
@@ -1396,7 +1418,7 @@ sed_update_growth = {
     state_cleanup = '\n'.join('  remove_variable = ' + name for name in planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES + investment.STATE_VARIABLES + production_methods.state_variables(SUPPLY_TARGETS))
     script = script.replace(' # Schema and automatic attempt month',
                             ' every_scope_state = {\n' + state_cleanup + '\n }\n # Schema and automatic attempt month', 1)
-    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, INPUT_DEPENDENCIES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + input_forecast.effects() + input_priority_effect() + labor.effects() + construction_budget.effects(founding_projects()) + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + planning.military_wage_policy_effects() + investment.effects() + production_methods.effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants, recovery=True) + coordination.effects() + trade_capacity.effects() + admin_capacity.effects() + power_capacity.effects() + import_notice_effect()
+    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, INPUT_DEPENDENCIES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + input_forecast.effects() + input_priority_effect() + labor.effects() + construction_budget.effects(founding_projects()) + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + planning.military_wage_policy_effects() + investment.effects() + production_methods.effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants, recovery=True) + coordination.effects() + trade_capacity.effects() + admin_capacity.effects() + power_capacity.effects() + core_growth.effects() + import_notice_effect()
 
 
 def scripted_guis():
@@ -2072,12 +2094,26 @@ sed_auto_executor_safe = {
         for item in SUPPLY_TARGETS)
     result.append('sed_direct_supply_priority_exists = {\n OR = {\n' + priorities + '\n }\n}')
     options = '\n'.join(f'  has_variable = {option}' for name, option, pt, en in COMPETING_BUILDERS)
+    # A healthy growth month may develop the core inputs even with nothing
+    # scarce or expensive; the candidate still needs a positive reference return.
+    result.append('''# Core inputs may grow only when no other objective has a claim: a negative
+# bureaucracy, a state over its tax capacity, dear local power or a good with no
+# producer at all keep their own executor and must not be preempted.
+sed_develop_core = {
+ has_variable = sed_mode_automatic
+ sed_coord_fiscal_safe = yes
+ NOT = { in_default = yes }
+ bureaucracy >= 0
+ OR = { NOT = { has_variable = sed_plan_missing_count } var:sed_plan_missing_count = 0 }
+ NOT = { any_scope_state = { is_incorporated = yes tax_capacity_usage > tax_capacity } }
+ NOT = { any_scope_state = { sg:electricity ?= { state_goods_pricier >= 0.2 } } }
+}''')
     result.append('sed_competing_builder_configured = {\n OR = {\n' + options + '\n }\n}')
     # Read-only view of Controllable Private Construction. Absent mod = every
     # flag is false, so this trigger is also the detection test.
     control = '\n'.join(f'  has_variable = {option}' for name, option, pt, en in PRIVATE_CONTROL_FLAGS)
     result.append('sed_private_control_configured = {\n OR = {\n' + control + '\n }\n}')
-    return '\n'.join(result).rstrip() + '\n' + planning.triggers() + construction_budget.triggers() + input_forecast.triggers() + coordination.triggers() + trade_capacity.triggers([item['good'] for item in SUPPLY_TARGETS]) + admin_capacity.triggers() + power_capacity.triggers() + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants) + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants, recovery=True)
+    return '\n'.join(result).rstrip() + '\n' + planning.triggers() + construction_budget.triggers() + input_forecast.triggers() + coordination.triggers() + trade_capacity.triggers([item['good'] for item in SUPPLY_TARGETS]) + admin_capacity.triggers() + power_capacity.triggers() + core_growth.triggers() + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants) + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants, recovery=True)
 
 
 def value(name, fmt='1'):

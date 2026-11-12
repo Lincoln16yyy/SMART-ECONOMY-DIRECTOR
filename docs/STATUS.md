@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.32
+# Estado dos requisitos — 0.7.33
 
 ## Protocolo de evidência adotado
 
@@ -42,7 +42,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Métodos de produção | Configuração inicial em fundações acompanhadas desde a 0.7.7. Seleção inicial e, desde a 0.7.9, modernização contínua do grupo principal para gargalos, por saída e margem material estimada a preços-base, com reserva mensal de insumos. Desde a 0.7.10, recuperação de escassez por método com menor dependência de insumos e piso de saída nominal. A 0.7.17 fornece a unidade salarial observada aos filtros de oferta; a 0.7.18 desconta a folha da mudança na pontuação de modernização e recuperação | Confirmar na engine. Preços reais pendentes. Qualificações e salários por profissão **não têm primitiva legível** (sondagem Tiger 1.19.0: `pop_qualifications`, `state_pop_qualifications`, `wages`, `wage_rate`, `average_wage` são tokens desconhecidos); o proxy é `occupancy` + `has_failed_hires`, e desde a 0.7.26 a unidade salarial é por família de prédio com fallback nacional. Desde a 0.7.28 a modernização cede o prédio que o Auto-Apply PMs já administra (`zw_var_auto_pm_building_<prédio>` e os botões de grupo de fazendas/plantações), em vez de disputar o mesmo grupo. Automação dos demais grupos pendente. A ordem dos pares e a configuração inicial seguem apenas materiais |
 | Economia militar | Custos, participação das despesas, guerra e cinco bens monitorados. Expansões de armas, artilharia e munição na 0.6.14, com bônus de prioridade em guerra | Confirmar leituras na engine, identificar consumo nacional, planejar indústria bélica, modernização e coordenação do recrutamento |
 | Leis, guerra e diplomacia | Fora das mutações econômicas implementadas. Desde a 0.7.20 o painel declara a fronteira e reconhece o Smart Government Advisor instalado (`sg_enabled`), sem repetir recomendações de leis | Mantidas sob responsabilidade dos módulos e decisões previstos pelo briefing. Conferir a exibição com os dois mods na engine |
-| Comércio exterior | Limitação de engine confirmada: `create_trade_route` foi removido na 1.9 (Tiger 1.19.0) e `add_trade_route_level`, `cancel_trade_route` e `establish_trade_route` são tokens desconhecidos. Desde a 0.7.21, `sed_pulse.2..13` avisam em evento quando a escassez não tem candidata local, com prazo e três opções; desde a 0.7.22 a descrição mostra os pedidos de compra e venda do mercado. Desde a 0.7.30, quando o bem em escassez não tem **produtor no país** (`var:sed_plan_missing_<bem> = 1`) e nenhum estado pode receber a fundação, o Automático amplia ou funda um Centro de Comércio para comprar capacidade (`TRADE_CENTER_POINTS = 100`), sem abrir rota, sem tarifa/subvenção e sem construir sob Isolacionismo ou em estado com infraestrutura negativa | Abrir rota continua ação do jogador. Conferir em campanha se o nível aumenta a capacidade usada pelo Mercado Mundial, a entrada na fila do governo, a reserva de 100 pontos e o comportamento após save/reload. Desde a 0.7.29 a descrição ensina o caminho da 1.9+ com termos conferidos no jogo instalado (Centro de Comércio, capacidade de comércio, tarifa/subvenção, Transferência de Bens, `country_disallow_trade_bool` do Isolacionismo). Confirmar no jogo a exibição do evento e dos números, o prazo de 3 e o cooldown de 6/12/24 meses |
+| Comércio exterior | Limitação de engine confirmada: `create_trade_route` foi removido na 1.9 (Tiger 1.19.0) e `add_trade_route_level`, `cancel_trade_route` e `establish_trade_route` são tokens desconhecidos. Desde a 0.7.21, `sed_pulse.2..13` avisam em evento quando a escassez não tem candidata local, com prazo e três opções; desde a 0.7.22 a descrição mostra os pedidos de compra e venda do mercado. Desde a 0.7.30, quando o bem em escassez não tem **produtor no país** (`var:sed_plan_missing_<bem> = 1`) e nenhum estado pode receber a fundação, o Automático amplia ou funda um Centro de Comércio para comprar capacidade (`TRADE_CENTER_POINTS = 100`), sem abrir rota, sem tarifa/subvenção e sem construir sob Isolacionismo ou em estado com infraestrutura negativa | Abrir rota continua ação do jogador. Tarifa e subvenção **também não são scriptáveis** (sondagem 2026-11-12: 13 nomes candidatos responderam `unknown token`), então o sistema de presença/vantagem da 1.9+ não pode ser automatizado por script. Abrir rota continua ação do jogador. Conferir em campanha se o nível aumenta a capacidade usada pelo Mercado Mundial, a entrada na fila do governo, a reserva de 100 pontos e o comportamento após save/reload. Desde a 0.7.29 a descrição ensina o caminho da 1.9+ com termos conferidos no jogo instalado (Centro de Comércio, capacidade de comércio, tarifa/subvenção, Transferência de Bens, `country_disallow_trade_bool` do Isolacionismo). Confirmar no jogo a exibição do evento e dos números, o prazo de 3 e o cooldown de 6/12/24 meses |
 | Haiti, país rico e crise | Cenários sintéticos fiscais e de seleção | Campanhas registradas e comparáveis permanecem pendentes |
 | Crescimento em campanha longa | Ainda sem evidência | Medir PIB, SoL, emprego, dívida, reservas e diversificação durante vários anos |
 | Localização | Desde a 0.7.29 o arquivo inglês recebe a coluna em inglês. Até a 0.7.28 a bandeira do idioma era reutilizada como rótulo de laço (`for policy, pt, en` e `for good, pt, en`), então `localization('english')` gerava português. Também desde a 0.7.29 parágrafos usam `\n` escapado, porque quebra real invalida a entrada | Conferir no jogo a exibição nos dois idiomas. Não havia teste de idioma antes da 0.7.29 |
@@ -195,3 +195,45 @@ conclusão inferida, reserva de 400 pontos e texto do painel nos dois idiomas.
 NÃO VERIFICADO na engine: entrada da usina na fila do governo, efeito do nível
 no preço local de eletricidade, exigência da tecnologia em campanha e save/
 reload. Roteiro em `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.32.
+
+## 0.7.33 — Crescimento com economia equilibrada e relato de campanha
+
+Relato do jogador: com o Paraguai, caixa positivo e nada em falta, o Automático
+não construiu nada por meses. Reprodução no harness confirmou `sed_plan_goal =
+8`, `sed_plan_count = 0`, status 2 e nenhuma obra: o plano só cria demanda com
+escassez, bem 20% acima da base ou insumo bloqueante, e a margem de referência
+(75% de receita, 125% de insumos) é negativa em preço-base.
+
+Código — `tools/core_growth.py` adiciona uma trilha de crescimento como última
+ramificação do despachante (depois dos alvos ranqueados, dos objetivos cívicos e
+do Centro de Comércio): expande madeira, ferro ou ferramentas quando
+`sed_develop_core` vale — modo automático, finanças saudáveis, sem
+inadimplência, burocracia ≥ 0, nenhum estado acima da capacidade tributária,
+nenhuma energia local 20% acima da base e nenhum bem sem produtor — e o bem não
+está mais barato que a base. Só expande prédio existente; exige ocupação ≥ 50%,
+sem contratação falha, sem nível já enfileirado, trabalho reservado e previsão
+de insumos segura. Uma tentativa por mês e as guardas do executor direto.
+
+Em paralelo, os blocos explicativos do painel (escopo militar, leis, política de
+insumos, retorno do investimento, unidade salarial e política do plano) passaram
+para trás do botão de detalhes; a tela padrão fica com objetivo, situação
+fiscal, prioridades e ações.
+
+Evidência de limite de engine (sondagem com Tiger 1.19.0 em `/tmp`):
+`set_tariff`, `set_tariffs`, `set_tariff_rate`, `add_tariff`,
+`set_trade_route_tariff`, `set_goods_tariff`, `set_subvention`,
+`add_subvention`, `set_goods_subvention`, `set_market_subvention`,
+`add_tariff_to_goods`, `set_country_tariff` e `change_tariff` são todos
+`unknown token` na 1.15. O sistema de presença/vantagem da 1.9+ não tem efeito
+de script: automatizar tarifa ou subvenção não é possível; resta orientar pelo
+evento e construir capacidade/indústria local.
+
+Teste sintético — 419 aprovados; 9 novos em `tests/test_core_growth.py`. Dois
+testes antigos de `tests/test_investment.py` foram ajustados porque verificavam
+a regra anterior justamente em bens-núcleo: o de pressão de preço passou a usar
+um bem não-núcleo (mantendo o intento) e o de referência material negativa virou
+um teste explícito da nova regra para o núcleo.
+
+NÃO VERIFICADO na engine: se a trilha de crescimento aparece em campanha com
+fila andando, se ela respeita o orçamento como esperado e o painel encurtado nos
+dois idiomas. Roteiro em `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.33.

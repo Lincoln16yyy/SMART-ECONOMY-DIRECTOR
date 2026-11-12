@@ -1,7 +1,15 @@
 # Contexto de continuidade
 
-Última entrega do mod — 0.7.32 gerada e testada; instalação e campanha pendentes.
-Código — 0.7.32 repete o padrão para o objetivo 9: sem ferramenta externa, o
+Última entrega do mod — 0.7.33 gerada e testada; instalação e campanha pendentes.
+Código — 0.7.33 corrige o relato do Paraguai: economia equilibrada não gerava
+prioridade e o mês terminava sem obra. `tools/core_growth.py` é a última
+ramificação do despachante e expande madeira, ferro ou ferramentas (só prédio
+existente, 1 nível/mês, sob as guardas) quando `sed_develop_core` vale: sem
+burocracia negativa, sem estado acima da capacidade tributária, sem energia 20%
+acima da base e sem bem sem produtor. Blocos explicativos do painel foram para
+trás do botão de detalhes. Tarifa/subvenção: 13 nomes sondados no Tiger são
+`unknown token`; presença/vantagem não é scriptável.
+Antes: 0.7.32 deu executor próprio ao objetivo 9: sem ferramenta externa, o
 executor próprio amplia `building_power_plant` um nível por mês, só em estado
 incorporado com infraestrutura ≥ 0, `can_construct_building` aceitando (o jogo
 exige `electrical_generation`) e eletricidade local ≥ 20% acima da base; 400
@@ -26,8 +34,8 @@ idioma e `\n` escapado). Antes: cessão de PM ao Auto-Apply PMs; leitura do
 Controllable Private Construction; unidade salarial por família; meta
 plurianual; duração da fila pela engine. Comércio: script não abre rota
 (removido na 1.9); autor/investidor e qualificações não têm primitiva legível.
-Teste sintético — 410 testes aprovados.
-Documentação — README e STATUS foram sincronizados com a 0.7.32; a lista de
+Teste sintético — 419 testes aprovados.
+Documentação — README e STATUS foram sincronizados com a 0.7.33; a lista de
 lacunas herdada da 0.6.26 estava errada em PMs, fundação de prédios e salários
 militares. Antes: README e STATUS sincronizados com a 0.7.30; a lista de
 lacunas herdada da 0.6.26 estava errada em PMs, fundação de prédios e salários
@@ -43,8 +51,9 @@ Ler `AGENTS.md`, `docs/agent/vic3-modding/SKILL.md` e suas referências.
 O ambiente registra o Tiger, o resultado da sondagem de comércio e o Smart
 Government instalado (1.0.0, esquema 2, variáveis `sg_*`). A pasta de
 documentação exportada do jogo continua ausente.
-Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.32 (usina
-elétrica no objetivo 9, tecnologia e fila privada), 0.7.31 (administração
+Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.33 (crescimento
+com economia equilibrada e painel curto), 0.7.32 (usina elétrica no objetivo 9,
+tecnologia e fila privada), 0.7.31 (administração
 pública nos objetivos 6 e 7, fila privada e save/reload), 0.7.30
 (Centro de Comércio como último recurso, Isolacionismo e estado com
 infraestrutura negativa), 0.7.29 (evento de importação com o novo texto, nos dois idiomas),

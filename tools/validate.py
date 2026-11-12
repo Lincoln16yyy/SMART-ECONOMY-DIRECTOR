@@ -165,7 +165,10 @@ def validate(root=ROOT, game=None):
                         'sed_run_construction_approval': {'building_construction_sector'},
                         'sed_run_trade_center_approval': {'building_trade_center'},
                         'sed_run_admin_approval': {'building_government_administration'},
-                        'sed_run_power_approval': {'building_power_plant'}}
+                        'sed_run_power_approval': {'building_power_plant'},
+                        'sed_run_core_wood_approval': {'building_logging_camp'},
+                        'sed_run_core_iron_approval': {'building_iron_mine'},
+                        'sed_run_core_tools_approval': {'building_tooling_workshop'}}
     try:
         from .build_mod import SUPPLY_TARGETS, variants
     except ImportError:
@@ -232,7 +235,10 @@ def validate(root=ROOT, game=None):
             errors.append('Approval lacks material budget revalidation: ' + name)
         fallback_guards = {'trade_center': 'sed_trade_center_candidate_eligible',
                            'admin': 'sed_admin_candidate_eligible',
-                           'power': 'sed_power_candidate_eligible'}
+                           'power': 'sed_power_candidate_eligible',
+                           'core_wood': 'sed_core_wood_eligible',
+                           'core_iron': 'sed_core_iron_eligible',
+                           'core_tools': 'sed_core_tools_eligible'}
         if name in fallback_guards:
             # Fallbacks run only after every ranked target failed this month, so
             # they have no plan rank. They must still prove their own eligibility.

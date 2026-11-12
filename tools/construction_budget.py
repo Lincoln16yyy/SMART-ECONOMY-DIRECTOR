@@ -133,6 +133,13 @@ def effects(founding_projects=()):
    any_scope_state = {{ sed_power_candidate_eligible = yes }} }}
    set_variable = {{ name = sed_build_budget_project_points value = {POWER_POINTS} }}
   }}''')
+    # Growth lane of the core inputs is the very last branch of the dispatcher.
+    for good, points in (('wood', PROJECT_POINTS['wood']), ('iron', PROJECT_POINTS['iron']),
+                         ('tools', PROJECT_POINTS['tools'])):
+        result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0
+   any_scope_state = {{ sed_core_{good}_eligible = yes }} }}
+   set_variable = {{ name = sed_build_budget_project_points value = {points} }}
+  }}''')
     # No ranked project this month: the Trade Center fallback is the next work.
     result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0
    any_scope_state = {{ sed_trade_center_candidate_eligible = yes }} }}

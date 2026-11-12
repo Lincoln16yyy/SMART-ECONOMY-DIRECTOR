@@ -2641,3 +2641,55 @@ avisos (943 + os 5 textboxes novos do painel).
 Não verificado na engine: entrada da usina na fila, efeito do nível no preço
 local de eletricidade, exigência da tecnologia em campanha e save/reload.
 Roteiro em `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.32.
+
+## 2026-11-12 — 0.7.33: crescimento com economia equilibrada
+
+Relato do jogador: com o Paraguai, caixa positivo e nada em falta, o Automático
+não construiu nada. Reprodução no harness: `sed_plan_goal = 8`,
+`sed_plan_count = 0`, status 2, nenhuma obra. A causa é de desenho —
+`sed_<bem>_supply_demand` só existe com escassez, preço 20% acima da base ou
+insumo bloqueante — e a margem de referência estressada (75% de receita, 125%
+de insumos) é negativa em preço-base, então exigir retorno positivo também não
+resolveria.
+
+Primeira tentativa (descartada): colocar o crescimento dentro do plano. Isso fez
+36 testes falharem e 22 continuarem falhando: a prioridade de crescimento virava
+objetivo 2 e roubava o turno dos executores cívicos (6/7/9) e do Centro de
+Comércio. Revertido.
+
+Segunda tentativa (adotada): `tools/core_growth.py` como última ramificação do
+despachante, depois dos alvos ranqueados, de administração, de energia e do
+Centro de Comércio. Expande madeira, ferro ou ferramentas (só prédio existente)
+quando `sed_develop_core` vale: automático, finanças saudáveis, sem
+inadimplência, burocracia ≥ 0, nenhum estado acima da capacidade tributária,
+nenhuma energia 20% acima da base, nenhum bem sem produtor e o bem não mais
+barato que a base. Mantém ocupação ≥ 50%, sem contratação falha, sem nível já
+enfileirado, trabalho reservado e previsão de insumos segura, com uma tentativa
+por mês.
+
+Diagnóstico que custou duas iterações: a elegibilidade falhava no harness por
+`sed_investment_<variante>_output > 0`; o teste precisa declarar
+`production_methods` no prédio, como os testes existentes fazem. Não era defeito
+do gerador.
+
+Também nesta entrega: os blocos explicativos do painel passaram para trás do
+botão de detalhes (escopo militar, leis, política de insumos, retorno do
+investimento, unidade salarial, política do plano), deixando a tela padrão com
+objetivo, situação fiscal, prioridades e ações.
+
+Sondagem de comércio (Tiger 1.19.0): tarifa e subvenção não existem como efeito.
+Os 13 nomes testados (`set_tariff`, `set_tariffs`, `set_tariff_rate`,
+`add_tariff`, `set_trade_route_tariff`, `set_goods_tariff`, `set_subvention`,
+`add_subvention`, `set_goods_subvention`, `set_market_subvention`,
+`add_tariff_to_goods`, `set_country_tariff`, `change_tariff`) são
+`unknown token` na 1.15. O sistema de presença/vantagem não é automatizável por
+script.
+
+Teste sintético — 419 aprovados; 9 novos em `tests/test_core_growth.py`. Dois
+testes de `tests/test_investment.py` verificavam a regra antiga em bens-núcleo:
+o de pressão de preço passou a usar um bem não-núcleo (mesmo intento) e o de
+referência negativa virou teste explícito da nova regra do núcleo.
+
+Não verificado na engine: a trilha em campanha, o respeito ao orçamento e o
+painel encurtado nos dois idiomas. Roteiro em `docs/MANUAL_RUNTIME_TEST.md`,
+seção 0.7.33.

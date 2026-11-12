@@ -4149,6 +4149,39 @@ sed_auto_run_direct = {
     sed_run_trade_center_approval = yes
    }
   }
+  else_if = {
+   limit = { any_scope_state = { sed_core_wood_eligible = yes } }
+   ordered_scope_state = {
+    limit = { sed_core_wood_eligible = yes }
+    order_by = { value = state_population multiply = -1 }
+    max = 1
+    check_range_bounds = no
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
+    sed_run_core_wood_approval = yes
+   }
+  }
+  else_if = {
+   limit = { any_scope_state = { sed_core_iron_eligible = yes } }
+   ordered_scope_state = {
+    limit = { sed_core_iron_eligible = yes }
+    order_by = { value = state_population multiply = -1 }
+    max = 1
+    check_range_bounds = no
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
+    sed_run_core_iron_approval = yes
+   }
+  }
+  else_if = {
+   limit = { any_scope_state = { sed_core_tools_eligible = yes } }
+   ordered_scope_state = {
+    limit = { sed_core_tools_eligible = yes }
+    order_by = { value = state_population multiply = -1 }
+    max = 1
+    check_range_bounds = no
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
+    sed_run_core_tools_approval = yes
+   }
+  }
  }
  else_if = { limit = { in_default = yes } set_variable = { name = sed_auto_action_status value = 10 } }
  else_if = { limit = { sed_auto_month_limit_reached = yes } set_variable = { name = sed_auto_action_status value = 16 } }
@@ -7778,6 +7811,18 @@ sed_refresh_direct_budget = {
   if = { limit = { var:sed_build_budget_project_points = 0
    any_scope_state = { sed_power_candidate_eligible = yes } }
    set_variable = { name = sed_build_budget_project_points value = 400 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { sed_core_wood_eligible = yes } }
+   set_variable = { name = sed_build_budget_project_points value = 200 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { sed_core_iron_eligible = yes } }
+   set_variable = { name = sed_build_budget_project_points value = 400 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { sed_core_tools_eligible = yes } }
+   set_variable = { name = sed_build_budget_project_points value = 600 }
   }
   if = { limit = { var:sed_build_budget_project_points = 0
    any_scope_state = { sed_trade_center_candidate_eligible = yes } }
@@ -13816,7 +13861,117 @@ sed_refresh_power = {
   }
  }
 }
-# Country scope. Fires a visible event only when local supply cannot respond.
+# State scope. Queue one public level under the growth lane. Reuses the ledger
+# variables of the good, so the monthly reconciliation already covers it.
+sed_run_core_wood_approval = {
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
+ if = {
+  limit = { sed_core_wood_approval_valid = yes }
+  owner = {
+   set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }
+  }
+  owner = { sed_record_auto_attempt = yes }
+  set_variable = { name = sed_wood_intent_level value = b:building_logging_camp.level }
+  set_variable = { name = sed_wood_intent_variant value = 1 }
+  start_building_construction = building_logging_camp
+  owner = {
+   if = {
+    limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_wood_action_status value = 1 }
+    if = { limit = { has_variable = sed_mode_automatic }
+     set_variable = { name = sed_auto_action_status value = 1 }
+    }
+    if = { limit = { has_variable = sed_wood_intents }
+     change_variable = { name = sed_wood_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_wood_intents value = 1 } }
+    prev = { set_variable = { name = sed_wood_request_pending value = yes } }
+   }
+   else = {
+    set_variable = { name = sed_wood_action_status value = 2 }
+    prev = {
+     remove_variable = sed_wood_intent_level
+     remove_variable = sed_wood_intent_variant
+    }
+   }
+   remove_variable = sed_queue_levels_before
+  }
+ }
+}
+# State scope. Queue one public level under the growth lane. Reuses the ledger
+# variables of the good, so the monthly reconciliation already covers it.
+sed_run_core_iron_approval = {
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
+ if = {
+  limit = { sed_core_iron_approval_valid = yes }
+  owner = {
+   set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }
+  }
+  owner = { sed_record_auto_attempt = yes }
+  set_variable = { name = sed_iron_intent_level value = b:building_iron_mine.level }
+  set_variable = { name = sed_iron_intent_variant value = 1 }
+  start_building_construction = building_iron_mine
+  owner = {
+   if = {
+    limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_iron_action_status value = 1 }
+    if = { limit = { has_variable = sed_mode_automatic }
+     set_variable = { name = sed_auto_action_status value = 1 }
+    }
+    if = { limit = { has_variable = sed_iron_intents }
+     change_variable = { name = sed_iron_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_iron_intents value = 1 } }
+    prev = { set_variable = { name = sed_iron_request_pending value = yes } }
+   }
+   else = {
+    set_variable = { name = sed_iron_action_status value = 2 }
+    prev = {
+     remove_variable = sed_iron_intent_level
+     remove_variable = sed_iron_intent_variant
+    }
+   }
+   remove_variable = sed_queue_levels_before
+  }
+ }
+}
+# State scope. Queue one public level under the growth lane. Reuses the ledger
+# variables of the good, so the monthly reconciliation already covers it.
+sed_run_core_tools_approval = {
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
+ if = {
+  limit = { sed_core_tools_approval_valid = yes }
+  owner = {
+   set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }
+  }
+  owner = { sed_record_auto_attempt = yes }
+  set_variable = { name = sed_tools_intent_level value = b:building_tooling_workshop.level }
+  set_variable = { name = sed_tools_intent_variant value = 1 }
+  start_building_construction = building_tooling_workshop
+  owner = {
+   if = {
+    limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_tools_action_status value = 1 }
+    if = { limit = { has_variable = sed_mode_automatic }
+     set_variable = { name = sed_auto_action_status value = 1 }
+    }
+    if = { limit = { has_variable = sed_tools_intents }
+     change_variable = { name = sed_tools_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_tools_intents value = 1 } }
+    prev = { set_variable = { name = sed_tools_request_pending value = yes } }
+   }
+   else = {
+    set_variable = { name = sed_tools_action_status value = 2 }
+    prev = {
+     remove_variable = sed_tools_intent_level
+     remove_variable = sed_tools_intent_variant
+    }
+   }
+   remove_variable = sed_queue_levels_before
+  }
+ }
+}# Country scope. Fires a visible event only when local supply cannot respond.
 # The script has no trade-route effect in 1.15 (create_trade_route was removed in 1.9),
 # so the event advises the player instead of acting.
 sed_check_import_notices = {
