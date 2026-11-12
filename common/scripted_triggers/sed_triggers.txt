@@ -2720,6 +2720,22 @@ sed_competing_builder_configured = {
   has_variable = aroai_autobuild
  }
 }
+sed_private_control_configured = {
+ OR = {
+  has_variable = zw_var_auto_invest_incorporated_states_only
+  has_variable = zw_var_auto_invest_profitable_buildings_only
+  has_variable = zw_var_auto_invest_existing_buildings_only_manufacture
+  has_variable = zw_var_auto_invest_existing_buildings_only_agro
+  has_variable = zw_var_auto_invest_existing_buildings_only_resource
+  has_variable = zw_var_auto_invest_existing_buildings_only_infrastructure
+  has_variable = zw_var_no_foreign_private_investment_manufacture
+  has_variable = zw_var_no_foreign_private_investment_agro
+  has_variable = zw_var_no_foreign_private_investment_resource
+  has_variable = zw_var_no_foreign_private_investment_infrastructure
+  has_variable = zw_var_intervene_investment_from_abroad_industry
+  has_variable = zw_var_intervene_investment_from_abroad_agriculture
+ }
+}
 sed_military_wage_month_limit_reached = {
  has_variable = sed_military_wage_last_change_month
  var:sed_military_wage_last_change_month = sed_live_month_key

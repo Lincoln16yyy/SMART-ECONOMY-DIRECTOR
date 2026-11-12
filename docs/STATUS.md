@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.26
+# Estado dos requisitos — 0.7.27
 
 ## Protocolo de evidência adotado
 
@@ -12,7 +12,7 @@ Restam três campos do diário apontados como desconhecidos, presentes no vanill
 formatação e de OR de um item permanecem visíveis. A documentação exportada
 continua ausente. Carregou e Campanha das leituras fiscais, da prontidão e do
 novo retorno salarial e da pontuação de PMs seguem NÃO VERIFICADO. Teste
-sintético — 378 testes aprovados. O evento consultivo de importação (com os
+sintético — 382 testes aprovados. O evento consultivo de importação (com os
 pedidos de compra e venda do bem) segue NÃO VERIFICADO na engine.
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
@@ -32,6 +32,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Ativar somente caminho necessário | Automático usa rotinas específicas para administração, tributação, energia e, preferencialmente, setores de construção | Oferta elegível pode usar alvo direto do plano. Nas rotas externas, a seleção continua sob o algoritmo da ferramenta escolhida |
 | Construção própria automática | Desde a 0.7.13 inclui bens civis caros com demanda superior à oferta e margem material positiva. Consome a primeira prioridade, revalida guardas e limita tentativa mensal. Desde a 0.6.25 atua com a fila pública ocupada; só a fila privada precisa estar vazia. Desde a 0.6.26 expande também o setor de construção quando ele lidera o plano e agenda uma segunda revisão no mês após bloqueio por fila privada ou pausa. Desde a 0.7.1 funda a primeira ferrovia em estado com déficit e sem ferrovia | Inclusão direta e persistência ainda exigem evidência de campanha. Espera por obra e transição após fim da escassez tiveram confirmação visual parcial. A fila longa recebe referência de trabalho e materiais desde a 0.7.6; desde a 0.7.23 o painel compara essa referência com a duração restante medida pela engine (`construction_queue_government_duration`, em faixas de 2 a 260 semanas). Progresso já executado, autoria e custo incremental preciso continuam pendentes. Agenda da segunda revisão não observada na engine |
 | Evitar executor próprio em paralelo | Executor próprio exclusivo para primeira prioridade de oferta na 0.6.15; opções externas suspensas | ARoAI detectado suspende delegação, autoexpansões nativas continuam sem controle |
+| Controle da construção privada externa | Desde a 0.7.27, o painel lê as doze restrições do Controllable Private Construction (`zw_var_*`, somente `has_variable`) e mostra quais estão ligadas, inclusive no bloqueio por fila privada. O Director não escreve essas variáveis nem injeta `can_build_private`/`can_build_government`: isso colidiria com a injeção do próprio mod no mesmo prédio | Exibir a seção e apontar o diário não muda a engine. Se a intervenção no investimento estrangeiro fizer o jogo recusar uma obra pública, a recusa deve aparecer como falha de ação; NÃO VERIFICADO em campanha. A autoexpansão nativa continua fora de controle quando o mod não está ativo |
 | Desativar e devolver opções | Restaura presença e valor original das onze opções, com testes de idempotência | Limites fiscais preservados por mês. Confirmar restauração após save/reload e atualização de versão |
 | Manual e Assistido | Autorizações e trocas de modo testadas | Restauração pode reativar opções externas originalmente ligadas |
 | Histórico | Resultado mensal datado, status externo e livro dos oito bens, ferrovia e setor de construção | Conclusão é inferida pela fila e nível; reduzir ambiguidade de cancelamento |

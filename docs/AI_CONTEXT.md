@@ -1,14 +1,17 @@
 # Contexto de continuidade
 
-Última entrega do mod — 0.7.26 gerada, testada e instalada com jogo fechado.
-Código — unidade salarial por família de prédio (`sed_investment_wage_unit_<prédio>`),
-com fallback para a média nacional; meta de escassez plurianual; fila com duração
-da engine e contagem de projetos. Comércio: script não abre rota (removido na
-1.9); autor/investidor e qualificações não têm primitiva legível.
-Teste sintético — 378 testes aprovados.
+Última entrega do mod — 0.7.27 gerada, testada e instalada com jogo fechado.
+Código — leitura das doze restrições do Controllable Private Construction
+(`zw_var_auto_invest_*`, `zw_var_no_foreign_private_investment_*`,
+`zw_var_intervene_investment_from_abroad_*`) no painel, mais apontamento do
+diário daquele mod quando a fila privada bloqueia o Automático. Antes: unidade
+salarial por família de prédio, meta plurianual, fila com duração da engine e
+contagem de projetos. Comércio: script não abre rota (removido na 1.9);
+autor/investidor e qualificações não têm primitiva legível.
+Teste sintético — 382 testes aprovados.
 Estático — geração consistente e validação local 1.15 aprovadas. Tiger 1.19.0:
-mesmos três campos de diário do vanilla 1.15 e 917 avisos (767 de colocação de
-chaves no GUI, 150 de OR de item único).
+mesmos três campos de diário do vanilla 1.15 e 932 avisos (todos de colocação de
+chaves no GUI e de OR de item único; as 15 caixas novas seguem o mesmo padrão).
 Carregou e Campanha — retorno com salários, unidade por estado, painel e
 pontuação de PMs seguem NÃO VERIFICADO.
 
@@ -16,10 +19,35 @@ Ler `AGENTS.md`, `docs/agent/vic3-modding/SKILL.md` e suas referências.
 O ambiente registra o Tiger, o resultado da sondagem de comércio e o Smart
 Government instalado (1.0.0, esquema 2, variáveis `sg_*`). A pasta de
 documentação exportada do jogo continua ausente.
-Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.23 (duração da
-fila), 0.7.21 (evento de importação) e depois a seção 0.7.17–0.7.19:
-conferir a unidade no painel, o desvio de fornecedor, a pontuação de PMs,
-save/reload e limpeza. Depois retomar as leituras fiscais e a fundação básica.
+Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.27 (seção de
+controle privado ligada só com o outro mod ativo), depois 0.7.23 (duração da
+fila), 0.7.21 (evento de importação) e 0.7.17–0.7.19: unidade no painel, desvio
+de fornecedor, pontuação de PMs, save/reload e limpeza. Depois retomar as
+leituras fiscais e a fundação básica.
+
+## 0.7.27 — Leitura do controle de construção privada
+
+O jogador mantém ativo o Controllable Private Construction (3278770055). Ele
+injeta `can_build_private`/`can_build_government` por prédio com
+`INJECT_OR_CREATE:` e substitui `default_auto_expand_rule` com `REPLACE:`, e
+publica uma variável de país por botão do diário dele.
+
+Código — `sed_private_control_configured` (OR de 12 `has_variable`) e uma seção
+no painel com uma linha por restrição ligada. `sed_auto_current_queue_control`
+aparece quando a fila privada bloqueia o Automático e o controle está ativo.
+
+Por que não controlar de fato: injetar `can_build_private` nos mesmos prédios
+colidiria com a injeção do outro mod (mesma chave, ordem de carregamento
+define o vencedor) e quebraria os botões dele em silêncio. O Director só lê.
+A escrita dessas variáveis continua proibida pelo validador (variável externa).
+
+Teste sintético — 382 aprovados; quatro novos cobrem a lista das 12 variáveis,
+a ausência delas em `sed_competing_builder_configured` (ler não bloqueia o
+executor próprio), a visibilidade da seção/aviso e a localização nos dois idiomas.
+
+NÃO VERIFICADO na engine: se a leitura aparece em campanha, se a recusa de obra
+pela intervenção no investimento estrangeiro surge como falha de ação e se a seção
+some ao desativar o outro mod.
 
 ## 0.7.26 — Unidade salarial por família de prédio
 

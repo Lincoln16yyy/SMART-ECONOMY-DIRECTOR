@@ -2385,3 +2385,42 @@ mesmos 3 `unknown-field` de diário e 917 avisos.
 
 Não verificado na engine: efeito da amostra por família na escolha real de
 fornecedor em campanha.
+
+## 0.7.27 — Leitura do controle de construção privada
+
+O jogador informou que mantém ativo o Controllable Private Construction
+(`mod/3278770055_Controllable_Private_Construction`) sem saber o que ele faz.
+Leitura dos arquivos do mod (a pasta do Workshop é a fonte; nenhum arquivo dele
+foi alterado):
+
+- Injeta `can_build_private` e `can_build_government` em cada prédio com
+  `INJECT_OR_CREATE:` e substitui `default_auto_expand_rule` com `REPLACE:`
+  (vanilla exige `cash_reserves_ratio > 0.95`, acesso ≥ 0.95 e ocupação ≥ 0.95;
+  o mod troca por lucro semanal ≥ 200 × nível, entre outras condições).
+- Um diário (`je_zw_autonom_invest_management`) com 12 botões que ligam/desligam
+  restrições: só estados incorporados; só lucrativos; só prédios existentes por
+  ramo (manufatura, agro, recursos, infraestrutura); bloquear investimento
+  próprio no exterior por ramo; vigiar investimento estrangeiro (indústria e
+  agropecuária, com −5% de burocracia via modificador).
+- Cada botão é um `has_variable` de país: presença = restrição ligada.
+
+Código — `sed_private_control_configured` (OR das 12 `has_variable`) e seção no
+painel com uma linha por restrição ligada, além de
+`sed_auto_current_queue_control`, exibido quando a fila privada bloqueia o
+Automático com o controle ativo. O Director apenas lê: escrever essas variáveis
+é variável externa para o validador e injetar `can_build_private` nos mesmos
+prédios colidiria com a injeção do outro mod (mesma chave; a ordem de
+carregamento decidiria o vencedor e os botões dele falhariam em silêncio).
+
+Teste sintético — 382 aprovados; `tests/test_private_control.py` cobre as 12
+variáveis, a ausência delas em `sed_competing_builder_configured` (a leitura não
+bloqueia o executor próprio), a visibilidade da seção e do aviso e a localização
+nos dois idiomas.
+
+Estático — geração consistente, validação local 1.15 aprovada, Tiger 1.19.0 nos
+mesmos 3 `unknown-field` de diário e 932 avisos (15 novos, todos de colocação de
+chaves no GUI, mesmo padrão das caixas existentes).
+
+Não verificado na engine: exibição da seção em campanha, recusa de obra pública
+pela intervenção no investimento estrangeiro aparecendo como falha de ação e
+sumiço da seção ao desativar o outro mod.

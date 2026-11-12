@@ -673,3 +673,26 @@ expirar seguem NÃO VERIFICADO; as três opções são inofensivas por desenho.
    falhas ou ocupação abaixo de 80% continuam fora da amostra.
 4. Desativar o Director e verificar que as variáveis `sed_investment_wage_*_
    <prédio>` não sobram.
+
+## Controle de construção privada 0.7.27 (pendente)
+
+Pré-requisito: Controllable Private Construction ativo e o Director ligado.
+Anote a versão dos dois mods. Save de teste antes de mexer nos botões.
+
+1. Abra o diário *Private Constructions Management* do outro mod e confira quais
+   botões estão ligados. Abra o painel do Director: a seção
+   *Controle de construção privada detectado* deve listar exatamente as mesmas
+   restrições, uma linha por botão ligado.
+2. Ligue um botão novo no diário do outro mod e atualize o Director. A linha
+   correspondente deve aparecer; desligue e ela deve sumir. Esperado: leitura,
+   sem nenhuma mensagem de erro no `logs/error.log`.
+3. Desative o Controllable Private Construction (jogo fechado, mudar o playset)
+   e carregue o save. A seção deve sumir por completo e o Director deve
+   continuar funcionando; nenhuma variável `zw_var_*` deve aparecer no save.
+4. Com a fila privada ocupada e o Automático ativo, confira o aviso
+   *A fila privada ocupada conta para os guardas do Director mesmo com o
+   controle ativo*. Ele deve apontar o diário do outro mod, sem botão novo.
+5. Se a intervenção no investimento estrangeiro estiver ligada, tente aprovar
+   uma obra pública que o Director pediria e registre se a recusa aparece como
+   falha de ação. Devolver: trecho do `error.log`, captura da seção antes/depois
+   de ligar o botão e o save se a recusa ocorrer.

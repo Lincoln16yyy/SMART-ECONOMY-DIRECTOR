@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.26'
+VERSION = '0.7.27'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -23,6 +23,35 @@ COMPETING_BUILDERS = (
     ('admin', 'zw_var_scsab_gov_admin', 'Supply Chain: administração geral', 'Supply Chain: general administration'),
     ('tax', 'zw_var_scsab_gov_admin_for_tax', 'Supply Chain: administração tributária', 'Supply Chain: tax administration'),
     ('aroai', 'aroai_autobuild', 'ARoAI: construção automática', 'ARoAI: automatic construction'),
+)
+# Controllable Private Construction (3278770055) publishes one country flag per
+# restriction the player toggles. Reading them is safe without the mod: an absent
+# flag is simply false. The Director never writes these variables.
+PRIVATE_CONTROL_FLAGS = (
+    ('incorporated', 'zw_var_auto_invest_incorporated_states_only',
+     'Prédios privados novos só em estados incorporados', 'New private buildings only in incorporated states'),
+    ('profitable', 'zw_var_auto_invest_profitable_buildings_only',
+     'Expansão privada só sob condições de lucro', 'Private expansion only under profit conditions'),
+    ('existing_manufacture', 'zw_var_auto_invest_existing_buildings_only_manufacture',
+     'Manufatura: privado só expande prédio existente', 'Manufacturing: private only expands existing buildings'),
+    ('existing_agro', 'zw_var_auto_invest_existing_buildings_only_agro',
+     'Agropecuária: privado só expande prédio existente', 'Agriculture: private only expands existing buildings'),
+    ('existing_resource', 'zw_var_auto_invest_existing_buildings_only_resource',
+     'Recursos: privado só expande prédio existente', 'Resources: private only expands existing buildings'),
+    ('existing_infrastructure', 'zw_var_auto_invest_existing_buildings_only_infrastructure',
+     'Infraestrutura: privado só expande prédio existente', 'Infrastructure: private only expands existing buildings'),
+    ('no_foreign_manufacture', 'zw_var_no_foreign_private_investment_manufacture',
+     'Investimento próprio no exterior bloqueado: manufatura', 'Outbound investment blocked: manufacturing'),
+    ('no_foreign_agro', 'zw_var_no_foreign_private_investment_agro',
+     'Investimento próprio no exterior bloqueado: agropecuária', 'Outbound investment blocked: agriculture'),
+    ('no_foreign_resource', 'zw_var_no_foreign_private_investment_resource',
+     'Investimento próprio no exterior bloqueado: recursos', 'Outbound investment blocked: resources'),
+    ('no_foreign_infrastructure', 'zw_var_no_foreign_private_investment_infrastructure',
+     'Investimento próprio no exterior bloqueado: infraestrutura', 'Outbound investment blocked: infrastructure'),
+    ('intervene_industry', 'zw_var_intervene_investment_from_abroad_industry',
+     'Investimento estrangeiro vigiado: indústria', 'Inbound investment policed: industry'),
+    ('intervene_agriculture', 'zw_var_intervene_investment_from_abroad_agriculture',
+     'Investimento estrangeiro vigiado: agropecuária', 'Inbound investment policed: agriculture'),
 )
 SUPPLY_TARGETS = [
     {'good': 'wood', 'building': 'building_logging_camp', 'methods': ['pm_electric_saw_mills', 'pm_saw_mills', 'pm_simple_forestry'], 'label_pt': 'madeira', 'label_en': 'wood', 'building_pt': 'acampamento madeireiro', 'building_en': 'logging camp'},
@@ -688,10 +717,15 @@ def widget():
         body += textbox(f'sed_auto_{state}', f'sed_auto_{state}_visible_sgui')
     for blocker in ('default', 'month_limit', 'queue', 'paused', 'competing', 'fiscal', 'budget', 'clear'):
         body += textbox(f'sed_auto_current_{blocker}', f'sed_auto_current_{blocker}_visible_sgui')
+    body += textbox('sed_auto_current_queue_control', 'sed_auto_current_queue_control_visible_sgui')
     body += textbox('sed_auto_builders_title', 'sed_auto_builders_visible_sgui')
     for name, option, pt, en in COMPETING_BUILDERS:
         body += textbox(f'sed_auto_builder_{name}', f'sed_auto_builder_{name}_visible_sgui')
     body += textbox('sed_auto_builders_help', 'sed_auto_builders_visible_sgui')
+    body += textbox('sed_private_control_title', 'sed_private_control_visible_sgui')
+    for name, option, pt, en in PRIVATE_CONTROL_FLAGS:
+        body += textbox(f'sed_private_control_{name}', f'sed_private_control_{name}_visible_sgui')
+    body += textbox('sed_private_control_help', 'sed_private_control_visible_sgui')
     for policy in ('tax', 'wage'):
         body += textbox(f'sed_{policy}_last_command', f'sed_{policy}_last_command_visible_sgui')
     body += textbox('sed_auto_last_review', 'sed_auto_last_review_visible_sgui')
@@ -1532,6 +1566,9 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
     result += f'sed_auto_builders_visible_sgui = {{ scope = country is_shown = {{ {base} sed_competing_builder_configured = yes }} }}\n'
     for name, option, pt, en in COMPETING_BUILDERS:
         result += f'sed_auto_builder_{name}_visible_sgui = {{ scope = country is_shown = {{ {base} has_variable = {option} }} }}\n'
+    result += 'sed_private_control_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled sed_private_control_configured = yes } }\n'
+    for name, option, pt, en in PRIVATE_CONTROL_FLAGS:
+        result += f'sed_private_control_{name}_visible_sgui = {{ scope = country is_shown = {{ is_player = yes has_variable = sed_enabled has_variable = {option} }} }}\n'
     previous = ''
     for name, condition in [
         ('default', 'in_default = yes'),
@@ -1545,6 +1582,7 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
         result += f'sed_auto_current_{name}_visible_sgui = {{ scope = country is_shown = {{ {base} {previous} {condition} }} }}\n'
         previous += f' NOT = {{ {condition} }}'
     result += f'sed_auto_current_clear_visible_sgui = {{ scope = country is_shown = {{ {base} sed_auto_executor_safe = yes }} }}\n'
+    result += f'sed_auto_current_queue_control_visible_sgui = {{ scope = country is_shown = {{ {base} construction_queue_num_queued_private_levels > 0 sed_private_control_configured = yes }} }}\n'
     result += 'sed_auto_status_delegated_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 18 } }\n'
     for executor in range(14):
         result += f'sed_coord_executor_{executor}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = {executor} }} }}\n'
@@ -1967,6 +2005,10 @@ sed_auto_executor_safe = {
     result.append('sed_direct_supply_priority_exists = {\n OR = {\n' + priorities + '\n }\n}')
     options = '\n'.join(f'  has_variable = {option}' for name, option, pt, en in COMPETING_BUILDERS)
     result.append('sed_competing_builder_configured = {\n OR = {\n' + options + '\n }\n}')
+    # Read-only view of Controllable Private Construction. Absent mod = every
+    # flag is false, so this trigger is also the detection test.
+    control = '\n'.join(f'  has_variable = {option}' for name, option, pt, en in PRIVATE_CONTROL_FLAGS)
+    result.append('sed_private_control_configured = {\n OR = {\n' + control + '\n }\n}')
     return '\n'.join(result).rstrip() + '\n' + planning.triggers() + construction_budget.triggers() + input_forecast.triggers() + coordination.triggers() + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants) + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants, recovery=True)
 
 
@@ -2319,6 +2361,15 @@ def localization(language):
         'Without active coordination, an enabled option suspends direct Director construction. During coordination, this list shows the authorized executor. Leaving Automatic restores original options. This list does not confirm external execution.')
     for name, option, pt_label, en_label in COMPETING_BUILDERS:
         pairs[f'sed_auto_builder_{name}'] = (pt_label, en_label)
+    pairs['sed_private_control_title'] = ('Controle de construção privada detectado (Controllable Private Construction):', 'Private construction control detected (Controllable Private Construction):')
+    for name, option, pt_label, en_label in PRIVATE_CONTROL_FLAGS:
+        pairs[f'sed_private_control_{name}'] = (pt_label, en_label)
+    pairs['sed_private_control_help'] = (
+        'O Director só lê estas opções; quem as altera é o diário Private Constructions Management do outro mod. Restrição ligada impede o investidor privado de abrir prédio novo do ramo indicado, o que reduz a disputa com o plano. A fila privada continua contando para os guardas do Director, e a intervenção no investimento estrangeiro pode fazer o jogo recusar uma obra pública pedida aqui; a recusa aparece como falha da ação. O Director não muda nem cancela nada disso.',
+        'The Director only reads these options; the other mod’s Private Constructions Management journal entry changes them. An enabled restriction stops private investors from opening new buildings in that branch, which reduces competition with the plan. The private queue still counts for the Director’s guards, and inbound investment policing may make the game refuse government work requested here; the refusal appears as an action failure. The Director changes and cancels none of this.')
+    pairs['sed_auto_current_queue_control'] = (
+        'A fila privada ocupada conta para os guardas do Director mesmo com o controle ativo. Se ela foi aberta por prédios que o Director já planeja, restrinja a autoexpansão no diário Private Constructions Management e aguarde a fila esvaziar. O Director não altera essas opções nem cancela obras.',
+        'An occupied private queue counts for the Director’s guards even with the control active. If it was opened for buildings the Director already plans, restrict expansion in the Private Constructions Management journal entry and wait for the queue to empty. The Director changes neither the options nor existing projects.')
     pairs['sed_railway_candidate_reason'] = ('Ferrovia operante em estado com déficit de infraestrutura. Custo e retorno não estimados.', 'Operating railway in a state with an infrastructure deficit. Cost and return not estimated.')
     pairs['sed_railway_found_reason'] = ('Estado com déficit de infraestrutura e sem ferrovia: o Director funda a primeira. Custo e retorno não estimados.', 'State with an infrastructure deficit and no railway: the Director founds the first one. Cost and return not estimated.')
     pairs['sed_construction_candidate_reason'] = ('Setor operante e fila pública com demanda. Custo e contratação futura não estimados.', 'Operating sector with demand in the government queue. Cost and future hiring not estimated.')

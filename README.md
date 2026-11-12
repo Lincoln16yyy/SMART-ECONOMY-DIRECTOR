@@ -1,5 +1,12 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.27, o painel lê o Controllable Private Construction — o mod de controle
+da construção privada que o jogador mantém ativo — e lista apenas quais
+restrições estão ligadas. É leitura: o Director não altera essas opções, não
+injeta regras `can_build_*` e não cancela obras. Quando a fila privada bloqueia
+o Automático, o painel aponta o diário daquele mod como caminho para restringir
+a autoexpansão.
+
 Na 0.7.26, a unidade salarial usada no retorno é por família de prédio, com
 queda para a média nacional quando a família não tem amostra saudável. O
 jogo não expõe qualificação nem salário por profissão, então esses filtros

@@ -21,6 +21,13 @@ houver mudança observada no ambiente.
 - Log em `/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/logs/error.log`.
 - Advisor em `/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/mod/3778129206_Economy_Advisor`.
 - Supply Chain em `/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/mod/3357811223_Supply_Chain_Semi-Auto_Builder`.
+- Controllable Private Construction em `mod/3278770055_Controllable_Private_Construction`
+  (Workshop 3278770055; sem `descriptor.mod`, só `.metadata/metadata.json`).
+  O jogador mantém esse mod ativo. [confirmado 2026-11-11]
+- Private Investments Only Expand Existing Buildings em
+  `mod/3278371002_Private_Investments_Only_Expand_Existing_Buildings`
+  (mesmo autor, mesma técnica; o jogador não citou como ativo).
+  [confirmado 2026-11-11]
 - Saves em `/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3/save games`.
 - Smart Government Advisor em `mod/Smart Government Advisor` (1.0.0,
   `supported_version 1.15.*`, do jogador). Define `sg_enabled`,
@@ -68,7 +75,7 @@ python3 tools/package_mod.py
 python3 tools/install_mod.py --user-data '/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3'
 ```
 
-A última entrega executou 363 testes sintéticos e instalou a versão 0.7.20
+A última entrega executou 382 testes sintéticos e instalou a versão 0.7.27
 com conferência de 14 arquivos. O último `--check` confirmou sincronia.
 [confirmado 2026-11-11]
 
@@ -189,3 +196,48 @@ qualificação são só `*_mult` em leis/tecnologias, não leitura de estoque.
 Conclusão: não prometer filtro por qualificação nem salário por profissão. Proxy
 do mod: `occupancy` + `has_failed_hires`; salário observado sai de
 `earnings - weekly_profit` por prédio.
+
+## Mod de construção privada do jogador: Controllable Private Construction (2026-11-11)
+
+Lido em `mod/3278770055_Controllable_Private_Construction` (Workshop 3278770055,
+autor `zw_*`). Nada dele foi alterado. É o mod que o jogador "sempre ativa".
+
+Mecânica, com evidência dos arquivos dele:
+
+- `common/buildings/zw_cpc_0*.txt` usam `INJECT_OR_CREATE:building_<x> = { ... }`
+  para sobrescrever `can_build_private` e `can_build_government` em cada prédio.
+  Os testes chamam `zw_trigger_autonom_investment_<ramo>` e
+  `zw_trigger_gov_investment`, que leem `scope:investor_country` e variáveis de
+  país. Conclusão: **é possível restringir a autoexpansão privada nativa**, mas
+  só por injeção em `can_build_private` (campo por prédio).
+- `common/scripted_triggers/zw_cpc_triggers_auto_expand.txt` usa
+  `REPLACE:default_auto_expand_rule`, contra o vanilla
+  `game/common/scripted_triggers/00_scripted_triggers.txt:985`
+  (`cash_reserves_ratio > 0.95`, `state.market_access >= 0.95`,
+  `occupancy >= 0.95`). O mod troca por lucro semanal ≥ 200 × nível etc.
+  Os grupos de prédio apontam para essa regra em `should_auto_expand`
+  (`game/common/building_groups/00_building_groups.txt`).
+- Botões em `common/scripted_buttons/` e diário
+  `je_zw_autonom_invest_management` (loc pt-br mantém o nome em inglês,
+  "Private Constructions Management"). Cada botão liga/desliga uma variável de
+  país `zw_var_auto_invest_*` / `zw_var_no_foreign_private_investment_*` /
+  `zw_var_intervene_investment_from_abroad_*`; presença = restrição ligada.
+- `decree_zw_no_state_private_investment` ("Ban Private Constructions", custo 0,
+  só jogador) bloqueia construção privada no estado; é decreto, ocupa slot.
+- Os dois modificadores de intervenção em investimento estrangeiro custam
+  `country_bureaucracy_mult = -0.05`.
+
+Regra para o Director: **ler** essas variáveis é seguro (`has_variable`;
+ausente = falso). **Escrever** é variável externa para `tools/validate.py`, e
+injetar `can_build_private` nos mesmos prédios colide com a injeção do outro mod
+(mesma chave; a ordem de carregamento define o vencedor, sem aviso). Por isso a
+0.7.27 só lê. [confirmado 2026-11-11]
+
+Tiger 1.19.0 rodado só na pasta dele
+(`vic3-tiger --game '<jogo>' '<pasta do mod>'`): 0 erros, 88 avisos; portanto
+`INJECT_OR_CREATE:` em `common/buildings/` e `REPLACE:` em scripted trigger são
+formas aceitas na 1.15. [confirmado 2026-11-11]
+
+Se um dia for preciso controlar de fato, a alternativa é oferecer o próprio
+`can_build_private` e pedir ao jogador para desativar o outro mod — não rodar
+os dois.
