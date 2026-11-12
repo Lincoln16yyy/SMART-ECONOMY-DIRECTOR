@@ -1,5 +1,9 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.24, o painel mostra quantos projetos do governo e quantos privados
+estão na fila, ao lado dos níveis. O autor de cada item não é exposto pelo
+script, então o Director não afirma quem enfileirou a obra.
+
 Na 0.7.23, o painel compara a referência de semanas da fila com a duração
 restante medida pela própria engine (`construction_queue_government_duration`,
 arredondada para cima em faixas), sem trocar a reserva de ouro.

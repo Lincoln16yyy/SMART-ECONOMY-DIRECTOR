@@ -1320,3 +1320,12 @@ exibida ao lado da referência estimada pelo plano. O próximo passo nesta frent
 é usar a leitura para calibrar a espera por obra (hoje baseada só na
 estimativa) e, se houver primitiva, medir progresso já executado do primeiro
 item.
+
+## 0.7.24 — Contagem de projetos e limite de autoria
+
+O item "autor/investidor" fecha como limitação de engine: as três primitivas
+plausíveis de autor são desconhecidas e `construction_queue_size` não é
+reconhecida pelo Tiger 1.19.0. Ficam apenas contagens de país por lado
+(governo/privado), agora no painel, e `is_under_construction` por prédio. Para
+quando houver documentação exportada do jogo: procurar primitiva de investidor
+por item antes de prometer reconciliação de identidade.

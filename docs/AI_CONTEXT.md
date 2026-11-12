@@ -1,11 +1,10 @@
 # Contexto de continuidade
 
-Última entrega do mod — 0.7.23 gerada, testada e instalada com jogo fechado.
-Código — painel compara a duração estimada da fila com a leitura da engine
-(`construction_queue_government_duration`, faixas de 0 a 260 semanas) e o evento
-de importação mostra pedidos de compra e venda do mercado. Comércio: script não
-abre rota (removido na 1.9).
-Teste sintético — 374 testes aprovados.
+Última entrega do mod — 0.7.24 gerada, testada e instalada com jogo fechado.
+Código — painel mostra níveis, duração real da fila (faixas de 0 a 260 semanas)
+e contagem de projetos do governo e privados. Autor/investidor por item não tem
+primitiva (sondado com Tiger). Comércio: script não abre rota (removido na 1.9).
+Teste sintético — 375 testes aprovados.
 Estático — geração consistente e validação local 1.15 aprovadas. Tiger 1.19.0:
 mesmos três campos de diário do vanilla 1.15 e 917 avisos (767 de colocação de
 chaves no GUI, 150 de OR de item único).
@@ -20,6 +19,20 @@ Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.23 (dura�
 fila), 0.7.21 (evento de importação) e depois a seção 0.7.17–0.7.19:
 conferir a unidade no painel, o desvio de fornecedor, a pontuação de PMs,
 save/reload e limpeza. Depois retomar as leituras fiscais e a fundação básica.
+
+## 0.7.24 — Contagem de projetos e limite de autoria
+
+Sondagem em `/tmp/sed_dur` com Tiger 1.19.0: `num_queued_constructions`,
+`num_queued_government_constructions` e `num_queued_private_constructions` são
+triggers de **país** (contam projetos, não níveis). `is_under_construction`
+existe em escopo de prédio. `is_government_construction`, `is_privately_constructed`
+e `construction_owner_is_government` são `unknown token`, e `construction_queue_size`
+o Tiger 1.19.0 ainda não conhece.
+
+Conclusão — não há primitiva para saber o autor/investidor de um item da fila.
+O mod continua reconciliando por `level_after_queued_constructions` e marcas por
+estado; a 0.7.24 só acrescenta o que a engine oferece: as contagens de projetos
+do governo e privados no painel, ao lado dos níveis.
 
 ## 0.7.23 — Duração real da fila no orçamento direto
 

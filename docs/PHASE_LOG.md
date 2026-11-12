@@ -2307,3 +2307,30 @@ mesmos 3 `unknown-field` de diário e 917 avisos.
 
 Não verificado na engine: comportamento do trigger em país sem fila de governo e
 se a faixa exibida bate com a barra de obras do jogo.
+
+## 0.7.24 — Contagem de projetos e limite de autoria
+
+Sondagem para o item "autor/investidor na reconciliação da fila", em
+`/tmp/sed_dur` com o Tiger 1.19.0:
+
+- `num_queued_constructions`, `num_queued_government_constructions` e
+  `num_queued_private_constructions` existem em escopo de **país** e contam
+  **projetos**, não níveis (avisos de escopo confirmam a restrição).
+- `is_under_construction` existe em escopo de **prédio**.
+- `is_government_construction`, `is_privately_constructed` e
+  `construction_owner_is_government` são `unknown token`; `construction_queue_size`
+  também (o Tiger 1.19.0 não o conhece, apesar de a localização do jogo citá-lo).
+
+Nenhuma primitiva identifica o autor ou o investidor de um item da fila. O mod
+segue reconciliando por `level_after_queued_constructions` e pelas marcas por
+estado, e a 0.7.24 publica apenas o que a engine expõe de fato:
+`sed_build_budget_queue_projects` e `sed_build_budget_queue_private_projects`,
+exibidos na linha do orçamento direto ao lado dos níveis e das semanas.
+
+Teste sintético — 375 aprovados; um novo confere as duas contagens (3 e 2).
+
+Estático — geração consistente, validação local 1.15 aprovada, Tiger 1.19.0 nos
+mesmos 3 `unknown-field` de diário e 917 avisos.
+
+Não verificado na engine: se as contagens de projeto batem com os ícones da fila
+de obras e como a contagem trata projetos de vários níveis.

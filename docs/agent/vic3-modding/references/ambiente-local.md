@@ -152,3 +152,19 @@ zero erros:
 - `if` dentro do `value = { }` de `set_variable` é `unknown-field`: efeitos
   condicionais precisam ficar fora do cálculo (comportamento do Tiger já
   conhecido, reconfirmado aqui).
+
+## Sondagem: autor/investidor da fila e contagens de projeto (2026-11-11)
+
+`/tmp/sed_dur` com Tiger 1.19.0:
+
+- Existem e são de **país**: `num_queued_constructions`,
+  `num_queued_government_constructions`, `num_queued_private_constructions`
+  (projetos, não níveis). Usar em escopo de estado gera
+  `warning(scopes): ... is for country`.
+- `is_under_construction` existe em escopo de **prédio**
+  (`b:building_x = { is_under_construction = yes }`).
+- Não existem (todos `error(unknown-field)`): `is_government_construction`,
+  `is_privately_constructed`, `construction_owner_is_government`,
+  `construction_queue_size`.
+- Conclusão: autor/investidor por item não é scriptável na 1.15. Não prometer
+  reconciliação de identidade; usar as contagens por lado e as marcas próprias.

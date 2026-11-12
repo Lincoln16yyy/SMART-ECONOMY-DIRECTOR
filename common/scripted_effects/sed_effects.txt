@@ -611,6 +611,8 @@ sed_disable_country = {
  remove_variable = sed_build_budget_queue_levels_unknown
  remove_variable = sed_build_budget_funding_weeks
  remove_variable = sed_build_budget_queue_weeks_engine
+ remove_variable = sed_build_budget_queue_projects
+ remove_variable = sed_build_budget_queue_private_projects
  remove_variable = sed_build_budget_active_points
  remove_variable = sed_input_market_margin_coal
  remove_variable = sed_input_market_margin_copper
@@ -8057,6 +8059,11 @@ var:sed_paper_intent_variant = 1
     value = var:sed_build_budget_queue_points divide = modifier:country_construction_add
    } }
   }
+  # Engine project counts: levels answer "how much", projects answer "how many works".
+  set_variable = { name = sed_build_budget_queue_projects value = {
+   value = num_queued_government_constructions min = 0 } }
+  set_variable = { name = sed_build_budget_queue_private_projects value = {
+   value = num_queued_private_constructions min = 0 } }
   set_variable = { name = sed_build_budget_queue_weeks_engine value = 0 }
   if = { limit = { construction_queue_government_duration > 0 }
    if = { limit = { construction_queue_government_duration <= 2 }

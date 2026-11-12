@@ -35,7 +35,8 @@ VARIABLES = ['sed_build_budget_known', 'sed_build_budget_points',
              'sed_build_budget_project_materials', 'sed_build_budget_queue_levels_known',
              'sed_build_budget_queue_points', 'sed_build_budget_queue_weeks',
              'sed_build_budget_queue_levels_unknown', 'sed_build_budget_funding_weeks',
-             'sed_build_budget_queue_weeks_engine',
+             'sed_build_budget_queue_weeks_engine', 'sed_build_budget_queue_projects',
+             'sed_build_budget_queue_private_projects',
              'sed_build_budget_active_points']
 
 
@@ -147,6 +148,11 @@ def effects(founding_projects=()):
     value = var:sed_build_budget_queue_points divide = modifier:country_construction_add
    }} }}
   }}
+  # Engine project counts: levels answer "how much", projects answer "how many works".
+  set_variable = {{ name = sed_build_budget_queue_projects value = {{
+   value = num_queued_government_constructions min = 0 }} }}
+  set_variable = {{ name = sed_build_budget_queue_private_projects value = {{
+   value = num_queued_private_constructions min = 0 }} }}
   set_variable = {{ name = sed_build_budget_queue_weeks_engine value = 0 }}
 {queue_bands()}''')
     result.append('''  set_variable = { name = sed_build_budget_project_weeks value = 0 }

@@ -200,6 +200,14 @@ class ConstructionBudgetTests(unittest.TestCase):
             self.assertEqual(c.variables['sed_build_budget_queue_weeks_engine'], expected,
                              f'duration {duration}')
 
+    def test_engine_project_counts_distinguish_government_and_private_work(self):
+        c = self.c
+        c.readings['num_queued_government_constructions'] = 3
+        c.readings['num_queued_private_constructions'] = 2
+        c.run('sed_refresh_direct_budget')
+        self.assertEqual(c.variables['sed_build_budget_queue_projects'], 3)
+        self.assertEqual(c.variables['sed_build_budget_queue_private_projects'], 2)
+
     def test_panel_text_reports_the_engine_queue_reading(self):
         portuguese = outputs()['localization/braz_por/sed_l_braz_por.yml'].decode('utf-8-sig')
         english = outputs()['localization/english/sed_l_english.yml'].decode('utf-8-sig')
