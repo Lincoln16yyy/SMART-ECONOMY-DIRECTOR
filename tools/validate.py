@@ -162,7 +162,8 @@ def validate(root=ROOT, game=None):
     construction_calls = [(name, entry) for name, tree in trees.items() for entry in walk(tree)
                           if entry.key == 'start_building_construction']
     approved_actions = {'sed_run_railway_approval': {'building_railway'},
-                        'sed_run_construction_approval': {'building_construction_sector'}}
+                        'sed_run_construction_approval': {'building_construction_sector'},
+                        'sed_run_trade_center_approval': {'building_trade_center'}}
     try:
         from .build_mod import SUPPLY_TARGETS, variants
     except ImportError:
@@ -227,6 +228,13 @@ def validate(root=ROOT, game=None):
         name = action.removeprefix('sed_run_').removesuffix('_approval')
         if not any(entry.key == 'sed_refresh_direct_budget' for entry in walk(custom.get(action, []))):
             errors.append('Approval lacks material budget revalidation: ' + name)
+        if name == 'trade_center':
+            # Fallback used only after every ranked target failed this month, so it
+            # has no plan rank. It must still prove its own eligibility.
+            if not any(entry.key == 'sed_trade_center_candidate_eligible' and entry.value == 'yes'
+                       for entry in custom.get('sed_trade_center_approval_valid', [])):
+                errors.append('Trade Center fallback lacks its candidate guard')
+            continue
         target_authority = parse(f"""guard = {{
             owner = {{ NOT = {{ has_variable = sed_coord_active }} }}
             var:sed_plan_{name}_rank = 1

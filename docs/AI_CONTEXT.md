@@ -1,38 +1,75 @@
 # Contexto de continuidade
 
-Última entrega do mod — 0.7.29 gerada, testada e instalada com jogo fechado.
-Código — o evento de escassez agora ensina a importação da 1.9+ (Centro de
-Comércio/capacidade, tarifa ou subvenção, Transferência de Bens, Isolacionismo),
-e corrige dois defeitos de localização: o arquivo inglês saía em português (a
-bandeira do idioma era reutilizada como rótulo nos laços `for policy, pt, en` e
-`for good, pt, en`) e parágrafos tinham quebra real, inválida em loc. Antes: a modernização de PM cede o prédio quando o Auto-Apply PMs tem o botão
-do prédio ou do grupo ligado (`owner = { NOT = { has_variable = ... } }` na
-elegibilidade, que roda em escopo de estado). Auditoria dos 12 mods instalados
-em `docs/COMPATIBILITY.md`. Antes: leitura das doze restrições do Controllable Private Construction
-(`zw_var_auto_invest_*`, `zw_var_no_foreign_private_investment_*`,
-`zw_var_intervene_investment_from_abroad_*`) no painel, mais apontamento do
-diário daquele mod quando a fila privada bloqueia o Automático. Antes: unidade
-salarial por família de prédio, meta plurianual, fila com duração da engine e
-contagem de projetos. Comércio: script não abre rota (removido na 1.9);
-autor/investidor e qualificações não têm primitiva legível.
-Teste sintético — 387 testes aprovados.
+Última entrega do mod — 0.7.30 gerada e testada; instalação e campanha pendentes.
+Código — novo último recurso do Automático: quando um bem em escassez não tem
+produtor no país (`var:sed_plan_missing_<bem> = 1`, escopo país) e nenhum estado
+pode receber a fundação, o Director amplia um Centro de Comércio existente ou
+funda o primeiro, comprando capacidade de comércio. Não abre rota, não altera
+tarifa/subvenção, não constrói sob Isolacionismo nem em estado com
+`infrastructure_delta < 0`. Respeita fila privada, orçamento (100 pontos) e uma
+tentativa por mês; conclusão inferida pelo nível. Antes: o evento de escassez
+ensina a importação da 1.9+ e a localização inglesa foi corrigida (coluna de
+idioma e `\n` escapado). Antes: cessão de PM ao Auto-Apply PMs; leitura do
+Controllable Private Construction; unidade salarial por família; meta
+plurianual; duração da fila pela engine. Comércio: script não abre rota
+(removido na 1.9); autor/investidor e qualificações não têm primitiva legível.
+Teste sintético — 394 testes aprovados.
 Estático — geração consistente e validação local 1.15 aprovadas. Tiger 1.19.0:
-mesmos três campos de diário do vanilla 1.15 e 933 avisos (todos de colocação de
-chaves no GUI e de OR de item único).
-Carregou e Campanha — retorno com salários, unidade por estado, painel e
-pontuação de PMs seguem NÃO VERIFICADO.
+mesmos três campos de diário do vanilla 1.15 e 938 avisos (colocação de chaves
+no GUI e OR de item único).
+Carregou e Campanha — Centro de Comércio, retorno com salários, unidade por
+estado, painel e pontuação de PMs seguem NÃO VERIFICADO.
 
 Ler `AGENTS.md`, `docs/agent/vic3-modding/SKILL.md` e suas referências.
 O ambiente registra o Tiger, o resultado da sondagem de comércio e o Smart
 Government instalado (1.0.0, esquema 2, variáveis `sg_*`). A pasta de
 documentação exportada do jogo continua ausente.
-Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.29 (evento
-de importação com o novo texto, nos dois idiomas), 0.7.28 (PM cedido
+Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.30 (Centro de
+Comércio como último recurso, Isolacionismo e estado com infraestrutura
+negativa), 0.7.29 (evento de importação com o novo texto, nos dois idiomas),
+0.7.28 (PM cedido
 com o Auto-Apply PMs ligado), 0.7.27 (seção de controle privado só com o outro
 mod ativo), depois 0.7.23 (duração da
 fila), 0.7.21 (evento de importação) e 0.7.17–0.7.19: unidade no painel, desvio
 de fornecedor, pontuação de PMs, save/reload e limpeza. Depois retomar as
 leituras fiscais e a fundação básica.
+
+## 0.7.30 — Centro de Comércio como último recurso
+
+Código — `sed_trade_center_needed` (país) exige bem em escassez com
+`sed_plan_missing_<bem> = 1`, nenhuma candidata local elegível, nenhum pedido
+próprio pendente e ausência de `law_type:law_isolationism`.
+`sed_trade_center_candidate_eligible` (estado) exige `is_incorporated`,
+`infrastructure_delta >= 0`, `can_construct_building = building_trade_center`,
+sem pedido pendente, e ou nenhum Centro de Comércio, ou um com
+`level_after_queued_constructions <= level`, ocupação ≥ 50% e sem contratação
+falha. O despachante tenta a rota só depois de todas as candidatas locais falharem
+(status 15) e `sed_run_trade_center_approval` confirma pela contagem de níveis do
+governo. `sed_refresh_trade_center` roda no pulso mensal e infere conclusão pelo
+nível. Orçamento: `TRADE_CENTER_POINTS = 100`
+(`required_construction = construction_cost_very_low`,
+`common/script_values/building_values.txt:7` no 1.15 instalado).
+
+Descartes decididos por teste — a primeira versão usava
+`sed_<bem>_supply_demand`, e 33 testes existentes quebraram: ela também cobre a
+oportunidade de preço (bem caro sem escassez) e dispara com produtor apenas
+esperando mão de obra ou insumo. Passou-se a exigir `sed_plan_missing_<bem>`,
+que é exatamente "sem produtor no país", e `infrastructure_delta >= 0`, guarda
+que o resto do mod já usa. Nenhum teste antigo foi alterado.
+
+Teste sintético — 394 aprovados; 7 novos em `tests/test_trade_capacity.py`:
+fundação sem produtor, expansão lendo o nível, bloqueio por Isolacionismo,
+conclusão inferida no pulso, reserva de 100 pontos no orçamento, ausência de
+compra de capacidade com produtor existente e texto do painel nos dois idiomas.
+
+Estático — geração consistente, validação local 1.15 aprovada e Tiger 1.19.0
+com 0 fatais, os mesmos 3 `unknown-field` de diário do vanilla 1.15 e 938
+avisos.
+
+NÃO VERIFICADO na engine: se o nível do Centro de Comércio realmente aumenta a
+capacidade de comércio usada pelo Mercado Mundial, se a obra aparece na fila
+do governo em campanha, se o fallback respeita o orçamento como esperado e como
+o painel se comporta após save/reload.
 
 ## 0.7.29 — Evento de importação ensina o caminho da 1.9+ e loc em inglês
 

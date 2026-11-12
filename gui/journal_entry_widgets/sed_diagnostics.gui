@@ -5297,6 +5297,39 @@ textbox = {
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_paper_action_failed"
 }
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_xxl
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_trade_center_title"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_trade_center_note"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_trade_center_needed_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_trade_center_needed"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_trade_center_success_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_trade_center_success"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_trade_center_failed_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_trade_center_failed"
+}
 }
 flowcontainer = { direction = vertical spacing = 10 ignoreinvisible = yes
  visible = "[GetScriptedGui('sed_details_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"

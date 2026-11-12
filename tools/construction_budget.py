@@ -28,6 +28,9 @@ PROJECT_POINTS = {
     'tools': 600, 'groceries': 600, 'clothes': 600, 'paper': 600,
     'small_arms': 600, 'artillery': 600, 'ammunition': 800,
 }
+# Trade Center: required_construction = construction_cost_very_low (100 points),
+# common/script_values/building_values.txt:7 in the installed 1.15 game.
+TRADE_CENTER_POINTS = 100
 VARIABLES = ['sed_build_budget_known', 'sed_build_budget_points',
              'sed_build_budget_point_cost', 'sed_build_budget_weekly',
              'sed_build_budget_required_gold', 'sed_build_budget_material_capacity',
@@ -112,6 +115,11 @@ def effects(founding_projects=()):
         result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0
    any_scope_state = {{ has_variable = sed_plan_{action}_rank var:sed_plan_{action}_rank = 1 }} }}
    set_variable = {{ name = sed_build_budget_project_points value = {points} }}
+  }}''')
+    # No ranked project this month: the Trade Center fallback is the next work.
+    result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0
+   any_scope_state = {{ sed_trade_center_candidate_eligible = yes }} }}
+   set_variable = {{ name = sed_build_budget_project_points value = {TRADE_CENTER_POINTS} }}
   }}''')
     for field in ('levels_known', 'points'):
         result.append(f'''  set_variable = {{ name = sed_build_budget_queue_{field} value = 0 }}

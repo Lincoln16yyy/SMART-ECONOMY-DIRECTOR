@@ -260,3 +260,24 @@ os dois.
   `_transportation`). [confirmado 2026-11-11]
 - Ordem de carregamento não é controlada por nós. Para leitura por
   `has_variable`, ordem não importa; para injeção em prédio, importa.
+
+## Evidência de comércio e Centro de Comércio (2026-11-12)
+
+- `building_trade_center` é construível pelo governo e por investidores privados:
+  `can_build_government`/`can_build_private` leem
+  `trade_center_construction_allowed` (`common/buildings/` do 1.15 instalado).
+- `required_construction = construction_cost_very_low`; o valor está em
+  `common/script_values/building_values.txt:7` e vale **100 pontos** de
+  construção (usado em `tools/construction_budget.py` como
+  `TRADE_CENTER_POINTS`).
+- Capacidade de comércio é gerada por nível de Centro de Comércio e consumida
+  pelo Mercado Mundial (`concept_trade_capacity_desc`). O script não abre rota
+  (`create_trade_route` removido na 1.9); o caminho de script é ampliar/fundar
+  o prédio.
+- `law_isolationism` desliga o comércio com o Mercado Mundial
+  (`country_disallow_trade_bool = yes`), então capacidade extra é inútil sob
+  essa lei.
+- Tiger 1.19.0 na 0.7.30: 0 fatais, 3 `unknown-field` de diário (os mesmos do
+  vanilla 1.15) e **938** avisos (933 na 0.7.29; os cinco novos vêm das caixas
+  de texto do painel). O binário continua declarando suporte até 1.13.5.
+  [confirmado 2026-11-12]

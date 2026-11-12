@@ -752,6 +752,15 @@ sed_disable_country = {
  remove_variable = sed_pm_reserved_sulfur
  remove_variable = sed_pm_reserved_tools
  remove_variable = sed_pm_reserved_wood
+ remove_variable = sed_trade_center_action_status
+ remove_variable = sed_trade_center_intent_level
+ remove_variable = sed_trade_center_request_pending
+ remove_variable = sed_trade_center_intents
+ remove_variable = sed_trade_center_completed
+ remove_variable = sed_trade_center_abandoned
+ remove_variable = sed_trade_center_result
+ remove_variable = sed_trade_center_result_month
+ remove_variable = sed_trade_center_candidate_states
  remove_variable = sed_input_pass_changed
  remove_variable = sed_input_priority_wood
  remove_variable = sed_input_priority_iron
@@ -3872,6 +3881,7 @@ sed_schedule_auto_retry = {
 }
 sed_auto_apply_monthly = {
  sed_configure_founded_industries = yes
+ sed_refresh_trade_center = yes
  sed_refresh_national_plan = yes
  sed_recover_existing_industry = yes
  sed_modernize_existing_industry = yes
@@ -4086,6 +4096,17 @@ sed_auto_run_direct = {
     # A candidate was selected; only confirmed insertion changes this to success.
     owner = { set_variable = { name = sed_auto_action_status value = 15 } }
     sed_run_construction_approval = yes
+   }
+  }
+  else_if = {
+   limit = { any_scope_state = { sed_trade_center_candidate_eligible = yes } }
+   ordered_scope_state = {
+    limit = { sed_trade_center_candidate_eligible = yes }
+    order_by = { value = state_population }
+    max = 1
+    check_range_bounds = no
+    owner = { set_variable = { name = sed_auto_action_status value = 15 } }
+    sed_run_trade_center_approval = yes
    }
   }
  }
@@ -7709,6 +7730,10 @@ sed_refresh_direct_budget = {
   if = { limit = { var:sed_build_budget_project_points = 0
    any_scope_state = { has_variable = sed_plan_ammunition_rank var:sed_plan_ammunition_rank = 1 } }
    set_variable = { name = sed_build_budget_project_points value = 800 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { sed_trade_center_candidate_eligible = yes } }
+   set_variable = { name = sed_build_budget_project_points value = 100 }
   }
   set_variable = { name = sed_build_budget_queue_levels_known value = 0 }
   if = { limit = { construction_queue_num_queued_government_levels > 0 }
@@ -13519,6 +13544,82 @@ else = { set_variable = { name = advisor_auto_construction_enabled value = 1 } }
 }
 else = { set_variable = { name = zw_var_expand_building value = 0 } }
     set_variable = { name = sed_coord_executor value = 3 }
+   }
+  }
+ }
+}
+# State scope. Queue one public level and record the intent for the monthly
+# review, mirroring the railway executor: only a queue count increase confirms it.
+sed_run_trade_center_approval = {
+ owner = { if = { limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic } sed_refresh_direct_budget = yes } }
+ if = {
+  limit = { sed_trade_center_approval_valid = yes }
+  owner = {
+   set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }
+  }
+  owner = { sed_record_auto_attempt = yes }
+  if = { limit = { has_building = building_trade_center }
+   set_variable = { name = sed_trade_center_intent_level value = b:building_trade_center.level }
+  }
+  else = { set_variable = { name = sed_trade_center_intent_level value = 0 } }
+  start_building_construction = building_trade_center
+  owner = {
+   if = {
+    limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_trade_center_action_status value = 1 }
+    if = { limit = { has_variable = sed_trade_center_intents }
+     change_variable = { name = sed_trade_center_intents add = 1 }
+    }
+    else = { set_variable = { name = sed_trade_center_intents value = 1 } }
+    prev = { set_variable = { name = sed_trade_center_request_pending value = yes } }
+   }
+   else = {
+    set_variable = { name = sed_trade_center_action_status value = 2 }
+    prev = { remove_variable = sed_trade_center_intent_level }
+   }
+   remove_variable = sed_queue_levels_before
+  }
+ }
+}
+
+# Completion is inferred from the queue leaving and the level rising.
+sed_refresh_trade_center = {
+ if = { limit = { is_player = yes has_variable = sed_enabled }
+  set_variable = { name = sed_trade_center_candidate_states value = 0 }
+  every_scope_state = {
+   if = { limit = { sed_trade_center_candidate_eligible = yes }
+    root = { change_variable = { name = sed_trade_center_candidate_states add = 1 } }
+   }
+   if = {
+    limit = { has_variable = sed_trade_center_request_pending
+     OR = {
+      NOT = { has_building = building_trade_center }
+      b:building_trade_center = { level_after_queued_constructions <= level }
+     }
+    }
+    if = { limit = { has_variable = sed_trade_center_intent_level
+     has_building = building_trade_center b:building_trade_center.level > var:sed_trade_center_intent_level }
+     owner = {
+      if = { limit = { has_variable = sed_trade_center_completed }
+       change_variable = { name = sed_trade_center_completed add = 1 }
+      }
+      else = { set_variable = { name = sed_trade_center_completed value = 1 } }
+      set_variable = { name = sed_trade_center_result value = 1 }
+      set_variable = { name = sed_trade_center_result_month value = sed_live_month_key }
+     }
+    }
+    else_if = { limit = { has_variable = sed_trade_center_intent_level }
+     owner = {
+      if = { limit = { has_variable = sed_trade_center_abandoned }
+       change_variable = { name = sed_trade_center_abandoned add = 1 }
+      }
+      else = { set_variable = { name = sed_trade_center_abandoned value = 1 } }
+      set_variable = { name = sed_trade_center_result value = 2 }
+      set_variable = { name = sed_trade_center_result_month value = sed_live_month_key }
+     }
+    }
+    remove_variable = sed_trade_center_intent_level
+    remove_variable = sed_trade_center_request_pending
    }
   }
  }

@@ -2508,3 +2508,44 @@ de OR de item único); os avisos de localização sumiram.
 
 Não verificado na engine: o texto longo do evento nos dois idiomas e a exibição
 das quebras escapadas.
+
+## 2026-11-12 — 0.7.30: Centro de Comércio como último recurso
+
+Objetivo: o Automático não ficar parado quando um bem em escassez não tem
+produtor nacional e nenhum estado pode receber a fundação. Em vez de só avisar
+(evento da 0.7.21), comprar capacidade de comércio.
+
+Evidência usada: `concept_trade_capacity_desc` e `building_trade_center` no jogo
+1.15 instalado; `can_build_government`/`can_build_private` do prédio leem
+`trade_center_construction_allowed`; `required_construction =
+construction_cost_very_low` (`common/script_values/building_values.txt:7` = 100
+pontos); `law_isolationism` desliga o comércio com o Mercado Mundial
+(`country_disallow_trade_bool = yes`).
+
+Implementação: `tools/trade_capacity.py` (novo) gera
+`sed_trade_center_needed`, `sed_trade_center_candidate_eligible`,
+`sed_trade_center_approval_valid`, `sed_run_trade_center_approval` e
+`sed_refresh_trade_center`; `tools/build_mod.py` liga o módulo ao gerador, ao
+despachante (último `else_if`, status 15) e ao painel; `construction_budget.py`
+reserva 100 pontos quando não há projeto ranqueado; `validate.py` ganhou a
+exceção de autorização (o fallback não tem rank de plano, mas precisa provar a
+própria elegibilidade).
+
+Duas correções vieram de testes que quebraram, não de suposições:
+
+1. A primeira versão usava `sed_<bem>_supply_demand` e quebrou 33 testes
+   existentes. Essa condição também cobre a oportunidade de preço (bem 20% acima
+   da base, sem escassez) e dispara com produtor apenas esperando mão de obra ou
+   insumo. Trocada por `var:sed_plan_missing_<bem> = 1`, que significa "escassez
+   real sem produtor verificado no país", mais `NOT any_scope_state
+   sed_<bem>_request_pending` para não duplicar obra em curso.
+2. Faltava `infrastructure_delta >= 0`, guarda que todas as outras candidatas já
+   têm; sem ela o fallback construía em estado com infraestrutura negativa.
+
+Validação: 394 testes sintéticos, geração consistente, validação local 1.15
+aprovada e Tiger 1.19.0 com 0 fatais, os mesmos 3 `unknown-field` de diário do
+vanilla 1.15 e 938 avisos.
+
+Não verificado na engine: efeito real do nível na capacidade de comércio,
+entrada na fila em campanha, reserva de orçamento e save/reload. Roteiro em
+`docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.30.

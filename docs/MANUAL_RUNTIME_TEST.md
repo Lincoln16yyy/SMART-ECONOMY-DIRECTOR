@@ -724,3 +724,23 @@ de um bem do catálogo (ex.: madeira) e um prédio operante do tipo.
    clicar, o aviso de papel não deve voltar por 12 meses.
 3. Troque o jogo para inglês e confirme que o texto está em inglês (antes da
    0.7.29 o arquivo inglês saía em português).
+
+## Centro de Comércio 0.7.30 (pendente)
+
+1. Save de teste com um bem do catálogo em escassez real e **sem produtor** no
+   país (ex.: papel sem fábrica de papel), estado incorporado com infraestrutura
+   ≥ 0 e que aceite a obra. Automático por um mês. Esperado: um nível de
+   `building_trade_center` na fila do governo, linha "Centro de Comércio" no
+   painel com o pedido enfileirado. Devolver: captura do painel e da fila.
+2. Confirme que o nível aparece no prédio existente quando já há um Centro de
+   Comércio no estado (caso de expansão), e que nada é enfileirado de novo no
+   mês seguinte enquanto a obra está na fila.
+3. Com um produtor do bem presente mas parado por falta de trabalhadores, o
+   Director deve esperar (status 2) e **não** comprar capacidade.
+4. Ligue Isolacionismo (`law_isolationism`) e repita o passo 1: nada deve ser
+   enfileirado e a linha do painel não deve aparecer.
+5. Estado com `infrastructure_delta` negativo: nenhuma obra ali; com outro
+   estado saudável, a obra deve ir para o estado saudável.
+6. Salve e recarregue no Automático: o pedido pendente deve continuar
+   reconhecido e, ao concluir a obra, o contador `sed_trade_center_completed`
+   deve subir (inferência por nível, como na ferrovia).

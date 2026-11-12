@@ -242,6 +242,8 @@ class Country:
             return entry.value in scope.get('production_methods', [])
         if key == 'has_technology_researched':
             return entry.value in self.readings.get('technologies', [])
+        if key == 'has_law':
+            return entry.value.split(':', 1)[-1] in self.readings.get('laws', [])
         if key == 'has_variable':
             return entry.value in self.variables_for(scope)
         if key == 'has_journal_entry':

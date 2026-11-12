@@ -3841,6 +3841,55 @@ sed_coord_tools_available = {
   has_variable = zw_var_develop_incorporated_states
  }
 }
+# Country scope. A shortage of a good with no producer anywhere in the country,
+# with trade open. Isolationism disables World Market trade, so extra capacity
+# would be useless.
+sed_trade_center_needed = {
+ NOT = { has_law = law_type:law_isolationism }
+ OR = {
+  AND = { var:sed_plan_missing_wood = 1 NOT = { any_scope_state = { sed_wood_candidate_eligible = yes } } NOT = { any_scope_state = { has_variable = sed_wood_request_pending } } }
+  AND = { var:sed_plan_missing_iron = 1 NOT = { any_scope_state = { sed_iron_candidate_eligible = yes } } NOT = { any_scope_state = { has_variable = sed_iron_request_pending } } }
+  AND = { var:sed_plan_missing_coal = 1 NOT = { any_scope_state = { sed_coal_candidate_eligible = yes } } NOT = { any_scope_state = { has_variable = sed_coal_request_pending } } }
+  AND = { var:sed_plan_missing_grain = 1 NOT = { any_scope_state = { sed_grain_candidate_eligible = yes } } NOT = { any_scope_state = { has_variable = sed_grain_request_pending } } }
+  AND = { var:sed_plan_missing_fabric = 1 NOT = { any_scope_state = { sed_fabric_candidate_eligible = yes } } NOT = { any_scope_state = { has_variable = sed_fabric_request_pending } } }
+  AND = { var:sed_plan_missing_tools = 1 NOT = { any_scope_state = { sed_tools_candidate_eligible = yes } } NOT = { any_scope_state = { has_variable = sed_tools_request_pending } } }
+  AND = { var:sed_plan_missing_groceries = 1 NOT = { any_scope_state = { sed_groceries_candidate_eligible = yes } } NOT = { any_scope_state = { has_variable = sed_groceries_request_pending } } }
+  AND = { var:sed_plan_missing_clothes = 1 NOT = { any_scope_state = { sed_clothes_candidate_eligible = yes } } NOT = { any_scope_state = { has_variable = sed_clothes_request_pending } } }
+  AND = { var:sed_plan_missing_small_arms = 1 NOT = { any_scope_state = { sed_small_arms_candidate_eligible = yes } } NOT = { any_scope_state = { has_variable = sed_small_arms_request_pending } } }
+  AND = { var:sed_plan_missing_artillery = 1 NOT = { any_scope_state = { sed_artillery_candidate_eligible = yes } } NOT = { any_scope_state = { has_variable = sed_artillery_request_pending } } }
+  AND = { var:sed_plan_missing_ammunition = 1 NOT = { any_scope_state = { sed_ammunition_candidate_eligible = yes } } NOT = { any_scope_state = { has_variable = sed_ammunition_request_pending } } }
+  AND = { var:sed_plan_missing_paper = 1 NOT = { any_scope_state = { sed_paper_candidate_eligible = yes } } NOT = { any_scope_state = { has_variable = sed_paper_request_pending } } }
+ }
+}
+
+# State scope. Expand an existing Trade Center, or found the first one where the
+# engine accepts the building. Skips a state whose request is already pending.
+sed_trade_center_candidate_eligible = {
+ is_incorporated = yes
+ infrastructure_delta >= 0
+ can_construct_building = building_trade_center
+ NOT = { has_variable = sed_trade_center_request_pending }
+ owner = { sed_trade_center_needed = yes }
+ OR = {
+  NOT = { has_building = building_trade_center }
+  b:building_trade_center = {
+   level_after_queued_constructions <= level
+   occupancy >= 0.5
+   has_failed_hires = no
+  }
+ }
+}
+
+sed_trade_center_approval_valid = {
+ sed_trade_center_candidate_eligible = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+  sed_execution_mode_permits_approval = yes
+ }
+}
 sed_pm_upgrade_month_limit_reached = {
  has_variable = sed_pm_upgrade_last_attempt_month
  var:sed_pm_upgrade_last_attempt_month = sed_live_month_key
