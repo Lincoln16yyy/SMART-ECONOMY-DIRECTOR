@@ -1,5 +1,11 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.30, quando a escassez de um bem não tem produtor no país e nenhum
+estado pode receber a fundação, o Automático amplia um Centro de Comércio
+existente ou funda o primeiro para comprar capacidade de comércio. É o último
+recurso do plano: não abre rota, não mexe em tarifa ou subvenção e não constrói
+sob Isolacionismo nem em estado com infraestrutura negativa.
+
 Na 0.7.29, o evento de escassez ensina o caminho de importação da 1.9+:
 Centro de Comércio e capacidade de comércio, tarifa ou subvenção no painel do
 bem, cláusula Transferência de Bens em tratado e o bloqueio do Isolacionismo.
@@ -227,8 +233,9 @@ do Advisor admite também financiamento por reservas com a cobertura descrita
 em PLANNING.md. Impostos e salários civis têm um ajuste automático por mês
 de calendário e restauração dos níveis anteriores ao sair do modo.
 
-O plano compara infraestrutura e produtores existentes de madeira, ferro,
-carvão, cereais, tecido, ferramentas, mantimentos e roupas. Também identifica
+O plano compara infraestrutura e produtores existentes de doze bens — madeira,
+ferro, carvão, cereais, tecido, ferramentas, mantimentos, roupas, armas leves,
+artilharia, munição e papel —, além de ferrovia e do setor de construção. Também identifica
 escassez desses bens sem o tipo de produtor atendido e objetivos administrativos
 ou de energia. A autorização do executor externo permite que ele avalie
 investimentos além do escopo das expansões próprias do Director.
@@ -250,7 +257,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.6.23.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.7.30.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 

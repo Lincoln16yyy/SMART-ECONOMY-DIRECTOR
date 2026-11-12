@@ -14,6 +14,10 @@ Controllable Private Construction; unidade salarial por família; meta
 plurianual; duração da fila pela engine. Comércio: script não abre rota
 (removido na 1.9); autor/investidor e qualificações não têm primitiva legível.
 Teste sintético — 394 testes aprovados.
+Documentação — README e STATUS foram sincronizados com a 0.7.30; a lista de
+lacunas herdada da 0.6.26 estava errada em PMs, fundação de prédios e salários
+militares, e o catálogo já tem doze bens (papel desde a 0.7.14). Nenhuma
+mudança de comportamento nesta sincronização.
 Estático — geração consistente e validação local 1.15 aprovadas. Tiger 1.19.0:
 mesmos três campos de diário do vanilla 1.15 e 938 avisos (colocação de chaves
 no GUI e OR de item único).

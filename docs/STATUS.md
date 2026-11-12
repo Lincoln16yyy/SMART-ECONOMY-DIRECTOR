@@ -36,7 +36,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Controle da construção privada externa | Desde a 0.7.27, o painel lê as doze restrições do Controllable Private Construction (`zw_var_*`, somente `has_variable`) e mostra quais estão ligadas, inclusive no bloqueio por fila privada. O Director não escreve essas variáveis nem injeta `can_build_private`/`can_build_government`: isso colidiria com a injeção do próprio mod no mesmo prédio | Exibir a seção e apontar o diário não muda a engine. Se a intervenção no investimento estrangeiro fizer o jogo recusar uma obra pública, a recusa deve aparecer como falha de ação; NÃO VERIFICADO em campanha. A autoexpansão nativa continua fora de controle quando o mod não está ativo |
 | Desativar e devolver opções | Restaura presença e valor original das onze opções, com testes de idempotência | Limites fiscais preservados por mês. Confirmar restauração após save/reload e atualização de versão |
 | Manual e Assistido | Autorizações e trocas de modo testadas | Restauração pode reativar opções externas originalmente ligadas |
-| Histórico | Resultado mensal datado, status externo e livro dos oito bens, ferrovia e setor de construção | Conclusão é inferida pela fila e nível; reduzir ambiguidade de cancelamento |
+| Histórico | Resultado mensal datado, status externo e livro dos doze bens, ferrovia e setor de construção | Conclusão é inferida pela fila e nível; reduzir ambiguidade de cancelamento |
 | Fila sem duplicação | Guardas agregadas, nível após fila e marcas por tipo/estado | Acompanhamento relacionado na 0.6.12. Autor/investidor por item **não tem primitiva**: sondagem com Tiger 1.19.0 mostra que `is_government_construction`, `is_privately_constructed` e `construction_owner_is_government` são tokens desconhecidos; existem só contagens de país (`num_queued_government_constructions`, `num_queued_private_constructions`, desde a 0.7.24 no painel) e `is_under_construction` por prédio. Identidade do autor e reconciliação completa permanecem pendentes. Com a fila pública ocupada (0.6.25), a não duplicação depende de `level_after_queued_constructions` e das marcas por estado |
 | Planejamento de longo prazo | Direção atual, reavaliação periódica e meta anual de oferta para escassez persistente | Na 0.7.4, propagação por vários elos do catálogo, com espera por obra, alternativas e término de ciclos. Desde a 0.7.25, meta de escassez repetida em anos consecutivos vira plurianual (`sed_<bem>_goal_streak` até 5, +15 de prioridade, linha visível enquanto a escassez persistir); bens fora do catálogo, diversificação medida e feedback de resultados seguem pendentes |
 | Métodos de produção | Configuração inicial em fundações acompanhadas desde a 0.7.7. Seleção inicial e, desde a 0.7.9, modernização contínua do grupo principal para gargalos, por saída e margem material estimada a preços-base, com reserva mensal de insumos. Desde a 0.7.10, recuperação de escassez por método com menor dependência de insumos e piso de saída nominal. A 0.7.17 fornece a unidade salarial observada aos filtros de oferta; a 0.7.18 desconta a folha da mudança na pontuação de modernização e recuperação | Confirmar na engine. Preços reais pendentes. Qualificações e salários por profissão **não têm primitiva legível** (sondagem Tiger 1.19.0: `pop_qualifications`, `state_pop_qualifications`, `wages`, `wage_rate`, `average_wage` são tokens desconhecidos); o proxy é `occupancy` + `has_failed_hires`, e desde a 0.7.26 a unidade salarial é por família de prédio com fallback nacional. Desde a 0.7.28 a modernização cede o prédio que o Auto-Apply PMs já administra (`zw_var_auto_pm_building_<prédio>` e os botões de grupo de fazendas/plantações), em vez de disputar o mesmo grupo. Automação dos demais grupos pendente. A ordem dos pares e a configuração inicial seguem apenas materiais |
@@ -125,3 +125,19 @@ precisam de observação em campanha.
 
 A revisão de calendário, política fiscal e acompanhamento de variantes está
 registrada em [REVIEW_2026-11-10.md](REVIEW_2026-11-10.md).
+
+## Sincronização de documentação (2026-11-12)
+
+O README e esta matriz foram confrontados com o gerador da 0.7.30. A lista de
+lacunas herdada da 0.6.26 estava desatualizada em três pontos: métodos de
+produção (configuração inicial desde a 0.7.7, modernização contínua desde a
+0.7.9, recuperação por insumo desde a 0.7.10 e cessão ao Auto-Apply PMs desde a
+0.7.28), fundação de prédios (indústria desde a 0.7.0, primeira ferrovia desde
+a 0.7.1, Centro de Comércio desde a 0.7.30) e salários militares (controlados
+em crise na paz desde a 0.7.5). O catálogo tem doze bens desde a 0.7.14, e o
+livro de resultados cobre os doze, a ferrovia e o setor de construção.
+Continuam fora: comércio exterior por rota, leis, imposto de consumo, gasto
+discricionário, dívida, recrutamento e consumo real das tropas, custo
+incremental real, identidade de projeto, qualificações e construtores nativos.
+`python3 tools/build_mod.py --check` confirmou sincronia e 394 testes
+sintéticos passaram; nenhuma mudança de comportamento nesta sincronização.

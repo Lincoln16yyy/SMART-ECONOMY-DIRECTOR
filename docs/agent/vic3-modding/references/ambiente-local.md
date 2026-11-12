@@ -75,9 +75,10 @@ python3 tools/package_mod.py
 python3 tools/install_mod.py --user-data '/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3'
 ```
 
-A última entrega executou 382 testes sintéticos e instalou a versão 0.7.27
-com conferência de 14 arquivos. O último `--check` confirmou sincronia.
-[confirmado 2026-11-11]
+A 0.7.30 executou 394 testes sintéticos (205 s) e o último `--check`
+confirmou sincronia. A instalação local verificada mais recente é a 0.7.27,
+com conferência de 14 arquivos; a 0.7.28–0.7.30 ainda não foi instalada.
+[confirmado 2026-11-12]
 
 ## Documentação exportada do jogo
 
