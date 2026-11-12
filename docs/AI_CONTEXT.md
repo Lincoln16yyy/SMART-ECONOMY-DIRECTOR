@@ -1,7 +1,14 @@
 # Contexto de continuidade
 
-Última entrega do mod — 0.7.30 gerada e testada; instalação e campanha pendentes.
-Código — novo último recurso do Automático: quando um bem em escassez não tem
+Última entrega do mod — 0.7.31 gerada e testada; instalação e campanha pendentes.
+Código — 0.7.31 fecha o buraco dos objetivos 6 e 7: sem ferramenta externa
+detectada, o executor próprio amplia `building_government_administration` um
+nível por mês (estado incorporado, infraestrutura ≥ 0, aceita a obra; no
+objetivo 7 só onde `tax_capacity_usage > tax_capacity`), antes do fallback de
+Centro de Comércio, com 100 pontos reservados e conclusão inferida pelo nível.
+Antes disso, burocracia negativa terminava a revisão em status 2 sem obra.
+Antes: Centro de Comércio como último recurso (0.7.30) quando o bem em escassez
+não tem
 produtor no país (`var:sed_plan_missing_<bem> = 1`, escopo país) e nenhum estado
 pode receber a fundação, o Director amplia um Centro de Comércio existente ou
 funda o primeiro, comprando capacidade de comércio. Não abre rota, não altera
@@ -13,8 +20,10 @@ idioma e `\n` escapado). Antes: cessão de PM ao Auto-Apply PMs; leitura do
 Controllable Private Construction; unidade salarial por família; meta
 plurianual; duração da fila pela engine. Comércio: script não abre rota
 (removido na 1.9); autor/investidor e qualificações não têm primitiva legível.
-Teste sintético — 394 testes aprovados.
-Documentação — README e STATUS foram sincronizados com a 0.7.30; a lista de
+Teste sintético — 402 testes aprovados.
+Documentação — README e STATUS foram sincronizados com a 0.7.31; a lista de
+lacunas herdada da 0.6.26 estava errada em PMs, fundação de prédios e salários
+militares. Antes: README e STATUS sincronizados com a 0.7.30; a lista de
 lacunas herdada da 0.6.26 estava errada em PMs, fundação de prédios e salários
 militares, e o catálogo já tem doze bens (papel desde a 0.7.14). Nenhuma
 mudança de comportamento nesta sincronização.
@@ -28,9 +37,10 @@ Ler `AGENTS.md`, `docs/agent/vic3-modding/SKILL.md` e suas referências.
 O ambiente registra o Tiger, o resultado da sondagem de comércio e o Smart
 Government instalado (1.0.0, esquema 2, variáveis `sg_*`). A pasta de
 documentação exportada do jogo continua ausente.
-Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.30 (Centro de
-Comércio como último recurso, Isolacionismo e estado com infraestrutura
-negativa), 0.7.29 (evento de importação com o novo texto, nos dois idiomas),
+Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.31
+(administração pública nos objetivos 6 e 7, fila privada e save/reload), 0.7.30
+(Centro de Comércio como último recurso, Isolacionismo e estado com
+infraestrutura negativa), 0.7.29 (evento de importação com o novo texto, nos dois idiomas),
 0.7.28 (PM cedido
 com o Auto-Apply PMs ligado), 0.7.27 (seção de controle privado só com o outro
 mod ativo), depois 0.7.23 (duração da

@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.30
+# Estado dos requisitos — 0.7.31
 
 ## Protocolo de evidência adotado
 
@@ -30,7 +30,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Reserva, dívida e ritmo | Guarda proporcional inicial, classificações 1–4 e construção financiada por reservas (5). Desde a 0.7.6 a reserva exigida considera a fila e o novo projeto, sem teto de 56 semanas, e o executor direto pode usar financiamento por reservas | Referência de materiais implementada na 0.6.17 e limitada por níveis/ocupação na 0.6.18. Calibrar limiares e custo real incremental, duração com fila concorrente e serviço da dívida |
 | Impostos e gastos | Nível de imposto, salário civil e, desde a 0.7.5, salários militares durante crise operacional na paz, com limite mensal, snapshot e restauração | Leitura das rotinas aceita no menu da engine. Observar alterações em campanha e calibrar limiares |
 | Coordenação Advisor/Supply Chain | Adaptadores de sete opções de construção, quatro de objetivo/orçamento e três de política do Supply Chain, com restauração | Verificar efeitos reais, save/reload e compatibilidade das versões instaladas |
-| Ativar somente caminho necessário | Automático usa rotinas específicas para administração, tributação, energia e, preferencialmente, setores de construção | Oferta elegível pode usar alvo direto do plano. Nas rotas externas, a seleção continua sob o algoritmo da ferramenta escolhida |
+| Ativar somente caminho necessário | Automático usa rotinas específicas para administração, tributação, energia e, preferencialmente, setores de construção. Desde a 0.7.31, sem ferramenta externa detectada, o executor próprio amplia a administração pública para os objetivos 6 e 7 (burocracia negativa, estado acima da capacidade tributária), um nível por mês e só no estado que excede a capacidade quando o objetivo é 7 | Oferta elegível pode usar alvo direto do plano. Nas rotas externas, a seleção continua sob o algoritmo da ferramenta escolhida. Objetivo 9 (energia) segue delegado. Conferir em campanha a obra de administração e o efeito na burocracia e na capacidade tributária |
 | Construção própria automática | Desde a 0.7.13 inclui bens civis caros com demanda superior à oferta e margem material positiva. Consome a primeira prioridade, revalida guardas e limita tentativa mensal. Desde a 0.6.25 atua com a fila pública ocupada; só a fila privada precisa estar vazia. Desde a 0.6.26 expande também o setor de construção quando ele lidera o plano e agenda uma segunda revisão no mês após bloqueio por fila privada ou pausa. Desde a 0.7.1 funda a primeira ferrovia em estado com déficit e sem ferrovia | Inclusão direta e persistência ainda exigem evidência de campanha. Espera por obra e transição após fim da escassez tiveram confirmação visual parcial. A fila longa recebe referência de trabalho e materiais desde a 0.7.6; desde a 0.7.23 o painel compara essa referência com a duração restante medida pela engine (`construction_queue_government_duration`, em faixas de 2 a 260 semanas). Progresso já executado, autoria e custo incremental preciso continuam pendentes. Agenda da segunda revisão não observada na engine |
 | Evitar executor próprio em paralelo | Executor próprio exclusivo para primeira prioridade de oferta na 0.6.15; opções externas suspensas | ARoAI detectado suspende delegação, autoexpansões nativas continuam sem controle |
 | Controle da construção privada externa | Desde a 0.7.27, o painel lê as doze restrições do Controllable Private Construction (`zw_var_*`, somente `has_variable`) e mostra quais estão ligadas, inclusive no bloqueio por fila privada. O Director não escreve essas variáveis nem injeta `can_build_private`/`can_build_government`: isso colidiria com a injeção do próprio mod no mesmo prédio | Exibir a seção e apontar o diário não muda a engine. Se a intervenção no investimento estrangeiro fizer o jogo recusar uma obra pública, a recusa deve aparecer como falha de ação; NÃO VERIFICADO em campanha. A autoexpansão nativa continua fora de controle quando o mod não está ativo |
@@ -141,3 +141,30 @@ discricionário, dívida, recrutamento e consumo real das tropas, custo
 incremental real, identidade de projeto, qualificações e construtores nativos.
 `python3 tools/build_mod.py --check` confirmou sincronia e 394 testes
 sintéticos passaram; nenhuma mudança de comportamento nesta sincronização.
+
+## 0.7.31 — Administração pública com executor próprio
+
+Código — `tools/admin_capacity.py` gera `sed_admin_needed` (país, objetivos 6 e
+7), `sed_admin_candidate_eligible` (estado: incorporado, infraestrutura ≥ 0,
+`can_construct_building`, sem pedido pendente, e no objetivo 7 exige
+`tax_capacity_usage > tax_capacity`), `sed_admin_approval_valid`,
+`sed_run_admin_approval` e `sed_refresh_admin`. O despachante tenta a obra
+depois dos alvos ranqueados e antes do Centro de Comércio, com status 15; o
+pulso mensal infere a conclusão pelo nível; o orçamento reserva 100 pontos
+(`construction_cost_very_low`, `common/buildings/07_government.txt:30`).
+`validate.py` ganhou a ação aprovada e a exceção de guarda própria.
+
+Motivo — antes, com burocracia negativa e nenhum mod externo, o plano anunciava
+o objetivo 6 e a revisão terminava com status 2 (nada elegível) sem construir.
+O caminho externo (`sed_coord_executor = 9`) continua igual quando há Supply
+Chain detectado; a mudança só alcança o executor próprio.
+
+Teste sintético — 402 aprovados; 8 novos em `tests/test_admin_capacity.py`:
+objetivo 6 sem coordenação, objetivo 7 só no estado acima da capacidade, nível
+já enfileirado não duplica, fila privada bloqueia, objetivo 8 não constrói,
+conclusão inferida, reserva de 100 pontos e texto do painel nos dois idiomas.
+
+NÃO VERIFICADO na engine: se `start_building_construction` de
+`building_government_administration` entra na fila em campanha, se o nível
+aumenta a burocracia/capacidade tributária como esperado e como o painel se
+comporta após save/reload. Roteiro em `docs/MANUAL_RUNTIME_TEST.md`.

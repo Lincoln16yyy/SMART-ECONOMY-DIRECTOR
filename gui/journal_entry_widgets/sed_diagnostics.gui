@@ -5301,6 +5301,39 @@ textbox = {
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_xxl
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_admin_title"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_admin_note"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_admin_needed_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_admin_needed"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_admin_success_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_admin_success"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_admin_failed_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_admin_failed"
+}
+textbox = {
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_xxl
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
  text = "sed_trade_center_title"
 }
 textbox = {

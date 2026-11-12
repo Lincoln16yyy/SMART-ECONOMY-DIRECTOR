@@ -725,6 +725,28 @@ de um bem do catálogo (ex.: madeira) e um prédio operante do tipo.
 3. Troque o jogo para inglês e confirme que o texto está em inglês (antes da
    0.7.29 o arquivo inglês saía em português).
 
+## Administração pública 0.7.31 (pendente)
+
+1. Save de teste **sem** Economy Advisor e **sem** Supply Chain ativos, com
+   burocracia nacional negativa (objetivo 6) e um estado incorporado com
+   infraestrutura ≥ 0. Automático por um mês. Esperado: um nível de
+   `building_government_administration` na fila do governo, seção
+   "Administração pública" no painel com o pedido enfileirado. Devolver:
+   captura do painel e da fila.
+2. Burocracia ≥ 0 e um estado com `tax_capacity_usage > tax_capacity`
+   (objetivo 7): a obra deve ir para esse estado, não para o mais populoso.
+3. Com o prédio já tendo um nível na fila, avance um mês: nada novo deve ser
+   enfileirado (espera a fila andar).
+4. Com fila privada ocupada, avance um mês: status 11 e nenhuma obra; a segunda
+   revisão deve ocorrer 7 dias depois, se a fila privada esvaziar.
+5. Confira que o custo na fila corresponde a 100 pontos por nível e que a
+   reserva de orçamento do painel cobre esse projeto.
+6. Salve e recarregue no Automático: o pedido pendente deve continuar
+   reconhecido e, ao concluir, `sed_admin_completed` deve subir.
+7. Com Supply Chain ativo, confirme que o caminho externo (opção
+   `zw_var_scsab_gov_admin`) continua sendo o usado e que o Director não
+   enfileira obra própria em paralelo.
+
 ## Centro de Comércio 0.7.30 (pendente)
 
 1. Save de teste com um bem do catálogo em escassez real e **sem produtor** no

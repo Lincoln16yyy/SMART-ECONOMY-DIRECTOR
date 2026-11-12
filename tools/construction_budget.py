@@ -31,6 +31,9 @@ PROJECT_POINTS = {
 # Trade Center: required_construction = construction_cost_very_low (100 points),
 # common/script_values/building_values.txt:7 in the installed 1.15 game.
 TRADE_CENTER_POINTS = 100
+# Government administration: required_construction = construction_cost_very_low
+# as well (common/buildings/07_government.txt:30 in the installed 1.15 game).
+ADMIN_POINTS = 100
 VARIABLES = ['sed_build_budget_known', 'sed_build_budget_points',
              'sed_build_budget_point_cost', 'sed_build_budget_weekly',
              'sed_build_budget_required_gold', 'sed_build_budget_material_capacity',
@@ -115,6 +118,12 @@ def effects(founding_projects=()):
         result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0
    any_scope_state = {{ has_variable = sed_plan_{action}_rank var:sed_plan_{action}_rank = 1 }} }}
    set_variable = {{ name = sed_build_budget_project_points value = {points} }}
+  }}''')
+    # No ranked project this month: the administration goal (6/7) is dispatched
+    # before the Trade Center fallback, so its points are reserved first.
+    result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0
+   any_scope_state = {{ sed_admin_candidate_eligible = yes }} }}
+   set_variable = {{ name = sed_build_budget_project_points value = {ADMIN_POINTS} }}
   }}''')
     # No ranked project this month: the Trade Center fallback is the next work.
     result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0

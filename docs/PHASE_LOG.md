@@ -2549,3 +2549,53 @@ vanilla 1.15 e 938 avisos.
 Não verificado na engine: efeito real do nível na capacidade de comércio,
 entrada na fila em campanha, reserva de orçamento e save/reload. Roteiro em
 `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.30.
+
+## 2026-11-12 — 0.7.31: administração pública com executor próprio
+
+Objetivo: fechar o buraco dos objetivos 6 e 7 do plano quando nenhum mod
+externo de construção está presente. O plano anunciava "recuperar capacidade
+administrativa" ou "tributária" e o executor próprio não tinha ação: a revisão
+terminava em status 2, sem obra, e o Supply Chain era o único caminho.
+
+Evidência da lacuna: reprodução no harness com `bureaucracy = -10`, sem
+variáveis de ferramenta externa, resultou em `sed_plan_goal = 6`,
+`sed_coord_active` ausente, `sed_auto_action_status = 2` e `constructions = []`.
+Evidência da solução: em `common/buildings/07_government.txt` o prédio não
+declara `can_build_government`/`can_build_private`, usa
+`required_construction = construction_cost_very_low:30` (100 pontos em
+`common/script_values/building_values.txt:7`) e o `should_auto_expand` vanilla
+lê `tax_capacity`/`bureaucracy`, os mesmos sinais dos objetivos 6 e 7.
+
+Implementação: `tools/admin_capacity.py` (novo) gera `sed_admin_needed`,
+`sed_admin_candidate_eligible`, `sed_admin_approval_valid`,
+`sed_run_admin_approval` e `sed_refresh_admin`. Elegibilidade exige estado
+incorporado, `infrastructure_delta >= 0`, `can_construct_building`, ausência de
+pedido pendente e, no objetivo 7, `tax_capacity_usage > tax_capacity`; prédio
+existente precisa de `level_after_queued_constructions <= level`, ocupação
+≥ 50% e sem contratação falha. O despachante tenta a obra depois dos alvos
+ranqueados e antes do Centro de Comércio (status 15); o pulso mensal infere
+conclusão pelo nível; `construction_budget.py` reserva 100 pontos quando não há
+projeto ranqueado; `validate.py` registra a ação aprovada e a exceção de guarda
+própria, no mesmo formato do fallback de comércio.
+
+Decisão de escopo: o objetivo 9 (energia) continua delegado ao Supply Chain. O
+caminho externo com `sed_coord_executor = 9` não mudou; a ação própria só
+alcança país sem ferramenta externa detectada.
+
+Teste sintético — 402 aprovados; 8 novos em `tests/test_admin_capacity.py`:
+objetivo 6 sem coordenação, objetivo 7 agindo só no estado acima da capacidade,
+nível já enfileirado não duplica, fila privada bloqueia com status 11, objetivo
+8 não constrói, conclusão inferida no pulso, reserva de 100 pontos e texto do
+painel nos dois idiomas.
+
+Estático — geração consistente, validação local 1.15 aprovada e Tiger 1.19.0
+com 0 fatais, os mesmos 3 `unknown-field` de diário do vanilla 1.15
+(`activation_description`, `disable_evaluation`, `outcome`) e 943 avisos (938 +
+os 5 textboxes novos do painel, no mesmo estilo de colocação de chaves).
+Nenhum apontamento do Tiger cita `sed_admin`.
+
+Não verificado na engine: se `start_building_construction` de
+`building_government_administration` entra mesmo na fila do governo em
+campanha, se o nível entregue move burocracia e capacidade tributária como o
+vanilla promete, e o comportamento do painel após save/reload. Roteiro em
+`docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.31.

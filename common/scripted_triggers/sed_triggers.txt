@@ -3890,6 +3890,47 @@ sed_trade_center_approval_valid = {
   sed_execution_mode_permits_approval = yes
  }
 }
+# Country scope. Goals 6 and 7 are computed by the national plan.
+sed_admin_needed = {
+ has_variable = sed_plan_goal
+ OR = {
+  var:sed_plan_goal = 6
+  var:sed_plan_goal = 7
+ }
+}
+
+# State scope. Goal 7 only acts in a state that actually exceeds its tax
+# capacity; goal 6 accepts any incorporated state that can host the building.
+sed_admin_candidate_eligible = {
+ is_incorporated = yes
+ infrastructure_delta >= 0
+ can_construct_building = building_government_administration
+ NOT = { has_variable = sed_admin_request_pending }
+ owner = { sed_admin_needed = yes }
+ OR = {
+  NOT = { owner = { var:sed_plan_goal = 7 } }
+  tax_capacity_usage > tax_capacity
+ }
+ OR = {
+  NOT = { has_building = building_government_administration }
+  b:building_government_administration = {
+   level_after_queued_constructions <= level
+   occupancy >= 0.5
+   has_failed_hires = no
+  }
+ }
+}
+
+sed_admin_approval_valid = {
+ sed_admin_candidate_eligible = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+  sed_execution_mode_permits_approval = yes
+ }
+}
 sed_pm_upgrade_month_limit_reached = {
  has_variable = sed_pm_upgrade_last_attempt_month
  var:sed_pm_upgrade_last_attempt_month = sed_live_month_key
