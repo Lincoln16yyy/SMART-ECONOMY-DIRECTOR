@@ -1,7 +1,12 @@
 # Contexto de continuidade
 
-Última entrega do mod — 0.7.35 gerada e testada; instalação e campanha pendentes.
-Código — 0.7.35 corrige a paralisia de campanha: escassez de bem sem produtor e
+Última entrega do mod — 0.7.36 gerada e testada; instalação pendente de nova campanha.
+Código — 0.7.36 corrige a detecção de automações externas: opção desligada (var =
+0) era lida como ligada porque só `has_variable` era testado, então o Director
+coordena e **religava** a opção do outro mod. Agora todos os pontos usam
+`AND = { has_variable = x var:x > 0 }`; dentro de `OR`, as duas condições sem
+AND eram alternativas, não conjunção. Testes 425.
+Antes: 0.7.35 corrigiu a paralisia de campanha: escassez de bem sem produtor e
 sem local apto em nenhum estado (ferro sem depósito, no Paraguai) marcava
 objetivo 5 e barrava a trilha de crescimento por `sed_plan_missing_count = 0`,
 ficando meses sem obra com caixa positivo. Agora `sed_missing_hostable` só é
@@ -47,7 +52,7 @@ idioma e `\n` escapado). Antes: cessão de PM ao Auto-Apply PMs; leitura do
 Controllable Private Construction; unidade salarial por família; meta
 plurianual; duração da fila pela engine. Comércio: script não abre rota
 (removido na 1.9); autor/investidor e qualificações não têm primitiva legível.
-Teste sintético — 424 testes aprovados.
+Teste sintético — 425 testes aprovados.
 Documentação — README e STATUS foram sincronizados com a 0.7.34; a lista de
 lacunas herdada da 0.6.26 estava errada em PMs, fundação de prédios e salários
 militares. Antes: README e STATUS sincronizados com a 0.7.30; a lista de

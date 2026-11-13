@@ -216,7 +216,13 @@ class Country:
         return None
 
     def condition(self, entries, scope):
-        return all(self.single_condition(entry, scope) for entry in entries)
+        # A clause list is an AND evaluated in order, stopping at the first false
+        # entry like the engine, so `has_variable = x var:x > 0` never reads a
+        # variable the previous line just proved absent.
+        for entry in entries:
+            if not self.single_condition(entry, scope):
+                return False
+        return True
 
     def single_condition(self, entry, scope):
         key = entry.key

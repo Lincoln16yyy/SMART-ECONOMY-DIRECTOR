@@ -13467,8 +13467,11 @@ sed_coord_enable = {
   if = { limit = { has_variable = zw_var_scsab_gov_admin_for_tax }
    set_variable = { name = sed_coord_saved_tax value = var:zw_var_scsab_gov_admin_for_tax }
   }
-  if = { limit = { OR = { has_variable = advisor_enabled has_variable = advisor_auto_construction_enabled } } set_variable = { name = sed_coord_advisor_known value = yes } }
-  if = { limit = { OR = { has_variable = zw_var_expand_building has_variable = zw_var_more_construction_sectors has_variable = zw_var_scsab_construct_railway has_variable = zw_var_scsab_construct_power_plant has_variable = zw_var_scsab_gov_admin has_variable = zw_var_scsab_gov_admin_for_tax has_variable = zw_var_scsab_gov_admin_for_institution has_variable = zw_var_added_constructions has_variable = zw_var_labor_threshold has_variable = zw_var_more_construction_sectors_gold_reserves has_variable = zw_var_develop_incorporated_states } } set_variable = { name = sed_coord_supply_known value = yes } }
+  if = { limit = { OR = {
+   AND = { has_variable = advisor_enabled var:advisor_enabled > 0 }
+   AND = { has_variable = advisor_auto_construction_enabled var:advisor_auto_construction_enabled > 0 }
+  } } set_variable = { name = sed_coord_advisor_known value = yes } }
+  if = { limit = { OR = { AND = { has_variable = zw_var_expand_building var:zw_var_expand_building > 0 } AND = { has_variable = zw_var_more_construction_sectors var:zw_var_more_construction_sectors > 0 } AND = { has_variable = zw_var_scsab_construct_railway var:zw_var_scsab_construct_railway > 0 } AND = { has_variable = zw_var_scsab_construct_power_plant var:zw_var_scsab_construct_power_plant > 0 } AND = { has_variable = zw_var_scsab_gov_admin var:zw_var_scsab_gov_admin > 0 } AND = { has_variable = zw_var_scsab_gov_admin_for_tax var:zw_var_scsab_gov_admin_for_tax > 0 } AND = { has_variable = zw_var_scsab_gov_admin_for_institution var:zw_var_scsab_gov_admin_for_institution > 0 } AND = { has_variable = zw_var_added_constructions var:zw_var_added_constructions > 0 } AND = { has_variable = zw_var_labor_threshold var:zw_var_labor_threshold > 0 } AND = { has_variable = zw_var_more_construction_sectors_gold_reserves var:zw_var_more_construction_sectors_gold_reserves > 0 } AND = { has_variable = zw_var_develop_incorporated_states var:zw_var_develop_incorporated_states > 0 } } } set_variable = { name = sed_coord_supply_known value = yes } }
   set_variable = { name = sed_coord_active value = yes }
   sed_coord_capture_advisor_policy = yes
   remove_variable = sed_mode_manual
@@ -13584,7 +13587,7 @@ sed_coord_sync = {
   remove_variable = zw_var_scsab_gov_admin_for_tax
   set_variable = { name = sed_coord_executor value = 0 }
   set_variable = { name = sed_coord_advisor_policy value = 0 }
-  if = { limit = { has_variable = aroai_autobuild } set_variable = { name = sed_coord_executor value = 5 } }
+  if = { limit = { has_variable = aroai_autobuild var:aroai_autobuild > 0 } set_variable = { name = sed_coord_executor value = 5 } }
   else_if = { limit = { sed_pm_upgrade_month_limit_reached = yes }
    set_variable = { name = sed_coord_executor value = 13 }
   }

@@ -104,6 +104,20 @@ class CoordinationTests(unittest.TestCase):
         c.run('sed_monthly_update')
         self.assertEqual(self.external(), {})
 
+    def test_a_disabled_option_left_at_zero_is_not_detected_or_enabled(self):
+        # Supply Chain leaves its variables behind at 0 when the player turns the
+        # option off. Presence alone made the Director detect, coordinate and
+        # re-enable automation the player had just disabled.
+        c = self.c
+        for _, option, _ in OPTIONS:
+            c.variables[option] = 0
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertFalse(c.condition(c.definitions['sed_competing_builder_configured'], c.country_scope()))
+        self.assertNotIn('sed_coord_supply_known', c.variables)
+        self.assertEqual({option: c.variables.get(option, 0) for _, option, _ in OPTIONS},
+                         {option: 0 for _, option, _ in OPTIONS})
+
     def test_no_producer_shortage_delegates_to_advisor_and_preserves_unrelated_options(self):
         c = self.c
         c.states.clear()

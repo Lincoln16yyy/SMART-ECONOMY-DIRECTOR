@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.35
+# Estado dos requisitos — 0.7.36
 
 ## Protocolo de evidência adotado
 
@@ -296,3 +296,32 @@ mantém o plano no comando (fazenda enfileirada, sem obra de crescimento).
 NÃO VERIFICADO na engine: se o Paraguai volta a construir em campanha com o
 Economy Advisor desligado e se a escassez de ferro sem depósito é mesmo o caso
 do save. Roteiro em `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.35.
+
+## 0.7.36 — Opção desligada não é opção configurada
+
+Evidência de campanha (Paraguai, agosto de 1850) — com todas as opções do Supply
+Chain desligadas, o painel continuava em "Executor escolhido: Supply Chain,
+cadeias produtivas", e o jogador viu as opções **religando sozinhas**.
+
+Causa — a detecção usava só `has_variable`: os mods deixam a variável em 0 quando
+o jogador desliga a opção, então "existe" era lido como "ligado". O Director
+então escolhia aquele executor e executava `enable_option`, gravando
+`zw_var_expand_building = 1`. Outro defeito no mesmo lugar: dentro de
+`OR = { ... }` as condições `has_variable = x var:x > 0` eram **duas alternativas**
+("existe **ou** é positivo"), não uma conjunção, e a presença continuava vencendo.
+
+Código — todos os pontos de detecção passam a exigir
+`AND = { has_variable = <opção> var:<opção> > 0 }`: `sed_competing_builder_configured`,
+`sed_auto_builder_*_visible_sgui`, `sed_coord_supply_known`,
+`sed_coord_advisor_known`, `sed_coord_tools_available` e a leitura de
+`aroai_autobuild`. Com as opções em 0, o Director não detecta, não coordena e
+não religa nada.
+
+Teste sintético — 425 aprovados; 1 novo: opções em 0 não detectam concorrente,
+não marcam `sed_coord_supply_known` e permanecem em 0. O harness passou a
+avaliar listas de condições em ordem com parada no primeiro falso, como a engine,
+para o guarda `has_variable` proteger a leitura de `var:`.
+
+NÃO VERIFICADO na engine: se o Supply Chain respeita as opções em 0 e se o
+Director volta a construir sozinho. Roteiro em `docs/MANUAL_RUNTIME_TEST.md`,
+seção 0.7.36.

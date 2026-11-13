@@ -725,6 +725,16 @@ de um bem do catálogo (ex.: madeira) e um prédio operante do tipo.
 3. Troque o jogo para inglês e confirme que o texto está em inglês (antes da
    0.7.29 o arquivo inglês saía em português).
 
+## Opção desligada 0.7.36 (pendente)
+
+1. Com Supply Chain e Economy Advisor instalados e **todas** as opções de
+automação desligadas, entre no Automático.
+2. O painel não deve listar "Opções externas detectadas" nem "Executor
+escolhido: Supply Chain".
+3. As opções do outro mod devem **continuar em 0** depois de um mês (era o
+sintoma: elas religavam sozinhas).
+4. O Director deve enfileirar obra direta, respeitando as guardas usuais.
+
 ## Escassez sem local apto 0.7.35 (pendente)
 
 Setup do relato: Paraguai, escassez de ferro (sem depósito em estado

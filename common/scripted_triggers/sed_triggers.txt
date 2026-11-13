@@ -2744,14 +2744,14 @@ sed_develop_core = {
 }
 sed_competing_builder_configured = {
  OR = {
-  has_variable = advisor_auto_construction_enabled
-  has_variable = zw_var_expand_building
-  has_variable = zw_var_more_construction_sectors
-  has_variable = zw_var_scsab_construct_railway
-  has_variable = zw_var_scsab_construct_power_plant
-  has_variable = zw_var_scsab_gov_admin
-  has_variable = zw_var_scsab_gov_admin_for_tax
-  has_variable = aroai_autobuild
+  AND = { has_variable = advisor_auto_construction_enabled var:advisor_auto_construction_enabled > 0 }
+  AND = { has_variable = zw_var_expand_building var:zw_var_expand_building > 0 }
+  AND = { has_variable = zw_var_more_construction_sectors var:zw_var_more_construction_sectors > 0 }
+  AND = { has_variable = zw_var_scsab_construct_railway var:zw_var_scsab_construct_railway > 0 }
+  AND = { has_variable = zw_var_scsab_construct_power_plant var:zw_var_scsab_construct_power_plant > 0 }
+  AND = { has_variable = zw_var_scsab_gov_admin var:zw_var_scsab_gov_admin > 0 }
+  AND = { has_variable = zw_var_scsab_gov_admin_for_tax var:zw_var_scsab_gov_admin_for_tax > 0 }
+  AND = { has_variable = aroai_autobuild var:aroai_autobuild > 0 }
  }
 }
 sed_private_control_configured = {
@@ -3860,19 +3860,19 @@ sed_founding_input_paper_mill_safe = {
 }
 sed_coord_tools_available = {
  OR = {
-  has_variable = advisor_enabled
-  has_variable = advisor_auto_construction_enabled
-  has_variable = zw_var_expand_building
-  has_variable = zw_var_more_construction_sectors
-  has_variable = zw_var_scsab_construct_railway
-  has_variable = zw_var_scsab_construct_power_plant
-  has_variable = zw_var_scsab_gov_admin
-  has_variable = zw_var_scsab_gov_admin_for_tax
-  has_variable = zw_var_scsab_gov_admin_for_institution
-  has_variable = zw_var_added_constructions
-  has_variable = zw_var_labor_threshold
-  has_variable = zw_var_more_construction_sectors_gold_reserves
-  has_variable = zw_var_develop_incorporated_states
+  AND = { has_variable = advisor_enabled var:advisor_enabled > 0 }
+  AND = { has_variable = advisor_auto_construction_enabled var:advisor_auto_construction_enabled > 0 }
+  AND = { has_variable = zw_var_expand_building var:zw_var_expand_building > 0 }
+  AND = { has_variable = zw_var_more_construction_sectors var:zw_var_more_construction_sectors > 0 }
+  AND = { has_variable = zw_var_scsab_construct_railway var:zw_var_scsab_construct_railway > 0 }
+  AND = { has_variable = zw_var_scsab_construct_power_plant var:zw_var_scsab_construct_power_plant > 0 }
+  AND = { has_variable = zw_var_scsab_gov_admin var:zw_var_scsab_gov_admin > 0 }
+  AND = { has_variable = zw_var_scsab_gov_admin_for_tax var:zw_var_scsab_gov_admin_for_tax > 0 }
+  AND = { has_variable = zw_var_scsab_gov_admin_for_institution var:zw_var_scsab_gov_admin_for_institution > 0 }
+  AND = { has_variable = zw_var_added_constructions var:zw_var_added_constructions > 0 }
+  AND = { has_variable = zw_var_labor_threshold var:zw_var_labor_threshold > 0 }
+  AND = { has_variable = zw_var_more_construction_sectors_gold_reserves var:zw_var_more_construction_sectors_gold_reserves > 0 }
+  AND = { has_variable = zw_var_develop_incorporated_states var:zw_var_develop_incorporated_states > 0 }
  }
 }
 # Country scope. A shortage of a good with no producer anywhere in the country,

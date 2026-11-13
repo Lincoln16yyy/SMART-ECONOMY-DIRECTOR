@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.35'
+VERSION = '0.7.36'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -1658,7 +1658,8 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
     result += 'sed_auto_last_review_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status has_variable = sed_auto_review_year has_variable = sed_auto_review_month } }\n'
     result += f'sed_auto_builders_visible_sgui = {{ scope = country is_shown = {{ {base} sed_competing_builder_configured = yes }} }}\n'
     for name, option, pt, en in COMPETING_BUILDERS:
-        result += f'sed_auto_builder_{name}_visible_sgui = {{ scope = country is_shown = {{ {base} has_variable = {option} }} }}\n'
+        result += (f'sed_auto_builder_{name}_visible_sgui = {{ scope = country is_shown = {{ {base} '
+                   f'has_variable = {option} var:{option} > 0 }} }}\n')
     result += 'sed_private_control_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled sed_private_control_configured = yes } }\n'
     result += 'sed_pm_external_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled sed_pm_external_managed = yes } }\n'
     for name, option, pt, en in PRIVATE_CONTROL_FLAGS:
@@ -2121,7 +2122,11 @@ sed_missing_hostable = {
         f'  any_scope_state = {{ var:sed_plan_{item["good"]}_rank = 1 sed_{item["good"]}_candidate_eligible = yes }}'
         for item in SUPPLY_TARGETS)
     result.append('sed_direct_supply_priority_exists = {\n OR = {\n' + priorities + '\n }\n}')
-    options = '\n'.join(f'  has_variable = {option}' for name, option, pt, en in COMPETING_BUILDERS)
+    # An option another mod leaves at 0 is off, not configured: the variable
+    # survives after the player disables it, so presence alone made the Director
+    # detect, coordinate and re-enable automation the player had turned off.
+    options = '\n'.join(f'  AND = {{ has_variable = {option} var:{option} > 0 }}'
+                        for name, option, pt, en in COMPETING_BUILDERS)
     # A healthy growth month may develop the core inputs even with nothing
     # scarce or expensive; the candidate still needs a positive reference return.
     result.append('''# Core inputs may grow only when no other objective has a claim: a negative

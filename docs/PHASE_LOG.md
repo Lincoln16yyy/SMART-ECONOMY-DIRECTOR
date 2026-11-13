@@ -2694,6 +2694,34 @@ Não verificado na engine: a trilha em campanha, o respeito ao orçamento e o
 painel encurtado nos dois idiomas. Roteiro em `docs/MANUAL_RUNTIME_TEST.md`,
 seção 0.7.33.
 
+## 2026-11-12 — 0.7.36: opção desligada não é opção configurada
+
+Relato do jogador: "as opções do Supply Chain estão ligando sozinhas". Era
+verdade e a culpa era do Director.
+
+Causa — a detecção de automações externas testava apenas `has_variable`. Os mods
+mantêm a variável no save com valor 0 quando o jogador desliga a opção, então
+"existe" virava "está ligada". O Director escolhia aquele executor e, ao
+coordenar, gravava `zw_var_expand_building = 1` — religando a automação que o
+jogador tinha acabado de desligar. Segundo defeito no mesmo caminho: dentro de
+`OR = { ... }` escrever `has_variable = x var:x > 0` cria **duas alternativas**
+("existe **ou** é positivo"); a presença continuava vencendo mesmo depois do
+primeiro conserto.
+
+Código — os sete pontos de detecção passam a exigir
+`AND = { has_variable = <opção> var:<opção> > 0 }`:
+`sed_competing_builder_configured`, `sed_auto_builder_*_visible_sgui`,
+`sed_coord_supply_known`, `sed_coord_advisor_known`, `sed_coord_tools_available`,
+a lista de opções do Supply Chain e `aroai_autobuild`.
+
+Harness — listas de condições agora param no primeiro falso, como a engine, para
+que `has_variable` proteja a leitura de `var:`.
+
+Teste sintético — 425 aprovados; 1 novo cobre opções em 0.
+
+Não verificado na engine: se o Supply Chain aceita as opções em 0 e se o
+Director volta a construir sozinho.
+
 ## 2026-11-12 — 0.7.35: escassez sem local apto não congela mais o mês
 
 Diagnóstico veio de seis fotos de campanha (Paraguai, 1849–1850): escassez de
