@@ -2692,6 +2692,26 @@ sed_auto_executor_safe = {
  sed_direct_fiscal_safe = yes
  sed_direct_budget_safe = yes
 }
+# A missing producer keeps its own objective and blocks the growth lane only
+# while some state can actually host the industry. Iron with no deposit and a
+# goods whose technology or land is absent would otherwise hold the month
+# forever and nothing would ever be built.
+sed_missing_hostable = {
+ OR = {
+  AND = { has_variable = sed_plan_missing_wood var:sed_plan_missing_wood = 1 any_scope_state = { OR = { sed_wood_logging_camp_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_iron var:sed_plan_missing_iron = 1 any_scope_state = { OR = { sed_iron_iron_mine_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_coal var:sed_plan_missing_coal = 1 any_scope_state = { OR = { sed_coal_coal_mine_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_grain var:sed_plan_missing_grain = 1 any_scope_state = { OR = { sed_grain_wheat_farm_found_eligible = yes sed_grain_rye_farm_found_eligible = yes sed_grain_rice_farm_found_eligible = yes sed_grain_maize_farm_found_eligible = yes sed_grain_millet_farm_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_fabric var:sed_plan_missing_fabric = 1 any_scope_state = { OR = { sed_fabric_cotton_plantation_found_eligible = yes sed_fabric_livestock_ranch_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_tools var:sed_plan_missing_tools = 1 any_scope_state = { OR = { sed_tools_tooling_workshop_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_groceries var:sed_plan_missing_groceries = 1 any_scope_state = { OR = { sed_groceries_food_industry_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_clothes var:sed_plan_missing_clothes = 1 any_scope_state = { OR = { sed_clothes_textile_mill_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_small_arms var:sed_plan_missing_small_arms = 1 any_scope_state = { OR = { sed_small_arms_arms_industry_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_artillery var:sed_plan_missing_artillery = 1 any_scope_state = { OR = { sed_artillery_artillery_foundry_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_ammunition var:sed_plan_missing_ammunition = 1 any_scope_state = { OR = { sed_ammunition_munition_plant_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_paper var:sed_plan_missing_paper = 1 any_scope_state = { OR = { sed_paper_paper_mill_found_eligible = yes } } }
+ }
+}
 sed_direct_supply_priority_exists = {
  OR = {
   any_scope_state = { var:sed_plan_wood_rank = 1 sed_wood_candidate_eligible = yes }
@@ -2709,14 +2729,16 @@ sed_direct_supply_priority_exists = {
  }
 }
 # Core inputs may grow only when no other objective has a claim: a negative
-# bureaucracy, a state over its tax capacity, dear local power or a good with no
-# producer at all keep their own executor and must not be preempted.
+# bureaucracy, a state over its tax capacity, dear local power, or a missing
+# producer that some state could actually host keep their own executor and must
+# not be preempted. A missing producer with no host site anywhere is left to the
+# plan's waiting message and does not starve the growth lane.
 sed_develop_core = {
  has_variable = sed_mode_automatic
  sed_coord_fiscal_safe = yes
  NOT = { in_default = yes }
  bureaucracy >= 0
- OR = { NOT = { has_variable = sed_plan_missing_count } var:sed_plan_missing_count = 0 }
+ NOT = { sed_missing_hostable = yes }
  NOT = { any_scope_state = { is_incorporated = yes tax_capacity_usage > tax_capacity } }
  NOT = { any_scope_state = { sg:electricity ?= { state_goods_pricier >= 0.2 } } }
 }

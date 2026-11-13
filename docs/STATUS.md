@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.34
+# Estado dos requisitos — 0.7.35
 
 ## Protocolo de evidência adotado
 
@@ -267,3 +267,32 @@ fila curta não compra e nível já enfileirado espera. O teste usa tesouro de
 NÃO VERIFICADO na engine: se a ampliação do setor entra na fila, se a duração
 medida pela engine bate com as 12 semanas do gatilho e o efeito real no ritmo de
 obras. Roteiro em `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.34.
+
+## 0.7.35 — Escassez sem local apto não congela mais o mês
+
+Evidência de campanha (Paraguai, 1849–1850, fotos do painel) — escassez de ferro
+e de roupas sem produtor. O plano marcava `sed_plan_missing_count = 1`, entrava
+em objetivo 5 ("nenhum estado incorporado pode hospedar o produtor") e a trilha
+de crescimento ficava barrada pelo próprio gate `sed_plan_missing_count = 0`.
+Resultado: nenhuma obra, pública ou privada, por meses, com 231 mil de ouro e
+saldo mensal positivo.
+
+Código — novo gatilho `sed_missing_hostable`: verdadeiro só quando um bem
+marcado como ausente tem **algum** estado com `sed_<bem>_<variante>_found_eligible`.
+O gate `sed_develop_core` troca `sed_plan_missing_count = 0` por
+`NOT = { sed_missing_hostable = yes }`. Objetivo 5 e sua mensagem continuam
+iguais: quando existe local apto, o plano mantém a prioridade; quando não
+existe, a trilha de crescimento pode usar o mês.
+
+Segundo bloqueio confirmado nas mesmas fotos — Economy Advisor com construção
+automática ligada. O painel já avisava: sem coordenação ativa, essa opção
+suspende a construção direta do Director. Não é defeito; é o desenho de
+coordenação. Para o Director construir, é preciso desligar a opção no outro mod.
+
+Teste sintético — 424 aprovados; 2 novos: bem ausente sem local apto libera a
+trilha (objetivo 5 preservado, mês não perdido) e bem ausente com local apto
+mantém o plano no comando (fazenda enfileirada, sem obra de crescimento).
+
+NÃO VERIFICADO na engine: se o Paraguai volta a construir em campanha com o
+Economy Advisor desligado e se a escassez de ferro sem depósito é mesmo o caso
+do save. Roteiro em `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.35.

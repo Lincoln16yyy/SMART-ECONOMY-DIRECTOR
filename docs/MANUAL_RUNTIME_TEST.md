@@ -725,6 +725,21 @@ de um bem do catálogo (ex.: madeira) e um prédio operante do tipo.
 3. Troque o jogo para inglês e confirme que o texto está em inglês (antes da
    0.7.29 o arquivo inglês saía em português).
 
+## Escassez sem local apto 0.7.35 (pendente)
+
+Setup do relato: Paraguai, escassez de ferro (sem depósito em estado
+incorporado).
+
+1. **Economy Advisor desligado** (construção automática), Diretor em Automático.
+2. Antes da correção, o painel ficava em "Objetivo atual: fundar a indústria
+   ausente... nenhum estado incorporado pode hospedar o produtor" e nada era
+   construído. Esperado agora: a mensagem continua, mas o mês seguinte deve
+   render uma obra de crescimento (madeira, ferro, ferramentas ou setor).
+3. Se o ferro aparecer como escassez e o país não tiver depósito, confirme que
+   o plano não volta a congelar assim que a fila esvaziar.
+4. Anote se a escassez de roupas (que **tem** local apto) é resolvida pelo
+   plano: nesse caso o objetivo deve virar 2, não 5.
+
 ## Setor de construção 0.7.34 (pendente)
 
 1. Save com setor de construção existente, fila pública com 12+ semanas e caixa

@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.34'
+VERSION = '0.7.35'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -2102,6 +2102,21 @@ sed_auto_executor_safe = {
  sed_direct_fiscal_safe = yes
  sed_direct_budget_safe = yes
 }''')
+    hostable = []
+    for item in SUPPLY_TARGETS:
+        good = item['good']
+        sites = ' '.join(f'sed_{good}_{variant_id(variant)}_found_eligible = yes' for variant in variants(item))
+        hostable.append(f'  AND = {{ has_variable = sed_plan_missing_{good} var:sed_plan_missing_{good} = 1 '
+                        f'any_scope_state = {{ OR = {{ {sites} }} }} }}')
+    result.append('''# A missing producer keeps its own objective and blocks the growth lane only
+# while some state can actually host the industry. Iron with no deposit and a
+# goods whose technology or land is absent would otherwise hold the month
+# forever and nothing would ever be built.
+sed_missing_hostable = {
+ OR = {
+''' + '\n'.join(hostable) + '''
+ }
+}''')
     priorities = '\n'.join(
         f'  any_scope_state = {{ var:sed_plan_{item["good"]}_rank = 1 sed_{item["good"]}_candidate_eligible = yes }}'
         for item in SUPPLY_TARGETS)
@@ -2110,14 +2125,16 @@ sed_auto_executor_safe = {
     # A healthy growth month may develop the core inputs even with nothing
     # scarce or expensive; the candidate still needs a positive reference return.
     result.append('''# Core inputs may grow only when no other objective has a claim: a negative
-# bureaucracy, a state over its tax capacity, dear local power or a good with no
-# producer at all keep their own executor and must not be preempted.
+# bureaucracy, a state over its tax capacity, dear local power, or a missing
+# producer that some state could actually host keep their own executor and must
+# not be preempted. A missing producer with no host site anywhere is left to the
+# plan's waiting message and does not starve the growth lane.
 sed_develop_core = {
  has_variable = sed_mode_automatic
  sed_coord_fiscal_safe = yes
  NOT = { in_default = yes }
  bureaucracy >= 0
- OR = { NOT = { has_variable = sed_plan_missing_count } var:sed_plan_missing_count = 0 }
+ NOT = { sed_missing_hostable = yes }
  NOT = { any_scope_state = { is_incorporated = yes tax_capacity_usage > tax_capacity } }
  NOT = { any_scope_state = { sg:electricity ?= { state_goods_pricier >= 0.2 } } }
 }''')

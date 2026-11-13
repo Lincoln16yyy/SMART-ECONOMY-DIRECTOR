@@ -35,6 +35,35 @@ class CoreGrowthTests(unittest.TestCase):
         self.assertEqual(c.states[0]['variables'].get('sed_wood_intent_level'), 1)
         self.assertIn('sed_wood_request_pending', c.states[0]['variables'])
 
+    def test_a_missing_good_without_a_host_site_leaves_the_month_to_growth(self):
+        # Paraguay-like deadlock: a good is scarce and has no producer, but no
+        # state can host the industry (no deposit, technology or land). The plan
+        # waits on goal 5; the growth lane must not wait with it forever.
+        c = self.c
+        self.add_logging_camp()
+        c.market_goods['grain'] = {'market_goods_has_goods_shortage': True,
+                                    'market_goods_buy_orders': 100, 'market_goods_sell_orders': 0}
+        c.states[0]['variables']['sed_grain_ignored'] = 1
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_plan_missing_grain'], 1)
+        self.assertEqual(c.variables['sed_plan_goal'], 5)
+        self.assertTrue(c.condition(c.definitions['sed_develop_core'], c.country_scope()))
+        self.assertTrue(c.constructions)
+
+    def test_a_missing_good_with_a_host_site_keeps_the_growth_lane_waiting(self):
+        c = self.c
+        self.add_logging_camp()
+        c.market_goods['grain'] = {'market_goods_has_goods_shortage': True,
+                                    'market_goods_buy_orders': 100, 'market_goods_sell_orders': 0}
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_plan_goal'], 2)
+        self.assertEqual([item.get('building') for item in c.constructions],
+                         ['building_wheat_farm'])
+        self.assertNotIn('building_logging_camp',
+                         [item.get('building') for item in c.constructions])
+
     def test_no_building_means_no_founding_from_the_growth_lane(self):
         c = self.c
         c.run('sed_set_mode_automatic')

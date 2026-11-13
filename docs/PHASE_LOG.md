@@ -2694,6 +2694,38 @@ Não verificado na engine: a trilha em campanha, o respeito ao orçamento e o
 painel encurtado nos dois idiomas. Roteiro em `docs/MANUAL_RUNTIME_TEST.md`,
 seção 0.7.33.
 
+## 2026-11-12 — 0.7.35: escassez sem local apto não congela mais o mês
+
+Diagnóstico veio de seis fotos de campanha (Paraguai, 1849–1850): escassez de
+ferro e de roupas, `sed_plan_missing_count = 1`, objetivo 5 ("nenhum estado
+incorporado pode hospedar o produtor") e nenhuma obra por meses, com 231 mil de
+ouro e saldo mensal positivo. O gate `sed_develop_core` exigia
+`sed_plan_missing_count = 0`, então a trilha de crescimento também ficava
+parada — o país inteiro esperava por uma indústria de ferro que não pode existir
+sem depósito.
+
+Código — gatilho novo `sed_missing_hostable` (OR por bem ausente: existe estado
+com `sed_<bem>_<variante>_found_eligible`). `sed_develop_core` passa a usar
+`NOT = { sed_missing_hostable = yes }`. Objetivo 5 e a mensagem de espera não
+mudaram: com local apto o plano continua no comando; sem local apto a trilha de
+crescimento usa o mês.
+
+Segundo bloqueio das mesmas fotos, sem mudança de código — Economy Advisor com
+construção automática ligada; por desenho de coordenação isso suspende a
+construção direta do Director. O painel já dizia isso, mas o efeito prático era
+"nada acontece".
+
+Uma observação de leitura para a próxima sessão: no save o painel mostrava
+0,00K/semana de materiais e 0,00K de teto, com 10 pontos de construção — ou não
+há setor de construção, ou ele está com ocupação zero. Isso não bloqueia a
+trilha (o gate do setor exige ocupação ≥ 50%), mas explica por que o Paraguai
+não escala obras.
+
+Teste sintético — 424 aprovados; 2 novos cobrem os dois lados do gatilho.
+
+Não verificado na engine: campanha com Advisor desligado e a hipótese de que o
+ferro sem depósito é o bem que gera o objetivo 5.
+
 ## 2026-11-12 — 0.7.34: setor de construção na trilha de crescimento
 
 O plano só ranqueia o setor de construção quando a fila pública já tem três

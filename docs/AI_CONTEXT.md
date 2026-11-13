@@ -1,7 +1,15 @@
 # Contexto de continuidade
 
-Última entrega do mod — 0.7.34 gerada e testada; instalação e campanha pendentes.
-Código — 0.7.34 acrescenta o setor de construção à trilha de crescimento (fila
+Última entrega do mod — 0.7.35 gerada e testada; instalação e campanha pendentes.
+Código — 0.7.35 corrige a paralisia de campanha: escassez de bem sem produtor e
+sem local apto em nenhum estado (ferro sem depósito, no Paraguai) marcava
+objetivo 5 e barrava a trilha de crescimento por `sed_plan_missing_count = 0`,
+ficando meses sem obra com caixa positivo. Agora `sed_missing_hostable` só é
+verdadeiro se algum estado pode hospedar o produtor; sem local apto, a trilha
+de crescimento recupera o mês. Objetivo 5 e mensagem seguem iguais.
+Também confirmado em campanha (fotos): Economy Advisor com construção automática
+ligada suspende a construção direta do Director por desenho de coordenação.
+Antes: 0.7.34 acrescentou o setor de construção à trilha de crescimento (fila
 pública ≥ 12 semanas, 25 pontos) e registra um achado de calibragem: a guarda de
 materiais exige `despesas fixas × 4 + (custo semanal − renda) × semanas`; com
 setor presente isso deu 88.600 de ouro no harness para país pequeno e pode ser o
@@ -39,7 +47,7 @@ idioma e `\n` escapado). Antes: cessão de PM ao Auto-Apply PMs; leitura do
 Controllable Private Construction; unidade salarial por família; meta
 plurianual; duração da fila pela engine. Comércio: script não abre rota
 (removido na 1.9); autor/investidor e qualificações não têm primitiva legível.
-Teste sintético — 422 testes aprovados.
+Teste sintético — 424 testes aprovados.
 Documentação — README e STATUS foram sincronizados com a 0.7.34; a lista de
 lacunas herdada da 0.6.26 estava errada em PMs, fundação de prédios e salários
 militares. Antes: README e STATUS sincronizados com a 0.7.30; a lista de

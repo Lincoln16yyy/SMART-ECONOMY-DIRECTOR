@@ -1,5 +1,10 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.35, um bem em escassez sem produtor deixa de congelar o mês: se
+**nenhum** estado pode hospedar a indústria, a trilha de crescimento volta a ter
+a vez em vez de esperar para sempre. É o caso do Paraguai, que tem escassez de
+ferro sem depósito em estado incorporado.
+
 Na 0.7.34, a trilha de crescimento também compra capacidade de construção: com
 fila pública de 12 semanas ou mais, o Automático amplia o setor de construção
 um nível por mês. É o projeto mais barato do jogo (25 pontos) e destrava todos
@@ -285,7 +290,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.7.34.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.7.35.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 
