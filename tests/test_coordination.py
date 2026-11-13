@@ -294,7 +294,8 @@ class CoordinationTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_plan_goal'], 8)
         self.assertEqual(c.variables['sed_coord_executor'], 1)
         self.assertEqual(self.external(), {'advisor_auto_construction_enabled': 1})
-        c.readings['gold_reserves'] = 859
+        # O piso financiado por ouro é de seis semanas de despesas fixas (300).
+        c.readings['gold_reserves'] = 299
         c.run('sed_monthly_update')
         self.assertEqual(c.variables['sed_coord_executor'], 0)
         self.assertEqual(self.external(), {})
@@ -304,20 +305,21 @@ class CoordinationTests(unittest.TestCase):
         self.assertEqual(self.external(), {})
         self.assertEqual(c.constructions, [])
 
-    def test_reserve_drawdown_routes_infrastructure_to_advisor_and_not_supply(self):
+    def test_reserve_funded_infrastructure_uses_supply_railways(self):
         c = self.c
         c.readings.update(net_total_income=-10, net_fixed_income=100,
                           fixed_expenses=50, gold_reserves=860, principal=0)
         c.run('sed_set_mode_automatic')
         self.assertEqual(c.variables['sed_plan_goal'], 1)
-        self.assertEqual(c.variables['sed_coord_executor'], 1)
-        self.assertEqual(self.external(), {'advisor_auto_construction_enabled': 1})
+        self.assertEqual(c.variables['sed_coord_executor'], 2)
+        self.assertEqual(self.external(), {'zw_var_scsab_construct_railway': 1})
         c.run('sed_set_mode_assisted')
+        self.assertEqual(self.external(), self.original)
         c.variables.pop('advisor_enabled')
         c.variables.pop('advisor_auto_construction_enabled')
         c.run('sed_set_mode_automatic')
-        self.assertEqual(c.variables['sed_coord_executor'], 0)
-        self.assertEqual(self.external(), {})
+        self.assertEqual(c.variables['sed_coord_executor'], 2)
+        self.assertEqual(self.external(), {'zw_var_scsab_construct_railway': 1})
 
     def test_specific_goals_use_only_the_matching_supply_routine(self):
         for goal, option, executor in (
@@ -390,7 +392,7 @@ class CoordinationTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_auto_review_status'], 18)
         self.assertEqual(self.external(), {'zw_var_scsab_construct_railway': 1})
 
-    def test_reserve_funded_queue_pauses_then_resumes_without_cancelling_projects(self):
+    def test_reserve_funded_queue_keeps_coordinating_without_cancelling_projects(self):
         c = self.c
         c.states.clear()
         c.readings.update(net_total_income=-10, net_fixed_income=100,
@@ -399,9 +401,9 @@ class CoordinationTests(unittest.TestCase):
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')
         self.assertEqual(c.variables['sed_fiscal_status'], 5)
-        self.assertEqual(c.variables['sed_coord_executor'], 12)
-        self.assertEqual(c.variables['sed_auto_review_status'], 21)
-        self.assertEqual(self.external(), {})
+        self.assertEqual(c.variables['sed_coord_executor'], 1)
+        self.assertEqual(c.variables['sed_auto_review_status'], 18)
+        self.assertEqual(self.external(), {'advisor_auto_construction_enabled': 1})
         self.assertEqual(c.readings['construction_queue_num_queued_government_levels'], 1)
         c.readings['construction_queue_num_queued_government_levels'] = 0
         c.run('sed_auto_apply_monthly')
@@ -435,11 +437,11 @@ class CoordinationTests(unittest.TestCase):
         c.readings.update(net_total_income=-10, fixed_expenses=50, gold_reserves=860,
                           principal=0, construction_queue_num_queued_government_levels=1)
         c.run('sed_refresh_diagnostics')
-        self.assertEqual(c.variables['sed_coord_executor'], 12)
-        self.assertEqual(self.external(), {})
+        self.assertEqual(c.variables['sed_coord_executor'], 1)
+        self.assertEqual(self.external(), {'advisor_auto_construction_enabled': 1})
         self.assertEqual(c.constructions, [])
         self.assertEqual({key: value for key, value in c.variables.items() if key in review}, review)
-        c.readings['gold_reserves'] = 859
+        c.readings['gold_reserves'] = 299
         c.run('sed_refresh_diagnostics')
         self.assertEqual(c.variables['sed_coord_executor'], 0)
         c.readings.update(net_total_income=100, gold_reserves=1000)

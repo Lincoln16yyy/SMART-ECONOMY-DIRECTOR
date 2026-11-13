@@ -2789,3 +2789,25 @@ exige a cobertura da fila.
 
 Não verificado na engine: entrada do nível na fila, duração medida pela engine
 contra as 12 semanas do gatilho e efeito no ritmo de obras.
+
+## 0.7.37 — Piso único de reservas
+
+A tentativa de acrescentar uma tolerância de déficit a `6 × despesas fixas`
+dentro da guarda 1–4 quebrou quatro testes de contrato, e a causa era de
+desenho, não de sintaxe: como `12 × despesas fixas ≥ 6 × despesas fixas`, a
+nova ramificação engloba a classificação 5 e deixa a guarda de saque
+inalcançável. A decisão do jogador foi substituir as duas por um piso único.
+
+A guarda 1–4 agora é uma disjunção: leitura saudável com `4 × despesas fixas`,
+ou déficit operacional com `net_fixed_income >= 0`, sem dívida e `6 × despesas
+fixas`. `sed_coord_reserve_drawdown_safe` foi removido, `sed_direct_fiscal_safe`
+e `sed_coord_fiscal_safe` viraram aliases, a classificação 5 ficou só como
+rótulo de déficit financiado e o executor 12 com o status 21 deixaram de
+existir. A leitura de reserva no painel passou a `4 ×`/`6 ×` em vez de
+`12 × + 26 × déficit`.
+
+Teste sintético — 425 aprovados. Quatro testes foram reescritos para o contrato
+novo (piso de `6 ×`, coordenação sem a espera por reservas, ferrovia delegada
+ao Supply Chain sob déficit). Estático — geração consistente. NÃO VERIFICADO na
+engine: nenhuma leitura de déficit financiado foi observada em campanha, e os
+fatores 4 e 6 precisam de save para calibragem.

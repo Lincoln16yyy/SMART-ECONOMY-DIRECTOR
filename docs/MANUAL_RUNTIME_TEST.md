@@ -840,3 +840,20 @@ incorporado).
 6. Salve e recarregue no Automático: o pedido pendente deve continuar
    reconhecido e, ao concluir a obra, o contador `sed_trade_center_completed`
    deve subir (inferência por nível, como na ferrovia).
+
+## Teste da 0.7.37 — piso único de reservas
+
+1. Salvar o jogo e anotar do orçamento: ouro, despesas fixas (impostos e
+   gastos que não variam com a produção) e o saldo semanal total.
+2. Com déficit semanal e **sem dívida**, levar o ouro a mais de seis vezes as
+   despesas fixas e entrar no Automático. Esperado: o painel mostra o piso
+   exigido (6 ×) nas leituras de reserva, a classificação 5 como déficit
+   financiado e o Director aceita enfileirar. Registrar que prédio entrou na
+   fila e em que estado.
+3. Drenar o ouro para menos de seis vezes as despesas fixas e esperar a revisão.
+   Esperado: nenhuma autorização nova e status de bloqueio fiscal. Anotar se as
+   obras já enfileiradas continuam.
+4. Repetir com dívida ativa (`principal > 0`): esperado nenhuma obra nova, mesmo
+   com ouro acima do piso.
+5. Registrar capturas do painel e do orçamento no mês em que o Director parar.
+   Sem esse número não há como calibrar os fatores 4 e 6.

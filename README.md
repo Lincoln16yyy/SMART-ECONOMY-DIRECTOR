@@ -1,5 +1,10 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.37, a guarda fiscal passa a ter um piso único. Um déficit operacional sem
+dívida é financiado por ouro quando as reservas cobrem seis semanas de despesas
+fixas; a classificação 5 e a janela de 26 semanas saíram, e o custo da obra
+continua sendo avaliado pela guarda de orçamento.
+
 Na 0.7.36, uma opção **desligada** de outro mod não é mais confundida com opção
 ligada. Os mods deixam a variável em 0 quando o jogador desliga a opção; o
 Director lia a mera existência da variável, escolhia aquele executor e ainda
@@ -295,7 +300,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.7.36.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.7.37.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 

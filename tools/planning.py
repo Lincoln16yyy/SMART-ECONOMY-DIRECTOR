@@ -276,33 +276,36 @@ sed_wage_month_limit_reached = {
 }
 
 # Initial proportional policy; not an incremental cost estimate.
+# Uma leitura saudavel mantem o piso de quatro semanas de despesas fixas.
+# Um deficit operacional sem divida e financiado por ouro quando as reservas
+# cobrem seis semanas de despesas fixas. O custo da obra em si continua na
+# guarda de orcamento, que ja projeta o deficit da fila e do projeto.
 sed_auto_fiscal_safe = {
- net_total_income >= 0
- net_fixed_income >= 0
- gold_reserves >= { value = sed_fixed_expenses_value min = 0 multiply = 4 }
  OR = {
-  principal <= 0
-  AND = { credit > 0 principal <= { value = credit multiply = 0.75 } }
- }
-}
-
-# Keep a reserve floor plus six months of the currently observed deficit.
-sed_coord_reserve_drawdown_safe = {
- net_fixed_income >= 0
- net_total_income < 0
- principal <= 0
- gold_reserves >= {
-  value = sed_fixed_expenses_value min = 0 multiply = 12
-  add = { value = net_total_income multiply = -26 }
+  AND = {
+   net_total_income >= 0
+   net_fixed_income >= 0
+   gold_reserves >= { value = sed_fixed_expenses_value min = 0 multiply = 4 }
+   OR = {
+    principal <= 0
+    AND = { credit > 0 principal <= { value = credit multiply = 0.75 } }
+   }
+  }
+  AND = {
+   net_total_income < 0
+   net_fixed_income >= 0
+   principal <= 0
+   gold_reserves >= { value = sed_fixed_expenses_value min = 0 multiply = 6 }
+  }
  }
 }
 
 sed_direct_fiscal_safe = {
- OR = { sed_auto_fiscal_safe = yes sed_coord_reserve_drawdown_safe = yes }
+ sed_auto_fiscal_safe = yes
 }
 
 sed_coord_fiscal_safe = {
- OR = { sed_auto_fiscal_safe = yes sed_coord_reserve_drawdown_safe = yes }
+ sed_auto_fiscal_safe = yes
 }
 '''
 
@@ -321,11 +324,12 @@ def effects(actions, dependencies, buildings):
   set_variable = { name = sed_plan_year value = year }
   set_variable = { name = sed_prev_year value = { value = year subtract = 1 } }
   set_variable = { name = sed_plan_month value = { value = month add = 1 } }
-  set_variable = { name = sed_reserve_floor value = { value = sed_fixed_expenses_value min = 0 multiply = 12 } }
-  set_variable = { name = sed_reserve_required value = {
-   value = var:sed_reserve_floor add = { value = net_total_income max = 0 multiply = -26 }
-  } }
-  set_variable = { name = sed_reserve_spare value = { value = gold_reserves subtract = var:sed_reserve_floor min = 0 } }
+  set_variable = { name = sed_reserve_floor value = { value = sed_fixed_expenses_value min = 0 multiply = 4 } }
+  set_variable = { name = sed_reserve_required value = { value = var:sed_reserve_floor } }
+  if = { limit = { net_total_income < 0 }
+   set_variable = { name = sed_reserve_required value = { value = sed_fixed_expenses_value min = 0 multiply = 6 } }
+  }
+  set_variable = { name = sed_reserve_spare value = { value = gold_reserves subtract = var:sed_reserve_required min = 0 } }
   set_variable = { name = sed_reserve_runway value = 0 }
   if = { limit = { net_total_income < 0 }
    set_variable = { name = sed_reserve_runway value = { value = var:sed_reserve_spare divide = { value = net_total_income multiply = -1 } } }
@@ -339,7 +343,7 @@ def effects(actions, dependencies, buildings):
    } }
    set_variable = { name = sed_fiscal_status value = 3 }
   }
-  else_if = { limit = { sed_coord_reserve_drawdown_safe = yes } set_variable = { name = sed_fiscal_status value = 5 } }
+  else_if = { limit = { sed_auto_fiscal_safe = yes net_total_income < 0 } set_variable = { name = sed_fiscal_status value = 5 } }
   else_if = { limit = { NOT = { sed_auto_fiscal_safe = yes } } set_variable = { name = sed_fiscal_status value = 2 } }
 ''']
     for name in lists(actions):

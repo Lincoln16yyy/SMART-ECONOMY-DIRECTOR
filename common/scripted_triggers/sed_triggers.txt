@@ -2800,33 +2800,36 @@ sed_wage_month_limit_reached = {
 }
 
 # Initial proportional policy; not an incremental cost estimate.
+# Uma leitura saudavel mantem o piso de quatro semanas de despesas fixas.
+# Um deficit operacional sem divida e financiado por ouro quando as reservas
+# cobrem seis semanas de despesas fixas. O custo da obra em si continua na
+# guarda de orcamento, que ja projeta o deficit da fila e do projeto.
 sed_auto_fiscal_safe = {
- net_total_income >= 0
- net_fixed_income >= 0
- gold_reserves >= { value = sed_fixed_expenses_value min = 0 multiply = 4 }
  OR = {
-  principal <= 0
-  AND = { credit > 0 principal <= { value = credit multiply = 0.75 } }
- }
-}
-
-# Keep a reserve floor plus six months of the currently observed deficit.
-sed_coord_reserve_drawdown_safe = {
- net_fixed_income >= 0
- net_total_income < 0
- principal <= 0
- gold_reserves >= {
-  value = sed_fixed_expenses_value min = 0 multiply = 12
-  add = { value = net_total_income multiply = -26 }
+  AND = {
+   net_total_income >= 0
+   net_fixed_income >= 0
+   gold_reserves >= { value = sed_fixed_expenses_value min = 0 multiply = 4 }
+   OR = {
+    principal <= 0
+    AND = { credit > 0 principal <= { value = credit multiply = 0.75 } }
+   }
+  }
+  AND = {
+   net_total_income < 0
+   net_fixed_income >= 0
+   principal <= 0
+   gold_reserves >= { value = sed_fixed_expenses_value min = 0 multiply = 6 }
+  }
  }
 }
 
 sed_direct_fiscal_safe = {
- OR = { sed_auto_fiscal_safe = yes sed_coord_reserve_drawdown_safe = yes }
+ sed_auto_fiscal_safe = yes
 }
 
 sed_coord_fiscal_safe = {
- OR = { sed_auto_fiscal_safe = yes sed_coord_reserve_drawdown_safe = yes }
+ sed_auto_fiscal_safe = yes
 }
 sed_direct_budget_safe = {
  has_variable = sed_build_budget_known var:sed_build_budget_known = 1

@@ -3916,8 +3916,7 @@ sed_auto_apply_monthly = {
   if = { limit = { var:sed_coord_executor = 11 } sed_auto_run_direct = yes }
   else = {
    set_variable = { name = sed_auto_action_status value = 18 }
-   if = { limit = { var:sed_coord_executor = 12 } set_variable = { name = sed_auto_action_status value = 21 } }
-   else_if = { limit = { var:sed_coord_executor = 10 } set_variable = { name = sed_auto_action_status value = 20 } }
+   if = { limit = { var:sed_coord_executor = 10 } set_variable = { name = sed_auto_action_status value = 20 } }
    else_if = { limit = { var:sed_coord_executor = 9 } set_variable = { name = sed_auto_action_status value = 19 } }
    else_if = { limit = { var:sed_coord_executor = 5 } set_variable = { name = sed_auto_action_status value = 13 } }
    else_if = { limit = { var:sed_coord_executor = 0 }
@@ -4349,11 +4348,12 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_plan_year value = year }
   set_variable = { name = sed_prev_year value = { value = year subtract = 1 } }
   set_variable = { name = sed_plan_month value = { value = month add = 1 } }
-  set_variable = { name = sed_reserve_floor value = { value = sed_fixed_expenses_value min = 0 multiply = 12 } }
-  set_variable = { name = sed_reserve_required value = {
-   value = var:sed_reserve_floor add = { value = net_total_income max = 0 multiply = -26 }
-  } }
-  set_variable = { name = sed_reserve_spare value = { value = gold_reserves subtract = var:sed_reserve_floor min = 0 } }
+  set_variable = { name = sed_reserve_floor value = { value = sed_fixed_expenses_value min = 0 multiply = 4 } }
+  set_variable = { name = sed_reserve_required value = { value = var:sed_reserve_floor } }
+  if = { limit = { net_total_income < 0 }
+   set_variable = { name = sed_reserve_required value = { value = sed_fixed_expenses_value min = 0 multiply = 6 } }
+  }
+  set_variable = { name = sed_reserve_spare value = { value = gold_reserves subtract = var:sed_reserve_required min = 0 } }
   set_variable = { name = sed_reserve_runway value = 0 }
   if = { limit = { net_total_income < 0 }
    set_variable = { name = sed_reserve_runway value = { value = var:sed_reserve_spare divide = { value = net_total_income multiply = -1 } } }
@@ -4367,7 +4367,7 @@ sed_refresh_national_plan = {
    } }
    set_variable = { name = sed_fiscal_status value = 3 }
   }
-  else_if = { limit = { sed_coord_reserve_drawdown_safe = yes } set_variable = { name = sed_fiscal_status value = 5 } }
+  else_if = { limit = { sed_auto_fiscal_safe = yes net_total_income < 0 } set_variable = { name = sed_fiscal_status value = 5 } }
   else_if = { limit = { NOT = { sed_auto_fiscal_safe = yes } } set_variable = { name = sed_fiscal_status value = 2 } }
   clear_variable_list = sed_plan_1_railway
   clear_variable_list = sed_plan_1_construction
@@ -13594,9 +13594,6 @@ sed_coord_sync = {
   else_if = { limit = { sed_coord_fiscal_safe = yes NOT = { in_default = yes } is_construction_paused = no }
    if = { limit = { var:sed_plan_goal = 2 sed_direct_fiscal_safe = yes sed_direct_supply_priority_exists = yes }
     set_variable = { name = sed_coord_executor value = 11 }
-   }
-   else_if = { limit = { sed_coord_reserve_drawdown_safe = yes construction_queue_num_queued_government_levels > 0 }
-    set_variable = { name = sed_coord_executor value = 12 }
    }
    else_if = { limit = { var:sed_plan_waiting = 1 }
     set_variable = { name = sed_coord_executor value = 10 }

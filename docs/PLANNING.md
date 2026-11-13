@@ -1345,3 +1345,37 @@ fallback para a média nacional. Qualificações continuam fora de alcance
 (primitivas de leitura inexistentes); o item fecha com `occupancy` e
 `has_failed_hires` como proxy documentado. Próximo passo possível: medir em
 campanha se a amostra por família muda a escolha de fornecedor.
+
+## 0.7.37 — Piso único de reservas na guarda fiscal
+
+As duas guardas fiscais mediam a mesma coisa em escalas diferentes: a guarda
+1–4 exigia saldo semanal não negativo, e a classificação 5 aceitava déficit com
+`12 × despesas fixas + 26 × déficit`. Um piso de `6 × despesas fixas` na guarda
+1–4 é sempre mais permissivo que a classificação 5, então as duas não podem
+conviver: a 5 ficaria inalcançável. A 0.7.37 substitui as duas por um piso
+único:
+
+- Leitura saudável (`net_total_income >= 0`): piso de `4 × despesas fixas` e a
+  regra de dívida anterior.
+- Déficit operacional (`net_total_income < 0`): `net_fixed_income >= 0`, sem
+  dívida e ouro ≥ `6 × despesas fixas`. O custo da obra em si continua na
+  guarda de orçamento, que já projeta `4 × despesas fixas + (custo semanal −
+  renda) × semanas` com piso de 26 semanas.
+
+`sed_coord_reserve_drawdown_safe` foi removido. `sed_direct_fiscal_safe` e
+`sed_coord_fiscal_safe` passam a ser aliases de `sed_auto_fiscal_safe`. A
+classificação 5 continua como rótulo: déficit tolerado e pago por ouro, agora
+sem a janela de 26 semanas. O executor 12 ("ritmo por reservas aguardando a
+fila") e o status 21 saíram junto com a guarda; com déficit financiado, a
+coordenação segue a rota normal do objetivo — inclusive delegando ferrovia ao
+Supply Chain, o que antes a classificação 5 proibia.
+
+O painel lê `sed_reserve_floor` (`4 × despesas fixas`), `sed_reserve_required`
+(`6 ×` quando há déficit), `sed_reserve_spare` e `sed_reserve_runway`, que agora
+medem o excesso acima do piso exigido na leitura.
+
+Teste sintético — 425 aprovados, com escala 0.01/1/1000 no piso de `6 ×`,
+rejeição com dívida, `net_fixed_income` negativo e ouro abaixo do piso. NÃO
+VERIFICADO na engine: nenhuma dessas leituras foi confrontada com save; os
+fatores 4 e 6 são decisões desta implementação e seguem para calibragem em
+campanha.
