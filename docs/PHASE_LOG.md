@@ -2549,3 +2549,243 @@ vanilla 1.15 e 938 avisos.
 Não verificado na engine: efeito real do nível na capacidade de comércio,
 entrada na fila em campanha, reserva de orçamento e save/reload. Roteiro em
 `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.30.
+
+## 2026-11-12 — 0.7.31: administração pública com executor próprio
+
+Objetivo: fechar o buraco dos objetivos 6 e 7 do plano quando nenhum mod
+externo de construção está presente. O plano anunciava "recuperar capacidade
+administrativa" ou "tributária" e o executor próprio não tinha ação: a revisão
+terminava em status 2, sem obra, e o Supply Chain era o único caminho.
+
+Evidência da lacuna: reprodução no harness com `bureaucracy = -10`, sem
+variáveis de ferramenta externa, resultou em `sed_plan_goal = 6`,
+`sed_coord_active` ausente, `sed_auto_action_status = 2` e `constructions = []`.
+Evidência da solução: em `common/buildings/07_government.txt` o prédio não
+declara `can_build_government`/`can_build_private`, usa
+`required_construction = construction_cost_very_low:30` (100 pontos em
+`common/script_values/building_values.txt:7`) e o `should_auto_expand` vanilla
+lê `tax_capacity`/`bureaucracy`, os mesmos sinais dos objetivos 6 e 7.
+
+Implementação: `tools/admin_capacity.py` (novo) gera `sed_admin_needed`,
+`sed_admin_candidate_eligible`, `sed_admin_approval_valid`,
+`sed_run_admin_approval` e `sed_refresh_admin`. Elegibilidade exige estado
+incorporado, `infrastructure_delta >= 0`, `can_construct_building`, ausência de
+pedido pendente e, no objetivo 7, `tax_capacity_usage > tax_capacity`; prédio
+existente precisa de `level_after_queued_constructions <= level`, ocupação
+≥ 50% e sem contratação falha. O despachante tenta a obra depois dos alvos
+ranqueados e antes do Centro de Comércio (status 15); o pulso mensal infere
+conclusão pelo nível; `construction_budget.py` reserva 100 pontos quando não há
+projeto ranqueado; `validate.py` registra a ação aprovada e a exceção de guarda
+própria, no mesmo formato do fallback de comércio.
+
+Decisão de escopo: o objetivo 9 (energia) continua delegado ao Supply Chain. O
+caminho externo com `sed_coord_executor = 9` não mudou; a ação própria só
+alcança país sem ferramenta externa detectada.
+
+Teste sintético — 402 aprovados; 8 novos em `tests/test_admin_capacity.py`:
+objetivo 6 sem coordenação, objetivo 7 agindo só no estado acima da capacidade,
+nível já enfileirado não duplica, fila privada bloqueia com status 11, objetivo
+8 não constrói, conclusão inferida no pulso, reserva de 100 pontos e texto do
+painel nos dois idiomas.
+
+Estático — geração consistente, validação local 1.15 aprovada e Tiger 1.19.0
+com 0 fatais, os mesmos 3 `unknown-field` de diário do vanilla 1.15
+(`activation_description`, `disable_evaluation`, `outcome`) e 943 avisos (938 +
+os 5 textboxes novos do painel, no mesmo estilo de colocação de chaves).
+Nenhum apontamento do Tiger cita `sed_admin`.
+
+Não verificado na engine: se `start_building_construction` de
+`building_government_administration` entra mesmo na fila do governo em
+campanha, se o nível entregue move burocracia e capacidade tributária como o
+vanilla promete, e o comportamento do painel após save/reload. Roteiro em
+`docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.31.
+
+## 2026-11-12 — 0.7.32: usina elétrica com executor próprio
+
+Objetivo: fechar o último objetivo do plano que só o Supply Chain sabia
+executar. O objetivo 9 é definido quando algum estado incorporado vê
+eletricidade local 20% acima da base; sem ferramenta externa, nenhuma ação
+existia.
+
+Evidência: `common/buildings/06_urban_center.txt:96` define
+`building_power_plant` sem `can_build_*`, com `unlocking_technologies =
+{ electrical_generation }`, `required_construction = construction_cost_medium`
+(400 pontos; `building_values.txt:5` e `data/queued_building_costs.json`) e
+`ai_value` afirmando que o país precisa de um nível em todo lugar como
+pré-requisito dos PMs elétricos. `can_construct_building` aplica tecnologia e
+tipo de cidade, então país sem a tecnologia simplesmente não tem estado
+elegível.
+
+Implementação: `tools/power_capacity.py` (novo) com `sed_power_needed`,
+`sed_power_candidate_eligible`, `sed_power_approval_valid`,
+`sed_run_power_approval` e `sed_refresh_power`; ligado ao pulso mensal, ao
+painel, ao orçamento (400 pontos) e ao despachante (depois de administração e
+antes do Centro de Comércio). `validate.py` ganhou a ação aprovada e a exceção
+de guarda própria.
+
+Decisão: a condição de preço local usa a mesma leitura do plano
+(`sg:electricity ?= { state_goods_pricier >= 0.2 }`), então o executor só age
+onde o objetivo foi levantado. Com Supply Chain detectado, o caminho externo
+(`sed_coord_executor = 8`) não mudou.
+
+Teste sintético — 410 aprovados; 8 novos em `tests/test_power_capacity.py`.
+Um teste novo falhou na primeira execução e o defeito era do teste: ele não
+simulava o nível ainda na fila (`level_after_queued_constructions`), então a
+revisão mensal concluía cedo demais e marcava abandono. O código não mudou;
+o teste seguiu o formato já usado nas 0.7.30 e 0.7.31.
+
+Estático — geração consistente, validação local 1.15 aprovada e Tiger 1.19.0
+com 0 fatais, os mesmos 3 `unknown-field` de diário do vanilla 1.15 e 948
+avisos (943 + os 5 textboxes novos do painel).
+
+Não verificado na engine: entrada da usina na fila, efeito do nível no preço
+local de eletricidade, exigência da tecnologia em campanha e save/reload.
+Roteiro em `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.32.
+
+## 2026-11-12 — 0.7.33: crescimento com economia equilibrada
+
+Relato do jogador: com o Paraguai, caixa positivo e nada em falta, o Automático
+não construiu nada. Reprodução no harness: `sed_plan_goal = 8`,
+`sed_plan_count = 0`, status 2, nenhuma obra. A causa é de desenho —
+`sed_<bem>_supply_demand` só existe com escassez, preço 20% acima da base ou
+insumo bloqueante — e a margem de referência estressada (75% de receita, 125%
+de insumos) é negativa em preço-base, então exigir retorno positivo também não
+resolveria.
+
+Primeira tentativa (descartada): colocar o crescimento dentro do plano. Isso fez
+36 testes falharem e 22 continuarem falhando: a prioridade de crescimento virava
+objetivo 2 e roubava o turno dos executores cívicos (6/7/9) e do Centro de
+Comércio. Revertido.
+
+Segunda tentativa (adotada): `tools/core_growth.py` como última ramificação do
+despachante, depois dos alvos ranqueados, de administração, de energia e do
+Centro de Comércio. Expande madeira, ferro ou ferramentas (só prédio existente)
+quando `sed_develop_core` vale: automático, finanças saudáveis, sem
+inadimplência, burocracia ≥ 0, nenhum estado acima da capacidade tributária,
+nenhuma energia 20% acima da base, nenhum bem sem produtor e o bem não mais
+barato que a base. Mantém ocupação ≥ 50%, sem contratação falha, sem nível já
+enfileirado, trabalho reservado e previsão de insumos segura, com uma tentativa
+por mês.
+
+Diagnóstico que custou duas iterações: a elegibilidade falhava no harness por
+`sed_investment_<variante>_output > 0`; o teste precisa declarar
+`production_methods` no prédio, como os testes existentes fazem. Não era defeito
+do gerador.
+
+Também nesta entrega: os blocos explicativos do painel passaram para trás do
+botão de detalhes (escopo militar, leis, política de insumos, retorno do
+investimento, unidade salarial, política do plano), deixando a tela padrão com
+objetivo, situação fiscal, prioridades e ações.
+
+Sondagem de comércio (Tiger 1.19.0): tarifa e subvenção não existem como efeito.
+Os 13 nomes testados (`set_tariff`, `set_tariffs`, `set_tariff_rate`,
+`add_tariff`, `set_trade_route_tariff`, `set_goods_tariff`, `set_subvention`,
+`add_subvention`, `set_goods_subvention`, `set_market_subvention`,
+`add_tariff_to_goods`, `set_country_tariff`, `change_tariff`) são
+`unknown token` na 1.15. O sistema de presença/vantagem não é automatizável por
+script.
+
+Teste sintético — 419 aprovados; 9 novos em `tests/test_core_growth.py`. Dois
+testes de `tests/test_investment.py` verificavam a regra antiga em bens-núcleo:
+o de pressão de preço passou a usar um bem não-núcleo (mesmo intento) e o de
+referência negativa virou teste explícito da nova regra do núcleo.
+
+Não verificado na engine: a trilha em campanha, o respeito ao orçamento e o
+painel encurtado nos dois idiomas. Roteiro em `docs/MANUAL_RUNTIME_TEST.md`,
+seção 0.7.33.
+
+## 2026-11-12 — 0.7.36: opção desligada não é opção configurada
+
+Relato do jogador: "as opções do Supply Chain estão ligando sozinhas". Era
+verdade e a culpa era do Director.
+
+Causa — a detecção de automações externas testava apenas `has_variable`. Os mods
+mantêm a variável no save com valor 0 quando o jogador desliga a opção, então
+"existe" virava "está ligada". O Director escolhia aquele executor e, ao
+coordenar, gravava `zw_var_expand_building = 1` — religando a automação que o
+jogador tinha acabado de desligar. Segundo defeito no mesmo caminho: dentro de
+`OR = { ... }` escrever `has_variable = x var:x > 0` cria **duas alternativas**
+("existe **ou** é positivo"); a presença continuava vencendo mesmo depois do
+primeiro conserto.
+
+Código — os sete pontos de detecção passam a exigir
+`AND = { has_variable = <opção> var:<opção> > 0 }`:
+`sed_competing_builder_configured`, `sed_auto_builder_*_visible_sgui`,
+`sed_coord_supply_known`, `sed_coord_advisor_known`, `sed_coord_tools_available`,
+a lista de opções do Supply Chain e `aroai_autobuild`.
+
+Harness — listas de condições agora param no primeiro falso, como a engine, para
+que `has_variable` proteja a leitura de `var:`.
+
+Teste sintético — 425 aprovados; 1 novo cobre opções em 0.
+
+Não verificado na engine: se o Supply Chain aceita as opções em 0 e se o
+Director volta a construir sozinho.
+
+## 2026-11-12 — 0.7.35: escassez sem local apto não congela mais o mês
+
+Diagnóstico veio de seis fotos de campanha (Paraguai, 1849–1850): escassez de
+ferro e de roupas, `sed_plan_missing_count = 1`, objetivo 5 ("nenhum estado
+incorporado pode hospedar o produtor") e nenhuma obra por meses, com 231 mil de
+ouro e saldo mensal positivo. O gate `sed_develop_core` exigia
+`sed_plan_missing_count = 0`, então a trilha de crescimento também ficava
+parada — o país inteiro esperava por uma indústria de ferro que não pode existir
+sem depósito.
+
+Código — gatilho novo `sed_missing_hostable` (OR por bem ausente: existe estado
+com `sed_<bem>_<variante>_found_eligible`). `sed_develop_core` passa a usar
+`NOT = { sed_missing_hostable = yes }`. Objetivo 5 e a mensagem de espera não
+mudaram: com local apto o plano continua no comando; sem local apto a trilha de
+crescimento usa o mês.
+
+Segundo bloqueio das mesmas fotos, sem mudança de código — Economy Advisor com
+construção automática ligada; por desenho de coordenação isso suspende a
+construção direta do Director. O painel já dizia isso, mas o efeito prático era
+"nada acontece".
+
+Uma observação de leitura para a próxima sessão: no save o painel mostrava
+0,00K/semana de materiais e 0,00K de teto, com 10 pontos de construção — ou não
+há setor de construção, ou ele está com ocupação zero. Isso não bloqueia a
+trilha (o gate do setor exige ocupação ≥ 50%), mas explica por que o Paraguai
+não escala obras.
+
+Teste sintético — 424 aprovados; 2 novos cobrem os dois lados do gatilho.
+
+Não verificado na engine: campanha com Advisor desligado e a hipótese de que o
+ferro sem depósito é o bem que gera o objetivo 5.
+
+## 2026-11-12 — 0.7.34: setor de construção na trilha de crescimento
+
+O plano só ranqueia o setor de construção quando a fila pública já tem três
+projetos (`num_queued_government_constructions >= 3`), então uma fila longa
+nunca comprava capacidade — justamente o gargalo de todas as outras obras.
+
+Código — `sed_core_construction_eligible` (estado) exige setor existente,
+ocupação ≥ 50%, sem contratação falha, sem nível enfileirado e
+`construction_queue_government_duration >= 12` semanas; sob `sed_develop_core`.
+`sed_run_core_construction_approval` enfileira um nível (25 pontos). Fecha a
+trilha de crescimento, depois de madeira, ferro e ferramentas.
+
+Dois defeitos meus no caminho: um `}` extra no guarda do efeito novo (o
+validador acusou "Unexpected closing brace" e reportou o arquivo de efeitos
+inteiro como indefinido) e o teste do setor sem `production_methods` no prédio
+de construção, o que deixava o orçamento "desconhecido" (sem capacidade
+material) e bloqueava a execução.
+
+Achado de calibragem (hipótese) — a guarda `sed_direct_budget_safe` exige
+`despesas fixas × 4 + max(0, custo semanal de materiais − renda líquida) ×
+semanas de financiamento`. Com setor de construção, o custo semanal é
+`pontos ativos × custo do ponto`. No harness (país pequeno, 10 pontos, madeira)
+isso dá 88.600 de ouro exigidos contra 1.000 disponíveis — status 22, nada é
+construído. Se a mesma conta aparecer em campanha, essa guarda é o bloqueio
+real do relato "caixa positivo e nenhuma obra", mais até que a ausência de
+prioridade corrigida na 0.7.33. Não alterei a fórmula: o número precisa de
+confronto com um save real antes de recalibrar. Roteiro em
+`docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.34, passo 4.
+
+Teste sintético — 422 aprovados; 3 novos cobrem fila longa, fila curta e nível
+já enfileirado. O teste de fila longa usa tesouro de 400.000 porque a guarda
+exige a cobertura da fila.
+
+Não verificado na engine: entrada do nível na fila, duração medida pela engine
+contra as 12 semanas do gatilho e efeito no ritmo de obras.

@@ -75,10 +75,32 @@ python3 tools/package_mod.py
 python3 tools/install_mod.py --user-data '/home/lincoln-ii/.config/hydralauncher/wine-prefixes/529340/drive_c/users/steamuser/Documents/Paradox Interactive/Victoria 3'
 ```
 
-A 0.7.30 executou 394 testes sintéticos (205 s) e o último `--check`
-confirmou sincronia. A instalação local verificada mais recente é a 0.7.27,
-com conferência de 14 arquivos; a 0.7.28–0.7.30 ainda não foi instalada.
+A 0.7.33 executou 419 testes sintéticos (186 s), `--check` sincronizado,
+validação local aprovada e Tiger 1.19.0 com 0 fatais, 3 `unknown-field` de
+diário do vanilla 1.15 e 949 avisos. Instalação local da 0.7.33 confirmada:
+14 arquivos, backup em
+`sed_backups/mod_before_0.7.33_20261112_201035_100577`, ordem de mods
+inalterada e `descriptor.mod` instalado com `version="0.7.33"`. O
+`logs/error.log` da sessão anterior (0.7.30, 1832 linhas) não tem nenhuma
+referência a `sed_`. Nenhuma partida foi aberta com a 0.7.33.
 [confirmado 2026-11-12]
+
+### Conferir se o jogo está fechado antes de instalar
+
+`pgrep -f "binaries/victoria3.exe"` **não serve**: o próprio comando contém o
+padrão, então o `pgrep` casa com a linha de comando do shell que o executa e
+reporta "jogo aberto" sempre. Isso abortou duas instalações (0.7.34 e 0.7.35)
+antes de perceber. Use um destes:
+
+```bash
+pgrep -x victoria3.exe || echo fechado
+ps -eo pid,args | grep -i victoria | grep -v grep | grep -v "ps -eo"
+```
+
+[confirmado 2026-11-12 — sem processo `victoria3.exe` e instalação da 0.7.35
+concluída: 14 arquivos, backup em
+`sed_backups/mod_before_0.7.35_20261112_211602_983311`, ordem de mods
+inalterada, `descriptor.mod` = 0.7.35]
 
 ## Documentação exportada do jogo
 
@@ -133,6 +155,14 @@ validada com o Tiger 1.19.0 (`--game '/home/lincoln-ii/Games/Victoria 3'`):
   `error(unknown-field): unknown token`. Não existem como efeito de script.
 - Conclusão: script só lê comércio (pedidos, faixa de preço, escassez). Abrir
   rota é ação da UI/IA do jogador.
+
+- Tarifa e subvenção (sondagem 2026-11-12, `/tmp/sed_tariff`, Tiger 1.19.0):
+  `set_tariff`, `set_tariffs`, `set_tariff_rate`, `add_tariff`,
+  `set_trade_route_tariff`, `set_goods_tariff`, `set_subvention`,
+  `add_subvention`, `set_goods_subvention`, `set_market_subvention`,
+  `add_tariff_to_goods`, `set_country_tariff` e `change_tariff` são todos
+  `unknown token`. O sistema de presença/vantagem da 1.9+ não tem efeito de
+  script; não insistir nesse caminho. [confirmado 2026-11-12]
 
 Formato de evento (vanilla `events/1848.txt`, evento `1848.1`): `type`, `placement`,
 `title`, `desc`, `flavor`, `duration`, `icon`, `on_created_soundeffect`,

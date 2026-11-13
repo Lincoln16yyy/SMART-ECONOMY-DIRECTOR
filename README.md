@@ -1,5 +1,43 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.36, uma opção **desligada** de outro mod não é mais confundida com opção
+ligada. Os mods deixam a variável em 0 quando o jogador desliga a opção; o
+Director lia a mera existência da variável, escolhia aquele executor e ainda
+religava a opção por conta própria. Agora só conta valor maior que zero.
+
+Na 0.7.35, um bem em escassez sem produtor deixa de congelar o mês: se
+**nenhum** estado pode hospedar a indústria, a trilha de crescimento volta a ter
+a vez em vez de esperar para sempre. É o caso do Paraguai, que tem escassez de
+ferro sem depósito em estado incorporado.
+
+Na 0.7.34, a trilha de crescimento também compra capacidade de construção: com
+fila pública de 12 semanas ou mais, o Automático amplia o setor de construção
+um nível por mês. É o projeto mais barato do jogo (25 pontos) e destrava todos
+os outros, mas continua sujeito à guarda de materiais — que exige ouro para as
+semanas de fila que a renda não cobre.
+
+Na 0.7.33, o Automático deixa de ficar parado numa economia equilibrada. Antes,
+o plano só criava prioridade com escassez, bem 20% acima da base ou insumo
+bloqueante — com o país saudável, o mês terminava sem obra nenhuma. Agora, sem
+desvio administrativo, tributário, de energia ou de bem sem produtor, o
+despachante expande madeira, ferro e ferramentas enquanto o mercado não estiver
+mais barato que a base, um nível por mês e sob as mesmas guardas. A expansão só
+vale para prédios que já existem. Também nesta versão os blocos explicativos do
+painel passam para trás do botão de detalhes, deixando a tela padrão curta.
+
+Na 0.7.32, o objetivo 9 (energia local 20% acima da base) ganha o mesmo
+tratamento: sem Supply Chain detectado, o Automático amplia a usina elétrica um
+nível por mês no estado com energia cara que aceite a obra, reservando 400
+pontos e exigindo a tecnologia de geração elétrica pelo próprio jogo. Com a
+ferramenta externa, o caminho dela continua sendo o usado.
+
+Na 0.7.31, os objetivos 6 e 7 do plano (burocracia nacional negativa e estado
+usando mais capacidade tributária do que tem) deixam de ficar só na mão do
+Supply Chain: sem ferramenta externa detectada, o Automático amplia a
+administração pública um nível por mês no estado que aceita a obra, sob as
+mesmas guardas de fila privada, pausa, orçamento e uma tentativa por mês. O
+objetivo 9 (energia) continua delegado.
+
 Na 0.7.30, quando a escassez de um bem não tem produtor no país e nenhum
 estado pode receber a fundação, o Automático amplia um Centro de Comércio
 existente ou funda o primeiro para comprar capacidade de comércio. É o último
@@ -257,7 +295,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.7.30.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.7.36.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 

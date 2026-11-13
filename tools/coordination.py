@@ -75,7 +75,8 @@ def effects():
    else = {{ remove_variable = {option} }}''' for name, option in SUPPLY_POLICY_OPTIONS)
     cleanup = '\n'.join('  remove_variable = ' + name for name in VARIABLES)
     supply_options = [option for name, option, _ in OPTIONS if name != 'advisor']
-    supply = ' '.join('has_variable = ' + option for option in supply_options + list(SUPPLY_HINTS))
+    supply = ' '.join(f'AND = {{ has_variable = {option} var:{option} > 0 }}'
+                      for option in supply_options + list(SUPPLY_HINTS))
     # No foreign write is permitted outside these two checked effects.
     return f'''sed_coord_capture_supply_policy = {{
  if = {{ limit = {{ is_player = yes has_variable = sed_enabled has_variable = sed_coord_active
@@ -97,7 +98,10 @@ sed_coord_enable = {{
  if = {{
   limit = {{ is_player = yes has_variable = sed_enabled NOT = {{ has_variable = sed_coord_active }} }}
 {snapshot}
-  if = {{ limit = {{ OR = {{ has_variable = advisor_enabled has_variable = advisor_auto_construction_enabled }} }} set_variable = {{ name = sed_coord_advisor_known value = yes }} }}
+  if = {{ limit = {{ OR = {{
+   AND = {{ has_variable = advisor_enabled var:advisor_enabled > 0 }}
+   AND = {{ has_variable = advisor_auto_construction_enabled var:advisor_auto_construction_enabled > 0 }}
+  }} }} set_variable = {{ name = sed_coord_advisor_known value = yes }} }}
   if = {{ limit = {{ OR = {{ {supply} }} }} set_variable = {{ name = sed_coord_supply_known value = yes }} }}
   set_variable = {{ name = sed_coord_active value = yes }}
   sed_coord_capture_advisor_policy = yes
@@ -135,7 +139,7 @@ sed_coord_sync = {{
 {remove}
   set_variable = {{ name = sed_coord_executor value = 0 }}
   set_variable = {{ name = sed_coord_advisor_policy value = 0 }}
-  if = {{ limit = {{ has_variable = aroai_autobuild }} set_variable = {{ name = sed_coord_executor value = 5 }} }}
+  if = {{ limit = {{ has_variable = aroai_autobuild var:aroai_autobuild > 0 }} set_variable = {{ name = sed_coord_executor value = 5 }} }}
   else_if = {{ limit = {{ sed_pm_upgrade_month_limit_reached = yes }}
    set_variable = {{ name = sed_coord_executor value = 13 }}
   }}
@@ -206,6 +210,8 @@ sed_coord_sync = {{
 
 def triggers():
     option_names = [option for _, option, _ in OPTIONS] + list(SUPPLY_HINTS)
-    options = '\n'.join('  has_variable = ' + option for option in option_names)
-    return ('sed_coord_tools_available = {\n OR = {\n  has_variable = advisor_enabled\n'
+    # Off options stay at 0 in the other mods' saves; only an enabled option
+    # (or the advisor mod flag itself) offers real coordination.
+    options = '\n'.join(f'  AND = {{ has_variable = {option} var:{option} > 0 }}' for option in option_names)
+    return ('sed_coord_tools_available = {\n OR = {\n  AND = { has_variable = advisor_enabled var:advisor_enabled > 0 }\n'
             + options + '\n }\n}\n')

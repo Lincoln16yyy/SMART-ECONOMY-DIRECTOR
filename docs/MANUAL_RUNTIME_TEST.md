@@ -725,6 +725,102 @@ de um bem do catálogo (ex.: madeira) e um prédio operante do tipo.
 3. Troque o jogo para inglês e confirme que o texto está em inglês (antes da
    0.7.29 o arquivo inglês saía em português).
 
+## Opção desligada 0.7.36 (pendente)
+
+1. Com Supply Chain e Economy Advisor instalados e **todas** as opções de
+automação desligadas, entre no Automático.
+2. O painel não deve listar "Opções externas detectadas" nem "Executor
+escolhido: Supply Chain".
+3. As opções do outro mod devem **continuar em 0** depois de um mês (era o
+sintoma: elas religavam sozinhas).
+4. O Director deve enfileirar obra direta, respeitando as guardas usuais.
+
+## Escassez sem local apto 0.7.35 (pendente)
+
+Setup do relato: Paraguai, escassez de ferro (sem depósito em estado
+incorporado).
+
+1. **Economy Advisor desligado** (construção automática), Diretor em Automático.
+2. Antes da correção, o painel ficava em "Objetivo atual: fundar a indústria
+   ausente... nenhum estado incorporado pode hospedar o produtor" e nada era
+   construído. Esperado agora: a mensagem continua, mas o mês seguinte deve
+   render uma obra de crescimento (madeira, ferro, ferramentas ou setor).
+3. Se o ferro aparecer como escassez e o país não tiver depósito, confirme que
+   o plano não volta a congelar assim que a fila esvaziar.
+4. Anote se a escassez de roupas (que **tem** local apto) é resolvida pelo
+   plano: nesse caso o objetivo deve virar 2, não 5.
+
+## Setor de construção 0.7.34 (pendente)
+
+1. Save com setor de construção existente, fila pública com 12+ semanas e caixa
+   saudável. Automático por um mês. Esperado: um nível de
+   `building_construction_sector` na fila e status 1 no painel.
+2. Fila curta (< 12 semanas): nada deve ser enfileirado.
+3. Nível já na fila: o mês seguinte deve esperar.
+4. **Diagnóstico da guarda de materiais:** se o painel mostrar status 22 com
+   caixa positivo, anote os valores de `sed_build_budget_weekly`,
+   `sed_build_budget_required_gold` e `gold_reserves` no save. É a evidência que
+   falta para calibrar a reserva exigida.
+
+## Crescimento com economia equilibrada 0.7.33 (pendente)
+
+1. Save do Paraguai saudável (caixa positivo, nada em escassez, preços na base)
+   com serraria, mina de ferro ou oficina de ferramentas existentes. Automático
+   por 3 meses. Esperado: uma obra de expansão desses tipos por mês, sem esperar
+   escassez. Devolver: captura do painel resumido e da fila.
+2. Confirme que **não** há fundação de prédio novo por essa trilha: só tipos que
+   já existem no estado são ampliados.
+3. Burocracia negativa, estado acima da capacidade tributária ou energia 20%
+   acima da base: a trilha de crescimento deve ceder lugar ao executor do
+   objetivo correspondente (administração ou usina).
+4. Bem mais barato que a base: aquele tipo não deve ser ampliado.
+5. Com fila privada ocupada: status 11, nenhuma obra.
+6. Painel: confirme que a tela padrão mostra objetivo, situação fiscal e
+   prioridades, e que os blocos longos aparecem só depois de "Mostrar
+   indicadores e detalhes". Conferir nos dois idiomas.
+
+## Usina elétrica 0.7.32 (pendente)
+
+1. Save de teste **sem** Supply Chain, com a tecnologia de geração elétrica já
+   pesquisada e um estado incorporado onde a eletricidade local esteja ao menos
+   20% acima da base. Automático por um mês. Esperado: um nível de
+   `building_power_plant` na fila do governo e a seção "Usina elétrica" no
+   painel com o pedido enfileirado. Devolver: captura do painel e da fila.
+2. Sem a tecnologia: nenhuma obra, nenhum estado elegível e o objetivo deve cair
+   para 8 no mês seguinte.
+3. Estado com energia barata (< 20% acima da base) não deve receber a obra,
+   mesmo sendo o mais populoso.
+4. Com fila privada ocupada, status 11 e nenhuma obra; a segunda revisão deve
+   ocorrer 7 dias depois, se a fila esvaziar.
+5. Confira o custo de 400 pontos por nível na fila e a reserva de orçamento do
+   painel cobrindo o projeto.
+6. Salve e recarregue no Automático: pedido pendente reconhecido e
+   `sed_power_completed` subindo ao concluir.
+7. Com Supply Chain ativo, confirme que a opção `zw_var_scsab_construct_power_plant`
+   continua sendo o caminho e que o Director não enfileira obra própria.
+
+## Administração pública 0.7.31 (pendente)
+
+1. Save de teste **sem** Economy Advisor e **sem** Supply Chain ativos, com
+   burocracia nacional negativa (objetivo 6) e um estado incorporado com
+   infraestrutura ≥ 0. Automático por um mês. Esperado: um nível de
+   `building_government_administration` na fila do governo, seção
+   "Administração pública" no painel com o pedido enfileirado. Devolver:
+   captura do painel e da fila.
+2. Burocracia ≥ 0 e um estado com `tax_capacity_usage > tax_capacity`
+   (objetivo 7): a obra deve ir para esse estado, não para o mais populoso.
+3. Com o prédio já tendo um nível na fila, avance um mês: nada novo deve ser
+   enfileirado (espera a fila andar).
+4. Com fila privada ocupada, avance um mês: status 11 e nenhuma obra; a segunda
+   revisão deve ocorrer 7 dias depois, se a fila privada esvaziar.
+5. Confira que o custo na fila corresponde a 100 pontos por nível e que a
+   reserva de orçamento do painel cobre esse projeto.
+6. Salve e recarregue no Automático: o pedido pendente deve continuar
+   reconhecido e, ao concluir, `sed_admin_completed` deve subir.
+7. Com Supply Chain ativo, confirme que o caminho externo (opção
+   `zw_var_scsab_gov_admin`) continua sendo o usado e que o Director não
+   enfileira obra própria em paralelo.
+
 ## Centro de Comércio 0.7.30 (pendente)
 
 1. Save de teste com um bem do catálogo em escassez real e **sem produtor** no

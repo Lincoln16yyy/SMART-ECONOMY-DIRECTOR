@@ -41,15 +41,21 @@ class InvestmentTests(unittest.TestCase):
         self.assertNotIn('sed_wood_candidates', self.c.variable_lists)
 
     def test_automatic_waits_when_price_pressure_is_below_threshold(self):
-        self.producer('building_logging_camp', ['pm_simple_forestry'])
-        self.c.market_goods['wood'] = dict(market_goods_has_goods_shortage=False,
-                                         market_goods_buy_orders=100, market_goods_sell_orders=95,
-                                         market_goods_pricier=0.1)
+        # A non-core good: the core inputs have their own growth lane since
+        # 0.7.33 and would build even below the 20% threshold.
+        self.producer('building_food_industry', ['pm_bakery'])
+        self.c.market_goods['groceries'] = dict(market_goods_has_goods_shortage=False,
+                                               market_goods_buy_orders=100, market_goods_sell_orders=95,
+                                               market_goods_pricier=0.1)
         self.c.run('sed_set_mode_automatic')
         self.c.run('sed_auto_apply_monthly')
         self.assertEqual(self.c.constructions, [])
 
-    def test_expensive_growth_requires_positive_material_reference(self):
+    def test_core_growth_does_not_wait_for_a_positive_material_reference(self):
+        # Deliberate rule change in 0.7.33: the stressed reference (75% revenue,
+        # 125% inputs) is negative for most industries at base prices, so waiting
+        # for it kept a healthy country idle. Wood, iron and tools grow under the
+        # fiscal guard instead; every other good still needs the reference.
         self.producer('building_tooling_workshop',
                       ['pm_crude_tools', 'pm_rotary_valve_engine_building_tooling_workshop'])
         self.c.market_goods['tools'] = dict(market_goods_has_goods_shortage=False,
@@ -57,7 +63,8 @@ class InvestmentTests(unittest.TestCase):
                                           market_goods_pricier=0.25)
         self.c.run('sed_set_mode_automatic')
         self.c.run('sed_auto_apply_monthly')
-        self.assertEqual(self.c.constructions, [])
+        self.assertEqual([item.get('building') for item in self.c.constructions],
+                         ['building_tooling_workshop'])
 
     def test_expensive_growth_keeps_labor_guard(self):
         self.producer('building_logging_camp', ['pm_simple_forestry'], population=1)

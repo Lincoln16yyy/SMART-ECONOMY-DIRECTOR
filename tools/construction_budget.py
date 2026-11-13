@@ -31,6 +31,12 @@ PROJECT_POINTS = {
 # Trade Center: required_construction = construction_cost_very_low (100 points),
 # common/script_values/building_values.txt:7 in the installed 1.15 game.
 TRADE_CENTER_POINTS = 100
+# Government administration: required_construction = construction_cost_very_low
+# as well (common/buildings/07_government.txt:30 in the installed 1.15 game).
+ADMIN_POINTS = 100
+# Power plant: required_construction = construction_cost_medium (400 points),
+# common/buildings/06_urban_center.txt:111 and data/queued_building_costs.json.
+POWER_POINTS = QUEUED_COSTS['building_power_plant']
 VARIABLES = ['sed_build_budget_known', 'sed_build_budget_points',
              'sed_build_budget_point_cost', 'sed_build_budget_weekly',
              'sed_build_budget_required_gold', 'sed_build_budget_material_capacity',
@@ -115,6 +121,29 @@ def effects(founding_projects=()):
         result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0
    any_scope_state = {{ has_variable = sed_plan_{action}_rank var:sed_plan_{action}_rank = 1 }} }}
    set_variable = {{ name = sed_build_budget_project_points value = {points} }}
+  }}''')
+    # No ranked project this month: the administration goal (6/7) is dispatched
+    # before the Trade Center fallback, so its points are reserved first.
+    result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0
+   any_scope_state = {{ sed_admin_candidate_eligible = yes }} }}
+   set_variable = {{ name = sed_build_budget_project_points value = {ADMIN_POINTS} }}
+  }}''')
+    # Goal 9 follows, before the Trade Center fallback as well.
+    result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0
+   any_scope_state = {{ sed_power_candidate_eligible = yes }} }}
+   set_variable = {{ name = sed_build_budget_project_points value = {POWER_POINTS} }}
+  }}''')
+    # Growth lane of the core inputs is the very last branch of the dispatcher.
+    for good, points in (('wood', PROJECT_POINTS['wood']), ('iron', PROJECT_POINTS['iron']),
+                         ('tools', PROJECT_POINTS['tools'])):
+        result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0
+   any_scope_state = {{ sed_core_{good}_eligible = yes }} }}
+   set_variable = {{ name = sed_build_budget_project_points value = {points} }}
+  }}''')
+    # Growth lane also covers the construction sector, the cheapest project.
+    result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0
+   any_scope_state = {{ sed_core_construction_eligible = yes }} }}
+   set_variable = {{ name = sed_build_budget_project_points value = {PROJECT_POINTS['construction']} }}
   }}''')
     # No ranked project this month: the Trade Center fallback is the next work.
     result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0

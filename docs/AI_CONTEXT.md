@@ -1,7 +1,46 @@
 # Contexto de continuidade
 
-Última entrega do mod — 0.7.30 gerada e testada; instalação e campanha pendentes.
-Código — novo último recurso do Automático: quando um bem em escassez não tem
+Última entrega do mod — 0.7.36 gerada e testada; instalação pendente de nova campanha.
+Código — 0.7.36 corrige a detecção de automações externas: opção desligada (var =
+0) era lida como ligada porque só `has_variable` era testado, então o Director
+coordena e **religava** a opção do outro mod. Agora todos os pontos usam
+`AND = { has_variable = x var:x > 0 }`; dentro de `OR`, as duas condições sem
+AND eram alternativas, não conjunção. Testes 425.
+Antes: 0.7.35 corrigiu a paralisia de campanha: escassez de bem sem produtor e
+sem local apto em nenhum estado (ferro sem depósito, no Paraguai) marcava
+objetivo 5 e barrava a trilha de crescimento por `sed_plan_missing_count = 0`,
+ficando meses sem obra com caixa positivo. Agora `sed_missing_hostable` só é
+verdadeiro se algum estado pode hospedar o produtor; sem local apto, a trilha
+de crescimento recupera o mês. Objetivo 5 e mensagem seguem iguais.
+Também confirmado em campanha (fotos): Economy Advisor com construção automática
+ligada suspende a construção direta do Director por desenho de coordenação.
+Antes: 0.7.34 acrescentou o setor de construção à trilha de crescimento (fila
+pública ≥ 12 semanas, 25 pontos) e registra um achado de calibragem: a guarda de
+materiais exige `despesas fixas × 4 + (custo semanal − renda) × semanas`; com
+setor presente isso deu 88.600 de ouro no harness para país pequeno e pode ser o
+motivo real do travamento em campanha (status 22). Hipotese, precisa de save.
+Antes: 0.7.33 corrigiu o relato do Paraguai: economia equilibrada não gerava
+prioridade e o mês terminava sem obra. `tools/core_growth.py` é a última
+ramificação do despachante e expande madeira, ferro ou ferramentas (só prédio
+existente, 1 nível/mês, sob as guardas) quando `sed_develop_core` vale: sem
+burocracia negativa, sem estado acima da capacidade tributária, sem energia 20%
+acima da base e sem bem sem produtor. Blocos explicativos do painel foram para
+trás do botão de detalhes. Tarifa/subvenção: 13 nomes sondados no Tiger são
+`unknown token`; presença/vantagem não é scriptável.
+Antes: 0.7.32 deu executor próprio ao objetivo 9: sem ferramenta externa, o
+executor próprio amplia `building_power_plant` um nível por mês, só em estado
+incorporado com infraestrutura ≥ 0, `can_construct_building` aceitando (o jogo
+exige `electrical_generation`) e eletricidade local ≥ 20% acima da base; 400
+pontos reservados, conclusão inferida pelo nível, antes do Centro de Comércio.
+Com Supply Chain detectado, o caminho externo continua. Antes: 0.7.31 fechou os
+objetivos 6 e 7: sem ferramenta externa
+detectada, o executor próprio amplia `building_government_administration` um
+nível por mês (estado incorporado, infraestrutura ≥ 0, aceita a obra; no
+objetivo 7 só onde `tax_capacity_usage > tax_capacity`), antes do fallback de
+Centro de Comércio, com 100 pontos reservados e conclusão inferida pelo nível.
+Antes disso, burocracia negativa terminava a revisão em status 2 sem obra.
+Antes: Centro de Comércio como último recurso (0.7.30) quando o bem em escassez
+não tem
 produtor no país (`var:sed_plan_missing_<bem> = 1`, escopo país) e nenhum estado
 pode receber a fundação, o Director amplia um Centro de Comércio existente ou
 funda o primeiro, comprando capacidade de comércio. Não abre rota, não altera
@@ -13,8 +52,10 @@ idioma e `\n` escapado). Antes: cessão de PM ao Auto-Apply PMs; leitura do
 Controllable Private Construction; unidade salarial por família; meta
 plurianual; duração da fila pela engine. Comércio: script não abre rota
 (removido na 1.9); autor/investidor e qualificações não têm primitiva legível.
-Teste sintético — 394 testes aprovados.
-Documentação — README e STATUS foram sincronizados com a 0.7.30; a lista de
+Teste sintético — 425 testes aprovados.
+Documentação — README e STATUS foram sincronizados com a 0.7.34; a lista de
+lacunas herdada da 0.6.26 estava errada em PMs, fundação de prédios e salários
+militares. Antes: README e STATUS sincronizados com a 0.7.30; a lista de
 lacunas herdada da 0.6.26 estava errada em PMs, fundação de prédios e salários
 militares, e o catálogo já tem doze bens (papel desde a 0.7.14). Nenhuma
 mudança de comportamento nesta sincronização.
@@ -28,9 +69,14 @@ Ler `AGENTS.md`, `docs/agent/vic3-modding/SKILL.md` e suas referências.
 O ambiente registra o Tiger, o resultado da sondagem de comércio e o Smart
 Government instalado (1.0.0, esquema 2, variáveis `sg_*`). A pasta de
 documentação exportada do jogo continua ausente.
-Próximo passo — executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.30 (Centro de
-Comércio como último recurso, Isolacionismo e estado com infraestrutura
-negativa), 0.7.29 (evento de importação com o novo texto, nos dois idiomas),
+Próximo passo — ler a linha de status do painel em campanha: se aparecer 22, a
+guarda de materiais é o bloqueio e precisamos do save para calibrar. Depois
+executar `docs/MANUAL_RUNTIME_TEST.md`, seção 0.7.34 (setor de construção sob
+fila longa), 0.7.33 (crescimento com economia equilibrada e painel curto), 0.7.32 (usina elétrica no objetivo 9,
+tecnologia e fila privada), 0.7.31 (administração
+pública nos objetivos 6 e 7, fila privada e save/reload), 0.7.30
+(Centro de Comércio como último recurso, Isolacionismo e estado com
+infraestrutura negativa), 0.7.29 (evento de importação com o novo texto, nos dois idiomas),
 0.7.28 (PM cedido
 com o Auto-Apply PMs ligado), 0.7.27 (seção de controle privado só com o outro
 mod ativo), depois 0.7.23 (duração da

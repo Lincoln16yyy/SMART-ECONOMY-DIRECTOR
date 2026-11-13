@@ -2692,6 +2692,26 @@ sed_auto_executor_safe = {
  sed_direct_fiscal_safe = yes
  sed_direct_budget_safe = yes
 }
+# A missing producer keeps its own objective and blocks the growth lane only
+# while some state can actually host the industry. Iron with no deposit and a
+# goods whose technology or land is absent would otherwise hold the month
+# forever and nothing would ever be built.
+sed_missing_hostable = {
+ OR = {
+  AND = { has_variable = sed_plan_missing_wood var:sed_plan_missing_wood = 1 any_scope_state = { OR = { sed_wood_logging_camp_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_iron var:sed_plan_missing_iron = 1 any_scope_state = { OR = { sed_iron_iron_mine_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_coal var:sed_plan_missing_coal = 1 any_scope_state = { OR = { sed_coal_coal_mine_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_grain var:sed_plan_missing_grain = 1 any_scope_state = { OR = { sed_grain_wheat_farm_found_eligible = yes sed_grain_rye_farm_found_eligible = yes sed_grain_rice_farm_found_eligible = yes sed_grain_maize_farm_found_eligible = yes sed_grain_millet_farm_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_fabric var:sed_plan_missing_fabric = 1 any_scope_state = { OR = { sed_fabric_cotton_plantation_found_eligible = yes sed_fabric_livestock_ranch_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_tools var:sed_plan_missing_tools = 1 any_scope_state = { OR = { sed_tools_tooling_workshop_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_groceries var:sed_plan_missing_groceries = 1 any_scope_state = { OR = { sed_groceries_food_industry_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_clothes var:sed_plan_missing_clothes = 1 any_scope_state = { OR = { sed_clothes_textile_mill_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_small_arms var:sed_plan_missing_small_arms = 1 any_scope_state = { OR = { sed_small_arms_arms_industry_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_artillery var:sed_plan_missing_artillery = 1 any_scope_state = { OR = { sed_artillery_artillery_foundry_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_ammunition var:sed_plan_missing_ammunition = 1 any_scope_state = { OR = { sed_ammunition_munition_plant_found_eligible = yes } } }
+  AND = { has_variable = sed_plan_missing_paper var:sed_plan_missing_paper = 1 any_scope_state = { OR = { sed_paper_paper_mill_found_eligible = yes } } }
+ }
+}
 sed_direct_supply_priority_exists = {
  OR = {
   any_scope_state = { var:sed_plan_wood_rank = 1 sed_wood_candidate_eligible = yes }
@@ -2708,16 +2728,30 @@ sed_direct_supply_priority_exists = {
   any_scope_state = { var:sed_plan_paper_rank = 1 sed_paper_candidate_eligible = yes }
  }
 }
+# Core inputs may grow only when no other objective has a claim: a negative
+# bureaucracy, a state over its tax capacity, dear local power, or a missing
+# producer that some state could actually host keep their own executor and must
+# not be preempted. A missing producer with no host site anywhere is left to the
+# plan's waiting message and does not starve the growth lane.
+sed_develop_core = {
+ has_variable = sed_mode_automatic
+ sed_coord_fiscal_safe = yes
+ NOT = { in_default = yes }
+ bureaucracy >= 0
+ NOT = { sed_missing_hostable = yes }
+ NOT = { any_scope_state = { is_incorporated = yes tax_capacity_usage > tax_capacity } }
+ NOT = { any_scope_state = { sg:electricity ?= { state_goods_pricier >= 0.2 } } }
+}
 sed_competing_builder_configured = {
  OR = {
-  has_variable = advisor_auto_construction_enabled
-  has_variable = zw_var_expand_building
-  has_variable = zw_var_more_construction_sectors
-  has_variable = zw_var_scsab_construct_railway
-  has_variable = zw_var_scsab_construct_power_plant
-  has_variable = zw_var_scsab_gov_admin
-  has_variable = zw_var_scsab_gov_admin_for_tax
-  has_variable = aroai_autobuild
+  AND = { has_variable = advisor_auto_construction_enabled var:advisor_auto_construction_enabled > 0 }
+  AND = { has_variable = zw_var_expand_building var:zw_var_expand_building > 0 }
+  AND = { has_variable = zw_var_more_construction_sectors var:zw_var_more_construction_sectors > 0 }
+  AND = { has_variable = zw_var_scsab_construct_railway var:zw_var_scsab_construct_railway > 0 }
+  AND = { has_variable = zw_var_scsab_construct_power_plant var:zw_var_scsab_construct_power_plant > 0 }
+  AND = { has_variable = zw_var_scsab_gov_admin var:zw_var_scsab_gov_admin > 0 }
+  AND = { has_variable = zw_var_scsab_gov_admin_for_tax var:zw_var_scsab_gov_admin_for_tax > 0 }
+  AND = { has_variable = aroai_autobuild var:aroai_autobuild > 0 }
  }
 }
 sed_private_control_configured = {
@@ -3826,19 +3860,19 @@ sed_founding_input_paper_mill_safe = {
 }
 sed_coord_tools_available = {
  OR = {
-  has_variable = advisor_enabled
-  has_variable = advisor_auto_construction_enabled
-  has_variable = zw_var_expand_building
-  has_variable = zw_var_more_construction_sectors
-  has_variable = zw_var_scsab_construct_railway
-  has_variable = zw_var_scsab_construct_power_plant
-  has_variable = zw_var_scsab_gov_admin
-  has_variable = zw_var_scsab_gov_admin_for_tax
-  has_variable = zw_var_scsab_gov_admin_for_institution
-  has_variable = zw_var_added_constructions
-  has_variable = zw_var_labor_threshold
-  has_variable = zw_var_more_construction_sectors_gold_reserves
-  has_variable = zw_var_develop_incorporated_states
+  AND = { has_variable = advisor_enabled var:advisor_enabled > 0 }
+  AND = { has_variable = advisor_auto_construction_enabled var:advisor_auto_construction_enabled > 0 }
+  AND = { has_variable = zw_var_expand_building var:zw_var_expand_building > 0 }
+  AND = { has_variable = zw_var_more_construction_sectors var:zw_var_more_construction_sectors > 0 }
+  AND = { has_variable = zw_var_scsab_construct_railway var:zw_var_scsab_construct_railway > 0 }
+  AND = { has_variable = zw_var_scsab_construct_power_plant var:zw_var_scsab_construct_power_plant > 0 }
+  AND = { has_variable = zw_var_scsab_gov_admin var:zw_var_scsab_gov_admin > 0 }
+  AND = { has_variable = zw_var_scsab_gov_admin_for_tax var:zw_var_scsab_gov_admin_for_tax > 0 }
+  AND = { has_variable = zw_var_scsab_gov_admin_for_institution var:zw_var_scsab_gov_admin_for_institution > 0 }
+  AND = { has_variable = zw_var_added_constructions var:zw_var_added_constructions > 0 }
+  AND = { has_variable = zw_var_labor_threshold var:zw_var_labor_threshold > 0 }
+  AND = { has_variable = zw_var_more_construction_sectors_gold_reserves var:zw_var_more_construction_sectors_gold_reserves > 0 }
+  AND = { has_variable = zw_var_develop_incorporated_states var:zw_var_develop_incorporated_states > 0 }
  }
 }
 # Country scope. A shortage of a good with no producer anywhere in the country,
@@ -3890,7 +3924,200 @@ sed_trade_center_approval_valid = {
   sed_execution_mode_permits_approval = yes
  }
 }
-sed_pm_upgrade_month_limit_reached = {
+# Country scope. Goals 6 and 7 are computed by the national plan.
+sed_admin_needed = {
+ has_variable = sed_plan_goal
+ OR = {
+  var:sed_plan_goal = 6
+  var:sed_plan_goal = 7
+ }
+}
+
+# State scope. Goal 7 only acts in a state that actually exceeds its tax
+# capacity; goal 6 accepts any incorporated state that can host the building.
+sed_admin_candidate_eligible = {
+ is_incorporated = yes
+ infrastructure_delta >= 0
+ can_construct_building = building_government_administration
+ NOT = { has_variable = sed_admin_request_pending }
+ owner = { sed_admin_needed = yes }
+ OR = {
+  NOT = { owner = { var:sed_plan_goal = 7 } }
+  tax_capacity_usage > tax_capacity
+ }
+ OR = {
+  NOT = { has_building = building_government_administration }
+  b:building_government_administration = {
+   level_after_queued_constructions <= level
+   occupancy >= 0.5
+   has_failed_hires = no
+  }
+ }
+}
+
+sed_admin_approval_valid = {
+ sed_admin_candidate_eligible = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+  sed_execution_mode_permits_approval = yes
+ }
+}
+# Country scope. Goal 9 is computed by the national plan.
+sed_power_needed = {
+ has_variable = sed_plan_goal
+ var:sed_plan_goal = 9
+}
+
+# State scope. Local electricity must be dear where the plant goes; the plan
+# uses the same reading to set the goal.
+sed_power_candidate_eligible = {
+ is_incorporated = yes
+ infrastructure_delta >= 0
+ can_construct_building = building_power_plant
+ NOT = { has_variable = sed_power_request_pending }
+ owner = { sed_power_needed = yes }
+ sg:electricity ?= { state_goods_pricier >= 0.2 }
+ OR = {
+  NOT = { has_building = building_power_plant }
+  b:building_power_plant = {
+   level_after_queued_constructions <= level
+   occupancy >= 0.5
+   has_failed_hires = no
+  }
+ }
+}
+
+sed_power_approval_valid = {
+ sed_power_candidate_eligible = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+  sed_execution_mode_permits_approval = yes
+ }
+}
+# State scope. Growth expansion of the construction sector while the public
+# queue is long; a level already queued waits for the queue.
+sed_core_construction_eligible = {
+ is_incorporated = yes
+ infrastructure_delta >= 0
+ can_construct_building = building_construction_sector
+ has_building = building_construction_sector
+ NOT = { has_variable = sed_construction_ignored }
+ NOT = { has_variable = sed_construction_request_pending }
+ b:building_construction_sector = {
+  level_after_queued_constructions <= level
+  occupancy >= 0.5
+  has_failed_hires = no
+ }
+ owner = { sed_develop_core = yes }
+ owner = { construction_queue_government_duration >= 12 }
+}
+
+sed_core_construction_approval_valid = {
+ sed_core_construction_eligible = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+  sed_execution_mode_permits_approval = yes
+ }
+}
+# State scope. Growth expansion of wood: the building must already exist.
+sed_core_wood_eligible = {
+ is_incorporated = yes
+ infrastructure_delta >= 0
+ can_construct_building = building_logging_camp
+ has_building = building_logging_camp
+ NOT = { has_variable = sed_wood_ignored }
+ NOT = { has_variable = sed_wood_request_pending }
+ b:building_logging_camp = {
+  level_after_queued_constructions <= level
+  occupancy >= 0.5
+  has_failed_hires = no
+ }
+ owner = { sed_develop_core = yes }
+ owner = { NOT = { market = { mg:wood ?= { market_goods_cheaper = yes } } } }
+ sed_state_labor_available >= 5000
+ sed_input_logging_camp_safe = yes
+ sed_investment_logging_camp_output > 0
+}
+
+sed_core_wood_approval_valid = {
+ sed_core_wood_eligible = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+  sed_execution_mode_permits_approval = yes
+ }
+}
+# State scope. Growth expansion of iron: the building must already exist.
+sed_core_iron_eligible = {
+ is_incorporated = yes
+ infrastructure_delta >= 0
+ can_construct_building = building_iron_mine
+ has_building = building_iron_mine
+ NOT = { has_variable = sed_iron_ignored }
+ NOT = { has_variable = sed_iron_request_pending }
+ b:building_iron_mine = {
+  level_after_queued_constructions <= level
+  occupancy >= 0.5
+  has_failed_hires = no
+ }
+ owner = { sed_develop_core = yes }
+ owner = { NOT = { market = { mg:iron ?= { market_goods_cheaper = yes } } } }
+ sed_state_labor_available >= 5250
+ sed_input_iron_mine_safe = yes
+ sed_investment_iron_mine_output > 0
+}
+
+sed_core_iron_approval_valid = {
+ sed_core_iron_eligible = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+  sed_execution_mode_permits_approval = yes
+ }
+}
+# State scope. Growth expansion of tools: the building must already exist.
+sed_core_tools_eligible = {
+ is_incorporated = yes
+ infrastructure_delta >= 0
+ can_construct_building = building_tooling_workshop
+ has_building = building_tooling_workshop
+ NOT = { has_variable = sed_tools_ignored }
+ NOT = { has_variable = sed_tools_request_pending }
+ b:building_tooling_workshop = {
+  level_after_queued_constructions <= level
+  occupancy >= 0.5
+  has_failed_hires = no
+ }
+ owner = { sed_develop_core = yes }
+ owner = { NOT = { market = { mg:tools ?= { market_goods_cheaper = yes } } } }
+ sed_state_labor_available >= 5000
+ sed_input_tooling_workshop_safe = yes
+ sed_investment_tooling_workshop_output > 0
+}
+
+sed_core_tools_approval_valid = {
+ sed_core_tools_eligible = yes
+ owner = {
+  is_player = yes
+  has_variable = sed_enabled
+  NOT = { in_default = yes }
+  construction_queue_num_queued_private_levels = 0
+  sed_execution_mode_permits_approval = yes
+ }
+}sed_pm_upgrade_month_limit_reached = {
  has_variable = sed_pm_upgrade_last_attempt_month
  var:sed_pm_upgrade_last_attempt_month = sed_live_month_key
 }
