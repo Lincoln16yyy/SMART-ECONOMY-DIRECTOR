@@ -85,6 +85,23 @@ inalterada e `descriptor.mod` instalado com `version="0.7.33"`. O
 referência a `sed_`. Nenhuma partida foi aberta com a 0.7.33.
 [confirmado 2026-11-12]
 
+### Conferir se o jogo está fechado antes de instalar
+
+`pgrep -f "binaries/victoria3.exe"` **não serve**: o próprio comando contém o
+padrão, então o `pgrep` casa com a linha de comando do shell que o executa e
+reporta "jogo aberto" sempre. Isso abortou duas instalações (0.7.34 e 0.7.35)
+antes de perceber. Use um destes:
+
+```bash
+pgrep -x victoria3.exe || echo fechado
+ps -eo pid,args | grep -i victoria | grep -v grep | grep -v "ps -eo"
+```
+
+[confirmado 2026-11-12 — sem processo `victoria3.exe` e instalação da 0.7.35
+concluída: 14 arquivos, backup em
+`sed_backups/mod_before_0.7.35_20261112_211602_983311`, ordem de mods
+inalterada, `descriptor.mod` = 0.7.35]
+
 ## Documentação exportada do jogo
 
 A geração local de `script_docs` e `dump_data_types` permanece pendente.
