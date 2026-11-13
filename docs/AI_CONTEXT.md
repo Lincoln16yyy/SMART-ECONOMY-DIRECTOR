@@ -1,6 +1,12 @@
 # Contexto de continuidade
 
 Última entrega do mod — 0.7.36 gerada e testada; instalação confirmada com jogo fechado.
+Evidência de engine (2026-11-xx): usuário do Paraguai testou o mod 0.7.36 e relatou:
+- Antes do fix, o mod não ativava sozinho quando Supply Chain/Economy Advisor já estavam habilitados
+- Após o fix 0.7.36 (correção `has_variable = x var:x > 0`), o mod começa a construir normalmente
+- O mod passou a enfileirar Centro de Comércio como fallback (0.7.30) quando bem em escassez sem produtor local
+- O usuário confirmou: "ele construiu só centro comercial" - o mod está ativo e funcionando
+
 Código — 0.7.36 corrige a detecção de automações externas: opção desligada (var = 0) não é mais lida como ligada porque só has_variable era testado, então o Director coordenava e religava a opção do outro mod. Agora todos os pontos usam AND = { has_variable = x var:x > 0 }; dentro de OR, as duas condições sem AND eram alternativas, não conjunção. Testes 425.
 Antes: 0.7.35 corrigiu a paralisia de campanha: escassez de bem sem produtor e sem local apto em nenhum estado (ferro sem depósito, no Paraguai) marcava objetivo 5 e barrava a trilha de crescimento por sed_plan_missing_count = 0, ficando meses sem obra com caixa positivo. Agora sed_missing_hostable só é verdadeiro se algum estado pode hospedar o produtor; sem local apto, a trilha de crescimento recupera o mês. Objetivo 5 e mensagem seguem iguais.
 Também confirmado em campanha (fotos): Economy Advisor com construção automática ligada suspende a construção direta do Director por desenho de coordenação.
