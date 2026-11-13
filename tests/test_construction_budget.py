@@ -290,5 +290,68 @@ class ConstructionBudgetTests(unittest.TestCase):
         self.assertFalse(any(key.startswith('sed_build_budget_') for key in c.variables))
 
 
+class ConstructionBudgetInvariantTests(unittest.TestCase):
+    """Relações que valem para qualquer país, sem constante de campanha.
+
+    Os testes acima fixam limiares num cenário; estes provam que o gerador é
+    internamente coerente, que é o que sobrevive a mudanças de escala e de
+    leitura sem precisar de um save para conferir número por número.
+    """
+
+    def setUp(self):
+        self.c = Country(script_definitions(), construction_queue_num_queued_government_levels=0)
+        self.c.run('sed_enable_country')
+        sector = construction_sector()
+        sector['production_methods'] = ['pm_wooden_buildings']
+        self.c.states.append(state(buildings=[sector]))
+
+    def refresh(self, **readings):
+        self.c.readings.update(readings)
+        self.c.run('sed_refresh_direct_budget')
+        return self.c.variables
+
+    def test_required_gold_matches_its_own_stated_formula(self):
+        for income, fixed, queue in ((100, 50, 0), (-10, 50, 0), (4000, 0, 2),
+                                     (0, 0, 5), (3500, 0, 0), (-1000, 200, 3)):
+            with self.subTest(income=income, fixed=fixed, queue=queue):
+                v = self.refresh(net_total_income=income, fixed_expenses=fixed,
+                                 construction_queue_num_queued_government_levels=queue)
+                shortfall = max(v['sed_build_budget_weekly'] - income, 0)
+                expected = max(fixed, 0) * 4 + shortfall * v['sed_build_budget_funding_weeks']
+                self.assertAlmostEqual(v['sed_build_budget_required_gold'], expected, places=3)
+
+    def test_funding_window_covers_the_work_and_keeps_the_26_week_floor(self):
+        for queue in (0, 1, 4):
+            with self.subTest(queue=queue):
+                v = self.refresh(construction_queue_num_queued_government_levels=queue)
+                self.assertAlmostEqual(
+                    v['sed_build_budget_funding_weeks'],
+                    max(v['sed_build_budget_project_weeks'] + v['sed_build_budget_queue_weeks'] + 4, 26),
+                    places=4)
+
+    def test_the_guard_turns_on_exactly_at_the_required_gold(self):
+        required = self.refresh(net_total_income=-10, fixed_expenses=50)['sed_build_budget_required_gold']
+        c = self.c
+        c.readings.update(principal=0, gold_reserves=required - 1)
+        self.assertFalse(c.condition(c.definitions['sed_direct_budget_safe'], c.country_scope()))
+        c.readings['gold_reserves'] = required
+        self.assertTrue(c.condition(c.definitions['sed_direct_budget_safe'], c.country_scope()))
+
+    def test_higher_income_never_raises_the_required_gold(self):
+        previous = None
+        for income in (-1000, -10, 0, 100, 1000, 3499, 3500, 8000):
+            v = self.refresh(net_total_income=income)
+            current = v['sed_build_budget_required_gold']
+            if previous is not None:
+                self.assertLessEqual(current, previous + 1e-6, f'income {income}')
+            previous = current
+
+    def test_debt_blocks_the_reserve_branch_at_any_reserve_size(self):
+        self.refresh(net_total_income=-10, fixed_expenses=50)
+        self.c.readings.update(principal=1, gold_reserves=10 ** 9)
+        self.assertFalse(self.c.condition(self.c.definitions['sed_direct_budget_safe'],
+                                          self.c.country_scope()))
+
+
 if __name__ == '__main__':
     unittest.main()
