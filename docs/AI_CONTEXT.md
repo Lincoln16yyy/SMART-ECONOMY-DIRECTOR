@@ -1,5 +1,7 @@
 # Contexto de continuidade
 
+Sessão atual — nenhuma mudança de comportamento entregue; 0.7.36 continua a última. A ideia de tolerar déficit operacional na guarda fiscal 1–4 com um piso de 6 × despesas fixas foi medida e rejeitada: como a guarda de saque (5) já cobre 12 × despesas fixas + 26 × déficit, a nova ramificação é sempre mais permissiva, deixaria a classificação 5 e o `sed_coord_reserve_drawdown_safe` inalcançáveis e quebrou quatro testes de contrato (`test_reserve_budget_coverage_matches_the_existing_fiscal_threshold`, `test_reserve_funded_construction_keeps_advisor_authorized_until_floor`, `test_reserve_drawdown_routes_infrastructure_to_advisor_and_not_supply`, `test_diagnostic_refresh_synchronizes_executor_without_building_or_rewriting_review`). A árvore foi revertida e os 425 testes voltaram a passar; a poda de arquivos soltos (duplicatas de AGENTS/SKILL/ambiente, scripts de rascunho) foi mantida. Falta decisão: calibrar o horizonte de 26 semanas da guarda 5 com leitura de campanha, ou substituir a guarda 5 por um piso único.
+
 Última entrega do mod — 0.7.36 gerada e testada; instalação confirmada com jogo fechado.
 Evidência de engine (2026-11-xx): usuário do Paraguai testou o mod 0.7.36 e relatou:
 - Antes do fix, o mod não ativava sozinho quando Supply Chain/Economy Advisor já estavam habilitados
