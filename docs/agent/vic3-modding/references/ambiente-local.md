@@ -430,3 +430,12 @@ efeito instalado e nos dois idiomas da localização. Reabrir o jogo: PENDENTE.]
 `descriptor.mod` = `version="0.7.42"`. Status 22 mostra `sed_build_budget_gold_gap`
 e resíduos do status 21/executor 12 removidos dos artefatos instalados. Reabrir
 o jogo: PENDENTE.]
+
+
+[instalação da 0.7.44: jogo fechado, 14 arquivos, backup em
+`sed_backups/mod_before_0.7.44_20261114_014619_131213`, ordem de mods inalterada,
+`descriptor.mod` = `version="0.7.44"`, ZIP
+`dist/smart-economy-director-0.7.44.zip`. Inclui 0.7.43 (`sed_build_budget_gold_gap`
+no bloqueio atual `sed_auto_current_budget`) e 0.7.44 (eventos didáticos do
+Assistido `sed_pulse.21`–`29`, por objetivo, sem enfileirar; cooldown
+`sed_assist_notice_month`). Reabrir o jogo e validar em campanha: PENDENTE.]

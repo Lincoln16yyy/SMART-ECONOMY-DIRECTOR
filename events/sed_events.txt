@@ -15,6 +15,285 @@ sed_pulse.1 = {
   }
  }
 }
+# Didactic: explain the current recommendation in Assisted mode.
+sed_pulse.21 = {
+ type = country_event
+ placement = root
+ title = sed_assist_notice_title
+ desc = sed_assist_notice_1_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted }
+ option = {
+  name = sed_assist_notice_option_review
+  custom_tooltip = sed_assist_notice_option_review_tt
+  default_option = yes
+  ai_chance = { base = 60 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_assist_notice_option_later
+  custom_tooltip = sed_assist_notice_option_later_tt
+  ai_chance = { base = 30 }
+  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 2 } }
+ }
+ option = {
+  name = sed_assist_notice_option_mute
+  custom_tooltip = sed_assist_notice_option_mute_tt
+  ai_chance = { base = 10 }
+  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 6 } }
+ }
+}
+
+# Didactic: explain the current recommendation in Assisted mode.
+sed_pulse.22 = {
+ type = country_event
+ placement = root
+ title = sed_assist_notice_title
+ desc = sed_assist_notice_2_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted }
+ option = {
+  name = sed_assist_notice_option_review
+  custom_tooltip = sed_assist_notice_option_review_tt
+  default_option = yes
+  ai_chance = { base = 60 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_assist_notice_option_later
+  custom_tooltip = sed_assist_notice_option_later_tt
+  ai_chance = { base = 30 }
+  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 2 } }
+ }
+ option = {
+  name = sed_assist_notice_option_mute
+  custom_tooltip = sed_assist_notice_option_mute_tt
+  ai_chance = { base = 10 }
+  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 6 } }
+ }
+}
+
+# Didactic: explain the current recommendation in Assisted mode.
+sed_pulse.23 = {
+ type = country_event
+ placement = root
+ title = sed_assist_notice_title
+ desc = sed_assist_notice_3_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted }
+ option = {
+  name = sed_assist_notice_option_review
+  custom_tooltip = sed_assist_notice_option_review_tt
+  default_option = yes
+  ai_chance = { base = 60 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_assist_notice_option_later
+  custom_tooltip = sed_assist_notice_option_later_tt
+  ai_chance = { base = 30 }
+  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 2 } }
+ }
+ option = {
+  name = sed_assist_notice_option_mute
+  custom_tooltip = sed_assist_notice_option_mute_tt
+  ai_chance = { base = 10 }
+  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 6 } }
+ }
+}
+
+# Didactic: explain the current recommendation in Assisted mode.
+sed_pulse.24 = {
+ type = country_event
+ placement = root
+ title = sed_assist_notice_title
+ desc = sed_assist_notice_4_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted }
+ option = {
+  name = sed_assist_notice_option_review
+  custom_tooltip = sed_assist_notice_option_review_tt
+  default_option = yes
+  ai_chance = { base = 60 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_assist_notice_option_later
+  custom_tooltip = sed_assist_notice_option_later_tt
+  ai_chance = { base = 30 }
+  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 2 } }
+ }
+ option = {
+  name = sed_assist_notice_option_mute
+  custom_tooltip = sed_assist_notice_option_mute_tt
+  ai_chance = { base = 10 }
+  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 6 } }
+ }
+}
+
+# Didactic: explain the current recommendation in Assisted mode.
+sed_pulse.25 = {
+ type = country_event
+ placement = root
+ title = sed_assist_notice_title
+ desc = sed_assist_notice_5_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted }
+ option = {
+  name = sed_assist_notice_option_review
+  custom_tooltip = sed_assist_notice_option_review_tt
+  default_option = yes
+  ai_chance = { base = 60 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_assist_notice_option_later
+  custom_tooltip = sed_assist_notice_option_later_tt
+  ai_chance = { base = 30 }
+  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 2 } }
+ }
+ option = {
+  name = sed_assist_notice_option_mute
+  custom_tooltip = sed_assist_notice_option_mute_tt
+  ai_chance = { base = 10 }
+  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 6 } }
+ }
+}
+
+# Didactic: explain the current recommendation in Assisted mode.
+sed_pulse.26 = {
+ type = country_event
+ placement = root
+ title = sed_assist_notice_title
+ desc = sed_assist_notice_6_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted }
+ option = {
+  name = sed_assist_notice_option_review
+  custom_tooltip = sed_assist_notice_option_review_tt
+  default_option = yes
+  ai_chance = { base = 60 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_assist_notice_option_later
+  custom_tooltip = sed_assist_notice_option_later_tt
+  ai_chance = { base = 30 }
+  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 2 } }
+ }
+ option = {
+  name = sed_assist_notice_option_mute
+  custom_tooltip = sed_assist_notice_option_mute_tt
+  ai_chance = { base = 10 }
+  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 6 } }
+ }
+}
+
+# Didactic: explain the current recommendation in Assisted mode.
+sed_pulse.27 = {
+ type = country_event
+ placement = root
+ title = sed_assist_notice_title
+ desc = sed_assist_notice_7_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted }
+ option = {
+  name = sed_assist_notice_option_review
+  custom_tooltip = sed_assist_notice_option_review_tt
+  default_option = yes
+  ai_chance = { base = 60 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_assist_notice_option_later
+  custom_tooltip = sed_assist_notice_option_later_tt
+  ai_chance = { base = 30 }
+  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 2 } }
+ }
+ option = {
+  name = sed_assist_notice_option_mute
+  custom_tooltip = sed_assist_notice_option_mute_tt
+  ai_chance = { base = 10 }
+  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 6 } }
+ }
+}
+
+# Didactic: explain the current recommendation in Assisted mode.
+sed_pulse.28 = {
+ type = country_event
+ placement = root
+ title = sed_assist_notice_title
+ desc = sed_assist_notice_8_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted }
+ option = {
+  name = sed_assist_notice_option_review
+  custom_tooltip = sed_assist_notice_option_review_tt
+  default_option = yes
+  ai_chance = { base = 60 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_assist_notice_option_later
+  custom_tooltip = sed_assist_notice_option_later_tt
+  ai_chance = { base = 30 }
+  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 2 } }
+ }
+ option = {
+  name = sed_assist_notice_option_mute
+  custom_tooltip = sed_assist_notice_option_mute_tt
+  ai_chance = { base = 10 }
+  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 6 } }
+ }
+}
+
+# Didactic: explain the current recommendation in Assisted mode.
+sed_pulse.29 = {
+ type = country_event
+ placement = root
+ title = sed_assist_notice_title
+ desc = sed_assist_notice_9_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_assisted }
+ option = {
+  name = sed_assist_notice_option_review
+  custom_tooltip = sed_assist_notice_option_review_tt
+  default_option = yes
+  ai_chance = { base = 60 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_assist_notice_option_later
+  custom_tooltip = sed_assist_notice_option_later_tt
+  ai_chance = { base = 30 }
+  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 2 } }
+ }
+ option = {
+  name = sed_assist_notice_option_mute
+  custom_tooltip = sed_assist_notice_option_mute_tt
+  ai_chance = { base = 10 }
+  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 6 } }
+ }
+}
+
 # Advisory: no local expansion is eligible, so importing is the remaining lever.
 sed_pulse.2 = {
  type = country_event

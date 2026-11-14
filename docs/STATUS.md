@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.42
+# Estado dos requisitos — 0.7.44
 
 ## Protocolo de evidência adotado
 
@@ -11,7 +11,7 @@ Restam três campos do diário apontados como desconhecidos, presentes no vanill
 1.15 e documentados no jogo. O Tiger declara suporte até 1.13.5. Os avisos de
 formatação e de OR de um item permanecem visíveis. A documentação exportada
 continua ausente. Carregou e Campanha das leituras fiscais, da prontidão e do
-novo retorno salarial e da pontuação de PMs segue NÃO VERIFICADO. Teste sintético — 433 testes aprovados. A 0.7.42 acrescenta a distância em ouro ao texto do status 22 e remove resíduos mortos do status 21/executor 12, sem mudar limiares. O evento consultivo de importação e o fallback de Centro de Comércio (0.7.30) seguem NÃO VERIFICADOS na engine.
+novo retorno salarial e da pontuação de PMs segue NÃO VERIFICADO. Teste sintético — 433 testes aprovados. A 0.7.42 acrescenta a distância em ouro ao texto do status 22 e remove resíduos mortos do status 21/executor 12; a 0.7.43 alinha o bloqueio atual de orçamento (`sed_auto_current_budget`). A 0.7.44 acrescenta eventos didáticos no modo Assistido (por objetivo, com motivo e opções de revisar/adiar/silenciar, sem enfileirar) — Carregou/Campanha NÃO VERIFICADOS. O evento consultivo de importação e o fallback de Centro de Comércio (0.7.30) seguem NÃO VERIFICADOS na engine.
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.

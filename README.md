@@ -1,5 +1,9 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.44, o modo Assistido passa a disparar eventos didáticos quando há recomendações: cada aviso explica por que o Director recomenda aquele objetivo (gargalo de infraestrutura, escassez de bens, capacidade de construção, finanças, indústria ausente, burocracia, tributação, diversificação ou energia cara) e orienta abrir o Diário para aprovar a recomendação item a item. O evento não enfileira nada sozinho; as opções permitem revisar, adiar ou silenciar o aviso por alguns meses.
+
+Na 0.7.43, o bloqueio atual de orçamento (`sed_auto_current_budget`) também passa a mostrar quanto ouro falta para a guarda liberar, alinhado ao plano e ao status 22.
+
 Na 0.7.42, o status de orçamento sem cobertura passa a mostrar quanto ouro falta para a guarda liberar (`sed_build_budget_gold_gap`) e os resíduos mortos do antigo status 21/executor 12 foram removidos dos artefatos.
 
 Na 0.7.41, o painel do orçamento diz quanto ouro falta até a reserva exigida pela
@@ -323,7 +327,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.7.42.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.7.43.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 

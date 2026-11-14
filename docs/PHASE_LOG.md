@@ -2879,3 +2879,31 @@ SGUi, blocos no GUI e localizações; removidos do gerador e dos artefatos.
 Teste sintético — 433 aprovados. Estático — `--check` e `validate.py`
 aprovados. Instalada com jogo fechado (backup
 `mod_before_0.7.42_20261114_005714_384642`). Carregou: NÃO VERIFICADO.
+
+
+## 0.7.43 — Ouro faltante no bloqueio atual de orçamento
+
+O bloqueio atual `sed_auto_current_budget` passou a mostrar quanto ouro falta
+até a guarda liberar (`sed_build_budget_gold_gap`), alinhado ao texto do plano
+e ao status 22. Leitura pura, sem mudar limiares ou efeitos econômicos.
+
+Teste sintético — 433 aprovados. Estático — `--check` e `validate.py`
+aprovados. Incluída na instalação 0.7.44. Carregou/Campanha: NÃO VERIFICADO.
+
+## 0.7.44 — Eventos didáticos de recomendação no modo Assistido
+
+No modo Assistido, quando há recomendações (`sed_plan_count > 0`), o Director
+dispara um evento por objetivo (`sed_pulse.21`–`29`) explicando de forma
+didática por que aquela recomendação existe (gargalo de infraestrutura,
+escassez de bens, capacidade de construção, finanças, indústria ausente,
+burocracia, tributação, diversificação ou energia cara) e orientando abrir o
+Diário para aprovar item a item. O evento não enfileira nada; opções permitem
+atualizar/revisar, adiar ou silenciar (cooldown em `sed_assist_notice_month`,
+limpo ao desativar por estar nas variáveis de país). Aprovação continua pelos
+botões do painel, com revalidação no clique.
+
+Teste sintético — 433 aprovados. Estático — `--check` e `validate.py --game`
+aprovados. Empacotada e instalada com jogo fechado (backup
+`mod_before_0.7.44_20261114_014619_131213`, ZIP
+`dist/smart-economy-director-0.7.44.zip`). Carregou/Campanha: NÃO VERIFICADO
+(disparo, texto, cooldown e ausência de enfileiramento).

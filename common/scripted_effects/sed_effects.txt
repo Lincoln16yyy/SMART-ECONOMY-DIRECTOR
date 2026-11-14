@@ -422,6 +422,7 @@ sed_disable_country = {
  remove_variable = sed_import_notice_paper_month
  remove_variable = sed_import_notice_paper_buy
  remove_variable = sed_import_notice_paper_sell
+ remove_variable = sed_assist_notice_month
  remove_variable = sed_pm_upgrade_status
  remove_variable = sed_investment_market_wood_lower
  remove_variable = sed_investment_market_wood_upper
@@ -14275,7 +14276,31 @@ sed_run_core_tools_approval = {
    remove_variable = sed_queue_levels_before
   }
  }
-}# Country scope. Fires a visible event only when local supply cannot respond.
+}# Assisted mode: explain why there are recommendations to approve.
+sed_maybe_notify_assisted_recommendation = {
+ if = {
+  limit = {
+   has_variable = sed_mode_assisted
+   has_variable = sed_plan_count var:sed_plan_count > 0
+   has_variable = sed_plan_goal var:sed_plan_goal > 0
+   OR = {
+    NOT = { has_variable = sed_assist_notice_month }
+    var:sed_assist_notice_month <= sed_live_month_key
+   }
+  }
+  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 1 } }
+  if = { limit = { var:sed_plan_goal = 1 } trigger_event = { id = sed_pulse.21 days = 0 } }
+  else_if = { limit = { var:sed_plan_goal = 2 } trigger_event = { id = sed_pulse.22 days = 0 } }
+  else_if = { limit = { var:sed_plan_goal = 3 } trigger_event = { id = sed_pulse.23 days = 0 } }
+  else_if = { limit = { var:sed_plan_goal = 4 } trigger_event = { id = sed_pulse.24 days = 0 } }
+  else_if = { limit = { var:sed_plan_goal = 5 } trigger_event = { id = sed_pulse.25 days = 0 } }
+  else_if = { limit = { var:sed_plan_goal = 6 } trigger_event = { id = sed_pulse.26 days = 0 } }
+  else_if = { limit = { var:sed_plan_goal = 7 } trigger_event = { id = sed_pulse.27 days = 0 } }
+  else_if = { limit = { var:sed_plan_goal = 8 } trigger_event = { id = sed_pulse.28 days = 0 } }
+  else_if = { limit = { var:sed_plan_goal = 9 } trigger_event = { id = sed_pulse.29 days = 0 } }
+ }
+}
+# Country scope. Fires a visible event only when local supply cannot respond.
 # The script has no trade-route effect in 1.15 (create_trade_route was removed in 1.9),
 # so the event advises the player instead of acting.
 sed_check_import_notices = {
