@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.39
+# Estado dos requisitos — 0.7.40
 
 ## Protocolo de evidência adotado
 
@@ -46,7 +46,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Haiti, país rico e crise | Cenários sintéticos fiscais e de seleção | Campanhas registradas e comparáveis permanecem pendentes |
 | Crescimento em campanha longa | Ainda sem evidência | Medir PIB, SoL, emprego, dívida, reservas e diversificação durante vários anos |
 | Localização | Desde a 0.7.29 o arquivo inglês recebe a coluna em inglês. Até a 0.7.28 a bandeira do idioma era reutilizada como rótulo de laço (`for policy, pt, en` e `for good, pt, en`), então `localization('english')` gerava português. Também desde a 0.7.29 parágrafos usam `\n` escapado, porque quebra real invalida a entrada | Conferir no jogo a exibição nos dois idiomas. Não havia teste de idioma antes da 0.7.29 |
-| Compatibilidade com mods instalados | Auditoria dos 12 mods instalados em `docs/COMPATIBILITY.md`. Desde a 0.7.27 o painel lê o Controllable Private Construction; desde a 0.7.28 a modernização cede o prédio ao Auto-Apply PMs (`zw_var_auto_pm_building_*`) | Conferir em campanha a seção de controle privado e a cessão de PM. `OGAS for CWE` é de 1.13 + Cold War Era e não deve ser usado nesta campanha; Government Administration Auto Expand remove `ai_value` do prédio vanilla |
+| Compatibilidade com mods instalados | **Carregou (2026-11-13):** o jogo abriu com a 0.7.39 e o `error.log` mostrou 1.627 erros `Left side and right side during comparison were of different types`, todos vindos de `advisor_enabled`, `advisor_auto_construction_enabled` e `aroai_autobuild` — bandeiras que o Economy Advisor e o ARoAI criam com `set_variable = <flag>` (valor booleano) e que o Director comparava com `> 0`. Na 0.7.40 a leitura é tipada por dono (presença para booleana, `> 0` só para as numéricas do Supply Chain) e a reabertura do jogo continua NÃO VERIFICADA. Auditoria dos 12 mods instalados em `docs/COMPATIBILITY.md`. Desde a 0.7.27 o painel lê o Controllable Private Construction; desde a 0.7.28 a modernização cede o prédio ao Auto-Apply PMs (`zw_var_auto_pm_building_*`) | Conferir em campanha a seção de controle privado e a cessão de PM. `OGAS for CWE` é de 1.13 + Cold War Era e não deve ser usado nesta campanha; Government Administration Auto Expand remove `ai_value` do prédio vanilla |
 | Entrega | Gerador, validador, testes, ZIP e instalador com backup | Entrega da 0.6.9 com backup, conferência dos outputs e PR de revisão |
 
 O jogador relatou que seus testes anteriores produziram pouca mudança visível, pois outros construtores já atuavam. Esse relato motivou os adaptadores da 0.6.1.

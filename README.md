@@ -1,5 +1,12 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.40, o Director lê as opções do Economy Advisor e do ARoAI como bandeiras
+booleanas, do jeito que esses mods as criam. Antes ele comparava essas bandeiras
+com um número e a engine registrava "Left side and right side during comparison
+were of different types" a cada avaliação — 1.627 linhas em um único carregamento
+no `error.log`. As opções do Supply Chain continuam numéricas e mantêm o teste
+de zero.
+
 Na 0.7.39, o Director registra o resultado da meta industrial: quando a
 escassez que sustentava a meta deixa de ser observada, o painel mostra quantos
 anos ela durou e quanto o preço do bem andou desde o início dela. É leitura de
@@ -310,7 +317,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.7.39.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.7.40.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 

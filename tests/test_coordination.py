@@ -4,7 +4,7 @@ from pathlib import Path
 import unittest
 
 from tools.build_mod import outputs, SUPPLY_TARGETS
-from tools.coordination import OPTIONS, ADVISOR_POLICY_OPTIONS, SUPPLY_POLICY_OPTIONS
+from tools.coordination import OPTIONS, ADVISOR_POLICY_OPTIONS, SUPPLY_POLICY_OPTIONS, BARE_FLAGS
 from tools.validate import validate
 from test_diagnostics import script_definitions
 from script_harness import Country, railway, state, building
@@ -105,18 +105,38 @@ class CoordinationTests(unittest.TestCase):
         self.assertEqual(self.external(), {})
 
     def test_a_disabled_option_left_at_zero_is_not_detected_or_enabled(self):
-        # Supply Chain leaves its variables behind at 0 when the player turns the
-        # option off. Presence alone made the Director detect, coordinate and
-        # re-enable automation the player had just disabled.
+        # Supply Chain leaves its numeric variables behind at 0 when the player
+        # turns the option off. Presence alone made the Director detect,
+        # coordinate and re-enable automation the player had just disabled.
+        # Economy Advisor and ARoAI flags are boolean, so they are excluded here
+        # and covered by the type test below.
+        numeric = [option for _, option, _ in OPTIONS if option not in BARE_FLAGS]
         c = self.c
-        for _, option, _ in OPTIONS:
+        for option in numeric:
             c.variables[option] = 0
+        # A boolean flag is off by being absent, never by being zero.
+        for option in BARE_FLAGS:
+            c.variables.pop(option, None)
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')
         self.assertFalse(c.condition(c.definitions['sed_competing_builder_configured'], c.country_scope()))
         self.assertNotIn('sed_coord_supply_known', c.variables)
-        self.assertEqual({option: c.variables.get(option, 0) for _, option, _ in OPTIONS},
-                         {option: 0 for _, option, _ in OPTIONS})
+        self.assertEqual({option: c.variables.get(option, 0) for option in numeric},
+                         {option: 0 for option in numeric})
+
+    def test_boolean_external_flags_are_read_without_numeric_comparison(self):
+        # Economy Advisor and ARoAI create these flags with a bare
+        # `set_variable`, so the stored value is boolean. Comparing it to a
+        # number made the engine log "Left side and right side during comparison
+        # were of different types" 1.627 times in one session (installed game's
+        # logs/error.log, 2026-11-13). Presence is the state for those flags.
+        script = ''.join(content.decode('utf-8', 'replace')
+                         for content in outputs().values() if isinstance(content, bytes))
+        for flag in BARE_FLAGS:
+            self.assertNotIn(f'var:{flag} > 0', script, flag)
+            self.assertIn(f'has_variable = {flag}', script, flag)
+        # Numeric Supply Chain options still need the zero test.
+        self.assertIn('var:zw_var_expand_building > 0', script)
 
     def test_no_producer_shortage_delegates_to_advisor_and_preserves_unrelated_options(self):
         c = self.c

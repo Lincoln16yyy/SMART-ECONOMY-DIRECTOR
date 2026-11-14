@@ -328,3 +328,35 @@ inalterada, `descriptor.mod` = `version="0.7.39"`. Conferido no instalado: loc
 `sed_meta_grain_result` nos dois idiomas, `goal_result_years` em
 `common/scripted_effects/sed_effects.txt` e a linha no
 `gui/journal_entry_widgets/sed_diagnostics.gui`. Nenhuma partida aberta.]
+
+### Ler o error.log — primeira evidência Carregou (2026-11-13)
+
+O log fica em `.../Documents/Paradox Interactive/Victoria 3/logs/error.log` e
+é reescrito a cada abertura; confira `ls -l --time-style=full-iso` antes de
+interpretar. Padrões úteis:
+
+```bash
+grep -o "sed_triggers.txt:[0-9]*" "$LOG" | sort | uniq -c | sort -rn | head
+grep -v "Script location:" "$LOG" | grep -v "^common/" | sed -E 's/[0-9]+/N/g' | sort | uniq -c | sort -rn
+```
+
+Resultado da 0.7.39 (jogo aberto pelo usuário, 8.151 linhas): 1.627
+`Left side and right side during comparison were of different types (left was
+'boolean', right was 'value')` em `sed_triggers.txt:2747/2754/2691/3866/3867`.
+Causa provada nos mods instalados: `advisor_enabled` e
+`advisor_auto_construction_enabled` são criados pelo Economy Advisor com
+`set_variable = <flag>` (nulo de valor ⇒ booleano; `decisions/advisor_decisions.txt:19`,
+`scripted_guis/advisor_scripted_guis.txt:415`), e `aroai_autobuild` pelo ARoAI
+do mesmo jeito (`events/aroai_autobuild_events.txt:39`). As opções do Supply
+Chain são numéricas (`scripted_buttons/zw_scsab_buttons.txt:580`). Regra: nunca
+comparar com `> 0` uma bandeira que o dono grava com `set_variable` nu.
+
+Também aparecem 16 `Failed to approximate weeks left in construction queue: The
+total construction speed is zero` — mensagem do vanilla com fila vazia, sem
+relação com `sed_`.
+
+[instalação da 0.7.40: jogo fechado, 14 arquivos, backup em
+`sed_backups/mod_before_0.7.40_20261113_222607_201024`, ordem de mods inalterada,
+zero ocorrências de `var:advisor_enabled > 0`, `var:advisor_auto_construction_enabled > 0`
+e `var:aroai_autobuild > 0` nos três arquivos instalados. Reabrir o jogo para
+confirmar log limpo: PENDENTE.]

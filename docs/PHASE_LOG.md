@@ -2838,3 +2838,12 @@ Desativar limpa as variáveis.
 Teste sintético — suíte aprovada, incluindo o teste novo de duração, variação de
 preço, visibilidade e sobrescrita. NÃO VERIFICADO na engine: nenhuma leitura de
 resultado em campanha.
+
+## 0.7.40 — Opções externas lidas pelo tipo certo
+
+O `error.log` de um carregamento real com a 0.7.39 acusou 1.627 comparações
+inválidas (booleano contra valor) em `sed_triggers.txt`, disparadas toda vez que
+as GUIs do Director avaliavam as opções do Economy Advisor e do ARoAI. Esses
+mods gravam as bandeiras com `set_variable` nu; o Director comparava com `> 0`.
+Corrigido com leitura por presença para booleana e `> 0` só para as numéricas do
+Supply Chain. Reabrir o jogo para confirmar o log limpo: NÃO VERIFICADO.

@@ -3,6 +3,23 @@
 These are version-specific option adapters, not public mod APIs. Do not call
 external effects or alter unrelated production/political/financial options.
 """
+# Economy Advisor and ARoAI create their construction flags with a bare
+# `set_variable = <flag>`, so the stored value is boolean. Comparing it to a
+# number makes the engine log "Left side and right side during comparison were
+# of different types" on every evaluation (verified in the installed game's
+# logs/error.log on 2026-11-13: 1.627 entries, all traceable to these flags).
+# Supply Chain writes numeric values (0/1/5/10), so it keeps the `> 0` test:
+# that is what tells a disabled option apart from an absent one.
+BARE_FLAGS = ('advisor_enabled', 'advisor_auto_construction_enabled', 'aroai_autobuild')
+
+
+def option_on(option):
+    """Trigger text for "this external option is enabled", typed like its owner."""
+    if option in BARE_FLAGS:
+        return f'has_variable = {option}'
+    return f'AND = {{ has_variable = {option} var:{option} > 0 }}'
+
+
 OPTIONS = (
     ('advisor', 'advisor_auto_construction_enabled', 1),
     ('chains', 'zw_var_expand_building', 0),
@@ -75,8 +92,7 @@ def effects():
    else = {{ remove_variable = {option} }}''' for name, option in SUPPLY_POLICY_OPTIONS)
     cleanup = '\n'.join('  remove_variable = ' + name for name in VARIABLES)
     supply_options = [option for name, option, _ in OPTIONS if name != 'advisor']
-    supply = ' '.join(f'AND = {{ has_variable = {option} var:{option} > 0 }}'
-                      for option in supply_options + list(SUPPLY_HINTS))
+    supply = ' '.join(option_on(option) for option in supply_options + list(SUPPLY_HINTS))
     # No foreign write is permitted outside these two checked effects.
     return f'''sed_coord_capture_supply_policy = {{
  if = {{ limit = {{ is_player = yes has_variable = sed_enabled has_variable = sed_coord_active
@@ -99,8 +115,8 @@ sed_coord_enable = {{
   limit = {{ is_player = yes has_variable = sed_enabled NOT = {{ has_variable = sed_coord_active }} }}
 {snapshot}
   if = {{ limit = {{ OR = {{
-   AND = {{ has_variable = advisor_enabled var:advisor_enabled > 0 }}
-   AND = {{ has_variable = advisor_auto_construction_enabled var:advisor_auto_construction_enabled > 0 }}
+   has_variable = advisor_enabled
+   has_variable = advisor_auto_construction_enabled
   }} }} set_variable = {{ name = sed_coord_advisor_known value = yes }} }}
   if = {{ limit = {{ OR = {{ {supply} }} }} set_variable = {{ name = sed_coord_supply_known value = yes }} }}
   set_variable = {{ name = sed_coord_active value = yes }}
@@ -139,7 +155,7 @@ sed_coord_sync = {{
 {remove}
   set_variable = {{ name = sed_coord_executor value = 0 }}
   set_variable = {{ name = sed_coord_advisor_policy value = 0 }}
-  if = {{ limit = {{ has_variable = aroai_autobuild var:aroai_autobuild > 0 }} set_variable = {{ name = sed_coord_executor value = 5 }} }}
+  if = {{ limit = {{ has_variable = aroai_autobuild }} set_variable = {{ name = sed_coord_executor value = 5 }} }}
   else_if = {{ limit = {{ sed_pm_upgrade_month_limit_reached = yes }}
    set_variable = {{ name = sed_coord_executor value = 13 }}
   }}
@@ -209,6 +225,6 @@ def triggers():
     option_names = [option for _, option, _ in OPTIONS] + list(SUPPLY_HINTS)
     # Off options stay at 0 in the other mods' saves; only an enabled option
     # (or the advisor mod flag itself) offers real coordination.
-    options = '\n'.join(f'  AND = {{ has_variable = {option} var:{option} > 0 }}' for option in option_names)
-    return ('sed_coord_tools_available = {\n OR = {\n  AND = { has_variable = advisor_enabled var:advisor_enabled > 0 }\n'
+    options = '\n'.join(f'  {option_on(option)}' for option in option_names)
+    return ('sed_coord_tools_available = {\n OR = {\n  has_variable = advisor_enabled\n'
             + options + '\n }\n}\n')

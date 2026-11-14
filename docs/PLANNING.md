@@ -1434,3 +1434,38 @@ Teste sintético — `test_finished_goal_records_its_duration_and_price_move` co
 início da meta, ausência de registro antes do fim, anos, ano, variação negativa
 de preço, visibilidade da linha e sobrescrita pela meta seguinte. NÃO VERIFICADO
 na engine.
+
+## 0.7.40 — Leitura tipada das opções externas
+
+Primeira evidência Carregou desde a 0.7.33: o jogo abriu com a 0.7.39. O
+`error.log` trouxe 8.151 linhas, das quais 1.627
+`Left side and right side during comparison were of different types (left was
+'boolean', right was 'value')`, todas apontando para `sed_triggers.txt:2747`,
+`:2754`, `:2691`, `:3866` e `:3867`, avaliadas a partir das scripted GUIs
+`sed_scripted_guis.txt:22` e `1260–1290`.
+
+Causa, com evidência nos mods instalados: o Economy Advisor cria
+`advisor_enabled` e `advisor_auto_construction_enabled` com
+`set_variable = <flag>` (forma nua, valor booleano) e o ARoAI cria
+`aroai_autobuild` do mesmo jeito (`events/aroai_autobuild_events.txt:39`). O
+Director testava todas as opções com `has_variable = X var:X > 0`, o que compara
+booleano com número. As opções do Supply Chain são numéricas
+(`name = zw_var_expand_building value = 0`, `zw_scsab_buttons.txt:580`) e por
+isso não geravam erro.
+
+A 0.7.40 separa os dois tipos em `coordination.BARE_FLAGS` e
+`coordination.option_on`: bandeira booleana é lida por presença, opção numérica
+continua com `> 0` — o teste de zero da 0.7.36 segue valendo para quem de fato
+grava zero. Nenhum efeito, escopo ou ID novo foi introduzido: a correção usa só
+`has_variable`, já presente no mod.
+
+Efeito colateral lido no mesmo log, registrado e não alterado: 16 linhas
+`Failed to approximate weeks left in construction queue: The total construction
+speed is zero` — mensagem do vanilla para fila vazia, sem vínculo com `sed_`.
+
+Teste sintético — 431 aprovados, incluindo
+`test_boolean_external_flags_are_read_without_numeric_comparison`, que varre
+todos os artefatos gerados e proíbe `var:<bandeira> > 0` para as três bandeiras
+booleanas, e o teste de opção desligada, que agora modela bandeira ausente em vez
+de zero. A reabertura do jogo para confirmar o `error.log` limpo continua
+NÃO VERIFICADA.

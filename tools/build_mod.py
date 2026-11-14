@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.39'
+VERSION = '0.7.40'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -1662,7 +1662,7 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
     result += f'sed_auto_builders_visible_sgui = {{ scope = country is_shown = {{ {base} sed_competing_builder_configured = yes }} }}\n'
     for name, option, pt, en in COMPETING_BUILDERS:
         result += (f'sed_auto_builder_{name}_visible_sgui = {{ scope = country is_shown = {{ {base} '
-                   f'has_variable = {option} var:{option} > 0 }} }}\n')
+                   f'{coordination.option_on(option)} }} }}\n')
     result += 'sed_private_control_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled sed_private_control_configured = yes } }\n'
     result += 'sed_pm_external_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled sed_pm_external_managed = yes } }\n'
     for name, option, pt, en in PRIVATE_CONTROL_FLAGS:
@@ -2130,7 +2130,7 @@ sed_missing_hostable = {
     # An option another mod leaves at 0 is off, not configured: the variable
     # survives after the player disables it, so presence alone made the Director
     # detect, coordinate and re-enable automation the player had turned off.
-    options = '\n'.join(f'  AND = {{ has_variable = {option} var:{option} > 0 }}'
+    options = '\n'.join(f'  {coordination.option_on(option)}'
                         for name, option, pt, en in COMPETING_BUILDERS)
     # A healthy growth month may develop the core inputs even with nothing
     # scarce or expensive; the candidate still needs a positive reference return.

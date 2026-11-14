@@ -2744,14 +2744,14 @@ sed_develop_core = {
 }
 sed_competing_builder_configured = {
  OR = {
-  AND = { has_variable = advisor_auto_construction_enabled var:advisor_auto_construction_enabled > 0 }
+  has_variable = advisor_auto_construction_enabled
   AND = { has_variable = zw_var_expand_building var:zw_var_expand_building > 0 }
   AND = { has_variable = zw_var_more_construction_sectors var:zw_var_more_construction_sectors > 0 }
   AND = { has_variable = zw_var_scsab_construct_railway var:zw_var_scsab_construct_railway > 0 }
   AND = { has_variable = zw_var_scsab_construct_power_plant var:zw_var_scsab_construct_power_plant > 0 }
   AND = { has_variable = zw_var_scsab_gov_admin var:zw_var_scsab_gov_admin > 0 }
   AND = { has_variable = zw_var_scsab_gov_admin_for_tax var:zw_var_scsab_gov_admin_for_tax > 0 }
-  AND = { has_variable = aroai_autobuild var:aroai_autobuild > 0 }
+  has_variable = aroai_autobuild
  }
 }
 sed_private_control_configured = {
@@ -3863,8 +3863,8 @@ sed_founding_input_paper_mill_safe = {
 }
 sed_coord_tools_available = {
  OR = {
-  AND = { has_variable = advisor_enabled var:advisor_enabled > 0 }
-  AND = { has_variable = advisor_auto_construction_enabled var:advisor_auto_construction_enabled > 0 }
+  has_variable = advisor_enabled
+  has_variable = advisor_auto_construction_enabled
   AND = { has_variable = zw_var_expand_building var:zw_var_expand_building > 0 }
   AND = { has_variable = zw_var_more_construction_sectors var:zw_var_more_construction_sectors > 0 }
   AND = { has_variable = zw_var_scsab_construct_railway var:zw_var_scsab_construct_railway > 0 }
