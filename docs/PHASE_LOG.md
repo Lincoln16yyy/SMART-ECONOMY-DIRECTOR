@@ -2846,4 +2846,21 @@ inválidas (booleano contra valor) em `sed_triggers.txt`, disparadas toda vez qu
 as GUIs do Director avaliavam as opções do Economy Advisor e do ARoAI. Esses
 mods gravam as bandeiras com `set_variable` nu; o Director comparava com `> 0`.
 Corrigido com leitura por presença para booleana e `> 0` só para as numéricas do
-Supply Chain. Reabrir o jogo para confirmar o log limpo: NÃO VERIFICADO.
+Supply Chain. **Carregou:** a reabertura com a 0.7.40 gerou `error.log` de 108
+linhas e zero comparações inválidas; sobrou só ruído do ARoAI 1.3.5, incompatível
+com a 1.15 (1.344 `Value of wrong type` e 5 `Div/0`). ARoAI recomendado desativado.
+Kuromi's AI v8.0 auditado e instalado, sem cruzamento com `sed_*`.
+
+## 0.7.41 — Quanto ouro falta para a guarda liberar a obra
+
+O texto do orçamento já mostrava a reserva exigida, mas o jogador precisava
+comparar com o próprio ouro de cabeça. Nova variável de leitura
+`sed_build_budget_gold_gap = max(required_gold − gold_reserves, 0)`, exibida no
+mesmo texto; zero significa que o saldo já cobre a referência. Nenhum limiar,
+nenhum efeito econômico: a guarda `sed_direct_budget_safe` continua igual.
+
+Teste sintético — 433 aprovados, incluindo
+`test_gold_gap_is_the_distance_to_the_required_reserve` (0, metade, um abaixo, no
+limiar e muito acima) e a limpeza da variável em Desativar. Estático — `--check`
+e `validate.py` aprovados. Instalada com jogo fechado (backup
+`mod_before_0.7.41_20261113_235654_504707`). Carregou: NÃO VERIFICADO.

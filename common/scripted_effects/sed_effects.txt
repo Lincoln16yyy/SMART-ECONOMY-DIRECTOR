@@ -742,6 +742,7 @@ sed_disable_country = {
  remove_variable = sed_build_budget_point_cost
  remove_variable = sed_build_budget_weekly
  remove_variable = sed_build_budget_required_gold
+ remove_variable = sed_build_budget_gold_gap
  remove_variable = sed_build_budget_material_capacity
  remove_variable = sed_build_budget_project_points
  remove_variable = sed_build_budget_project_weeks
@@ -8870,6 +8871,11 @@ var:sed_paper_intent_variant = 1
    add = { value = var:sed_build_budget_weekly subtract = net_total_income min = 0
     multiply = var:sed_build_budget_funding_weeks
    }
+  } }
+  # Distance between the treasury and the required reserve, so the player reads
+  # how much gold is missing instead of comparing two numbers.
+  set_variable = { name = sed_build_budget_gold_gap value = {
+   value = var:sed_build_budget_required_gold subtract = gold_reserves min = 0
   } }
  }
 }

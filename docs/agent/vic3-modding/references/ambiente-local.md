@@ -358,8 +358,8 @@ relação com `sed_`.
 [instalação da 0.7.40: jogo fechado, 14 arquivos, backup em
 `sed_backups/mod_before_0.7.40_20261113_222607_201024`, ordem de mods inalterada,
 zero ocorrências de `var:advisor_enabled > 0`, `var:advisor_auto_construction_enabled > 0`
-e `var:aroai_autobuild > 0` nos três arquivos instalados. Reabrir o jogo para
-confirmar log limpo: PENDENTE.]
+e `var:aroai_autobuild > 0` nos três arquivos instalados. Log limpo confirmado na
+terceira leitura (seção seguinte).]
 
 ### Diagnóstico do log de segunda leitura (2026-11-13, 0.7.40)
 
@@ -389,3 +389,38 @@ Nenhuma linha com `var:advisor_enabled > 0`, `var:advisor_auto_construction_enab
 ou `var:aroai_autobuild > 0` depois da correção. Os erros de comparação booleanas
 (the "jomini_script_system_error") sumiram. O ARoAI é o responsável de todos os
 demais avisos; não são do Director.
+
+### Terceira leitura do log — 0.7.40 confirmada (2026-11-13 22:49)
+
+Reabertura depois de desativar o ARoAI: `error.log` de 16.116 bytes e 108 linhas.
+Zero `Left side and right side during comparison were of different types` — a
+correção da 0.7.40 está confirmada na engine. O que sobra:
+
+- 1.344 `Value of wrong type` em `common/scripted_effects/aroai_preparation_effects.txt:47`
+  (o ARoAI grava `none` onde o jogo espera valor);
+- 5 `Division by zero` em `aroai_preparation_effects.txt:834` e
+  `script_values/aroai_preparation_values.txt:232`.
+
+Tudo do ARoAI, nada de `sed_`. Conclusão registrada: manter o ARoAI **desativado**
+nesta campanha; ele é incompatível com a 1.15 na prática (arquivos de 2023,
+`supported_game_version` vazio).
+
+### Kuromi's AI v8.0 — auditoria e instalação (2026-11-14)
+
+Origem: `~/Downloads/3227982912_Kuromi__x27_s_AI(1).zip`. Conteúdo conferido:
+`supported_game_version "1.15.*"`, `common/ai_strategies/00_default_strategy.txt`
+mais `kai_*`, `common/defines/kai_ai.txt`, `INJECT:` em prédios (incluindo
+`building_construction_sector`, só com `ai_value`), leis, tratados, mobilização,
+botões, triggers e values. Varredura por `sed_*, aroai_*, advisor_*, zw_*`: zero
+ocorrências — sem cruzamento com o Director nem com os adaptadores de coordenação.
+
+Instalado com o jogo fechado, sem sobrescrever nada: pasta
+`mod/3227982912 Kuromi's AI` e descritor `mod/3227982912 Kuromi's AI.mod`
+criado à mão (`version="8.0"`, `name="Kuromi's AI"`, `supported_version="1.15.*"`,
+`path="mod/3227982912 Kuromi's AI"`). O zip não traz `.mod`, então sem esse
+arquivo o launcher não lista o mod.
+
+[instalação da 0.7.41: jogo fechado, 14 arquivos, backup em
+`sed_backups/mod_before_0.7.41_20261113_235654_504707`, ordem de mods inalterada,
+`descriptor.mod` = `version="0.7.41"`, `sed_build_budget_gold_gap` presente no
+efeito instalado e nos dois idiomas da localização. Reabrir o jogo: PENDENTE.]

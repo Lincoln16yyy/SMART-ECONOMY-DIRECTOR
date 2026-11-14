@@ -330,6 +330,14 @@ class ConstructionBudgetInvariantTests(unittest.TestCase):
                     places=4)
                 self.assertGreaterEqual(v['sed_build_budget_funding_weeks'], 4)
 
+    def test_gold_gap_is_the_distance_to_the_required_reserve(self):
+        required = self.refresh(net_total_income=-10, fixed_expenses=50)['sed_build_budget_required_gold']
+        for gold in (0, required / 2, required - 1, required, required + 10 ** 6):
+            with self.subTest(gold=gold):
+                v = self.refresh(net_total_income=-10, fixed_expenses=50, gold_reserves=gold)
+                self.assertAlmostEqual(v['sed_build_budget_gold_gap'],
+                                       max(required - gold, 0), places=3)
+
     def test_the_guard_turns_on_exactly_at_the_required_gold(self):
         required = self.refresh(net_total_income=-10, fixed_expenses=50)['sed_build_budget_required_gold']
         c = self.c

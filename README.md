@@ -1,5 +1,9 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.41, o painel do orçamento diz quanto ouro falta até a reserva exigida pela
+guarda de materiais (`sed_build_budget_gold_gap`, zero quando o saldo já cobre).
+É leitura: nenhum limiar mudou, e a decisão de esperar continua onde estava.
+
 Na 0.7.40, o Director lê as opções do Economy Advisor e do ARoAI como bandeiras
 booleanas, do jeito que esses mods as criam. Antes ele comparava essas bandeiras
 com um número e a engine registrava "Left side and right side during comparison
@@ -317,7 +321,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.7.40.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.7.41.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 

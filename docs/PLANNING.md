@@ -1467,5 +1467,28 @@ Teste sintético — 431 aprovados, incluindo
 `test_boolean_external_flags_are_read_without_numeric_comparison`, que varre
 todos os artefatos gerados e proíbe `var:<bandeira> > 0` para as três bandeiras
 booleanas, e o teste de opção desligada, que agora modela bandeira ausente em vez
-de zero. A reabertura do jogo para confirmar o `error.log` limpo continua
-NÃO VERIFICADA.
+de zero. **Carregou (2026-11-13):** a reabertura com a 0.7.40 produziu 108 linhas,
+zero comparações inválidas; restaram 1.344 `Value of wrong type`
+(`aroai_preparation_effects.txt:47`) e 5 `Div/0`, todos do ARoAI 1.3.5, que é
+incompatível com a 1.15 e deve ficar desativado.
+
+## 0.7.41 — Distância até a reserva exigida
+
+O texto da guarda de materiais mostrava `required_gold` (4 × despesas fixas mais
+o déficit semanal vezes a janela de financiamento), mas o jogador tinha de
+comparar esse número com o próprio ouro. A 0.7.41 acrescenta a leitura
+`sed_build_budget_gold_gap = max(required_gold − gold_reserves, 0)`, publicada no
+mesmo texto do painel e zerada quando o saldo já cobre a reserva.
+
+Decisão de escopo: é leitura pura. `sed_direct_budget_safe` continua decidindo
+pelo mesmo limiar (`gold_reserves >= required_gold` sem dívida), então nenhum
+país passa a construir antes ou depois; só a explicação fica legível. A variável
+entrou em `construction_budget.VARIABLES`, para o Desativar limpar como as
+demais.
+
+Teste sintético — 433 aprovados, incluindo
+`test_gold_gap_is_the_distance_to_the_required_reserve`, que compara a variável
+com a diferença calculada em cinco pontos (saldo zero, metade, um abaixo, no
+limiar e muito acima) e garante que ela nunca fica negativa. Estático —
+`build_mod.py --check` e `validate.py` aprovados. Instalação com jogo fechado e
+backup `mod_before_0.7.41_20261113_235654_504707`. Carregou: NÃO VERIFICADO.
