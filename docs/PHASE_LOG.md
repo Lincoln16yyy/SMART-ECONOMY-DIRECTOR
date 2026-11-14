@@ -2864,3 +2864,18 @@ Teste sintético — 433 aprovados, incluindo
 limiar e muito acima) e a limpeza da variável em Desativar. Estático — `--check`
 e `validate.py` aprovados. Instalada com jogo fechado (backup
 `mod_before_0.7.41_20261113_235654_504707`). Carregou: NÃO VERIFICADO.
+
+## 0.7.42 — Ouro faltante no status 22 e limpeza do status 21/executor 12
+
+O status 22 de revisão (“referência de materiais sem cobertura”) passou a
+mostrar a distância em ouro até a guarda liberar (`sed_build_budget_gold_gap`,
+a mesma leitura da 0.7.41), para o jogador ver o bloqueio direto na última
+revisão. Nenhum limiar ou efeito econômico mudou.
+
+Limpeza de resíduo da 0.7.37: `sed_auto_status_reserve_queue` (status 21) e
+`sed_coord_executor_12` não eram mais emitidos nem usados, mas ainda geravam
+SGUi, blocos no GUI e localizações; removidos do gerador e dos artefatos.
+
+Teste sintético — 433 aprovados. Estático — `--check` e `validate.py`
+aprovados. Instalada com jogo fechado (backup
+`mod_before_0.7.42_20261114_005714_384642`). Carregou: NÃO VERIFICADO.

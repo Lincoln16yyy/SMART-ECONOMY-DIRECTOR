@@ -1492,3 +1492,18 @@ com a diferença calculada em cinco pontos (saldo zero, metade, um abaixo, no
 limiar e muito acima) e garante que ela nunca fica negativa. Estático —
 `build_mod.py --check` e `validate.py` aprovados. Instalação com jogo fechado e
 backup `mod_before_0.7.41_20261113_235654_504707`. Carregou: NÃO VERIFICADO.
+
+## 0.7.42 — Clareza do bloqueio orçamentário e limpeza de resíduo
+
+A 0.7.41 expôs `sed_build_budget_gold_gap` no texto do orçamento; a 0.7.42
+reusa a mesma variável no `sed_auto_status_budget` (status 22), para que a
+última revisão informe “faltam X de ouro” sem exigir que o jogador abra o
+detalhe do plano. É leitura pura: `sed_direct_budget_safe` e todos os limiares
+permanecem iguais.
+
+Também foram removidos do gerador/artefatos os resíduos do caminho extinto na
+0.7.37: visibilidade/GUI/loc de `sed_auto_status_reserve_queue` (status 21) e de
+`sed_coord_executor_12`. Nenhum efeito emitia esses valores; a remoção não altera
+comportamento, apenas elimina UI inalcançável. Teste sintético 433, estático ok,
+instalação com jogo fechado (`mod_before_0.7.42_20261114_005714_384642`).
+Carregou: NÃO VERIFICADO.

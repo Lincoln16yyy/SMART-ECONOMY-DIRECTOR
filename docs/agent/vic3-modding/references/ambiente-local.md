@@ -424,3 +424,9 @@ arquivo o launcher não lista o mod.
 `sed_backups/mod_before_0.7.41_20261113_235654_504707`, ordem de mods inalterada,
 `descriptor.mod` = `version="0.7.41"`, `sed_build_budget_gold_gap` presente no
 efeito instalado e nos dois idiomas da localização. Reabrir o jogo: PENDENTE.]
+
+[instalação da 0.7.42: jogo fechado, 14 arquivos, backup em
+`sed_backups/mod_before_0.7.42_20261114_005714_384642`, ordem de mods inalterada,
+`descriptor.mod` = `version="0.7.42"`. Status 22 mostra `sed_build_budget_gold_gap`
+e resíduos do status 21/executor 12 removidos dos artefatos instalados. Reabrir
+o jogo: PENDENTE.]
