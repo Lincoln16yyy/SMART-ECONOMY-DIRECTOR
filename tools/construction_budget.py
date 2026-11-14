@@ -201,8 +201,11 @@ def effects(founding_projects=()):
     value = var:sed_build_budget_project_points divide = var:sed_build_budget_points
    } }
   }
+  # The window is the work itself plus one month of slack. A fixed six-month
+  # floor used to override cheap projects and block them for a horizon they
+  # never occupy; a long queue still extends the window through its own weeks.
   set_variable = { name = sed_build_budget_funding_weeks value = {
-   value = var:sed_build_budget_project_weeks add = var:sed_build_budget_queue_weeks add = 4 min = 26
+   value = var:sed_build_budget_project_weeks add = var:sed_build_budget_queue_weeks add = 4
   } }
   set_variable = { name = sed_build_budget_required_gold value = {
    value = sed_fixed_expenses_value min = 0 multiply = 4

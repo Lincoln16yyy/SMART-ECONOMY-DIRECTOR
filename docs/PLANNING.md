@@ -1379,3 +1379,30 @@ rejeição com dívida, `net_fixed_income` negativo e ouro abaixo do piso. NÃO
 VERIFICADO na engine: nenhuma dessas leituras foi confrontada com save; os
 fatores 4 e 6 são decisões desta implementação e seguem para calibragem em
 campanha.
+
+## 0.7.38 — Janela de financiamento proporcional à obra
+
+`sed_build_budget_funding_weeks` era `projeto + fila + 4`, com um piso fixo de
+26 semanas. O piso existia para cobrir obra longa, mas também alcançava obra
+curta: uma fundação de 200 pontos, que ocupa 20 semanas, era avaliada como se
+precisasse pagar seis meses de materiais que não existiriam. Era isso que
+segurava o Director em país pequeno com obra barata na frente.
+
+A 0.7.38 remove o piso. A janela passa a ser exatamente `projeto + fila + 4`:
+a obra longa continua exigindo a janela longa porque ela mesma a produz, e a
+obra curta deixa de ser cobrada por um horizonte que não ocupa. No cenário de
+teste (setor de madeira, um nível, fundação de madeira de 200 pontos,
+despesas fixas 50, renda 100) o ouro exigido cai de 88.600 para 81.800; com
+déficit de 10 por semana, de 91.460 para 84.440.
+
+O teto de materiais do setor ainda limita a referência semanal, e a duração
+continua usando a capacidade nacional de construção, não a capacidade limitada
+por material. Essa divergência é conhecida e registrada como limitação: pelos
+dados de `PROFILES`, um nível de setor sustentaria 2 pontos por semana, enquanto
+`modifier:country_construction_add` informa 10. Unificar as duas leituras
+mudaria o limiar em cinco vezes e é decisão de balanceamento, não correção.
+
+Teste sintético — 430 aprovados, incluindo invariantes que não dependem de
+número de campanha: fórmula do ouro exigido, janela igual à obra mais um mês,
+limiar exato do gatilho, monotonicidade na renda e rejeição com dívida. NÃO
+VERIFICADO na engine.

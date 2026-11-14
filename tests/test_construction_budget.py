@@ -64,11 +64,11 @@ class ConstructionBudgetTests(unittest.TestCase):
         c = self.c
         self.sector('pm_wooden_buildings')
         self.target()
-        c.readings.update(principal=0, gold_reserves=88599)
+        c.readings.update(principal=0, gold_reserves=81799)
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')
         self.assertEqual(c.constructions, [])
-        c.readings['gold_reserves'] = 88600
+        c.readings['gold_reserves'] = 81800
         c.run('sed_auto_apply_monthly')
         self.assertEqual(len(c.constructions), 1)
         self.assertEqual(c.variables['sed_auto_review_status'], 1)
@@ -252,12 +252,12 @@ class ConstructionBudgetTests(unittest.TestCase):
         c = self.c
         self.sector('pm_wooden_buildings')
         self.target()
-        c.readings.update(net_total_income=-10, principal=0, gold_reserves=91459)
+        c.readings.update(net_total_income=-10, principal=0, gold_reserves=84439)
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')
         self.assertEqual(c.constructions, [])
         self.assertNotIn('sed_auto_last_attempt_month', c.variables)
-        c.readings['gold_reserves'] = 91460
+        c.readings['gold_reserves'] = 84440
         c.run('sed_auto_apply_monthly')
         self.assertEqual(len(c.constructions), 1)
         self.assertEqual(c.variables['sed_auto_review_status'], 1)
@@ -320,14 +320,15 @@ class ConstructionBudgetInvariantTests(unittest.TestCase):
                 expected = max(fixed, 0) * 4 + shortfall * v['sed_build_budget_funding_weeks']
                 self.assertAlmostEqual(v['sed_build_budget_required_gold'], expected, places=3)
 
-    def test_funding_window_covers_the_work_and_keeps_the_26_week_floor(self):
+    def test_funding_window_is_the_work_plus_one_month_without_a_fixed_floor(self):
         for queue in (0, 1, 4):
             with self.subTest(queue=queue):
                 v = self.refresh(construction_queue_num_queued_government_levels=queue)
                 self.assertAlmostEqual(
                     v['sed_build_budget_funding_weeks'],
-                    max(v['sed_build_budget_project_weeks'] + v['sed_build_budget_queue_weeks'] + 4, 26),
+                    v['sed_build_budget_project_weeks'] + v['sed_build_budget_queue_weeks'] + 4,
                     places=4)
+                self.assertGreaterEqual(v['sed_build_budget_funding_weeks'], 4)
 
     def test_the_guard_turns_on_exactly_at_the_required_gold(self):
         required = self.refresh(net_total_income=-10, fixed_expenses=50)['sed_build_budget_required_gold']

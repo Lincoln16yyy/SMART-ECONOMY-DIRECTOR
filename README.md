@@ -1,5 +1,10 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.38, a reserva de materiais deixa de exigir um mínimo fixo de 26 semanas:
+ela passa a cobrir a duração estimada da obra mais um mês. Obra barata que era
+bloqueada por um horizonte de meio ano — e que nunca o ocuparia — passa a entrar
+na fila; obra longa continua exigindo a janela longa, porque ela mesma a cria.
+
 Na 0.7.37, a guarda fiscal passa a ter um piso único. Um déficit operacional sem
 dívida é financiado por ouro quando as reservas cobrem seis semanas de despesas
 fixas; a classificação 5 e a janela de 26 semanas saíram, e o custo da obra
@@ -300,7 +305,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.7.37.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.7.38.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 

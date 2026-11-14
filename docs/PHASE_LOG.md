@@ -2811,3 +2811,19 @@ novo (piso de `6 ×`, coordenação sem a espera por reservas, ferrovia delegada
 ao Supply Chain sob déficit). Estático — geração consistente. NÃO VERIFICADO na
 engine: nenhuma leitura de déficit financiado foi observada em campanha, e os
 fatores 4 e 6 precisam de save para calibragem.
+
+## 0.7.38 — Janela de financiamento pela obra
+
+O piso fixo de 26 semanas em `sed_build_budget_funding_weeks` cobrava obra
+curta por um horizonte que ela não ocupa. Removido: a janela é `projeto + fila +
+4`. Cenário de teste cai de 88.600 para 81.800 de ouro exigido (e de 91.460 para
+84.440 com déficit), sem mudar o caso de obra longa, que já excedia o piso.
+
+A divergência entre a duração (capacidade nacional) e o teto de materiais do
+setor ficou registrada em `docs/PLANNING.md` como limitação conhecida, com
+números: 2 pontos/semana pelo perfil contra 10 pontos/semana pelo modificador do
+jogo. Não foi alterada nesta versão.
+
+Teste sintético — 430 aprovados, cinco deles invariantes sem constante de
+campanha (fórmula, janela, limiar exato, monotonicidade e dívida). Estático —
+geração consistente. NÃO VERIFICADO na engine.
