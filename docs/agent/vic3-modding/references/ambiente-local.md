@@ -360,3 +360,32 @@ relação com `sed_`.
 zero ocorrências de `var:advisor_enabled > 0`, `var:advisor_auto_construction_enabled > 0`
 e `var:aroai_autobuild > 0` nos três arquivos instalados. Reabrir o jogo para
 confirmar log limpo: PENDENTE.]
+
+### Diagnóstico do log de segunda leitura (2026-11-13, 0.7.40)
+
+Após corrigir as comparações booleanas, o log da 0.7.40 tem 381.855 bytes,
+com estas mensagens distintas, todas vindas de outros mods (não de `sed_`):
+
+- 1.300 `start_building_construction returned false` em
+  `common/scripted_effects/aroai_construction_effects.txt:377` — o ARoAI tenta
+  construir edifícios que não estão no seu banco: `building_war_machine_industry`,
+  `building_tooling_workshops`, `building_textile_mills`, `building_synthetics_plants`,
+  `building_steel_mills`, `building_shipyards`, `building_paper_mills`,
+  `building_naval_base`, `building_munition_plants`, `building_furniture_manufacturies`,
+  `building_chemical_plants`, `building_barracks`, `building_arts_academy`. São
+  edifícios do ARoAI que o jogo não reconhece. Erro do ARoAI.
+- 123 `has_potential_resource returned false` em
+  `aroai_evaluation_triggers.txt` — `target: Not found in database class
+  CBuildingDatabase` (mesmo grupo de edifícios). Erro do ARoAI.
+- 52 `remove_building returned false` no `aroai_preparation_effects.txt` (mesmo
+  grupo). Erro do ARoAI.
+- 50 `start_building_construction` por um **reator** do ARoAI (loop de construção
+  fora do Escopo Common, 50×), e 26 do `aroai_preparation_effects`. Extraídos de
+  `aroai_construction_effects.txt` (linhas 284/377 e 1273/1280/1285/1490 etc.).
+- 48 `Failed to approximate weeks left in construction queue: The total construction
+  speed is zero` (mesma do vanilla; fila vazia).
+
+Nenhuma linha com `var:advisor_enabled > 0`, `var:advisor_auto_construction_enabled > 0`
+ou `var:aroai_autobuild > 0` depois da correção. Os erros de comparação booleanas
+(the "jomini_script_system_error") sumiram. O ARoAI é o responsável de todos os
+demais avisos; não são do Director.
