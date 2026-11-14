@@ -312,3 +312,12 @@ os dois.
   vanilla 1.15) e **938** avisos (933 na 0.7.29; os cinco novos vêm das caixas
   de texto do painel). O binário continua declarando suporte até 1.13.5.
   [confirmado 2026-11-12]
+
+[confirmado 2026-11-13 — instalação da 0.7.38 concluída com jogo fechado
+(`pgrep -x victoria3.exe` sem processo): 14 arquivos, backup em
+`sed_backups/mod_before_0.7.38_20261113_211121_616441`, ordem de mods
+inalterada, `descriptor.mod` = `version="0.7.38"`. Pacote em
+`dist/smart-economy-director-0.7.38.zip`. Conferido no arquivo instalado:
+`sed_build_budget_funding_weeks` sem `min = 26` e a guarda fiscal com a
+ramificação de déficit a `multiply = 6`. Nenhuma partida aberta com a 0.7.38;
+evidência Carregou continua pendente.]
