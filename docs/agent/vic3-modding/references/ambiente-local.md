@@ -312,3 +312,121 @@ os dois.
   vanilla 1.15) e **938** avisos (933 na 0.7.29; os cinco novos vêm das caixas
   de texto do painel). O binário continua declarando suporte até 1.13.5.
   [confirmado 2026-11-12]
+
+[confirmado 2026-11-13 — instalação da 0.7.38 concluída com jogo fechado
+(`pgrep -x victoria3.exe` sem processo): 14 arquivos, backup em
+`sed_backups/mod_before_0.7.38_20261113_211121_616441`, ordem de mods
+inalterada, `descriptor.mod` = `version="0.7.38"`. Pacote em
+`dist/smart-economy-director-0.7.38.zip`. Conferido no arquivo instalado:
+`sed_build_budget_funding_weeks` sem `min = 26` e a guarda fiscal com a
+ramificação de déficit a `multiply = 6`. Nenhuma partida aberta com a 0.7.38;
+evidência Carregou continua pendente.]
+
+[confirmado 2026-11-13 — instalação da 0.7.39 com jogo fechado: 14 arquivos,
+backup em `sed_backups/mod_before_0.7.39_20261113_214040_320070`, ordem de mods
+inalterada, `descriptor.mod` = `version="0.7.39"`. Conferido no instalado: loc
+`sed_meta_grain_result` nos dois idiomas, `goal_result_years` em
+`common/scripted_effects/sed_effects.txt` e a linha no
+`gui/journal_entry_widgets/sed_diagnostics.gui`. Nenhuma partida aberta.]
+
+### Ler o error.log — primeira evidência Carregou (2026-11-13)
+
+O log fica em `.../Documents/Paradox Interactive/Victoria 3/logs/error.log` e
+é reescrito a cada abertura; confira `ls -l --time-style=full-iso` antes de
+interpretar. Padrões úteis:
+
+```bash
+grep -o "sed_triggers.txt:[0-9]*" "$LOG" | sort | uniq -c | sort -rn | head
+grep -v "Script location:" "$LOG" | grep -v "^common/" | sed -E 's/[0-9]+/N/g' | sort | uniq -c | sort -rn
+```
+
+Resultado da 0.7.39 (jogo aberto pelo usuário, 8.151 linhas): 1.627
+`Left side and right side during comparison were of different types (left was
+'boolean', right was 'value')` em `sed_triggers.txt:2747/2754/2691/3866/3867`.
+Causa provada nos mods instalados: `advisor_enabled` e
+`advisor_auto_construction_enabled` são criados pelo Economy Advisor com
+`set_variable = <flag>` (nulo de valor ⇒ booleano; `decisions/advisor_decisions.txt:19`,
+`scripted_guis/advisor_scripted_guis.txt:415`), e `aroai_autobuild` pelo ARoAI
+do mesmo jeito (`events/aroai_autobuild_events.txt:39`). As opções do Supply
+Chain são numéricas (`scripted_buttons/zw_scsab_buttons.txt:580`). Regra: nunca
+comparar com `> 0` uma bandeira que o dono grava com `set_variable` nu.
+
+Também aparecem 16 `Failed to approximate weeks left in construction queue: The
+total construction speed is zero` — mensagem do vanilla com fila vazia, sem
+relação com `sed_`.
+
+[instalação da 0.7.40: jogo fechado, 14 arquivos, backup em
+`sed_backups/mod_before_0.7.40_20261113_222607_201024`, ordem de mods inalterada,
+zero ocorrências de `var:advisor_enabled > 0`, `var:advisor_auto_construction_enabled > 0`
+e `var:aroai_autobuild > 0` nos três arquivos instalados. Log limpo confirmado na
+terceira leitura (seção seguinte).]
+
+### Diagnóstico do log de segunda leitura (2026-11-13, 0.7.40)
+
+Após corrigir as comparações booleanas, o log da 0.7.40 tem 381.855 bytes,
+com estas mensagens distintas, todas vindas de outros mods (não de `sed_`):
+
+- 1.300 `start_building_construction returned false` em
+  `common/scripted_effects/aroai_construction_effects.txt:377` — o ARoAI tenta
+  construir edifícios que não estão no seu banco: `building_war_machine_industry`,
+  `building_tooling_workshops`, `building_textile_mills`, `building_synthetics_plants`,
+  `building_steel_mills`, `building_shipyards`, `building_paper_mills`,
+  `building_naval_base`, `building_munition_plants`, `building_furniture_manufacturies`,
+  `building_chemical_plants`, `building_barracks`, `building_arts_academy`. São
+  edifícios do ARoAI que o jogo não reconhece. Erro do ARoAI.
+- 123 `has_potential_resource returned false` em
+  `aroai_evaluation_triggers.txt` — `target: Not found in database class
+  CBuildingDatabase` (mesmo grupo de edifícios). Erro do ARoAI.
+- 52 `remove_building returned false` no `aroai_preparation_effects.txt` (mesmo
+  grupo). Erro do ARoAI.
+- 50 `start_building_construction` por um **reator** do ARoAI (loop de construção
+  fora do Escopo Common, 50×), e 26 do `aroai_preparation_effects`. Extraídos de
+  `aroai_construction_effects.txt` (linhas 284/377 e 1273/1280/1285/1490 etc.).
+- 48 `Failed to approximate weeks left in construction queue: The total construction
+  speed is zero` (mesma do vanilla; fila vazia).
+
+Nenhuma linha com `var:advisor_enabled > 0`, `var:advisor_auto_construction_enabled > 0`
+ou `var:aroai_autobuild > 0` depois da correção. Os erros de comparação booleanas
+(the "jomini_script_system_error") sumiram. O ARoAI é o responsável de todos os
+demais avisos; não são do Director.
+
+### Terceira leitura do log — 0.7.40 confirmada (2026-11-13 22:49)
+
+Reabertura depois de desativar o ARoAI: `error.log` de 16.116 bytes e 108 linhas.
+Zero `Left side and right side during comparison were of different types` — a
+correção da 0.7.40 está confirmada na engine. O que sobra:
+
+- 1.344 `Value of wrong type` em `common/scripted_effects/aroai_preparation_effects.txt:47`
+  (o ARoAI grava `none` onde o jogo espera valor);
+- 5 `Division by zero` em `aroai_preparation_effects.txt:834` e
+  `script_values/aroai_preparation_values.txt:232`.
+
+Tudo do ARoAI, nada de `sed_`. Conclusão registrada: manter o ARoAI **desativado**
+nesta campanha; ele é incompatível com a 1.15 na prática (arquivos de 2023,
+`supported_game_version` vazio).
+
+### Kuromi's AI v8.0 — auditoria e instalação (2026-11-14)
+
+Origem: `~/Downloads/3227982912_Kuromi__x27_s_AI(1).zip`. Conteúdo conferido:
+`supported_game_version "1.15.*"`, `common/ai_strategies/00_default_strategy.txt`
+mais `kai_*`, `common/defines/kai_ai.txt`, `INJECT:` em prédios (incluindo
+`building_construction_sector`, só com `ai_value`), leis, tratados, mobilização,
+botões, triggers e values. Varredura por `sed_*, aroai_*, advisor_*, zw_*`: zero
+ocorrências — sem cruzamento com o Director nem com os adaptadores de coordenação.
+
+Instalado com o jogo fechado, sem sobrescrever nada: pasta
+`mod/3227982912 Kuromi's AI` e descritor `mod/3227982912 Kuromi's AI.mod`
+criado à mão (`version="8.0"`, `name="Kuromi's AI"`, `supported_version="1.15.*"`,
+`path="mod/3227982912 Kuromi's AI"`). O zip não traz `.mod`, então sem esse
+arquivo o launcher não lista o mod.
+
+[instalação da 0.7.41: jogo fechado, 14 arquivos, backup em
+`sed_backups/mod_before_0.7.41_20261113_235654_504707`, ordem de mods inalterada,
+`descriptor.mod` = `version="0.7.41"`, `sed_build_budget_gold_gap` presente no
+efeito instalado e nos dois idiomas da localização. Reabrir o jogo: PENDENTE.]
+
+[instalação da 0.7.42: jogo fechado, 14 arquivos, backup em
+`sed_backups/mod_before_0.7.42_20261114_005714_384642`, ordem de mods inalterada,
+`descriptor.mod` = `version="0.7.42"`. Status 22 mostra `sed_build_budget_gold_gap`
+e resíduos do status 21/executor 12 removidos dos artefatos instalados. Reabrir
+o jogo: PENDENTE.]

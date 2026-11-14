@@ -4,7 +4,7 @@ from pathlib import Path
 import unittest
 
 from tools.build_mod import outputs, SUPPLY_TARGETS
-from tools.coordination import OPTIONS, ADVISOR_POLICY_OPTIONS, SUPPLY_POLICY_OPTIONS
+from tools.coordination import OPTIONS, ADVISOR_POLICY_OPTIONS, SUPPLY_POLICY_OPTIONS, BARE_FLAGS
 from tools.validate import validate
 from test_diagnostics import script_definitions
 from script_harness import Country, railway, state, building
@@ -105,18 +105,38 @@ class CoordinationTests(unittest.TestCase):
         self.assertEqual(self.external(), {})
 
     def test_a_disabled_option_left_at_zero_is_not_detected_or_enabled(self):
-        # Supply Chain leaves its variables behind at 0 when the player turns the
-        # option off. Presence alone made the Director detect, coordinate and
-        # re-enable automation the player had just disabled.
+        # Supply Chain leaves its numeric variables behind at 0 when the player
+        # turns the option off. Presence alone made the Director detect,
+        # coordinate and re-enable automation the player had just disabled.
+        # Economy Advisor and ARoAI flags are boolean, so they are excluded here
+        # and covered by the type test below.
+        numeric = [option for _, option, _ in OPTIONS if option not in BARE_FLAGS]
         c = self.c
-        for _, option, _ in OPTIONS:
+        for option in numeric:
             c.variables[option] = 0
+        # A boolean flag is off by being absent, never by being zero.
+        for option in BARE_FLAGS:
+            c.variables.pop(option, None)
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')
         self.assertFalse(c.condition(c.definitions['sed_competing_builder_configured'], c.country_scope()))
         self.assertNotIn('sed_coord_supply_known', c.variables)
-        self.assertEqual({option: c.variables.get(option, 0) for _, option, _ in OPTIONS},
-                         {option: 0 for _, option, _ in OPTIONS})
+        self.assertEqual({option: c.variables.get(option, 0) for option in numeric},
+                         {option: 0 for option in numeric})
+
+    def test_boolean_external_flags_are_read_without_numeric_comparison(self):
+        # Economy Advisor and ARoAI create these flags with a bare
+        # `set_variable`, so the stored value is boolean. Comparing it to a
+        # number made the engine log "Left side and right side during comparison
+        # were of different types" 1.627 times in one session (installed game's
+        # logs/error.log, 2026-11-13). Presence is the state for those flags.
+        script = ''.join(content.decode('utf-8', 'replace')
+                         for content in outputs().values() if isinstance(content, bytes))
+        for flag in BARE_FLAGS:
+            self.assertNotIn(f'var:{flag} > 0', script, flag)
+            self.assertIn(f'has_variable = {flag}', script, flag)
+        # Numeric Supply Chain options still need the zero test.
+        self.assertIn('var:zw_var_expand_building > 0', script)
 
     def test_no_producer_shortage_delegates_to_advisor_and_preserves_unrelated_options(self):
         c = self.c
@@ -294,7 +314,8 @@ class CoordinationTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_plan_goal'], 8)
         self.assertEqual(c.variables['sed_coord_executor'], 1)
         self.assertEqual(self.external(), {'advisor_auto_construction_enabled': 1})
-        c.readings['gold_reserves'] = 859
+        # O piso financiado por ouro é de seis semanas de despesas fixas (300).
+        c.readings['gold_reserves'] = 299
         c.run('sed_monthly_update')
         self.assertEqual(c.variables['sed_coord_executor'], 0)
         self.assertEqual(self.external(), {})
@@ -304,20 +325,21 @@ class CoordinationTests(unittest.TestCase):
         self.assertEqual(self.external(), {})
         self.assertEqual(c.constructions, [])
 
-    def test_reserve_drawdown_routes_infrastructure_to_advisor_and_not_supply(self):
+    def test_reserve_funded_infrastructure_uses_supply_railways(self):
         c = self.c
         c.readings.update(net_total_income=-10, net_fixed_income=100,
                           fixed_expenses=50, gold_reserves=860, principal=0)
         c.run('sed_set_mode_automatic')
         self.assertEqual(c.variables['sed_plan_goal'], 1)
-        self.assertEqual(c.variables['sed_coord_executor'], 1)
-        self.assertEqual(self.external(), {'advisor_auto_construction_enabled': 1})
+        self.assertEqual(c.variables['sed_coord_executor'], 2)
+        self.assertEqual(self.external(), {'zw_var_scsab_construct_railway': 1})
         c.run('sed_set_mode_assisted')
+        self.assertEqual(self.external(), self.original)
         c.variables.pop('advisor_enabled')
         c.variables.pop('advisor_auto_construction_enabled')
         c.run('sed_set_mode_automatic')
-        self.assertEqual(c.variables['sed_coord_executor'], 0)
-        self.assertEqual(self.external(), {})
+        self.assertEqual(c.variables['sed_coord_executor'], 2)
+        self.assertEqual(self.external(), {'zw_var_scsab_construct_railway': 1})
 
     def test_specific_goals_use_only_the_matching_supply_routine(self):
         for goal, option, executor in (
@@ -390,7 +412,7 @@ class CoordinationTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_auto_review_status'], 18)
         self.assertEqual(self.external(), {'zw_var_scsab_construct_railway': 1})
 
-    def test_reserve_funded_queue_pauses_then_resumes_without_cancelling_projects(self):
+    def test_reserve_funded_queue_keeps_coordinating_without_cancelling_projects(self):
         c = self.c
         c.states.clear()
         c.readings.update(net_total_income=-10, net_fixed_income=100,
@@ -399,9 +421,9 @@ class CoordinationTests(unittest.TestCase):
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')
         self.assertEqual(c.variables['sed_fiscal_status'], 5)
-        self.assertEqual(c.variables['sed_coord_executor'], 12)
-        self.assertEqual(c.variables['sed_auto_review_status'], 21)
-        self.assertEqual(self.external(), {})
+        self.assertEqual(c.variables['sed_coord_executor'], 1)
+        self.assertEqual(c.variables['sed_auto_review_status'], 18)
+        self.assertEqual(self.external(), {'advisor_auto_construction_enabled': 1})
         self.assertEqual(c.readings['construction_queue_num_queued_government_levels'], 1)
         c.readings['construction_queue_num_queued_government_levels'] = 0
         c.run('sed_auto_apply_monthly')
@@ -435,11 +457,11 @@ class CoordinationTests(unittest.TestCase):
         c.readings.update(net_total_income=-10, fixed_expenses=50, gold_reserves=860,
                           principal=0, construction_queue_num_queued_government_levels=1)
         c.run('sed_refresh_diagnostics')
-        self.assertEqual(c.variables['sed_coord_executor'], 12)
-        self.assertEqual(self.external(), {})
+        self.assertEqual(c.variables['sed_coord_executor'], 1)
+        self.assertEqual(self.external(), {'advisor_auto_construction_enabled': 1})
         self.assertEqual(c.constructions, [])
         self.assertEqual({key: value for key, value in c.variables.items() if key in review}, review)
-        c.readings['gold_reserves'] = 859
+        c.readings['gold_reserves'] = 299
         c.run('sed_refresh_diagnostics')
         self.assertEqual(c.variables['sed_coord_executor'], 0)
         c.readings.update(net_total_income=100, gold_reserves=1000)

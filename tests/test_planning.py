@@ -154,15 +154,16 @@ class PlanningTests(unittest.TestCase):
         c.readings.update(fixed_expenses=50, gold_reserves=860,
                           net_total_income=-10, principal=0)
         c.run('sed_refresh_national_plan')
-        self.assertEqual(c.variables['sed_reserve_floor'], 600)
-        self.assertEqual(c.variables['sed_reserve_required'], 860)
-        self.assertEqual(c.variables['sed_reserve_spare'], 260)
-        self.assertEqual(c.variables['sed_reserve_runway'], 26)
+        self.assertEqual(c.variables['sed_reserve_floor'], 200)
+        self.assertEqual(c.variables['sed_reserve_required'], 300)
+        self.assertEqual(c.variables['sed_reserve_spare'], 560)
+        self.assertEqual(c.variables['sed_reserve_runway'], 56)
         self.assertEqual(c.variables['sed_fiscal_status'], 5)
-        c.readings['gold_reserves'] = 859
+        c.readings['gold_reserves'] = 299
         c.run('sed_refresh_national_plan')
         self.assertEqual(c.variables['sed_fiscal_status'], 2)
-        self.assertAlmostEqual(c.variables['sed_reserve_runway'], 25.9)
+        self.assertEqual(c.variables['sed_reserve_spare'], 0)
+        self.assertEqual(c.variables['sed_reserve_runway'], 0)
 
     def test_reserve_budget_clamps_negative_expenses_and_gold_below_floor(self):
         c = self.c
@@ -173,7 +174,7 @@ class PlanningTests(unittest.TestCase):
         c.readings.update(fixed_expenses=-5, gold_reserves=100)
         c.run('sed_refresh_national_plan')
         self.assertEqual(c.variables['sed_reserve_floor'], 0)
-        self.assertEqual(c.variables['sed_reserve_required'], 260)
+        self.assertEqual(c.variables['sed_reserve_required'], 0)
 
     def test_reserve_budget_zero_deficit_does_not_divide_by_zero_or_keep_old_runway(self):
         c = self.c
@@ -182,11 +183,11 @@ class PlanningTests(unittest.TestCase):
         c.readings['net_total_income'] = 0
         c.run('sed_refresh_national_plan')
         self.assertEqual(c.variables['sed_reserve_runway'], 0)
-        self.assertEqual(c.variables['sed_reserve_required'], 600)
+        self.assertEqual(c.variables['sed_reserve_required'], 200)
         c.readings['net_total_income'] = 100
         c.run('sed_refresh_national_plan')
         self.assertEqual(c.variables['sed_reserve_runway'], 0)
-        self.assertEqual(c.variables['sed_reserve_required'], 600)
+        self.assertEqual(c.variables['sed_reserve_required'], 200)
 
     def ranked(self):
         result = []
@@ -421,17 +422,22 @@ class PlanningTests(unittest.TestCase):
         self.assertFalse(c.condition(child(c.definitions['sed_plan_1_grain_visible_sgui'],
                                            'is_shown'), c.country_scope()))
 
-    def test_reserve_drawdown_guard_scales_and_rejects_operating_deficit(self):
+    def test_reserve_financed_deficit_tolerance_scales_with_country_size(self):
         c = self.c
         for scale in (0.01, 1, 1000):
             with self.subTest(scale=scale):
                 c.readings.update(net_total_income=-10 * scale, net_fixed_income=100 * scale,
                                   fixed_expenses=50 * scale, gold_reserves=860 * scale,
                                   principal=0)
-                self.assertTrue(c.condition(c.definitions['sed_coord_reserve_drawdown_safe'], c.country_scope()))
+                # Déficit sem dívida é financiado por ouro quando as reservas
+                # cobrem seis semanas de despesas fixas (300 x escala).
+                self.assertTrue(c.condition(c.definitions['sed_auto_fiscal_safe'], c.country_scope()))
+                c.readings['gold_reserves'] = 299 * scale
                 self.assertFalse(c.condition(c.definitions['sed_auto_fiscal_safe'], c.country_scope()))
-                c.readings['net_fixed_income'] = -1
-                self.assertFalse(c.condition(c.definitions['sed_coord_reserve_drawdown_safe'], c.country_scope()))
+                c.readings.update(gold_reserves=860 * scale, principal=scale)
+                self.assertFalse(c.condition(c.definitions['sed_auto_fiscal_safe'], c.country_scope()))
+                c.readings.update(principal=0, net_fixed_income=-1)
+                self.assertFalse(c.condition(c.definitions['sed_auto_fiscal_safe'], c.country_scope()))
 
     def test_grain_alternative_producer_is_planned_and_queued(self):
         maize = building('building_maize_farm')
@@ -484,6 +490,33 @@ class PlanningTests(unittest.TestCase):
         self.assertTrue(c.condition(child(visible, 'is_shown'), c.country_scope()))
         c.readings['year'] = 1837
         self.assertFalse(c.condition(child(visible, 'is_shown'), c.country_scope()))
+
+    def test_finished_goal_records_its_duration_and_price_move(self):
+        self.producer('grain', buy=100, sell=30)
+        c = self.c
+        c.market_goods['grain']['market_goods_pricier'] = 0.40
+        for month in range(3):
+            c.readings['month'] = month
+            c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_grain_meta_year'], 1836)
+        self.assertAlmostEqual(c.variables['sed_grain_goal_price_start'], 40)
+        self.assertNotIn('sed_grain_goal_result_year', c.variables)
+        # Two years later the shortage stops being observed.
+        c.readings['year'] = 1838
+        c.market_goods['grain']['market_goods_pricier'] = 0.25
+        c.market_goods['grain']['market_goods_has_goods_shortage'] = False
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_grain_goal_result_years'], 2)
+        self.assertEqual(c.variables['sed_grain_goal_result_year'], 1838)
+        self.assertAlmostEqual(c.variables['sed_grain_goal_result_price'], -15)
+        visible = c.definitions['sed_meta_grain_result_visible_sgui']
+        self.assertTrue(c.condition(child(visible, 'is_shown'), c.country_scope()))
+        # The next goal overwrites the reading instead of stacking a second one.
+        for month in range(3):
+            c.readings['month'] = month
+            c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_grain_goal_result_year'], 1838)
+        self.assertEqual(c.variables['sed_grain_goal_result_years'], 2)
 
     def test_consecutive_annual_goals_become_a_multi_year_goal(self):
         grain = self.producer('grain', buy=100, sell=30)

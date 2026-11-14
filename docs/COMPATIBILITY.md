@@ -22,7 +22,8 @@ duas discordarem, vale esta.
 | **Auto-Apply Automation PMs** (`3344726320`) | PMs de automação/transporte por estado quando falta mão de obra | Conflito indireto: muda ocupação, que é guarda do Director. Não escreve os grupos do Director | `zw_var_auto_pm_automation_*`, `zw_var_auto_pm_transportation` |
 | **Supply Chain Semi-Auto Builder** (`3357811223`) | Constrói setores, ferrovias, energia, administração e cadeias | Já coordenado: sete opções em `COMPETING_BUILDERS` e `coordination.py` | `zw_var_expand_building`, `zw_var_scsab_*` |
 | **Economy Advisor** (`3778129206`, 1.0.0) | Construção automática e política de PM/orçamento | Já coordenado/cedido: `advisor_auto_construction_enabled`, `advisor_pm_balance_enabled`, `advisor_labor_auto_enabled` | arquivos do Advisor |
-| **ARoAI** (`ARoAI-1.3.5`) | Revisão da IA + autobuild com regra de jogo e evento de configuração | Já detectado: `aroai_autobuild` suspende a modernização e a execução | `ARoAI_events_l_english.yml` |
+| **ARoAI** (`ARoAI-1.3.5`) | Revisão da IA + autobuild com regra de jogo e evento de configuração | Já detectado: `aroai_autobuild` suspende a modernização e a execução. **Incompatível na prática com a 1.15** (arquivos de 2023, `supported_game_version` vazio): produz 1.300 `start_building_construction` falsos, 1.344 `Value of wrong type` e 5 `Div/0` no `error.log`. Recomendado desativar | `ARoAI_events_l_english.yml`, `error.log` de 2026-11-13 |
+| **Kuromi's AI** (`3227982912`, 8.0) | Estratégias de IA (`ai_strategies`, `defines/kai_ai.txt`) com `INJECT:` em prédios, leis, tratados e mobilização | Neutro: nenhum `on_actions`, scripted effect ou variável própria do Director é tocado, e ele não escreve `sed_*`. Convive sem adaptador | `supported_game_version "1.15.*"`, varredura por `sed_*`/`aroai_*`/`advisor_*`/`zw_*` sem ocorrência |
 | **Smart Government Advisor** (`1.0.0`) | Leis e instituições (`sg_*`, esquema 2) | Reconhecido no painel desde a 0.7.20; o Director não propõe leis | `sg_enabled`, `sg_schema_version` |
 | **Government Administration Auto Expand** (`2934542706`) | `REPLACE:building_government_administration` com regra de autoexpansão e **sem `ai_value`** | Não toca o Director, mas o `REPLACE` apaga campo do vanilla 1.15 e disputa a definição com o `INJECT_OR_CREATE` do Controllable Private Construction: vence quem carregar por último | comparado com `game/common/buildings/07_government.txt` |
 | **Auto-Recruit & One-Click Recruit Commanders** (`3279201462`) | Recruta comandantes por botão/decisão | Fora do escopo (militar não é mutado) | `zw_recruit_generals_*` |
@@ -36,6 +37,13 @@ Pendências de compatibilidade:
   essa regra, revisar `EXTERNAL_PM_VARIABLES` em `tools/production_methods.py`.
 - **Government Administration Auto Expand**: recomendo desativar. Substitui a
   definição inteira do prédio e anula injeções de outros mods conforme a ordem.
+- **Economy Advisor, Smart Construction**: em Automático com coordenação ativa, o
+  Director remove as sete opções externas a cada `sed_coord_sync` e reabilita só
+  a do executor escolhido no mês. Isso deixa o Smart Construction desmarcado em
+  todo mês em que a execução não é delegada ao Advisor (executor 0, 2–10, 13 ou
+  5 com ARoAI). É por desenho, mas o jogador não deve re-marcar dentro da
+  coordenação esperando persistência: sair do Automático ou "Restaurar opções"
+  devolve o valor guardado na entrada.
 - **Ordem de carregamento** não é controlada pelo Director. Para leitura por
   `has_variable`, ordem não importa; para injeção em prédio, importa.
 

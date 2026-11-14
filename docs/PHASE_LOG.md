@@ -2789,3 +2789,93 @@ exige a cobertura da fila.
 
 Não verificado na engine: entrada do nível na fila, duração medida pela engine
 contra as 12 semanas do gatilho e efeito no ritmo de obras.
+
+## 0.7.37 — Piso único de reservas
+
+A tentativa de acrescentar uma tolerância de déficit a `6 × despesas fixas`
+dentro da guarda 1–4 quebrou quatro testes de contrato, e a causa era de
+desenho, não de sintaxe: como `12 × despesas fixas ≥ 6 × despesas fixas`, a
+nova ramificação engloba a classificação 5 e deixa a guarda de saque
+inalcançável. A decisão do jogador foi substituir as duas por um piso único.
+
+A guarda 1–4 agora é uma disjunção: leitura saudável com `4 × despesas fixas`,
+ou déficit operacional com `net_fixed_income >= 0`, sem dívida e `6 × despesas
+fixas`. `sed_coord_reserve_drawdown_safe` foi removido, `sed_direct_fiscal_safe`
+e `sed_coord_fiscal_safe` viraram aliases, a classificação 5 ficou só como
+rótulo de déficit financiado e o executor 12 com o status 21 deixaram de
+existir. A leitura de reserva no painel passou a `4 ×`/`6 ×` em vez de
+`12 × + 26 × déficit`.
+
+Teste sintético — 425 aprovados. Quatro testes foram reescritos para o contrato
+novo (piso de `6 ×`, coordenação sem a espera por reservas, ferrovia delegada
+ao Supply Chain sob déficit). Estático — geração consistente. NÃO VERIFICADO na
+engine: nenhuma leitura de déficit financiado foi observada em campanha, e os
+fatores 4 e 6 precisam de save para calibragem.
+
+## 0.7.38 — Janela de financiamento pela obra
+
+O piso fixo de 26 semanas em `sed_build_budget_funding_weeks` cobrava obra
+curta por um horizonte que ela não ocupa. Removido: a janela é `projeto + fila +
+4`. Cenário de teste cai de 88.600 para 81.800 de ouro exigido (e de 91.460 para
+84.440 com déficit), sem mudar o caso de obra longa, que já excedia o piso.
+
+A divergência entre a duração (capacidade nacional) e o teto de materiais do
+setor ficou registrada em `docs/PLANNING.md` como limitação conhecida, com
+números: 2 pontos/semana pelo perfil contra 10 pontos/semana pelo modificador do
+jogo. Não foi alterada nesta versão.
+
+Teste sintético — 430 aprovados, cinco deles invariantes sem constante de
+campanha (fórmula, janela, limiar exato, monotonicidade e dívida). Estático —
+geração consistente. NÃO VERIFICADO na engine.
+
+## 0.7.39 — Resultado da meta industrial
+
+A meta plurianual agora deixa registro de resultado: preço no início, anos de
+duração e variação de preço até a escassez desaparecer, com uma linha no painel
+por bem. Nenhum efeito econômico; a meta seguinte sobrescreve o registro e
+Desativar limpa as variáveis.
+
+Teste sintético — suíte aprovada, incluindo o teste novo de duração, variação de
+preço, visibilidade e sobrescrita. NÃO VERIFICADO na engine: nenhuma leitura de
+resultado em campanha.
+
+## 0.7.40 — Opções externas lidas pelo tipo certo
+
+O `error.log` de um carregamento real com a 0.7.39 acusou 1.627 comparações
+inválidas (booleano contra valor) em `sed_triggers.txt`, disparadas toda vez que
+as GUIs do Director avaliavam as opções do Economy Advisor e do ARoAI. Esses
+mods gravam as bandeiras com `set_variable` nu; o Director comparava com `> 0`.
+Corrigido com leitura por presença para booleana e `> 0` só para as numéricas do
+Supply Chain. **Carregou:** a reabertura com a 0.7.40 gerou `error.log` de 108
+linhas e zero comparações inválidas; sobrou só ruído do ARoAI 1.3.5, incompatível
+com a 1.15 (1.344 `Value of wrong type` e 5 `Div/0`). ARoAI recomendado desativado.
+Kuromi's AI v8.0 auditado e instalado, sem cruzamento com `sed_*`.
+
+## 0.7.41 — Quanto ouro falta para a guarda liberar a obra
+
+O texto do orçamento já mostrava a reserva exigida, mas o jogador precisava
+comparar com o próprio ouro de cabeça. Nova variável de leitura
+`sed_build_budget_gold_gap = max(required_gold − gold_reserves, 0)`, exibida no
+mesmo texto; zero significa que o saldo já cobre a referência. Nenhum limiar,
+nenhum efeito econômico: a guarda `sed_direct_budget_safe` continua igual.
+
+Teste sintético — 433 aprovados, incluindo
+`test_gold_gap_is_the_distance_to_the_required_reserve` (0, metade, um abaixo, no
+limiar e muito acima) e a limpeza da variável em Desativar. Estático — `--check`
+e `validate.py` aprovados. Instalada com jogo fechado (backup
+`mod_before_0.7.41_20261113_235654_504707`). Carregou: NÃO VERIFICADO.
+
+## 0.7.42 — Ouro faltante no status 22 e limpeza do status 21/executor 12
+
+O status 22 de revisão (“referência de materiais sem cobertura”) passou a
+mostrar a distância em ouro até a guarda liberar (`sed_build_budget_gold_gap`,
+a mesma leitura da 0.7.41), para o jogador ver o bloqueio direto na última
+revisão. Nenhum limiar ou efeito econômico mudou.
+
+Limpeza de resíduo da 0.7.37: `sed_auto_status_reserve_queue` (status 21) e
+`sed_coord_executor_12` não eram mais emitidos nem usados, mas ainda geravam
+SGUi, blocos no GUI e localizações; removidos do gerador e dos artefatos.
+
+Teste sintético — 433 aprovados. Estático — `--check` e `validate.py`
+aprovados. Instalada com jogo fechado (backup
+`mod_before_0.7.42_20261114_005714_384642`). Carregou: NÃO VERIFICADO.

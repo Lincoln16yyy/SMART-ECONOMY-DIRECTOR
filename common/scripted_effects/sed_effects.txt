@@ -632,28 +632,76 @@ sed_disable_country = {
  remove_variable = sed_paper_meta_year
  remove_variable = sed_wood_goal_streak
  remove_variable = sed_wood_meta_since
+ remove_variable = sed_wood_goal_price_start
+ remove_variable = sed_wood_goal_result_years
+ remove_variable = sed_wood_goal_result_price
+ remove_variable = sed_wood_goal_result_year
  remove_variable = sed_iron_goal_streak
  remove_variable = sed_iron_meta_since
+ remove_variable = sed_iron_goal_price_start
+ remove_variable = sed_iron_goal_result_years
+ remove_variable = sed_iron_goal_result_price
+ remove_variable = sed_iron_goal_result_year
  remove_variable = sed_coal_goal_streak
  remove_variable = sed_coal_meta_since
+ remove_variable = sed_coal_goal_price_start
+ remove_variable = sed_coal_goal_result_years
+ remove_variable = sed_coal_goal_result_price
+ remove_variable = sed_coal_goal_result_year
  remove_variable = sed_grain_goal_streak
  remove_variable = sed_grain_meta_since
+ remove_variable = sed_grain_goal_price_start
+ remove_variable = sed_grain_goal_result_years
+ remove_variable = sed_grain_goal_result_price
+ remove_variable = sed_grain_goal_result_year
  remove_variable = sed_fabric_goal_streak
  remove_variable = sed_fabric_meta_since
+ remove_variable = sed_fabric_goal_price_start
+ remove_variable = sed_fabric_goal_result_years
+ remove_variable = sed_fabric_goal_result_price
+ remove_variable = sed_fabric_goal_result_year
  remove_variable = sed_tools_goal_streak
  remove_variable = sed_tools_meta_since
+ remove_variable = sed_tools_goal_price_start
+ remove_variable = sed_tools_goal_result_years
+ remove_variable = sed_tools_goal_result_price
+ remove_variable = sed_tools_goal_result_year
  remove_variable = sed_groceries_goal_streak
  remove_variable = sed_groceries_meta_since
+ remove_variable = sed_groceries_goal_price_start
+ remove_variable = sed_groceries_goal_result_years
+ remove_variable = sed_groceries_goal_result_price
+ remove_variable = sed_groceries_goal_result_year
  remove_variable = sed_clothes_goal_streak
  remove_variable = sed_clothes_meta_since
+ remove_variable = sed_clothes_goal_price_start
+ remove_variable = sed_clothes_goal_result_years
+ remove_variable = sed_clothes_goal_result_price
+ remove_variable = sed_clothes_goal_result_year
  remove_variable = sed_small_arms_goal_streak
  remove_variable = sed_small_arms_meta_since
+ remove_variable = sed_small_arms_goal_price_start
+ remove_variable = sed_small_arms_goal_result_years
+ remove_variable = sed_small_arms_goal_result_price
+ remove_variable = sed_small_arms_goal_result_year
  remove_variable = sed_artillery_goal_streak
  remove_variable = sed_artillery_meta_since
+ remove_variable = sed_artillery_goal_price_start
+ remove_variable = sed_artillery_goal_result_years
+ remove_variable = sed_artillery_goal_result_price
+ remove_variable = sed_artillery_goal_result_year
  remove_variable = sed_ammunition_goal_streak
  remove_variable = sed_ammunition_meta_since
+ remove_variable = sed_ammunition_goal_price_start
+ remove_variable = sed_ammunition_goal_result_years
+ remove_variable = sed_ammunition_goal_result_price
+ remove_variable = sed_ammunition_goal_result_year
  remove_variable = sed_paper_goal_streak
  remove_variable = sed_paper_meta_since
+ remove_variable = sed_paper_goal_price_start
+ remove_variable = sed_paper_goal_result_years
+ remove_variable = sed_paper_goal_result_price
+ remove_variable = sed_paper_goal_result_year
  remove_variable = sed_prev_year
  remove_variable = sed_wood_short_sample_month
  remove_variable = sed_iron_short_sample_month
@@ -694,6 +742,7 @@ sed_disable_country = {
  remove_variable = sed_build_budget_point_cost
  remove_variable = sed_build_budget_weekly
  remove_variable = sed_build_budget_required_gold
+ remove_variable = sed_build_budget_gold_gap
  remove_variable = sed_build_budget_material_capacity
  remove_variable = sed_build_budget_project_points
  remove_variable = sed_build_budget_project_weeks
@@ -3916,8 +3965,7 @@ sed_auto_apply_monthly = {
   if = { limit = { var:sed_coord_executor = 11 } sed_auto_run_direct = yes }
   else = {
    set_variable = { name = sed_auto_action_status value = 18 }
-   if = { limit = { var:sed_coord_executor = 12 } set_variable = { name = sed_auto_action_status value = 21 } }
-   else_if = { limit = { var:sed_coord_executor = 10 } set_variable = { name = sed_auto_action_status value = 20 } }
+   if = { limit = { var:sed_coord_executor = 10 } set_variable = { name = sed_auto_action_status value = 20 } }
    else_if = { limit = { var:sed_coord_executor = 9 } set_variable = { name = sed_auto_action_status value = 19 } }
    else_if = { limit = { var:sed_coord_executor = 5 } set_variable = { name = sed_auto_action_status value = 13 } }
    else_if = { limit = { var:sed_coord_executor = 0 }
@@ -4349,11 +4397,12 @@ sed_refresh_national_plan = {
   set_variable = { name = sed_plan_year value = year }
   set_variable = { name = sed_prev_year value = { value = year subtract = 1 } }
   set_variable = { name = sed_plan_month value = { value = month add = 1 } }
-  set_variable = { name = sed_reserve_floor value = { value = sed_fixed_expenses_value min = 0 multiply = 12 } }
-  set_variable = { name = sed_reserve_required value = {
-   value = var:sed_reserve_floor add = { value = net_total_income max = 0 multiply = -26 }
-  } }
-  set_variable = { name = sed_reserve_spare value = { value = gold_reserves subtract = var:sed_reserve_floor min = 0 } }
+  set_variable = { name = sed_reserve_floor value = { value = sed_fixed_expenses_value min = 0 multiply = 4 } }
+  set_variable = { name = sed_reserve_required value = { value = var:sed_reserve_floor } }
+  if = { limit = { net_total_income < 0 }
+   set_variable = { name = sed_reserve_required value = { value = sed_fixed_expenses_value min = 0 multiply = 6 } }
+  }
+  set_variable = { name = sed_reserve_spare value = { value = gold_reserves subtract = var:sed_reserve_required min = 0 } }
   set_variable = { name = sed_reserve_runway value = 0 }
   if = { limit = { net_total_income < 0 }
    set_variable = { name = sed_reserve_runway value = { value = var:sed_reserve_spare divide = { value = net_total_income multiply = -1 } } }
@@ -4367,7 +4416,7 @@ sed_refresh_national_plan = {
    } }
    set_variable = { name = sed_fiscal_status value = 3 }
   }
-  else_if = { limit = { sed_coord_reserve_drawdown_safe = yes } set_variable = { name = sed_fiscal_status value = 5 } }
+  else_if = { limit = { sed_auto_fiscal_safe = yes net_total_income < 0 } set_variable = { name = sed_fiscal_status value = 5 } }
   else_if = { limit = { NOT = { sed_auto_fiscal_safe = yes } } set_variable = { name = sed_fiscal_status value = 2 } }
   clear_variable_list = sed_plan_1_railway
   clear_variable_list = sed_plan_1_construction
@@ -4453,6 +4502,9 @@ sed_refresh_national_plan = {
      set_variable = { name = sed_wood_meta_year value = year }
      set_variable = { name = sed_wood_goal_streak value = 1 }
      set_variable = { name = sed_wood_meta_since value = year }
+     # Price at the moment the goal begins, so its outcome can be measured later.
+     set_variable = { name = sed_wood_goal_price_start value = {
+      value = 0 market ?= { mg:wood ?= { value = market_goods_pricier multiply = 100 } } } }
     }
     else_if = { limit = { var:sed_wood_meta_year < year }
      # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
@@ -4468,7 +4520,21 @@ sed_refresh_national_plan = {
     }
    }
   }
-  else = { remove_variable = sed_wood_short_months }
+  else = {
+   remove_variable = sed_wood_short_months
+   # Shortage gone while a goal was active: record how long it lasted and how far
+   # the market price moved from the goal's own starting point. This is a reading
+   # for the player, not an economic effect; a new goal overwrites it.
+   if = { limit = { has_variable = sed_wood_meta_year }
+    set_variable = { name = sed_wood_goal_result_year value = year }
+    set_variable = { name = sed_wood_goal_result_years value = {
+     value = year subtract = var:sed_wood_meta_since min = 1 } }
+    set_variable = { name = sed_wood_goal_result_price value = {
+     value = 0 market ?= { mg:wood ?= { value = market_goods_pricier multiply = 100 } }
+     if = { limit = { has_variable = sed_wood_goal_price_start }
+      subtract = var:sed_wood_goal_price_start } } }
+   }
+  }
   set_variable = { name = sed_wood_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_iron value = 0 }
   if = { limit = {
@@ -4512,6 +4578,9 @@ sed_refresh_national_plan = {
      set_variable = { name = sed_iron_meta_year value = year }
      set_variable = { name = sed_iron_goal_streak value = 1 }
      set_variable = { name = sed_iron_meta_since value = year }
+     # Price at the moment the goal begins, so its outcome can be measured later.
+     set_variable = { name = sed_iron_goal_price_start value = {
+      value = 0 market ?= { mg:iron ?= { value = market_goods_pricier multiply = 100 } } } }
     }
     else_if = { limit = { var:sed_iron_meta_year < year }
      # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
@@ -4527,7 +4596,21 @@ sed_refresh_national_plan = {
     }
    }
   }
-  else = { remove_variable = sed_iron_short_months }
+  else = {
+   remove_variable = sed_iron_short_months
+   # Shortage gone while a goal was active: record how long it lasted and how far
+   # the market price moved from the goal's own starting point. This is a reading
+   # for the player, not an economic effect; a new goal overwrites it.
+   if = { limit = { has_variable = sed_iron_meta_year }
+    set_variable = { name = sed_iron_goal_result_year value = year }
+    set_variable = { name = sed_iron_goal_result_years value = {
+     value = year subtract = var:sed_iron_meta_since min = 1 } }
+    set_variable = { name = sed_iron_goal_result_price value = {
+     value = 0 market ?= { mg:iron ?= { value = market_goods_pricier multiply = 100 } }
+     if = { limit = { has_variable = sed_iron_goal_price_start }
+      subtract = var:sed_iron_goal_price_start } } }
+   }
+  }
   set_variable = { name = sed_iron_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_coal value = 0 }
   if = { limit = {
@@ -4571,6 +4654,9 @@ sed_refresh_national_plan = {
      set_variable = { name = sed_coal_meta_year value = year }
      set_variable = { name = sed_coal_goal_streak value = 1 }
      set_variable = { name = sed_coal_meta_since value = year }
+     # Price at the moment the goal begins, so its outcome can be measured later.
+     set_variable = { name = sed_coal_goal_price_start value = {
+      value = 0 market ?= { mg:coal ?= { value = market_goods_pricier multiply = 100 } } } }
     }
     else_if = { limit = { var:sed_coal_meta_year < year }
      # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
@@ -4586,7 +4672,21 @@ sed_refresh_national_plan = {
     }
    }
   }
-  else = { remove_variable = sed_coal_short_months }
+  else = {
+   remove_variable = sed_coal_short_months
+   # Shortage gone while a goal was active: record how long it lasted and how far
+   # the market price moved from the goal's own starting point. This is a reading
+   # for the player, not an economic effect; a new goal overwrites it.
+   if = { limit = { has_variable = sed_coal_meta_year }
+    set_variable = { name = sed_coal_goal_result_year value = year }
+    set_variable = { name = sed_coal_goal_result_years value = {
+     value = year subtract = var:sed_coal_meta_since min = 1 } }
+    set_variable = { name = sed_coal_goal_result_price value = {
+     value = 0 market ?= { mg:coal ?= { value = market_goods_pricier multiply = 100 } }
+     if = { limit = { has_variable = sed_coal_goal_price_start }
+      subtract = var:sed_coal_goal_price_start } } }
+   }
+  }
   set_variable = { name = sed_coal_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_grain value = 0 }
   if = { limit = {
@@ -4630,6 +4730,9 @@ sed_refresh_national_plan = {
      set_variable = { name = sed_grain_meta_year value = year }
      set_variable = { name = sed_grain_goal_streak value = 1 }
      set_variable = { name = sed_grain_meta_since value = year }
+     # Price at the moment the goal begins, so its outcome can be measured later.
+     set_variable = { name = sed_grain_goal_price_start value = {
+      value = 0 market ?= { mg:grain ?= { value = market_goods_pricier multiply = 100 } } } }
     }
     else_if = { limit = { var:sed_grain_meta_year < year }
      # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
@@ -4645,7 +4748,21 @@ sed_refresh_national_plan = {
     }
    }
   }
-  else = { remove_variable = sed_grain_short_months }
+  else = {
+   remove_variable = sed_grain_short_months
+   # Shortage gone while a goal was active: record how long it lasted and how far
+   # the market price moved from the goal's own starting point. This is a reading
+   # for the player, not an economic effect; a new goal overwrites it.
+   if = { limit = { has_variable = sed_grain_meta_year }
+    set_variable = { name = sed_grain_goal_result_year value = year }
+    set_variable = { name = sed_grain_goal_result_years value = {
+     value = year subtract = var:sed_grain_meta_since min = 1 } }
+    set_variable = { name = sed_grain_goal_result_price value = {
+     value = 0 market ?= { mg:grain ?= { value = market_goods_pricier multiply = 100 } }
+     if = { limit = { has_variable = sed_grain_goal_price_start }
+      subtract = var:sed_grain_goal_price_start } } }
+   }
+  }
   set_variable = { name = sed_grain_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_fabric value = 0 }
   if = { limit = {
@@ -4689,6 +4806,9 @@ sed_refresh_national_plan = {
      set_variable = { name = sed_fabric_meta_year value = year }
      set_variable = { name = sed_fabric_goal_streak value = 1 }
      set_variable = { name = sed_fabric_meta_since value = year }
+     # Price at the moment the goal begins, so its outcome can be measured later.
+     set_variable = { name = sed_fabric_goal_price_start value = {
+      value = 0 market ?= { mg:fabric ?= { value = market_goods_pricier multiply = 100 } } } }
     }
     else_if = { limit = { var:sed_fabric_meta_year < year }
      # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
@@ -4704,7 +4824,21 @@ sed_refresh_national_plan = {
     }
    }
   }
-  else = { remove_variable = sed_fabric_short_months }
+  else = {
+   remove_variable = sed_fabric_short_months
+   # Shortage gone while a goal was active: record how long it lasted and how far
+   # the market price moved from the goal's own starting point. This is a reading
+   # for the player, not an economic effect; a new goal overwrites it.
+   if = { limit = { has_variable = sed_fabric_meta_year }
+    set_variable = { name = sed_fabric_goal_result_year value = year }
+    set_variable = { name = sed_fabric_goal_result_years value = {
+     value = year subtract = var:sed_fabric_meta_since min = 1 } }
+    set_variable = { name = sed_fabric_goal_result_price value = {
+     value = 0 market ?= { mg:fabric ?= { value = market_goods_pricier multiply = 100 } }
+     if = { limit = { has_variable = sed_fabric_goal_price_start }
+      subtract = var:sed_fabric_goal_price_start } } }
+   }
+  }
   set_variable = { name = sed_fabric_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_tools value = 0 }
   if = { limit = {
@@ -4748,6 +4882,9 @@ sed_refresh_national_plan = {
      set_variable = { name = sed_tools_meta_year value = year }
      set_variable = { name = sed_tools_goal_streak value = 1 }
      set_variable = { name = sed_tools_meta_since value = year }
+     # Price at the moment the goal begins, so its outcome can be measured later.
+     set_variable = { name = sed_tools_goal_price_start value = {
+      value = 0 market ?= { mg:tools ?= { value = market_goods_pricier multiply = 100 } } } }
     }
     else_if = { limit = { var:sed_tools_meta_year < year }
      # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
@@ -4763,7 +4900,21 @@ sed_refresh_national_plan = {
     }
    }
   }
-  else = { remove_variable = sed_tools_short_months }
+  else = {
+   remove_variable = sed_tools_short_months
+   # Shortage gone while a goal was active: record how long it lasted and how far
+   # the market price moved from the goal's own starting point. This is a reading
+   # for the player, not an economic effect; a new goal overwrites it.
+   if = { limit = { has_variable = sed_tools_meta_year }
+    set_variable = { name = sed_tools_goal_result_year value = year }
+    set_variable = { name = sed_tools_goal_result_years value = {
+     value = year subtract = var:sed_tools_meta_since min = 1 } }
+    set_variable = { name = sed_tools_goal_result_price value = {
+     value = 0 market ?= { mg:tools ?= { value = market_goods_pricier multiply = 100 } }
+     if = { limit = { has_variable = sed_tools_goal_price_start }
+      subtract = var:sed_tools_goal_price_start } } }
+   }
+  }
   set_variable = { name = sed_tools_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_groceries value = 0 }
   if = { limit = {
@@ -4807,6 +4958,9 @@ sed_refresh_national_plan = {
      set_variable = { name = sed_groceries_meta_year value = year }
      set_variable = { name = sed_groceries_goal_streak value = 1 }
      set_variable = { name = sed_groceries_meta_since value = year }
+     # Price at the moment the goal begins, so its outcome can be measured later.
+     set_variable = { name = sed_groceries_goal_price_start value = {
+      value = 0 market ?= { mg:groceries ?= { value = market_goods_pricier multiply = 100 } } } }
     }
     else_if = { limit = { var:sed_groceries_meta_year < year }
      # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
@@ -4822,7 +4976,21 @@ sed_refresh_national_plan = {
     }
    }
   }
-  else = { remove_variable = sed_groceries_short_months }
+  else = {
+   remove_variable = sed_groceries_short_months
+   # Shortage gone while a goal was active: record how long it lasted and how far
+   # the market price moved from the goal's own starting point. This is a reading
+   # for the player, not an economic effect; a new goal overwrites it.
+   if = { limit = { has_variable = sed_groceries_meta_year }
+    set_variable = { name = sed_groceries_goal_result_year value = year }
+    set_variable = { name = sed_groceries_goal_result_years value = {
+     value = year subtract = var:sed_groceries_meta_since min = 1 } }
+    set_variable = { name = sed_groceries_goal_result_price value = {
+     value = 0 market ?= { mg:groceries ?= { value = market_goods_pricier multiply = 100 } }
+     if = { limit = { has_variable = sed_groceries_goal_price_start }
+      subtract = var:sed_groceries_goal_price_start } } }
+   }
+  }
   set_variable = { name = sed_groceries_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_clothes value = 0 }
   if = { limit = {
@@ -4866,6 +5034,9 @@ sed_refresh_national_plan = {
      set_variable = { name = sed_clothes_meta_year value = year }
      set_variable = { name = sed_clothes_goal_streak value = 1 }
      set_variable = { name = sed_clothes_meta_since value = year }
+     # Price at the moment the goal begins, so its outcome can be measured later.
+     set_variable = { name = sed_clothes_goal_price_start value = {
+      value = 0 market ?= { mg:clothes ?= { value = market_goods_pricier multiply = 100 } } } }
     }
     else_if = { limit = { var:sed_clothes_meta_year < year }
      # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
@@ -4881,7 +5052,21 @@ sed_refresh_national_plan = {
     }
    }
   }
-  else = { remove_variable = sed_clothes_short_months }
+  else = {
+   remove_variable = sed_clothes_short_months
+   # Shortage gone while a goal was active: record how long it lasted and how far
+   # the market price moved from the goal's own starting point. This is a reading
+   # for the player, not an economic effect; a new goal overwrites it.
+   if = { limit = { has_variable = sed_clothes_meta_year }
+    set_variable = { name = sed_clothes_goal_result_year value = year }
+    set_variable = { name = sed_clothes_goal_result_years value = {
+     value = year subtract = var:sed_clothes_meta_since min = 1 } }
+    set_variable = { name = sed_clothes_goal_result_price value = {
+     value = 0 market ?= { mg:clothes ?= { value = market_goods_pricier multiply = 100 } }
+     if = { limit = { has_variable = sed_clothes_goal_price_start }
+      subtract = var:sed_clothes_goal_price_start } } }
+   }
+  }
   set_variable = { name = sed_clothes_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_small_arms value = 0 }
   if = { limit = {
@@ -4925,6 +5110,9 @@ sed_refresh_national_plan = {
      set_variable = { name = sed_small_arms_meta_year value = year }
      set_variable = { name = sed_small_arms_goal_streak value = 1 }
      set_variable = { name = sed_small_arms_meta_since value = year }
+     # Price at the moment the goal begins, so its outcome can be measured later.
+     set_variable = { name = sed_small_arms_goal_price_start value = {
+      value = 0 market ?= { mg:small_arms ?= { value = market_goods_pricier multiply = 100 } } } }
     }
     else_if = { limit = { var:sed_small_arms_meta_year < year }
      # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
@@ -4940,7 +5128,21 @@ sed_refresh_national_plan = {
     }
    }
   }
-  else = { remove_variable = sed_small_arms_short_months }
+  else = {
+   remove_variable = sed_small_arms_short_months
+   # Shortage gone while a goal was active: record how long it lasted and how far
+   # the market price moved from the goal's own starting point. This is a reading
+   # for the player, not an economic effect; a new goal overwrites it.
+   if = { limit = { has_variable = sed_small_arms_meta_year }
+    set_variable = { name = sed_small_arms_goal_result_year value = year }
+    set_variable = { name = sed_small_arms_goal_result_years value = {
+     value = year subtract = var:sed_small_arms_meta_since min = 1 } }
+    set_variable = { name = sed_small_arms_goal_result_price value = {
+     value = 0 market ?= { mg:small_arms ?= { value = market_goods_pricier multiply = 100 } }
+     if = { limit = { has_variable = sed_small_arms_goal_price_start }
+      subtract = var:sed_small_arms_goal_price_start } } }
+   }
+  }
   set_variable = { name = sed_small_arms_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_artillery value = 0 }
   if = { limit = {
@@ -4984,6 +5186,9 @@ sed_refresh_national_plan = {
      set_variable = { name = sed_artillery_meta_year value = year }
      set_variable = { name = sed_artillery_goal_streak value = 1 }
      set_variable = { name = sed_artillery_meta_since value = year }
+     # Price at the moment the goal begins, so its outcome can be measured later.
+     set_variable = { name = sed_artillery_goal_price_start value = {
+      value = 0 market ?= { mg:artillery ?= { value = market_goods_pricier multiply = 100 } } } }
     }
     else_if = { limit = { var:sed_artillery_meta_year < year }
      # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
@@ -4999,7 +5204,21 @@ sed_refresh_national_plan = {
     }
    }
   }
-  else = { remove_variable = sed_artillery_short_months }
+  else = {
+   remove_variable = sed_artillery_short_months
+   # Shortage gone while a goal was active: record how long it lasted and how far
+   # the market price moved from the goal's own starting point. This is a reading
+   # for the player, not an economic effect; a new goal overwrites it.
+   if = { limit = { has_variable = sed_artillery_meta_year }
+    set_variable = { name = sed_artillery_goal_result_year value = year }
+    set_variable = { name = sed_artillery_goal_result_years value = {
+     value = year subtract = var:sed_artillery_meta_since min = 1 } }
+    set_variable = { name = sed_artillery_goal_result_price value = {
+     value = 0 market ?= { mg:artillery ?= { value = market_goods_pricier multiply = 100 } }
+     if = { limit = { has_variable = sed_artillery_goal_price_start }
+      subtract = var:sed_artillery_goal_price_start } } }
+   }
+  }
   set_variable = { name = sed_artillery_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_ammunition value = 0 }
   if = { limit = {
@@ -5043,6 +5262,9 @@ sed_refresh_national_plan = {
      set_variable = { name = sed_ammunition_meta_year value = year }
      set_variable = { name = sed_ammunition_goal_streak value = 1 }
      set_variable = { name = sed_ammunition_meta_since value = year }
+     # Price at the moment the goal begins, so its outcome can be measured later.
+     set_variable = { name = sed_ammunition_goal_price_start value = {
+      value = 0 market ?= { mg:ammunition ?= { value = market_goods_pricier multiply = 100 } } } }
     }
     else_if = { limit = { var:sed_ammunition_meta_year < year }
      # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
@@ -5058,7 +5280,21 @@ sed_refresh_national_plan = {
     }
    }
   }
-  else = { remove_variable = sed_ammunition_short_months }
+  else = {
+   remove_variable = sed_ammunition_short_months
+   # Shortage gone while a goal was active: record how long it lasted and how far
+   # the market price moved from the goal's own starting point. This is a reading
+   # for the player, not an economic effect; a new goal overwrites it.
+   if = { limit = { has_variable = sed_ammunition_meta_year }
+    set_variable = { name = sed_ammunition_goal_result_year value = year }
+    set_variable = { name = sed_ammunition_goal_result_years value = {
+     value = year subtract = var:sed_ammunition_meta_since min = 1 } }
+    set_variable = { name = sed_ammunition_goal_result_price value = {
+     value = 0 market ?= { mg:ammunition ?= { value = market_goods_pricier multiply = 100 } }
+     if = { limit = { has_variable = sed_ammunition_goal_price_start }
+      subtract = var:sed_ammunition_goal_price_start } } }
+   }
+  }
   set_variable = { name = sed_ammunition_short_sample_month value = sed_live_month_key }
   set_variable = { name = sed_plan_missing_paper value = 0 }
   if = { limit = {
@@ -5102,6 +5338,9 @@ sed_refresh_national_plan = {
      set_variable = { name = sed_paper_meta_year value = year }
      set_variable = { name = sed_paper_goal_streak value = 1 }
      set_variable = { name = sed_paper_meta_since value = year }
+     # Price at the moment the goal begins, so its outcome can be measured later.
+     set_variable = { name = sed_paper_goal_price_start value = {
+      value = 0 market ?= { mg:paper ?= { value = market_goods_pricier multiply = 100 } } } }
     }
     else_if = { limit = { var:sed_paper_meta_year < year }
      # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
@@ -5117,7 +5356,21 @@ sed_refresh_national_plan = {
     }
    }
   }
-  else = { remove_variable = sed_paper_short_months }
+  else = {
+   remove_variable = sed_paper_short_months
+   # Shortage gone while a goal was active: record how long it lasted and how far
+   # the market price moved from the goal's own starting point. This is a reading
+   # for the player, not an economic effect; a new goal overwrites it.
+   if = { limit = { has_variable = sed_paper_meta_year }
+    set_variable = { name = sed_paper_goal_result_year value = year }
+    set_variable = { name = sed_paper_goal_result_years value = {
+     value = year subtract = var:sed_paper_meta_since min = 1 } }
+    set_variable = { name = sed_paper_goal_result_price value = {
+     value = 0 market ?= { mg:paper ?= { value = market_goods_pricier multiply = 100 } }
+     if = { limit = { has_variable = sed_paper_goal_price_start }
+      subtract = var:sed_paper_goal_price_start } } }
+   }
+  }
   set_variable = { name = sed_paper_short_sample_month value = sed_live_month_key }
   every_scope_state = {
    set_variable = { name = sed_plan_railway_rank value = 0 }
@@ -8607,14 +8860,22 @@ var:sed_paper_intent_variant = 1
     value = var:sed_build_budget_project_points divide = var:sed_build_budget_points
    } }
   }
+  # The window is the work itself plus one month of slack. A fixed six-month
+  # floor used to override cheap projects and block them for a horizon they
+  # never occupy; a long queue still extends the window through its own weeks.
   set_variable = { name = sed_build_budget_funding_weeks value = {
-   value = var:sed_build_budget_project_weeks add = var:sed_build_budget_queue_weeks add = 4 min = 26
+   value = var:sed_build_budget_project_weeks add = var:sed_build_budget_queue_weeks add = 4
   } }
   set_variable = { name = sed_build_budget_required_gold value = {
    value = sed_fixed_expenses_value min = 0 multiply = 4
    add = { value = var:sed_build_budget_weekly subtract = net_total_income min = 0
     multiply = var:sed_build_budget_funding_weeks
    }
+  } }
+  # Distance between the treasury and the required reserve, so the player reads
+  # how much gold is missing instead of comparing two numbers.
+  set_variable = { name = sed_build_budget_gold_gap value = {
+   value = var:sed_build_budget_required_gold subtract = gold_reserves min = 0
   } }
  }
 }
@@ -13468,8 +13729,8 @@ sed_coord_enable = {
    set_variable = { name = sed_coord_saved_tax value = var:zw_var_scsab_gov_admin_for_tax }
   }
   if = { limit = { OR = {
-   AND = { has_variable = advisor_enabled var:advisor_enabled > 0 }
-   AND = { has_variable = advisor_auto_construction_enabled var:advisor_auto_construction_enabled > 0 }
+   has_variable = advisor_enabled
+   has_variable = advisor_auto_construction_enabled
   } } set_variable = { name = sed_coord_advisor_known value = yes } }
   if = { limit = { OR = { AND = { has_variable = zw_var_expand_building var:zw_var_expand_building > 0 } AND = { has_variable = zw_var_more_construction_sectors var:zw_var_more_construction_sectors > 0 } AND = { has_variable = zw_var_scsab_construct_railway var:zw_var_scsab_construct_railway > 0 } AND = { has_variable = zw_var_scsab_construct_power_plant var:zw_var_scsab_construct_power_plant > 0 } AND = { has_variable = zw_var_scsab_gov_admin var:zw_var_scsab_gov_admin > 0 } AND = { has_variable = zw_var_scsab_gov_admin_for_tax var:zw_var_scsab_gov_admin_for_tax > 0 } AND = { has_variable = zw_var_scsab_gov_admin_for_institution var:zw_var_scsab_gov_admin_for_institution > 0 } AND = { has_variable = zw_var_added_constructions var:zw_var_added_constructions > 0 } AND = { has_variable = zw_var_labor_threshold var:zw_var_labor_threshold > 0 } AND = { has_variable = zw_var_more_construction_sectors_gold_reserves var:zw_var_more_construction_sectors_gold_reserves > 0 } AND = { has_variable = zw_var_develop_incorporated_states var:zw_var_develop_incorporated_states > 0 } } } set_variable = { name = sed_coord_supply_known value = yes } }
   set_variable = { name = sed_coord_active value = yes }
@@ -13587,16 +13848,13 @@ sed_coord_sync = {
   remove_variable = zw_var_scsab_gov_admin_for_tax
   set_variable = { name = sed_coord_executor value = 0 }
   set_variable = { name = sed_coord_advisor_policy value = 0 }
-  if = { limit = { has_variable = aroai_autobuild var:aroai_autobuild > 0 } set_variable = { name = sed_coord_executor value = 5 } }
+  if = { limit = { has_variable = aroai_autobuild } set_variable = { name = sed_coord_executor value = 5 } }
   else_if = { limit = { sed_pm_upgrade_month_limit_reached = yes }
    set_variable = { name = sed_coord_executor value = 13 }
   }
   else_if = { limit = { sed_coord_fiscal_safe = yes NOT = { in_default = yes } is_construction_paused = no }
    if = { limit = { var:sed_plan_goal = 2 sed_direct_fiscal_safe = yes sed_direct_supply_priority_exists = yes }
     set_variable = { name = sed_coord_executor value = 11 }
-   }
-   else_if = { limit = { sed_coord_reserve_drawdown_safe = yes construction_queue_num_queued_government_levels > 0 }
-    set_variable = { name = sed_coord_executor value = 12 }
    }
    else_if = { limit = { var:sed_plan_waiting = 1 }
     set_variable = { name = sed_coord_executor value = 10 }

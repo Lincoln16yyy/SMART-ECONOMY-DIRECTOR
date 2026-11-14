@@ -1,5 +1,33 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.42, o status de orçamento sem cobertura passa a mostrar quanto ouro falta para a guarda liberar (`sed_build_budget_gold_gap`) e os resíduos mortos do antigo status 21/executor 12 foram removidos dos artefatos.
+
+Na 0.7.41, o painel do orçamento diz quanto ouro falta até a reserva exigida pela
+guarda de materiais (`sed_build_budget_gold_gap`, zero quando o saldo já cobre).
+É leitura: nenhum limiar mudou, e a decisão de esperar continua onde estava.
+
+Na 0.7.40, o Director lê as opções do Economy Advisor e do ARoAI como bandeiras
+booleanas, do jeito que esses mods as criam. Antes ele comparava essas bandeiras
+com um número e a engine registrava "Left side and right side during comparison
+were of different types" a cada avaliação — 1.627 linhas em um único carregamento
+no `error.log`. As opções do Supply Chain continuam numéricas e mantêm o teste
+de zero.
+
+Na 0.7.39, o Director registra o resultado da meta industrial: quando a
+escassez que sustentava a meta deixa de ser observada, o painel mostra quantos
+anos ela durou e quanto o preço do bem andou desde o início dela. É leitura de
+resultado, sem efeito econômico, e a próxima meta substitui o registro.
+
+Na 0.7.38, a reserva de materiais deixa de exigir um mínimo fixo de 26 semanas:
+ela passa a cobrir a duração estimada da obra mais um mês. Obra barata que era
+bloqueada por um horizonte de meio ano — e que nunca o ocuparia — passa a entrar
+na fila; obra longa continua exigindo a janela longa, porque ela mesma a cria.
+
+Na 0.7.37, a guarda fiscal passa a ter um piso único. Um déficit operacional sem
+dívida é financiado por ouro quando as reservas cobrem seis semanas de despesas
+fixas; a classificação 5 e a janela de 26 semanas saíram, e o custo da obra
+continua sendo avaliado pela guarda de orçamento.
+
 Na 0.7.36, uma opção **desligada** de outro mod não é mais confundida com opção
 ligada. Os mods deixam a variável em 0 quando o jogador desliga a opção; o
 Director lia a mera existência da variável, escolhia aquele executor e ainda
@@ -295,7 +323,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.7.36.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.7.42.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 

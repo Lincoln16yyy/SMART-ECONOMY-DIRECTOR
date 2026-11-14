@@ -26,7 +26,9 @@ def country_variables(actions):
     missing = [f'sed_plan_missing_{name}' for name in supply]
     months = [f'sed_{name}_short_months' for name in supply]
     meta = [f'sed_{name}_meta_year' for name in supply]
-    streak = [f'sed_{name}_{field}' for name in supply for field in ('goal_streak', 'meta_since')]
+    streak = [f'sed_{name}_{field}' for name in supply for field in (
+        'goal_streak', 'meta_since', 'goal_price_start',
+        'goal_result_years', 'goal_result_price', 'goal_result_year')]
     streak.append('sed_prev_year')
     samples = [f'sed_{name}_short_sample_month' for name in supply]
     return (COUNTRY_VARIABLES + pressure + missing + months + meta + streak + samples
@@ -276,33 +278,36 @@ sed_wage_month_limit_reached = {
 }
 
 # Initial proportional policy; not an incremental cost estimate.
+# Uma leitura saudavel mantem o piso de quatro semanas de despesas fixas.
+# Um deficit operacional sem divida e financiado por ouro quando as reservas
+# cobrem seis semanas de despesas fixas. O custo da obra em si continua na
+# guarda de orcamento, que ja projeta o deficit da fila e do projeto.
 sed_auto_fiscal_safe = {
- net_total_income >= 0
- net_fixed_income >= 0
- gold_reserves >= { value = sed_fixed_expenses_value min = 0 multiply = 4 }
  OR = {
-  principal <= 0
-  AND = { credit > 0 principal <= { value = credit multiply = 0.75 } }
- }
-}
-
-# Keep a reserve floor plus six months of the currently observed deficit.
-sed_coord_reserve_drawdown_safe = {
- net_fixed_income >= 0
- net_total_income < 0
- principal <= 0
- gold_reserves >= {
-  value = sed_fixed_expenses_value min = 0 multiply = 12
-  add = { value = net_total_income multiply = -26 }
+  AND = {
+   net_total_income >= 0
+   net_fixed_income >= 0
+   gold_reserves >= { value = sed_fixed_expenses_value min = 0 multiply = 4 }
+   OR = {
+    principal <= 0
+    AND = { credit > 0 principal <= { value = credit multiply = 0.75 } }
+   }
+  }
+  AND = {
+   net_total_income < 0
+   net_fixed_income >= 0
+   principal <= 0
+   gold_reserves >= { value = sed_fixed_expenses_value min = 0 multiply = 6 }
+  }
  }
 }
 
 sed_direct_fiscal_safe = {
- OR = { sed_auto_fiscal_safe = yes sed_coord_reserve_drawdown_safe = yes }
+ sed_auto_fiscal_safe = yes
 }
 
 sed_coord_fiscal_safe = {
- OR = { sed_auto_fiscal_safe = yes sed_coord_reserve_drawdown_safe = yes }
+ sed_auto_fiscal_safe = yes
 }
 '''
 
@@ -321,11 +326,12 @@ def effects(actions, dependencies, buildings):
   set_variable = { name = sed_plan_year value = year }
   set_variable = { name = sed_prev_year value = { value = year subtract = 1 } }
   set_variable = { name = sed_plan_month value = { value = month add = 1 } }
-  set_variable = { name = sed_reserve_floor value = { value = sed_fixed_expenses_value min = 0 multiply = 12 } }
-  set_variable = { name = sed_reserve_required value = {
-   value = var:sed_reserve_floor add = { value = net_total_income max = 0 multiply = -26 }
-  } }
-  set_variable = { name = sed_reserve_spare value = { value = gold_reserves subtract = var:sed_reserve_floor min = 0 } }
+  set_variable = { name = sed_reserve_floor value = { value = sed_fixed_expenses_value min = 0 multiply = 4 } }
+  set_variable = { name = sed_reserve_required value = { value = var:sed_reserve_floor } }
+  if = { limit = { net_total_income < 0 }
+   set_variable = { name = sed_reserve_required value = { value = sed_fixed_expenses_value min = 0 multiply = 6 } }
+  }
+  set_variable = { name = sed_reserve_spare value = { value = gold_reserves subtract = var:sed_reserve_required min = 0 } }
   set_variable = { name = sed_reserve_runway value = 0 }
   if = { limit = { net_total_income < 0 }
    set_variable = { name = sed_reserve_runway value = { value = var:sed_reserve_spare divide = { value = net_total_income multiply = -1 } } }
@@ -339,7 +345,7 @@ def effects(actions, dependencies, buildings):
    } }
    set_variable = { name = sed_fiscal_status value = 3 }
   }
-  else_if = { limit = { sed_coord_reserve_drawdown_safe = yes } set_variable = { name = sed_fiscal_status value = 5 } }
+  else_if = { limit = { sed_auto_fiscal_safe = yes net_total_income < 0 } set_variable = { name = sed_fiscal_status value = 5 } }
   else_if = { limit = { NOT = { sed_auto_fiscal_safe = yes } } set_variable = { name = sed_fiscal_status value = 2 } }
 ''']
     for name in lists(actions):
@@ -393,6 +399,9 @@ def effects(actions, dependencies, buildings):
      set_variable = {{ name = sed_{name}_meta_year value = year }}
      set_variable = {{ name = sed_{name}_goal_streak value = 1 }}
      set_variable = {{ name = sed_{name}_meta_since value = year }}
+     # Price at the moment the goal begins, so its outcome can be measured later.
+     set_variable = {{ name = sed_{name}_goal_price_start value = {{
+      value = 0 market ?= {{ mg:{name} ?= {{ value = market_goods_pricier multiply = 100 }} }} }} }}
     }}
     else_if = {{ limit = {{ var:sed_{name}_meta_year < year }}
      # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
@@ -408,7 +417,21 @@ def effects(actions, dependencies, buildings):
     }}
    }}
   }}
-  else = {{ remove_variable = sed_{name}_short_months }}
+  else = {{
+   remove_variable = sed_{name}_short_months
+   # Shortage gone while a goal was active: record how long it lasted and how far
+   # the market price moved from the goal's own starting point. This is a reading
+   # for the player, not an economic effect; a new goal overwrites it.
+   if = {{ limit = {{ has_variable = sed_{name}_meta_year }}
+    set_variable = {{ name = sed_{name}_goal_result_year value = year }}
+    set_variable = {{ name = sed_{name}_goal_result_years value = {{
+     value = year subtract = var:sed_{name}_meta_since min = 1 }} }}
+    set_variable = {{ name = sed_{name}_goal_result_price value = {{
+     value = 0 market ?= {{ mg:{name} ?= {{ value = market_goods_pricier multiply = 100 }} }}
+     if = {{ limit = {{ has_variable = sed_{name}_goal_price_start }}
+      subtract = var:sed_{name}_goal_price_start }} }} }}
+   }}
+  }}
   set_variable = {{ name = sed_{name}_short_sample_month value = sed_live_month_key }}''')
     result.append('  every_scope_state = {')
     for name in actions:

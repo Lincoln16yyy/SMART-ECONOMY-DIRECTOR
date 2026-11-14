@@ -1345,3 +1345,165 @@ fallback para a média nacional. Qualificações continuam fora de alcance
 (primitivas de leitura inexistentes); o item fecha com `occupancy` e
 `has_failed_hires` como proxy documentado. Próximo passo possível: medir em
 campanha se a amostra por família muda a escolha de fornecedor.
+
+## 0.7.37 — Piso único de reservas na guarda fiscal
+
+As duas guardas fiscais mediam a mesma coisa em escalas diferentes: a guarda
+1–4 exigia saldo semanal não negativo, e a classificação 5 aceitava déficit com
+`12 × despesas fixas + 26 × déficit`. Um piso de `6 × despesas fixas` na guarda
+1–4 é sempre mais permissivo que a classificação 5, então as duas não podem
+conviver: a 5 ficaria inalcançável. A 0.7.37 substitui as duas por um piso
+único:
+
+- Leitura saudável (`net_total_income >= 0`): piso de `4 × despesas fixas` e a
+  regra de dívida anterior.
+- Déficit operacional (`net_total_income < 0`): `net_fixed_income >= 0`, sem
+  dívida e ouro ≥ `6 × despesas fixas`. O custo da obra em si continua na
+  guarda de orçamento, que já projeta `4 × despesas fixas + (custo semanal −
+  renda) × semanas` com piso de 26 semanas.
+
+`sed_coord_reserve_drawdown_safe` foi removido. `sed_direct_fiscal_safe` e
+`sed_coord_fiscal_safe` passam a ser aliases de `sed_auto_fiscal_safe`. A
+classificação 5 continua como rótulo: déficit tolerado e pago por ouro, agora
+sem a janela de 26 semanas. O executor 12 ("ritmo por reservas aguardando a
+fila") e o status 21 saíram junto com a guarda; com déficit financiado, a
+coordenação segue a rota normal do objetivo — inclusive delegando ferrovia ao
+Supply Chain, o que antes a classificação 5 proibia.
+
+O painel lê `sed_reserve_floor` (`4 × despesas fixas`), `sed_reserve_required`
+(`6 ×` quando há déficit), `sed_reserve_spare` e `sed_reserve_runway`, que agora
+medem o excesso acima do piso exigido na leitura.
+
+Teste sintético — 425 aprovados, com escala 0.01/1/1000 no piso de `6 ×`,
+rejeição com dívida, `net_fixed_income` negativo e ouro abaixo do piso. NÃO
+VERIFICADO na engine: nenhuma dessas leituras foi confrontada com save; os
+fatores 4 e 6 são decisões desta implementação e seguem para calibragem em
+campanha.
+
+## 0.7.38 — Janela de financiamento proporcional à obra
+
+`sed_build_budget_funding_weeks` era `projeto + fila + 4`, com um piso fixo de
+26 semanas. O piso existia para cobrir obra longa, mas também alcançava obra
+curta: uma fundação de 200 pontos, que ocupa 20 semanas, era avaliada como se
+precisasse pagar seis meses de materiais que não existiriam. Era isso que
+segurava o Director em país pequeno com obra barata na frente.
+
+A 0.7.38 remove o piso. A janela passa a ser exatamente `projeto + fila + 4`:
+a obra longa continua exigindo a janela longa porque ela mesma a produz, e a
+obra curta deixa de ser cobrada por um horizonte que não ocupa. No cenário de
+teste (setor de madeira, um nível, fundação de madeira de 200 pontos,
+despesas fixas 50, renda 100) o ouro exigido cai de 88.600 para 81.800; com
+déficit de 10 por semana, de 91.460 para 84.440.
+
+O teto de materiais do setor ainda limita a referência semanal, e a duração
+continua usando a capacidade nacional de construção, não a capacidade limitada
+por material. Essa divergência é conhecida e registrada como limitação: pelos
+dados de `PROFILES`, um nível de setor sustentaria 2 pontos por semana, enquanto
+`modifier:country_construction_add` informa 10. Unificar as duas leituras
+mudaria o limiar em cinco vezes e é decisão de balanceamento, não correção.
+
+Teste sintético — 430 aprovados, incluindo invariantes que não dependem de
+número de campanha: fórmula do ouro exigido, janela igual à obra mais um mês,
+limiar exato do gatilho, monotonicidade na renda e rejeição com dívida. NÃO
+VERIFICADO na engine.
+
+## 0.7.39 — Resultado da meta industrial
+
+A meta plurianual da 0.7.25 dava prioridade e visibilidade, mas não dizia se
+adiantou: o jogador só via a escassez continuar ou não. A 0.7.39 fecha o passo
+seguinte documentado naquela seção.
+
+Ao criar a meta, o Director guarda o preço do bem naquele momento
+(`sed_<bem>_goal_price_start`, em pontos percentuais de `market_goods_pricier`).
+Quando a escassez deixa de ser observada com meta ativa, ele grava
+`sed_<bem>_goal_result_year`, `sed_<bem>_goal_result_years` (ano corrente menos
+`meta_since`, mínimo 1) e `sed_<bem>_goal_result_price` (preço atual menos o
+preço inicial). O painel mostra uma linha por bem com esses três valores.
+
+É leitura: nenhum efeito econômico, nenhum custo estimado. A meta continua
+valendo até janeiro como antes; o registro só descreve o que aconteceu. Uma nova
+meta do mesmo bem sobrescreve o registro, então nunca existe mais de um resultado
+por bem, e Desativar limpa as variáveis junto com o resto do plano.
+
+Limitação honesta: preço do mercado nacional não prova que a oferta subiu — o
+bem pode ter ficado mais barato por importação, por queda de demanda ou por
+efeito de outro mod. Por isso o texto fala em variação de preço, não em sucesso
+da meta.
+
+Teste sintético — `test_finished_goal_records_its_duration_and_price_move` cobre
+início da meta, ausência de registro antes do fim, anos, ano, variação negativa
+de preço, visibilidade da linha e sobrescrita pela meta seguinte. NÃO VERIFICADO
+na engine.
+
+## 0.7.40 — Leitura tipada das opções externas
+
+Primeira evidência Carregou desde a 0.7.33: o jogo abriu com a 0.7.39. O
+`error.log` trouxe 8.151 linhas, das quais 1.627
+`Left side and right side during comparison were of different types (left was
+'boolean', right was 'value')`, todas apontando para `sed_triggers.txt:2747`,
+`:2754`, `:2691`, `:3866` e `:3867`, avaliadas a partir das scripted GUIs
+`sed_scripted_guis.txt:22` e `1260–1290`.
+
+Causa, com evidência nos mods instalados: o Economy Advisor cria
+`advisor_enabled` e `advisor_auto_construction_enabled` com
+`set_variable = <flag>` (forma nua, valor booleano) e o ARoAI cria
+`aroai_autobuild` do mesmo jeito (`events/aroai_autobuild_events.txt:39`). O
+Director testava todas as opções com `has_variable = X var:X > 0`, o que compara
+booleano com número. As opções do Supply Chain são numéricas
+(`name = zw_var_expand_building value = 0`, `zw_scsab_buttons.txt:580`) e por
+isso não geravam erro.
+
+A 0.7.40 separa os dois tipos em `coordination.BARE_FLAGS` e
+`coordination.option_on`: bandeira booleana é lida por presença, opção numérica
+continua com `> 0` — o teste de zero da 0.7.36 segue valendo para quem de fato
+grava zero. Nenhum efeito, escopo ou ID novo foi introduzido: a correção usa só
+`has_variable`, já presente no mod.
+
+Efeito colateral lido no mesmo log, registrado e não alterado: 16 linhas
+`Failed to approximate weeks left in construction queue: The total construction
+speed is zero` — mensagem do vanilla para fila vazia, sem vínculo com `sed_`.
+
+Teste sintético — 431 aprovados, incluindo
+`test_boolean_external_flags_are_read_without_numeric_comparison`, que varre
+todos os artefatos gerados e proíbe `var:<bandeira> > 0` para as três bandeiras
+booleanas, e o teste de opção desligada, que agora modela bandeira ausente em vez
+de zero. **Carregou (2026-11-13):** a reabertura com a 0.7.40 produziu 108 linhas,
+zero comparações inválidas; restaram 1.344 `Value of wrong type`
+(`aroai_preparation_effects.txt:47`) e 5 `Div/0`, todos do ARoAI 1.3.5, que é
+incompatível com a 1.15 e deve ficar desativado.
+
+## 0.7.41 — Distância até a reserva exigida
+
+O texto da guarda de materiais mostrava `required_gold` (4 × despesas fixas mais
+o déficit semanal vezes a janela de financiamento), mas o jogador tinha de
+comparar esse número com o próprio ouro. A 0.7.41 acrescenta a leitura
+`sed_build_budget_gold_gap = max(required_gold − gold_reserves, 0)`, publicada no
+mesmo texto do painel e zerada quando o saldo já cobre a reserva.
+
+Decisão de escopo: é leitura pura. `sed_direct_budget_safe` continua decidindo
+pelo mesmo limiar (`gold_reserves >= required_gold` sem dívida), então nenhum
+país passa a construir antes ou depois; só a explicação fica legível. A variável
+entrou em `construction_budget.VARIABLES`, para o Desativar limpar como as
+demais.
+
+Teste sintético — 433 aprovados, incluindo
+`test_gold_gap_is_the_distance_to_the_required_reserve`, que compara a variável
+com a diferença calculada em cinco pontos (saldo zero, metade, um abaixo, no
+limiar e muito acima) e garante que ela nunca fica negativa. Estático —
+`build_mod.py --check` e `validate.py` aprovados. Instalação com jogo fechado e
+backup `mod_before_0.7.41_20261113_235654_504707`. Carregou: NÃO VERIFICADO.
+
+## 0.7.42 — Clareza do bloqueio orçamentário e limpeza de resíduo
+
+A 0.7.41 expôs `sed_build_budget_gold_gap` no texto do orçamento; a 0.7.42
+reusa a mesma variável no `sed_auto_status_budget` (status 22), para que a
+última revisão informe “faltam X de ouro” sem exigir que o jogador abra o
+detalhe do plano. É leitura pura: `sed_direct_budget_safe` e todos os limiares
+permanecem iguais.
+
+Também foram removidos do gerador/artefatos os resíduos do caminho extinto na
+0.7.37: visibilidade/GUI/loc de `sed_auto_status_reserve_queue` (status 21) e de
+`sed_coord_executor_12`. Nenhum efeito emitia esses valores; a remoção não altera
+comportamento, apenas elimina UI inalcançável. Teste sintético 433, estático ok,
+instalação com jogo fechado (`mod_before_0.7.42_20261114_005714_384642`).
+Carregou: NÃO VERIFICADO.
