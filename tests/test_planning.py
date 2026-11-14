@@ -491,6 +491,33 @@ class PlanningTests(unittest.TestCase):
         c.readings['year'] = 1837
         self.assertFalse(c.condition(child(visible, 'is_shown'), c.country_scope()))
 
+    def test_finished_goal_records_its_duration_and_price_move(self):
+        self.producer('grain', buy=100, sell=30)
+        c = self.c
+        c.market_goods['grain']['market_goods_pricier'] = 0.40
+        for month in range(3):
+            c.readings['month'] = month
+            c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_grain_meta_year'], 1836)
+        self.assertAlmostEqual(c.variables['sed_grain_goal_price_start'], 40)
+        self.assertNotIn('sed_grain_goal_result_year', c.variables)
+        # Two years later the shortage stops being observed.
+        c.readings['year'] = 1838
+        c.market_goods['grain']['market_goods_pricier'] = 0.25
+        c.market_goods['grain']['market_goods_has_goods_shortage'] = False
+        c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_grain_goal_result_years'], 2)
+        self.assertEqual(c.variables['sed_grain_goal_result_year'], 1838)
+        self.assertAlmostEqual(c.variables['sed_grain_goal_result_price'], -15)
+        visible = c.definitions['sed_meta_grain_result_visible_sgui']
+        self.assertTrue(c.condition(child(visible, 'is_shown'), c.country_scope()))
+        # The next goal overwrites the reading instead of stacking a second one.
+        for month in range(3):
+            c.readings['month'] = month
+            c.run('sed_refresh_national_plan')
+        self.assertEqual(c.variables['sed_grain_goal_result_year'], 1838)
+        self.assertEqual(c.variables['sed_grain_goal_result_years'], 2)
+
     def test_consecutive_annual_goals_become_a_multi_year_goal(self):
         grain = self.producer('grain', buy=100, sell=30)
         c = self.c

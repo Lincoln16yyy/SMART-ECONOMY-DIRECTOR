@@ -4065,6 +4065,90 @@ textbox = {
  text = "sed_meta_paper"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_meta_wood_result_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_meta_wood_result"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_meta_iron_result_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_meta_iron_result"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_meta_coal_result_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_meta_coal_result"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_meta_grain_result_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_meta_grain_result"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_meta_fabric_result_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_meta_fabric_result"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_meta_tools_result_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_meta_tools_result"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_meta_groceries_result_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_meta_groceries_result"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_meta_clothes_result_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_meta_clothes_result"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_meta_small_arms_result_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_meta_small_arms_result"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_meta_artillery_result_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_meta_artillery_result"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_meta_ammunition_result_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_meta_ammunition_result"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_meta_paper_result_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_meta_paper_result"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_plan_missing_wood_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large

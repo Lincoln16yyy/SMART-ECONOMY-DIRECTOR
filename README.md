@@ -1,5 +1,10 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.39, o Director registra o resultado da meta industrial: quando a
+escassez que sustentava a meta deixa de ser observada, o painel mostra quantos
+anos ela durou e quanto o preço do bem andou desde o início dela. É leitura de
+resultado, sem efeito econômico, e a próxima meta substitui o registro.
+
 Na 0.7.38, a reserva de materiais deixa de exigir um mínimo fixo de 26 semanas:
 ela passa a cobrir a duração estimada da obra mais um mês. Obra barata que era
 bloqueada por um horizonte de meio ano — e que nunca o ocuparia — passa a entrar
@@ -305,7 +310,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.7.38.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.7.39.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 

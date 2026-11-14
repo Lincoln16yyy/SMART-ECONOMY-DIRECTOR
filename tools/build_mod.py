@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.38'
+VERSION = '0.7.39'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -854,6 +854,10 @@ def widget():
     for item in SUPPLY_TARGETS:
         name = item['good']
         body += textbox(f'sed_meta_{name}', f'sed_meta_{name}_visible_sgui')
+    # Outcome of the last finished goal: years it lasted and the price move.
+    for item in SUPPLY_TARGETS:
+        name = item['good']
+        body += textbox(f'sed_meta_{name}_result', f'sed_meta_{name}_result_visible_sgui')
     for item in SUPPLY_TARGETS:
         name = item['good']
         body += textbox(f'sed_plan_missing_{name}', f'sed_plan_missing_{name}_visible_sgui')
@@ -1717,6 +1721,8 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
                    f'OR = {{ AND = {{ has_variable = sed_{name}_meta_year var:sed_{name}_meta_year = year }} '
                    f'AND = {{ has_variable = sed_{name}_goal_streak var:sed_{name}_goal_streak >= 2 '
                    f'has_variable = sed_{name}_short_months }} }} }} }}\n')
+        result += (f'sed_meta_{name}_result_visible_sgui = {{ scope = country is_shown = {{ '
+                   f'has_variable = sed_enabled has_variable = sed_{name}_goal_result_year }} }}\n')
     for item in SUPPLY_TARGETS:
         name = item['good']
         result += f'sed_book_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_{name}_intents var:sed_{name}_intents > 0 }} }}\n'
@@ -2506,6 +2512,7 @@ def localization(language):
         pairs[f'sed_plan_missing_{name}'] = (f"Setor a fundar: {item['label_pt']} em escassez no mercado, sem produtor verificado ({producers_pt}) nos estados do país. O Director funda a base quando há estado incorporado apto, sob as guardas fiscais, de materiais e de fila. Importação ou outros produtores podem suprir o bem; não é ordem de autossuficiência.", f"Sector to found: market shortage of {item['label_en']}, with no verified producer ({producers_en}) in the country's states. The Director founds the base when an incorporated state can host it, under the fiscal, material and queue guards. Imports or other producers may supply it; this is not a self-sufficiency mandate.")
         pairs[f'sed_book_{name}'] = (f"Histórico de {item['label_pt']}: {v(name + '_intents', '0')} pedidos, {v(name + '_completed', '0')} concluídos, {v(name + '_abandoned', '0')} abandonados. Conclusão inferida quando o nível do produtor sobe ao sair da fila; cancelamento ou obra externa podem distorcer a leitura.", f"{item['label_en'].capitalize()} history: {v(name + '_intents', '0')} requested, {v(name + '_completed', '0')} completed, {v(name + '_abandoned', '0')} abandoned. Completion is inferred when the producer level rises after leaving the queue; cancellation or external work can distort it.")
         pairs[f'sed_meta_{name}'] = (f"Meta industrial anual: ampliar a oferta de {item['label_pt']}. A escassez foi observada em três meses de calendário consecutivos; ela mantém prioridade no plano até o fim do ano. Repetida em anos seguidos, a meta vira plurianual (até cinco anos, +15 de prioridade) e continua visível enquanto a escassez for observada. A meta não dispensa os filtros de trabalhadores, insumos, fila, infraestrutura e proteção fiscal.", f"Annual industrial goal: expand the supply of {item['label_en']}. Shortage was observed in three consecutive calendar months; it keeps priority in the plan until the end of the year. Repeated in consecutive years it becomes a multi-year goal (up to five years, +15 priority) and stays visible while the shortage is observed. The goal does not bypass the worker, input, queue, infrastructure and fiscal guards.")
+        pairs[f'sed_meta_{name}_result'] = (f"Última meta de {item['label_pt']}: durou {v(name + '_goal_result_years', '0')} ano(s) até {v(name + '_goal_result_year', '0')}, e o preço do bem variou {v(name + '_goal_result_price', '0')} pontos percentuais desde o início dela (negativo significa preço mais baixo). A escassez deixou de ser observada nesse mês. É leitura de resultado; não estima custo nem receita.", f"Last goal on {item['label_en']}: it lasted {v(name + '_goal_result_years', '0')} year(s) until {v(name + '_goal_result_year', '0')}, and the good's price moved {v(name + '_goal_result_price', '0')} percentage points from the goal's start (negative means a lower price). Shortage stopped being observed that month. This is an outcome reading; it does not estimate cost or revenue.")
     pairs['sed_book_railway'] = (f"Histórico de ferrovias: {v('railway_intents', '0')} pedidos, {v('railway_completed', '0')} concluídos, {v('railway_abandoned', '0')} abandonados. Conclusão inferida quando o nível sobe ao sair da fila.", f"Railway history: {v('railway_intents', '0')} requested, {v('railway_completed', '0')} completed, {v('railway_abandoned', '0')} abandoned. Completion is inferred when the level rises after leaving the queue.")
     pairs['sed_book_construction'] = (f"Histórico de setores de construção: {v('construction_intents', '0')} pedidos, {v('construction_completed', '0')} concluídos, {v('construction_abandoned', '0')} abandonados. Conclusão inferida quando o nível sobe ao sair da fila.", f"Construction sector history: {v('construction_intents', '0')} requested, {v('construction_completed', '0')} completed, {v('construction_abandoned', '0')} abandoned. Completion is inferred when the level rises after leaving the queue.")
     for rank in planning.RANKS:

@@ -26,7 +26,9 @@ def country_variables(actions):
     missing = [f'sed_plan_missing_{name}' for name in supply]
     months = [f'sed_{name}_short_months' for name in supply]
     meta = [f'sed_{name}_meta_year' for name in supply]
-    streak = [f'sed_{name}_{field}' for name in supply for field in ('goal_streak', 'meta_since')]
+    streak = [f'sed_{name}_{field}' for name in supply for field in (
+        'goal_streak', 'meta_since', 'goal_price_start',
+        'goal_result_years', 'goal_result_price', 'goal_result_year')]
     streak.append('sed_prev_year')
     samples = [f'sed_{name}_short_sample_month' for name in supply]
     return (COUNTRY_VARIABLES + pressure + missing + months + meta + streak + samples
@@ -397,6 +399,9 @@ def effects(actions, dependencies, buildings):
      set_variable = {{ name = sed_{name}_meta_year value = year }}
      set_variable = {{ name = sed_{name}_goal_streak value = 1 }}
      set_variable = {{ name = sed_{name}_meta_since value = year }}
+     # Price at the moment the goal begins, so its outcome can be measured later.
+     set_variable = {{ name = sed_{name}_goal_price_start value = {{
+      value = 0 market ?= {{ mg:{name} ?= {{ value = market_goods_pricier multiply = 100 }} }} }} }}
     }}
     else_if = {{ limit = {{ var:sed_{name}_meta_year < year }}
      # Consecutive annual goals form a multi-year goal; a skipped year restarts it.
@@ -412,7 +417,21 @@ def effects(actions, dependencies, buildings):
     }}
    }}
   }}
-  else = {{ remove_variable = sed_{name}_short_months }}
+  else = {{
+   remove_variable = sed_{name}_short_months
+   # Shortage gone while a goal was active: record how long it lasted and how far
+   # the market price moved from the goal's own starting point. This is a reading
+   # for the player, not an economic effect; a new goal overwrites it.
+   if = {{ limit = {{ has_variable = sed_{name}_meta_year }}
+    set_variable = {{ name = sed_{name}_goal_result_year value = year }}
+    set_variable = {{ name = sed_{name}_goal_result_years value = {{
+     value = year subtract = var:sed_{name}_meta_since min = 1 }} }}
+    set_variable = {{ name = sed_{name}_goal_result_price value = {{
+     value = 0 market ?= {{ mg:{name} ?= {{ value = market_goods_pricier multiply = 100 }} }}
+     if = {{ limit = {{ has_variable = sed_{name}_goal_price_start }}
+      subtract = var:sed_{name}_goal_price_start }} }} }}
+   }}
+  }}
   set_variable = {{ name = sed_{name}_short_sample_month value = sed_live_month_key }}''')
     result.append('  every_scope_state = {')
     for name in actions:

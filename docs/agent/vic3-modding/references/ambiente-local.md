@@ -321,3 +321,10 @@ inalterada, `descriptor.mod` = `version="0.7.38"`. Pacote em
 `sed_build_budget_funding_weeks` sem `min = 26` e a guarda fiscal com a
 ramificação de déficit a `multiply = 6`. Nenhuma partida aberta com a 0.7.38;
 evidência Carregou continua pendente.]
+
+[confirmado 2026-11-13 — instalação da 0.7.39 com jogo fechado: 14 arquivos,
+backup em `sed_backups/mod_before_0.7.39_20261113_214040_320070`, ordem de mods
+inalterada, `descriptor.mod` = `version="0.7.39"`. Conferido no instalado: loc
+`sed_meta_grain_result` nos dois idiomas, `goal_result_years` em
+`common/scripted_effects/sed_effects.txt` e a linha no
+`gui/journal_entry_widgets/sed_diagnostics.gui`. Nenhuma partida aberta.]

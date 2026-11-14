@@ -2827,3 +2827,14 @@ jogo. Não foi alterada nesta versão.
 Teste sintético — 430 aprovados, cinco deles invariantes sem constante de
 campanha (fórmula, janela, limiar exato, monotonicidade e dívida). Estático —
 geração consistente. NÃO VERIFICADO na engine.
+
+## 0.7.39 — Resultado da meta industrial
+
+A meta plurianual agora deixa registro de resultado: preço no início, anos de
+duração e variação de preço até a escassez desaparecer, com uma linha no painel
+por bem. Nenhum efeito econômico; a meta seguinte sobrescreve o registro e
+Desativar limpa as variáveis.
+
+Teste sintético — suíte aprovada, incluindo o teste novo de duração, variação de
+preço, visibilidade e sobrescrita. NÃO VERIFICADO na engine: nenhuma leitura de
+resultado em campanha.

@@ -1406,3 +1406,31 @@ Teste sintético — 430 aprovados, incluindo invariantes que não dependem de
 número de campanha: fórmula do ouro exigido, janela igual à obra mais um mês,
 limiar exato do gatilho, monotonicidade na renda e rejeição com dívida. NÃO
 VERIFICADO na engine.
+
+## 0.7.39 — Resultado da meta industrial
+
+A meta plurianual da 0.7.25 dava prioridade e visibilidade, mas não dizia se
+adiantou: o jogador só via a escassez continuar ou não. A 0.7.39 fecha o passo
+seguinte documentado naquela seção.
+
+Ao criar a meta, o Director guarda o preço do bem naquele momento
+(`sed_<bem>_goal_price_start`, em pontos percentuais de `market_goods_pricier`).
+Quando a escassez deixa de ser observada com meta ativa, ele grava
+`sed_<bem>_goal_result_year`, `sed_<bem>_goal_result_years` (ano corrente menos
+`meta_since`, mínimo 1) e `sed_<bem>_goal_result_price` (preço atual menos o
+preço inicial). O painel mostra uma linha por bem com esses três valores.
+
+É leitura: nenhum efeito econômico, nenhum custo estimado. A meta continua
+valendo até janeiro como antes; o registro só descreve o que aconteceu. Uma nova
+meta do mesmo bem sobrescreve o registro, então nunca existe mais de um resultado
+por bem, e Desativar limpa as variáveis junto com o resto do plano.
+
+Limitação honesta: preço do mercado nacional não prova que a oferta subiu — o
+bem pode ter ficado mais barato por importação, por queda de demanda ou por
+efeito de outro mod. Por isso o texto fala em variação de preço, não em sucesso
+da meta.
+
+Teste sintético — `test_finished_goal_records_its_duration_and_price_move` cobre
+início da meta, ausência de registro antes do fim, anos, ano, variação negativa
+de preço, visibilidade da linha e sobrescrita pela meta seguinte. NÃO VERIFICADO
+na engine.
