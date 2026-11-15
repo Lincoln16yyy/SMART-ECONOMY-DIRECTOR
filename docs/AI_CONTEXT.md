@@ -1,7 +1,7 @@
 # Contexto de continuidade
 
 ## Estado atual
-- **Fechamento CWE:** último tick em 11/01/1950, relatório vazio. Logs com 2.040 ocorrências no ranking do Smart Government. Conselheiro temporariamente fora do perfil, com Cold War Era, OGAS e Director ativos. Próximo teste: carregar `uruguai_1950_01_09.v3` e cruzar 11/01. Causa do crash NÃO VERIFICADA.
+- **Fechamento CWE:** último tick em 11/01/1950, relatório vazio. Logs com 2.040 ocorrências no ranking do Smart Government. Conselheiro temporariamente fora do perfil, com Cold War Era, OGAS e Director ativos. Reteste avançou até 15/01/1950 sem referências ao ranking nos logs atuais. O Smart Government segue como suspeito principal, com causa definitiva NÃO VERIFICADA.
 - **CWE fiscal e escassez:** instalado. Director avalia imposto e salários em revisão mensal, inclusive com OGAS dono da fila. Salários militares têm guarda de prontidão. OGAS prioriza produtores ativos do bem em falta quando crescimento está ligado. Doze testes focados. Save/reload e campanha NÃO VERIFICADOS.
 - **Smart Government para CWE:** pacote separado em `dist/smart-government-advisor-cwe.zip`, gerado da cópia local do projeto de leis e das definições CWE. 211 leis em 60 grupos, sete excluídas das sugestões por requisitos ausentes. Instalado. A primeira execução do ranking registrou erros de variáveis e o conselheiro foi desativado para isolamento.
 - **Crescimento automático do CWE:** decisão instalada no OGAS que ativa construção, ferrovias, setores, métodos e gestão de mão de obra. Meta de fila de 12 semanas e pausa de novas obras quando faltar caixa, renda ou capacidade. Nove testes focados aprovados, campanha pendente.

@@ -578,3 +578,8 @@ War Era, OGAS e Director, com Smart Government temporariamente desativado.
 Logs e perfil anterior em
 `sed_backups/cwe_crash_isolation_20261115_183148_637793`. O save
 `uruguai_1950_01_09.v3` permanece intacto. Repetir até passar 11/01.
+
+Reteste às 18h40 com o conselheiro fora do perfil cruzou 11/01 e chegou a
+15/01/1950, confirmado em `dedicated_server.log`. Os logs correntes
+`error.log` e `game.log` não registraram erros em `sg_law_rank.txt`.
+A lista ativa do Hydra foi preservada durante o reteste.

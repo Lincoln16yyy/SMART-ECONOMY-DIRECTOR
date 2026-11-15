@@ -11,7 +11,8 @@ ainda NÃO VERIFICADOS.
 Validador do projeto passou. O Tiger aponta os três campos conhecidos de
 Diário da versão 1.15. Instalado, temporariamente fora do perfil ativo.
 O ranking em campanha registrou erros de comparação. A causa do
-fechamento em 11/01/1950 segue NÃO VERIFICADA.
+fechamento em 11/01/1950 segue NÃO VERIFICADA. O reteste com a edição de
+leis desativada avançou até 15/01 sem erros do ranking.
 
 **Crescimento automático:** decisão instalada e testada no sintético. Ela liga
 os gerenciadores do OGAS, usa uma meta de 12 semanas e verifica orçamento
