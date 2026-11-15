@@ -583,3 +583,12 @@ Reteste às 18h40 com o conselheiro fora do perfil cruzou 11/01 e chegou a
 15/01/1950, confirmado em `dedicated_server.log`. Os logs correntes
 `error.log` e `game.log` não registraram erros em `sg_law_rank.txt`.
 A lista ativa do Hydra foi preservada durante o reteste.
+
+Smart Government CWE corrigido e reativado no perfil de quatro mods. O
+gerador protege as 633 comparações de pontuação e exige ID válido para
+contar ou deslocar vaga. Teste sintético da função de pontuação passou,
+validador aprovou 211 leis, Tiger manteve os três apontamentos de Diário
+conhecidos. 20 arquivos conferidos após instalação com jogo fechado.
+Backup `sed_backups/cwe_before_government_rank_fix_20261115_184521_574837`.
+Reteste após reativação pendente: carregar cópia do Uruguai, reavaliar
+leis no Diário e avançar além de 11/01.

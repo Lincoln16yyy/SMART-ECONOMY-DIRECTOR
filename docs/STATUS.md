@@ -9,7 +9,7 @@ ainda NÃO VERIFICADOS.
 
 **Smart Government para CWE:** edição separada, com 211 leis em 60 grupos.
 Validador do projeto passou. O Tiger aponta os três campos conhecidos de
-Diário da versão 1.15. Instalado, temporariamente fora do perfil ativo.
+Diário da versão 1.15. Instalado e reativado com proteção para posições vazias no ranking.
 O ranking em campanha registrou erros de comparação. A causa do
 fechamento em 11/01/1950 segue NÃO VERIFICADA. O reteste com a edição de
 leis desativada avançou até 15/01 sem erros do ranking.

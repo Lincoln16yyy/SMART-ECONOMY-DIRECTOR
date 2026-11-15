@@ -63,7 +63,28 @@ def adapt_generator(stage):
     )
     if count != 2:
         raise ValueError('Unexpected Smart Government fiscal scoring.')
+    for slot in (1, 2, 3):
+        text = replace_once(text, f' > var:sg_top_{slot}_score ', f' > sg_cwe_top_{slot}_score_or_empty ')
+        needle = f'limit = {{ var:sg_top_{slot}_id > 0 }}'
+        text = replace_once(text, needle,
+                            f'limit = {{ has_variable = sg_top_{slot}_id var:sg_top_{slot}_id > 0 }}')
+    for slot in (1, 2):
+        old = f'has_variable = sg_top_{slot}_id }} sg_copy_top_{slot}_to_{slot + 1}'
+        new = (f'has_variable = sg_top_{slot}_id var:sg_top_{slot}_id > 0 '
+               f'has_variable = sg_top_{slot}_score }} sg_copy_top_{slot}_to_{slot + 1}')
+        if text.count(old) != slot:
+            raise ValueError(f'Unexpected Smart Government shift logic for slot {slot}.')
+        text = text.replace(old, new)
     path.write_text(text, encoding='utf-8')
+
+
+def score_fallbacks():
+    return '\n'.join(f'''sg_cwe_top_{slot}_score_or_empty = {{
+ value = 0
+ if = {{ limit = {{ has_variable = sg_top_{slot}_score }} add = var:sg_top_{slot}_score }}
+ if = {{ limit = {{ NOT = {{ has_variable = sg_top_{slot}_score }} }} subtract = 1000 }}
+}}
+''' for slot in (1, 2, 3))
 
 
 def build(source, game, cwe, stage):
@@ -71,6 +92,8 @@ def build(source, game, cwe, stage):
         shutil.copytree(source / folder, stage / folder, ignore=shutil.ignore_patterns('__pycache__'))
     shutil.copyfile(source / 'Smart Government Advisor.mod', stage / 'Smart Government Advisor.mod')
     adapt_generator(stage)
+    (stage / 'common/script_values/sg_cwe_rank_fallbacks.txt').write_text(
+        score_fallbacks(), encoding='utf-8-sig')
     with TemporaryDirectory(prefix='sg-cwe-laws-') as temporary:
         inputs = Path(temporary)
         copy_law_inputs(game, cwe, inputs)
