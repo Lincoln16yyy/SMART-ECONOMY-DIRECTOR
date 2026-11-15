@@ -567,3 +567,14 @@ backup em `sed_backups/cwe_before_fiscal_shortage_20261115_182559_610593`.
 Perfil de quatro mods preservado. Doze testes focados aprovados.
 Tiger sem erros no Director e OGAS. Carregamento, reação à escassez em
 campanha e restauração após save/reload ainda NÃO VERIFICADOS.
+
+## Isolamento do fechamento no Uruguai — 2026-11-15
+
+Sessão do Uruguai às 18h29, encerrada no tick de 11/01/1950. Diretório de
+crash criado com `meta.yml` vazio. `error.log` e `error.1.log` registraram
+2.040 chamadas ao ranking `sg_law_rank.txt` na localização dos erros e
+nove ao alerta do OGAS. Sem causa definitiva. O perfil agora carrega Cold
+War Era, OGAS e Director, com Smart Government temporariamente desativado.
+Logs e perfil anterior em
+`sed_backups/cwe_crash_isolation_20261115_183148_637793`. O save
+`uruguai_1950_01_09.v3` permanece intacto. Repetir até passar 11/01.
