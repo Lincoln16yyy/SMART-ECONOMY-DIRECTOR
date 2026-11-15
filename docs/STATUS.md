@@ -1,4 +1,16 @@
-# Estado dos requisitos — 0.7.45
+# Estado dos requisitos — 0.7.46
+
+## Retomada da construção no Automático na 0.7.46
+
+- **Código:** após bloqueio por fila privada ou pausa, o evento existente
+  volta a conferir em sete dias. Enquanto a trava persiste no mesmo mês,
+  só lê as condições de espera. Quando a trava sai ou o mês vira, a
+  revisão completa aplica as guardas e o limite mensal de tentativa.
+- **Teste sintético:** 436 testes aprovados.
+- **Estático:** gerador e validador aprovados. Tiger 1.19.0 com 999 avisos
+  e os três apontamentos conhecidos de diário.
+- **Campanha:** cronograma real e persistência do evento após save/reload
+  ainda NÃO VERIFICADOS. Roteiro específico em `MANUAL_RUNTIME_TEST.md`.
 
 ## Automático na 0.7.45
 

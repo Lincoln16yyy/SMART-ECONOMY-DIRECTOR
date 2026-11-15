@@ -332,7 +332,7 @@
  sed_paper_action_failed:0 "Inclusão não confirmada. Confira a fila antes de aprovar novamente."
  sed_auto_status_month_limit:0 "A revisão não tentou outra expansão: já houve uma tentativa automática neste mês."
  sed_auto_current_month_limit:0 "Agora: limite mensal atingido. Uma nova tentativa automática só pode ocorrer em outro mês; aprovação manual continua no Assistido."
- sed_auto_pending:0 "Revisão agendada. O prazo a partir do agendamento é de 23 dias na revisão regular e 7 dias na segunda revisão após bloqueio por fila privada ou pausa."
+ sed_auto_pending:0 "Revisão agendada. Fila privada ou pausa são reavaliadas a cada 7 dias."
  sed_auto_idle:0 "Próxima revisão: aguardando o pulso mensal."
  sed_auto_unrecorded:0 "Última revisão: sem registro nesta ativação."
  sed_auto_last_review:0 "Última revisão automática: [JournalEntry.GetCountry.MakeScope.Var('sed_auto_review_month').GetValue|0]/[JournalEntry.GetCountry.MakeScope.Var('sed_auto_review_year').GetValue|0]. Resultado:"

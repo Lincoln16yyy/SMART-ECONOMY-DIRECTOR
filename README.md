@@ -1,5 +1,9 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.46, o Automático verifica a cada sete dias se a fila privada esvaziou
+ou se a construção foi retomada. Quando a trava sai, recalcula o plano e tenta
+a obra elegível pelo limite mensal vigente.
+
 Na 0.7.45, o Automático guarda os níveis de imposto e salário civil apenas
 quando vai alterá-los. O Diário distingue ausência de capacidade, estimativa
 ainda indisponível, método sem estimativa, dívida e falta de reservas.

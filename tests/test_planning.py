@@ -959,28 +959,54 @@ class PlanningTests(unittest.TestCase):
         self.assertNotIn('sed_construction_request_pending', target['variables'])
         self.assertEqual([item['building'] for item in c.constructions], ['building_railway'])
 
-    def test_transient_private_queue_schedules_one_retry_per_month(self):
-        self.producer('grain')
+    def test_transient_blockers_retry_until_clear_without_consuming_the_month(self):
+        event = next(entry.value for entry in parse(
+            outputs()['events/sed_events.txt'].decode('utf-8-sig')) if entry.key == 'sed_pulse.1')
+        for blocker, status in (('construction_queue_num_queued_private_levels', 11),
+                                ('is_construction_paused', 12)):
+            with self.subTest(blocker=blocker):
+                self.setUp()
+                self.producer('grain')
+                c = self.c
+                c.readings[blocker] = 1
+                c.run('sed_set_mode_automatic')
+                c.execute(child(event, 'immediate'), c.country_scope())
+                self.assertEqual(c.variables['sed_auto_review_status'], status)
+                for expected_retries in (2, 3):
+                    c.variables['sed_plan_count'] = 99
+                    c.execute(child(event, 'immediate'), c.country_scope())
+                    self.assertEqual(c.variables['sed_plan_count'], 99)
+                    self.assertEqual(c.variables['sed_auto_review_status'], status)
+                    self.assertEqual(c.scheduled_events.count(('sed_pulse.1', 7)), expected_retries)
+                    self.assertNotIn('sed_auto_last_attempt_month', c.variables)
+                c.readings[blocker] = 0
+                c.execute(child(event, 'immediate'), c.country_scope())
+                self.assertEqual(len(c.constructions), 1)
+                self.assertEqual(c.variables['sed_auto_review_status'], 1)
+                self.assertNotIn('sed_auto_event_pending', c.variables)
+                self.assertNotIn('sed_auto_retry_month', c.variables)
+                c.execute(child(event, 'immediate'), c.country_scope())
+                self.assertEqual(len(c.constructions), 1)
+
+    def test_weekly_check_runs_monthly_review_at_month_rollover_and_stops_on_exit(self):
+        event = next(entry.value for entry in parse(
+            outputs()['events/sed_events.txt'].decode('utf-8-sig')) if entry.key == 'sed_pulse.1')
         c = self.c
-        c.readings['construction_queue_num_queued_private_levels'] = 1
+        c.readings.update(year=1836, month=11, is_construction_paused=True)
         c.run('sed_set_mode_automatic')
-        # The monthly event already fired for this cycle.
-        c.variables.pop('sed_auto_event_pending')
-        c.run('sed_auto_apply_monthly')
-        self.assertEqual(c.variables['sed_auto_review_status'], 11)
-        self.assertTrue(c.variables.get('sed_auto_event_pending'))
-        self.assertIn(('sed_pulse.1', 7), c.scheduled_events)
-        retries = c.scheduled_events.count(('sed_pulse.1', 7))
-        # A second blocked review in the same month does not schedule another retry.
-        c.variables.pop('sed_auto_event_pending')
-        c.run('sed_auto_apply_monthly')
-        self.assertEqual(c.scheduled_events.count(('sed_pulse.1', 7)), retries)
-        # A confirmed insertion leaves no retry pending.
-        c.readings['construction_queue_num_queued_private_levels'] = 0
-        c.variables.pop('sed_auto_event_pending', None)
-        c.run('sed_auto_apply_monthly')
-        self.assertEqual(len(c.constructions), 1)
-        self.assertEqual(c.variables['sed_auto_review_status'], 1)
+        c.execute(child(event, 'immediate'), c.country_scope())
+        c.readings.update(year=1837, month=0)
+        c.run('sed_monthly_update')
+        self.assertEqual(c.scheduled_events, [('sed_pulse.1', 23), ('sed_pulse.1', 7)])
+        c.execute(child(event, 'immediate'), c.country_scope())
+        self.assertEqual(c.variables['sed_auto_review_year'], 1837)
+        self.assertEqual(c.variables['sed_auto_review_month'], 1)
+        self.assertEqual(c.scheduled_events.count(('sed_pulse.1', 7)), 2)
+        c.run('sed_set_mode_manual')
+        c.execute(child(event, 'immediate'), c.country_scope())
+        self.assertEqual(c.scheduled_events.count(('sed_pulse.1', 7)), 2)
+        self.assertNotIn('sed_auto_event_pending', c.variables)
+        self.assertNotIn('sed_auto_retry_month', c.variables)
 
     def test_busy_public_queue_still_allows_one_monthly_expansion(self):
         target = self.producer('grain')

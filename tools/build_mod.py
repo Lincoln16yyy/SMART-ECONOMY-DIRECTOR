@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.45'
+VERSION = '0.7.46'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -478,7 +478,6 @@ sed_refresh_supply_candidates = {
     result.append('''sed_schedule_auto_retry = {
  if = {
   limit = { has_variable = sed_mode_automatic NOT = { has_variable = sed_auto_event_pending }
-   NOT = { AND = { has_variable = sed_auto_retry_month var:sed_auto_retry_month = sed_live_month_key } }
   }
   set_variable = { name = sed_auto_event_pending value = yes }
   set_variable = { name = sed_auto_retry_month value = sed_live_month_key }
@@ -525,7 +524,7 @@ sed_refresh_supply_candidates = {
  set_variable = { name = sed_auto_review_status value = var:sed_auto_action_status }
  set_variable = { name = sed_auto_review_year value = year }
  set_variable = { name = sed_auto_review_month value = { value = month add = 1 } }
- # One late second look per month when a transient queue pause clears.
+ # Only transient construction blockers start weekly checks.
  if = { limit = { OR = { var:sed_auto_review_status = 11 var:sed_auto_review_status = 12 } }
   sed_schedule_auto_retry = yes
  }
@@ -2505,7 +2504,7 @@ def localization(language):
         'sed_title': ('Economia e construções', 'Economy and construction'),
         'sed_auto_status_month_limit': ('A revisão não tentou outra expansão: já houve uma tentativa automática neste mês.', 'The review did not attempt another expansion: an automatic attempt already occurred this month.'),
         'sed_auto_current_month_limit': ('Agora: limite mensal atingido. Uma nova tentativa automática só pode ocorrer em outro mês; aprovação manual continua no Assistido.', 'Now: the monthly limit is reached. A new automatic attempt requires a different month; manual approval remains available in Assisted.'),
-        'sed_auto_pending': ('Revisão agendada. O prazo a partir do agendamento é de 23 dias na revisão regular e 7 dias na segunda revisão após bloqueio por fila privada ou pausa.', 'Review scheduled. The delay from scheduling is 23 days for a regular review and 7 days for a second review after a private queue or pause blocker.'),
+        'sed_auto_pending': ('Revisão agendada. Fila privada ou pausa são reavaliadas a cada 7 dias.', 'Review scheduled. Private queue and pause blockers are checked every 7 days.'),
         'sed_auto_idle': ('Próxima revisão: aguardando o pulso mensal.', 'Next review: waiting for the monthly pulse.'),
         'sed_auto_unrecorded': ('Última revisão: sem registro nesta ativação.', 'Last review: no record in this activation.'),
         'sed_auto_last_review': ('Última revisão automática: ' + v('auto_review_month', '0') + '/' + v('auto_review_year', '0') + '. Resultado:', 'Last automatic review: ' + v('auto_review_month', '0') + '/' + v('auto_review_year', '0') + '. Result:'),
@@ -2797,10 +2796,25 @@ sed_pulse.1 = {
  immediate = {
   remove_variable = sed_auto_event_pending
   if = {
-   limit = { has_variable = sed_mode_automatic }
-   sed_refresh_railway_candidates = yes
-   sed_refresh_supply_candidates = yes
-   sed_auto_apply_monthly = yes
+   limit = {
+    has_variable = sed_mode_automatic
+    has_variable = sed_auto_retry_month
+    var:sed_auto_retry_month = sed_live_month_key
+    NOT = { sed_auto_month_limit_reached = yes }
+    NOT = { in_default = yes }
+    OR = { construction_queue_num_queued_private_levels > 0 is_construction_paused = yes }
+   }
+   # While the month and blocker persist, avoid rescanning every state.
+   sed_schedule_auto_retry = yes
+  }
+  else = {
+   remove_variable = sed_auto_retry_month
+   if = {
+    limit = { has_variable = sed_mode_automatic }
+    sed_refresh_railway_candidates = yes
+    sed_refresh_supply_candidates = yes
+    sed_auto_apply_monthly = yes
+   }
   }
  }
 }

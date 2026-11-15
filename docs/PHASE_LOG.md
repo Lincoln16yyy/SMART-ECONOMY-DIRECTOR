@@ -2978,3 +2978,14 @@ em ouro usa o saldo atual e a reserva exigida pela última estimativa. O
 registro da última revisão continua datado e independente do bloqueio atual.
 A pendência de save/reload está no roteiro 0.7.45 de
 `MANUAL_RUNTIME_TEST.md`.
+
+## 2026-11-15 — 0.7.46, retomada de construção no Automático
+
+A única segunda revisão podia consumir a oportunidade de retomar o mês
+enquanto uma fila privada ou pausa persistia. A espera passa a verificar as
+duas travas a cada sete dias pelo evento já usado pelo Director. Dentro do
+mês, uma trava ainda ativa adia a revisão sem recalcular candidatos. Na
+liberação ou virada do mês, roda a revisão completa com as guardas fiscais,
+de materiais e de tentativa mensal. Os cenários sintéticos cobrem pausa,
+fila privada, virada do ano e saída do Automático. A calibração do orçamento
+continua dependente de medições de campanha.

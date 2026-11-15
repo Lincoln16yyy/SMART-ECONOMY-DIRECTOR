@@ -332,7 +332,7 @@
  sed_paper_action_failed:0 "Queue addition not confirmed. Inspect the queue before approving again."
  sed_auto_status_month_limit:0 "The review did not attempt another expansion: an automatic attempt already occurred this month."
  sed_auto_current_month_limit:0 "Now: the monthly limit is reached. A new automatic attempt requires a different month; manual approval remains available in Assisted."
- sed_auto_pending:0 "Review scheduled. The delay from scheduling is 23 days for a regular review and 7 days for a second review after a private queue or pause blocker."
+ sed_auto_pending:0 "Review scheduled. Private queue and pause blockers are checked every 7 days."
  sed_auto_idle:0 "Next review: waiting for the monthly pulse."
  sed_auto_unrecorded:0 "Last review: no record in this activation."
  sed_auto_last_review:0 "Last automatic review: [JournalEntry.GetCountry.MakeScope.Var('sed_auto_review_month').GetValue|0]/[JournalEntry.GetCountry.MakeScope.Var('sed_auto_review_year').GetValue|0]. Result:"

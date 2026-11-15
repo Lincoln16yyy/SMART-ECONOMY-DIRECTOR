@@ -1,5 +1,20 @@
 # Plano de teste da campanha — interface 0.5.3
 
+## 0.7.46 — retomar construção no Automático
+
+1. Abra uma cópia de `paraguai_1837_02_01.v3` com os mods exigidos pelo save.
+   Escolha uma situação com obra elegível, caixa saudável e nenhuma tentativa
+   própria no mês. Pause a construção antes da revisão regular.
+2. Depois da revisão bloqueada, aguarde mais de sete dias com a construção
+   pausada. Salve e recarregue. Retome a construção e avance até sete dias.
+   Esperado: se as guardas passarem, o Director adiciona uma obra à fila pública.
+3. Repita com fila privada ocupada, deixando-a esvaziar só depois da primeira
+   conferência semanal. Ao recarregar após a inserção, avance no mesmo mês
+   e confira que o Director não adiciona uma segunda obra.
+4. Em outra cópia, mantenha a trava ao virar o mês e confira que a revisão
+   completa ainda ocorre. Repita saindo do Automático durante a espera e
+   confirme que o evento pendente não enfileira obras.
+
 ## 0.7.45 — Automático, restauração e orçamento
 
 Use uma cópia do save e o pacote da 0.7.45.

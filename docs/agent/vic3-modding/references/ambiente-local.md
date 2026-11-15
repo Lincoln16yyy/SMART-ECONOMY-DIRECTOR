@@ -457,3 +457,13 @@ Pacote criado por `python3 tools/package_mod.py` em
 No comando Tiger acima, a 0.7.45 produziu 999 avisos e os três apontamentos
 de campos de diário da auditoria anterior. Instalação, carregamento e
 save/reload da 0.7.45 pendentes.
+
+## Verificação local da 0.7.46 (2026-11-15)
+
+436 testes sintéticos aprovados. Gerador e validador local aprovados, Tiger
+1.19.0 com 999 avisos e os três apontamentos conhecidos de diário. ZIP
+`dist/smart-economy-director-0.7.46.zip` conferido com `unzip -t`. Instalado
+com jogo fechado, 14 arquivos verificados, ordem de mods preservada e backup
+`sed_backups/mod_before_0.7.46_20261115_164836_978933`. O save
+`paraguai_1837_02_01.v3` existe na pasta de saves. A versão ainda não foi
+aberta no jogo.
