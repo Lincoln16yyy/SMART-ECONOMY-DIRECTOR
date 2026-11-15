@@ -496,3 +496,12 @@ jogo fechado. Os 10 arquivos conferem byte a byte com o ZIP e o perfil
 ativo foi preservado, com cópia em
 `sed_backups/profile_before_director_cwe_20261115_171452_086586`.
 Carregamento com a combinação local de versões permanece NÃO VERIFICADO.
+
+## Perfil ativo Cold War Era (2026-11-15)
+
+Atualizada a conversão local para a revisão oficial `4d301a80d962bc9bad2d00fbe5780aca22c52a41`
+(0.99 para 1.15.1). Conferidos 3.121 arquivos e os scripts contra a cópia
+auditada. Com o jogo fechado, `content_load.json` foi configurado com
+somente Cold War Era seguido pelo Director CWE. Cópia do perfil anterior e
+da conversão anterior em `sed_backups/profile_before_cwe_play_20261115_172151_124926`.
+Executável local 1.15.0. Carregamento NÃO VERIFICADO.
