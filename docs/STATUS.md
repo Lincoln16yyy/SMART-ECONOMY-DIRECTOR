@@ -2,6 +2,10 @@
 
 ## Expansões na série 1.15
 
+**Perfil atual:** Better Politics, Director normal e Smart Government normal.
+Lista conferida com o jogo fechado. Execução conjunta em campanha ainda
+NÃO VERIFICADA.
+
 **CWE fiscal e escassez:** instalado. Snapshot/restauração fiscal, prioridade
 a produtor ativo com insumos e limite mensal cobertos por testes focados.
 Tiger sem erros nos dois pacotes. Carregamento, campanha e save/reload

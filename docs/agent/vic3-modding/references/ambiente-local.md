@@ -592,3 +592,12 @@ conhecidos. 20 arquivos conferidos após instalação com jogo fechado.
 Backup `sed_backups/cwe_before_government_rank_fix_20261115_184521_574837`.
 Reteste após reativação pendente: carregar cópia do Uruguai, reavaliar
 leis no Diário e avançar além de 11/01.
+
+## Perfil de teste Better Politics
+
+Com Victoria 3 fechado, `content_load.json` passou a carregar Better
+Politics 2.5.47, Smart Economy Director 0.7.46 e Smart Government Advisor
+1.0.0, nessa ordem. O perfil Cold War Era anterior está em
+`sed_backups/profile_before_better_politics_20261115_195413_016841`. Os mods
+e saves da conversão permanecem instalados. O OGAS para jogo base é o
+item Workshop 3092955121. Carregamento do perfil novo NÃO VERIFICADO.
