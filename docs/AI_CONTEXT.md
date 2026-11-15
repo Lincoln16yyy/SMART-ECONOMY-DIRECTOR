@@ -1,7 +1,7 @@
 # Contexto de continuidade
 
 ## Estado atual
-- **Smart Government para CWE:** pacote separado em `dist/smart-government-advisor-cwe.zip`, gerado da cópia local do projeto de leis e das definições CWE. 211 leis em 60 grupos, sete excluídas das sugestões por requisitos ausentes. Não instalado. Carregamento em campanha NÃO VERIFICADO.
+- **Smart Government para CWE:** pacote separado em `dist/smart-government-advisor-cwe.zip`, gerado da cópia local do projeto de leis e das definições CWE. 211 leis em 60 grupos, sete excluídas das sugestões por requisitos ausentes. Instalado e ativo após Cold War Era, OGAS e Director. Carregamento em campanha NÃO VERIFICADO.
 - **Crescimento automático do CWE:** decisão instalada no OGAS que ativa construção, ferrovias, setores, métodos e gestão de mão de obra. Meta de fila de 12 semanas e pausa de novas obras quando faltar caixa, renda ou capacidade. Nove testes focados aprovados, campanha pendente.
 - **OGAS para CWE:** adaptado localmente e ativo entre Cold War Era e Director. Migração do prédio de roupas para `building_clothes_factory` e retirada de trigger inválido sem chamadas eliminaram os erros no Tiger. Director cede a fila ao gerenciador geral do OGAS e deixa ferrovias ao gerenciador dedicado. Sete testes sintéticos. Campanha pendente.
 - **Diário do Director CWE:** instalado em 0.7.46 com status da construção e confirmação pela fila pública. Cinco testes sintéticos e Tiger sem apontamentos para a edição. A sessão anterior avançou em janeiro de 1950 com as decisões visíveis. Diário atualizado e construção em campanha pendentes.

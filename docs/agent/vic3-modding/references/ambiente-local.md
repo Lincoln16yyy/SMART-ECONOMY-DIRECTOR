@@ -554,3 +554,8 @@ o jogo base local e o CWE 0.99 ativo. O validador encontrou 211 leis e
 60 grupos, sem erros. Tiger com as camadas temporárias retornou três
 apontamentos de Diário da engine 1.15. A pasta ativa do Hydra e o perfil
 não foram modificados.
+
+Edição CWE instalada e ativada após Cold War Era, OGAS e Director, com o jogo
+fechado. Os 19 arquivos conferem byte a byte com o ZIP. Perfil anterior em
+`sed_backups/profile_before_government_cwe_20261115_181155_999299`.
+Carregamento em campanha ainda NÃO VERIFICADO.
