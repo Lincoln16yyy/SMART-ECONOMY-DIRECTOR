@@ -39,6 +39,17 @@ preços-base e todos os grupos de métodos do setor de construção na fonte CWE
 A edição cobre essas três obras. Modernização, fundações industriais, salários,
 impostos e coordenação de construtores externos ainda precisam de adaptação.
 
+### Smart Government Advisor para Cold War Era
+
+A edição separada recomenda reformas no catálogo do Cold War Era 0.99,
+conserva os IDs estáveis, o apoio político, a checagem de viabilidade e o
+início manual da tramitação. O ajuste de cobertura fiscal usa déficit e
+reservas. Três leis ambientais com tecnologias ausentes e quatro leis do
+grupo militar com pré-requisito indefinido ficam fora das sugestões.
+Use a edição CWE no perfil Cold War Era em lugar da edição para o jogo base.
+A edição é opcional e pode ser carregada depois de Cold War Era, OGAS e
+Director. Para gerar o pacote, use `python3 -m tools.cwe_government --help`.
+
 ### OGAS para Cold War Era
 
 Use **Ativar crescimento automático** para configurar os Diários do OGAS e

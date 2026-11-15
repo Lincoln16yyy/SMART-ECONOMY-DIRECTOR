@@ -2,6 +2,10 @@
 
 ## Expansões na série 1.15
 
+**Smart Government para CWE:** edição separada, com 211 leis em 60 grupos.
+Validador do projeto passou. O Tiger aponta os três campos conhecidos de
+Diário da versão 1.15. Instalação e campanha NÃO VERIFICADAS.
+
 **Crescimento automático:** decisão instalada e testada no sintético. Ela liga
 os gerenciadores do OGAS, usa uma meta de 12 semanas e verifica orçamento
 antes de continuar a fila. Tiger sem erros novos. Campanha NÃO VERIFICADA.

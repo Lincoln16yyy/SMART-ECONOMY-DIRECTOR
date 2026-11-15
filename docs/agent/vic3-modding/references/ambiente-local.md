@@ -545,3 +545,12 @@ e instalado no OGAS com jogo fechado e verificação byte a byte. Backup
 Sete testes do Director e dois da decisão de crescimento passaram. Tiger
 com as camadas do CWE e Director registrou 923 avisos e cinco dicas do OGAS,
 zero erros. Carregamento e comportamento em campanha NÃO VERIFICADOS.
+
+## Smart Government para Cold War Era
+
+Gerado em `dist/smart-government-advisor-cwe.zip` com
+`tools/cwe_government.py`, usando a cópia instalada do Smart Government,
+o jogo base local e o CWE 0.99 ativo. O validador encontrou 211 leis e
+60 grupos, sem erros. Tiger com as camadas temporárias retornou três
+apontamentos de Diário da engine 1.15. A pasta ativa do Hydra e o perfil
+não foram modificados.
