@@ -26,7 +26,8 @@ Carregamento, interface e execução em campanha seguem **NÃO VERIFICADOS**.
 
 Em um perfil com Victoria 3 **1.15.1**, habilite **Cold War Era (1950) 0.99**
 e **Smart Economy Director - Cold War Era**, nessa ordem. Use a decisão
-**Ativar Director para Cold War Era**. A edição usa um identificador próprio
+**Ativar Director para Cold War Era** e abra **Diário → Director — Cold War Era**
+para acompanhar o resultado da revisão. A edição usa um identificador próprio
 e substitui o Director normal nesse perfil.
 
 A revisão mensal pode autorizar uma ferrovia em estado com infraestrutura

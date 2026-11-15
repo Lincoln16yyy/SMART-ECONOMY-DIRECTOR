@@ -505,3 +505,16 @@ auditada. Com o jogo fechado, `content_load.json` foi configurado com
 somente Cold War Era seguido pelo Director CWE. Cópia do perfil anterior e
 da conversão anterior em `sed_backups/profile_before_cwe_play_20261115_172151_124926`.
 Executável local 1.15.0. Carregamento NÃO VERIFICADO.
+
+## Diário do Director para Cold War Era (2026-11-15)
+
+O log `dedicated_server.log` da sessão anterior registrou ticks de 1950.1.1.
+`debug.3.log` registrou `on_river` desconhecido na conversão, e `gui.log`
+registrou `REPLACE_OR_CREATE:texticon` no arquivo de ícones do Cold War Era.
+Não foram localizadas linhas `sed_cwe_` nos logs da sessão anterior.
+Instalada a edição com Diário, 11 arquivos conferidos, backup em
+`sed_backups/director_cwe_before_journal_20261115_174046_318978`. A lista
+ativa continua Cold War Era seguido do Director CWE. A pasta da conversão
+carece de IDs vanilla usados por ARoAI, Supply Chain e Auto-Apply PMs, por
+exemplo `building_tooling_workshop`. A renderização do Diário e a execução de
+obra em campanha ainda precisam de confirmação.

@@ -5,7 +5,9 @@
 **Instalação local:** `content_load.json` ativa Cold War Era 0.99 seguido
 do Director CWE 0.7.46. A revisão do Cold War Era foi atualizada para
 `4d301a80`, correspondente à fonte usada para gerar o Director. Os dois
-declaram 1.15.1, e o jogo local está na 1.15.0. Carregamento NÃO VERIFICADO.
+declaram 1.15.1, e o jogo local está na 1.15.0. A sessão chegou à campanha de 1950, com erros de script e GUI da conversão.
+A edição CWE agora inclui Diário, validado pelo Tiger e por cinco testes
+sintéticos. Diário e execução em campanha ainda NÃO VERIFICADOS.
 O perfil anterior e a cópia CWE para 1.14.5 estão preservados em backup.
 
 - **Estático:** Director normal com Morgenröte 2.9.0 + CMF e com Better

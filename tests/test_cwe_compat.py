@@ -45,6 +45,25 @@ class ColdWarEraTests(unittest.TestCase):
         self.assertEqual([item['building'] for item in c.constructions],
                          ['building_railway', 'building_government_administration'])
 
+    def test_review_reports_only_confirmed_queue_insertion(self):
+        c = self.country
+        c.construction_accepted = False
+        c.run('sed_cwe_automatic_review')
+        self.assertEqual(c.variables['sed_cwe_result'], 4)
+        self.assertNotIn('sed_cwe_queue_before', c.variables)
+        c.construction_accepted = True
+        c.run('sed_cwe_automatic_review')
+        self.assertEqual(c.variables['sed_cwe_result'], 4)
+        c.readings['month'] = 1
+        c.run('sed_cwe_automatic_review')
+        self.assertEqual(c.variables['sed_cwe_result'], 1)
+
+    def test_journal_is_added_once_for_existing_enabled_games(self):
+        c = self.country
+        c.run('sed_cwe_ensure_journal')
+        c.run('sed_cwe_ensure_journal')
+        self.assertEqual(c.journals_added, 1)
+
     def test_paused_or_existing_director_stops_the_cwe_dispatcher(self):
         c = self.country
         c.variables['sed_enabled'] = True
