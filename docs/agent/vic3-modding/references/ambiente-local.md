@@ -478,3 +478,15 @@ em `cmf`, commit `962ee3a730e5b4bfbd5d61949da6bec2432fb0d8`.
 Better Politics 2.5.47 em `bpm/better-politics-mod`, commit
 `b80a4074bf93dbf2f04dd70f73abe0f39a3a9a91`. O executável local continua em
 1.15.0. Nenhuma dessas expansões foi instalada na pasta de mods.
+
+## Instalação local dos ZIPs de expansões (2026-11-15)
+
+Com jogo fechado, a edição completa do Better Politics 2.5.47 (1.15.*,
+2.016 arquivos) e Cold War Era (1950) 0.99 (1.14.5, 3.095 arquivos) foram
+extraídos de `~/Downloads` para a pasta `mod` do Hydra. Os descritores
+externos seguem as versões dos metadados originais. O perfil ativo foi
+preservado byte a byte, com cópia em
+`sed_backups/profile_before_expansions_20261115_171135_870373`. A instalação
+local do jogo é 1.15.0. O ZIP baixado do Cold War Era pertence a uma revisão
+diferente da analisada para a edição adaptada do Director. Jogo e launcher
+não foram abertos para validar carregamento.
