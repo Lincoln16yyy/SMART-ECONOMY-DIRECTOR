@@ -2966,3 +2966,15 @@ focada do snapshot fiscal. **Estático:** gerador sincronizado, validador
 local aprovado. Tiger 1.19.0 reportou 995 avisos e três erros `unknown-field` de diário, já registrados
 como campos do vanilla 1.15. O Tiger declara suporte até 1.13.5.
 **Carregou/Campanha:** nenhuma sessão de jogo aberta nesta auditoria.
+
+## 2026-11-15 — 0.7.45, restauração fiscal e diagnóstico do Automático
+
+A captura de imposto e salário civil fica no ramo que aplica a mudança.
+A restauração preserva os registros existentes para saves atualizados. As
+guardas de construção mantêm o orçamento e os limiares da 0.7.44. O Diário
+usa o resultado atual da guarda para mostrar capacidade, estimativa
+indisponível, método desconhecido, dívida ou reserva insuficiente. A diferença
+em ouro usa o saldo atual e a reserva exigida pela última estimativa. O
+registro da última revisão continua datado e independente do bloqueio atual.
+A pendência de save/reload está no roteiro 0.7.45 de
+`MANUAL_RUNTIME_TEST.md`.

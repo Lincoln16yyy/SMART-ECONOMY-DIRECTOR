@@ -216,13 +216,18 @@ def effects(founding_projects=()):
   } }
   # Distance between the treasury and the required reserve, so the player reads
   # how much gold is missing instead of comparing two numbers.
-  set_variable = { name = sed_build_budget_gold_gap value = {
-   value = var:sed_build_budget_required_gold subtract = gold_reserves min = 0
-  } }
+  set_variable = { name = sed_build_budget_gold_gap value = sed_live_build_budget_gold_gap }
  }
 }
 ''')
     return '\n'.join(result)
+
+
+def values():
+    return """sed_live_build_budget_gold_gap = {
+ value = var:sed_build_budget_required_gold subtract = gold_reserves min = 0
+}
+"""
 
 
 def triggers():

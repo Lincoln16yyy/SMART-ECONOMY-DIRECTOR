@@ -449,3 +449,11 @@ Tiger 1.19.0 executado na 0.7.44 com 995 avisos e três erros
 acionados nesta auditoria. `git log --all` falha por duas referências de
 checkpoint com objetos ausentes. `git log HEAD origin/main` foi usado para
 o inventário dos commits.
+
+## Verificação local da 0.7.45 (2026-11-15)
+
+Pacote criado por `python3 tools/package_mod.py` em
+`dist/smart-economy-director-0.7.45.zip` e conferido com `unzip -t`.
+No comando Tiger acima, a 0.7.45 produziu 999 avisos e os três apontamentos
+de campos de diário da auditoria anterior. Instalação, carregamento e
+save/reload da 0.7.45 pendentes.

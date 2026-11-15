@@ -1,5 +1,10 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.45, o Automático guarda os níveis de imposto e salário civil apenas
+quando vai alterá-los. O Diário distingue ausência de capacidade, estimativa
+ainda indisponível, método sem estimativa, dívida e falta de reservas.
+O resultado da última revisão permanece separado da situação atual.
+
 Na 0.7.44, o modo Assistido passa a disparar eventos didáticos quando há recomendações: cada aviso explica por que o Director recomenda aquele objetivo (gargalo de infraestrutura, escassez de bens, capacidade de construção, finanças, indústria ausente, burocracia, tributação, diversificação ou energia cara) e orienta abrir o Diário para aprovar a recomendação item a item. O evento não enfileira nada sozinho; as opções permitem revisar, adiar ou silenciar o aviso por alguns meses.
 
 Na 0.7.43, o bloqueio atual de orçamento (`sed_auto_current_budget`) também passa a mostrar quanto ouro falta para a guarda liberar, alinhado ao plano e ao status 22.

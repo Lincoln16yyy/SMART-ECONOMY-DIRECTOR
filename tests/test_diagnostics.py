@@ -664,6 +664,33 @@ class DiagnosisTests(unittest.TestCase):
         only('clear')
         self.assertTrue(self.auto_panel_shown(c, 'status_queue'))  # Dated historical result.
 
+    def test_live_budget_blockers_distinguish_capacity_method_debt_and_gold(self):
+        c = self.country()
+        c.run('sed_set_mode_automatic')
+        c.variables.update(sed_build_budget_known=0, sed_build_budget_weekly=200,
+                           sed_build_budget_required_gold=2000, sed_auto_review_status=22)
+        c.readings['modifier:country_construction_add'] = 0
+        names = ('capacity', 'pending', 'method', 'debt', 'gold')
+
+        def visible_budget_blockers():
+            return [name for name in names
+                    if self.auto_panel_shown(c, 'current_budget_' + name)]
+
+        self.assertEqual(visible_budget_blockers(), ['capacity'])
+        c.readings['modifier:country_construction_add'] = 10
+        self.assertEqual(visible_budget_blockers(), ['method'])
+        c.variables.pop('sed_build_budget_known')
+        self.assertEqual(visible_budget_blockers(), ['pending'])
+        c.variables['sed_build_budget_known'] = 1
+        self.assertEqual(visible_budget_blockers(), ['debt'])
+        c.readings['principal'] = 0
+        self.assertEqual(visible_budget_blockers(), ['gold'])
+        self.assertEqual(c.number('sed_live_build_budget_gold_gap', c.country_scope()), 1000)
+        c.readings['gold_reserves'] = 2000
+        self.assertEqual(visible_budget_blockers(), [])
+        self.assertTrue(self.auto_panel_shown(c, 'current_clear'))
+        self.assertTrue(self.auto_panel_shown(c, 'status_budget'))
+
     def test_legacy_status_does_not_invent_review_date_and_event_records_new_result(self):
         c = self.country()
         c.readings['construction_queue_num_queued_private_levels'] = 1

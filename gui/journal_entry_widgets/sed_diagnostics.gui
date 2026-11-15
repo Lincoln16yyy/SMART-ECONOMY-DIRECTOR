@@ -3194,11 +3194,39 @@ textbox = {
  text = "sed_auto_current_fiscal"
 }
 textbox = {
- visible = "[GetScriptedGui('sed_auto_current_budget_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ visible = "[GetScriptedGui('sed_auto_current_budget_capacity_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }
- text = "sed_auto_current_budget"
+ text = "sed_auto_current_budget_capacity"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_current_budget_pending_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_current_budget_pending"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_current_budget_method_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_current_budget_method"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_current_budget_debt_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_current_budget_debt"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_auto_current_budget_gold_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_auto_current_budget_gold"
 }
 textbox = {
  visible = "[GetScriptedGui('sed_auto_current_clear_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"

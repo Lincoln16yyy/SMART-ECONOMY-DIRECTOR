@@ -792,6 +792,22 @@ class PlanningTests(unittest.TestCase):
         self.assertEqual(c.readings['government_wage_level'], 'very_high')
         self.assertIn('sed_wage_last_change_month', c.variables)
 
+    def test_fiscal_review_without_a_change_preserves_later_player_adjustments(self):
+        c = self.c
+        c.run('sed_set_mode_automatic')
+        c.readings.update(tax_level='very_high', government_wage_level='low')
+        c.variables['sed_fiscal_status'] = 3
+        c.run('sed_apply_fiscal_policy')
+        c.run('sed_apply_wage_policy')
+        self.assertEqual(c.tax_changes, [])
+        self.assertEqual(c.wage_changes, [])
+        self.assertNotIn('sed_tax_level_saved', c.variables)
+        self.assertNotIn('sed_gov_wage_saved', c.variables)
+        c.readings.update(tax_level='medium', government_wage_level='high')
+        c.run('sed_set_mode_manual')
+        self.assertEqual(c.readings['tax_level'], 'medium')
+        self.assertEqual(c.readings['government_wage_level'], 'high')
+
     def test_conflicting_manual_mode_blocks_tax_and_wage_effects(self):
         c = self.c
         c.readings.update(gold_reserves=100, net_total_income=-100)

@@ -8875,9 +8875,7 @@ var:sed_paper_intent_variant = 1
   } }
   # Distance between the treasury and the required reserve, so the player reads
   # how much gold is missing instead of comparing two numbers.
-  set_variable = { name = sed_build_budget_gold_gap value = {
-   value = var:sed_build_budget_required_gold subtract = gold_reserves min = 0
-  } }
+  set_variable = { name = sed_build_budget_gold_gap value = sed_live_build_budget_gold_gap }
  }
 }
 # Country scope; read-only military-economic assessment.
@@ -8963,11 +8961,10 @@ sed_apply_fiscal_policy = {
   }
   if = {
    limit = { OR = { var:sed_fiscal_status = 2 var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } }
-   sed_tax_policy_save = yes
-   if = { limit = { tax_level = very_low } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 1 } set_variable = { name = sed_tax_last_to value = 2 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = low }
-   else_if = { limit = { tax_level = low } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 2 } set_variable = { name = sed_tax_last_to value = 3 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = medium }
-   else_if = { limit = { tax_level = medium } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 3 } set_variable = { name = sed_tax_last_to value = 4 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = high }
-   else_if = { limit = { tax_level = high } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 4 } set_variable = { name = sed_tax_last_to value = 5 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = very_high }
+   if = { limit = { tax_level = very_low } sed_tax_policy_save = yes set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 1 } set_variable = { name = sed_tax_last_to value = 2 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = low }
+   else_if = { limit = { tax_level = low } sed_tax_policy_save = yes set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 2 } set_variable = { name = sed_tax_last_to value = 3 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = medium }
+   else_if = { limit = { tax_level = medium } sed_tax_policy_save = yes set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 3 } set_variable = { name = sed_tax_last_to value = 4 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = high }
+   else_if = { limit = { tax_level = high } sed_tax_policy_save = yes set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 4 } set_variable = { name = sed_tax_last_to value = 5 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = very_high }
   }
   else_if = {
    limit = { OR = { var:sed_fiscal_status = 1 var:sed_fiscal_status = 5 }
@@ -8975,10 +8972,9 @@ sed_apply_fiscal_policy = {
     principal <= 0
     net_total_income > 0
    }
-   sed_tax_policy_save = yes
-   if = { limit = { tax_level = medium } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 3 } set_variable = { name = sed_tax_last_to value = 2 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = low }
-   else_if = { limit = { tax_level = high } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 4 } set_variable = { name = sed_tax_last_to value = 3 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = medium }
-   else_if = { limit = { tax_level = very_high } set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 5 } set_variable = { name = sed_tax_last_to value = 4 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = high }
+   if = { limit = { tax_level = medium } sed_tax_policy_save = yes set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 3 } set_variable = { name = sed_tax_last_to value = 2 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = low }
+   else_if = { limit = { tax_level = high } sed_tax_policy_save = yes set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 4 } set_variable = { name = sed_tax_last_to value = 3 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = medium }
+   else_if = { limit = { tax_level = very_high } sed_tax_policy_save = yes set_variable = { name = sed_tax_last_change_month value = sed_live_month_key } set_variable = { name = sed_tax_last_from value = 5 } set_variable = { name = sed_tax_last_to value = 4 } set_variable = { name = sed_tax_last_year value = year } set_variable = { name = sed_tax_last_month value = { value = month add = 1 } } set_tax_level = high }
   }
  }
 }
@@ -9026,10 +9022,9 @@ sed_apply_wage_policy = {
   }
   if = {
    limit = { OR = { var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } }
-   sed_wage_policy_save = yes
-   if = { limit = { government_wage_level = medium } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_wage_last_from value = 3 } set_variable = { name = sed_wage_last_to value = 2 } set_variable = { name = sed_wage_last_year value = year } set_variable = { name = sed_wage_last_month value = { value = month add = 1 } } set_government_wage_level = low }
-   else_if = { limit = { government_wage_level = high } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_wage_last_from value = 4 } set_variable = { name = sed_wage_last_to value = 3 } set_variable = { name = sed_wage_last_year value = year } set_variable = { name = sed_wage_last_month value = { value = month add = 1 } } set_government_wage_level = medium }
-   else_if = { limit = { government_wage_level = very_high } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_wage_last_from value = 5 } set_variable = { name = sed_wage_last_to value = 4 } set_variable = { name = sed_wage_last_year value = year } set_variable = { name = sed_wage_last_month value = { value = month add = 1 } } set_government_wage_level = high }
+   if = { limit = { government_wage_level = medium } sed_wage_policy_save = yes set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_wage_last_from value = 3 } set_variable = { name = sed_wage_last_to value = 2 } set_variable = { name = sed_wage_last_year value = year } set_variable = { name = sed_wage_last_month value = { value = month add = 1 } } set_government_wage_level = low }
+   else_if = { limit = { government_wage_level = high } sed_wage_policy_save = yes set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_wage_last_from value = 4 } set_variable = { name = sed_wage_last_to value = 3 } set_variable = { name = sed_wage_last_year value = year } set_variable = { name = sed_wage_last_month value = { value = month add = 1 } } set_government_wage_level = medium }
+   else_if = { limit = { government_wage_level = very_high } sed_wage_policy_save = yes set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_wage_last_from value = 5 } set_variable = { name = sed_wage_last_to value = 4 } set_variable = { name = sed_wage_last_year value = year } set_variable = { name = sed_wage_last_month value = { value = month add = 1 } } set_government_wage_level = high }
   }
   else_if = {
    limit = { OR = { var:sed_fiscal_status = 1 var:sed_fiscal_status = 5 }
@@ -9037,9 +9032,8 @@ sed_apply_wage_policy = {
     principal <= 0
     net_total_income > 0
    }
-   sed_wage_policy_save = yes
-   if = { limit = { government_wage_level = very_low } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_wage_last_from value = 1 } set_variable = { name = sed_wage_last_to value = 2 } set_variable = { name = sed_wage_last_year value = year } set_variable = { name = sed_wage_last_month value = { value = month add = 1 } } set_government_wage_level = low }
-   else_if = { limit = { government_wage_level = low } set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_wage_last_from value = 2 } set_variable = { name = sed_wage_last_to value = 3 } set_variable = { name = sed_wage_last_year value = year } set_variable = { name = sed_wage_last_month value = { value = month add = 1 } } set_government_wage_level = medium }
+   if = { limit = { government_wage_level = very_low } sed_wage_policy_save = yes set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_wage_last_from value = 1 } set_variable = { name = sed_wage_last_to value = 2 } set_variable = { name = sed_wage_last_year value = year } set_variable = { name = sed_wage_last_month value = { value = month add = 1 } } set_government_wage_level = low }
+   else_if = { limit = { government_wage_level = low } sed_wage_policy_save = yes set_variable = { name = sed_wage_last_change_month value = sed_live_month_key } set_variable = { name = sed_wage_last_from value = 2 } set_variable = { name = sed_wage_last_to value = 3 } set_variable = { name = sed_wage_last_year value = year } set_variable = { name = sed_wage_last_month value = { value = month add = 1 } } set_government_wage_level = medium }
   }
  }
 }

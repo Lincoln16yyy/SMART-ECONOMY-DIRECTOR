@@ -1,4 +1,17 @@
-# Estado dos requisitos — 0.7.44
+# Estado dos requisitos — 0.7.45
+
+## Automático na 0.7.45
+
+- **Código:** a captura de imposto e salário civil só ocorre antes de um
+  passo aplicável. Os snapshots de saves anteriores continuam legíveis e
+  preservam a restauração já pendente. O Diário separa a situação atual do
+  resultado registrado e informa o bloqueio específico da guarda de orçamento.
+- **Teste sintético:** 435 testes aprovados, incluindo ajuste manual após
+  revisão sem mudança e exclusividade dos bloqueios de orçamento.
+- **Estático:** gerador e validador local aprovados. Tiger 1.19.0 reportou 999
+  avisos e os três apontamentos conhecidos de campos de diário.
+- **Carregou/Campanha: NÃO VERIFICADOS.** O roteiro 0.7.45 em
+  `MANUAL_RUNTIME_TEST.md` cobre save/reload, restauração e leitura dos bloqueios.
 
 ## Protocolo de evidência adotado
 

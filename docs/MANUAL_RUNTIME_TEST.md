@@ -1,5 +1,26 @@
 # Plano de teste da campanha — interface 0.5.3
 
+## 0.7.45 — Automático, restauração e orçamento
+
+Use uma cópia do save e o pacote da 0.7.45.
+
+1. Com imposto muito alto e salário civil baixo em crise fiscal, deixe passar
+   uma revisão. Confira que os dois níveis permanecem. Ajuste os níveis
+   manualmente, salve/recarregue no mesmo mês e mude para Manual
+   antes de outra revisão. Esperado: os ajustes ficam como o jogador deixou.
+2. Em outra cópia, comece em níveis que permitam ajuste e deixe passar uma
+   revisão. Registre os níveis original e aplicado, fila pública e mês.
+   Salve/recarregue e confira a fila após a revisão programada. Esperado:
+   dentro do mesmo mês, nenhuma segunda tentativa quando já houve uma
+   tentativa própria. Ao sair do Automático, os níveis capturados voltam.
+3. Num país com renda abaixo da referência semanal que passe pela guarda
+   fiscal geral, compare a mensagem do Diário com a dívida e as reservas. Se houver dívida, espere a indicação
+   de dívida. Se só faltarem reservas, espere a diferença em ouro. Pause a
+   construção e confirme que aparece a pausa. Confira que a última revisão
+   continua exibindo o resultado anterior até a próxima revisão.
+4. Registre o save e o mês, capturas da fila, orçamento e Diário, e o trecho
+   novo de `logs/error.log` que mencione `sed_`.
+
 ## Evidência parcial recebida em 10/11/2026
 
 Capturas da campanha de março–maio de 1842 mostram escassez de ferro, dois
