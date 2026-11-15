@@ -52,6 +52,13 @@ Director. Para gerar o pacote, use `python3 -m tools.cwe_government --help`.
 
 ### OGAS para Cold War Era
 
+Ao ativar crescimento, o OGAS prioriza a expansão de produtores com método
+ativo que fornece um bem em escassez no mercado e que não tenham escassez
+própria de insumos. Os filtros originais de viabilidade e a guarda de fila
+permanecem. O Director avalia impostos e salários mensalmente, mesmo com
+a fila delegada. Pausar crescimento ou desativar o Director restaura os
+níveis capturados antes das primeiras mudanças.
+
 Use **Ativar crescimento automático** para configurar os Diários do OGAS e
 ligar as rotinas de construção e métodos. A meta da fila é de 12 semanas.
 O modo bloqueia novas obras com déficit, reservas inferiores a quatro semanas

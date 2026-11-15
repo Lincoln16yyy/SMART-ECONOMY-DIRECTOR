@@ -2,6 +2,11 @@
 
 ## Expansões na série 1.15
 
+**CWE fiscal e escassez:** instalado. Snapshot/restauração fiscal, prioridade
+a produtor ativo com insumos e limite mensal cobertos por testes focados.
+Tiger sem erros nos dois pacotes. Carregamento, campanha e save/reload
+ainda NÃO VERIFICADOS.
+
 **Smart Government para CWE:** edição separada, com 211 leis em 60 grupos.
 Validador do projeto passou. O Tiger aponta os três campos conhecidos de
 Diário da versão 1.15. Instalado e ativo no perfil local. Campanha NÃO VERIFICADA.

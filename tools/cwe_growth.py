@@ -58,7 +58,7 @@ sed_cwe_stop_growth = {
 sed_cwe_stop_growth_effect = {{
 {switches_off}
  remove_variable = sed_cwe_growth_enabled
- remove_variable = sed_cwe_enabled
+ sed_cwe_disable_country = yes
 }}
 ''',
         'common/scripted_triggers/sed_cwe_growth_triggers.txt': '''sed_cwe_growth_allows_queue = {
@@ -90,6 +90,17 @@ def guarded_journal(text):
         if text.count(needle) != 1:
             raise ValueError(f'Unexpected OGAS construction journal: {needle}')
         text = text.replace(needle, needle + '\n\t\t\t\t\troot = { sed_cwe_growth_allows_queue = yes }')
+    score = 'order_by = cnm_building_profit_weight'
+    if text.count(score) != 1:
+        raise ValueError('Unexpected OGAS construction ranking.')
+    text = text.replace(score, '''order_by = {
+							value = cnm_building_profit_weight
+							max = 99999999
+							if = {
+								limit = { owner = { has_variable = sed_cwe_growth_enabled } sed_cwe_building_shortage_supplier = yes }
+								add = 100000000
+							}
+						}''')
     needle = '\t\t\t\t\t\tOGAS_find_best_profit_building = yes'
     if text.count(needle) != 1:
         raise ValueError('Unexpected OGAS project selection.')

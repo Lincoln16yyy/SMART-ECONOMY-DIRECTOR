@@ -1,6 +1,7 @@
 # Contexto de continuidade
 
 ## Estado atual
+- **CWE fiscal e escassez:** instalado. Director avalia imposto e salários em revisão mensal, inclusive com OGAS dono da fila. Salários militares têm guarda de prontidão. OGAS prioriza produtores ativos do bem em falta quando crescimento está ligado. Doze testes focados. Save/reload e campanha NÃO VERIFICADOS.
 - **Smart Government para CWE:** pacote separado em `dist/smart-government-advisor-cwe.zip`, gerado da cópia local do projeto de leis e das definições CWE. 211 leis em 60 grupos, sete excluídas das sugestões por requisitos ausentes. Instalado e ativo após Cold War Era, OGAS e Director. Carregamento em campanha NÃO VERIFICADO.
 - **Crescimento automático do CWE:** decisão instalada no OGAS que ativa construção, ferrovias, setores, métodos e gestão de mão de obra. Meta de fila de 12 semanas e pausa de novas obras quando faltar caixa, renda ou capacidade. Nove testes focados aprovados, campanha pendente.
 - **OGAS para CWE:** adaptado localmente e ativo entre Cold War Era e Director. Migração do prédio de roupas para `building_clothes_factory` e retirada de trigger inválido sem chamadas eliminaram os erros no Tiger. Director cede a fila ao gerenciador geral do OGAS e deixa ferrovias ao gerenciador dedicado. Sete testes sintéticos. Campanha pendente.

@@ -1,12 +1,15 @@
 """Build the standalone Automatic edition for Cold War Era 0.99."""
 
 import json
+import re
 from pathlib import Path
 import zipfile
 
 try:
+    from . import planning
     from .pdx_script import child, parse
 except ImportError:
+    import planning
     from pdx_script import child, parse
 
 
@@ -64,6 +67,45 @@ def construction_profiles(root):
     return profiles
 
 
+def shortage_supply_methods(cwe):
+    goods = definitions(cwe, 'goods')
+    methods = definitions(cwe, 'production_methods')
+    groups = definitions(cwe, 'production_method_groups')
+    outputs = {}
+    active_candidates = {
+        method.key for group in groups.values()
+        for entry in group if entry.key == 'production_methods'
+        for method in entry.value if method.key in methods
+    }
+    for method in sorted(active_candidates):
+        for entry in methods[method]:
+            if entry.key != 'building_modifiers':
+                continue
+            for scale in entry.value:
+                for modifier in scale.value:
+                    if not (modifier.key.startswith('goods_output_') and modifier.key.endswith('_add')):
+                        continue
+                    good = modifier.key.removeprefix('goods_output_').removesuffix('_add')
+                    if good in goods and float(modifier.value) > 0:
+                        outputs.setdefault(good, set()).add(method)
+    return outputs
+
+
+def shortage_trigger(outputs):
+    branches = []
+    for good, methods in sorted(outputs.items()):
+        active = ' '.join(f'has_active_production_method = {method}' for method in sorted(methods))
+        method_check = f'OR = {{ {active} }}' if len(methods) > 1 else active
+        branches.append(f'''  AND = {{
+   owner = {{ market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }} }}
+   {method_check}
+  }}''')
+    return '''sed_cwe_building_shortage_supplier = {
+ building_has_goods_shortage = no
+ OR = {
+''' + '\n'.join(branches) + '\n }\n}\n'
+
+
 def budget_scripts(profiles):
     known_groups = []
     price_terms = []
@@ -93,7 +135,8 @@ sed_cwe_budget_safe = {{
  net_total_income >= sed_cwe_weekly_material_cost
 }}
 ''', f'''sed_cwe_month = {{ value = year multiply = 12 add = month }}
-sed_cwe_reserve_floor = {{ value = fixed_income subtract = net_fixed_income min = 0 multiply = 4 }}
+sed_cwe_fixed_expenses_value = {{ value = fixed_income subtract = net_fixed_income min = 0 }}
+sed_cwe_reserve_floor = {{ value = sed_cwe_fixed_expenses_value multiply = 4 }}
 
 sed_cwe_material_cost_per_level = {{
  value = 0
@@ -177,6 +220,38 @@ sed_cwe_automatic_review = {
 '''
 
 
+def fiscal_scripts():
+    """Reuse the reviewed policy and give the conversion its own save state."""
+    effects = '\n'.join((planning.tax_policy_effects(), planning.wage_policy_effects(),
+                         planning.military_wage_policy_effects()))
+    effects = effects.replace(' has_variable = sed_mode_automatic', '')
+    effects = re.sub(r'^ +NOT = \{ has_variable = sed_mode_(?:manual|assisted) \}\n',
+                     '', effects, flags=re.MULTILINE)
+    effects += f'''sed_cwe_apply_budget_policy = {{
+ if = {{ limit = {{ is_player = yes has_variable = sed_enabled NOT = {{ has_variable = sed_cwe_base_enabled }} }}
+{planning.fiscal_status_update()}
+  sed_apply_fiscal_policy = yes
+  sed_apply_wage_policy = yes
+  sed_apply_military_wage_policy = yes
+ }}
+}}
+
+sed_cwe_disable_country = {{
+ sed_restore_fiscal_policy = yes
+ sed_restore_wage_policy = yes
+ sed_restore_military_wage_policy = yes
+ remove_variable = sed_enabled
+}}
+'''
+    # The vanilla edition uses sed_enabled as its activation flag. Keep that
+    # specific cross-edition check, but namespace the entire copied policy.
+    def namespace(script):
+        return re.sub(r'\bsed_(?!cwe_)(\w+)', r'sed_cwe_\1', script).replace(
+            'sed_cwe_live_month_key', 'sed_cwe_month')
+    return namespace(planning.triggers()), namespace(effects).replace(
+        'sed_cwe_base_enabled', 'sed_enabled')
+
+
 def journal():
     statuses = (
         ('disabled', 'NOT = { has_variable = sed_cwe_enabled }'),
@@ -211,15 +286,16 @@ def journal():
 def outputs(cwe, version):
     budget, values = budget_scripts(construction_profiles(cwe))
     candidates, effects = automation_scripts()
+    fiscal_triggers, fiscal_effects = fiscal_scripts()
     scripts = {
-        'common/scripted_triggers/sed_cwe_triggers.txt': budget + candidates,
+        'common/scripted_triggers/sed_cwe_triggers.txt': budget + candidates + fiscal_triggers + shortage_trigger(shortage_supply_methods(cwe)),
         'common/script_values/sed_cwe_values.txt': values,
         'common/journal_entries/sed_cwe_journal.txt': journal(),
-        'common/scripted_effects/sed_cwe_effects.txt': effects,
+        'common/scripted_effects/sed_cwe_effects.txt': effects + fiscal_effects,
         'common/on_actions/sed_cwe_on_actions.txt': '''on_monthly_pulse_country = { on_actions = { sed_cwe_dispatch } }
 sed_cwe_dispatch = {
  trigger = { is_player = yes has_variable = sed_cwe_enabled }
- effect = { sed_cwe_ensure_journal = yes sed_cwe_automatic_review = yes }
+ effect = { sed_cwe_ensure_journal = yes sed_cwe_apply_budget_policy = yes sed_cwe_automatic_review = yes }
 }
 ''',
         'common/decisions/sed_cwe_decisions.txt': '''sed_cwe_enable = {
@@ -231,7 +307,7 @@ sed_cwe_dispatch = {
 sed_cwe_disable = {
  is_shown = { is_player = yes has_variable = sed_cwe_enabled }
  possible = { always = yes }
- when_taken = { remove_variable = sed_cwe_enabled }
+ when_taken = { sed_cwe_disable_country = yes }
  ai_chance = { value = 0 }
 }
 ''',

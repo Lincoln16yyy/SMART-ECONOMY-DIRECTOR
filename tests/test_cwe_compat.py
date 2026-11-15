@@ -2,8 +2,8 @@
 
 import unittest
 
-from script_harness import Country, construction_sector, state
-from tools.cwe_compat import automation_scripts, budget_scripts
+from script_harness import Country, building, construction_sector, state
+from tools.cwe_compat import automation_scripts, budget_scripts, fiscal_scripts, shortage_trigger
 from tools.pdx_script import parse
 
 
@@ -89,3 +89,56 @@ class ColdWarEraTests(unittest.TestCase):
         c.readings['is_construction_paused'] = True
         c.run('sed_cwe_automatic_review')
         self.assertEqual(c.constructions, [])
+
+
+class ColdWarEraFiscalTests(unittest.TestCase):
+    def setUp(self):
+        triggers, values = budget_scripts({'basic': {'pm_construction_0': 200}})
+        fiscal_triggers, fiscal_effects = fiscal_scripts()
+        self.definitions = {entry.key: entry.value for entry in parse(
+            triggers + values + fiscal_triggers + fiscal_effects)}
+        self.country = Country(self.definitions, net_total_income=-300, net_fixed_income=-200,
+                               gold_reserves=10, military_expenses=300, in_default=True)
+        self.country.variables['sed_cwe_enabled'] = True
+
+    def test_policy_runs_under_ogas_and_restores_after_a_simulated_reload(self):
+        c = self.country
+        c.variables['cnm_auto_construct_manager'] = 1
+        c.run('sed_cwe_apply_budget_policy')
+        self.assertEqual(c.readings['tax_level'], 'high')
+        self.assertEqual(c.readings['government_wage_level'], 'low')
+        self.assertEqual(c.readings['military_wage_level'], 'low')
+        loaded = Country(self.definitions, **c.readings)
+        loaded.variables.update(c.variables)
+        loaded.run('sed_cwe_apply_budget_policy')
+        self.assertEqual(loaded.tax_changes, [])
+        self.assertEqual(loaded.wage_changes, [])
+        self.assertEqual(loaded.military_wage_changes, [])
+        loaded.run('sed_cwe_disable_country')
+        self.assertEqual(loaded.readings['tax_level'], 'medium')
+        self.assertEqual(loaded.readings['government_wage_level'], 'medium')
+        self.assertEqual(loaded.readings['military_wage_level'], 'medium')
+        self.assertNotIn('sed_cwe_enabled', loaded.variables)
+
+    def test_military_wages_are_not_cut_during_war(self):
+        c = self.country
+        c.readings['is_at_war'] = True
+        c.run('sed_cwe_apply_budget_policy')
+        self.assertEqual(c.military_wage_changes, [])
+        self.assertNotIn('sed_cwe_military_wage_saved', c.variables)
+
+
+class ColdWarEraShortageTests(unittest.TestCase):
+    def test_only_an_active_producer_with_inputs_responds_to_shortage(self):
+        entry, = parse(shortage_trigger({'iron': {'pm_iron_0'}}))
+        self.assertEqual(entry.key, 'sed_cwe_building_shortage_supplier')
+        c = Country({entry.key: entry.value})
+        c.market_goods['iron'] = {'market_goods_has_goods_shortage': True}
+        mine = building('building_iron_mine')
+        mine['production_methods'] = ['pm_iron_0']
+        self.assertTrue(c.condition(entry.value, mine))
+        mine['building_has_goods_shortage'] = True
+        self.assertFalse(c.condition(entry.value, mine))
+        mine['building_has_goods_shortage'] = False
+        mine['production_methods'] = []
+        self.assertFalse(c.condition(entry.value, mine))

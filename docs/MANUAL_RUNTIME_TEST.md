@@ -2,6 +2,19 @@
 
 ## Campanhas com expansões da série 1.15
 
+### Fiscal e escassez no CWE
+
+1. Em cópia de uma campanha CWE, anote imposto e salários antes de ativar o
+   crescimento. Em crise fiscal, avance até a revisão. Confira no orçamento
+   o movimento dos níveis e se os salários militares são protegidos em guerra.
+2. Salve e recarregue no mesmo mês. Confira que não houve uma segunda
+   alteração. Use **Pausar crescimento automático** e compare os níveis
+   restaurados aos valores anotados antes de ativar.
+3. Com o OGAS ativo e fila abaixo da meta, escolha um mercado com escassez
+   e dois prédios elegíveis, um produtor com método ativo e insumos livres.
+   Veja se a primeira expansão semanal atende ao bem em falta. Repita após
+   aliviar a escassez e confira as novas obras no log e na fila.
+
 - **Morgenröte e Better Politics:** faça uma campanha nova por perfil de
   `COMPATIBILITY.md`. Ative o Director, deixe o Automático rodar e confira
   se uma obra elegível entra na fila e se o pulso também mantém os sistemas

@@ -308,6 +308,20 @@ sed_coord_fiscal_safe = {
 '''
 
 
+def fiscal_status_update():
+    return '''  set_variable = { name = sed_fiscal_status value = 1 }
+  if = { limit = { in_default = yes } set_variable = { name = sed_fiscal_status value = 4 } }
+  else_if = {
+   limit = { OR = {
+    AND = { net_total_income < 0 gold_reserves < { value = net_total_income multiply = -4 } }
+    AND = { principal > 0 OR = { credit <= 0 principal > { value = credit multiply = 0.9 } } }
+   } }
+   set_variable = { name = sed_fiscal_status value = 3 }
+  }
+  else_if = { limit = { sed_auto_fiscal_safe = yes net_total_income < 0 } set_variable = { name = sed_fiscal_status value = 5 } }
+  else_if = { limit = { NOT = { sed_auto_fiscal_safe = yes } } set_variable = { name = sed_fiscal_status value = 2 } }'''
+
+
 def effects(actions, dependencies, buildings):
     supply = [name for name in actions if name not in ('railway', 'construction')]
     result = ['''sed_refresh_national_plan = {
@@ -332,18 +346,7 @@ def effects(actions, dependencies, buildings):
   if = { limit = { net_total_income < 0 }
    set_variable = { name = sed_reserve_runway value = { value = var:sed_reserve_spare divide = { value = net_total_income multiply = -1 } } }
   }
-  set_variable = { name = sed_fiscal_status value = 1 }
-  if = { limit = { in_default = yes } set_variable = { name = sed_fiscal_status value = 4 } }
-  else_if = {
-   limit = { OR = {
-    AND = { net_total_income < 0 gold_reserves < { value = net_total_income multiply = -4 } }
-    AND = { principal > 0 OR = { credit <= 0 principal > { value = credit multiply = 0.9 } } }
-   } }
-   set_variable = { name = sed_fiscal_status value = 3 }
-  }
-  else_if = { limit = { sed_auto_fiscal_safe = yes net_total_income < 0 } set_variable = { name = sed_fiscal_status value = 5 } }
-  else_if = { limit = { NOT = { sed_auto_fiscal_safe = yes } } set_variable = { name = sed_fiscal_status value = 2 } }
-''']
+''' + fiscal_status_update() + '\n']
     for name in lists(actions):
         result.append(f'  clear_variable_list = {name}')
     for name in supply:

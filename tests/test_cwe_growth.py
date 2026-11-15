@@ -15,7 +15,7 @@ class GrowthPresetTests(unittest.TestCase):
         scripts = preset_scripts()
         script = values + scripts['common/scripted_effects/sed_cwe_growth_effects.txt']
         script += scripts['common/scripted_triggers/sed_cwe_growth_triggers.txt']
-        script += 'sed_cwe_ensure_journal = {}'
+        script += 'sed_cwe_ensure_journal = {} sed_cwe_disable_country = { remove_variable = sed_cwe_enabled }'
         self.country = Country({entry.key: entry.value for entry in parse(script)})
         self.country.active_journal = True  # Already set up in this save.
 

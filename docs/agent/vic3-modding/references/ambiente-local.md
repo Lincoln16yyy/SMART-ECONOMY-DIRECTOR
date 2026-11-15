@@ -559,3 +559,11 @@ Edição CWE instalada e ativada após Cold War Era, OGAS e Director, com o jogo
 fechado. Os 19 arquivos conferem byte a byte com o ZIP. Perfil anterior em
 `sed_backups/profile_before_government_cwe_20261115_181155_999299`.
 Carregamento em campanha ainda NÃO VERIFICADO.
+
+## Fiscal e escassez no perfil Cold War Era
+
+Director e OGAS atualizados com jogo fechado, verificação byte a byte e
+backup em `sed_backups/cwe_before_fiscal_shortage_20261115_182559_610593`.
+Perfil de quatro mods preservado. Doze testes focados aprovados.
+Tiger sem erros no Director e OGAS. Carregamento, reação à escassez em
+campanha e restauração após save/reload ainda NÃO VERIFICADOS.
