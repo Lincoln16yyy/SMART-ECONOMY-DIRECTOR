@@ -1,6 +1,7 @@
 # Contexto de continuidade
 
 ## Estado atual
+- **OGAS para CWE:** instalado fora do perfil ativo. A revisão local declara 1.13.*. Na auditoria estática contra o CWE ativo, 153 apontamentos referenciam o prédio removido `building_textile_mill`. O Director CWE roda suas três obras independentemente do OGAS.
 - **Diário do Director CWE:** instalado em 0.7.46 com status da construção e confirmação pela fila pública. Cinco testes sintéticos e Tiger sem apontamentos para a edição. A sessão anterior avançou em janeiro de 1950 com as decisões visíveis. Diário atualizado e construção em campanha pendentes.
 - **Perfil ativo:** Cold War Era 0.99 (commit `4d301a80`) seguido da edição CWE do Director 0.7.46. Ambos declaram 1.15.1. O executável local é 1.15.0. A conversão iniciou e registrou erros próprios de script e GUI. Perfil anterior e revisão CWE para 1.14.5 em `sed_backups/profile_before_cwe_play_20261115_172151_124926`. Better Politics 2.5.47 segue instalado fora do perfil ativo.
 - **0.7.46:** após bloqueio por fila privada ou pausa, o Automático verifica a cada sete dias. No mesmo mês, só recalcula quando a trava sai ou outro limite interrompe a espera. Ao virar o mês, roda a revisão completa. Pacote em `dist/smart-economy-director-0.7.46.zip`. Instalada com backup `sed_backups/mod_before_0.7.46_20261115_164836_978933`. **Teste sintético:** 436 testes aprovados. Save/reload em campanha pendente.

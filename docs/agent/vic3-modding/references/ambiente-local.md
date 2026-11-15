@@ -518,3 +518,10 @@ ativa continua Cold War Era seguido do Director CWE. A pasta da conversão
 carece de IDs vanilla usados por ARoAI, Supply Chain e Auto-Apply PMs, por
 exemplo `building_tooling_workshop`. A renderização do Diário e a execução de
 obra em campanha ainda precisam de confirmação.
+
+## OGAS para Cold War Era
+
+Cópia instalada em `mod/3770300244_OGAS_for_CWE`, versão `2026-07-23.2`,
+metadados para 1.13.*. Tiger 1.19.0 com a sobreposição temporária do CWE
+0.99 produziu 154 erros, dos quais 153 são referências ao prédio
+`building_textile_mill` ausente. A revisão está fora do perfil ativo.

@@ -2,6 +2,10 @@
 
 ## Expansões na série 1.15
 
+**Estático (OGAS para CWE):** a cópia instalada declara jogo 1.13.*. Com os
+scripts do CWE 0.99 ativo, Tiger reportou 153 referências a
+`building_textile_mill` ausente. O OGAS está fora do perfil ativo.
+
 **Instalação local:** `content_load.json` ativa Cold War Era 0.99 seguido
 do Director CWE 0.7.46. A revisão do Cold War Era foi atualizada para
 `4d301a80`, correspondente à fonte usada para gerar o Director. Os dois
