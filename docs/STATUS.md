@@ -1,5 +1,15 @@
 # Estado dos requisitos — 0.7.46
 
+## Expansões na série 1.15
+
+- **Estático:** Director normal com Morgenröte 2.9.0 + CMF e com Better
+  Politics 2.5.47. Edição CWE testada pelo Tiger contra os scripts do
+  Cold War Era 0.99. Combinações, versões e limites em `COMPATIBILITY.md`.
+- **Código e Teste sintético:** 439 testes aprovados, incluindo a edição CWE com seleção mensal de ferrovia,
+  administração ou usina e custo de materiais derivado da conversão.
+- **Carregou/Campanha: NÃO VERIFICADOS.** A instalação local é 1.15.0.
+  A revisão CWE analisada declara 1.15.1.
+
 ## Retomada da construção no Automático na 0.7.46
 
 - **Código:** após bloqueio por fila privada ou pausa, o evento existente

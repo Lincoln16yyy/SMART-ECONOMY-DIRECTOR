@@ -173,6 +173,11 @@ class Country:
             if entry.key == 'owner':
                 result += self.number(entry.value, self.country_scope())
                 continue
+            if entry.key.startswith('b:') and isinstance(entry.value, list):
+                target = self.building(scope, entry.key[2:])
+                if target is not None:
+                    result += self.number(entry.value, target)
+                continue
             if entry.key == 'market':
                 result += self.number(entry.value, {'goods': self.market_goods})
                 continue

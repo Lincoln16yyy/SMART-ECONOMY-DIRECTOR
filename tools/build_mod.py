@@ -2848,8 +2848,17 @@ sed_pulse.1 = {
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--check', action='store_true', help='Fail on stale artifacts without writing')
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument('--check', action='store_true', help='Fail on stale artifacts without writing')
+    mode.add_argument('--cwe', type=Path, help='Package the optional Cold War Era edition from a local mod directory')
     args = parser.parse_args()
+    if args.cwe:
+        if __package__:
+            from . import cwe_compat
+        else:
+            import cwe_compat
+        print(cwe_compat.package(args.cwe, ROOT / f'dist/smart-economy-director-cwe-{VERSION}.zip', VERSION))
+        return
     stale = []
     for name, data in outputs().items():
         path = ROOT / name

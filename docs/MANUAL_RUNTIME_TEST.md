@@ -1,5 +1,19 @@
 # Plano de teste da campanha — interface 0.5.3
 
+## Campanhas com expansões da série 1.15
+
+- **Morgenröte e Better Politics:** faça uma campanha nova por perfil de
+  `COMPATIBILITY.md`. Ative o Director, deixe o Automático rodar e confira
+  se uma obra elegível entra na fila e se o pulso também mantém os sistemas
+  do outro mod. Compare o log antes e depois da revisão.
+- **Cold War Era 0.99:** abra uma campanha nova no Victoria 3 1.15.1.
+  Escolha um país com reserva e renda para cobrir os materiais, estado com
+  infraestrutura negativa e ferrovia permitida. Ative a edição CWE, deixe
+  passar uma revisão e confira uma ferrovia na fila pública. Salve/recarregue
+  no mesmo mês e confira o limite. Repita com déficit de burocracia ou
+  energia cara, e com a construção pausada. Guarde a fila e o trecho do
+  `error.log` que mencione `sed_cwe_`.
+
 ## 0.7.46 — retomar construção no Automático
 
 1. Abra uma cópia de `paraguai_1837_02_01.v3` com os mods exigidos pelo save.

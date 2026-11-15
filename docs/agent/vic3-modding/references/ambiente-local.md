@@ -467,3 +467,14 @@ com jogo fechado, 14 arquivos verificados, ordem de mods preservada e backup
 `sed_backups/mod_before_0.7.46_20261115_164836_978933`. O save
 `paraguai_1837_02_01.v3` existe na pasta de saves. A versão ainda não foi
 aberta no jogo.
+
+## Fontes para compatibilidade de expansões
+
+Cópias públicas temporárias em `/tmp/sed-expansions`. Cold War Era 0.99
+em `cwe`, commit `4d301a80d962bc9bad2d00fbe5780aca22c52a41`, declara 1.15.1.
+Morgenröte 2.9.0 em `mr-source`, commit
+`cf951921b670feddcc32ba36f287b0d466abc80e`. Community Mod Framework 1.67.6
+em `cmf`, commit `962ee3a730e5b4bfbd5d61949da6bec2432fb0d8`.
+Better Politics 2.5.47 em `bpm/better-politics-mod`, commit
+`b80a4074bf93dbf2f04dd70f73abe0f39a3a9a91`. O executável local continua em
+1.15.0. Nenhuma dessas expansões foi instalada na pasta de mods.

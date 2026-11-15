@@ -1,5 +1,9 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Para expansões, consulte os [perfis de compatibilidade](docs/COMPATIBILITY.md).
+O Cold War Era (1950) tem uma edição própria do Diretor com orçamento e
+construção pública automáticos baseados nos dados da conversão.
+
 Na 0.7.46, o Automático verifica a cada sete dias se a fila privada esvaziou
 ou se a construção foi retomada. Quando a trava sai, recalcula o plano e tenta
 a obra elegível pelo limite mensal vigente.

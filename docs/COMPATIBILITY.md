@@ -7,6 +7,40 @@ Economy Advisor e Supply Chain nesta sessão amplia o escopo dos adaptadores.
 As seções anteriores abaixo preservam a evolução histórica das versões.
 
 
+## Expansões e conversões no Victoria 3 1.15
+
+| Expansão | Combinação revisada | Evidência |
+| --- | --- | --- |
+| [Morgenröte 2.9.0 Curie](https://github.com/Morgenrote-Team/Morgenroete-Beta/releases/tag/2.9.0Curie) | Community Mod Framework 1.67.6, Morgenröte, Director 0.7.46 | Estático. Morgenröte injeta o grupo de hospitais na administração, mas mantém os IDs de construção usados pelo Director. |
+| [Better Politics Mod 2.5.47](https://github.com/Better-Politics-Mod/Better-Politics-Mod-Vic-3/releases/tag/2.5.47) | Better Politics, Director 0.7.46 | Estático. O Director usa os mesmos prédios e métodos revisados e não modifica leis. |
+| [Cold War Era (1950) 0.99](https://steamcommunity.com/sharedfiles/filedetails/?id=2988303719) | Cold War Era 0.99, edição específica do Director | Estático e Teste sintético. A conversão declara Victoria 3 1.15.1 e substitui prédios, tecnologias e métodos do vanilla. |
+
+Cada linha representa um perfil separado. O Tiger conferiu o Director com os
+arquivos `common/` do jogo mais as camadas da combinação, respeitando as
+substituições de diretório declaradas. Morgenröte e Better Politics tiveram
+os três apontamentos conhecidos de diário. A edição CWE teve zero
+apontamentos no Director. O Tiger 1.19.0 foi feito para Victoria 3 1.13.5.
+Carregamento, interface e execução em campanha seguem **NÃO VERIFICADOS**.
+
+### Edição Cold War Era
+
+Em um perfil com Victoria 3 **1.15.1**, habilite **Cold War Era (1950) 0.99**
+e **Smart Economy Director - Cold War Era**, nessa ordem. Use a decisão
+**Ativar Director para Cold War Era**. A edição usa um identificador próprio
+e substitui o Director normal nesse perfil.
+
+A revisão mensal pode autorizar uma ferrovia em estado com infraestrutura
+negativa, administração onde falta burocracia ou capacidade tributária, ou
+usina onde a energia local está cara. A tentativa exige capacidade de
+construção, fila privada livre, renda cobrindo a referência conservadora dos
+materiais, reserva e aceitação do prédio pelo estado. O orçamento lê os
+preços-base e todos os grupos de métodos do setor de construção na fonte CWE.
+A edição cobre essas três obras. Modernização, fundações industriais, salários,
+impostos e coordenação de construtores externos ainda precisam de adaptação.
+
+Gere o ZIP com `python3 tools/build_mod.py --cwe "/pasta/do/Cold War Era"`.
+O pacote contém o Director adaptado. Obtenha o Cold War Era separadamente.
+
 ## Reauditoria de 2026-11-11 (código 0.7.28)
 
 Leitura direta dos arquivos de cada mod instalado na pasta de mods do usuário;

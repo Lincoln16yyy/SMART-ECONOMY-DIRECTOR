@@ -2989,3 +2989,12 @@ liberação ou virada do mês, roda a revisão completa com as guardas fiscais,
 de materiais e de tentativa mensal. Os cenários sintéticos cobrem pausa,
 fila privada, virada do ano e saída do Automático. A calibração do orçamento
 continua dependente de medições de campanha.
+
+## Compatibilidade com expansões 1.15
+
+Auditados Morgenröte 2.9.0 com CMF, Better Politics 2.5.47 e Cold War Era
+0.99. O CWE substitui 26 IDs de prédios e a maioria dos métodos usados pelo
+Director normal. Foi criada uma edição específica com decisões de ligar e
+desligar, revisão mensal, limite de tentativa e orçamento construído a partir
+dos métodos e preços-base da conversão. Os perfis vitorianos mantêm a edição
+normal. A documentação indica níveis de evidência e roteiros de campanha.
