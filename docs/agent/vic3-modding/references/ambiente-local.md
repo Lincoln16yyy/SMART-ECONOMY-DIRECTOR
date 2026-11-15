@@ -439,3 +439,13 @@ o jogo: PENDENTE.]
 no bloqueio atual `sed_auto_current_budget`) e 0.7.44 (eventos didáticos do
 Assistido `sed_pulse.21`–`29`, por objetivo, sem enfileirar; cooldown
 `sed_assist_notice_month`). Reabrir o jogo e validar em campanha: PENDENTE.]
+
+## Auditoria da 0.7.44 (2026-11-14)
+
+`build_mod.py --check` e `validate.py --game` aprovados com os caminhos acima.
+Tiger 1.19.0 executado na 0.7.44 com 995 avisos e três erros
+`unknown-field` de diário (`activation_description`, `disable_evaluation`,
+`outcome`), campos registrados no vanilla 1.15. Jogo e instalação não foram
+acionados nesta auditoria. `git log --all` falha por duas referências de
+checkpoint com objetos ausentes. `git log HEAD origin/main` foi usado para
+o inventário dos commits.

@@ -2907,3 +2907,62 @@ aprovados. Empacotada e instalada com jogo fechado (backup
 `mod_before_0.7.44_20261114_014619_131213`, ZIP
 `dist/smart-economy-director-0.7.44.zip`). Carregou/Campanha: NÃO VERIFICADO
 (disparo, texto, cooldown e ausência de enfileiramento).
+
+## 2026-11-14 — Auditoria das mudanças atribuíveis ao Codebuff
+
+Base revisada: `4b51b46` (0.7.44), árvore limpa na abertura. O alcance
+inclui os 33 commits que mencionam Codebuff nas mensagens do histórico
+alcançável de `HEAD` ou `origin/main` (mesmo conjunto nas branches e remotos
+locais), e a evolução posterior dos mesmos
+fluxos na versão ativa. A conta Git é compartilhada. A autoria dos commits
+sem marcação é indeterminada. Duas referências internas de checkpoint do
+Codex apontam para objetos ausentes e impedem a travessia de `git log --all`;
+os dois históricos acima puderam ser lidos diretamente.
+
+| Mudanças atribuídas | Commits e leitura do comportamento atual |
+| --- | --- |
+| Reservas, produtores alternativos e metas industriais | `03aa0a6`, `cccd29b`, `98c3150`. A reserva voltou a ter piso de 6× na guarda fiscal geral em revisão posterior e a obra direta tem guarda própria de materiais. Alternativas de grão/tecido e metas ficam no planejador; a 0.7.39 acrescentou duração e variação de preço, que medem evolução durante a meta. |
+| Impostos e salários civis | `f68dc07`, `93cf88a`. Controle mensal no Automático, captura e restauração ao sair. Há um caso em que a captura antecede uma revisão sem alteração, descrito abaixo. |
+| Fila, obras acompanhadas e fundações | `f8a4e64`, `d0fca76`, `e4f62ac`, `056e3a2`, `73c0182`, `53712f3`, `cb1af65`, `afaa497`. Rastreamento de conclusão/abandono, revisão com fila ocupada, fundação inicial e limite por país, primeira ferrovia, estimativa de duração e materiais e comparação com faixas da engine. Autoria da obra, atraso, custo e persistência continuam com as limitações registradas no STATUS. |
+| Folha e métodos de produção | `164d742`, `995c3b9`, `8249f0a`, `7bb5c50`. A folha por diferença entre earnings e lucro semanal é usada como referência de retorno/modernização e exibida no painel. Modernização cede os prédios já cobertos pelo Auto-Apply PMs. Calibração e coexistência em campanha seguem pendentes. |
+| Integrações de leitura e detecção externa | `2a1d4b4`, `9d7cb6c`, `a84f44e`, `4a18d31`. Painel reconhece Advisor de leis e restrições privadas. A comparação com zero de 0.7.36 resolvia o caso numérico e causava erro com bandeiras booleanas. A 0.7.40 distinguiu os tipos e o log histórico registra a eliminação desses erros. |
+| Escassez, localização e comércio | `19c14e4`, `ecde108`, `5419f63`, `270bf97`, `92e1d3d`. Eventos explicam escassez e pedidos do mercado. Corrigida a escolha da coluna inglesa. O fallback de Centro de Comércio tem relato histórico de construção no Paraguai. O relato cobre a ocorrência da obra e deixa janela de repetição, capacidade e save/reload em aberto. |
+| Expansões automáticas e instalação | `7a5d561`, `f1fb3ae`, `e22c828`, `b82e80f`, `169de62`, `4afe400`, `326b626`. Administração, energia, insumos principais e setores de construção entram como candidatos sob guardas. Escassez sem destino apto cede a outra prioridade. Registros de instalação servem como evidência de entrega, com confirmação de campanha ainda pendente para esses caminhos. |
+
+### Achados no estado atual
+
+- **Alta — eventos do Assistido inalcançáveis (0.7.44, autoria
+  indeterminada).** `sed_maybe_notify_assisted_recommendation` só aparece
+  na própria definição gerada. O pulso mensal e a atualização de diagnóstico
+  não o chamam. Nenhum teste cita o efeito ou os eventos de recomendação.
+  Exercitar o caminho pelo pulso e conferir disparo em save do Assistido com
+  recomendação válida, cooldown e fila inalterada.
+- **Média — captura fiscal em revisão sem mudança (Codebuff).** Em
+  `tools/planning.py`, as políticas de imposto e salário civil capturam o
+  nível antes de examinar se há um passo aplicável. Em crise, imposto já
+  muito alto ou salário já baixo podem gravar snapshot sem mudança.
+  Se o jogador ajustar manualmente o nível e sair do Automático antes de
+  outra revisão, a restauração aplica o nível capturado. **Teste sintético:**
+  reproduzido com imposto muito alto e salário baixo, nenhum comando na
+  revisão, ajuste manual para médio e alto, retorno a muito alto e baixo.
+  Na engine, salvar/recarregar e sair do Automático após ajuste manual.
+- **Média — falta de ouro apresentada para bloqueios de outra natureza
+  (0.7.41–0.7.43, autoria indeterminada).** A lacuna é reserva exigida menos
+  ouro. A guarda também rejeita método desconhecido, capacidade zero e, no
+  ramo que usa ouro, dívida. O painel pode prometer liberação com um valor
+  que não resolve o bloqueio, ou exibir zero enquanto ele permanece.
+  Validar em save com dívida, capacidade zero e método desconhecido.
+- **Baixa — faixa da fila pode ficar abaixo da duração real (Codebuff).**
+  `queue_bands()` escolhe o primeiro teto até 208 semanas e usa 260 para
+  qualquer valor acima. Uma fila acima de 260 aparece como 260. Essa leitura
+  da engine é de exibição. O orçamento usa outra estimativa de fila.
+- **Evidência — segunda revisão no Paraguai.** O commit `edfbc81` cita a
+  construção de Centro de Comércio como confirmação da segunda revisão.
+  Para comprovar essa sequência, o teste precisa registrar o primeiro
+  bloqueio, sua liberação e a nova revisão no mesmo mês.
+
+**Teste sintético:** 433 testes aprovados (185,844 s), além da reprodução
+focada do snapshot fiscal. **Estático:** gerador sincronizado, validador
+local aprovado. Tiger 1.19.0 reportou 995 avisos e três erros `unknown-field` de diário, já registrados
+como campos do vanilla 1.15. O Tiger declara suporte até 1.13.5.
+**Carregou/Campanha:** nenhuma sessão de jogo aberta nesta auditoria.
