@@ -39,6 +39,18 @@ preços-base e todos os grupos de métodos do setor de construção na fonte CWE
 A edição cobre essas três obras. Modernização, fundações industriais, salários,
 impostos e coordenação de construtores externos ainda precisam de adaptação.
 
+### OGAS para Cold War Era
+
+Perfil local: Cold War Era → OGAS para CWE → Director para Cold War Era.
+O OGAS instalado recebeu um patch local para o prédio de roupas e para a
+sintaxe de um trigger sem chamadas. Dentro do jogo, `Reset MOD JE` cria os
+Diários do OGAS e restaura os valores padrão. Use essa decisão na primeira
+configuração e ligue os módulos desejados no Diário.
+
+O Director lê os controles numéricos do OGAS. O gerenciador geral ativo
+assume a fila pública. Com apenas o gerenciador ferroviário ativo, o Director
+pula ferrovias e continua elegível para administração e usinas.
+
 Gere o ZIP com `python3 tools/build_mod.py --cwe "/pasta/do/Cold War Era"`.
 O pacote contém o Director adaptado. Obtenha o Cold War Era separadamente.
 

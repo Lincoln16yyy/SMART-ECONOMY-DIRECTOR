@@ -116,6 +116,8 @@ def automation_scripts():
     candidates = []
     branches = []
     for project_id, (name, (building, need)) in enumerate(BUILDINGS.items(), 1):
+        if name == 'rail':
+            need += ' owner = { NOT = { has_variable = cnm_auto_railway_manager var:cnm_auto_railway_manager = 1 } }'
         candidate = f'sed_cwe_{name}_candidate'
         candidates.append(f'''{candidate} = {{
  is_incorporated = yes
@@ -163,6 +165,7 @@ sed_cwe_automatic_review = {
    is_player = yes
    has_variable = sed_cwe_enabled
    NOT = { has_variable = sed_enabled }
+   NOT = { has_variable = cnm_auto_construct_manager var:cnm_auto_construct_manager = 1 }
    NOT = { AND = { has_variable = sed_cwe_last_attempt var:sed_cwe_last_attempt = sed_cwe_month } }
    is_construction_paused = no
    construction_queue_num_queued_private_levels = 0
@@ -181,6 +184,7 @@ def journal():
         ('administration', 'has_variable = sed_cwe_result var:sed_cwe_result = 2 var:sed_cwe_last_attempt = sed_cwe_month'),
         ('electricity', 'has_variable = sed_cwe_result var:sed_cwe_result = 3 var:sed_cwe_last_attempt = sed_cwe_month'),
         ('unconfirmed', 'has_variable = sed_cwe_result var:sed_cwe_result = 4 var:sed_cwe_last_attempt = sed_cwe_month'),
+        ('ogas', 'has_variable = cnm_auto_construct_manager var:cnm_auto_construct_manager = 1'),
         ('paused', 'is_construction_paused = yes'),
         ('private_queue', 'construction_queue_num_queued_private_levels > 0'),
         ('budget', 'NOT = { sed_cwe_budget_safe = yes }'),
@@ -240,6 +244,7 @@ sed_cwe_disable = {
         'sed_cwe_administration': ('Neste mês: administração incluída na fila pública.', 'This month: administration added to the government queue.'),
         'sed_cwe_electricity': ('Neste mês: usina incluída na fila pública.', 'This month: power plant added to the government queue.'),
         'sed_cwe_unconfirmed': ('Neste mês: o jogo não confirmou a inclusão da obra.', 'This month: the game did not confirm queue insertion.'),
+        'sed_cwe_ogas': ('OGAS está gerenciando a fila pública.', 'OGAS is managing the government queue.'),
         'sed_cwe_paused': ('Construção pausada.', 'Construction is paused.'),
         'sed_cwe_private_queue': ('Aguardando a fila privada esvaziar.', 'Waiting for the private queue to clear.'),
         'sed_cwe_budget': ('Aguardando capacidade e cobertura do orçamento.', 'Waiting for capacity and budget coverage.'),

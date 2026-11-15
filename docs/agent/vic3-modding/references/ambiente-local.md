@@ -525,3 +525,14 @@ Cópia instalada em `mod/3770300244_OGAS_for_CWE`, versão `2026-07-23.2`,
 metadados para 1.13.*. Tiger 1.19.0 com a sobreposição temporária do CWE
 0.99 produziu 154 erros, dos quais 153 são referências ao prédio
 `building_textile_mill` ausente. A revisão está fora do perfil ativo.
+
+## OGAS adaptado e ativo (2026-11-15)
+
+Patch local em `mod/3770300244_OGAS_for_CWE`: referências ao tipo
+`building_textile_mill` migradas para `building_clothes_factory`; trigger
+`cnm_state_building_construction_sector_unit_profit_predict` inválido e
+sem referências removido. Tiger com CWE ativo: zero erros, 923 avisos e cinco
+dicas. Versões originais do OGAS e Director e lista anterior em
+`sed_backups/cwe_before_ogas_20261115_174652_158303`. O jogo estava fechado
+e a ordem ativa é Cold War Era, OGAS para CWE, Director CWE. Campanha
+com a combinação ainda NÃO VERIFICADA.

@@ -2,12 +2,14 @@
 
 ## Expansões na série 1.15
 
-**Estático (OGAS para CWE):** a cópia instalada declara jogo 1.13.*. Com os
-scripts do CWE 0.99 ativo, Tiger reportou 153 referências a
-`building_textile_mill` ausente. O OGAS está fora do perfil ativo.
+**OGAS para CWE:** patch local corrige as referências ao prédio de roupas e
+retira um trigger inválido que não tinha chamadas. Tiger 1.19.0 retornou
+zero erros, 923 avisos e cinco dicas. A montagem do perfil está confirmada.
+Sete testes sintéticos confirmam construção e coordenação do Director.
+Execução conjunta em campanha permanece NÃO VERIFICADA.
 
-**Instalação local:** `content_load.json` ativa Cold War Era 0.99 seguido
-do Director CWE 0.7.46. A revisão do Cold War Era foi atualizada para
+**Instalação local:** `content_load.json` ativa Cold War Era 0.99, OGAS para CWE e
+Director CWE 0.7.46, nessa ordem. A revisão do Cold War Era foi atualizada para
 `4d301a80`, correspondente à fonte usada para gerar o Director. Os dois
 declaram 1.15.1, e o jogo local está na 1.15.0. A sessão chegou à campanha de 1950, com erros de script e GUI da conversão.
 A edição CWE agora inclui Diário, validado pelo Tiger e por cinco testes

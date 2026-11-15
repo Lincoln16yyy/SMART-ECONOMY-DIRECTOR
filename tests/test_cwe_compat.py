@@ -64,6 +64,23 @@ class ColdWarEraTests(unittest.TestCase):
         c.run('sed_cwe_ensure_journal')
         self.assertEqual(c.journals_added, 1)
 
+    def test_ogas_general_manager_owns_the_queue_when_enabled(self):
+        c = self.country
+        c.variables['cnm_auto_construct_manager'] = 1
+        c.run('sed_cwe_automatic_review')
+        self.assertEqual(c.constructions, [])
+        self.assertNotIn('sed_cwe_last_attempt', c.variables)
+        c.variables['cnm_auto_construct_manager'] = 0
+        c.run('sed_cwe_automatic_review')
+        self.assertEqual([item['building'] for item in c.constructions], ['building_railway'])
+
+    def test_ogas_railway_manager_only_suppresses_director_railways(self):
+        c = self.country
+        c.variables['cnm_auto_railway_manager'] = 1
+        c.run('sed_cwe_automatic_review')
+        self.assertEqual([item['building'] for item in c.constructions],
+                         ['building_government_administration'])
+
     def test_paused_or_existing_director_stops_the_cwe_dispatcher(self):
         c = self.country
         c.variables['sed_enabled'] = True
