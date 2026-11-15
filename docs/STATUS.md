@@ -2,6 +2,10 @@
 
 ## Expansões na série 1.15
 
+**Crescimento automático:** decisão instalada e testada no sintético. Ela liga
+os gerenciadores do OGAS, usa uma meta de 12 semanas e verifica orçamento
+antes de continuar a fila. Tiger sem erros novos. Campanha NÃO VERIFICADA.
+
 **OGAS para CWE:** patch local corrige as referências ao prédio de roupas e
 retira um trigger inválido que não tinha chamadas. Tiger 1.19.0 retornou
 zero erros, 923 avisos e cinco dicas. A montagem do perfil está confirmada.

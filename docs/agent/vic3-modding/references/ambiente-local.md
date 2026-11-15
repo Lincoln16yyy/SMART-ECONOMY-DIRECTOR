@@ -536,3 +536,12 @@ dicas. Versões originais do OGAS e Director e lista anterior em
 `sed_backups/cwe_before_ogas_20261115_174652_158303`. O jogo estava fechado
 e a ordem ativa é Cold War Era, OGAS para CWE, Director CWE. Campanha
 com a combinação ainda NÃO VERIFICADA.
+
+## Crescimento automático no perfil Cold War Era
+
+Patch gerado por `python3 -m tools.cwe_growth <pasta OGAS original> <destino>`
+e instalado no OGAS com jogo fechado e verificação byte a byte. Backup
+`sed_backups/ogas_before_growth_20261115_175201_124850`. Perfil preservado.
+Sete testes do Director e dois da decisão de crescimento passaram. Tiger
+com as camadas do CWE e Director registrou 923 avisos e cinco dicas do OGAS,
+zero erros. Carregamento e comportamento em campanha NÃO VERIFICADOS.

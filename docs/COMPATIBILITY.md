@@ -41,6 +41,13 @@ impostos e coordenação de construtores externos ainda precisam de adaptação.
 
 ### OGAS para Cold War Era
 
+Use **Ativar crescimento automático** para configurar os Diários do OGAS e
+ligar as rotinas de construção e métodos. A meta da fila é de 12 semanas.
+O modo bloqueia novas obras com déficit, reservas inferiores a quatro semanas
+de despesas fixas, inadimplência, pausa ou capacidade nula. **Pausar
+crescimento automático** desliga o Director e as seis opções do OGAS
+ligadas pela decisão. As obras já enfileiradas continuam.
+
 Perfil local: Cold War Era → OGAS para CWE → Director para Cold War Era.
 O OGAS instalado recebeu um patch local para o prédio de roupas e para a
 sintaxe de um trigger sem chamadas. Dentro do jogo, `Reset MOD JE` cria os
