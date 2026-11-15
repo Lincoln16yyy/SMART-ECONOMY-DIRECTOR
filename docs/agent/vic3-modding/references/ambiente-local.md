@@ -490,3 +490,9 @@ preservado byte a byte, com cópia em
 local do jogo é 1.15.0. O ZIP baixado do Cold War Era pertence a uma revisão
 diferente da analisada para a edição adaptada do Director. Jogo e launcher
 não foram abertos para validar carregamento.
+
+A edição `Smart Economy Director - Cold War Era` 0.7.46 foi instalada com
+jogo fechado. Os 10 arquivos conferem byte a byte com o ZIP e o perfil
+ativo foi preservado, com cópia em
+`sed_backups/profile_before_director_cwe_20261115_171452_086586`.
+Carregamento com a combinação local de versões permanece NÃO VERIFICADO.

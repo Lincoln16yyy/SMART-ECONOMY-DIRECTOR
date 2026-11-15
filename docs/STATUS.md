@@ -5,7 +5,8 @@
 **Instalação local:** Better Politics 2.5.47 e o Cold War Era do ZIP
 baixado estão na pasta do Hydra, com descritores verificados e perfil ativo
 preservado. O ZIP do Cold War Era declara 1.14.5. A edição adaptada do
-Director exige a revisão CWE para 1.15.1.
+Director foi instalada fora do perfil ativo e exige a revisão CWE para
+1.15.1. Carregamento com as versões locais NÃO VERIFICADO.
 
 - **Estático:** Director normal com Morgenröte 2.9.0 + CMF e com Better
   Politics 2.5.47. Edição CWE testada pelo Tiger contra os scripts do
