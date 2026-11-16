@@ -2,6 +2,9 @@
 
 ## Expansões na série 1.15
 
+**Auto-Recruit:** cópia local `z.260606.1` ativada no perfil Better Politics.
+Ativação conferida no Hydra. Campanha NÃO VERIFICADA.
+
 **Auto-Diplomacy:** cópia local `z.251212.1` ativada depois dos quatro mods do
 perfil Better Politics. Perfil salvo com backup. Campanha NÃO VERIFICADA.
 

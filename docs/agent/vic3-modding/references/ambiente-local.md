@@ -655,3 +655,11 @@ Tiger apontou um alias presente no jogo base, um escopo em ação de
 vassalos e um ramo sem alteração de valor. Campanha NÃO VERIFICADA.
 Para checar, use a decisão Diplomatic Affairs e o botão Auto-Diplomacy
 no diário que ela abre. Após um pulso, confira a ação Improve Relations.
+
+## Auto-Recruit no perfil Better Politics
+
+Workshop 3279201462, pasta `mod/3279201462_Auto-Recruit_One-Click_Recruit_Commanders`,
+versão local `z.260606.1`. Ativado no fim do perfil com o jogo fechado.
+Backup em `sed_backups/profile_before_auto_recruit_20261116_105447_887441`.
+Ativação conferida no JSON. Campanha NÃO VERIFICADA. Para testar, use a
+decisão Recruit Commanders e ligue o automático no diário que ela abre.
