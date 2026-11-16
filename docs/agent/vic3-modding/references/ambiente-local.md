@@ -675,3 +675,14 @@ e `-userdir` com caminho separado. Prefixo e dados em
 campanha NÃO VERIFICADOS. Para testar um save, copie-o primeiro para
 `user-data/save games/`. Para continuar a campanha de conquistas, use
 o botão Jogar normal do Hydra e o save original.
+
+## Troca do OGAS pelo Economy Advisor
+
+Economy Advisor 1.0.0 (`3778129206_Economy_Advisor`, metadados `1.15.*`)
+assumiu a posição do OGAS no `content_load.json`, com o jogo fechado.
+Backup `sed_backups/profile_before_economy_advisor_20261116_185503_490601`.
+OGAS permanece disponível no disco. Campanha NÃO VERIFICADA.
+No save do Marrocos, o OGAS já estava ativo. Seus interruptores `cnm_*`
+podem permanecer no save e ser detectados pelo Director. O fluxo limpo
+para esse save é pausar o crescimento no perfil anterior, gravar em outro
+slot e restaurar o perfil novo antes de ativar o Economy Advisor.

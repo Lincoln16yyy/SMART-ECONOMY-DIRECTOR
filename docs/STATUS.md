@@ -2,6 +2,10 @@
 
 ## Expansões na série 1.15
 
+**Economy Advisor:** 1.0.0 substituiu o OGAS no perfil Better Politics, com
+backup e jogo fechado. Carregamento e migração do save do Marrocos NÃO
+VERIFICADOS. Variáveis de automação do OGAS podem persistir em saves antigos.
+
 **Debug:** atalho separado instalado. A inicialização gerou logs na pasta privada de debug. Console e conquistas em campanha NÃO VERIFICADOS.
 
 **Auto-Recruit:** cópia local `z.260606.1` ativada no perfil Better Politics.
