@@ -639,3 +639,5 @@ três campos de Diário e a definição GUI `button_icon_round_action` da
 interface original. Carregamento e campanha NÃO VERIFICADOS. Em
 campanha, abra Diário → Smart Government Advisor, reavalie as leis e
 compare as sugestões com as opções da tela de leis antes de tramitar.
+
+Publicada no repositório Smart Government como prévia `v1.0.1-bpm`, no commit `f0f9daf` da branch `codex/better-politics-1.0.1`. O ZIP é idêntico ao instalado localmente.

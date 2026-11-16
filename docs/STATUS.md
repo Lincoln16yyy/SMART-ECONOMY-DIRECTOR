@@ -14,6 +14,8 @@ ponderada por influência, e dá peso dobrado à chance inicial. A votação
 efetiva depende de condições calculadas pelo BPM após o início da reforma.
 Campanha NÃO VERIFICADA.
 
+Publicada no repositório Smart Government como prévia `v1.0.1-bpm`, no commit `f0f9daf` da branch `codex/better-politics-1.0.1`. O ZIP é idêntico ao instalado localmente.
+
 **CWE fiscal e escassez:** instalado. Snapshot/restauração fiscal, prioridade
 a produtor ativo com insumos e limite mensal cobertos por testes focados.
 Tiger sem erros nos dois pacotes. Carregamento, campanha e save/reload
