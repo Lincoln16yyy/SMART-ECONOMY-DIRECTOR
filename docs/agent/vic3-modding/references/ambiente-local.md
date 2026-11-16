@@ -601,3 +601,17 @@ Politics 2.5.47, Smart Economy Director 0.7.46 e Smart Government Advisor
 `sed_backups/profile_before_better_politics_20261115_195413_016841`. Os mods
 e saves da conversão permanecem instalados. O OGAS para jogo base é o
 item Workshop 3092955121. Carregamento do perfil novo NÃO VERIFICADO.
+
+## OGAS adaptado para o jogo base
+
+Fonte pública do autor, commit `43a503f2205ba9edc71073c3390c3160178b5e5a`,
+de agosto de 2026. A versão publicada mais recentemente no Workshop é
+posterior a essa cópia. O gerador `tools/vanilla_ogas.py` remove duplicatas
+e um trigger sem chamadas, e prepara os controles de crescimento.
+Tiger com Better Politics e Director: zero erros, 405 avisos e cinco dicas
+para o OGAS. Perfil Better Politics → OGAS → Director 0.7.47 → Smart
+Government instalado e conferido com jogo fechado. Backup
+`sed_backups/vanilla_before_ogas_20261115_215420_477432`. A lista histórica
+do Chile conserva os 11 mods disponíveis em
+`sed_backups/profile_before_cwe_play_20261115_172151_124926/content_load.json`.
+A execução em campanha do perfil novo ainda NÃO VERIFICADA.

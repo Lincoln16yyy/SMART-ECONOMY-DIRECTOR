@@ -2,6 +2,12 @@
 
 ## Campanhas com expansões da série 1.15
 
+**OGAS no jogo base:** em campanha nova, use **Ativar crescimento
+automático**. Confira uma obra elegível depois do pulso semanal do OGAS,
+uma revisão fiscal mensal do Director e nenhum projeto direto do Director
+enquanto o gerenciador de construção do OGAS estiver ligado. Repita com
+escassez de um bem com produtor elegível e com a fila na meta de 12 semanas.
+
 ### Fiscal e escassez no CWE
 
 1. Em cópia de uma campanha CWE, anote imposto e salários antes de ativar o

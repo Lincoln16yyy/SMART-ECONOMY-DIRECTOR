@@ -124,6 +124,21 @@ class CoordinationTests(unittest.TestCase):
         self.assertEqual({option: c.variables.get(option, 0) for option in numeric},
                          {option: 0 for option in numeric})
 
+    def test_ogas_owns_construction_without_ceding_fiscal_policy(self):
+        c = self.c
+        c.variables['cnm_auto_construct_manager'] = 1
+        c.readings.update(in_default=True, tax_level='medium')
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_coord_executor'], 14)
+        self.assertEqual(c.variables['cnm_auto_construct_manager'], 1)
+        self.assertEqual(c.readings['tax_level'], 'high')
+        self.assertEqual(c.constructions, [])
+        self.assertEqual(self.external(), {})
+        c.variables['cnm_auto_construct_manager'] = 0
+        c.run('sed_coord_sync')
+        self.assertNotEqual(c.variables['sed_coord_executor'], 14)
+
     def test_boolean_external_flags_are_read_without_numeric_comparison(self):
         # Economy Advisor and ARoAI create these flags with a bare
         # `set_variable`, so the stored value is boolean. Comparing it to a

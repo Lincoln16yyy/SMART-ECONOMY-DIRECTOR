@@ -2744,6 +2744,7 @@ sed_develop_core = {
 }
 sed_competing_builder_configured = {
  OR = {
+  sed_ogas_construction_active = yes
   has_variable = advisor_auto_construction_enabled
   AND = { has_variable = zw_var_expand_building var:zw_var_expand_building > 0 }
   AND = { has_variable = zw_var_more_construction_sectors var:zw_var_more_construction_sectors > 0 }
@@ -3859,6 +3860,20 @@ sed_founding_input_paper_mill_safe = {
  NOT = {
  sed_founding_input_paper_mill_wood > 0
  sed_input_headroom_wood < { value = sed_founding_input_paper_mill_wood multiply = 1.25 }
+ }
+}
+sed_ogas_construction_active = {
+ OR = {
+  AND = { has_variable = cnm_auto_construct_manager var:cnm_auto_construct_manager > 0 }
+  AND = { has_variable = cnm_auto_railway_manager var:cnm_auto_railway_manager > 0 }
+  AND = { has_variable = cnm_auto_construction_sector_manager var:cnm_auto_construction_sector_manager > 0 }
+ }
+}
+sed_ogas_pm_active = {
+ OR = {
+  AND = { has_variable = cnm_upgrade_pm_manager var:cnm_upgrade_pm_manager > 0 }
+  AND = { has_variable = cnm_balance_pm_manager var:cnm_balance_pm_manager > 0 }
+  AND = { has_variable = cnm_workforce_employment_pm_manager var:cnm_workforce_employment_pm_manager > 0 }
  }
 }
 sed_coord_tools_available = {

@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.46'
+VERSION = '0.7.47'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -776,7 +776,7 @@ def widget():
     body += textbox('sed_coord_intro')
     body += button('sed_coord_enable', 'sed_coord_enable_sgui')
     body += button('sed_coord_release', 'sed_coord_release_sgui')
-    for executor in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13):
+    for executor in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14):
         body += textbox(f'sed_coord_executor_{executor}', f'sed_coord_executor_{executor}_visible_sgui')
     body += textbox('sed_coord_supply_policy', 'sed_coord_supply_policy_visible_sgui')
     for policy in (1, 2, 3):
@@ -1696,7 +1696,7 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
     result += f'sed_auto_current_clear_visible_sgui = {{ scope = country is_shown = {{ {base} sed_auto_executor_safe = yes }} }}\n'
     result += f'sed_auto_current_queue_control_visible_sgui = {{ scope = country is_shown = {{ {base} construction_queue_num_queued_private_levels > 0 sed_private_control_configured = yes }} }}\n'
     result += 'sed_auto_status_delegated_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 18 } }\n'
-    for executor in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13):
+    for executor in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14):
         result += f'sed_coord_executor_{executor}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = {executor} }} }}\n'
     for policy in (1, 2, 3):
         result += f'sed_coord_advisor_policy_{policy}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = 1 has_variable = sed_coord_advisor_policy var:sed_coord_advisor_policy = {policy} }} }}\n'
@@ -2286,7 +2286,7 @@ sed_develop_core = {
  NOT = { any_scope_state = { is_incorporated = yes tax_capacity_usage > tax_capacity } }
  NOT = { any_scope_state = { sg:electricity ?= { state_goods_pricier >= 0.2 } } }
 }''')
-    result.append('sed_competing_builder_configured = {\n OR = {\n' + options + '\n }\n}')
+    result.append('sed_competing_builder_configured = {\n OR = {\n  sed_ogas_construction_active = yes\n' + options + '\n }\n}')
     # Read-only view of Controllable Private Construction. Absent mod = every
     # flag is false, so this trigger is also the detection test.
     control = '\n'.join(f'  has_variable = {option}' for name, option, pt, en in PRIVATE_CONTROL_FLAGS)
@@ -2564,6 +2564,7 @@ def localization(language):
         'sed_coord_advisor_policy_2': ('Orientação do Advisor aplicada para padrão de vida, com orçamento equilibrado e opção de endividamento desabilitada. Bens essenciais lideram o plano.', 'Advisor guidance applied for standard of living, balanced budget and borrowing disabled. Essential goods lead the plan.'),
         'sed_coord_advisor_policy_3': ('Orientação do Advisor aplicada para retorno ao tesouro e preservação das reservas, com opção de endividamento desabilitada. A dívida atingiu ao menos 50% do crédito.', 'Advisor guidance applied for treasury return and reserve protection, with borrowing disabled. Debt reached at least 50% of credit.'),
     })
+    pairs['sed_coord_executor_14'] = ('OGAS controla a fila pública nesta revisão.', 'OGAS controls the government queue in this review.')
     pairs['sed_coord_executor_13'] = ('Método de produção reavaliado neste mês. A próxima revisão mensal reavalia os investimentos.', 'Production method reviewed this month. The next monthly review reassesses investment.')
     pairs['sed_auto_status_pm_recovered'] = ('A revisão aplicou um método para reduzir a dependência de insumos em falta.', 'The review applied a method to reduce dependence on scarce inputs.')
     pairs['sed_auto_status_modernized'] = ('A revisão aplicou uma modernização de método de produção.', 'The review applied a production-method upgrade.')

@@ -2,7 +2,11 @@
 
 ## Expansões na série 1.15
 
-**Perfil atual:** Better Politics, Director normal e Smart Government normal.
+**OGAS no jogo base:** perfil ativo com Better Politics, OGAS adaptado e
+versões normais do Director e Smart Government. 451 testes sintéticos,
+build e validação estática aprovados. Execução em campanha ainda NÃO VERIFICADA.
+
+**Perfil atual:** Better Politics, OGAS adaptado, Director normal e Smart Government normal.
 Lista conferida com o jogo fechado. Execução conjunta em campanha ainda
 NÃO VERIFICADA.
 

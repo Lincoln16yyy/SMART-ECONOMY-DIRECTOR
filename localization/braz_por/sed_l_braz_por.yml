@@ -375,6 +375,7 @@
  sed_coord_advisor_policy_1:0 "Orientação do Advisor aplicada para crescimento, orçamento equilibrado e endividamento desabilitado pela opção dele. O plano interno do Advisor reserva doze semanas de despesas fixas."
  sed_coord_advisor_policy_2:0 "Orientação do Advisor aplicada para padrão de vida, com orçamento equilibrado e opção de endividamento desabilitada. Bens essenciais lideram o plano."
  sed_coord_advisor_policy_3:0 "Orientação do Advisor aplicada para retorno ao tesouro e preservação das reservas, com opção de endividamento desabilitada. A dívida atingiu ao menos 50% do crédito."
+ sed_coord_executor_14:0 "OGAS controla a fila pública nesta revisão."
  sed_coord_executor_13:0 "Método de produção reavaliado neste mês. A próxima revisão mensal reavalia os investimentos."
  sed_auto_status_pm_recovered:0 "A revisão aplicou um método para reduzir a dependência de insumos em falta."
  sed_auto_status_modernized:0 "A revisão aplicou uma modernização de método de produção."

@@ -20,6 +20,18 @@ def option_on(option):
     return f'AND = {{ has_variable = {option} var:{option} > 0 }}'
 
 
+OGAS_CONSTRUCTION_OPTIONS = (
+    'cnm_auto_construct_manager',
+    'cnm_auto_railway_manager',
+    'cnm_auto_construction_sector_manager',
+)
+OGAS_PM_OPTIONS = (
+    'cnm_upgrade_pm_manager',
+    'cnm_balance_pm_manager',
+    'cnm_workforce_employment_pm_manager',
+)
+
+
 OPTIONS = (
     ('advisor', 'advisor_auto_construction_enabled', 1),
     ('chains', 'zw_var_expand_building', 0),
@@ -156,6 +168,7 @@ sed_coord_sync = {{
   set_variable = {{ name = sed_coord_executor value = 0 }}
   set_variable = {{ name = sed_coord_advisor_policy value = 0 }}
   if = {{ limit = {{ has_variable = aroai_autobuild }} set_variable = {{ name = sed_coord_executor value = 5 }} }}
+  else_if = {{ limit = {{ sed_ogas_construction_active = yes }} set_variable = {{ name = sed_coord_executor value = 14 }} }}
   else_if = {{ limit = {{ sed_pm_upgrade_month_limit_reached = yes }}
    set_variable = {{ name = sed_coord_executor value = 13 }}
   }}
@@ -226,5 +239,9 @@ def triggers():
     # Off options stay at 0 in the other mods' saves; only an enabled option
     # (or the advisor mod flag itself) offers real coordination.
     options = '\n'.join(f'  {option_on(option)}' for option in option_names)
-    return ('sed_coord_tools_available = {\n OR = {\n  has_variable = advisor_enabled\n'
+    ogas = ''
+    for name, flags in [('construction', OGAS_CONSTRUCTION_OPTIONS), ('pm', OGAS_PM_OPTIONS)]:
+        enabled = '\n'.join(f'  {option_on(flag)}' for flag in flags)
+        ogas += f'sed_ogas_{name}_active = {{\n OR = {{\n{enabled}\n }}\n}}\n'
+    return ogas + ('sed_coord_tools_available = {\n OR = {\n  has_variable = advisor_enabled\n'
             + options + '\n }\n}\n')

@@ -1,7 +1,8 @@
 # Contexto de continuidade
 
 ## Estado atual
-- **Perfil ativo:** Better Politics 2.5.47, Smart Economy Director 0.7.46 e Smart Government Advisor 1.0.0, em ordem. Campanha com esse perfil NÃO VERIFICADA. Perfil Cold War Era anterior em `sed_backups/profile_before_better_politics_20261115_195413_016841`.
+- **OGAS no jogo base:** Director 0.7.47 e OGAS do repositório do autor, adaptado e instalado no perfil Better Politics. Com a decisão de crescimento, OGAS tem prioridade em escassez e controles de orçamento. Director cede fila e métodos quando o gerenciador correspondente está ligado. 451 testes sintéticos aprovados. Reteste em campanha pendente.
+- **Perfil ativo:** Better Politics 2.5.47, OGAS do jogo base, Smart Economy Director 0.7.47 e Smart Government Advisor 1.0.0, em ordem. Campanha com esse perfil NÃO VERIFICADA. Perfil Cold War Era anterior em `sed_backups/profile_before_better_politics_20261115_195413_016841`.
 - **Smart Government CWE reativado:** ranking usa pontuação de vaga vazia quando a variável está ausente, e exige ID válido para deslocar uma recomendação. Pacote reinstalado com backup. Reteste em campanha com a correção ainda NÃO VERIFICADO.
 - **Fechamento CWE:** último tick em 11/01/1950, relatório vazio. Logs com 2.040 ocorrências no ranking do Smart Government. Conselheiro ficou temporariamente fora do perfil, com Cold War Era, OGAS e Director ativos. Reteste avançou até 15/01/1950 sem referências ao ranking nos logs atuais. O Smart Government segue como suspeito principal, com causa definitiva NÃO VERIFICADA.
 - **CWE fiscal e escassez:** instalado. Director avalia imposto e salários em revisão mensal, inclusive com OGAS dono da fila. Salários militares têm guarda de prontidão. OGAS prioriza produtores ativos do bem em falta quando crescimento está ligado. Doze testes focados. Save/reload e campanha NÃO VERIFICADOS.

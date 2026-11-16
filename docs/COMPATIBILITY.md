@@ -9,6 +9,14 @@ As seções anteriores abaixo preservam a evolução histórica das versões.
 
 ## Expansões e conversões no Victoria 3 1.15
 
+**OGAS no jogo base:** o Director lê as opções numéricas do OGAS e cede fila
+ou métodos conforme os gerenciadores ativos. O Director segue revisando
+impostos e salários. A decisão **Ativar crescimento automático** instala
+os controles em campanha e prioriza produtores elegíveis na escassez.
+Para testar o Better Politics, use o perfil Better Politics → OGAS original
+adaptado → Director → Smart Government. O perfil antigo do Chile exige sua
+lista histórica de mods.
+
 | Expansão | Combinação revisada | Evidência |
 | --- | --- | --- |
 | [Morgenröte 2.9.0 Curie](https://github.com/Morgenrote-Team/Morgenroete-Beta/releases/tag/2.9.0Curie) | Community Mod Framework 1.67.6, Morgenröte, Director 0.7.46 | Estático. Morgenröte injeta o grupo de hospitais na administração, mas mantém os IDs de construção usados pelo Director. |

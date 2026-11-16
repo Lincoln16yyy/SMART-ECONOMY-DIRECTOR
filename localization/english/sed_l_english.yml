@@ -375,6 +375,7 @@
  sed_coord_advisor_policy_1:0 "Advisor guidance applied for growth, balanced budget and borrowing disabled through its setting. The Advisor internal plan reserves twelve weeks of fixed expenses."
  sed_coord_advisor_policy_2:0 "Advisor guidance applied for standard of living, balanced budget and borrowing disabled. Essential goods lead the plan."
  sed_coord_advisor_policy_3:0 "Advisor guidance applied for treasury return and reserve protection, with borrowing disabled. Debt reached at least 50% of credit."
+ sed_coord_executor_14:0 "OGAS controls the government queue in this review."
  sed_coord_executor_13:0 "Production method reviewed this month. The next monthly review reassesses investment."
  sed_auto_status_pm_recovered:0 "The review applied a method to reduce dependence on scarce inputs."
  sed_auto_status_modernized:0 "The review applied a production-method upgrade."

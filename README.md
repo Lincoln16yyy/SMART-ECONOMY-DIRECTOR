@@ -1,5 +1,9 @@
 # Smart Economy Director — Victoria 3 1.15
 
+A 0.7.47 permite que o OGAS gerencie a fila pública e os métodos. O Director
+continua revisando impostos e salários. Consulte o perfil de jogo base em
+[compatibilidade](docs/COMPATIBILITY.md).
+
 Para expansões, consulte os [perfis de compatibilidade](docs/COMPATIBILITY.md).
 O Cold War Era (1950) tem uma edição própria do Diretor com orçamento e
 construção pública automáticos baseados nos dados da conversão.

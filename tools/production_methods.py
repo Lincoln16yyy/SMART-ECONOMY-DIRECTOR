@@ -152,6 +152,7 @@ def effects(targets, variants):
   is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic
   NOT = { has_variable = sed_mode_manual }
   NOT = { has_variable = sed_mode_assisted }
+  NOT = { sed_ogas_pm_active = yes }
  }
   sed_begin_pm_input_reservations = yes
   every_scope_state = {
@@ -326,6 +327,7 @@ def upgrade_effects(targets, variants, recovery=False):
   NOT = { has_variable = aroai_autobuild }
   NOT = { has_variable = advisor_pm_balance_enabled }
   NOT = { has_variable = advisor_labor_auto_enabled }
+  NOT = { sed_ogas_pm_active = yes }
   OR = { has_variable = sed_coord_active NOT = { sed_competing_builder_configured = yes } }
  }
   sed_begin_pm_input_reservations = yes
