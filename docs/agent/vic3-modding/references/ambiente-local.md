@@ -641,3 +641,17 @@ campanha, abra Diário → Smart Government Advisor, reavalie as leis e
 compare as sugestões com as opções da tela de leis antes de tramitar.
 
 Publicada no repositório Smart Government como prévia `v1.0.1-bpm`, no commit `f0f9daf` da branch `codex/better-politics-1.0.1`. O ZIP é idêntico ao instalado localmente.
+
+## Auto-Diplomacy no perfil Better Politics
+
+Workshop 3432933121, pasta local `mod/3432933121_Auto-Diplomacy_And_Advanced_Subject_Management`.
+Metadados locais `z.251212.1`. Conferida contra o arquivo público do autor
+`zzzwww404/Vic3-Mod-Auto-Diplomacy-And-Advanced-Subject-Management`, commit
+`1484b83c8eb2dc1062869dd81223701da97627cf`. Desconsiderando CRLF, a cópia
+local difere apenas na decisão e na configuração de fixação do diário.
+Ativada depois dos quatro mods do perfil com o jogo fechado. Backup em
+`sed_backups/profile_before_auto_diplomacy_20261115_225446_896759`.
+Tiger apontou um alias presente no jogo base, um escopo em ação de
+vassalos e um ramo sem alteração de valor. Campanha NÃO VERIFICADA.
+Para checar, use a decisão Diplomatic Affairs e o botão Auto-Diplomacy
+no diário que ela abre. Após um pulso, confira a ação Improve Relations.

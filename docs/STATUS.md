@@ -2,6 +2,9 @@
 
 ## Expansões na série 1.15
 
+**Auto-Diplomacy:** cópia local `z.251212.1` ativada depois dos quatro mods do
+perfil Better Politics. Perfil salvo com backup. Campanha NÃO VERIFICADA.
+
 **OGAS no jogo base:** perfil ativo com Better Politics, OGAS adaptado e
 versões normais do Director e Smart Government. 451 testes sintéticos,
 build e validação estática aprovados. Execução em campanha ainda NÃO VERIFICADA.
