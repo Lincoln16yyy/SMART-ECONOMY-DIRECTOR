@@ -663,3 +663,15 @@ versão local `z.260606.1`. Ativado no fim do perfil com o jogo fechado.
 Backup em `sed_backups/profile_before_auto_recruit_20261116_105447_887441`.
 Ativação conferida no JSON. Campanha NÃO VERIFICADA. Para testar, use a
 decisão Recruit Commanders e ligue o automático no diário que ela abre.
+
+## Atalho separado para debug
+
+`~/.local/share/applications/victoria3-debug.desktop` chama
+`~/.local/bin/victoria3-debug` pelo UMU-Proton-10.0-4. Usa
+`-debug_mode` (declarado em `launcher/launcher-settings.json` do jogo)
+e `-userdir` com caminho separado. Prefixo e dados em
+`~/.local/share/victoria3-debug/`. A inicialização escreveu
+`user-data/logs/system.log` no caminho isolado. Console e conquistas em
+campanha NÃO VERIFICADOS. Para testar um save, copie-o primeiro para
+`user-data/save games/`. Para continuar a campanha de conquistas, use
+o botão Jogar normal do Hydra e o save original.

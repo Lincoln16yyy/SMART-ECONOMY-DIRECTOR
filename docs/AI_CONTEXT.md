@@ -1,6 +1,7 @@
 # Contexto de continuidade
 
 ## Estado atual
+- **Modo debug:** atalho separado Victoria 3 — Debug com prefixo Proton próprio. O jogo escreveu logs na pasta isolada. O perfil normal do Hydra continua sem o argumento de debug. Console e conquistas em campanha NÃO VERIFICADOS.
 - **OGAS no jogo base:** Director 0.7.47 e OGAS do repositório do autor, adaptado e instalado no perfil Better Politics. Com a decisão de crescimento, OGAS tem prioridade em escassez e controles de orçamento. Director cede fila e métodos quando o gerenciador correspondente está ligado. 451 testes sintéticos aprovados. Reteste em campanha pendente.
 - **Perfil ativo:** Better Politics 2.5.47 → OGAS do jogo base → Smart Economy Director 0.7.47 → Smart Government Advisor - Better Politics 1.0.1 → Auto-Diplomacy → Auto-Recruit. Instalação conferida com jogo fechado. Campanha NÃO VERIFICADA.
 - **Conselheiro Better Politics:** 231 leis e 40 grupos, com requisitos da base e do BPM. Chance inicial da engine e mudança nas posições dos grupos conforme a lei vigente definem a viabilidade do ranking. Pacote `dist/smart-government-advisor-bpm.zip`. Edição original disponível fora do perfil. Publicada no repositório Smart Government como prévia `v1.0.1-bpm`, no commit `f0f9daf` da branch `codex/better-politics-1.0.1`. O ZIP é idêntico ao instalado localmente.

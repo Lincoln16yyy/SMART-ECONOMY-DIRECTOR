@@ -2,6 +2,8 @@
 
 ## Expansões na série 1.15
 
+**Debug:** atalho separado instalado. A inicialização gerou logs na pasta privada de debug. Console e conquistas em campanha NÃO VERIFICADOS.
+
 **Auto-Recruit:** cópia local `z.260606.1` ativada no perfil Better Politics.
 Ativação conferida no Hydra. Campanha NÃO VERIFICADA.
 
