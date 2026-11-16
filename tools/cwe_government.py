@@ -63,6 +63,10 @@ def adapt_generator(stage):
     )
     if count != 2:
         raise ValueError('Unexpected Smart Government fiscal scoring.')
+    path.write_text(guard_ranking(text), encoding="utf-8")
+
+
+def guard_ranking(text):
     for slot in (1, 2, 3):
         text = replace_once(text, f' > var:sg_top_{slot}_score ', f' > sg_cwe_top_{slot}_score_or_empty ')
         needle = f'limit = {{ var:sg_top_{slot}_id > 0 }}'
@@ -75,7 +79,7 @@ def adapt_generator(stage):
         if text.count(old) != slot:
             raise ValueError(f'Unexpected Smart Government shift logic for slot {slot}.')
         text = text.replace(old, new)
-    path.write_text(text, encoding='utf-8')
+    return text
 
 
 def score_fallbacks():
@@ -119,23 +123,27 @@ def package(source, game, cwe, output):
                     relationships=[{'rel_type': 'dependency', 'id': '2988303719',
                                     'display_name': 'Cold War Era (1950)', 'resource_type': 'mod',
                                     'version': '0.99'}])
-        descriptor = f'name="{NAME}"\nversion="{meta["version"]}"\nsupported_version="1.15.1"\n'
-        files = {
-            f'{NAME}.mod': (descriptor + f'path="mod/{NAME}"\n').encode(),
-            f'{NAME}/descriptor.mod': descriptor.encode(),
-            f'{NAME}/.metadata/metadata.json': (json.dumps(meta, indent=2) + '\n').encode(),
-        }
-        for folder in RUNTIME:
-            for path in (stage / folder).rglob('*'):
-                if path.is_file():
-                    files[f'{NAME}/{path.relative_to(stage).as_posix()}'] = path.read_bytes()
-        output.parent.mkdir(parents=True, exist_ok=True)
-        with ZipFile(output, 'w', compression=ZIP_DEFLATED) as archive:
-            for name, data in sorted(files.items()):
-                info = ZipInfo(name, date_time=(2026, 11, 15, 0, 0, 0))
-                info.compress_type = ZIP_DEFLATED
-                archive.writestr(info, data)
+        write_package(stage, output, NAME, meta)
     return output
+
+
+def write_package(stage, output, name, meta):
+    descriptor = f'name="{name}"\nversion="{meta["version"]}"\nsupported_version="{meta["supported_game_version"]}"\n'
+    files = {
+        f'{name}.mod': (descriptor + f'path="mod/{name}"\n').encode(),
+        f'{name}/descriptor.mod': descriptor.encode(),
+        f'{name}/.metadata/metadata.json': (json.dumps(meta, indent=2) + '\n').encode(),
+    }
+    for folder in RUNTIME:
+        for path in (stage / folder).rglob('*'):
+            if path.is_file():
+                files[f'{name}/{path.relative_to(stage).as_posix()}'] = path.read_bytes()
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with ZipFile(output, 'w', compression=ZIP_DEFLATED) as archive:
+        for member, data in sorted(files.items()):
+            info = ZipInfo(member, date_time=(2026, 11, 15, 0, 0, 0))
+            info.compress_type = ZIP_DEFLATED
+            archive.writestr(info, data)
 
 
 def main():

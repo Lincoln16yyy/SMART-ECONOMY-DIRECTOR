@@ -615,3 +615,27 @@ Government instalado e conferido com jogo fechado. Backup
 do Chile conserva os 11 mods disponíveis em
 `sed_backups/profile_before_cwe_play_20261115_172151_124926/content_load.json`.
 A execução em campanha do perfil novo ainda NÃO VERIFICADA.
+
+## Smart Government para Better Politics
+
+`python3 -m tools.bpm_government --government "<Smart Government original>"
+--game "<pasta game>" --bpm "<Better Politics>"` gera
+`dist/smart-government-advisor-bpm.zip`. A base mescla os requisitos
+das leis vanilla com os de Better Politics 2.5.47. O cálculo de apoio
+usa a variação de posição em relação à lei vigente, de -2 a +2 por
+posição, ponderada pela influência e filtrada por `bpm_ig_is_marginal`.
+A chance inicial vem da engine. O ranking não usa os votos que o BPM
+só calcula durante a tramitação. Referências locais em
+`common/scripted_effects/bpm_law_enactment_effects.txt`,
+`common/scripted_triggers/bpm_ig_triggers.txt` e
+`common/script_values/bpm_law_enactment_values.txt` do BPM.
+
+Edição 1.0.1 instalada com jogo fechado após Better Politics, OGAS e
+Director. 20 arquivos conferidos. Backup do perfil em
+`sed_backups/profile_before_government_bpm_20261115_223049_817448`.
+Validador aprovou 231 leis em 40 grupos. Tiger 1.19.0 não apontou erros
+nos novos valores e triggers do ranking. A cópia temporária apontou
+três campos de Diário e a definição GUI `button_icon_round_action` da
+interface original. Carregamento e campanha NÃO VERIFICADOS. Em
+campanha, abra Diário → Smart Government Advisor, reavalie as leis e
+compare as sugestões com as opções da tela de leis antes de tramitar.

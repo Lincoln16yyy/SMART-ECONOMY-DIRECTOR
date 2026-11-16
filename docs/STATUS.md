@@ -6,9 +6,13 @@
 versões normais do Director e Smart Government. 451 testes sintéticos,
 build e validação estática aprovados. Execução em campanha ainda NÃO VERIFICADA.
 
-**Perfil atual:** Better Politics, OGAS adaptado, Director normal e Smart Government normal.
-Lista conferida com o jogo fechado. Execução conjunta em campanha ainda
-NÃO VERIFICADA.
+**Smart Government para Better Politics:** edição 1.0.1 ativa no perfil
+após Better Politics, OGAS e Director. Validador aprovou 231 leis em 40
+grupos. O ranking exige os requisitos de tramitação e ganho de mérito.
+Compara a posição dos grupos de interesse sobre a proposta e a lei vigente,
+ponderada por influência, e dá peso dobrado à chance inicial. A votação
+efetiva depende de condições calculadas pelo BPM após o início da reforma.
+Campanha NÃO VERIFICADA.
 
 **CWE fiscal e escassez:** instalado. Snapshot/restauração fiscal, prioridade
 a produtor ativo com insumos e limite mensal cobertos por testes focados.
