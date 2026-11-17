@@ -1,5 +1,9 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.48, o Automático pode enfileirar um nível de universidade quando a
+inovação está abaixo do teto, há papel e mão de obra e o orçamento cobre a
+obra. A prioridade é avaliada também com Economy Advisor coordenado.
+
 A 0.7.47 permite que o OGAS gerencie a fila pública e os métodos. O Director
 continua revisando impostos e salários. Consulte o perfil de jogo base em
 [compatibilidade](docs/COMPATIBILITY.md).

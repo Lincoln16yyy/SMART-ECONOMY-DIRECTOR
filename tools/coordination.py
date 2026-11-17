@@ -202,6 +202,9 @@ sed_coord_sync = {{
    else_if = {{ limit = {{ OR = {{ var:sed_plan_goal = 6 var:sed_plan_goal = 7 var:sed_plan_goal = 9 }} }}
     set_variable = {{ name = sed_coord_executor value = 9 }}
    }}
+   else_if = {{ limit = {{ sed_university_ready = yes }}
+    set_variable = {{ name = sed_coord_executor value = 11 }}
+   }}
    else_if = {{ limit = {{ has_variable = sed_coord_advisor_known OR = {{ var:sed_plan_goal = 1 var:sed_plan_goal = 2 var:sed_plan_goal = 3 var:sed_plan_goal = 5 var:sed_plan_goal = 8 }} }}
     {enable_option('advisor')}
     set_variable = {{ name = sed_coord_executor value = 1 }}

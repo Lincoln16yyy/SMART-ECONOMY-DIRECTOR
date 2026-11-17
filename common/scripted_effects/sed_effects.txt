@@ -3995,8 +3995,18 @@ sed_auto_run_direct = {
  sed_refresh_direct_budget = yes
  if = {
   limit = { sed_auto_executor_safe = yes }
-
   if = {
+   limit = { sed_university_ready = yes }
+   ordered_scope_state = {
+    limit = { sed_university_candidate = yes }
+    order_by = sed_state_labor_available
+    max = 1
+    check_range_bounds = no
+    sed_run_university_approval = yes
+   }
+  }
+
+  else_if = {
    limit = { any_scope_state = { sed_railway_candidate_eligible = yes var:sed_plan_railway_rank = 1 } }
    ordered_scope_state = {
     limit = { sed_railway_candidate_eligible = yes var:sed_plan_railway_rank = 1 }
@@ -4250,6 +4260,28 @@ sed_auto_run_direct = {
  else_if = { limit = { NOT = { sed_direct_fiscal_safe = yes } } set_variable = { name = sed_auto_action_status value = 17 } }
  else_if = { limit = { NOT = { sed_direct_budget_safe = yes } } set_variable = { name = sed_auto_action_status value = 22 } }
  else = { set_variable = { name = sed_auto_action_status value = 14 } }
+}
+
+sed_run_university_approval = {
+ owner = { sed_refresh_direct_budget = yes }
+ if = {
+  limit = {
+   sed_university_candidate = yes
+   owner = { sed_auto_executor_safe = yes sed_university_ready = yes }
+  }
+  owner = {
+   set_variable = { name = sed_auto_action_status value = 15 }
+   set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }
+   sed_record_auto_attempt = yes
+  }
+  start_building_construction = building_university
+  owner = {
+   if = { limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_auto_action_status value = 1 }
+   }
+   remove_variable = sed_queue_levels_before
+  }
+ }
 }
 sed_ignore_railway = {
  if = {
@@ -8012,6 +8044,9 @@ sed_refresh_direct_budget = {
   # Duration and full material reference for the plan's first priority.
   set_variable = { name = sed_build_budget_project_points value = 0 }
 
+  if = { limit = { sed_university_ready = yes }
+   set_variable = { name = sed_build_budget_project_points value = 400 }
+  }
   if = { limit = { var:sed_build_budget_project_points = 0
    any_scope_state = { has_variable = sed_plan_railway_rank var:sed_plan_railway_rank = 1 } }
    set_variable = { name = sed_build_budget_project_points value = 800 }
@@ -13879,6 +13914,9 @@ sed_coord_sync = {
    }
    else_if = { limit = { OR = { var:sed_plan_goal = 6 var:sed_plan_goal = 7 var:sed_plan_goal = 9 } }
     set_variable = { name = sed_coord_executor value = 9 }
+   }
+   else_if = { limit = { sed_university_ready = yes }
+    set_variable = { name = sed_coord_executor value = 11 }
    }
    else_if = { limit = { has_variable = sed_coord_advisor_known OR = { var:sed_plan_goal = 1 var:sed_plan_goal = 2 var:sed_plan_goal = 3 var:sed_plan_goal = 5 var:sed_plan_goal = 8 } }
     if = { limit = { has_variable = sed_coord_saved_advisor }

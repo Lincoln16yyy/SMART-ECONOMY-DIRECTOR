@@ -1,4 +1,20 @@
-# Estado dos requisitos — 0.7.46
+# Estado dos requisitos — 0.7.48
+
+## Universidades no Automático
+
+**Código:** enfileira um nível abaixo do teto de inovação. Ambas as filas
+devem estar vazias. Exige saldo positivo, guarda fiscal e de materiais,
+papel disponível e estado incorporado com infraestrutura e mão de obra.
+A coordenação reserva a revisão para o Director quando a universidade é
+elegível. Prioridades de oferta, infraestrutura, administração e energia
+têm preferência.
+
+**Teste sintético:** cinco testes específicos. **Estático:** validador passou.
+Tiger apontou apenas os três campos de Diário 1.15 já registrados.
+Instalação conferida com jogo fechado. **Campanha:** NÃO VERIFICADA.
+Em cópia de save com inovação abaixo do teto, papel e orçamento adequados,
+use Automático, deixe as filas vazias e avance até a revisão mensal.
+A fila pública deve receber um nível e o Diário deve confirmar a inclusão.
 
 ## Expansões na série 1.15
 

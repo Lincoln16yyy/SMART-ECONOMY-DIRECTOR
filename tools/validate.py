@@ -166,6 +166,7 @@ def validate(root=ROOT, game=None):
                         'sed_run_trade_center_approval': {'building_trade_center'},
                         'sed_run_admin_approval': {'building_government_administration'},
                         'sed_run_power_approval': {'building_power_plant'},
+                        'sed_run_university_approval': {'building_university'},
                         'sed_run_core_wood_approval': {'building_logging_camp'},
                         'sed_run_core_iron_approval': {'building_iron_mine'},
                         'sed_run_core_tools_approval': {'building_tooling_workshop'},
@@ -199,11 +200,12 @@ def validate(root=ROOT, game=None):
         errors.append('Cleanup must preserve the schema and monthly safety markers')
     if set(runtime_variables()) != cleaned:
         errors.append('Runtime variable registry differs from cleanup')
-    # Coordinated direct execution is a narrow exception for the ranked supply target.
+    # Coordinated direct execution is a narrow exception for ranked supply and university construction.
     direct_authority = parse("""guard = {
         NOT = { has_variable = sed_coord_active }
         AND = { has_variable = sed_coord_active var:sed_coord_executor = 11
-                var:sed_plan_goal = 2 sed_direct_supply_priority_exists = yes }
+                OR = { AND = { var:sed_plan_goal = 2 sed_direct_supply_priority_exists = yes }
+                       sed_university_ready = yes } }
     }""")[0].value
     if child(custom.get('sed_auto_executor_safe', []), 'OR') != direct_authority:
         errors.append('Direct execution requires the restricted coordination authority')
@@ -234,6 +236,15 @@ def validate(root=ROOT, game=None):
         name = action.removeprefix('sed_run_').removesuffix('_approval')
         if not any(entry.key == 'sed_refresh_direct_budget' for entry in walk(custom.get(action, []))):
             errors.append('Approval lacks material budget revalidation: ' + name)
+        if name == 'university':
+            gate = parse("""guard = {
+                sed_university_candidate = yes
+                owner = { sed_auto_executor_safe = yes sed_university_ready = yes }
+            }""")[0].value
+            branch = child(custom.get(action, []), 'if')
+            if child(branch, 'limit') != gate:
+                errors.append('University requires its location and automatic execution guards')
+            continue
         fallback_guards = {'trade_center': 'sed_trade_center_candidate_eligible',
                            'admin': 'sed_admin_candidate_eligible',
                            'power': 'sed_power_candidate_eligible',

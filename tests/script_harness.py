@@ -72,7 +72,7 @@ class Country:
                              construction_queue_government_duration=0,
                              construction_queue_num_queued_private_levels=0,
                              military_expenses=0, military_expenses_share=0, is_at_war=False,
-                             bureaucracy=0, year=1836, month=0, is_player=True, in_default=False,
+                             bureaucracy=0, country_innovation=0, max_innovation=0, year=1836, month=0, is_player=True, in_default=False,
                              tax_level='medium', government_wage_level='medium', military_wage_level='medium',
                              is_diplomatic_play_committed_participant=False,
                              is_diplomatic_play_initiator=False, is_diplomatic_play_target=False,

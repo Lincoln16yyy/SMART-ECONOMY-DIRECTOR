@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.47'
+VERSION = '0.7.48'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -535,16 +535,25 @@ sed_auto_run_direct = {
  sed_refresh_direct_budget = yes
  if = {
   limit = { sed_auto_executor_safe = yes }
+  if = {
+   limit = { sed_university_ready = yes }
+   ordered_scope_state = {
+    limit = { sed_university_candidate = yes }
+    order_by = sed_state_labor_available
+    max = 1
+    check_range_bounds = no
+    sed_run_university_approval = yes
+   }
+  }
 ''')
     choices = [('railway', 'sed_railway_candidate_eligible')]
     choices.extend((item['good'], f"sed_{item['good']}_candidate_eligible") for item in SUPPLY_TARGETS)
     # The construction sector joins the automatic dispatcher only as a ranked target.
     choices.append(('construction', 'sed_construction_candidate_eligible'))
-    for index, (name, eligibility) in enumerate(choices):
-        start = 'if' if index == 0 else 'else_if'
+    for name, eligibility in choices:
         order = 'infrastructure_delta' if name == 'railway' else 'state_population'
         direction = ' multiply = -1'
-        result.append(f'''  {start} = {{
+        result.append(f'''  else_if = {{
    limit = {{ any_scope_state = {{ {eligibility} = yes var:sed_plan_{name}_rank = 1 }} }}
    ordered_scope_state = {{
     limit = {{ {eligibility} = yes var:sed_plan_{name}_rank = 1 }}
@@ -606,6 +615,28 @@ sed_auto_run_direct = {
  else = { set_variable = { name = sed_auto_action_status value = 14 } }
 }
 ''')
+    result.append('''sed_run_university_approval = {
+ owner = { sed_refresh_direct_budget = yes }
+ if = {
+  limit = {
+   sed_university_candidate = yes
+   owner = { sed_auto_executor_safe = yes sed_university_ready = yes }
+  }
+  owner = {
+   set_variable = { name = sed_auto_action_status value = 15 }
+   set_variable = { name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }
+   sed_record_auto_attempt = yes
+  }
+  start_building_construction = building_university
+  owner = {
+   if = { limit = { construction_queue_num_queued_government_levels > var:sed_queue_levels_before }
+    set_variable = { name = sed_auto_action_status value = 1 }
+   }
+   remove_variable = sed_queue_levels_before
+  }
+ }
+}''')
+
     return '\n'.join(result).rstrip() + '\n'
 
 
@@ -2235,7 +2266,7 @@ sed_auto_executor_safe = {
  NOT = { has_variable = sed_mode_assisted }
  OR = {
   NOT = { has_variable = sed_coord_active }
-  AND = { has_variable = sed_coord_active var:sed_coord_executor = 11 var:sed_plan_goal = 2 sed_direct_supply_priority_exists = yes }
+  AND = { has_variable = sed_coord_active var:sed_coord_executor = 11 OR = { AND = { var:sed_plan_goal = 2 sed_direct_supply_priority_exists = yes } sed_university_ready = yes } }
  }
  has_variable = sed_mode_automatic
  NOT = { sed_auto_month_limit_reached = yes }
@@ -2245,6 +2276,34 @@ sed_auto_executor_safe = {
  NOT = { sed_competing_builder_configured = yes }
  sed_direct_fiscal_safe = yes
  sed_direct_budget_safe = yes
+}''')
+    result.append('''# University employment is 500 base jobs plus 500 academia jobs per level.
+sed_university_candidate = {
+ is_incorporated = yes
+ infrastructure_delta >= 0
+ can_construct_building = building_university
+ sed_state_labor_available >= 1000
+ NOT = { b:building_university ?= { level > 0 occupancy < 0.9 } }
+ NOT = { sg:paper ?= { state_goods_pricier >= 0.2 } }
+}
+sed_university_ready = {
+ NOT = { sed_auto_month_limit_reached = yes }
+ construction_queue_num_queued_government_levels = 0
+ construction_queue_num_queued_private_levels = 0
+ net_total_income > 0
+ country_innovation < max_innovation
+ market = { mg:paper ?= {
+  market_goods_sell_orders > 0
+  market_goods_has_goods_shortage = no
+  market_goods_pricier < 0.2
+ } }
+ NOT = { sed_direct_supply_priority_exists = yes }
+ NOT = { any_scope_state = { OR = {
+  sed_railway_candidate_eligible = yes
+  sed_admin_candidate_eligible = yes
+  sed_power_candidate_eligible = yes
+ } } }
+ any_scope_state = { sed_university_candidate = yes }
 }''')
     hostable = []
     for item in SUPPLY_TARGETS:
@@ -2629,7 +2688,7 @@ def localization(language):
         'sed_build_budget_project': ('O primeiro projeto requer ' + v('build_budget_project_points', '0') + ' pontos, estimados em ' + v('build_budget_project_weeks', '1') + ' semanas. A fila existente acrescenta uma referência de ' + v('build_budget_queue_weeks', '1') + ' semanas; a engine mede até ' + v('build_budget_queue_weeks_engine', '0') + ' semanas restantes na fila do governo (0 = vazia, arredondada para cima). A fila contém ' + v('build_budget_queue_projects', '0') + ' projetos do governo e ' + v('build_budget_queue_private_projects', '0') + ' privados. A janela de financiamento é de ' + v('build_budget_funding_weeks', '1') + ' semanas. Progresso já executado, autor de cada projeto e eficiência local seguem fora da estimativa.', 'The first project requires ' + v('build_budget_project_points', '0') + ' points, estimated at ' + v('build_budget_project_weeks', '1') + ' weeks. The existing queue adds a reference of ' + v('build_budget_queue_weeks', '1') + ' weeks; the engine reports up to ' + v('build_budget_queue_weeks_engine', '0') + ' weeks remaining in the government queue (0 = empty, rounded up). The queue holds ' + v('build_budget_queue_projects', '0') + ' government projects and ' + v('build_budget_queue_private_projects', '0') + ' private ones. The funding window is ' + v('build_budget_funding_weeks', '1') + ' weeks. Completed progress, each project\u2019s author and local efficiency remain outside the estimate.'),
 
         'sed_reserve_budget': ('Orçamento por reservas nesta leitura. Piso padrão de quatro semanas de despesas fixas: @money!' + v('reserve_floor', 'K') + '. Piso exigido nesta leitura: @money!' + v('reserve_required', 'K') + ' (seis semanas quando há déficit). Ouro acima do piso: @money!' + v('reserve_spare', 'K') + '. Cobertura do déficit atual acima do piso: ' + v('reserve_runway', '1') + ' semanas' + '. Estimativa com despesas e déficit atuais; custo de novas obras ainda precisa ser avaliado.', 'Reserve budget in this reading. Standard four-week fixed-expense floor: @money!' + v('reserve_floor', 'K') + '. Floor required by this reading: @money!' + v('reserve_required', 'K') + ' (six weeks while running a deficit). Gold above the floor: @money!' + v('reserve_spare', 'K') + '. Current deficit coverage above the floor: ' + v('reserve_runway', '1') + ' weeks' + '. Estimate using current expenses and deficit; new construction costs still require assessment.'),
-        'sed_coord_executor_11': ('Executor escolhido: Director, expansão da primeira prioridade de oferta. As opções verificadas de construção do Advisor e Supply Chain ficam suspensas. Aguarda orçamento e fila privada livre; a fila pública pode estar ocupada. No máximo uma tentativa por mês. O resultado da revisão confirma se houve inclusão.', 'Selected executor: Director, expansion of the first supply priority. Verified Advisor and Supply Chain construction options remain suspended. Waits for budget and an empty private queue; the government queue may be busy. At most one attempt per month. The review outcome confirms insertion.'),
+        'sed_coord_executor_11': ('Executor escolhido: Director, prioridade de oferta ou universidade. As opções verificadas de construção do Advisor e Supply Chain ficam suspensas. Aguarda orçamento e fila privada livre. Universidade exige também fila pública livre. No máximo uma tentativa por mês. O resultado da revisão confirma se houve inclusão.', 'Selected executor: Director, supply priority or university. Verified Advisor and Supply Chain construction options remain suspended. Waits for budget and an empty private queue. Universities also require an empty government queue. At most one attempt per month. The review outcome confirms insertion.'),
         'sed_coord_executor_10': ('Coordenação em espera. Há expansão enfileirada de um prédio relacionado ao objetivo atual. Novas opções externas ficam suspensas até reavaliar a fila ou surgir outra prioridade elegível.', 'Coordination waiting. A building related to the current objective has a queued expansion. New external options remain suspended until queue reassessment or another eligible priority appears.'),
         'sed_plan_waiting': ('Plano em acompanhamento de obra relacionada. A fila ainda não comprova resolução do gargalo. A autoria e o efeito futuro do projeto não foram identificados.', 'Plan monitoring related construction. The queue does not yet prove resolution of the bottleneck. Project origin and future impact have not been identified.'),
         'sed_auto_status_waiting': ('Última revisão: aguardando expansão relacionada ao objetivo. A próxima revisão voltará a avaliar a fila.', 'Last review: waiting for an expansion related to the objective. The next review will reassess the queue.'),

@@ -118,6 +118,9 @@ def effects(founding_projects=()):
   # Duration and full material reference for the plan's first priority.
   set_variable = { name = sed_build_budget_project_points value = 0 }
 ''')
+    result.append(f'''  if = {{ limit = {{ sed_university_ready = yes }}
+   set_variable = {{ name = sed_build_budget_project_points value = {QUEUED_COSTS['building_university']} }}
+  }}''')
     for action, points in PROJECT_POINTS.items():
         result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0
    any_scope_state = {{ has_variable = sed_plan_{action}_rank var:sed_plan_{action}_rank = 1 }} }}

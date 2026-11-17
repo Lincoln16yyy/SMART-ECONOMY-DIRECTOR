@@ -686,3 +686,13 @@ No save do Marrocos, o OGAS já estava ativo. Seus interruptores `cnm_*`
 podem permanecer no save e ser detectados pelo Director. O fluxo limpo
 para esse save é pausar o crescimento no perfil anterior, gravar em outro
 slot e restaurar o perfil novo antes de ativar o Economy Advisor.
+
+## Universidades no Automático
+
+`game/common/buildings/07_government.txt` usa `country_innovation < max_innovation`
+no escopo de país para a agenda de educação. A universidade custa 400 pontos
+em `data/queued_building_costs.json` e os métodos em
+`game/common/production_methods/07_government.txt` justificam 1.000 vagas
+por nível e a leitura de papel. A mão de obra do Director é estimada.
+0.7.48 instalada com o jogo fechado. Ordem preservada. Backup em
+`sed_backups/mod_before_0.7.48_20261117_193202_634815`. Campanha NÃO VERIFICADA.
