@@ -1,5 +1,9 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.49, a coordenação com o Economy Advisor considera os indicadores do
+painel de sociedade para escolher Standard of Living ou Growth. As travas
+de orçamento e a prioridade de recuperação do tesouro continuam valendo.
+
 Na 0.7.48, o Automático pode enfileirar um nível de universidade quando a
 inovação está abaixo do teto, há papel e mão de obra e o orçamento cobre a
 obra. A prioridade é avaliada também com Economy Advisor coordenado.

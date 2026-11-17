@@ -373,7 +373,7 @@
  sed_trade_center_success:0 "Trade Center request queued (+1 level). Check cost and time in the game queue."
  sed_trade_center_failed:0 "The game did not confirm the Trade Center was added to the government queue."
  sed_coord_advisor_policy_1:0 "Advisor guidance applied for growth, balanced budget and borrowing disabled through its setting. The Advisor internal plan reserves twelve weeks of fixed expenses."
- sed_coord_advisor_policy_2:0 "Advisor guidance applied for standard of living, balanced budget and borrowing disabled. Essential goods lead the plan."
+ sed_coord_advisor_policy_2:0 "Advisor guidance applied for standard of living, balanced budget and borrowing disabled. Essential goods or living-standard pressure justify this priority."
  sed_coord_advisor_policy_3:0 "Advisor guidance applied for treasury return and reserve protection, with borrowing disabled. Debt reached at least 50% of credit."
  sed_coord_executor_14:0 "OGAS controls the government queue in this review."
  sed_coord_executor_13:0 "Production method reviewed this month. The next monthly review reassesses investment."

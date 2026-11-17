@@ -3904,6 +3904,16 @@ sed_ogas_pm_active = {
   AND = { has_variable = cnm_workforce_employment_pm_manager var:cnm_workforce_employment_pm_manager > 0 }
  }
 }
+sed_coord_advisor_sol_pressure = {
+ OR = {
+  AND = { has_variable = advisor_eh_below_expected var:advisor_eh_below_expected > 0.25 }
+  AND = { has_variable = advisor_eh_sol_change var:advisor_eh_sol_change <= -1 }
+  AND = {
+   has_variable = advisor_eh_sol_change var:advisor_eh_sol_change <= -0.25
+   has_variable = advisor_eh_sol_change_months var:advisor_eh_sol_change_months >= 6
+  }
+ }
+}
 sed_coord_tools_available = {
  OR = {
   has_variable = advisor_enabled

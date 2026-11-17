@@ -696,3 +696,14 @@ em `data/queued_building_costs.json` e os métodos em
 por nível e a leitura de papel. A mão de obra do Director é estimada.
 0.7.48 instalada com o jogo fechado. Ordem preservada. Backup em
 `sed_backups/mod_before_0.7.48_20261117_193202_634815`. Campanha NÃO VERIFICADA.
+
+## Pressão de padrão de vida do Economy Advisor
+
+O painel `gui/journal_entry_widgets/advisor_economy.gui` indica padrão de
+vida se `advisor_eh_below_expected > 0.25` ou `advisor_eh_sol_status > 1`.
+A tendência vem de `common/script_values/advisor_core_values.txt`:
+queda de 1 ponto, ou queda de 0,25 em pelo menos seis meses. O Director
+0.7.49 lê essas variáveis do Advisor apenas quando existem. No último
+autosave de Cuba, o Director estava em Assistido, a coordenação não
+estava ativa e o Advisor já estava em Standard of Living.
+Backup da instalação `sed_backups/mod_before_0.7.49_20261117_195833_813629`.

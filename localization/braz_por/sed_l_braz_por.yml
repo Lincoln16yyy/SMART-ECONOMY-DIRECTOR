@@ -373,7 +373,7 @@
  sed_trade_center_success:0 "Pedido de Centro de Comércio enfileirado (+1 nível). Confira custo e prazo na fila do jogo."
  sed_trade_center_failed:0 "O jogo não confirmou a inclusão do Centro de Comércio na fila pública."
  sed_coord_advisor_policy_1:0 "Orientação do Advisor aplicada para crescimento, orçamento equilibrado e endividamento desabilitado pela opção dele. O plano interno do Advisor reserva doze semanas de despesas fixas."
- sed_coord_advisor_policy_2:0 "Orientação do Advisor aplicada para padrão de vida, com orçamento equilibrado e opção de endividamento desabilitada. Bens essenciais lideram o plano."
+ sed_coord_advisor_policy_2:0 "Orientação do Advisor aplicada para padrão de vida, com orçamento equilibrado e opção de endividamento desabilitada. Bens essenciais ou pressão sobre o padrão de vida justificam a prioridade."
  sed_coord_advisor_policy_3:0 "Orientação do Advisor aplicada para retorno ao tesouro e preservação das reservas, com opção de endividamento desabilitada. A dívida atingiu ao menos 50% do crédito."
  sed_coord_executor_14:0 "OGAS controla a fila pública nesta revisão."
  sed_coord_executor_13:0 "Método de produção reavaliado neste mês. A próxima revisão mensal reavalia os investimentos."

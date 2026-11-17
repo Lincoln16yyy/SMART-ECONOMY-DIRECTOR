@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.48'
+VERSION = '0.7.49'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -2620,7 +2620,7 @@ def localization(language):
         pairs[key] = ('Aprovar expansão: +1 nível', 'Approve expansion: +1 level')
     pairs.update({
         'sed_coord_advisor_policy_1': ('Orientação do Advisor aplicada para crescimento, orçamento equilibrado e endividamento desabilitado pela opção dele. O plano interno do Advisor reserva doze semanas de despesas fixas.', 'Advisor guidance applied for growth, balanced budget and borrowing disabled through its setting. The Advisor internal plan reserves twelve weeks of fixed expenses.'),
-        'sed_coord_advisor_policy_2': ('Orientação do Advisor aplicada para padrão de vida, com orçamento equilibrado e opção de endividamento desabilitada. Bens essenciais lideram o plano.', 'Advisor guidance applied for standard of living, balanced budget and borrowing disabled. Essential goods lead the plan.'),
+        'sed_coord_advisor_policy_2': ('Orientação do Advisor aplicada para padrão de vida, com orçamento equilibrado e opção de endividamento desabilitada. Bens essenciais ou pressão sobre o padrão de vida justificam a prioridade.', 'Advisor guidance applied for standard of living, balanced budget and borrowing disabled. Essential goods or living-standard pressure justify this priority.'),
         'sed_coord_advisor_policy_3': ('Orientação do Advisor aplicada para retorno ao tesouro e preservação das reservas, com opção de endividamento desabilitada. A dívida atingiu ao menos 50% do crédito.', 'Advisor guidance applied for treasury return and reserve protection, with borrowing disabled. Debt reached at least 50% of credit.'),
     })
     pairs['sed_coord_executor_14'] = ('OGAS controla a fila pública nesta revisão.', 'OGAS controls the government queue in this review.')

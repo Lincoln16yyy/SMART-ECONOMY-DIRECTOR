@@ -220,6 +220,7 @@ sed_coord_sync = {{
      set_variable = {{ name = sed_coord_advisor_policy value = 3 }}
     }}
     else_if = {{ limit = {{ OR = {{
+     sed_coord_advisor_sol_pressure = yes
      any_scope_state = {{ OR = {{ var:sed_plan_grain_rank = 1 var:sed_plan_groceries_rank = 1 var:sed_plan_clothes_rank = 1 }} }}
      AND = {{ var:sed_plan_goal = 5 OR = {{ var:sed_plan_missing_grain = 1 var:sed_plan_missing_groceries = 1 var:sed_plan_missing_clothes = 1 }} }}
     }} }}
@@ -246,5 +247,18 @@ def triggers():
     for name, flags in [('construction', OGAS_CONSTRUCTION_OPTIONS), ('pm', OGAS_PM_OPTIONS)]:
         enabled = '\n'.join(f'  {option_on(flag)}' for flag in flags)
         ogas += f'sed_ogas_{name}_active = {{\n OR = {{\n{enabled}\n }}\n}}\n'
+    # Same population-share and observed-trend thresholds as the Advisor's
+    # Society card. Missing readings keep the Director's own priorities usable.
+    ogas += """sed_coord_advisor_sol_pressure = {
+ OR = {
+  AND = { has_variable = advisor_eh_below_expected var:advisor_eh_below_expected > 0.25 }
+  AND = { has_variable = advisor_eh_sol_change var:advisor_eh_sol_change <= -1 }
+  AND = {
+   has_variable = advisor_eh_sol_change var:advisor_eh_sol_change <= -0.25
+   has_variable = advisor_eh_sol_change_months var:advisor_eh_sol_change_months >= 6
+  }
+ }
+}
+"""
     return ogas + ('sed_coord_tools_available = {\n OR = {\n  has_variable = advisor_enabled\n'
             + options + '\n }\n}\n')

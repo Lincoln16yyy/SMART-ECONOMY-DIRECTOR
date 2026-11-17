@@ -1,4 +1,15 @@
-# Estado dos requisitos — 0.7.48
+# Estado dos requisitos — 0.7.49
+
+## Coordenação com Economy Advisor
+
+**Código:** a delegação considera o mesmo limiar de população abaixo do
+padrão esperado e de queda de padrão de vida que o painel do Advisor.
+A decisão de tesouro por endividamento mantém precedência. As opções
+anteriores continuam restauradas ao sair da coordenação.
+**Teste sintético:** caso Cuba, limiares de tendência e precedência de
+dívida passaram. **Estático:** aprovado. **Campanha:** 0.7.49 NÃO VERIFICADA.
+Em cópia do save de Cuba, entre no Automático coordenado, confira quem
+é o executor e compare o objetivo aplicado com o painel do Advisor.
 
 ## Universidades no Automático
 

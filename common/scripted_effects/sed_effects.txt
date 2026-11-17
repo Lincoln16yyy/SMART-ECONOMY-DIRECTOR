@@ -13936,6 +13936,7 @@ else = { set_variable = { name = advisor_auto_construction_enabled value = 1 } }
      set_variable = { name = sed_coord_advisor_policy value = 3 }
     }
     else_if = { limit = { OR = {
+     sed_coord_advisor_sol_pressure = yes
      any_scope_state = { OR = { var:sed_plan_grain_rank = 1 var:sed_plan_groceries_rank = 1 var:sed_plan_clothes_rank = 1 } }
      AND = { var:sed_plan_goal = 5 OR = { var:sed_plan_missing_grain = 1 var:sed_plan_missing_groceries = 1 var:sed_plan_missing_clothes = 1 } }
     } }
