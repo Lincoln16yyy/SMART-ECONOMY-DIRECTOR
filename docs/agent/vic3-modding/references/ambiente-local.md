@@ -707,3 +707,14 @@ queda de 1 ponto, ou queda de 0,25 em pelo menos seis meses. O Director
 autosave de Cuba, o Director estava em Assistido, a coordenação não
 estava ativa e o Advisor já estava em Standard of Living.
 Backup da instalação `sed_backups/mod_before_0.7.49_20261117_195833_813629`.
+
+## Plano de ascensão
+
+0.7.50 instalada com backup `sed_backups/mod_before_0.7.50_20261117_231913_804206`.
+Referências vanilla: `00_tutorial.txt` (prestígio e relações),
+`00_ai_triggers.txt` (rivalidade e interesses sobrepostos),
+`00_scripted_triggers.txt` (tratados e cláusulas defensivas),
+`00_diplomacy_values.txt` (projeção terrestre e desejo de liberdade).
+A posição é estimada por prestígio estritamente superior. Empates dividem
+posição nessa estimativa. A aceitação de aliança ou pacto deve ser
+verificada no painel diplomático. Campanha NÃO VERIFICADA.

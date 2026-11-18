@@ -1,5 +1,10 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.50, o Diário acompanha a posição estimada por prestígio, indica
+uma prioridade para subir e sugere onde procurar proteção diplomática.
+O balanço compara a situação após 12 meses e conta ações do Director
+confirmadas na fila ou pelos marcadores de orçamento.
+
 Na 0.7.49, a coordenação com o Economy Advisor considera os indicadores do
 painel de sociedade para escolher Standard of Living ou Growth. As travas
 de orçamento e a prioridade de recuperação do tesouro continuam valendo.

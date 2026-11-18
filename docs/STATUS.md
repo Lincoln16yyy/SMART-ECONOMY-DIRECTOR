@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.49
+# Estado dos requisitos — 0.7.50
 
 ## Coordenação com Economy Advisor
 

@@ -49,7 +49,7 @@ def validate(root=ROOT, game=None):
             custom[entry.key] = entry.value
     allowed_effects = {'if', 'else_if', 'else', 'limit', 'set_variable', 'remove_variable',
                        'change_variable', 'root', 'prev', 'owner', 'every_scope_state',
-                       'every_scope_building', 'ordered_scope_state', 'clear_variable_list',
+                       'every_scope_building', 'ordered_scope_state', 'every_country', 'ordered_country', 'clear_variable_list',
                        'add_to_variable_list', 'add_journal_entry', 'start_building_construction',
                        'trigger_event', 'order_by', 'max', 'check_range_bounds',
                        'set_tax_level', 'set_government_wage_level', 'set_military_wage_level',

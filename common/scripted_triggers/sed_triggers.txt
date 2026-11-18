@@ -3931,6 +3931,20 @@ sed_coord_tools_available = {
   AND = { has_variable = zw_var_develop_incorporated_states var:zw_var_develop_incorporated_states > 0 }
  }
 }
+sed_asc_ahead = {
+ NOT = { is_country_type = decentralized }
+ prestige > root.prestige
+}
+sed_asc_partner_candidate = {
+ NOT = { this = root }
+ NOT = { is_country_type = decentralized }
+ is_subject = no
+ is_at_war = no
+ army_power_projection > root.army_power_projection
+ has_overlapping_interests = root
+ relations:root >= relations_threshold:cordial
+ NOT = { has_diplomatic_pact = { who = root type = rivalry } }
+}
 # Country scope. A shortage of a good with no producer anywhere in the country,
 # with trade open. Isolationism disables World Market trade, so extra capacity
 # would be useless.

@@ -562,6 +562,43 @@ sed_disable_country = {
  remove_variable = sed_investment_wage_jobs_paper_mill
  remove_variable = sed_investment_wage_unit_paper_mill
  remove_variable = sed_investment_wage_known_paper_mill
+ remove_variable = sed_asc_rank
+ remove_variable = sed_asc_gap
+ remove_variable = sed_asc_next
+ remove_variable = sed_asc_partner
+ remove_variable = sed_asc_overlord
+ remove_variable = sed_asc_liberty
+ remove_variable = sed_asc_protection
+ remove_variable = sed_asc_priority
+ remove_variable = sed_asc_window_start
+ remove_variable = sed_asc_queue_before
+ remove_variable = sed_asc_policy_month
+ remove_variable = sed_asc_rank_base
+ remove_variable = sed_asc_rank_now
+ remove_variable = sed_asc_rank_delta
+ remove_variable = sed_asc_prestige_base
+ remove_variable = sed_asc_prestige_now
+ remove_variable = sed_asc_prestige_delta
+ remove_variable = sed_asc_balance_base
+ remove_variable = sed_asc_balance_now
+ remove_variable = sed_asc_balance_delta
+ remove_variable = sed_asc_sol_base
+ remove_variable = sed_asc_sol_now
+ remove_variable = sed_asc_sol_delta
+ remove_variable = sed_asc_army_base
+ remove_variable = sed_asc_army_now
+ remove_variable = sed_asc_army_delta
+ remove_variable = sed_asc_navy_base
+ remove_variable = sed_asc_navy_now
+ remove_variable = sed_asc_navy_delta
+ remove_variable = sed_asc_construction_count
+ remove_variable = sed_asc_construction_annual
+ remove_variable = sed_asc_tax_count
+ remove_variable = sed_asc_tax_annual
+ remove_variable = sed_asc_wage_count
+ remove_variable = sed_asc_wage_annual
+ remove_variable = sed_asc_military_wage_count
+ remove_variable = sed_asc_military_wage_annual
  remove_variable = sed_plan_count
  remove_variable = sed_plan_goal
  remove_variable = sed_fiscal_status
@@ -1160,6 +1197,7 @@ sed_monthly_update = {
    sed_refresh_diagnostics = yes
   }
   if = { limit = { has_variable = sed_coord_active } sed_refresh_national_plan = yes sed_coord_sync = yes }
+  if = { limit = { NOT = { has_variable = sed_monthly_refresh } } sed_asc_refresh = yes }
   sed_schedule_auto_event = yes
   # Advisory only: never opens a trade route, because the script cannot do it.
   sed_check_import_notices = yes
@@ -1249,6 +1287,7 @@ sed_refresh_diagnostics = {
   sed_refresh_construction_candidates = yes
   sed_refresh_supply_candidates = yes
   sed_refresh_national_plan = yes
+  sed_asc_refresh = yes
   if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }
  }
 }
@@ -3945,6 +3984,8 @@ sed_schedule_auto_retry = {
  }
 }
 sed_auto_apply_monthly = {
+ if = { limit = { NOT = { has_variable = sed_asc_window_start } } sed_asc_refresh = yes }
+ set_variable = { name = sed_asc_queue_before value = construction_queue_num_queued_government_levels }
  sed_configure_founded_industries = yes
  sed_refresh_trade_center = yes
  sed_refresh_admin = yes
@@ -3980,6 +4021,7 @@ sed_auto_apply_monthly = {
   if = { limit = { var:sed_pm_upgrade_status = 1 } set_variable = { name = sed_auto_action_status value = 23 } }
   else_if = { limit = { var:sed_pm_upgrade_status = 3 } set_variable = { name = sed_auto_action_status value = 25 } }
  }
+ sed_asc_record_actions = yes
  # Store the actual result after either direct execution or delegation.
  set_variable = { name = sed_auto_review_status value = var:sed_auto_action_status }
  set_variable = { name = sed_auto_review_year value = year }
@@ -14312,7 +14354,158 @@ sed_run_core_tools_approval = {
    remove_variable = sed_queue_levels_before
   }
  }
-}# Assisted mode: explain why there are recommendations to approve.
+}# All entry points use the player country as root.
+sed_asc_refresh = {
+ set_variable = { name = sed_asc_rank value = 1 }
+ remove_variable = sed_asc_next
+ remove_variable = sed_asc_gap
+ every_country = {
+  limit = { sed_asc_ahead = yes }
+  root = { change_variable = { name = sed_asc_rank add = 1 } }
+ }
+ ordered_country = {
+  limit = { sed_asc_ahead = yes }
+  order_by = { value = prestige multiply = -1 }
+  max = 1
+  check_range_bounds = no
+  root = {
+   set_variable = { name = sed_asc_next value = prev }
+   set_variable = { name = sed_asc_gap value = { value = prev.prestige subtract = prestige } }
+  }
+ }
+ sed_asc_diplomacy = yes
+ set_variable = { name = sed_asc_rank_now value = var:sed_asc_rank }
+ set_variable = { name = sed_asc_prestige_now value = prestige }
+ set_variable = { name = sed_asc_balance_now value = net_total_income }
+ set_variable = { name = sed_asc_sol_now value = average_sol }
+ set_variable = { name = sed_asc_army_now value = army_power_projection }
+ set_variable = { name = sed_asc_navy_now value = navy_size }
+ if = { limit = { NOT = { has_variable = sed_asc_window_start } }
+  set_variable = { name = sed_asc_window_start value = sed_live_month_key }
+  set_variable = { name = sed_asc_rank_base value = var:sed_asc_rank_now }
+  set_variable = { name = sed_asc_prestige_base value = var:sed_asc_prestige_now }
+  set_variable = { name = sed_asc_balance_base value = var:sed_asc_balance_now }
+  set_variable = { name = sed_asc_sol_base value = var:sed_asc_sol_now }
+  set_variable = { name = sed_asc_army_base value = var:sed_asc_army_now }
+  set_variable = { name = sed_asc_navy_base value = var:sed_asc_navy_now }
+  set_variable = { name = sed_asc_construction_count value = 0 }
+  set_variable = { name = sed_asc_tax_count value = 0 }
+  set_variable = { name = sed_asc_wage_count value = 0 }
+  set_variable = { name = sed_asc_military_wage_count value = 0 }
+ }
+ else_if = { limit = {
+  sed_live_month_key >= { value = var:sed_asc_window_start add = 12 }
+ }
+  set_variable = { name = sed_asc_rank_delta value = {
+   value = var:sed_asc_rank_now subtract = var:sed_asc_rank_base
+  } }
+  set_variable = { name = sed_asc_prestige_delta value = {
+   value = var:sed_asc_prestige_now subtract = var:sed_asc_prestige_base
+  } }
+  set_variable = { name = sed_asc_balance_delta value = {
+   value = var:sed_asc_balance_now subtract = var:sed_asc_balance_base
+  } }
+  set_variable = { name = sed_asc_sol_delta value = {
+   value = var:sed_asc_sol_now subtract = var:sed_asc_sol_base
+  } }
+  set_variable = { name = sed_asc_army_delta value = {
+   value = var:sed_asc_army_now subtract = var:sed_asc_army_base
+  } }
+  set_variable = { name = sed_asc_navy_delta value = {
+   value = var:sed_asc_navy_now subtract = var:sed_asc_navy_base
+  } }
+  set_variable = { name = sed_asc_rank_base value = var:sed_asc_rank_now }
+  set_variable = { name = sed_asc_prestige_base value = var:sed_asc_prestige_now }
+  set_variable = { name = sed_asc_balance_base value = var:sed_asc_balance_now }
+  set_variable = { name = sed_asc_sol_base value = var:sed_asc_sol_now }
+  set_variable = { name = sed_asc_army_base value = var:sed_asc_army_now }
+  set_variable = { name = sed_asc_navy_base value = var:sed_asc_navy_now }
+  set_variable = { name = sed_asc_construction_annual value = var:sed_asc_construction_count }
+  set_variable = { name = sed_asc_construction_count value = 0 }
+  set_variable = { name = sed_asc_tax_annual value = var:sed_asc_tax_count }
+  set_variable = { name = sed_asc_tax_count value = 0 }
+  set_variable = { name = sed_asc_wage_annual value = var:sed_asc_wage_count }
+  set_variable = { name = sed_asc_wage_count value = 0 }
+  set_variable = { name = sed_asc_military_wage_annual value = var:sed_asc_military_wage_count }
+  set_variable = { name = sed_asc_military_wage_count value = 0 }
+  set_variable = { name = sed_asc_window_start value = sed_live_month_key }
+ }
+ if = { limit = { in_default = yes }
+  set_variable = { name = sed_asc_priority value = 1 }
+ }
+ else_if = { limit = { OR = { is_at_war = yes is_diplomatic_play_committed_participant = yes is_diplomatic_play_initiator = yes is_diplomatic_play_target = yes } }
+  set_variable = { name = sed_asc_priority value = 2 }
+ }
+ else_if = { limit = { OR = { net_total_income < 0 NOT = { sed_auto_fiscal_safe = yes } } }
+  set_variable = { name = sed_asc_priority value = 3 }
+ }
+ else_if = { limit = { has_variable = sed_plan_goal OR = { var:sed_plan_goal = 2 var:sed_plan_goal = 5 var:sed_plan_goal = 6 var:sed_plan_goal = 7 var:sed_plan_goal = 9 } }
+  set_variable = { name = sed_asc_priority value = 4 }
+ }
+ else_if = { limit = { NOT = { has_technology_researched = railways } any_scope_state = { is_incorporated = yes infrastructure_delta < 0 } }
+  set_variable = { name = sed_asc_priority value = 5 }
+ }
+ else_if = { limit = { var:sed_asc_protection = 2 has_variable = sed_asc_partner }
+  set_variable = { name = sed_asc_priority value = 6 }
+ }
+ else_if = { limit = { has_variable = sed_asc_rank_delta var:sed_asc_rank_delta >= 0 var:sed_asc_army_delta <= 0 }
+  set_variable = { name = sed_asc_priority value = 7 }
+ }
+ else_if = { limit = { has_variable = sed_plan_goal var:sed_plan_goal = 1 }
+  set_variable = { name = sed_asc_priority value = 8 }
+ }
+ else = {
+  set_variable = { name = sed_asc_priority value = 9 }
+ }
+}
+
+sed_asc_diplomacy = {
+ remove_variable = sed_asc_overlord
+ remove_variable = sed_asc_liberty
+ remove_variable = sed_asc_partner
+ set_variable = { name = sed_asc_protection value = 2 }
+ if = { limit = { is_subject = yes exists = overlord }
+  set_variable = { name = sed_asc_protection value = 1 }
+  set_variable = { name = sed_asc_overlord value = overlord }
+  set_variable = { name = sed_asc_liberty value = liberty_desire }
+ }
+ else_if = { limit = { any_scope_treaty = { any_scope_article = {
+  OR = { has_type = alliance has_type = defensive_pact }
+ } } }
+  set_variable = { name = sed_asc_protection value = 3 }
+ }
+ else = {
+  ordered_country = {
+   limit = { sed_asc_partner_candidate = yes }
+   order_by = { value = relations:root add = { value = army_power_projection divide = 100 } }
+   max = 1
+   check_range_bounds = no
+   root = { set_variable = { name = sed_asc_partner value = prev } }
+  }
+ }
+}
+sed_asc_record_actions = {
+ if = { limit = { has_variable = sed_asc_queue_before
+  construction_queue_num_queued_government_levels > var:sed_asc_queue_before }
+  change_variable = { name = sed_asc_construction_count add = {
+   value = construction_queue_num_queued_government_levels subtract = var:sed_asc_queue_before
+  } }
+ }
+ remove_variable = sed_asc_queue_before
+ if = { limit = { NOT = { has_variable = sed_asc_policy_month var:sed_asc_policy_month = sed_live_month_key } }
+  set_variable = { name = sed_asc_policy_month value = sed_live_month_key }
+  if = { limit = { has_variable = sed_tax_last_change_month var:sed_tax_last_change_month = sed_live_month_key }
+   change_variable = { name = sed_asc_tax_count add = 1 }
+  }
+  if = { limit = { has_variable = sed_wage_last_change_month var:sed_wage_last_change_month = sed_live_month_key }
+   change_variable = { name = sed_asc_wage_count add = 1 }
+  }
+  if = { limit = { has_variable = sed_military_wage_last_change_month var:sed_military_wage_last_change_month = sed_live_month_key }
+   change_variable = { name = sed_asc_military_wage_count add = 1 }
+  }
+ }
+}
+# Assisted mode: explain why there are recommendations to approve.
 sed_maybe_notify_assisted_recommendation = {
  if = {
   limit = {

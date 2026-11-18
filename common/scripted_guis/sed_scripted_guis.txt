@@ -1575,3 +1575,22 @@ sed_power_needed_visible_sgui = { scope = country is_shown = { has_variable = se
 sed_trade_center_success_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_trade_center_action_status var:sed_trade_center_action_status = 1 } }
 sed_trade_center_failed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_trade_center_action_status var:sed_trade_center_action_status = 2 } }
 sed_trade_center_needed_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled sed_trade_center_needed = yes } }
+sed_asc_summary_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_rank_now } }
+sed_asc_gap_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_next has_variable = sed_asc_gap } }
+sed_asc_first_year_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_rank_now NOT = { has_variable = sed_asc_rank_delta } } }
+sed_asc_annual_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_rank_delta } }
+sed_asc_actions_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_construction_count } }
+sed_asc_advisor_visible_sgui = { scope = country is_shown = { has_variable = advisor_auto_construction_enabled has_variable = advisor_auto_construction_added_this_month } }
+sed_asc_subject_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_overlord has_variable = sed_asc_liberty } }
+sed_asc_partner_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_partner } }
+sed_asc_protected_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_protection var:sed_asc_protection = 3 } }
+sed_asc_no_partner_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_protection var:sed_asc_protection = 2 NOT = { has_variable = sed_asc_partner } } }
+sed_asc_priority_1_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_priority var:sed_asc_priority = 1 } }
+sed_asc_priority_2_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_priority var:sed_asc_priority = 2 } }
+sed_asc_priority_3_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_priority var:sed_asc_priority = 3 } }
+sed_asc_priority_4_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_priority var:sed_asc_priority = 4 } }
+sed_asc_priority_5_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_priority var:sed_asc_priority = 5 } }
+sed_asc_priority_6_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_priority var:sed_asc_priority = 6 } }
+sed_asc_priority_7_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_priority var:sed_asc_priority = 7 } }
+sed_asc_priority_8_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_priority var:sed_asc_priority = 8 } }
+sed_asc_priority_9_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_priority var:sed_asc_priority = 9 } }
