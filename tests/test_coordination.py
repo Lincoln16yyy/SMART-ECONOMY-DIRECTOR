@@ -124,6 +124,21 @@ class CoordinationTests(unittest.TestCase):
         self.assertEqual({option: c.variables.get(option, 0) for option in numeric},
                          {option: 0 for option in numeric})
 
+    def test_ogas_owns_construction_without_ceding_fiscal_policy(self):
+        c = self.c
+        c.variables['cnm_auto_construct_manager'] = 1
+        c.readings.update(in_default=True, tax_level='medium')
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_coord_executor'], 14)
+        self.assertEqual(c.variables['cnm_auto_construct_manager'], 1)
+        self.assertEqual(c.readings['tax_level'], 'high')
+        self.assertEqual(c.constructions, [])
+        self.assertEqual(self.external(), {})
+        c.variables['cnm_auto_construct_manager'] = 0
+        c.run('sed_coord_sync')
+        self.assertNotEqual(c.variables['sed_coord_executor'], 14)
+
     def test_boolean_external_flags_are_read_without_numeric_comparison(self):
         # Economy Advisor and ARoAI create these flags with a bare
         # `set_variable`, so the stored value is boolean. Comparing it to a
@@ -270,6 +285,32 @@ class CoordinationTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_coord_advisor_policy'], 2)
         c.run('sed_disable_country')
         self.assertEqual(self.advisor_policy(), {})
+
+    def test_cuba_living_standard_pressure_overrides_growth_and_restores(self):
+        c = self.c
+        c.states.clear()
+        c.variables['advisor_eh_below_expected'] = 0.46368
+        c.variables['advisor_eh_sol_change'] = 0.20859
+        c.run('sed_set_mode_automatic')
+        self.assertEqual(c.variables['sed_coord_executor'], 1)
+        self.assertEqual(c.variables['sed_coord_advisor_policy'], 2)
+        self.assertEqual(self.advisor_policy(), {'advisor_setting_sc_goal_sol': True})
+        c.run('sed_set_mode_assisted')
+        self.assertEqual(self.advisor_policy(), {})
+
+    def test_advisor_living_standard_uses_observed_trend_and_thresholds(self):
+        c = self.c
+        scope = c.country_scope()
+        trigger = c.definitions['sed_coord_advisor_sol_pressure']
+        for share, change, months, expected in (
+            (0.25, 0, 12, False), (0.26, 0, 12, True),
+            (0.0, -0.25, 5, False), (0.0, -0.25, 6, True),
+            (0.0, -1, 1, True),
+        ):
+            with self.subTest(share=share, change=change, months=months):
+                c.variables.update(advisor_eh_below_expected=share, advisor_eh_sol_change=change,
+                                   advisor_eh_sol_change_months=months)
+                self.assertEqual(c.condition(trigger, scope), expected)
 
     def test_legacy_active_coordination_captures_policy_before_first_write(self):
         c = self.c

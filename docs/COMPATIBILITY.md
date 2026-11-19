@@ -7,6 +7,86 @@ Economy Advisor e Supply Chain nesta sessão amplia o escopo dos adaptadores.
 As seções anteriores abaixo preservam a evolução histórica das versões.
 
 
+## Expansões e conversões no Victoria 3 1.15
+
+**OGAS no jogo base:** o Director lê as opções numéricas do OGAS e cede fila
+ou métodos conforme os gerenciadores ativos. O Director segue revisando
+impostos e salários. A decisão **Ativar crescimento automático** instala
+os controles em campanha e prioriza produtores elegíveis na escassez.
+Para testar o Better Politics, use o perfil Better Politics → OGAS original
+adaptado → Director → Smart Government. O perfil antigo do Chile exige sua
+lista histórica de mods.
+
+| Expansão | Combinação revisada | Evidência |
+| --- | --- | --- |
+| [Morgenröte 2.9.0 Curie](https://github.com/Morgenrote-Team/Morgenroete-Beta/releases/tag/2.9.0Curie) | Community Mod Framework 1.67.6, Morgenröte, Director 0.7.46 | Estático. Morgenröte injeta o grupo de hospitais na administração, mas mantém os IDs de construção usados pelo Director. |
+| [Better Politics Mod 2.5.47](https://github.com/Better-Politics-Mod/Better-Politics-Mod-Vic-3/releases/tag/2.5.47) | Better Politics, Director 0.7.46 | Estático. O Director usa os mesmos prédios e métodos revisados e não modifica leis. |
+| [Cold War Era (1950) 0.99](https://steamcommunity.com/sharedfiles/filedetails/?id=2988303719) | Cold War Era 0.99, edição específica do Director | Estático e Teste sintético. A conversão declara Victoria 3 1.15.1 e substitui prédios, tecnologias e métodos do vanilla. |
+
+Cada linha representa um perfil separado. O Tiger conferiu o Director com os
+arquivos `common/` do jogo mais as camadas da combinação, respeitando as
+substituições de diretório declaradas. Morgenröte e Better Politics tiveram
+os três apontamentos conhecidos de diário. A edição CWE teve zero
+apontamentos no Director. O Tiger 1.19.0 foi feito para Victoria 3 1.13.5.
+Carregamento, interface e execução em campanha seguem **NÃO VERIFICADOS**.
+
+### Edição Cold War Era
+
+Em um perfil com Victoria 3 **1.15.1**, habilite **Cold War Era (1950) 0.99**
+e **Smart Economy Director - Cold War Era**, nessa ordem. Use a decisão
+**Ativar Director para Cold War Era** e abra **Diário → Director — Cold War Era**
+para acompanhar o resultado da revisão. A edição usa um identificador próprio
+e substitui o Director normal nesse perfil.
+
+A revisão mensal pode autorizar uma ferrovia em estado com infraestrutura
+negativa, administração onde falta burocracia ou capacidade tributária, ou
+usina onde a energia local está cara. A tentativa exige capacidade de
+construção, fila privada livre, renda cobrindo a referência conservadora dos
+materiais, reserva e aceitação do prédio pelo estado. O orçamento lê os
+preços-base e todos os grupos de métodos do setor de construção na fonte CWE.
+A edição cobre essas três obras. Modernização, fundações industriais, salários,
+impostos e coordenação de construtores externos ainda precisam de adaptação.
+
+### Smart Government Advisor para Cold War Era
+
+A edição separada recomenda reformas no catálogo do Cold War Era 0.99,
+conserva os IDs estáveis, o apoio político, a checagem de viabilidade e o
+início manual da tramitação. O ajuste de cobertura fiscal usa déficit e
+reservas. Três leis ambientais com tecnologias ausentes e quatro leis do
+grupo militar com pré-requisito indefinido ficam fora das sugestões.
+Use a edição CWE no perfil Cold War Era em lugar da edição para o jogo base.
+A edição é opcional e pode ser carregada depois de Cold War Era, OGAS e
+Director. Para gerar o pacote, use `python3 -m tools.cwe_government --help`.
+
+### OGAS para Cold War Era
+
+Ao ativar crescimento, o OGAS prioriza a expansão de produtores com método
+ativo que fornece um bem em escassez no mercado e que não tenham escassez
+própria de insumos. Os filtros originais de viabilidade e a guarda de fila
+permanecem. O Director avalia impostos e salários mensalmente, mesmo com
+a fila delegada. Pausar crescimento ou desativar o Director restaura os
+níveis capturados antes das primeiras mudanças.
+
+Use **Ativar crescimento automático** para configurar os Diários do OGAS e
+ligar as rotinas de construção e métodos. A meta da fila é de 12 semanas.
+O modo bloqueia novas obras com déficit, reservas inferiores a quatro semanas
+de despesas fixas, inadimplência, pausa ou capacidade nula. **Pausar
+crescimento automático** desliga o Director e as seis opções do OGAS
+ligadas pela decisão. As obras já enfileiradas continuam.
+
+Perfil local: Cold War Era → OGAS para CWE → Director para Cold War Era.
+O OGAS instalado recebeu um patch local para o prédio de roupas e para a
+sintaxe de um trigger sem chamadas. Dentro do jogo, `Reset MOD JE` cria os
+Diários do OGAS e restaura os valores padrão. Use essa decisão na primeira
+configuração e ligue os módulos desejados no Diário.
+
+O Director lê os controles numéricos do OGAS. O gerenciador geral ativo
+assume a fila pública. Com apenas o gerenciador ferroviário ativo, o Director
+pula ferrovias e continua elegível para administração e usinas.
+
+Gere o ZIP com `python3 tools/build_mod.py --cwe "/pasta/do/Cold War Era"`.
+O pacote contém o Director adaptado. Obtenha o Cold War Era separadamente.
+
 ## Reauditoria de 2026-11-11 (código 0.7.28)
 
 Leitura direta dos arquivos de cada mod instalado na pasta de mods do usuário;

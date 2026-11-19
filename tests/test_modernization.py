@@ -156,6 +156,16 @@ class ModernizationTests(unittest.TestCase):
         c.run('sed_set_mode_assisted')
         self.assertEqual(c.variables['advisor_auto_construction_enabled'], 1)
 
+    def test_ogas_method_managers_prevent_competing_method_changes(self):
+        for flag in ('cnm_upgrade_pm_manager', 'cnm_balance_pm_manager',
+                     'cnm_workforce_employment_pm_manager'):
+            self.c.variables[flag] = 1
+            self.c.run('sed_modernize_existing_industry')
+            self.assertEqual(self.c.production_method_changes, [])
+            self.c.variables[flag] = 0
+        self.c.run('sed_modernize_existing_industry')
+        self.assertEqual(len(self.c.production_method_changes), 1)
+
     def test_existing_advisor_pm_managers_prevent_competing_method_changes(self):
         for option in ('advisor_pm_balance_enabled', 'advisor_labor_auto_enabled'):
             self.c.variables[option] = True

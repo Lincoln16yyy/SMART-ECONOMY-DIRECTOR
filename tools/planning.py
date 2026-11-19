@@ -73,10 +73,10 @@ def tax_policy_effects():
     for index, level in enumerate(TAX_LEVELS, 1):
         if index < len(TAX_LEVELS):
             branch = 'if' if index == 1 else 'else_if'
-            raise_steps.append(f'   {branch} = {{ limit = {{ tax_level = {level} }} {policy_step('set_tax_level', TAX_LEVELS[index], 'sed_tax_last_change_month', index)} }}')
+            raise_steps.append(f'   {branch} = {{ limit = {{ tax_level = {level} }} sed_tax_policy_save = yes {policy_step('set_tax_level', TAX_LEVELS[index], 'sed_tax_last_change_month', index)} }}')
         if index > 2:
             branch = 'if' if index == 3 else 'else_if'
-            lower_steps.append(f'   {branch} = {{ limit = {{ tax_level = {level} }} {policy_step('set_tax_level', TAX_LEVELS[index - 2], 'sed_tax_last_change_month', index)} }}')
+            lower_steps.append(f'   {branch} = {{ limit = {{ tax_level = {level} }} sed_tax_policy_save = yes {policy_step('set_tax_level', TAX_LEVELS[index - 2], 'sed_tax_last_change_month', index)} }}')
         branch = 'if' if index == 1 else 'else_if'
         restore_steps.append(f'  {branch} = {{ limit = {{ var:sed_tax_level_saved = {index} }} set_tax_level = {level} }}')
     return '''# Country scope. TAX_LEVELS is ordered: very_low, low, medium, high, very_high.
@@ -98,7 +98,6 @@ sed_apply_fiscal_policy = {
   }
   if = {
    limit = { OR = { var:sed_fiscal_status = 2 var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } }
-   sed_tax_policy_save = yes
 ''' + '\n'.join(raise_steps) + '''
   }
   else_if = {
@@ -107,7 +106,6 @@ sed_apply_fiscal_policy = {
     principal <= 0
     net_total_income > 0
    }
-   sed_tax_policy_save = yes
 ''' + '\n'.join(lower_steps) + '''
   }
  }
@@ -137,10 +135,10 @@ def wage_policy_effects():
         if index > 2:
             previous = TAX_LEVELS[index - 2]
             branch = 'if' if index == 3 else 'else_if'
-            cut_steps.append(f'   {branch} = {{ limit = {{ government_wage_level = {level} }} {policy_step('set_government_wage_level', previous, 'sed_wage_last_change_month', index)} }}')
+            cut_steps.append(f'   {branch} = {{ limit = {{ government_wage_level = {level} }} sed_wage_policy_save = yes {policy_step('set_government_wage_level', previous, 'sed_wage_last_change_month', index)} }}')
         if index < 3:
             branch = 'if' if index == 1 else 'else_if'
-            raise_steps.append(f'   {branch} = {{ limit = {{ government_wage_level = {level} }} {policy_step('set_government_wage_level', TAX_LEVELS[index], 'sed_wage_last_change_month', index)} }}')
+            raise_steps.append(f'   {branch} = {{ limit = {{ government_wage_level = {level} }} sed_wage_policy_save = yes {policy_step('set_government_wage_level', TAX_LEVELS[index], 'sed_wage_last_change_month', index)} }}')
         branch = 'if' if index == 1 else 'else_if'
         restore_steps.append(f'  {branch} = {{ limit = {{ var:sed_gov_wage_saved = {index} }} set_government_wage_level = {level} }}')
     return '''# Country scope; civilian government wages only, one step per monthly review.
@@ -161,7 +159,6 @@ sed_apply_wage_policy = {
   }
   if = {
    limit = { OR = { var:sed_fiscal_status = 3 var:sed_fiscal_status = 4 } }
-   sed_wage_policy_save = yes
 ''' + '\n'.join(cut_steps) + '''
   }
   else_if = {
@@ -170,7 +167,6 @@ sed_apply_wage_policy = {
     principal <= 0
     net_total_income > 0
    }
-   sed_wage_policy_save = yes
 ''' + '\n'.join(raise_steps) + '''
   }
  }
@@ -312,6 +308,20 @@ sed_coord_fiscal_safe = {
 '''
 
 
+def fiscal_status_update():
+    return '''  set_variable = { name = sed_fiscal_status value = 1 }
+  if = { limit = { in_default = yes } set_variable = { name = sed_fiscal_status value = 4 } }
+  else_if = {
+   limit = { OR = {
+    AND = { net_total_income < 0 gold_reserves < { value = net_total_income multiply = -4 } }
+    AND = { principal > 0 OR = { credit <= 0 principal > { value = credit multiply = 0.9 } } }
+   } }
+   set_variable = { name = sed_fiscal_status value = 3 }
+  }
+  else_if = { limit = { sed_auto_fiscal_safe = yes net_total_income < 0 } set_variable = { name = sed_fiscal_status value = 5 } }
+  else_if = { limit = { NOT = { sed_auto_fiscal_safe = yes } } set_variable = { name = sed_fiscal_status value = 2 } }'''
+
+
 def effects(actions, dependencies, buildings):
     supply = [name for name in actions if name not in ('railway', 'construction')]
     result = ['''sed_refresh_national_plan = {
@@ -336,18 +346,7 @@ def effects(actions, dependencies, buildings):
   if = { limit = { net_total_income < 0 }
    set_variable = { name = sed_reserve_runway value = { value = var:sed_reserve_spare divide = { value = net_total_income multiply = -1 } } }
   }
-  set_variable = { name = sed_fiscal_status value = 1 }
-  if = { limit = { in_default = yes } set_variable = { name = sed_fiscal_status value = 4 } }
-  else_if = {
-   limit = { OR = {
-    AND = { net_total_income < 0 gold_reserves < { value = net_total_income multiply = -4 } }
-    AND = { principal > 0 OR = { credit <= 0 principal > { value = credit multiply = 0.9 } } }
-   } }
-   set_variable = { name = sed_fiscal_status value = 3 }
-  }
-  else_if = { limit = { sed_auto_fiscal_safe = yes net_total_income < 0 } set_variable = { name = sed_fiscal_status value = 5 } }
-  else_if = { limit = { NOT = { sed_auto_fiscal_safe = yes } } set_variable = { name = sed_fiscal_status value = 2 } }
-''']
+''' + fiscal_status_update() + '\n']
     for name in lists(actions):
         result.append(f'  clear_variable_list = {name}')
     for name in supply:

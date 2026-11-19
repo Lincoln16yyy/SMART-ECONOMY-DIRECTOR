@@ -1,4 +1,122 @@
-# Estado dos requisitos — 0.7.42
+# Estado dos requisitos — 0.7.51
+
+## Coordenação com Economy Advisor
+
+**Código:** a delegação considera o mesmo limiar de população abaixo do
+padrão esperado e de queda de padrão de vida que o painel do Advisor.
+A decisão de tesouro por endividamento mantém precedência. As opções
+anteriores continuam restauradas ao sair da coordenação.
+**Teste sintético:** caso Cuba, limiares de tendência e precedência de
+dívida passaram. **Estático:** aprovado. **Campanha:** 0.7.49 NÃO VERIFICADA.
+Em cópia do save de Cuba, entre no Automático coordenado, confira quem
+é o executor e compare o objetivo aplicado com o painel do Advisor.
+
+## Universidades no Automático
+
+**Código:** enfileira um nível abaixo do teto de inovação. Ambas as filas
+devem estar vazias. Exige saldo positivo, guarda fiscal e de materiais,
+papel disponível e estado incorporado com infraestrutura e mão de obra.
+A coordenação reserva a revisão para o Director quando a universidade é
+elegível. Prioridades de oferta, infraestrutura, administração e energia
+têm preferência.
+
+**Teste sintético:** cinco testes específicos. **Estático:** validador passou.
+Tiger apontou apenas os três campos de Diário 1.15 já registrados.
+Instalação conferida com jogo fechado. **Campanha:** NÃO VERIFICADA.
+Em cópia de save com inovação abaixo do teto, papel e orçamento adequados,
+use Automático, deixe as filas vazias e avance até a revisão mensal.
+A fila pública deve receber um nível e o Diário deve confirmar a inclusão.
+
+## Expansões na série 1.15
+
+**Economy Advisor:** 1.0.0 substituiu o OGAS no perfil Better Politics, com
+backup e jogo fechado. Carregamento e migração do save do Marrocos NÃO
+VERIFICADOS. Variáveis de automação do OGAS podem persistir em saves antigos.
+
+**Debug:** atalho separado instalado. A inicialização gerou logs na pasta privada de debug. Console e conquistas em campanha NÃO VERIFICADOS.
+
+**Auto-Recruit:** cópia local `z.260606.1` ativada no perfil Better Politics.
+Ativação conferida no Hydra. Campanha NÃO VERIFICADA.
+
+**Auto-Diplomacy:** cópia local `z.251212.1` ativada depois dos quatro mods do
+perfil Better Politics. Perfil salvo com backup. Campanha NÃO VERIFICADA.
+
+**OGAS no jogo base:** perfil ativo com Better Politics, OGAS adaptado e
+versões normais do Director e Smart Government. 451 testes sintéticos,
+build e validação estática aprovados. Execução em campanha ainda NÃO VERIFICADA.
+
+**Smart Government para Better Politics:** edição 1.0.1 ativa no perfil
+após Better Politics, OGAS e Director. Validador aprovou 231 leis em 40
+grupos. O ranking exige os requisitos de tramitação e ganho de mérito.
+Compara a posição dos grupos de interesse sobre a proposta e a lei vigente,
+ponderada por influência, e dá peso dobrado à chance inicial. A votação
+efetiva depende de condições calculadas pelo BPM após o início da reforma.
+Campanha NÃO VERIFICADA.
+
+Publicada no repositório Smart Government como prévia `v1.0.1-bpm`, no commit `f0f9daf` da branch `codex/better-politics-1.0.1`. O ZIP é idêntico ao instalado localmente.
+
+**CWE fiscal e escassez:** instalado. Snapshot/restauração fiscal, prioridade
+a produtor ativo com insumos e limite mensal cobertos por testes focados.
+Tiger sem erros nos dois pacotes. Carregamento, campanha e save/reload
+ainda NÃO VERIFICADOS.
+
+**Smart Government para CWE:** edição separada, com 211 leis em 60 grupos.
+Validador do projeto passou. O Tiger aponta os três campos conhecidos de
+Diário da versão 1.15. Instalado e reativado com proteção para posições vazias no ranking.
+O ranking em campanha registrou erros de comparação. A causa do
+fechamento em 11/01/1950 segue NÃO VERIFICADA. O reteste com a edição de
+leis desativada avançou até 15/01 sem erros do ranking.
+
+**Crescimento automático:** decisão instalada e testada no sintético. Ela liga
+os gerenciadores do OGAS, usa uma meta de 12 semanas e verifica orçamento
+antes de continuar a fila. Tiger sem erros novos. Campanha NÃO VERIFICADA.
+
+**OGAS para CWE:** patch local corrige as referências ao prédio de roupas e
+retira um trigger inválido que não tinha chamadas. Tiger 1.19.0 retornou
+zero erros, 923 avisos e cinco dicas. A montagem do perfil está confirmada.
+Sete testes sintéticos confirmam construção e coordenação do Director.
+Execução conjunta em campanha permanece NÃO VERIFICADA.
+
+**Instalação local:** `content_load.json` ativa Cold War Era 0.99, OGAS para CWE e
+Director CWE 0.7.46, nessa ordem. A revisão do Cold War Era foi atualizada para
+`4d301a80`, correspondente à fonte usada para gerar o Director. Os dois
+declaram 1.15.1, e o jogo local está na 1.15.0. A sessão chegou à campanha de 1950, com erros de script e GUI da conversão.
+A edição CWE agora inclui Diário, validado pelo Tiger e por cinco testes
+sintéticos. Diário e execução em campanha ainda NÃO VERIFICADOS.
+O perfil anterior e a cópia CWE para 1.14.5 estão preservados em backup.
+
+- **Estático:** Director normal com Morgenröte 2.9.0 + CMF e com Better
+  Politics 2.5.47. Edição CWE testada pelo Tiger contra os scripts do
+  Cold War Era 0.99. Combinações, versões e limites em `COMPATIBILITY.md`.
+- **Código e Teste sintético:** 439 testes aprovados, incluindo a edição CWE com seleção mensal de ferrovia,
+  administração ou usina e custo de materiais derivado da conversão.
+- **Carregou/Campanha: NÃO VERIFICADOS.** A instalação local é 1.15.0.
+  A revisão CWE analisada declara 1.15.1.
+
+## Retomada da construção no Automático na 0.7.46
+
+- **Código:** após bloqueio por fila privada ou pausa, o evento existente
+  volta a conferir em sete dias. Enquanto a trava persiste no mesmo mês,
+  só lê as condições de espera. Quando a trava sai ou o mês vira, a
+  revisão completa aplica as guardas e o limite mensal de tentativa.
+- **Teste sintético:** 436 testes aprovados.
+- **Estático:** gerador e validador aprovados. Tiger 1.19.0 com 999 avisos
+  e os três apontamentos conhecidos de diário.
+- **Campanha:** cronograma real e persistência do evento após save/reload
+  ainda NÃO VERIFICADOS. Roteiro específico em `MANUAL_RUNTIME_TEST.md`.
+
+## Automático na 0.7.45
+
+- **Código:** a captura de imposto e salário civil só ocorre antes de um
+  passo aplicável. Os snapshots de saves anteriores continuam legíveis e
+  preservam a restauração já pendente. O Diário separa a situação atual do
+  resultado registrado e informa o bloqueio específico da guarda de orçamento.
+- **Teste sintético:** 435 testes aprovados, incluindo ajuste manual após
+  revisão sem mudança e exclusividade dos bloqueios de orçamento.
+- **Estático:** gerador e validador local aprovados. Tiger 1.19.0 reportou 999
+  avisos e os três apontamentos conhecidos de campos de diário.
+- **Carregou/Campanha: NÃO VERIFICADOS.** O roteiro 0.7.45 em
+  `MANUAL_RUNTIME_TEST.md` cobre save/reload, restauração e leitura dos bloqueios.
 
 ## Protocolo de evidência adotado
 
@@ -11,7 +129,9 @@ Restam três campos do diário apontados como desconhecidos, presentes no vanill
 1.15 e documentados no jogo. O Tiger declara suporte até 1.13.5. Os avisos de
 formatação e de OR de um item permanecem visíveis. A documentação exportada
 continua ausente. Carregou e Campanha das leituras fiscais, da prontidão e do
-novo retorno salarial e da pontuação de PMs segue NÃO VERIFICADO. Teste sintético — 433 testes aprovados. A 0.7.42 acrescenta a distância em ouro ao texto do status 22 e remove resíduos mortos do status 21/executor 12, sem mudar limiares. O evento consultivo de importação e o fallback de Centro de Comércio (0.7.30) seguem NÃO VERIFICADOS na engine.
+novo retorno salarial e da pontuação de PMs segue NÃO VERIFICADO. Teste sintético — 433 testes aprovados. A 0.7.42 acrescenta a distância em ouro ao texto do status 22 e remove resíduos mortos do status 21/executor 12; a 0.7.43 alinha o bloqueio atual de orçamento (`sed_auto_current_budget`). A 0.7.44 acrescenta eventos didáticos no modo Assistido (por objetivo, com motivo e opções de revisar/adiar/silenciar, sem enfileirar) — Carregou/Campanha NÃO VERIFICADOS. A auditoria encontrou o efeito de disparo sem nenhuma chamada, portanto os avisos são inalcançáveis no fluxo atual. O evento consultivo de importação segue NÃO VERIFICADO na engine. Há relato histórico da obra de Centro de Comércio no Paraguai com 0.7.36 (commit `edfbc81`), com save/reload, efeito na capacidade e segunda revisão ainda pendentes de verificação.
+
+O inventário da auditoria e os casos de snapshot fiscal, orçamento e leitura de fila estão em `PHASE_LOG.md`.
 
 Esta matriz acompanha o briefing e os esclarecimentos do jogador sobre um
 coordenador que define objetivos e orienta Economy Advisor e Supply Chain.
@@ -28,7 +148,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Impostos e gastos | Nível de imposto, salário civil e, desde a 0.7.5, salários militares durante crise operacional na paz, com limite mensal, snapshot e restauração | Leitura das rotinas aceita no menu da engine. Observar alterações em campanha e calibrar limiares |
 | Coordenação Advisor/Supply Chain | Adaptadores de sete opções de construção, quatro de objetivo/orçamento e três de política do Supply Chain, com restauração | Verificar efeitos reais, save/reload e compatibilidade das versões instaladas |
 | Ativar somente caminho necessário | Automático usa rotinas específicas para administração, tributação, energia e, preferencialmente, setores de construção. Desde a 0.7.31, sem ferramenta externa detectada, o executor próprio amplia a administração pública para os objetivos 6 e 7 (burocracia negativa, estado acima da capacidade tributária), um nível por mês e só no estado que excede a capacidade quando o objetivo é 7 | Oferta elegível pode usar alvo direto do plano. Nas rotas externas, a seleção continua sob o algoritmo da ferramenta escolhida. Desde a 0.7.32 o objetivo 9 também tem executor próprio (usina elétrica, 400 pontos, só em estado com energia 20% acima da base e com a tecnologia exigida pelo próprio jogo); com Supply Chain detectado, o caminho externo continua. Conferir em campanha as obras de administração e de usina, e o efeito na burocracia, na capacidade tributária e na oferta de energia |
-| Construção própria automática | Desde a 0.7.13 inclui bens civis caros com demanda superior à oferta e margem material positiva. Consome a primeira prioridade, revalida guardas e limita tentativa mensal. Desde a 0.6.25 atua com a fila pública ocupada; só a fila privada precisa estar vazia. Desde a 0.6.26 expande também o setor de construção quando ele lidera o plano e agenda uma segunda revisão no mês após bloqueio por fila privada ou pausa. Desde a 0.7.1 funda a primeira ferrovia em estado com déficit e sem ferrovia | Inclusão direta e persistência ainda exigem evidência de campanha. Espera por obra e transição após fim da escassez tiveram confirmação visual parcial. A fila longa recebe referência de trabalho e materiais desde a 0.7.6; desde a 0.7.23 o painel compara essa referência com a duração restante medida pela engine (`construction_queue_government_duration`, em faixas de 2 a 260 semanas). Progresso já executado, autoria e custo incremental preciso continuam pendentes. **Agenda da segunda revisão agora observada na engine:** o usuário confirmou que o mod constrói Trade Centers após o fix 0.7.36. Agenda da segunda revisão não observada na engine |
+| Construção própria automática | Desde a 0.7.13 inclui bens civis caros com demanda superior à oferta e margem material positiva. Consome a primeira prioridade, revalida guardas e limita tentativa mensal. Desde a 0.6.25 atua com a fila pública ocupada; só a fila privada precisa estar vazia. Desde a 0.6.26 expande também o setor de construção quando ele lidera o plano e agenda uma segunda revisão no mês após bloqueio por fila privada ou pausa. Desde a 0.7.1 funda a primeira ferrovia em estado com déficit e sem ferrovia | Inclusão direta e persistência ainda exigem evidência de campanha. Espera por obra e transição após fim da escassez tiveram confirmação visual parcial. A fila longa recebe referência de trabalho e materiais desde a 0.7.6; desde a 0.7.23 o painel compara essa referência com a duração restante medida pela engine (`construction_queue_government_duration`, em faixas de 2 a 260 semanas). Progresso já executado, autoria e custo incremental preciso continuam pendentes. A segunda revisão permanece NÃO VERIFICADA. O relato da 0.7.36 registra a construção de Centro de Comércio no Paraguai |
 | Evitar executor próprio em paralelo | Executor próprio exclusivo para primeira prioridade de oferta na 0.6.15; opções externas suspensas | ARoAI detectado suspende delegação, autoexpansões nativas continuam sem controle |
 | Controle da construção privada externa | Desde a 0.7.27, o painel lê as doze restrições do Controllable Private Construction (`zw_var_*`, somente `has_variable`) e mostra quais estão ligadas, inclusive no bloqueio por fila privada. O Director não escreve essas variáveis nem injeta `can_build_private`/`can_build_government`: isso colidiria com a injeção do próprio mod no mesmo prédio | Exibir a seção e apontar o diário não muda a engine. Se a intervenção no investimento estrangeiro fizer o jogo recusar uma obra pública, a recusa deve aparecer como falha de ação; NÃO VERIFICADO em campanha. A autoexpansão nativa continua fora de controle quando o mod não está ativo |
 | Desativar e devolver opções | Restaura presença e valor original das onze opções, com testes de idempotência | Limites fiscais preservados por mês. Confirmar restauração após save/reload e atualização de versão |
@@ -39,7 +159,7 @@ Implementação, teste sintético e confirmação de campanha são evidências s
 | Métodos de produção | Configuração inicial em fundações acompanhadas desde a 0.7.7. Seleção inicial e, desde a 0.7.9, modernização contínua do grupo principal para gargalos, por saída e margem material estimada a preços-base, com reserva mensal de insumos. Desde a 0.7.10, recuperação de escassez por método com menor dependência de insumos e piso de saída nominal. A 0.7.17 fornece a unidade salarial observada aos filtros de oferta; a 0.7.18 desconta a folha da mudança na pontuação de modernização e recuperação | Confirmar na engine. Preços reais pendentes. Qualificações e salários por profissão não têm primitiva legível (sondagem Tiger 1.19.0: `pop_qualifications`, `state_pop_qualifications`, `wages`, `wage_rate`, `average_wage` são tokens desconhecidos); o proxy é `occupancy` + `has_failed_hires`, e desde a 0.7.26 a unidade salarial é por família de prédio com fallback nacional. Desde a 0.7.28 a modernização cede o prédio que o Auto-Apply PMs já administra (`zw_var_auto_pm_building_<prédio>` e os botões de grupo de fazendas/plantações), em vez de disputar o mesmo grupo. Automação dos demais grupos pendente. A ordem dos pares e a configuração inicial seguem apenas materiais |
 | Economia militar | Custos, participação das despesas, guerra e cinco bens monitorados. Expansões de armas, artilharia e munição na 0.6.14, com bônus de prioridade em guerra | Confirmar leituras na engine, identificar consumo nacional, planejar indústria bélica, modernização e coordenação do recrutamento |
 | Leis, guerra e diplomacia | Fora das mutações econômicas implementadas. Desde a 0.7.20 o painel declara a fronteira e reconhece o Smart Government Advisor instalado (`sg_enabled`), sem repetir recomendações de leis | Mantidas sob responsabilidade dos módulos e decisões previstos pelo briefing. Conferir a exibição com os dois mods na engine |
-| Comércio exterior | Limitação de engine confirmada: `create_trade_route` foi removido na 1.9 (Tiger 1.19.0) e `add_trade_route_level`, `cancel_trade_route` e `establish_trade_route` são tokens desconhecidos. Desde a 0.7.21, `sed_pulse.2..13` avisa em evento quando a escassez não tem candidata local, com prazo e três opções; desde a 0.7.22 a descrição mostra os pedidos de compra e venda do mercado. Desde a 0.7.30, quando o bem em escassez não tem produtor no país (`var:sed_plan_missing_<bem> = 1`) e nenhum estado pode receber a fundação, o Automático amplia ou funda um Centro de Comércio para comprar capacidade (`TRADE_CENTER_POINTS = 100`), sem abrir rota, sem tarifa/subvenção e sem construir sob Isolacionismo ou em estado com infraestrutura negativa | Abrir rota continua ação do jogador. Tarifa e subvenção também não são scriptáveis (sondagem 2026-11-12: 13 nomes candidatos responderam `unknown token`), então o sistema de presença/vantagem da 1.9+ não pode ser automatizado por script. Abrir rota continua ação do jogador. Conferir em campanha se o nível aumenta a capacidade usada pelo Mercado Mundial, a entrada na fila do governo, a reserva de 100 pontos e o comportamento após save/reload. Desde a 0.7.29 a descrição ensina o caminho da 1.9+ com termos conferidos no jogo instalado (Centro de Comércio, capacidade de comércio, tarifa/subvenção, Transferência de Bens, `country_disallow_trade_bool` do Isolacionismo). Confirmado no jogo (0.7.36): o Automático amplia/funda Centro de Comércio quando bem em escassez sem produtor local (`var:sed_plan_missing_<bem> = 1`). Nível aumenta capacidade do Mercado Mundial e entra na fila do governo. O prazo de 3 e cooldown de 6/12/24 meses seguem o modelo vanilla. Desde a 0.7.36, o fix de `has_variable` resolveu conflito com Economy Advisor/Supply Chain já ativados. |
+| Comércio exterior | Limitação de engine confirmada: `create_trade_route` foi removido na 1.9 (Tiger 1.19.0) e `add_trade_route_level`, `cancel_trade_route` e `establish_trade_route` são tokens desconhecidos. Desde a 0.7.21, `sed_pulse.2..13` avisa em evento quando a escassez não tem candidata local, com prazo e três opções; desde a 0.7.22 a descrição mostra os pedidos de compra e venda do mercado. Desde a 0.7.30, quando o bem em escassez não tem produtor no país (`var:sed_plan_missing_<bem> = 1`) e nenhum estado pode receber a fundação, o Automático amplia ou funda um Centro de Comércio para comprar capacidade (`TRADE_CENTER_POINTS = 100`), sem abrir rota, sem tarifa/subvenção e sem construir sob Isolacionismo ou em estado com infraestrutura negativa | Abrir rota continua ação do jogador. Tarifa e subvenção também não são scriptáveis (sondagem 2026-11-12: 13 nomes candidatos responderam `unknown token`), então o sistema de presença/vantagem da 1.9+ não pode ser automatizado por script. Abrir rota continua ação do jogador. Conferir em campanha se o nível aumenta a capacidade usada pelo Mercado Mundial, a entrada na fila do governo, a reserva de 100 pontos e o comportamento após save/reload. Desde a 0.7.29 a descrição ensina o caminho da 1.9+ com termos conferidos no jogo instalado (Centro de Comércio, capacidade de comércio, tarifa/subvenção, Transferência de Bens, `country_disallow_trade_bool` do Isolacionismo). Relato de Campanha (0.7.36): o Automático construiu Centro de Comércio no Paraguai. Efeito na capacidade comercial, distinção entre fundação e ampliação, save/reload, prazo e cooldown permanecem NÃO VERIFICADOS. |
 | Haiti, país rico e crise | Cenários sintéticos fiscais e de seleção | Campanhas registradas e comparáveis permanecem pendentes |
 | Crescimento em campanha longa | Ainda sem evidência | Medir PIB, SoL, emprego, dívida, reservas e diversificação durante vários anos |
 | Localização | Desde a 0.7.29 o arquivo inglês recebe a coluna em inglês. Até a 0.7.28 a bandeira do idioma era reutilizada como rótulo de laço (`for policy, pt, en` e `for good, pt, en`), então `localization('english')` gerava português. Também desde a 0.7.29 parágrafos usam `\n` escapado, porque quebra real invalida a entrada | Conferir no jogo a exibição nos dois idiomas. Não havia teste de idioma antes da 0.7.29 |
@@ -65,3 +185,13 @@ A revisão de calendário, política fiscal e acompanhamento de variantes está 
 
 O README e esta matriz foram confrontados com o gerador da 0.7.30. A lista de lacunas herdada da 0.6.26 estava desatualizada em três pontos: métodos de produção (configuração inicial desde a 0.7.7, modernização contínua desde a 0.7.9, recuperação por insumo desde a 0.7.10 e cessão ao Auto-Apply PMs desde a 0.7.28), fundação de prédios (indústria desde a 0.7.0, primeira ferrovia desde a 0.7.1, Centro de Comércio desde a 0.7.30) e salários militares (controlados em crise na paz desde a 0.7.5). O catálogo tem doze bens desde a 0.7.14, e o livro de resultados cobre os doze, a ferrovia e o setor de construção. Continuam fora: comércio exterior por rota, leis, imposto de consumo, gasto discricionário, dívida, recrutamento e consumo real das tropas, custo incremental real, identidade de projeto, qualificações e construtores nativos.
 `python3 tools/build_mod.py --check` confirmou sincronia e 394 testes sintéticos passaram; nenhuma mudança de comportamento nesta sincronização.
+
+## Recuperação de fila — 0.7.51
+
+**Código:** dois intervalos mensais delegados ao Advisor com fila pública
+vazia permitem uma tentativa direta por candidato elegível. Mantém
+guardas fiscais e de materiais e o limite mensal. Fila ocupada zera a
+contagem. Pausa e fila privada suspendem a observação.
+**Teste sintético:** quatro testes passaram, incluindo devolução ao
+Advisor após enfileiramento. **Estático:** validado. Campanha NÃO
+VERIFICADA. Obras podem terminar entre as leituras de fila.

@@ -72,7 +72,9 @@ class Country:
                              construction_queue_government_duration=0,
                              construction_queue_num_queued_private_levels=0,
                              military_expenses=0, military_expenses_share=0, is_at_war=False,
-                             bureaucracy=0, year=1836, month=0, is_player=True, in_default=False,
+                             prestige=0, army_power_projection=0, navy_size=0, is_subject=False,
+                             is_country_type="recognized",
+                             bureaucracy=0, country_innovation=0, max_innovation=0, year=1836, month=0, is_player=True, in_default=False,
                              tax_level='medium', government_wage_level='medium', military_wage_level='medium',
                              is_diplomatic_play_committed_participant=False,
                              is_diplomatic_play_initiator=False, is_diplomatic_play_target=False,
@@ -96,6 +98,7 @@ class Country:
                                     'market_goods_sell_orders': 1000,
                                     'market_goods_has_goods_shortage': False} for good in MARKET_GOODS}
         self.scheduled_events = []
+        self.other_countries = []
 
     def country_scope(self):
         scope = dict(self.readings)
@@ -110,6 +113,14 @@ class Country:
         return scope.setdefault('variables', {})
 
     def lookup(self, name, scope):
+        if name == 'prev':
+            return scope['__previous_scope__']
+        if name.startswith('prev.') and not name.startswith('prev.var:'):
+            return self.lookup(name[5:], scope['__previous_scope__'])
+        if name.startswith('root.'):
+            return self.lookup(name[5:], self.country_scope())
+        if name == 'relations_threshold:cordial':
+            return 20
         if name.startswith('prev.var:'):
             return self.variables_for(scope['__previous_scope__'])[name[len('prev.var:'):]]
         if name == 'fixed_income' and name not in self.readings:
@@ -173,6 +184,11 @@ class Country:
             if entry.key == 'owner':
                 result += self.number(entry.value, self.country_scope())
                 continue
+            if entry.key.startswith('b:') and isinstance(entry.value, list):
+                target = self.building(scope, entry.key[2:])
+                if target is not None:
+                    result += self.number(entry.value, target)
+                continue
             if entry.key == 'market':
                 result += self.number(entry.value, {'goods': self.market_goods})
                 continue
@@ -232,6 +248,20 @@ class Country:
             return self.condition(entry.value, scope)
         if key == 'OR':
             return any(self.single_condition(e, scope) for e in entry.value)
+        if key == 'is_country_type':
+            return scope.get(key) == entry.value
+        if key == 'this' and entry.value == 'root':
+            return scope.get('__country__') is self
+        if key == 'exists':
+            return scope.get(entry.value) is not None
+        if key == 'has_overlapping_interests':
+            return scope.get(key, False)
+        if key == 'has_diplomatic_pact':
+            return child(entry.value, 'type') in scope.get('pacts', [])
+        if key in ('any_scope_treaty', 'any_scope_article'):
+            return any(self.condition(entry.value, item) for item in scope.get(key, []))
+        if key == 'has_type':
+            return scope.get(key) == entry.value
         if key == 'market':
             return self.condition(entry.value, {'goods': self.market_goods})
         if key.startswith('sg:'):
@@ -318,7 +348,9 @@ class Country:
                     target = self.variables_for(scope)[target[4:]]
                 self.variable_lists.setdefault(name, []).append(target)
             elif key == 'root':
-                self.execute(value, self.country_scope(), previous=scope)
+                country = self.country_scope()
+                country['__previous_scope__'] = scope
+                self.execute(value, country, previous=scope)
             elif key == 'prev':
                 if previous is None:
                     raise AssertionError('prev used without a previous scope')
@@ -339,12 +371,18 @@ class Country:
                 for target in scope.get('buildings', []):
                     if self.condition(limit, target):
                         self.execute(rest, target, previous=scope)
-            elif key == 'ordered_scope_state':
+            elif key == 'every_country':
+                limit = child(value, 'limit')
+                for target in self.other_countries:
+                    if self.condition(limit, target):
+                        self.execute([e for e in value if e.key != 'limit'], target, previous=scope)
+            elif key in ('ordered_scope_state', 'ordered_country'):
                 limit = next((e.value for e in value if e.key == 'limit'), [])
                 order = next((e.value for e in value if e.key == 'order_by'), [])
                 maximum = int(self.number(next((e.value for e in value if e.key == 'max'), '0'), scope))
                 rest = [e for e in value if e.key not in ('limit', 'order_by', 'max', 'check_range_bounds')]
-                candidates = [target for target in self.states if self.condition(limit, target)]
+                targets = self.states if key == 'ordered_scope_state' else self.other_countries
+                candidates = [target for target in targets if self.condition(limit, target)]
                 candidates.sort(key=lambda target: self.number(order, target), reverse=True)
                 if maximum:
                     candidates = candidates[:maximum]

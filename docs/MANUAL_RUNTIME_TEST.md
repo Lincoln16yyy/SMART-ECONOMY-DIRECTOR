@@ -1,5 +1,74 @@
 # Plano de teste da campanha — interface 0.5.3
 
+## Campanhas com expansões da série 1.15
+
+**OGAS no jogo base:** em campanha nova, use **Ativar crescimento
+automático**. Confira uma obra elegível depois do pulso semanal do OGAS,
+uma revisão fiscal mensal do Director e nenhum projeto direto do Director
+enquanto o gerenciador de construção do OGAS estiver ligado. Repita com
+escassez de um bem com produtor elegível e com a fila na meta de 12 semanas.
+
+### Fiscal e escassez no CWE
+
+1. Em cópia de uma campanha CWE, anote imposto e salários antes de ativar o
+   crescimento. Em crise fiscal, avance até a revisão. Confira no orçamento
+   o movimento dos níveis e se os salários militares são protegidos em guerra.
+2. Salve e recarregue no mesmo mês. Confira que não houve uma segunda
+   alteração. Use **Pausar crescimento automático** e compare os níveis
+   restaurados aos valores anotados antes de ativar.
+3. Com o OGAS ativo e fila abaixo da meta, escolha um mercado com escassez
+   e dois prédios elegíveis, um produtor com método ativo e insumos livres.
+   Veja se a primeira expansão semanal atende ao bem em falta. Repita após
+   aliviar a escassez e confira as novas obras no log e na fila.
+
+- **Morgenröte e Better Politics:** faça uma campanha nova por perfil de
+  `COMPATIBILITY.md`. Ative o Director, deixe o Automático rodar e confira
+  se uma obra elegível entra na fila e se o pulso também mantém os sistemas
+  do outro mod. Compare o log antes e depois da revisão.
+- **Cold War Era 0.99:** abra uma campanha nova no Victoria 3 1.15.1.
+  Escolha um país com reserva e renda para cobrir os materiais, estado com
+  infraestrutura negativa e ferrovia permitida. Ative a edição CWE, deixe
+  passar uma revisão e confira uma ferrovia na fila pública. Salve/recarregue
+  no mesmo mês e confira o limite. Repita com déficit de burocracia ou
+  energia cara, e com a construção pausada. Guarde a fila e o trecho do
+  `error.log` que mencione `sed_cwe_`.
+
+## 0.7.46 — retomar construção no Automático
+
+1. Abra uma cópia de `paraguai_1837_02_01.v3` com os mods exigidos pelo save.
+   Escolha uma situação com obra elegível, caixa saudável e nenhuma tentativa
+   própria no mês. Pause a construção antes da revisão regular.
+2. Depois da revisão bloqueada, aguarde mais de sete dias com a construção
+   pausada. Salve e recarregue. Retome a construção e avance até sete dias.
+   Esperado: se as guardas passarem, o Director adiciona uma obra à fila pública.
+3. Repita com fila privada ocupada, deixando-a esvaziar só depois da primeira
+   conferência semanal. Ao recarregar após a inserção, avance no mesmo mês
+   e confira que o Director não adiciona uma segunda obra.
+4. Em outra cópia, mantenha a trava ao virar o mês e confira que a revisão
+   completa ainda ocorre. Repita saindo do Automático durante a espera e
+   confirme que o evento pendente não enfileira obras.
+
+## 0.7.45 — Automático, restauração e orçamento
+
+Use uma cópia do save e o pacote da 0.7.45.
+
+1. Com imposto muito alto e salário civil baixo em crise fiscal, deixe passar
+   uma revisão. Confira que os dois níveis permanecem. Ajuste os níveis
+   manualmente, salve/recarregue no mesmo mês e mude para Manual
+   antes de outra revisão. Esperado: os ajustes ficam como o jogador deixou.
+2. Em outra cópia, comece em níveis que permitam ajuste e deixe passar uma
+   revisão. Registre os níveis original e aplicado, fila pública e mês.
+   Salve/recarregue e confira a fila após a revisão programada. Esperado:
+   dentro do mesmo mês, nenhuma segunda tentativa quando já houve uma
+   tentativa própria. Ao sair do Automático, os níveis capturados voltam.
+3. Num país com renda abaixo da referência semanal que passe pela guarda
+   fiscal geral, compare a mensagem do Diário com a dívida e as reservas. Se houver dívida, espere a indicação
+   de dívida. Se só faltarem reservas, espere a diferença em ouro. Pause a
+   construção e confirme que aparece a pausa. Confira que a última revisão
+   continua exibindo o resultado anterior até a próxima revisão.
+4. Registre o save e o mês, capturas da fila, orçamento e Diário, e o trecho
+   novo de `logs/error.log` que mencione `sed_`.
+
 ## Evidência parcial recebida em 10/11/2026
 
 Capturas da campanha de março–maio de 1842 mostram escassez de ferro, dois

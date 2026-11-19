@@ -20,6 +20,18 @@ def option_on(option):
     return f'AND = {{ has_variable = {option} var:{option} > 0 }}'
 
 
+OGAS_CONSTRUCTION_OPTIONS = (
+    'cnm_auto_construct_manager',
+    'cnm_auto_railway_manager',
+    'cnm_auto_construction_sector_manager',
+)
+OGAS_PM_OPTIONS = (
+    'cnm_upgrade_pm_manager',
+    'cnm_balance_pm_manager',
+    'cnm_workforce_employment_pm_manager',
+)
+
+
 OPTIONS = (
     ('advisor', 'advisor_auto_construction_enabled', 1),
     ('chains', 'zw_var_expand_building', 0),
@@ -156,11 +168,15 @@ sed_coord_sync = {{
   set_variable = {{ name = sed_coord_executor value = 0 }}
   set_variable = {{ name = sed_coord_advisor_policy value = 0 }}
   if = {{ limit = {{ has_variable = aroai_autobuild }} set_variable = {{ name = sed_coord_executor value = 5 }} }}
+  else_if = {{ limit = {{ sed_ogas_construction_active = yes }} set_variable = {{ name = sed_coord_executor value = 14 }} }}
   else_if = {{ limit = {{ sed_pm_upgrade_month_limit_reached = yes }}
    set_variable = {{ name = sed_coord_executor value = 13 }}
   }}
   else_if = {{ limit = {{ sed_coord_fiscal_safe = yes NOT = {{ in_default = yes }} is_construction_paused = no }}
    if = {{ limit = {{ var:sed_plan_goal = 2 sed_direct_fiscal_safe = yes sed_direct_supply_priority_exists = yes }}
+    set_variable = {{ name = sed_coord_executor value = 11 }}
+   }}
+   else_if = {{ limit = {{ sed_watch_recovery_candidate = yes }}
     set_variable = {{ name = sed_coord_executor value = 11 }}
    }}
    else_if = {{ limit = {{ var:sed_plan_waiting = 1 }}
@@ -189,6 +205,9 @@ sed_coord_sync = {{
    else_if = {{ limit = {{ OR = {{ var:sed_plan_goal = 6 var:sed_plan_goal = 7 var:sed_plan_goal = 9 }} }}
     set_variable = {{ name = sed_coord_executor value = 9 }}
    }}
+   else_if = {{ limit = {{ sed_university_ready = yes }}
+    set_variable = {{ name = sed_coord_executor value = 11 }}
+   }}
    else_if = {{ limit = {{ has_variable = sed_coord_advisor_known OR = {{ var:sed_plan_goal = 1 var:sed_plan_goal = 2 var:sed_plan_goal = 3 var:sed_plan_goal = 5 var:sed_plan_goal = 8 }} }}
     {enable_option('advisor')}
     set_variable = {{ name = sed_coord_executor value = 1 }}
@@ -204,6 +223,7 @@ sed_coord_sync = {{
      set_variable = {{ name = sed_coord_advisor_policy value = 3 }}
     }}
     else_if = {{ limit = {{ OR = {{
+     sed_coord_advisor_sol_pressure = yes
      any_scope_state = {{ OR = {{ var:sed_plan_grain_rank = 1 var:sed_plan_groceries_rank = 1 var:sed_plan_clothes_rank = 1 }} }}
      AND = {{ var:sed_plan_goal = 5 OR = {{ var:sed_plan_missing_grain = 1 var:sed_plan_missing_groceries = 1 var:sed_plan_missing_clothes = 1 }} }}
     }} }}
@@ -226,5 +246,22 @@ def triggers():
     # Off options stay at 0 in the other mods' saves; only an enabled option
     # (or the advisor mod flag itself) offers real coordination.
     options = '\n'.join(f'  {option_on(option)}' for option in option_names)
-    return ('sed_coord_tools_available = {\n OR = {\n  has_variable = advisor_enabled\n'
+    ogas = ''
+    for name, flags in [('construction', OGAS_CONSTRUCTION_OPTIONS), ('pm', OGAS_PM_OPTIONS)]:
+        enabled = '\n'.join(f'  {option_on(flag)}' for flag in flags)
+        ogas += f'sed_ogas_{name}_active = {{\n OR = {{\n{enabled}\n }}\n}}\n'
+    # Same population-share and observed-trend thresholds as the Advisor's
+    # Society card. Missing readings keep the Director's own priorities usable.
+    ogas += """sed_coord_advisor_sol_pressure = {
+ OR = {
+  AND = { has_variable = advisor_eh_below_expected var:advisor_eh_below_expected > 0.25 }
+  AND = { has_variable = advisor_eh_sol_change var:advisor_eh_sol_change <= -1 }
+  AND = {
+   has_variable = advisor_eh_sol_change var:advisor_eh_sol_change <= -0.25
+   has_variable = advisor_eh_sol_change_months var:advisor_eh_sol_change_months >= 6
+  }
+ }
+}
+"""
+    return ogas + ('sed_coord_tools_available = {\n OR = {\n  has_variable = advisor_enabled\n'
             + options + '\n }\n}\n')

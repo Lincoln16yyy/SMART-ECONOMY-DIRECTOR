@@ -430,3 +430,296 @@ efeito instalado e nos dois idiomas da localização. Reabrir o jogo: PENDENTE.]
 `descriptor.mod` = `version="0.7.42"`. Status 22 mostra `sed_build_budget_gold_gap`
 e resíduos do status 21/executor 12 removidos dos artefatos instalados. Reabrir
 o jogo: PENDENTE.]
+
+
+[instalação da 0.7.44: jogo fechado, 14 arquivos, backup em
+`sed_backups/mod_before_0.7.44_20261114_014619_131213`, ordem de mods inalterada,
+`descriptor.mod` = `version="0.7.44"`, ZIP
+`dist/smart-economy-director-0.7.44.zip`. Inclui 0.7.43 (`sed_build_budget_gold_gap`
+no bloqueio atual `sed_auto_current_budget`) e 0.7.44 (eventos didáticos do
+Assistido `sed_pulse.21`–`29`, por objetivo, sem enfileirar; cooldown
+`sed_assist_notice_month`). Reabrir o jogo e validar em campanha: PENDENTE.]
+
+## Auditoria da 0.7.44 (2026-11-14)
+
+`build_mod.py --check` e `validate.py --game` aprovados com os caminhos acima.
+Tiger 1.19.0 executado na 0.7.44 com 995 avisos e três erros
+`unknown-field` de diário (`activation_description`, `disable_evaluation`,
+`outcome`), campos registrados no vanilla 1.15. Jogo e instalação não foram
+acionados nesta auditoria. `git log --all` falha por duas referências de
+checkpoint com objetos ausentes. `git log HEAD origin/main` foi usado para
+o inventário dos commits.
+
+## Verificação local da 0.7.45 (2026-11-15)
+
+Pacote criado por `python3 tools/package_mod.py` em
+`dist/smart-economy-director-0.7.45.zip` e conferido com `unzip -t`.
+No comando Tiger acima, a 0.7.45 produziu 999 avisos e os três apontamentos
+de campos de diário da auditoria anterior. Instalação, carregamento e
+save/reload da 0.7.45 pendentes.
+
+## Verificação local da 0.7.46 (2026-11-15)
+
+436 testes sintéticos aprovados. Gerador e validador local aprovados, Tiger
+1.19.0 com 999 avisos e os três apontamentos conhecidos de diário. ZIP
+`dist/smart-economy-director-0.7.46.zip` conferido com `unzip -t`. Instalado
+com jogo fechado, 14 arquivos verificados, ordem de mods preservada e backup
+`sed_backups/mod_before_0.7.46_20261115_164836_978933`. O save
+`paraguai_1837_02_01.v3` existe na pasta de saves. A versão ainda não foi
+aberta no jogo.
+
+## Fontes para compatibilidade de expansões
+
+Cópias públicas temporárias em `/tmp/sed-expansions`. Cold War Era 0.99
+em `cwe`, commit `4d301a80d962bc9bad2d00fbe5780aca22c52a41`, declara 1.15.1.
+Morgenröte 2.9.0 em `mr-source`, commit
+`cf951921b670feddcc32ba36f287b0d466abc80e`. Community Mod Framework 1.67.6
+em `cmf`, commit `962ee3a730e5b4bfbd5d61949da6bec2432fb0d8`.
+Better Politics 2.5.47 em `bpm/better-politics-mod`, commit
+`b80a4074bf93dbf2f04dd70f73abe0f39a3a9a91`. O executável local continua em
+1.15.0. Nenhuma dessas expansões foi instalada na pasta de mods.
+
+## Instalação local dos ZIPs de expansões (2026-11-15)
+
+Com jogo fechado, a edição completa do Better Politics 2.5.47 (1.15.*,
+2.016 arquivos) e Cold War Era (1950) 0.99 (1.14.5, 3.095 arquivos) foram
+extraídos de `~/Downloads` para a pasta `mod` do Hydra. Os descritores
+externos seguem as versões dos metadados originais. O perfil ativo foi
+preservado byte a byte, com cópia em
+`sed_backups/profile_before_expansions_20261115_171135_870373`. A instalação
+local do jogo é 1.15.0. O ZIP baixado do Cold War Era pertence a uma revisão
+diferente da analisada para a edição adaptada do Director. Jogo e launcher
+não foram abertos para validar carregamento.
+
+A edição `Smart Economy Director - Cold War Era` 0.7.46 foi instalada com
+jogo fechado. Os 10 arquivos conferem byte a byte com o ZIP e o perfil
+ativo foi preservado, com cópia em
+`sed_backups/profile_before_director_cwe_20261115_171452_086586`.
+Carregamento com a combinação local de versões permanece NÃO VERIFICADO.
+
+## Perfil ativo Cold War Era (2026-11-15)
+
+Atualizada a conversão local para a revisão oficial `4d301a80d962bc9bad2d00fbe5780aca22c52a41`
+(0.99 para 1.15.1). Conferidos 3.121 arquivos e os scripts contra a cópia
+auditada. Com o jogo fechado, `content_load.json` foi configurado com
+somente Cold War Era seguido pelo Director CWE. Cópia do perfil anterior e
+da conversão anterior em `sed_backups/profile_before_cwe_play_20261115_172151_124926`.
+Executável local 1.15.0. Carregamento NÃO VERIFICADO.
+
+## Diário do Director para Cold War Era (2026-11-15)
+
+O log `dedicated_server.log` da sessão anterior registrou ticks de 1950.1.1.
+`debug.3.log` registrou `on_river` desconhecido na conversão, e `gui.log`
+registrou `REPLACE_OR_CREATE:texticon` no arquivo de ícones do Cold War Era.
+Não foram localizadas linhas `sed_cwe_` nos logs da sessão anterior.
+Instalada a edição com Diário, 11 arquivos conferidos, backup em
+`sed_backups/director_cwe_before_journal_20261115_174046_318978`. A lista
+ativa continua Cold War Era seguido do Director CWE. A pasta da conversão
+carece de IDs vanilla usados por ARoAI, Supply Chain e Auto-Apply PMs, por
+exemplo `building_tooling_workshop`. A renderização do Diário e a execução de
+obra em campanha ainda precisam de confirmação.
+
+## OGAS para Cold War Era
+
+Cópia instalada em `mod/3770300244_OGAS_for_CWE`, versão `2026-07-23.2`,
+metadados para 1.13.*. Tiger 1.19.0 com a sobreposição temporária do CWE
+0.99 produziu 154 erros, dos quais 153 são referências ao prédio
+`building_textile_mill` ausente. A revisão está fora do perfil ativo.
+
+## OGAS adaptado e ativo (2026-11-15)
+
+Patch local em `mod/3770300244_OGAS_for_CWE`: referências ao tipo
+`building_textile_mill` migradas para `building_clothes_factory`; trigger
+`cnm_state_building_construction_sector_unit_profit_predict` inválido e
+sem referências removido. Tiger com CWE ativo: zero erros, 923 avisos e cinco
+dicas. Versões originais do OGAS e Director e lista anterior em
+`sed_backups/cwe_before_ogas_20261115_174652_158303`. O jogo estava fechado
+e a ordem ativa é Cold War Era, OGAS para CWE, Director CWE. Campanha
+com a combinação ainda NÃO VERIFICADA.
+
+## Crescimento automático no perfil Cold War Era
+
+Patch gerado por `python3 -m tools.cwe_growth <pasta OGAS original> <destino>`
+e instalado no OGAS com jogo fechado e verificação byte a byte. Backup
+`sed_backups/ogas_before_growth_20261115_175201_124850`. Perfil preservado.
+Sete testes do Director e dois da decisão de crescimento passaram. Tiger
+com as camadas do CWE e Director registrou 923 avisos e cinco dicas do OGAS,
+zero erros. Carregamento e comportamento em campanha NÃO VERIFICADOS.
+
+## Smart Government para Cold War Era
+
+Gerado em `dist/smart-government-advisor-cwe.zip` com
+`tools/cwe_government.py`, usando a cópia instalada do Smart Government,
+o jogo base local e o CWE 0.99 ativo. O validador encontrou 211 leis e
+60 grupos, sem erros. Tiger com as camadas temporárias retornou três
+apontamentos de Diário da engine 1.15. A pasta ativa do Hydra e o perfil
+não foram modificados.
+
+Edição CWE instalada e ativada após Cold War Era, OGAS e Director, com o jogo
+fechado. Os 19 arquivos conferem byte a byte com o ZIP. Perfil anterior em
+`sed_backups/profile_before_government_cwe_20261115_181155_999299`.
+Carregamento em campanha ainda NÃO VERIFICADO.
+
+## Fiscal e escassez no perfil Cold War Era
+
+Director e OGAS atualizados com jogo fechado, verificação byte a byte e
+backup em `sed_backups/cwe_before_fiscal_shortage_20261115_182559_610593`.
+Perfil de quatro mods preservado. Doze testes focados aprovados.
+Tiger sem erros no Director e OGAS. Carregamento, reação à escassez em
+campanha e restauração após save/reload ainda NÃO VERIFICADOS.
+
+## Isolamento do fechamento no Uruguai — 2026-11-15
+
+Sessão do Uruguai às 18h29, encerrada no tick de 11/01/1950. Diretório de
+crash criado com `meta.yml` vazio. `error.log` e `error.1.log` registraram
+2.040 chamadas ao ranking `sg_law_rank.txt` na localização dos erros e
+nove ao alerta do OGAS. Sem causa definitiva. O perfil agora carrega Cold
+War Era, OGAS e Director, com Smart Government temporariamente desativado.
+Logs e perfil anterior em
+`sed_backups/cwe_crash_isolation_20261115_183148_637793`. O save
+`uruguai_1950_01_09.v3` permanece intacto. Repetir até passar 11/01.
+
+Reteste às 18h40 com o conselheiro fora do perfil cruzou 11/01 e chegou a
+15/01/1950, confirmado em `dedicated_server.log`. Os logs correntes
+`error.log` e `game.log` não registraram erros em `sg_law_rank.txt`.
+A lista ativa do Hydra foi preservada durante o reteste.
+
+Smart Government CWE corrigido e reativado no perfil de quatro mods. O
+gerador protege as 633 comparações de pontuação e exige ID válido para
+contar ou deslocar vaga. Teste sintético da função de pontuação passou,
+validador aprovou 211 leis, Tiger manteve os três apontamentos de Diário
+conhecidos. 20 arquivos conferidos após instalação com jogo fechado.
+Backup `sed_backups/cwe_before_government_rank_fix_20261115_184521_574837`.
+Reteste após reativação pendente: carregar cópia do Uruguai, reavaliar
+leis no Diário e avançar além de 11/01.
+
+## Perfil de teste Better Politics
+
+Com Victoria 3 fechado, `content_load.json` passou a carregar Better
+Politics 2.5.47, Smart Economy Director 0.7.46 e Smart Government Advisor
+1.0.0, nessa ordem. O perfil Cold War Era anterior está em
+`sed_backups/profile_before_better_politics_20261115_195413_016841`. Os mods
+e saves da conversão permanecem instalados. O OGAS para jogo base é o
+item Workshop 3092955121. Carregamento do perfil novo NÃO VERIFICADO.
+
+## OGAS adaptado para o jogo base
+
+Fonte pública do autor, commit `43a503f2205ba9edc71073c3390c3160178b5e5a`,
+de agosto de 2026. A versão publicada mais recentemente no Workshop é
+posterior a essa cópia. O gerador `tools/vanilla_ogas.py` remove duplicatas
+e um trigger sem chamadas, e prepara os controles de crescimento.
+Tiger com Better Politics e Director: zero erros, 405 avisos e cinco dicas
+para o OGAS. Perfil Better Politics → OGAS → Director 0.7.47 → Smart
+Government instalado e conferido com jogo fechado. Backup
+`sed_backups/vanilla_before_ogas_20261115_215420_477432`. A lista histórica
+do Chile conserva os 11 mods disponíveis em
+`sed_backups/profile_before_cwe_play_20261115_172151_124926/content_load.json`.
+A execução em campanha do perfil novo ainda NÃO VERIFICADA.
+
+## Smart Government para Better Politics
+
+`python3 -m tools.bpm_government --government "<Smart Government original>"
+--game "<pasta game>" --bpm "<Better Politics>"` gera
+`dist/smart-government-advisor-bpm.zip`. A base mescla os requisitos
+das leis vanilla com os de Better Politics 2.5.47. O cálculo de apoio
+usa a variação de posição em relação à lei vigente, de -2 a +2 por
+posição, ponderada pela influência e filtrada por `bpm_ig_is_marginal`.
+A chance inicial vem da engine. O ranking não usa os votos que o BPM
+só calcula durante a tramitação. Referências locais em
+`common/scripted_effects/bpm_law_enactment_effects.txt`,
+`common/scripted_triggers/bpm_ig_triggers.txt` e
+`common/script_values/bpm_law_enactment_values.txt` do BPM.
+
+Edição 1.0.1 instalada com jogo fechado após Better Politics, OGAS e
+Director. 20 arquivos conferidos. Backup do perfil em
+`sed_backups/profile_before_government_bpm_20261115_223049_817448`.
+Validador aprovou 231 leis em 40 grupos. Tiger 1.19.0 não apontou erros
+nos novos valores e triggers do ranking. A cópia temporária apontou
+três campos de Diário e a definição GUI `button_icon_round_action` da
+interface original. Carregamento e campanha NÃO VERIFICADOS. Em
+campanha, abra Diário → Smart Government Advisor, reavalie as leis e
+compare as sugestões com as opções da tela de leis antes de tramitar.
+
+Publicada no repositório Smart Government como prévia `v1.0.1-bpm`, no commit `f0f9daf` da branch `codex/better-politics-1.0.1`. O ZIP é idêntico ao instalado localmente.
+
+## Auto-Diplomacy no perfil Better Politics
+
+Workshop 3432933121, pasta local `mod/3432933121_Auto-Diplomacy_And_Advanced_Subject_Management`.
+Metadados locais `z.251212.1`. Conferida contra o arquivo público do autor
+`zzzwww404/Vic3-Mod-Auto-Diplomacy-And-Advanced-Subject-Management`, commit
+`1484b83c8eb2dc1062869dd81223701da97627cf`. Desconsiderando CRLF, a cópia
+local difere apenas na decisão e na configuração de fixação do diário.
+Ativada depois dos quatro mods do perfil com o jogo fechado. Backup em
+`sed_backups/profile_before_auto_diplomacy_20261115_225446_896759`.
+Tiger apontou um alias presente no jogo base, um escopo em ação de
+vassalos e um ramo sem alteração de valor. Campanha NÃO VERIFICADA.
+Para checar, use a decisão Diplomatic Affairs e o botão Auto-Diplomacy
+no diário que ela abre. Após um pulso, confira a ação Improve Relations.
+
+## Auto-Recruit no perfil Better Politics
+
+Workshop 3279201462, pasta `mod/3279201462_Auto-Recruit_One-Click_Recruit_Commanders`,
+versão local `z.260606.1`. Ativado no fim do perfil com o jogo fechado.
+Backup em `sed_backups/profile_before_auto_recruit_20261116_105447_887441`.
+Ativação conferida no JSON. Campanha NÃO VERIFICADA. Para testar, use a
+decisão Recruit Commanders e ligue o automático no diário que ela abre.
+
+## Atalho separado para debug
+
+`~/.local/share/applications/victoria3-debug.desktop` chama
+`~/.local/bin/victoria3-debug` pelo UMU-Proton-10.0-4. Usa
+`-debug_mode` (declarado em `launcher/launcher-settings.json` do jogo)
+e `-userdir` com caminho separado. Prefixo e dados em
+`~/.local/share/victoria3-debug/`. A inicialização escreveu
+`user-data/logs/system.log` no caminho isolado. Console e conquistas em
+campanha NÃO VERIFICADOS. Para testar um save, copie-o primeiro para
+`user-data/save games/`. Para continuar a campanha de conquistas, use
+o botão Jogar normal do Hydra e o save original.
+
+## Troca do OGAS pelo Economy Advisor
+
+Economy Advisor 1.0.0 (`3778129206_Economy_Advisor`, metadados `1.15.*`)
+assumiu a posição do OGAS no `content_load.json`, com o jogo fechado.
+Backup `sed_backups/profile_before_economy_advisor_20261116_185503_490601`.
+OGAS permanece disponível no disco. Campanha NÃO VERIFICADA.
+No save do Marrocos, o OGAS já estava ativo. Seus interruptores `cnm_*`
+podem permanecer no save e ser detectados pelo Director. O fluxo limpo
+para esse save é pausar o crescimento no perfil anterior, gravar em outro
+slot e restaurar o perfil novo antes de ativar o Economy Advisor.
+
+## Universidades no Automático
+
+`game/common/buildings/07_government.txt` usa `country_innovation < max_innovation`
+no escopo de país para a agenda de educação. A universidade custa 400 pontos
+em `data/queued_building_costs.json` e os métodos em
+`game/common/production_methods/07_government.txt` justificam 1.000 vagas
+por nível e a leitura de papel. A mão de obra do Director é estimada.
+0.7.48 instalada com o jogo fechado. Ordem preservada. Backup em
+`sed_backups/mod_before_0.7.48_20261117_193202_634815`. Campanha NÃO VERIFICADA.
+
+## Pressão de padrão de vida do Economy Advisor
+
+O painel `gui/journal_entry_widgets/advisor_economy.gui` indica padrão de
+vida se `advisor_eh_below_expected > 0.25` ou `advisor_eh_sol_status > 1`.
+A tendência vem de `common/script_values/advisor_core_values.txt`:
+queda de 1 ponto, ou queda de 0,25 em pelo menos seis meses. O Director
+0.7.49 lê essas variáveis do Advisor apenas quando existem. No último
+autosave de Cuba, o Director estava em Assistido, a coordenação não
+estava ativa e o Advisor já estava em Standard of Living.
+Backup da instalação `sed_backups/mod_before_0.7.49_20261117_195833_813629`.
+
+## Plano de ascensão
+
+0.7.50 instalada com backup `sed_backups/mod_before_0.7.50_20261117_231913_804206`.
+Referências vanilla: `00_tutorial.txt` (prestígio e relações),
+`00_ai_triggers.txt` (rivalidade e interesses sobrepostos),
+`00_scripted_triggers.txt` (tratados e cláusulas defensivas),
+`00_diplomacy_values.txt` (projeção terrestre e desejo de liberdade).
+A posição é estimada por prestígio estritamente superior. Empates dividem
+posição nessa estimativa. A aceitação de aliança ou pacto deve ser
+verificada no painel diplomático. Campanha NÃO VERIFICADA.
+
+## Recuperação de construção 0.7.51
+
+Instalada com backup `sed_backups/mod_before_0.7.51_20261118_212435_131111`.
+A observação usa fila e executor em meses distintos. Campanha pendente.

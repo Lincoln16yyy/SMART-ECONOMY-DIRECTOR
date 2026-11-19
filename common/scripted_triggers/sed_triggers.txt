@@ -2681,7 +2681,7 @@ sed_auto_executor_safe = {
  NOT = { has_variable = sed_mode_assisted }
  OR = {
   NOT = { has_variable = sed_coord_active }
-  AND = { has_variable = sed_coord_active var:sed_coord_executor = 11 var:sed_plan_goal = 2 sed_direct_supply_priority_exists = yes }
+  AND = { has_variable = sed_coord_active var:sed_coord_executor = 11 OR = { AND = { var:sed_plan_goal = 2 sed_direct_supply_priority_exists = yes } sed_university_ready = yes sed_watch_recovery_candidate = yes } }
  }
  has_variable = sed_mode_automatic
  NOT = { sed_auto_month_limit_reached = yes }
@@ -2691,6 +2691,34 @@ sed_auto_executor_safe = {
  NOT = { sed_competing_builder_configured = yes }
  sed_direct_fiscal_safe = yes
  sed_direct_budget_safe = yes
+}
+# University employment is 500 base jobs plus 500 academia jobs per level.
+sed_university_candidate = {
+ is_incorporated = yes
+ infrastructure_delta >= 0
+ can_construct_building = building_university
+ sed_state_labor_available >= 1000
+ NOT = { b:building_university ?= { level > 0 occupancy < 0.9 } }
+ NOT = { sg:paper ?= { state_goods_pricier >= 0.2 } }
+}
+sed_university_ready = {
+ NOT = { sed_auto_month_limit_reached = yes }
+ construction_queue_num_queued_government_levels = 0
+ construction_queue_num_queued_private_levels = 0
+ net_total_income > 0
+ country_innovation < max_innovation
+ market = { mg:paper ?= {
+  market_goods_sell_orders > 0
+  market_goods_has_goods_shortage = no
+  market_goods_pricier < 0.2
+ } }
+ NOT = { sed_direct_supply_priority_exists = yes }
+ NOT = { any_scope_state = { OR = {
+  sed_railway_candidate_eligible = yes
+  sed_admin_candidate_eligible = yes
+  sed_power_candidate_eligible = yes
+ } } }
+ any_scope_state = { sed_university_candidate = yes }
 }
 # A missing producer keeps its own objective and blocks the growth lane only
 # while some state can actually host the industry. Iron with no deposit and a
@@ -2744,6 +2772,7 @@ sed_develop_core = {
 }
 sed_competing_builder_configured = {
  OR = {
+  sed_ogas_construction_active = yes
   has_variable = advisor_auto_construction_enabled
   AND = { has_variable = zw_var_expand_building var:zw_var_expand_building > 0 }
   AND = { has_variable = zw_var_more_construction_sectors var:zw_var_more_construction_sectors > 0 }
@@ -3861,6 +3890,30 @@ sed_founding_input_paper_mill_safe = {
  sed_input_headroom_wood < { value = sed_founding_input_paper_mill_wood multiply = 1.25 }
  }
 }
+sed_ogas_construction_active = {
+ OR = {
+  AND = { has_variable = cnm_auto_construct_manager var:cnm_auto_construct_manager > 0 }
+  AND = { has_variable = cnm_auto_railway_manager var:cnm_auto_railway_manager > 0 }
+  AND = { has_variable = cnm_auto_construction_sector_manager var:cnm_auto_construction_sector_manager > 0 }
+ }
+}
+sed_ogas_pm_active = {
+ OR = {
+  AND = { has_variable = cnm_upgrade_pm_manager var:cnm_upgrade_pm_manager > 0 }
+  AND = { has_variable = cnm_balance_pm_manager var:cnm_balance_pm_manager > 0 }
+  AND = { has_variable = cnm_workforce_employment_pm_manager var:cnm_workforce_employment_pm_manager > 0 }
+ }
+}
+sed_coord_advisor_sol_pressure = {
+ OR = {
+  AND = { has_variable = advisor_eh_below_expected var:advisor_eh_below_expected > 0.25 }
+  AND = { has_variable = advisor_eh_sol_change var:advisor_eh_sol_change <= -1 }
+  AND = {
+   has_variable = advisor_eh_sol_change var:advisor_eh_sol_change <= -0.25
+   has_variable = advisor_eh_sol_change_months var:advisor_eh_sol_change_months >= 6
+  }
+ }
+}
 sed_coord_tools_available = {
  OR = {
   has_variable = advisor_enabled
@@ -3876,6 +3929,34 @@ sed_coord_tools_available = {
   AND = { has_variable = zw_var_labor_threshold var:zw_var_labor_threshold > 0 }
   AND = { has_variable = zw_var_more_construction_sectors_gold_reserves var:zw_var_more_construction_sectors_gold_reserves > 0 }
   AND = { has_variable = zw_var_develop_incorporated_states var:zw_var_develop_incorporated_states > 0 }
+ }
+}
+sed_asc_ahead = {
+ NOT = { is_country_type = decentralized }
+ prestige > root.prestige
+}
+sed_asc_partner_candidate = {
+ NOT = { this = root }
+ NOT = { is_country_type = decentralized }
+ is_subject = no
+ is_at_war = no
+ army_power_projection > root.army_power_projection
+ has_overlapping_interests = root
+ relations:root >= relations_threshold:cordial
+ NOT = { has_diplomatic_pact = { who = root type = rivalry } }
+}
+sed_watch_recovery_candidate = {
+ has_variable = sed_watch_idle var:sed_watch_idle >= 2
+ has_variable = sed_coord_active has_variable = sed_coord_advisor_known
+ construction_queue_num_queued_government_levels = 0
+ construction_queue_num_queued_private_levels = 0
+ OR = {
+  any_scope_state = { sed_admin_candidate_eligible = yes }
+  any_scope_state = { sed_power_candidate_eligible = yes }
+  any_scope_state = { sed_trade_center_candidate_eligible = yes }
+  any_scope_state = { sed_core_wood_eligible = yes }
+  any_scope_state = { sed_core_iron_eligible = yes }
+  any_scope_state = { sed_core_tools_eligible = yes }
  }
 }
 # Country scope. A shortage of a good with no producer anywhere in the country,

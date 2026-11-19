@@ -1,5 +1,44 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.51, o Director acompanha intervalos mensais delegados ao Economy
+Advisor com a fila pública vazia. Após dois intervalos, pode reservar uma
+tentativa direta de obra elegível sob as guardas fiscais e de materiais.
+O Diário mostra a trava observada ou a recuperação reservada.
+
+Na 0.7.50, o Diário acompanha a posição estimada por prestígio, indica
+uma prioridade para subir e sugere onde procurar proteção diplomática.
+O balanço compara a situação após 12 meses e conta ações do Director
+confirmadas na fila ou pelos marcadores de orçamento.
+
+Na 0.7.49, a coordenação com o Economy Advisor considera os indicadores do
+painel de sociedade para escolher Standard of Living ou Growth. As travas
+de orçamento e a prioridade de recuperação do tesouro continuam valendo.
+
+Na 0.7.48, o Automático pode enfileirar um nível de universidade quando a
+inovação está abaixo do teto, há papel e mão de obra e o orçamento cobre a
+obra. A prioridade é avaliada também com Economy Advisor coordenado.
+
+A 0.7.47 permite que o OGAS gerencie a fila pública e os métodos. O Director
+continua revisando impostos e salários. Consulte o perfil de jogo base em
+[compatibilidade](docs/COMPATIBILITY.md).
+
+Para expansões, consulte os [perfis de compatibilidade](docs/COMPATIBILITY.md).
+O Cold War Era (1950) tem uma edição própria do Diretor com orçamento e
+construção pública automáticos baseados nos dados da conversão.
+
+Na 0.7.46, o Automático verifica a cada sete dias se a fila privada esvaziou
+ou se a construção foi retomada. Quando a trava sai, recalcula o plano e tenta
+a obra elegível pelo limite mensal vigente.
+
+Na 0.7.45, o Automático guarda os níveis de imposto e salário civil apenas
+quando vai alterá-los. O Diário distingue ausência de capacidade, estimativa
+ainda indisponível, método sem estimativa, dívida e falta de reservas.
+O resultado da última revisão permanece separado da situação atual.
+
+Na 0.7.44, o modo Assistido passa a disparar eventos didáticos quando há recomendações: cada aviso explica por que o Director recomenda aquele objetivo (gargalo de infraestrutura, escassez de bens, capacidade de construção, finanças, indústria ausente, burocracia, tributação, diversificação ou energia cara) e orienta abrir o Diário para aprovar a recomendação item a item. O evento não enfileira nada sozinho; as opções permitem revisar, adiar ou silenciar o aviso por alguns meses.
+
+Na 0.7.43, o bloqueio atual de orçamento (`sed_auto_current_budget`) também passa a mostrar quanto ouro falta para a guarda liberar, alinhado ao plano e ao status 22.
+
 Na 0.7.42, o status de orçamento sem cobertura passa a mostrar quanto ouro falta para a guarda liberar (`sed_build_budget_gold_gap`) e os resíduos mortos do antigo status 21/executor 12 foram removidos dos artefatos.
 
 Na 0.7.41, o painel do orçamento diz quanto ouro falta até a reserva exigida pela
@@ -323,7 +362,7 @@ python3 -m unittest discover -s tests -v
 python3 tools/package_mod.py
 ```
 
-O pacote fica em `dist/smart-economy-director-0.7.42.zip`. A instalação local
+O pacote fica em `dist/smart-economy-director-0.7.43.zip`. A instalação local
 pode ser atualizada com jogo fechado, backup e conferência dos arquivos pelo
 comando documentado em [INSTALL.md](docs/INSTALL.md).
 
