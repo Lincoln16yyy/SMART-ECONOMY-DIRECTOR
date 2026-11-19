@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.52
+# Estado dos requisitos — 0.7.53
 
 ## Coordenação com Economy Advisor
 
@@ -215,3 +215,21 @@ com restauração ao sair do Automático. **Estático:** validador aprovado.
 **Campanha:** NÃO VERIFICADA. Save de Toscana anterior não contém os
 marcadores de observação da 0.7.51. Para verificar, use cópia de save,
 observe obra própria concluída com ocupação baixa e confira o diagnóstico.
+
+## Resultados de investimento — 0.7.53
+
+**Código:** compara níveis mensais de madeira, ferro, ferramentas,
+papel, alimentos e roupas. Expansão observada fica acompanhada enquanto
+há contratação limitada, insumos ausentes ou excesso de oferta com
+preço abaixo da base. A diversificação delegada de objetivo 8 espera
+a recuperação. Outros objetivos continuam com as prioridades existentes.
+A primeira leitura cria a referência, sem atribuir autoria à obra.
+
+**Teste sintético:** primeira construção após referência, recuperação
+de insumos, mercado comprador, retorno da delegação, deduplicação mensal
+e limpeza. Dez testes focados passaram junto às rotinas 0.7.51/0.7.52.
+**Estático:** aprovado. Tiger mantém três campos de Diário conhecidos.
+**Campanha:** NÃO VERIFICADA. Saves locais disponíveis são anteriores
+às versões recentes. Em cópia de save, registre uma leitura, conclua
+uma expansão e avance um mês. Confira o diagnóstico no Diário e o
+objetivo aplicado na coordenação.

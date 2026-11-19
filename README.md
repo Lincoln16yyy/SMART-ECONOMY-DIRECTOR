@@ -1,5 +1,10 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.53, o Director observa expansões de madeira, ferro, ferramentas,
+papel, alimentos e roupas entre revisões. O Diário identifica contratação,
+insumos e oferta excedente. A diversificação delegada pode aguardar a
+recuperação desses investimentos.
+
 Na 0.7.52, o Director acompanha contratação e insumos de obras próprias
 de madeira, ferro e ferramentas. A expansão direta desses produtores
 aguarda recuperação. Obras cobertas pelo saldo, sem dívida, admitem

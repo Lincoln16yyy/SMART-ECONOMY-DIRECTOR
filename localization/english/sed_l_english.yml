@@ -728,4 +728,6 @@
  sed_watch_3:0 "Recurring empty queue. Private construction blocks direct recovery."
  sed_watch_4:0 "Recurring empty queue. Construction is paused."
  sed_watch_5:0 "Recurring empty queue. The Director reserved a direct recovery attempt under material-budget and monthly limits. Check the review outcome."
+ sed_outcome_summary:0 "Observed expansions since the previous review (wood, iron, tools, paper, food and clothes): [JournalEntry.GetCountry.MakeScope.Var('sed_outcome_observed').GetValue|0]. Staffing constrained: [JournalEntry.GetCountry.MakeScope.Var('sed_outcome_staff').GetValue|0]; input shortages: [JournalEntry.GetCountry.MakeScope.Var('sed_outcome_inputs').GetValue|0]; excess supply and low price: [JournalEntry.GetCountry.MakeScope.Var('sed_outcome_market').GetValue|0]. Observed levels can come from any builder."
+ sed_outcome_wait:0 "Advisor diversification waits for recent expansions to recover. Review staffing, inputs and buyers. Urgent economic priorities remain under review."
  sed_follow_summary:0 "Recent wood, iron and tool projects: [JournalEntry.GetCountry.MakeScope.Var('sed_follow_staff').GetValue|0] with staffing problems; [JournalEntry.GetCountry.MakeScope.Var('sed_follow_inputs').GetValue|0] with input shortages. Direct expansion waits for recovery."

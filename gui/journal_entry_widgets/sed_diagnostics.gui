@@ -3101,6 +3101,20 @@ textbox = {
  text = "sed_watch_5"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_outcome_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_outcome_summary"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_outcome_wait_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_outcome_wait"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_follow_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large

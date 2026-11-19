@@ -605,6 +605,11 @@ sed_disable_country = {
  remove_variable = sed_watch_delegated
  remove_variable = sed_follow_staff
  remove_variable = sed_follow_inputs
+ remove_variable = sed_outcome_staff
+ remove_variable = sed_outcome_inputs
+ remove_variable = sed_outcome_market
+ remove_variable = sed_outcome_observed
+ remove_variable = sed_outcome_month
  remove_variable = sed_plan_count
  remove_variable = sed_plan_goal
  remove_variable = sed_fiscal_status
@@ -948,6 +953,18 @@ sed_disable_country = {
   remove_variable = sed_paper_ignored
  }
  every_scope_state = {
+  remove_variable = sed_outcome_wood_level
+  remove_variable = sed_outcome_wood_pending
+  remove_variable = sed_outcome_iron_level
+  remove_variable = sed_outcome_iron_pending
+  remove_variable = sed_outcome_tools_level
+  remove_variable = sed_outcome_tools_pending
+  remove_variable = sed_outcome_paper_level
+  remove_variable = sed_outcome_paper_pending
+  remove_variable = sed_outcome_food_level
+  remove_variable = sed_outcome_food_pending
+  remove_variable = sed_outcome_clothes_level
+  remove_variable = sed_outcome_clothes_pending
   remove_variable = sed_follow_wood
   remove_variable = sed_follow_iron
   remove_variable = sed_follow_tools
@@ -1218,6 +1235,7 @@ sed_refresh_diagnostics = {
   limit = { is_player = yes has_variable = sed_enabled }
   sed_ensure_mode_default = yes
   sed_follow_projects = yes
+  sed_outcome_review = yes
  # Economy Advisor/advisor_economy_health_effects.txt
  set_variable = { name = sed_balance value = net_total_income }
  # Economy Advisor/advisor_core_values.txt
@@ -4001,6 +4019,7 @@ sed_auto_apply_monthly = {
  sed_refresh_admin = yes
  sed_refresh_power = yes
  sed_follow_projects = yes
+ sed_outcome_review = yes
  sed_refresh_national_plan = yes
  sed_recover_existing_industry = yes
  sed_modernize_existing_industry = yes
@@ -13979,6 +13998,9 @@ sed_coord_sync = {
    else_if = { limit = { sed_university_ready = yes }
     set_variable = { name = sed_coord_executor value = 11 }
    }
+   else_if = { limit = { sed_outcome_growth_wait = yes }
+    set_variable = { name = sed_coord_executor value = 0 }
+   }
    else_if = { limit = { has_variable = sed_coord_advisor_known OR = { var:sed_plan_goal = 1 var:sed_plan_goal = 2 var:sed_plan_goal = 3 var:sed_plan_goal = 5 var:sed_plan_goal = 8 } }
     if = { limit = { has_variable = sed_coord_saved_advisor }
  set_variable = { name = advisor_auto_construction_enabled value = var:sed_coord_saved_advisor }
@@ -14648,6 +14670,193 @@ sed_follow_projects = {
     if = { limit = { b:building_tooling_workshop = { building_has_goods_shortage = yes } }
      root = { change_variable = { name = sed_follow_inputs add = 1 } }
     }
+   }
+  }
+ }
+}
+sed_outcome_review = {
+ if = { limit = {
+  NOT = { has_variable = sed_outcome_month var:sed_outcome_month = sed_live_month_key }
+ }
+  set_variable = { name = sed_outcome_month value = sed_live_month_key }
+  set_variable = { name = sed_outcome_staff value = 0 }
+  set_variable = { name = sed_outcome_inputs value = 0 }
+  set_variable = { name = sed_outcome_market value = 0 }
+  set_variable = { name = sed_outcome_observed value = 0 }
+  every_scope_state = {
+   if = { limit = { has_building = building_logging_camp }
+    if = { limit = { has_variable = sed_outcome_wood_level b:building_logging_camp.level > var:sed_outcome_wood_level }
+     set_variable = { name = sed_outcome_wood_pending value = yes }
+    }
+    set_variable = { name = sed_outcome_wood_level value = b:building_logging_camp.level }
+    if = { limit = { has_variable = sed_outcome_wood_pending }
+     root = { change_variable = { name = sed_outcome_observed add = 1 } }
+     if = { limit = { b:building_logging_camp = { OR = { occupancy < 0.8 has_failed_hires = yes } } }
+      root = { change_variable = { name = sed_outcome_staff add = 1 } }
+     }
+     if = { limit = { b:building_logging_camp = { building_has_goods_shortage = yes } }
+      root = { change_variable = { name = sed_outcome_inputs add = 1 } }
+     }
+     if = { limit = { owner = { market = { mg:wood ?= {
+      market_goods_sell_orders > market_goods_buy_orders market_goods_cheaper = yes
+     } } } }
+      root = { change_variable = { name = sed_outcome_market add = 1 } }
+     }
+     else_if = { limit = { b:building_logging_camp = {
+      occupancy >= 0.8 has_failed_hires = no building_has_goods_shortage = no
+     } }
+      remove_variable = sed_outcome_wood_pending
+     }
+    }
+   }
+   else = {
+    set_variable = { name = sed_outcome_wood_level value = 0 }
+    remove_variable = sed_outcome_wood_pending
+   }
+   if = { limit = { has_building = building_iron_mine }
+    if = { limit = { has_variable = sed_outcome_iron_level b:building_iron_mine.level > var:sed_outcome_iron_level }
+     set_variable = { name = sed_outcome_iron_pending value = yes }
+    }
+    set_variable = { name = sed_outcome_iron_level value = b:building_iron_mine.level }
+    if = { limit = { has_variable = sed_outcome_iron_pending }
+     root = { change_variable = { name = sed_outcome_observed add = 1 } }
+     if = { limit = { b:building_iron_mine = { OR = { occupancy < 0.8 has_failed_hires = yes } } }
+      root = { change_variable = { name = sed_outcome_staff add = 1 } }
+     }
+     if = { limit = { b:building_iron_mine = { building_has_goods_shortage = yes } }
+      root = { change_variable = { name = sed_outcome_inputs add = 1 } }
+     }
+     if = { limit = { owner = { market = { mg:iron ?= {
+      market_goods_sell_orders > market_goods_buy_orders market_goods_cheaper = yes
+     } } } }
+      root = { change_variable = { name = sed_outcome_market add = 1 } }
+     }
+     else_if = { limit = { b:building_iron_mine = {
+      occupancy >= 0.8 has_failed_hires = no building_has_goods_shortage = no
+     } }
+      remove_variable = sed_outcome_iron_pending
+     }
+    }
+   }
+   else = {
+    set_variable = { name = sed_outcome_iron_level value = 0 }
+    remove_variable = sed_outcome_iron_pending
+   }
+   if = { limit = { has_building = building_tooling_workshop }
+    if = { limit = { has_variable = sed_outcome_tools_level b:building_tooling_workshop.level > var:sed_outcome_tools_level }
+     set_variable = { name = sed_outcome_tools_pending value = yes }
+    }
+    set_variable = { name = sed_outcome_tools_level value = b:building_tooling_workshop.level }
+    if = { limit = { has_variable = sed_outcome_tools_pending }
+     root = { change_variable = { name = sed_outcome_observed add = 1 } }
+     if = { limit = { b:building_tooling_workshop = { OR = { occupancy < 0.8 has_failed_hires = yes } } }
+      root = { change_variable = { name = sed_outcome_staff add = 1 } }
+     }
+     if = { limit = { b:building_tooling_workshop = { building_has_goods_shortage = yes } }
+      root = { change_variable = { name = sed_outcome_inputs add = 1 } }
+     }
+     if = { limit = { owner = { market = { mg:tools ?= {
+      market_goods_sell_orders > market_goods_buy_orders market_goods_cheaper = yes
+     } } } }
+      root = { change_variable = { name = sed_outcome_market add = 1 } }
+     }
+     else_if = { limit = { b:building_tooling_workshop = {
+      occupancy >= 0.8 has_failed_hires = no building_has_goods_shortage = no
+     } }
+      remove_variable = sed_outcome_tools_pending
+     }
+    }
+   }
+   else = {
+    set_variable = { name = sed_outcome_tools_level value = 0 }
+    remove_variable = sed_outcome_tools_pending
+   }
+   if = { limit = { has_building = building_paper_mill }
+    if = { limit = { has_variable = sed_outcome_paper_level b:building_paper_mill.level > var:sed_outcome_paper_level }
+     set_variable = { name = sed_outcome_paper_pending value = yes }
+    }
+    set_variable = { name = sed_outcome_paper_level value = b:building_paper_mill.level }
+    if = { limit = { has_variable = sed_outcome_paper_pending }
+     root = { change_variable = { name = sed_outcome_observed add = 1 } }
+     if = { limit = { b:building_paper_mill = { OR = { occupancy < 0.8 has_failed_hires = yes } } }
+      root = { change_variable = { name = sed_outcome_staff add = 1 } }
+     }
+     if = { limit = { b:building_paper_mill = { building_has_goods_shortage = yes } }
+      root = { change_variable = { name = sed_outcome_inputs add = 1 } }
+     }
+     if = { limit = { owner = { market = { mg:paper ?= {
+      market_goods_sell_orders > market_goods_buy_orders market_goods_cheaper = yes
+     } } } }
+      root = { change_variable = { name = sed_outcome_market add = 1 } }
+     }
+     else_if = { limit = { b:building_paper_mill = {
+      occupancy >= 0.8 has_failed_hires = no building_has_goods_shortage = no
+     } }
+      remove_variable = sed_outcome_paper_pending
+     }
+    }
+   }
+   else = {
+    set_variable = { name = sed_outcome_paper_level value = 0 }
+    remove_variable = sed_outcome_paper_pending
+   }
+   if = { limit = { has_building = building_food_industry }
+    if = { limit = { has_variable = sed_outcome_food_level b:building_food_industry.level > var:sed_outcome_food_level }
+     set_variable = { name = sed_outcome_food_pending value = yes }
+    }
+    set_variable = { name = sed_outcome_food_level value = b:building_food_industry.level }
+    if = { limit = { has_variable = sed_outcome_food_pending }
+     root = { change_variable = { name = sed_outcome_observed add = 1 } }
+     if = { limit = { b:building_food_industry = { OR = { occupancy < 0.8 has_failed_hires = yes } } }
+      root = { change_variable = { name = sed_outcome_staff add = 1 } }
+     }
+     if = { limit = { b:building_food_industry = { building_has_goods_shortage = yes } }
+      root = { change_variable = { name = sed_outcome_inputs add = 1 } }
+     }
+     if = { limit = { owner = { market = { mg:groceries ?= {
+      market_goods_sell_orders > market_goods_buy_orders market_goods_cheaper = yes
+     } } } }
+      root = { change_variable = { name = sed_outcome_market add = 1 } }
+     }
+     else_if = { limit = { b:building_food_industry = {
+      occupancy >= 0.8 has_failed_hires = no building_has_goods_shortage = no
+     } }
+      remove_variable = sed_outcome_food_pending
+     }
+    }
+   }
+   else = {
+    set_variable = { name = sed_outcome_food_level value = 0 }
+    remove_variable = sed_outcome_food_pending
+   }
+   if = { limit = { has_building = building_textile_mill }
+    if = { limit = { has_variable = sed_outcome_clothes_level b:building_textile_mill.level > var:sed_outcome_clothes_level }
+     set_variable = { name = sed_outcome_clothes_pending value = yes }
+    }
+    set_variable = { name = sed_outcome_clothes_level value = b:building_textile_mill.level }
+    if = { limit = { has_variable = sed_outcome_clothes_pending }
+     root = { change_variable = { name = sed_outcome_observed add = 1 } }
+     if = { limit = { b:building_textile_mill = { OR = { occupancy < 0.8 has_failed_hires = yes } } }
+      root = { change_variable = { name = sed_outcome_staff add = 1 } }
+     }
+     if = { limit = { b:building_textile_mill = { building_has_goods_shortage = yes } }
+      root = { change_variable = { name = sed_outcome_inputs add = 1 } }
+     }
+     if = { limit = { owner = { market = { mg:clothes ?= {
+      market_goods_sell_orders > market_goods_buy_orders market_goods_cheaper = yes
+     } } } }
+      root = { change_variable = { name = sed_outcome_market add = 1 } }
+     }
+     else_if = { limit = { b:building_textile_mill = {
+      occupancy >= 0.8 has_failed_hires = no building_has_goods_shortage = no
+     } }
+      remove_variable = sed_outcome_clothes_pending
+     }
+    }
+   }
+   else = {
+    set_variable = { name = sed_outcome_clothes_level value = 0 }
+    remove_variable = sed_outcome_clothes_pending
    }
   }
  }

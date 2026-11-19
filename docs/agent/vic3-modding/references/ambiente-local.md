@@ -730,3 +730,11 @@ Leitura do último autosave de Toscana não encontrou `sed_watch_month`
 nem `sed_watch_idle`. A conclusão de obra própria usa nível acima da
 intenção gravada antes de enfileirar. Qualificações permanecem estimadas.
 O acompanhamento individual cobre madeira, ferro e ferramentas.
+
+## Observação de investimento 0.7.53
+
+`tools/investment_outcomes.py` usa níveis concluídos entre revisões
+mensais e as leituras existentes de ocupação, falhas de contratação,
+escassez e ordens de compra/venda. Autoria não é exposta pela engine.
+Os saves locais de Toscana continuam anteriores à instalação da
+0.7.51. Validação em campanha permanece pendente.

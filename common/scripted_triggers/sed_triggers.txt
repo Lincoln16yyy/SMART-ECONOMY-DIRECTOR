@@ -3967,6 +3967,14 @@ sed_watch_recovery_candidate = {
   any_scope_state = { sed_core_tools_eligible = yes }
  }
 }
+sed_outcome_growth_wait = {
+ has_variable = sed_plan_goal var:sed_plan_goal = 8
+ OR = {
+  AND = { has_variable = sed_outcome_staff var:sed_outcome_staff > 0 }
+  AND = { has_variable = sed_outcome_inputs var:sed_outcome_inputs > 0 }
+  AND = { has_variable = sed_outcome_market var:sed_outcome_market > 0 }
+ }
+}
 # Country scope. A shortage of a good with no producer anywhere in the country,
 # with trade open. Isolationism disables World Market trade, so extra capacity
 # would be useless.
