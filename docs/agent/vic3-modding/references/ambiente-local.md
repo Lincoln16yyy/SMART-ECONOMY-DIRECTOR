@@ -748,3 +748,10 @@ Os saves locais de Toscana continuam anteriores à instalação da
 `common/scripted_effects/advisor_pm_effects.txt`.
 Snapshot capturado antes da primeira escrita durante a coordenação.
 A leitura de trabalhadores é proxy demográfica do Director.
+
+## Local e última obra 0.7.55
+
+A prontidão local usa sed_state_labor_available, infrastructure_delta
+e market_access já empregados nos executores. Insumos por método
+ativo vêm de data/input_profiles.json. A última obra do Director
+registra o estado via prev no escopo do país após confirmação da fila.

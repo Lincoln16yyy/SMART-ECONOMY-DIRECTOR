@@ -460,6 +460,7 @@ def effects(actions, dependencies, buildings):
                 score += f'\n    if = {{ limit = {{ owner = {{ has_variable = sed_input_priority_{name} }} }} add = 75 }}'
             if name in MILITARY_INDUSTRY_GOODS:
                 score += '\n    if = { limit = { owner = { is_at_war = yes } } add = 20 }'
+        score += '\n    add = sed_site_readiness'
         result.append(f'''   if = {{ limit = {{ {eligibility} }}
     set_variable = {{ name = sed_plan_{name}_score value = {{ {score} }} }}
    }}''')

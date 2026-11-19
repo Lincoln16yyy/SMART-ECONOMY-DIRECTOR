@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.54
+# Estado dos requisitos — 0.7.55
 
 ## Coordenação com Economy Advisor
 
@@ -248,3 +248,20 @@ próprias guardas. Save/reload desse adaptador em campanha pendente.
 Director e avisos funcionaram na 0.7.53. País/data não especificados.
 A retomada pós-recuperação e balanço anual permanecem pendentes.
 A edição 0.7.54 ainda NÃO VERIFICADA em campanha.
+
+## Escolha do local e fornecedores — 0.7.55
+
+**Código:** prontidão local combina trabalho disponível, infraestrutura
+positiva e acesso ao mercado, com contribuição limitada para preservar
+a prioridade estratégica. A faixa direta de crescimento usa esse valor
+na escolha do estado. Ferrovias conservam a urgência do déficit.
+Insumos em escassez consumidos por métodos ativos de fábricas operantes
+com falta de bens ganham prioridade, mesmo sem expansão planejada.
+
+O registro da última obra direta guarda tipo, estado e mês apenas após
+a fila confirmar a inclusão. Acompanhamento de expansões ruins segue
+ativo pelas regras existentes. **Teste sintético:** escolha entre dois
+estados, prioridade de insumo e rejeição de obra sem falso sucesso;
+24 testes de crescimento, acompanhamento e universidades aprovados.
+**Estático:** validado. Tiger mantém três apontamentos de Diário
+conhecidos. **Campanha:** NÃO VERIFICADA.

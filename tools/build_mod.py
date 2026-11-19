@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import re
 from pathlib import Path
 
 try:
@@ -12,7 +13,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.54'
+VERSION = '0.7.55'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -165,6 +166,21 @@ def input_priority_effect():
   limit = {{ NOT = {{ has_variable = sed_mode_automatic }} has_variable_list = sed_input_blocked_{good} }}
   set_variable = {{ name = sed_input_priority_{good} value = yes }}
  }}''')
+    # Existing operating plants can need inputs even when no expansion is planned.
+    for good in INPUT_DEPENDENCIES:
+        consumers = []
+        for building, methods in input_forecast.PROFILES.items():
+            active = ' '.join(f'has_active_production_method = {method}'
+                             for method, inputs in methods.items() if inputs.get(good, 0) > 0)
+            if active:
+                consumers.append(f'AND = {{ has_building = {building} b:{building} = {{ level > 0 occupancy > 0 building_has_goods_shortage = yes OR = {{ {active} }} }} }}')
+        result.append(f''' if = {{ limit = {{
+  has_variable = sed_mode_automatic
+  market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }}
+  any_scope_state = {{ OR = {{ {' '.join(consumers)} }} }}
+ }}
+  set_variable = {{ name = sed_input_priority_{good} value = yes }}
+ }}''')
     result.append(''' if = { limit = { has_variable = sed_mode_automatic }
   set_variable = { name = sed_input_pass_changed value = yes }''')
     # Each productive pass discovers at least one new supported input. This
@@ -256,7 +272,8 @@ sed_queue_levels_before'''.split() + [
 
 EXTRA_VARIABLES += production_methods.COUNTRY_VARIABLES + investment.COUNTRY_VARIABLES + ascension.VARIABLES + construction_watch.VARIABLES + post_build.COUNTRY_VARIABLES + investment_outcomes.COUNTRY_VARIABLES
 EXTRA_VARIABLES += planning.country_variables(ACTION_NAMES) + coordination.VARIABLES + construction_budget.VARIABLES + input_forecast.COUNTRY_VARIABLES + trade_capacity.VARIABLES + admin_capacity.VARIABLES + power_capacity.VARIABLES
-EXTRA_VARIABLES += ['sed_input_pass_changed', *(f'sed_input_priority_{good}' for good in INPUT_DEPENDENCIES)]
+EXTRA_VARIABLES += ['sed_last_build_state', 'sed_last_build_action', 'sed_last_build_month', 'sed_last_build_year',
+    'sed_input_pass_changed', *(f'sed_input_priority_{good}' for good in INPUT_DEPENDENCIES)]
 
 
 def runtime_variables():
@@ -374,7 +391,7 @@ sed_refresh_supply_candidates = {
   }}
   ordered_scope_state = {{
    limit = {{ sed_{good}_candidate_eligible = yes }}
-   order_by = {{ value = state_population multiply = -1 }}
+   order_by = sed_site_readiness
    max = 3
    check_range_bounds = no
    root = {{ add_to_variable_list = {{ name = sed_{good}_candidates target = prev }} }}
@@ -558,8 +575,8 @@ sed_auto_run_direct = {
     # The construction sector joins the automatic dispatcher only as a ranked target.
     choices.append(('construction', 'sed_construction_candidate_eligible'))
     for name, eligibility in choices:
-        order = 'infrastructure_delta' if name == 'railway' else 'state_population'
-        direction = ' multiply = -1'
+        order = 'infrastructure_delta' if name == 'railway' else 'sed_site_readiness'
+        direction = ' multiply = -1' if name == 'railway' else ''
         result.append(f'''  else_if = {{
    limit = {{ any_scope_state = {{ {eligibility} = yes var:sed_plan_{name}_rank = 1 }} }}
    ordered_scope_state = {{
@@ -656,7 +673,7 @@ def core_growth_branches():
    limit = {{ any_scope_state = {{ sed_core_{good}_eligible = yes }} }}
    ordered_scope_state = {{
     limit = {{ sed_core_{good}_eligible = yes }}
-    order_by = {{ value = state_population multiply = -1 }}
+    order_by = sed_site_readiness
     max = 1
     check_range_bounds = no
     owner = {{ set_variable = {{ name = sed_auto_action_status value = 15 }} }}
@@ -678,6 +695,24 @@ def core_growth_branches():
   }
 ''')
     return ''.join(parts)
+
+
+def audited_construction(script):
+    actions = list(ACTION_NAMES) + ['trade_center', 'admin', 'power',
+                                    'university', 'core_wood', 'core_iron', 'core_tools',
+                                    'core_construction']
+    def annotate(match):
+        name, body = match.group(1), match.group(2)
+        if name not in actions:
+            return match[0]
+        marker = 'set_variable = { name = sed_auto_action_status value = 1 }'
+        audit = marker + f'''
+     set_variable = {{ name = sed_last_build_state value = prev }}
+     set_variable = {{ name = sed_last_build_action value = {actions.index(name) + 1} }}
+     set_variable = {{ name = sed_last_build_month value = {{ value = month add = 1 }} }}
+     set_variable = {{ name = sed_last_build_year value = year }}'''
+        return f'sed_run_{name}_approval = {{' + body.replace(marker, audit) + '\n}'
+    return re.sub(r'(?ms)^sed_run_(\w+)_approval = \{(.*?)^}', annotate, script)
 
 
 def preference_effects():
@@ -819,6 +854,8 @@ def widget():
     body += textbox('sed_outcome_labor', 'sed_outcome_labor_visible_sgui')
     body += textbox('sed_outcome_wait', 'sed_outcome_wait_visible_sgui')
     body += textbox('sed_follow_summary', 'sed_follow_visible_sgui')
+    for name in list(ACTION_NAMES) + ['trade_center', 'admin', 'power', 'university', 'core_wood', 'core_iron', 'core_tools', 'core_construction']:
+        body += textbox(f'sed_last_build_{name}', f'sed_last_build_{name}_visible_sgui')
     body += textbox('sed_mode_title', heading=True)
     body += textbox('sed_coord_intro')
     body += button('sed_coord_enable', 'sed_coord_enable_sgui')
@@ -1746,6 +1783,8 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
     result += f'sed_auto_current_clear_visible_sgui = {{ scope = country is_shown = {{ {base} sed_auto_executor_safe = yes }} }}\n'
     result += f'sed_auto_current_queue_control_visible_sgui = {{ scope = country is_shown = {{ {base} construction_queue_num_queued_private_levels > 0 sed_private_control_configured = yes }} }}\n'
     result += 'sed_auto_status_delegated_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 18 } }\n'
+    for index, name in enumerate(list(ACTION_NAMES) + ['trade_center', 'admin', 'power', 'university', 'core_wood', 'core_iron', 'core_tools', 'core_construction'], 1):
+        result += f'sed_last_build_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_last_build_state has_variable = sed_last_build_action var:sed_last_build_action = {index} }} }}\n'
     for executor in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14):
         result += f'sed_coord_executor_{executor}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_enabled has_variable = sed_coord_active has_variable = sed_coord_executor var:sed_coord_executor = {executor} }} }}\n'
     for policy in (1, 2, 3):
@@ -2812,6 +2851,19 @@ def localization(language):
         fmt = {'money': 'K', 'money_week': 'K', 'count': '0', 'decimal': '1', 'ratio': '%1'}[unit]
         reading = ('@money!' if unit.startswith('money') else '') + v(metric['id'], fmt)
         pairs['sed_metric_' + metric['id']] = (metric['pt'] + ': ' + reading, metric['en'] + ': ' + reading)
+    action_labels = {item['good']: (item['building_pt'], item['building_en']) for item in SUPPLY_TARGETS}
+    action_labels.update(railway=('ferrovia', 'railway'), construction=('setor de construção', 'construction sector'),
+                         trade_center=('centro comercial', 'trade center'), admin=('administração', 'administration'),
+                         power=('usina elétrica', 'power plant'), university=('universidade', 'university'),
+                         core_wood=('exploração madeireira', 'logging camp'), core_iron=('mina de ferro', 'iron mine'),
+                         core_tools=('oficina de ferramentas', 'tooling workshop'),
+                         core_construction=('setor de construção', 'construction sector'))
+    for name, (pt, en) in action_labels.items():
+        location = "[JournalEntry.GetCountry.MakeScope.Var('sed_last_build_state').GetState.GetName]"
+        date = v('last_build_month', '0') + '/' + v('last_build_year', '0')
+        pairs[f'sed_last_build_{name}'] = (
+            f'Última obra confirmada do Director ({date}): {pt} em {location}. Local selecionado após filtros de contratação, insumos e infraestrutura.',
+            f'Last confirmed Director project ({date}): {en} in {location}. Site selected after staffing, input and infrastructure checks.')
     pairs.update(ascension.localization(v))
     pairs.update(construction_watch.localization())
     pairs.update(investment_outcomes.localization(v))
@@ -2910,7 +2962,7 @@ sed_pulse.1 = {
         'common/journal_entries/sed_journal_entries.txt': journal,
         'common/on_actions/sed_on_actions.txt': on_actions,
         'events/sed_events.txt': events,
-        'common/scripted_effects/sed_effects.txt': effects(),
+        'common/scripted_effects/sed_effects.txt': audited_construction(effects()),
         'common/scripted_guis/sed_scripted_guis.txt': 'sed_outcome_labor_visible_sgui = { scope = country is_shown = { has_variable = sed_coord_active has_variable = sed_mode_automatic has_variable = sed_outcome_workers var:sed_outcome_workers > 0 has_variable = advisor_labor_auto_enabled } }\nsed_outcome_visible_sgui = { scope = country is_shown = { has_variable = sed_outcome_month } }\nsed_outcome_wait_visible_sgui = { scope = country is_shown = { has_variable = sed_coord_active has_variable = sed_mode_automatic sed_outcome_growth_wait = yes } }\nsed_follow_visible_sgui = { scope = country is_shown = { has_variable = sed_follow_staff has_variable = sed_follow_inputs } }\n' + scripted_guis() + ascension.guis() + ''.join(f'sed_watch_{n}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_watch_status var:sed_watch_status = {n} }} }}\n' for n in range(1, 6)),
         'common/scripted_triggers/sed_triggers.txt': scripted_triggers(),
         'common/script_values/sed_values.txt': '# Current calendar, independent of diagnostic refresh.\nsed_live_month_key = { value = year multiply = 12 add = month }\n# Country scope. Fixed expenditure is gross fixed income minus its net balance.\nsed_fixed_expenses_value = { value = fixed_income subtract = net_fixed_income min = 0 }\n' + construction_budget.values() + labor.values(projects) + input_forecast.values(projects) + supplier_output_values() + investment.values(SUPPLY_TARGETS, variants),

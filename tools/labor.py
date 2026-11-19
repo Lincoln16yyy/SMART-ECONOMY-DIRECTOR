@@ -12,7 +12,13 @@ STATE_VARIABLES = ['sed_labor_pool', 'sed_labor_committed', 'sed_labor_available
 
 
 def values(founding_projects=()):
-    result = ['''# State scope; demographic proxy rather than a worker count from the engine.
+    result = ['''# Readiness adds bounded tie-breaking weight to eligible local projects.
+sed_site_readiness = {
+ value = sed_state_labor_available divide = 10000 max = 10
+ add = { value = infrastructure_delta min = 0 max = 10 }
+ add = { value = market_access min = 0 max = 1 multiply = 10 }
+}
+# State scope; demographic proxy rather than a worker count from the engine.
 sed_state_labor_pool = {
  value = state_population min = 0
  multiply = { value = 0.25 add = modifier:state_working_adult_ratio_add min = 0.05 max = 1 }

@@ -1,5 +1,10 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.55, a escolha do estado considera trabalhadores disponíveis,
+acesso ao mercado e folga de infraestrutura. Fábricas operantes com
+escassez também priorizam fornecedores. O Diário mostra a última obra
+direta confirmada, seu estado e a data da inclusão na fila.
+
 Na 0.7.54, o acompanhamento cobre os 84 tipos de prédio catalogados.
 Excesso de oferta é avaliado pelos métodos ativos que produzem o bem.
 Quando faltam trabalhadores em expansões recentes, a coordenação pode
