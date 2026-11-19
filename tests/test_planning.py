@@ -527,7 +527,7 @@ class PlanningTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_grain_meta_year'], 1836)
         self.assertEqual(c.variables['sed_grain_goal_streak'], 1)
         self.assertEqual(c.variables['sed_grain_meta_since'], 1836)
-        self.assertEqual(grain['variables']['sed_plan_grain_score'], 195)
+        self.assertEqual(grain['variables']['sed_plan_grain_score'], 206.75)  # Includes 11.75 site readiness.
         # Next year, a fresh three-month shortage extends the same goal.
         c.readings['year'] = 1837
         for month in range(3):
@@ -536,7 +536,7 @@ class PlanningTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_grain_meta_year'], 1837)
         self.assertEqual(c.variables['sed_grain_goal_streak'], 2)
         self.assertEqual(c.variables['sed_grain_meta_since'], 1836)
-        self.assertEqual(grain['variables']['sed_plan_grain_score'], 210)
+        self.assertEqual(grain['variables']['sed_plan_grain_score'], 221.75)  # Includes 11.75 site readiness.
         visible = c.definitions['sed_meta_grain_visible_sgui']
         self.assertTrue(c.condition(child(visible, 'is_shown'), c.country_scope()))
 
@@ -574,8 +574,8 @@ class PlanningTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_plan_pressure_grain'], 60)
         self.assertEqual(c.variables['sed_plan_pressure_clothes'], 70)
         self.assertEqual(c.variables['sed_clothes_short_months'], 1)
-        self.assertEqual(grain['variables']['sed_plan_grain_score'], 185)
-        self.assertEqual(clothes['variables']['sed_plan_clothes_score'], 170)
+        self.assertEqual(grain['variables']['sed_plan_grain_score'], 196.75)  # Includes 11.75 site readiness.
+        self.assertEqual(clothes['variables']['sed_plan_clothes_score'], 181.75)  # Includes 11.75 site readiness.
         self.assertEqual([x[1] for x in self.ranked()], ['grain', 'clothes'])
         self.assertEqual([x[2] for x in self.ranked()], [grain, clothes])
 
