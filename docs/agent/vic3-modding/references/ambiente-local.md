@@ -738,3 +738,13 @@ mensais e as leituras existentes de ocupação, falhas de contratação,
 escassez e ordens de compra/venda. Autoria não é exposta pela engine.
 Os saves locais de Toscana continuam anteriores à instalação da
 0.7.51. Validação em campanha permanece pendente.
+
+## Catálogo e automação de trabalhadores 0.7.54
+
+`python3 tools/build_outcome_catalog.py --game "<game>"` gera
+`data/outcome_goods.json` pelos grupos e métodos vanilla. Advisor usa
+`advisor_labor_auto_enabled`, com avaliação agendada em
+`common/on_actions/advisor_on_actions.txt` e
+`common/scripted_effects/advisor_pm_effects.txt`.
+Snapshot capturado antes da primeira escrita durante a coordenação.
+A leitura de trabalhadores é proxy demográfica do Director.

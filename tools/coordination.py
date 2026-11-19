@@ -51,6 +51,7 @@ ADVISOR_POLICY_OPTIONS = (
     ('goal_treasury', 'advisor_setting_sc_goal_treasury'),
     ('treasury_off', 'advisor_setting_treasury_off'),
     ('borrow', 'advisor_setting_borrow'),
+    ('labor_auto', 'advisor_labor_auto_enabled'),
 )
 # Retained settings identify a previously configured Supply Chain even when
 # all construction switches are off. Avoid optional foreign journal IDs.
@@ -159,6 +160,17 @@ sed_coord_restore = {{
 sed_coord_sync = {{
  if = {{ limit = {{ is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic NOT = {{ has_variable = sed_mode_manual }} NOT = {{ has_variable = sed_mode_assisted }} has_variable = sed_coord_active }}
   sed_coord_capture_supply_policy = yes
+  if = {{ limit = {{ has_variable = sed_coord_advisor_known }}
+   sed_coord_capture_advisor_policy = yes
+   if = {{ limit = {{ has_variable = sed_outcome_workers var:sed_outcome_workers > 0 }}
+    set_variable = {{ name = advisor_labor_auto_enabled value = yes }}
+   }}
+   else_if = {{ limit = {{ has_variable = sed_coord_saved_labor_auto }}
+    set_variable = {{ name = advisor_labor_auto_enabled value = var:sed_coord_saved_labor_auto }}
+   }}
+   else = {{ remove_variable = advisor_labor_auto_enabled }}
+  }}
+
   if = {{ limit = {{ has_variable = sed_coord_supply_policy_saved }}
    set_variable = {{ name = zw_var_develop_incorporated_states value = yes }}
    set_variable = {{ name = zw_var_ip_incorporated value = yes }}

@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.53
+# Estado dos requisitos — 0.7.54
 
 ## Coordenação com Economy Advisor
 
@@ -233,3 +233,18 @@ e limpeza. Dez testes focados passaram junto às rotinas 0.7.51/0.7.52.
 às versões recentes. Em cópia de save, registre uma leitura, conclua
 uma expansão e avance um mês. Confira o diagnóstico no Diário e o
 objetivo aplicado na coordenação.
+
+## Ampliação dos setores — 0.7.54
+
+**Código:** acompanha os 84 tipos em outcome_goods.json, derivados do
+catálogo vanilla. A produção por método ativo filtra as leituras de
+oferta excedente. Contratação baixa com menos de 1.000 trabalhadores
+estimados habilita advisor_labor_auto_enabled durante a coordenação.
+Snapshot/restauração conservam o valor original, inclusive em saves
+anteriores à atualização. O Advisor executa as mudanças segundo suas
+próprias guardas. Save/reload desse adaptador em campanha pendente.
+
+**Campanha:** usuário relatou que obras automáticas, tomada de fila pelo
+Director e avisos funcionaram na 0.7.53. País/data não especificados.
+A retomada pós-recuperação e balanço anual permanecem pendentes.
+A edição 0.7.54 ainda NÃO VERIFICADA em campanha.

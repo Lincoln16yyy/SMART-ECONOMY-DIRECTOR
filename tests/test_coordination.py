@@ -260,7 +260,7 @@ class CoordinationTests(unittest.TestCase):
         c.variables.update(originals)
         c.run('sed_set_mode_automatic')
         self.assertEqual(c.variables['sed_coord_advisor_policy'], 1)
-        self.assertEqual(self.advisor_policy(), {})
+        self.assertEqual(self.advisor_policy(), {'advisor_labor_auto_enabled': originals['advisor_labor_auto_enabled']})
         saved = {k: v for k, v in c.variables.items() if k.startswith('sed_coord_saved_')}
         c.run('sed_coord_sync')
         self.assertEqual({k: v for k, v in c.variables.items() if k.startswith('sed_coord_saved_')}, saved)

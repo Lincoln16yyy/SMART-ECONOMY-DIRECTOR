@@ -30,6 +30,7 @@ class InvestmentOutcomeTests(unittest.TestCase):
     def test_market_pressure_persists_until_buyers_recover(self):
         c = self.c
         mill = building('building_paper_mill')
+        mill['production_methods'] = ['pm_pulp_pressing']
         site = state(buildings=[mill])
         c.states = [site]
         c.readings['month'] = 1
@@ -58,3 +59,33 @@ class InvestmentOutcomeTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_outcome_staff'], 3)
         c.run('sed_disable_country')
         self.assertNotIn('sed_outcome_staff', c.variables)
+
+    def test_new_coal_sector_is_observed(self):
+        c = self.c
+        site = state()
+        c.states = [site]
+        c.readings['month'] = 1
+        c.run('sed_outcome_review')
+        site['buildings'].append(building('building_coal_mine', occupancy=0.2))
+        c.readings['month'] = 2
+        c.run('sed_outcome_review')
+        self.assertIn('sed_outcome_coal_mine_pending', site['variables'])
+        self.assertEqual(c.variables['sed_outcome_staff'], 1)
+
+    def test_labor_automation_preserves_original_and_restores_after_recovery(self):
+        for original in (False, True):
+            with self.subTest(original=original):
+                self.setUp()
+                c = self.c
+                c.variables.update(advisor_enabled=True, sed_outcome_workers=1)
+                if original:
+                    c.variables['advisor_labor_auto_enabled'] = True
+                c.run('sed_set_mode_automatic')
+                self.assertTrue(c.variables['advisor_labor_auto_enabled'])
+                c.variables['sed_outcome_workers'] = 0
+                c.run('sed_coord_sync')
+                self.assertEqual('advisor_labor_auto_enabled' in c.variables, original)
+                c.variables['sed_outcome_workers'] = 1
+                c.run('sed_coord_sync')
+                c.run('sed_set_mode_assisted')
+                self.assertEqual('advisor_labor_auto_enabled' in c.variables, original)

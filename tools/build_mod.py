@@ -12,7 +12,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.53'
+VERSION = '0.7.54'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -816,6 +816,7 @@ def widget():
     for number in range(1, 6):
         body += textbox(f'sed_watch_{number}', f'sed_watch_{number}_visible_sgui')
     body += textbox('sed_outcome_summary', 'sed_outcome_visible_sgui')
+    body += textbox('sed_outcome_labor', 'sed_outcome_labor_visible_sgui')
     body += textbox('sed_outcome_wait', 'sed_outcome_wait_visible_sgui')
     body += textbox('sed_follow_summary', 'sed_follow_visible_sgui')
     body += textbox('sed_mode_title', heading=True)
@@ -2910,7 +2911,7 @@ sed_pulse.1 = {
         'common/on_actions/sed_on_actions.txt': on_actions,
         'events/sed_events.txt': events,
         'common/scripted_effects/sed_effects.txt': effects(),
-        'common/scripted_guis/sed_scripted_guis.txt': 'sed_outcome_visible_sgui = { scope = country is_shown = { has_variable = sed_outcome_month } }\nsed_outcome_wait_visible_sgui = { scope = country is_shown = { has_variable = sed_coord_active has_variable = sed_mode_automatic sed_outcome_growth_wait = yes } }\nsed_follow_visible_sgui = { scope = country is_shown = { has_variable = sed_follow_staff has_variable = sed_follow_inputs } }\n' + scripted_guis() + ascension.guis() + ''.join(f'sed_watch_{n}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_watch_status var:sed_watch_status = {n} }} }}\n' for n in range(1, 6)),
+        'common/scripted_guis/sed_scripted_guis.txt': 'sed_outcome_labor_visible_sgui = { scope = country is_shown = { has_variable = sed_coord_active has_variable = sed_mode_automatic has_variable = sed_outcome_workers var:sed_outcome_workers > 0 has_variable = advisor_labor_auto_enabled } }\nsed_outcome_visible_sgui = { scope = country is_shown = { has_variable = sed_outcome_month } }\nsed_outcome_wait_visible_sgui = { scope = country is_shown = { has_variable = sed_coord_active has_variable = sed_mode_automatic sed_outcome_growth_wait = yes } }\nsed_follow_visible_sgui = { scope = country is_shown = { has_variable = sed_follow_staff has_variable = sed_follow_inputs } }\n' + scripted_guis() + ascension.guis() + ''.join(f'sed_watch_{n}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_watch_status var:sed_watch_status = {n} }} }}\n' for n in range(1, 6)),
         'common/scripted_triggers/sed_triggers.txt': scripted_triggers(),
         'common/script_values/sed_values.txt': '# Current calendar, independent of diagnostic refresh.\nsed_live_month_key = { value = year multiply = 12 add = month }\n# Country scope. Fixed expenditure is gross fixed income minus its net balance.\nsed_fixed_expenses_value = { value = fixed_income subtract = net_fixed_income min = 0 }\n' + construction_budget.values() + labor.values(projects) + input_forecast.values(projects) + supplier_output_values() + investment.values(SUPPLY_TARGETS, variants),
         'gui/journal_entry_widgets/sed_diagnostics.gui': widget(),

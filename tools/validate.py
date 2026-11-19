@@ -74,7 +74,7 @@ def validate(root=ROOT, game=None):
         'zw_var_develop_incorporated_states', 'zw_var_ip_incorporated',
         'zw_var_scsab_gov_admin_for_institution',
         'advisor_setting_sc_goal_sol', 'advisor_setting_sc_goal_treasury',
-        'advisor_setting_treasury_off', 'advisor_setting_borrow',
+        'advisor_setting_treasury_off', 'advisor_setting_borrow', 'advisor_labor_auto_enabled',
     }
     for effect_name in ('sed_coord_sync', 'sed_coord_restore'):
         top = custom.get(effect_name, [])

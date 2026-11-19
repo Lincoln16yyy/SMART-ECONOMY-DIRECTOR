@@ -1,5 +1,11 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.54, o acompanhamento cobre os 84 tipos de prédio catalogados.
+Excesso de oferta é avaliado pelos métodos ativos que produzem o bem.
+Quando faltam trabalhadores em expansões recentes, a coordenação pode
+habilitar a automação de mão de obra do Advisor e restaura sua opção
+anterior após a recuperação ou a saída do Automático.
+
 Na 0.7.53, o Director observa expansões de madeira, ferro, ferramentas,
 papel, alimentos e roupas entre revisões. O Diário identifica contratação,
 insumos e oferta excedente. A diversificação delegada pode aguardar a
