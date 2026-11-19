@@ -718,3 +718,8 @@ Referências vanilla: `00_tutorial.txt` (prestígio e relações),
 A posição é estimada por prestígio estritamente superior. Empates dividem
 posição nessa estimativa. A aceitação de aliança ou pacto deve ser
 verificada no painel diplomático. Campanha NÃO VERIFICADA.
+
+## Recuperação de construção 0.7.51
+
+Instalada com backup `sed_backups/mod_before_0.7.51_20261118_212435_131111`.
+A observação usa fila e executor em meses distintos. Campanha pendente.

@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.50
+# Estado dos requisitos — 0.7.51
 
 ## Coordenação com Economy Advisor
 
@@ -185,3 +185,13 @@ A revisão de calendário, política fiscal e acompanhamento de variantes está 
 
 O README e esta matriz foram confrontados com o gerador da 0.7.30. A lista de lacunas herdada da 0.6.26 estava desatualizada em três pontos: métodos de produção (configuração inicial desde a 0.7.7, modernização contínua desde a 0.7.9, recuperação por insumo desde a 0.7.10 e cessão ao Auto-Apply PMs desde a 0.7.28), fundação de prédios (indústria desde a 0.7.0, primeira ferrovia desde a 0.7.1, Centro de Comércio desde a 0.7.30) e salários militares (controlados em crise na paz desde a 0.7.5). O catálogo tem doze bens desde a 0.7.14, e o livro de resultados cobre os doze, a ferrovia e o setor de construção. Continuam fora: comércio exterior por rota, leis, imposto de consumo, gasto discricionário, dívida, recrutamento e consumo real das tropas, custo incremental real, identidade de projeto, qualificações e construtores nativos.
 `python3 tools/build_mod.py --check` confirmou sincronia e 394 testes sintéticos passaram; nenhuma mudança de comportamento nesta sincronização.
+
+## Recuperação de fila — 0.7.51
+
+**Código:** dois intervalos mensais delegados ao Advisor com fila pública
+vazia permitem uma tentativa direta por candidato elegível. Mantém
+guardas fiscais e de materiais e o limite mensal. Fila ocupada zera a
+contagem. Pausa e fila privada suspendem a observação.
+**Teste sintético:** quatro testes passaram, incluindo devolução ao
+Advisor após enfileiramento. **Estático:** validado. Campanha NÃO
+VERIFICADA. Obras podem terminar entre as leituras de fila.
