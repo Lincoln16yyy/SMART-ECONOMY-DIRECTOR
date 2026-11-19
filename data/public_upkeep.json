@@ -1,0 +1,12 @@
+{
+  "university": {
+    "building": "building_university",
+    "materials": 787.5,
+    "weighted_jobs": 2900.0
+  },
+  "admin": {
+    "building": "building_government_administration",
+    "materials": 1662.5,
+    "weighted_jobs": 5000.0
+  }
+}

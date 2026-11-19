@@ -1298,6 +1298,123 @@ sed_auto_current_budget_gold_visible_sgui = { scope = country is_shown = { is_pl
 sed_auto_current_clear_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic sed_auto_executor_safe = yes } }
 sed_auto_current_queue_control_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic construction_queue_num_queued_private_levels > 0 sed_private_control_configured = yes } }
 sed_auto_status_delegated_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 18 } }
+sed_problem_angkor_wat_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 1 } }
+sed_problem_arms_industry_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 2 } }
+sed_problem_art_academy_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 3 } }
+sed_problem_artillery_foundry_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 4 } }
+sed_problem_automotive_industry_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 5 } }
+sed_problem_banana_plantation_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 6 } }
+sed_problem_barrack_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 7 } }
+sed_problem_big_ben_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 8 } }
+sed_problem_chemical_plant_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 9 } }
+sed_problem_coal_mine_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 10 } }
+sed_problem_coffee_plantation_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 11 } }
+sed_problem_construction_sector_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 12 } }
+sed_problem_copper_mine_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 13 } }
+sed_problem_cotton_plantation_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 14 } }
+sed_problem_cristo_redentor_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 15 } }
+sed_problem_dye_plantation_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 16 } }
+sed_problem_eiffel_tower_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 17 } }
+sed_problem_electrics_industry_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 18 } }
+sed_problem_estacion_de_madrid_atocha_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 19 } }
+sed_problem_explosives_factory_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 20 } }
+sed_problem_fishing_wharf_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 21 } }
+sed_problem_food_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 22 } }
+sed_problem_forbidden_city_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 23 } }
+sed_problem_furniture_manufactory_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 24 } }
+sed_problem_glassworks_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 25 } }
+sed_problem_gold_mine_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 26 } }
+sed_problem_government_administration_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 27 } }
+sed_problem_gran_teatro_de_la_habana_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 28 } }
+sed_problem_hagia_sophia_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 29 } }
+sed_problem_iron_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 30 } }
+sed_problem_kaiserforum_1_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 31 } }
+sed_problem_kaiserforum_2_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 32 } }
+sed_problem_kaiserforum_3_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 33 } }
+sed_problem_kaiserforum_4_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 34 } }
+sed_problem_kiel_canal_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 35 } }
+sed_problem_lead_mine_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 36 } }
+sed_problem_livestock_ranch_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 37 } }
+sed_problem_wood_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 38 } }
+sed_problem_maize_farm_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 39 } }
+sed_problem_manila_cathedral_monument_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 40 } }
+sed_problem_millet_farm_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 41 } }
+sed_problem_mosque_of_djenne_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 42 } }
+sed_problem_motor_industry_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 43 } }
+sed_problem_munition_plant_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 44 } }
+sed_problem_naval_administration_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 45 } }
+sed_problem_naval_fortification_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 46 } }
+sed_problem_oil_rig_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 47 } }
+sed_problem_opium_plantation_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 48 } }
+sed_problem_panama_canal_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 49 } }
+sed_problem_paper_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 50 } }
+sed_problem_pena_palace_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 51 } }
+sed_problem_port_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 52 } }
+sed_problem_power_bloc_statue_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 53 } }
+sed_problem_power_plant_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 54 } }
+sed_problem_railway_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 55 } }
+sed_problem_rice_farm_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 56 } }
+sed_problem_rubber_plantation_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 57 } }
+sed_problem_rye_farm_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 58 } }
+sed_problem_sagrada_familia_cathedral_1_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 59 } }
+sed_problem_sagrada_familia_cathedral_2_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 60 } }
+sed_problem_sagrada_familia_cathedral_3_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 61 } }
+sed_problem_saint_basils_cathedral_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 62 } }
+sed_problem_shipyard_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 63 } }
+sed_problem_silk_plantation_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 64 } }
+sed_problem_skyscraper_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 65 } }
+sed_problem_statue_of_liberty_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 66 } }
+sed_problem_steel_mill_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 67 } }
+sed_problem_suez_canal_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 68 } }
+sed_problem_sugar_plantation_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 69 } }
+sed_problem_sulfur_mine_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 70 } }
+sed_problem_synthetics_plant_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 71 } }
+sed_problem_taj_mahal_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 72 } }
+sed_problem_tea_plantation_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 73 } }
+sed_problem_clothes_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 74 } }
+sed_problem_tobacco_plantation_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 75 } }
+sed_problem_tools_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 76 } }
+sed_problem_trade_center_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 77 } }
+sed_problem_university_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 78 } }
+sed_problem_vatican_city_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 79 } }
+sed_problem_victoria_terminus_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 80 } }
+sed_problem_vineyard_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 81 } }
+sed_problem_whaling_station_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 82 } }
+sed_problem_wheat_farm_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 83 } }
+sed_problem_white_house_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 84 } }
+sed_problem_good_ammunition_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 1 } }
+sed_problem_good_artillery_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 2 } }
+sed_problem_good_clippers_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 3 } }
+sed_problem_good_coal_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 4 } }
+sed_problem_good_copper_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 5 } }
+sed_problem_good_dye_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 6 } }
+sed_problem_good_engines_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 7 } }
+sed_problem_good_explosives_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 8 } }
+sed_problem_good_fabric_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 9 } }
+sed_problem_good_fertilizer_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 10 } }
+sed_problem_good_fish_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 11 } }
+sed_problem_good_glass_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 12 } }
+sed_problem_good_grain_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 13 } }
+sed_problem_good_hardwood_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 14 } }
+sed_problem_good_iron_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 15 } }
+sed_problem_good_lead_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 16 } }
+sed_problem_good_meat_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 17 } }
+sed_problem_good_merchant_marine_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 18 } }
+sed_problem_good_oil_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 19 } }
+sed_problem_good_paper_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 20 } }
+sed_problem_good_radios_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 21 } }
+sed_problem_good_rubber_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 22 } }
+sed_problem_good_silk_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 23 } }
+sed_problem_good_small_arms_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 24 } }
+sed_problem_good_steamers_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 25 } }
+sed_problem_good_steel_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 26 } }
+sed_problem_good_sugar_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 27 } }
+sed_problem_good_sulfur_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 28 } }
+sed_problem_good_telephones_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 29 } }
+sed_problem_good_tools_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 30 } }
+sed_problem_good_wood_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_good var:sed_problem_good = 31 } }
+sed_upkeep_university_visible_sgui = { scope = country is_shown = { has_variable = sed_upkeep_university_known var:sed_upkeep_university_known = 1 } }
+sed_upkeep_admin_visible_sgui = { scope = country is_shown = { has_variable = sed_upkeep_admin_known var:sed_upkeep_admin_known = 1 } }
 sed_last_build_railway_visible_sgui = { scope = country is_shown = { has_variable = sed_last_build_state has_variable = sed_last_build_action var:sed_last_build_action = 1 } }
 sed_last_build_construction_visible_sgui = { scope = country is_shown = { has_variable = sed_last_build_state has_variable = sed_last_build_action var:sed_last_build_action = 2 } }
 sed_last_build_wood_visible_sgui = { scope = country is_shown = { has_variable = sed_last_build_state has_variable = sed_last_build_action var:sed_last_build_action = 3 } }

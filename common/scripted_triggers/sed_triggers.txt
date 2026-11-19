@@ -2707,6 +2707,7 @@ sed_university_ready = {
  construction_queue_num_queued_private_levels = 0
  net_total_income > 0
  country_innovation < max_innovation
+ sed_upkeep_university_safe = yes
  market = { mg:paper ?= {
   market_goods_sell_orders > 0
   market_goods_has_goods_shortage = no
@@ -3975,6 +3976,25 @@ sed_outcome_growth_wait = {
   AND = { has_variable = sed_outcome_market var:sed_outcome_market > 0 }
  }
 }
+sed_upkeep_university_safe = {
+ OR = {
+  AND = { has_variable = sed_upkeep_university_known var:sed_upkeep_university_known = 1
+   net_total_income >= var:sed_upkeep_university_cost }
+  AND = { NOT = { has_variable = sed_upkeep_university_known var:sed_upkeep_university_known = 1 }
+   net_total_income > 0 principal <= 0
+   gold_reserves >= { value = sed_fixed_expenses_value multiply = 12 } }
+ }
+}
+
+sed_upkeep_admin_safe = {
+ OR = {
+  AND = { has_variable = sed_upkeep_admin_known var:sed_upkeep_admin_known = 1
+   net_total_income >= var:sed_upkeep_admin_cost }
+  AND = { NOT = { has_variable = sed_upkeep_admin_known var:sed_upkeep_admin_known = 1 }
+   net_total_income > 0 principal <= 0
+   gold_reserves >= { value = sed_fixed_expenses_value multiply = 12 } }
+ }
+}
 # Country scope. A shortage of a good with no producer anywhere in the country,
 # with trade open. Isolationism disables World Market trade, so extra capacity
 # would be useless.
@@ -4040,7 +4060,7 @@ sed_admin_candidate_eligible = {
  infrastructure_delta >= 0
  can_construct_building = building_government_administration
  NOT = { has_variable = sed_admin_request_pending }
- owner = { sed_admin_needed = yes }
+ owner = { sed_admin_needed = yes sed_upkeep_admin_safe = yes }
  OR = {
   NOT = { owner = { var:sed_plan_goal = 7 } }
   tax_capacity_usage > tax_capacity

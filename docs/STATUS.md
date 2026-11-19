@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.55
+# Estado dos requisitos — 0.7.56
 
 ## Coordenação com Economy Advisor
 
@@ -265,3 +265,23 @@ estados, prioridade de insumo e rejeição de obra sem falso sucesso;
 24 testes de crescimento, acompanhamento e universidades aprovados.
 **Estático:** validado. Tiger mantém três apontamentos de Diário
 conhecidos. **Campanha:** NÃO VERIFICADA.
+
+## Manutenção e contratação — 0.7.56
+
+**Código:** construção direta de universidades e administrações verifica
+referência de manutenção. Insumos usam o maior custo por grupo de métodos
+vanilla com preços de referência acrescidos de 75%. Empregos ponderados
+pelos salários relativos usam observação nacional ou salário observado
+do prédio, acrescido de 25%. Métodos futuros podem tornar o limite alto.
+A leitura é aproximação conservadora. Sem referência salarial, mantém
+uma via com saldo positivo, ausência de dívida e 12 semanas de reserva.
+
+A observação de contratação concede três meses desde o nível concluído.
+A falta de insumos continua imediata. Pendências antigas recebem o prazo
+na primeira revisão desta versão. O Diário identifica um prédio
+acompanhado com o estado e um insumo de método ativo em escassez de
+mercado. Esse insumo é candidato a explicar a falta local.
+
+**Teste sintético:** fronteira do saldo de manutenção, prazo completo,
+migração de pendência e identificação de madeira para fábrica de papel.
+**Estático:** validador aprovado. **Campanha:** NÃO VERIFICADA.

@@ -3108,6 +3108,825 @@ textbox = {
  text = "sed_outcome_summary"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_problem_angkor_wat_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_angkor_wat"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_arms_industry_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_arms_industry"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_art_academy_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_art_academy"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_artillery_foundry_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_artillery_foundry"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_automotive_industry_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_automotive_industry"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_banana_plantation_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_banana_plantation"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_barrack_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_barrack"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_big_ben_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_big_ben"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_chemical_plant_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_chemical_plant"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_coal_mine_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_coal_mine"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_coffee_plantation_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_coffee_plantation"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_construction_sector_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_construction_sector"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_copper_mine_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_copper_mine"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_cotton_plantation_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_cotton_plantation"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_cristo_redentor_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_cristo_redentor"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_dye_plantation_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_dye_plantation"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_eiffel_tower_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_eiffel_tower"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_electrics_industry_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_electrics_industry"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_estacion_de_madrid_atocha_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_estacion_de_madrid_atocha"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_explosives_factory_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_explosives_factory"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_fishing_wharf_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_fishing_wharf"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_food_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_food"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_forbidden_city_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_forbidden_city"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_furniture_manufactory_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_furniture_manufactory"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_glassworks_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_glassworks"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_gold_mine_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_gold_mine"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_government_administration_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_government_administration"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_gran_teatro_de_la_habana_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_gran_teatro_de_la_habana"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_hagia_sophia_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_hagia_sophia"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_iron_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_iron"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_kaiserforum_1_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_kaiserforum_1"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_kaiserforum_2_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_kaiserforum_2"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_kaiserforum_3_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_kaiserforum_3"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_kaiserforum_4_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_kaiserforum_4"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_kiel_canal_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_kiel_canal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_lead_mine_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_lead_mine"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_livestock_ranch_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_livestock_ranch"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_wood_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_wood"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_maize_farm_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_maize_farm"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_manila_cathedral_monument_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_manila_cathedral_monument"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_millet_farm_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_millet_farm"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_mosque_of_djenne_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_mosque_of_djenne"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_motor_industry_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_motor_industry"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_munition_plant_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_munition_plant"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_naval_administration_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_naval_administration"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_naval_fortification_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_naval_fortification"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_oil_rig_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_oil_rig"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_opium_plantation_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_opium_plantation"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_panama_canal_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_panama_canal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_paper_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_paper"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_pena_palace_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_pena_palace"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_port_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_port"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_power_bloc_statue_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_power_bloc_statue"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_power_plant_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_power_plant"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_railway_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_railway"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_rice_farm_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_rice_farm"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_rubber_plantation_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_rubber_plantation"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_rye_farm_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_rye_farm"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_sagrada_familia_cathedral_1_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_sagrada_familia_cathedral_1"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_sagrada_familia_cathedral_2_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_sagrada_familia_cathedral_2"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_sagrada_familia_cathedral_3_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_sagrada_familia_cathedral_3"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_saint_basils_cathedral_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_saint_basils_cathedral"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_shipyard_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_shipyard"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_silk_plantation_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_silk_plantation"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_skyscraper_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_skyscraper"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_statue_of_liberty_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_statue_of_liberty"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_steel_mill_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_steel_mill"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_suez_canal_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_suez_canal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_sugar_plantation_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_sugar_plantation"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_sulfur_mine_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_sulfur_mine"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_synthetics_plant_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_synthetics_plant"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_taj_mahal_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_taj_mahal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_tea_plantation_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_tea_plantation"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_clothes_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_clothes"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_tobacco_plantation_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_tobacco_plantation"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_tools_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_tools"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_trade_center_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_trade_center"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_university_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_university"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_vatican_city_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_vatican_city"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_victoria_terminus_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_victoria_terminus"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_vineyard_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_vineyard"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_whaling_station_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_whaling_station"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_wheat_farm_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_wheat_farm"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_white_house_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_white_house"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_ammunition_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_ammunition"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_artillery_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_artillery"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_clippers_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_clippers"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_coal_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_coal"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_copper_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_copper"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_dye_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_dye"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_engines_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_engines"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_explosives_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_explosives"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_fabric_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_fabric"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_fertilizer_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_fertilizer"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_fish_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_fish"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_glass_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_glass"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_grain_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_grain"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_hardwood_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_hardwood"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_iron_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_iron"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_lead_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_lead"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_meat_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_meat"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_merchant_marine_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_merchant_marine"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_oil_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_oil"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_paper_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_paper"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_radios_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_radios"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_rubber_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_rubber"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_silk_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_silk"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_small_arms_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_small_arms"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_steamers_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_steamers"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_steel_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_steel"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_sugar_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_sugar"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_sulfur_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_sulfur"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_telephones_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_telephones"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_tools_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_tools"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_problem_good_wood_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_problem_good_wood"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_upkeep_university_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_upkeep_university"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_upkeep_admin_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_upkeep_admin"
+}
+textbox = {
  visible = "[GetScriptedGui('sed_outcome_labor_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_large

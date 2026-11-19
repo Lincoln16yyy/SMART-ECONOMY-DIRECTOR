@@ -9,7 +9,7 @@ except ImportError:
     from pdx_script import parse, walk
 
 
-def build(game):
+def build(game, prefix='goods_output_'):
     def definitions(category):
         return {entry.key: entry.value for path in sorted((game / 'common' / category).glob('*.txt'))
                 for entry in parse(path.read_text(encoding='utf-8-sig'))
@@ -27,13 +27,13 @@ def build(game):
             method_list = next((e.value for e in groups.get(group.key, []) if e.key == 'production_methods'), [])
             for method in method_list:
                 for entry in walk(methods.get(method.key, [])):
-                    if entry.key.startswith('goods_output_') and entry.key.endswith('_add'):
+                    if entry.key.startswith(prefix) and entry.key.endswith('_add'):
                         try:
                             positive = float(entry.value) > 0
                         except (ValueError, TypeError):
                             continue
                         if positive:
-                            goods.setdefault(entry.key[len('goods_output_'):-len('_add')], set()).add(method.key)
+                            goods.setdefault(entry.key[len(prefix):-len('_add')], set()).add(method.key)
         result[building] = {good: sorted(methods) for good, methods in sorted(goods.items())}
     return result
 
@@ -44,4 +44,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     output = Path(__file__).resolve().parents[1] / 'data/outcome_goods.json'
     output.write_text(json.dumps(build(args.game), indent=2) + '\n')
+    inputs = output.with_name('outcome_inputs.json')
+    inputs.write_text(json.dumps(build(args.game, 'goods_input_'), indent=2) + '\n')
     print(output)
+    print(inputs)

@@ -70,6 +70,7 @@ def queue_bands():
 def effects(founding_projects=()):
     methods = ' '.join(f'has_active_production_method = {method}' for method, _, _ in PROFILES)
     result = ['''sed_refresh_direct_budget = {
+ sed_refresh_public_upkeep = yes
  if = { limit = { is_player = yes has_variable = sed_enabled }
   set_variable = { name = sed_build_budget_known value = 1 }
   set_variable = { name = sed_build_budget_point_cost value = 0 }

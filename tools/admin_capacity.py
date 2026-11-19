@@ -46,7 +46,7 @@ sed_admin_candidate_eligible = {{
  infrastructure_delta >= 0
  can_construct_building = {BUILDING}
  NOT = {{ has_variable = sed_admin_request_pending }}
- owner = {{ sed_admin_needed = yes }}
+ owner = {{ sed_admin_needed = yes sed_upkeep_admin_safe = yes }}
  OR = {{
   NOT = {{ owner = {{ var:sed_plan_goal = 7 }} }}
   tax_capacity_usage > tax_capacity

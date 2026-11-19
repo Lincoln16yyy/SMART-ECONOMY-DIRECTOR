@@ -1,5 +1,10 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.56, universidades e administrações têm uma guarda de manutenção
+semanal baseada em insumos e salários observados. Expansões recebem três
+meses para contratar antes do bloqueio persistente por pessoal. O Diário
+identifica um prédio acompanhado, o estado e um insumo usado em escassez.
+
 Na 0.7.55, a escolha do estado considera trabalhadores disponíveis,
 acesso ao mercado e folga de infraestrutura. Fábricas operantes com
 escassez também priorizam fornecedores. O Diário mostra a última obra

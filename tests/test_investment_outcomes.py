@@ -20,7 +20,7 @@ class InvestmentOutcomeTests(unittest.TestCase):
         c.readings['month'] = 2
         c.run('sed_outcome_review')
         self.assertEqual(c.variables['sed_outcome_observed'], 1)
-        self.assertEqual(c.variables['sed_outcome_staff'], 1)
+        self.assertEqual(c.variables['sed_outcome_staff'], 0)
         self.assertEqual(c.variables['sed_outcome_inputs'], 1)
         mill.update(occupancy=1, building_has_goods_shortage=False)
         c.readings['month'] = 3
@@ -70,7 +70,7 @@ class InvestmentOutcomeTests(unittest.TestCase):
         c.readings['month'] = 2
         c.run('sed_outcome_review')
         self.assertIn('sed_outcome_coal_mine_pending', site['variables'])
-        self.assertEqual(c.variables['sed_outcome_staff'], 1)
+        self.assertEqual(c.variables['sed_outcome_staff'], 0)
 
     def test_labor_automation_preserves_original_and_restores_after_recovery(self):
         for original in (False, True):

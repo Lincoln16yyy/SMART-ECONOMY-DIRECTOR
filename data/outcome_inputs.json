@@ -1,0 +1,1181 @@
+{
+  "building_angkor_wat": {},
+  "building_arms_industry": {
+    "coal": [
+      "pm_rotary_valve_engine_building_arms_industry"
+    ],
+    "copper": [
+      "pm_assembly_lines_building_arms_industry"
+    ],
+    "electricity": [
+      "pm_assembly_lines_building_arms_industry"
+    ],
+    "hardwood": [
+      "pm_bolt_action_rifles",
+      "pm_muskets",
+      "pm_repeaters",
+      "pm_rifles"
+    ],
+    "iron": [
+      "pm_muskets"
+    ],
+    "oil": [
+      "pm_assembly_lines_building_arms_industry",
+      "pm_bolt_action_rifles"
+    ],
+    "steel": [
+      "pm_bolt_action_rifles",
+      "pm_repeaters",
+      "pm_rifles"
+    ],
+    "tools": [
+      "pm_assembly_lines_building_arms_industry",
+      "pm_bolt_action_rifles",
+      "pm_repeaters",
+      "pm_rifles",
+      "pm_rotary_valve_engine_building_arms_industry"
+    ]
+  },
+  "building_art_academy": {
+    "electricity": [
+      "pm_film_art"
+    ],
+    "paper": [
+      "pm_film_art",
+      "pm_photographic_art",
+      "pm_realist_art",
+      "pm_traditional_art"
+    ],
+    "tools": [
+      "pm_film_art",
+      "pm_photographic_art"
+    ]
+  },
+  "building_artillery_foundry": {
+    "coal": [
+      "pm_rotary_valve_engine_building_arms_industry"
+    ],
+    "copper": [
+      "pm_assembly_lines_building_arms_industry",
+      "pm_bronze_cannons",
+      "pm_bronze_smoothbores"
+    ],
+    "electricity": [
+      "pm_assembly_lines_building_arms_industry"
+    ],
+    "hardwood": [
+      "pm_breech_loaders",
+      "pm_bronze_cannons",
+      "pm_bronze_smoothbores",
+      "pm_cannons",
+      "pm_smoothbores"
+    ],
+    "iron": [
+      "pm_cannons",
+      "pm_smoothbores"
+    ],
+    "oil": [
+      "pm_assembly_lines_building_arms_industry",
+      "pm_recoiled_barrels"
+    ],
+    "steel": [
+      "pm_breech_loaders",
+      "pm_recoiled_barrels"
+    ],
+    "tools": [
+      "pm_assembly_lines_building_arms_industry",
+      "pm_breech_loaders",
+      "pm_recoiled_barrels",
+      "pm_rotary_valve_engine_building_arms_industry"
+    ]
+  },
+  "building_automotive_industry": {
+    "copper": [
+      "pm_assembly_lines_building_automotive_industry"
+    ],
+    "electricity": [
+      "pm_assembly_lines_building_automotive_industry"
+    ],
+    "engines": [
+      "pm_automobile_production",
+      "pm_mass_automobile_production"
+    ],
+    "fabric": [
+      "pm_aeroplane_production"
+    ],
+    "hardwood": [
+      "pm_aeroplane_production"
+    ],
+    "oil": [
+      "pm_assembly_lines_building_automotive_industry",
+      "pm_automobile_production",
+      "pm_mass_automobile_production"
+    ],
+    "rubber": [
+      "pm_automobile_production",
+      "pm_mass_automobile_production"
+    ],
+    "steel": [
+      "pm_tank_production"
+    ],
+    "tools": [
+      "pm_assembly_lines_building_automotive_industry"
+    ]
+  },
+  "building_banana_plantation": {
+    "engines": [
+      "automatic_irrigation_building_banana_plantation"
+    ],
+    "transportation": [
+      "pm_steam_rail_transport"
+    ]
+  },
+  "building_barrack": {},
+  "building_big_ben": {},
+  "building_chemical_plant": {
+    "iron": [
+      "pm_artificial_fertilizers",
+      "pm_improved_fertilizer",
+      "pm_nitrogen_fixation"
+    ],
+    "oil": [
+      "pm_nitrogen_fixation"
+    ],
+    "sulfur": [
+      "pm_artificial_fertilizers",
+      "pm_improved_fertilizer",
+      "pm_nitrogen_fixation"
+    ]
+  },
+  "building_coal_mine": {
+    "engines": [
+      "pm_steam_donkey_building_coal_mine"
+    ],
+    "explosives": [
+      "pm_dynamite_building_coal_mine",
+      "pm_nitroglycerin_building_coal_mine"
+    ],
+    "oil": [
+      "pm_diesel_pump_building_coal_mine"
+    ],
+    "tools": [
+      "pm_atmospheric_engine_pump_building_coal_mine",
+      "pm_condensing_engine_pump_building_coal_mine",
+      "pm_diesel_pump_building_coal_mine",
+      "pm_picks_and_shovels_building_coal_mine"
+    ],
+    "transportation": [
+      "pm_rail_transport_mine"
+    ]
+  },
+  "building_coffee_plantation": {
+    "engines": [
+      "coffee_plantation_mechanical_drying",
+      "coffee_plantation_wet_process_mechanical"
+    ],
+    "tools": [
+      "coffee_plantation_mechanical_drying",
+      "coffee_plantation_wet_process_manual",
+      "coffee_plantation_wet_process_mechanical"
+    ],
+    "transportation": [
+      "pm_steam_rail_transport"
+    ]
+  },
+  "building_construction_sector": {
+    "copper": [
+      "pm_arc_welded_buildings"
+    ],
+    "electricity": [
+      "pm_arc_welded_buildings"
+    ],
+    "explosives": [
+      "pm_arc_welded_buildings",
+      "pm_steel_frame_buildings"
+    ],
+    "fabric": [
+      "pm_iron_frame_buildings",
+      "pm_wooden_buildings"
+    ],
+    "glass": [
+      "pm_arc_welded_buildings",
+      "pm_steel_frame_buildings"
+    ],
+    "iron": [
+      "pm_iron_frame_buildings"
+    ],
+    "steel": [
+      "pm_arc_welded_buildings",
+      "pm_steel_frame_buildings"
+    ],
+    "tools": [
+      "pm_arc_welded_buildings",
+      "pm_iron_frame_buildings",
+      "pm_steel_frame_buildings"
+    ],
+    "wood": [
+      "pm_iron_frame_buildings",
+      "pm_wooden_buildings"
+    ]
+  },
+  "building_copper_mine": {
+    "coal": [
+      "pm_atmospheric_engine_pump_building_copper_mine",
+      "pm_condensing_engine_pump_building_copper_mine",
+      "pm_steam_donkey_mine"
+    ],
+    "engines": [
+      "pm_steam_donkey_mine"
+    ],
+    "explosives": [
+      "pm_dynamite_building_copper_mine",
+      "pm_nitroglycerin_building_copper_mine"
+    ],
+    "oil": [
+      "pm_diesel_pump_building_copper_mine"
+    ],
+    "tools": [
+      "pm_atmospheric_engine_pump_building_copper_mine",
+      "pm_condensing_engine_pump_building_copper_mine",
+      "pm_diesel_pump_building_copper_mine",
+      "pm_picks_and_shovels_building_copper_mine"
+    ],
+    "transportation": [
+      "pm_rail_transport_mine"
+    ]
+  },
+  "building_cotton_plantation": {
+    "engines": [
+      "automatic_irrigation_building_cotton_plantation"
+    ],
+    "transportation": [
+      "pm_steam_rail_transport"
+    ]
+  },
+  "building_cristo_redentor": {},
+  "building_dye_plantation": {
+    "engines": [
+      "automatic_irrigation_building_dye_plantation"
+    ],
+    "transportation": [
+      "pm_steam_rail_transport"
+    ]
+  },
+  "building_eiffel_tower": {},
+  "building_electrics_industry": {
+    "copper": [
+      "pm_telephones"
+    ],
+    "electricity": [
+      "pm_radios"
+    ],
+    "iron": [
+      "pm_telephones"
+    ],
+    "rubber": [
+      "pm_telephones"
+    ],
+    "tools": [
+      "pm_telephones"
+    ]
+  },
+  "building_estacion_de_madrid_atocha": {},
+  "building_explosives_factory": {
+    "electricity": [
+      "pm_brine_electrolysis"
+    ],
+    "fertilizer": [
+      "pm_ammonia-soda_process",
+      "pm_brine_electrolysis",
+      "pm_leblanc_process",
+      "pm_vacuum_evaporation"
+    ],
+    "paper": [
+      "pm_ammonia-soda_process",
+      "pm_brine_electrolysis",
+      "pm_vacuum_evaporation"
+    ],
+    "sulfur": [
+      "pm_ammonia-soda_process",
+      "pm_brine_electrolysis",
+      "pm_leblanc_process",
+      "pm_vacuum_evaporation"
+    ]
+  },
+  "building_fishing_wharf": {
+    "clippers": [
+      "pm_fishing_trawlers"
+    ],
+    "coal": [
+      "pm_steam_trawlers"
+    ],
+    "copper": [
+      "pm_flash_freezing_building_fishing_wharf",
+      "pm_refrigerated_rail_cars_building_fishing_wharf",
+      "pm_refrigerated_storage_building_fishing_wharf"
+    ],
+    "electricity": [
+      "pm_flash_freezing_building_fishing_wharf",
+      "pm_refrigerated_rail_cars_building_fishing_wharf",
+      "pm_refrigerated_storage_building_fishing_wharf"
+    ],
+    "steamers": [
+      "pm_steam_trawlers"
+    ],
+    "transportation": [
+      "pm_flash_freezing_building_fishing_wharf",
+      "pm_refrigerated_rail_cars_building_fishing_wharf"
+    ]
+  },
+  "building_food_industry": {
+    "copper": [
+      "pm_automated_bakery",
+      "pm_patent_stills",
+      "pm_pot_stills"
+    ],
+    "electricity": [
+      "pm_automated_bakery"
+    ],
+    "fish": [
+      "pm_cannery_fish",
+      "pm_vacuum_canning",
+      "pm_vacuum_canning_principle_3"
+    ],
+    "glass": [
+      "pm_patent_stills",
+      "pm_pot_stills"
+    ],
+    "grain": [
+      "pm_bakery",
+      "pm_baking_powder",
+      "pm_sweeteners"
+    ],
+    "iron": [
+      "pm_cannery",
+      "pm_cannery_fish",
+      "pm_vacuum_canning",
+      "pm_vacuum_canning_principle_3"
+    ],
+    "meat": [
+      "pm_cannery",
+      "pm_vacuum_canning",
+      "pm_vacuum_canning_principle_3"
+    ],
+    "oil": [
+      "pm_vacuum_canning",
+      "pm_vacuum_canning_principle_3"
+    ],
+    "sugar": [
+      "pm_baking_powder",
+      "pm_patent_stills",
+      "pm_pot_stills",
+      "pm_sweeteners"
+    ],
+    "tools": [
+      "pm_automated_bakery"
+    ]
+  },
+  "building_forbidden_city": {},
+  "building_furniture_manufactory": {
+    "coal": [
+      "pm_rotary_valve_engine_building_furniture_manufactory",
+      "pm_watertube_boiler_building_furniture_manufactory"
+    ],
+    "copper": [
+      "pm_assembly_lines_building_furniture_manufactory"
+    ],
+    "electricity": [
+      "pm_assembly_lines_building_furniture_manufactory"
+    ],
+    "fabric": [
+      "pm_handcrafted_furniture",
+      "pm_lathe",
+      "pm_mechanized_workshops"
+    ],
+    "hardwood": [
+      "pm_luxury_furniture",
+      "pm_precision_tools"
+    ],
+    "oil": [
+      "pm_assembly_lines_building_furniture_manufactory"
+    ],
+    "tools": [
+      "pm_assembly_lines_building_furniture_manufactory",
+      "pm_lathe",
+      "pm_mechanized_workshops",
+      "pm_precision_tools",
+      "pm_rotary_valve_engine_building_furniture_manufactory",
+      "pm_watertube_boiler_building_furniture_manufactory"
+    ],
+    "wood": [
+      "pm_handcrafted_furniture",
+      "pm_lathe",
+      "pm_mechanized_workshops"
+    ]
+  },
+  "building_glassworks": {
+    "dye": [
+      "pm_bone_china",
+      "pm_ceramics"
+    ],
+    "engines": [
+      "pm_automatic_bottle_blowers"
+    ],
+    "lead": [
+      "pm_crystal_glass",
+      "pm_houseware_plastics",
+      "pm_leaded_glass"
+    ],
+    "oil": [
+      "pm_automatic_bottle_blowers",
+      "pm_houseware_plastics"
+    ],
+    "tools": [
+      "pm_automatic_bottle_blowers"
+    ],
+    "wood": [
+      "pm_forest_glass",
+      "pm_leaded_glass"
+    ]
+  },
+  "building_gold_mine": {
+    "coal": [
+      "pm_atmospheric_engine_pump_building_gold_mine",
+      "pm_condensing_engine_pump_building_gold_mine",
+      "pm_steam_donkey_mine"
+    ],
+    "engines": [
+      "pm_steam_donkey_mine"
+    ],
+    "explosives": [
+      "pm_dynamite_building_gold_mine",
+      "pm_nitroglycerin_building_gold_mine"
+    ],
+    "oil": [
+      "pm_diesel_pump_building_gold_mine"
+    ],
+    "tools": [
+      "pm_atmospheric_engine_pump_building_gold_mine",
+      "pm_condensing_engine_pump_building_gold_mine",
+      "pm_diesel_pump_building_gold_mine",
+      "pm_picks_and_shovels_building_gold_mine"
+    ],
+    "transportation": [
+      "pm_rail_transport_mine"
+    ]
+  },
+  "building_government_administration": {
+    "paper": [
+      "pm_horizontal_drawer_cabinets",
+      "pm_switch_boards",
+      "pm_vertical_filing_cabinets"
+    ],
+    "telephones": [
+      "pm_switch_boards"
+    ]
+  },
+  "building_gran_teatro_de_la_habana": {
+    "paper": [
+      "pm_default_building_gran_teatro_de_la_habana"
+    ]
+  },
+  "building_hagia_sophia": {},
+  "building_iron_mine": {
+    "coal": [
+      "pm_atmospheric_engine_pump_building_iron_mine",
+      "pm_condensing_engine_pump_building_iron_mine",
+      "pm_steam_donkey_mine"
+    ],
+    "engines": [
+      "pm_steam_donkey_mine"
+    ],
+    "explosives": [
+      "pm_dynamite_building_iron_mine",
+      "pm_nitroglycerin_building_iron_mine"
+    ],
+    "oil": [
+      "pm_diesel_pump_building_iron_mine"
+    ],
+    "tools": [
+      "pm_atmospheric_engine_pump_building_iron_mine",
+      "pm_condensing_engine_pump_building_iron_mine",
+      "pm_diesel_pump_building_iron_mine",
+      "pm_picks_and_shovels_building_iron_mine"
+    ],
+    "transportation": [
+      "pm_rail_transport_mine"
+    ]
+  },
+  "building_kaiserforum_1": {},
+  "building_kaiserforum_2": {},
+  "building_kaiserforum_3": {},
+  "building_kaiserforum_4": {},
+  "building_kiel_canal": {
+    "coal": [
+      "pm_canal"
+    ],
+    "tools": [
+      "pm_canal"
+    ]
+  },
+  "building_lead_mine": {
+    "coal": [
+      "pm_atmospheric_engine_pump_building_lead_mine",
+      "pm_condensing_engine_pump_building_lead_mine",
+      "pm_steam_donkey_mine"
+    ],
+    "engines": [
+      "pm_steam_donkey_mine"
+    ],
+    "explosives": [
+      "pm_dynamite_building_lead_mine",
+      "pm_nitroglycerin_building_lead_mine"
+    ],
+    "oil": [
+      "pm_diesel_pump_building_lead_mine"
+    ],
+    "tools": [
+      "pm_atmospheric_engine_pump_building_lead_mine",
+      "pm_condensing_engine_pump_building_lead_mine",
+      "pm_diesel_pump_building_lead_mine",
+      "pm_picks_and_shovels_building_lead_mine"
+    ],
+    "transportation": [
+      "pm_rail_transport_mine"
+    ]
+  },
+  "building_livestock_ranch": {
+    "coal": [
+      "pm_mechanized_slaughtering"
+    ],
+    "electricity": [
+      "pm_electric_fencing",
+      "pm_refrigerated_rail_cars_building_livestock_ranch",
+      "pm_refrigerated_storage_building_livestock_ranch"
+    ],
+    "grain": [
+      "pm_intensive_grazing_ranch",
+      "pm_sheep_farms"
+    ],
+    "iron": [
+      "pm_barbed_wire_fences",
+      "pm_electric_fencing"
+    ],
+    "tools": [
+      "pm_butchering_tools",
+      "pm_mechanized_slaughtering",
+      "pm_slaughterhouses"
+    ],
+    "transportation": [
+      "pm_refrigerated_rail_cars_building_livestock_ranch"
+    ]
+  },
+  "building_logging_camp": {
+    "coal": [
+      "pm_steam_donkey_building_logging_camp"
+    ],
+    "electricity": [
+      "pm_electric_saw_mills"
+    ],
+    "engines": [
+      "pm_chainsaws",
+      "pm_steam_donkey_building_logging_camp"
+    ],
+    "oil": [
+      "pm_chainsaws"
+    ],
+    "tools": [
+      "pm_electric_saw_mills",
+      "pm_saw_mills"
+    ],
+    "transportation": [
+      "pm_log_carts",
+      "pm_rail_transport_building_logging_camp"
+    ]
+  },
+  "building_maize_farm": {
+    "coal": [
+      "pm_steam_threshers",
+      "pm_tractors"
+    ],
+    "engines": [
+      "pm_compression_ignition_tractors",
+      "pm_tractors"
+    ],
+    "fertilizer": [
+      "pm_chemical_fertilizer",
+      "pm_fertilization",
+      "pm_soil_enriching_farming"
+    ],
+    "oil": [
+      "pm_compression_ignition_tractors"
+    ],
+    "tools": [
+      "pm_steam_threshers",
+      "pm_tools"
+    ]
+  },
+  "building_manila_cathedral_monument": {},
+  "building_millet_farm": {
+    "coal": [
+      "pm_steam_threshers",
+      "pm_tractors"
+    ],
+    "engines": [
+      "pm_compression_ignition_tractors",
+      "pm_tractors"
+    ],
+    "fertilizer": [
+      "pm_chemical_fertilizer",
+      "pm_fertilization",
+      "pm_soil_enriching_farming"
+    ],
+    "oil": [
+      "pm_compression_ignition_tractors"
+    ],
+    "tools": [
+      "pm_steam_threshers",
+      "pm_tools"
+    ]
+  },
+  "building_mosque_of_djenne": {},
+  "building_motor_industry": {
+    "coal": [
+      "pm_rotary_valve_engine_building_motor_industry",
+      "pm_watertube_boiler_building_motor_industry"
+    ],
+    "copper": [
+      "pm_assembly_lines_building_motor_industry",
+      "pm_electric_engines"
+    ],
+    "electricity": [
+      "pm_assembly_lines_building_motor_industry",
+      "pm_electric_engines"
+    ],
+    "oil": [
+      "pm_assembly_lines_building_motor_industry",
+      "pm_diesel_engines"
+    ],
+    "steel": [
+      "pm_diesel_engines",
+      "pm_electric_engines",
+      "pm_steam_engines"
+    ],
+    "tools": [
+      "pm_assembly_lines_building_motor_industry",
+      "pm_rotary_valve_engine_building_motor_industry",
+      "pm_watertube_boiler_building_motor_industry"
+    ]
+  },
+  "building_munition_plant": {
+    "coal": [
+      "pm_rotary_valve_engine_building_munition_plant"
+    ],
+    "copper": [
+      "pm_assembly_lines_building_munition_plant",
+      "pm_explosive_shells",
+      "pm_percussion_caps"
+    ],
+    "electricity": [
+      "pm_assembly_lines_building_munition_plant"
+    ],
+    "explosives": [
+      "pm_explosive_shells",
+      "pm_percussion_caps"
+    ],
+    "lead": [
+      "pm_explosive_shells",
+      "pm_percussion_caps"
+    ],
+    "oil": [
+      "pm_assembly_lines_building_munition_plant"
+    ],
+    "tools": [
+      "pm_assembly_lines_building_munition_plant",
+      "pm_rotary_valve_engine_building_munition_plant"
+    ]
+  },
+  "building_naval_administration": {},
+  "building_naval_fortification": {
+    "ammunition": [
+      "pm_naval_fortification_advanced"
+    ],
+    "artillery": [
+      "pm_naval_fortification_advanced",
+      "pm_naval_fortification_reinforced"
+    ],
+    "iron": [
+      "pm_naval_fortification_basic"
+    ],
+    "small_arms": [
+      "pm_naval_fortification_advanced",
+      "pm_naval_fortification_basic",
+      "pm_naval_fortification_reinforced"
+    ],
+    "steel": [
+      "pm_naval_fortification_advanced",
+      "pm_naval_fortification_reinforced"
+    ]
+  },
+  "building_oil_rig": {
+    "coal": [
+      "pm_steam_derricks"
+    ],
+    "engines": [
+      "pm_combustion_derricks",
+      "pm_steam_derricks"
+    ],
+    "transportation": [
+      "pm_rail_transport_building_oil_rig",
+      "pm_tanker_cars"
+    ]
+  },
+  "building_opium_plantation": {
+    "engines": [
+      "automatic_irrigation_building_opium_plantation"
+    ],
+    "transportation": [
+      "pm_steam_rail_transport"
+    ]
+  },
+  "building_panama_canal": {
+    "coal": [
+      "pm_canal"
+    ],
+    "tools": [
+      "pm_canal"
+    ]
+  },
+  "building_paper_mill": {
+    "coal": [
+      "pm_rotary_valve_engine_building_paper_mill",
+      "pm_watertube_boiler_building_paper_mill"
+    ],
+    "dye": [
+      "pm_bleached_paper"
+    ],
+    "sulfur": [
+      "pm_bleached_paper",
+      "pm_sulfite_pulping"
+    ],
+    "tools": [
+      "pm_rotary_valve_engine_building_paper_mill",
+      "pm_watertube_boiler_building_paper_mill"
+    ],
+    "wood": [
+      "pm_bleached_paper",
+      "pm_pulp_pressing",
+      "pm_sulfite_pulping"
+    ]
+  },
+  "building_pena_palace": {},
+  "building_port": {
+    "clippers": [
+      "pm_basic_port"
+    ],
+    "coal": [
+      "pm_industrial_port"
+    ],
+    "oil": [
+      "pm_modern_port"
+    ],
+    "steamers": [
+      "pm_industrial_port",
+      "pm_modern_port"
+    ]
+  },
+  "building_power_bloc_statue": {},
+  "building_power_plant": {
+    "coal": [
+      "pm_coal-fired_plant",
+      "pm_early_power_plant"
+    ],
+    "copper": [
+      "pm_coal-fired_plant",
+      "pm_early_power_plant",
+      "pm_oil-fired_plant"
+    ],
+    "engines": [
+      "pm_coal-fired_plant",
+      "pm_early_power_plant",
+      "pm_oil-fired_plant"
+    ],
+    "oil": [
+      "pm_oil-fired_plant"
+    ]
+  },
+  "building_railway": {
+    "coal": [
+      "pm_early_trains",
+      "pm_steam_trains",
+      "pm_steam_trains_principle_transport_3"
+    ],
+    "electricity": [
+      "pm_electric_trains",
+      "pm_electric_trains_principle_transport_3"
+    ],
+    "engines": [
+      "pm_diesel_trains",
+      "pm_diesel_trains_principle_transport_3",
+      "pm_early_trains",
+      "pm_electric_trains",
+      "pm_electric_trains_principle_transport_3",
+      "pm_steam_trains",
+      "pm_steam_trains_principle_transport_3"
+    ],
+    "oil": [
+      "pm_diesel_trains",
+      "pm_diesel_trains_principle_transport_3"
+    ],
+    "steel": [
+      "pm_steel_passenger_carriages"
+    ],
+    "wood": [
+      "pm_wooden_passenger_carriages"
+    ]
+  },
+  "building_rice_farm": {
+    "coal": [
+      "pm_steam_threshers_building_rice_farm"
+    ],
+    "fertilizer": [
+      "pm_chemical_fertilizer_building_rice_farm",
+      "pm_fertilization_building_rice_farm",
+      "pm_soil_enriching_farming_building_rice_farm"
+    ],
+    "fish": [
+      "pm_herring_meal_farming_building_rice_farm"
+    ],
+    "tools": [
+      "pm_steam_threshers_building_rice_farm",
+      "pm_tools_building_rice_farm"
+    ]
+  },
+  "building_rubber_plantation": {
+    "engines": [
+      "automatic_irrigation_building_rubber_plantation"
+    ],
+    "transportation": [
+      "pm_steam_rail_transport"
+    ]
+  },
+  "building_rye_farm": {
+    "coal": [
+      "pm_steam_threshers",
+      "pm_tractors"
+    ],
+    "engines": [
+      "pm_compression_ignition_tractors",
+      "pm_tractors"
+    ],
+    "fertilizer": [
+      "pm_chemical_fertilizer",
+      "pm_fertilization",
+      "pm_soil_enriching_farming"
+    ],
+    "oil": [
+      "pm_compression_ignition_tractors"
+    ],
+    "tools": [
+      "pm_steam_threshers",
+      "pm_tools"
+    ]
+  },
+  "building_sagrada_familia_cathedral_1": {},
+  "building_sagrada_familia_cathedral_2": {},
+  "building_sagrada_familia_cathedral_3": {},
+  "building_saint_basils_cathedral": {},
+  "building_shipyard": {
+    "coal": [
+      "pm_metal_shipbuilding"
+    ],
+    "electricity": [
+      "pm_arc_welding_shipbuilding"
+    ],
+    "engines": [
+      "pm_arc_welding_shipbuilding",
+      "pm_complex_shipbuilding",
+      "pm_metal_shipbuilding"
+    ],
+    "fabric": [
+      "pm_basic_shipbuilding",
+      "pm_complex_shipbuilding"
+    ],
+    "hardwood": [
+      "pm_complex_shipbuilding"
+    ],
+    "steel": [
+      "pm_arc_welding_shipbuilding",
+      "pm_metal_shipbuilding"
+    ],
+    "wood": [
+      "pm_basic_shipbuilding",
+      "pm_complex_shipbuilding"
+    ]
+  },
+  "building_silk_plantation": {
+    "engines": [
+      "automatic_irrigation_building_silk_plantation"
+    ],
+    "transportation": [
+      "pm_steam_rail_transport"
+    ]
+  },
+  "building_skyscraper": {
+    "paper": [
+      "pm_skyscraper_bureaucratic_nexus",
+      "pm_skyscraper_trade_nexus"
+    ]
+  },
+  "building_statue_of_liberty": {},
+  "building_steel_mill": {
+    "coal": [
+      "pm_bessemer_process",
+      "pm_blister_steel_process",
+      "pm_electric_arc_process",
+      "pm_open_hearth_process",
+      "pm_rotary_valve_engine_building_steel_mill",
+      "pm_watertube_boiler_building_steel_mill"
+    ],
+    "electricity": [
+      "pm_electric_arc_process"
+    ],
+    "iron": [
+      "pm_bessemer_process",
+      "pm_blister_steel_process",
+      "pm_electric_arc_process",
+      "pm_open_hearth_process"
+    ],
+    "tools": [
+      "pm_rotary_valve_engine_building_steel_mill",
+      "pm_watertube_boiler_building_steel_mill"
+    ]
+  },
+  "building_suez_canal": {
+    "coal": [
+      "pm_canal"
+    ],
+    "tools": [
+      "pm_canal"
+    ]
+  },
+  "building_sugar_plantation": {
+    "coal": [
+      "centrifugal_machine_sugar",
+      "steam_powered_evaporation_sugar",
+      "vacuum_pan_sugar"
+    ],
+    "engines": [
+      "automatic_irrigation_building_sugar_plantation",
+      "centrifugal_machine_sugar",
+      "steam_powered_evaporation_sugar"
+    ],
+    "transportation": [
+      "pm_steam_rail_transport"
+    ]
+  },
+  "building_sulfur_mine": {
+    "coal": [
+      "pm_atmospheric_engine_pump_building_sulfur_mine",
+      "pm_condensing_engine_pump_building_sulfur_mine",
+      "pm_steam_donkey_mine"
+    ],
+    "engines": [
+      "pm_steam_donkey_mine"
+    ],
+    "explosives": [
+      "pm_dynamite_building_sulfur_mine",
+      "pm_nitroglycerin_building_sulfur_mine"
+    ],
+    "oil": [
+      "pm_diesel_pump_building_sulfur_mine"
+    ],
+    "tools": [
+      "pm_atmospheric_engine_pump_building_sulfur_mine",
+      "pm_condensing_engine_pump_building_sulfur_mine",
+      "pm_diesel_pump_building_sulfur_mine",
+      "pm_picks_and_shovels_building_sulfur_mine"
+    ],
+    "transportation": [
+      "pm_rail_transport_mine"
+    ]
+  },
+  "building_synthetics_plant": {
+    "fertilizer": [
+      "pm_dye_production"
+    ],
+    "sulfur": [
+      "pm_dye_production"
+    ],
+    "wood": [
+      "pm_rayon"
+    ]
+  },
+  "building_taj_mahal": {},
+  "building_tea_plantation": {
+    "engines": [
+      "automatic_irrigation_building_tea_plantation"
+    ],
+    "transportation": [
+      "pm_steam_rail_transport"
+    ]
+  },
+  "building_textile_mill": {
+    "copper": [
+      "pm_automatic_power_looms",
+      "pm_electric_sewing_machines"
+    ],
+    "dye": [
+      "pm_dye_workshops",
+      "pm_electric_sewing_machines",
+      "pm_sewing_machines"
+    ],
+    "electricity": [
+      "pm_automatic_power_looms",
+      "pm_electric_sewing_machines"
+    ],
+    "fabric": [
+      "pm_dye_workshops",
+      "pm_electric_sewing_machines",
+      "pm_handsewn_clothes",
+      "pm_sewing_machines"
+    ],
+    "rubber": [
+      "pm_elastics"
+    ],
+    "silk": [
+      "pm_craftsman_sewing",
+      "pm_elastics"
+    ],
+    "tools": [
+      "pm_automatic_power_looms",
+      "pm_electric_sewing_machines",
+      "pm_mechanized_looms",
+      "pm_sewing_machines"
+    ]
+  },
+  "building_tobacco_plantation": {
+    "electricity": [
+      "electric_rollers"
+    ],
+    "engines": [
+      "automatic_irrigation_building_tobacco_plantation"
+    ],
+    "iron": [
+      "electric_rollers",
+      "molds"
+    ],
+    "radios": [
+      "radio_stations_tobacco"
+    ],
+    "transportation": [
+      "pm_steam_rail_transport"
+    ]
+  },
+  "building_tooling_workshop": {
+    "coal": [
+      "pm_rotary_valve_engine_building_tooling_workshop",
+      "pm_watertube_boiler_building_tooling_workshop"
+    ],
+    "copper": [
+      "pm_assembly_lines_building_tooling_workshop"
+    ],
+    "electricity": [
+      "pm_assembly_lines_building_tooling_workshop"
+    ],
+    "iron": [
+      "pm_pig_iron"
+    ],
+    "oil": [
+      "pm_assembly_lines_building_tooling_workshop"
+    ],
+    "rubber": [
+      "pm_rubber_grips"
+    ],
+    "steel": [
+      "pm_rubber_grips",
+      "pm_steel"
+    ],
+    "wood": [
+      "pm_crude_tools",
+      "pm_pig_iron",
+      "pm_steel"
+    ]
+  },
+  "building_trade_center": {
+    "merchant_marine": [
+      "pm_trade_center_trade_quantity_high",
+      "pm_trade_center_trade_quantity_limited",
+      "pm_trade_center_trade_quantity_normal",
+      "pm_trade_center_trade_quantity_very_high"
+    ]
+  },
+  "building_university": {
+    "paper": [
+      "pm_analytical_philosophy_department",
+      "pm_philosophy_department",
+      "pm_scholastic_education"
+    ]
+  },
+  "building_vatican_city": {},
+  "building_victoria_terminus": {},
+  "building_vineyard": {
+    "engines": [
+      "automatic_irrigation_building_vineyard"
+    ],
+    "transportation": [
+      "pm_steam_rail_transport"
+    ]
+  },
+  "building_whaling_station": {
+    "clippers": [
+      "pm_wooden_whaling_ships"
+    ],
+    "coal": [
+      "pm_steam_whaling_ships"
+    ],
+    "copper": [
+      "pm_flash_freezing_building_whaling_station",
+      "pm_refrigerated_rail_cars_building_whaling_station",
+      "pm_refrigerated_storage_building_whaling_station"
+    ],
+    "electricity": [
+      "pm_flash_freezing_building_whaling_station",
+      "pm_refrigerated_rail_cars_building_whaling_station",
+      "pm_refrigerated_storage_building_whaling_station"
+    ],
+    "steamers": [
+      "pm_steam_whaling_ships"
+    ],
+    "transportation": [
+      "pm_flash_freezing_building_whaling_station",
+      "pm_refrigerated_rail_cars_building_whaling_station"
+    ]
+  },
+  "building_wheat_farm": {
+    "coal": [
+      "pm_steam_threshers",
+      "pm_tractors"
+    ],
+    "engines": [
+      "pm_compression_ignition_tractors",
+      "pm_tractors"
+    ],
+    "fertilizer": [
+      "pm_chemical_fertilizer",
+      "pm_fertilization",
+      "pm_soil_enriching_farming"
+    ],
+    "fish": [
+      "pm_herring_meal_farming"
+    ],
+    "oil": [
+      "pm_compression_ignition_tractors"
+    ],
+    "tools": [
+      "pm_steam_threshers",
+      "pm_tools"
+    ]
+  },
+  "building_white_house": {}
+}

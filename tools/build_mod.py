@@ -6,14 +6,14 @@ import re
 from pathlib import Path
 
 try:
-    from . import planning, coordination, construction_budget, labor, input_forecast, production_methods, investment, trade_capacity, admin_capacity, power_capacity, core_growth, ascension, construction_watch, post_build, investment_outcomes
+    from . import planning, coordination, construction_budget, labor, input_forecast, production_methods, investment, trade_capacity, admin_capacity, power_capacity, core_growth, ascension, construction_watch, post_build, investment_outcomes, public_upkeep
 except ImportError:
-    import planning, coordination, construction_budget, labor, input_forecast, production_methods, investment, trade_capacity, admin_capacity, power_capacity, core_growth, ascension, construction_watch, post_build, investment_outcomes
+    import planning, coordination, construction_budget, labor, input_forecast, production_methods, investment, trade_capacity, admin_capacity, power_capacity, core_growth, ascension, construction_watch, post_build, investment_outcomes, public_upkeep
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.55'
+VERSION = '0.7.56'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -270,7 +270,7 @@ sed_queue_levels_before'''.split() + [
 ]
 
 
-EXTRA_VARIABLES += production_methods.COUNTRY_VARIABLES + investment.COUNTRY_VARIABLES + ascension.VARIABLES + construction_watch.VARIABLES + post_build.COUNTRY_VARIABLES + investment_outcomes.COUNTRY_VARIABLES
+EXTRA_VARIABLES += production_methods.COUNTRY_VARIABLES + investment.COUNTRY_VARIABLES + ascension.VARIABLES + construction_watch.VARIABLES + post_build.COUNTRY_VARIABLES + investment_outcomes.COUNTRY_VARIABLES + public_upkeep.VARIABLES
 EXTRA_VARIABLES += planning.country_variables(ACTION_NAMES) + coordination.VARIABLES + construction_budget.VARIABLES + input_forecast.COUNTRY_VARIABLES + trade_capacity.VARIABLES + admin_capacity.VARIABLES + power_capacity.VARIABLES
 EXTRA_VARIABLES += ['sed_last_build_state', 'sed_last_build_action', 'sed_last_build_month', 'sed_last_build_year',
     'sed_input_pass_changed', *(f'sed_input_priority_{good}' for good in INPUT_DEPENDENCIES)]
@@ -510,6 +510,7 @@ sed_refresh_supply_candidates = {
  sed_refresh_admin = yes
  sed_refresh_power = yes
  sed_follow_projects = yes
+ sed_refresh_public_upkeep = yes
  sed_outcome_review = yes
  sed_refresh_national_plan = yes
  sed_recover_existing_industry = yes
@@ -851,6 +852,12 @@ def widget():
     for number in range(1, 6):
         body += textbox(f'sed_watch_{number}', f'sed_watch_{number}_visible_sgui')
     body += textbox('sed_outcome_summary', 'sed_outcome_visible_sgui')
+    for name in investment_outcomes.TARGETS:
+        body += textbox(f'sed_problem_{name}', f'sed_problem_{name}_visible_sgui')
+    for good in investment_outcomes.INPUT_GOODS:
+        body += textbox(f'sed_problem_good_{good}', f'sed_problem_good_{good}_visible_sgui')
+    for name in public_upkeep.PROFILES:
+        body += textbox(f'sed_upkeep_{name}', f'sed_upkeep_{name}_visible_sgui')
     body += textbox('sed_outcome_labor', 'sed_outcome_labor_visible_sgui')
     body += textbox('sed_outcome_wait', 'sed_outcome_wait_visible_sgui')
     body += textbox('sed_follow_summary', 'sed_follow_visible_sgui')
@@ -1515,7 +1522,7 @@ sed_update_growth = {
             f'    set_variable = {{ name = sed_{good}_action_status value = 1 }}\n'
             '    if = { limit = { has_variable = sed_mode_automatic } set_variable = { name = sed_auto_action_status value = 1 } }')
     script = script.replace('  sed_refresh_supply_candidates = yes\n }\n}',
-                            '  sed_refresh_supply_candidates = yes\n  sed_refresh_national_plan = yes\n  sed_asc_refresh = yes\n  if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }\n }\n}', 1)
+                            '  sed_refresh_supply_candidates = yes\n  sed_refresh_national_plan = yes\n  sed_refresh_public_upkeep = yes\n  sed_asc_refresh = yes\n  if = { limit = { has_variable = sed_coord_active } sed_coord_sync = yes }\n }\n}', 1)
     lists = [*planning.lists(ACTION_NAMES), *(f'sed_input_blocked_{good}' for good in INPUT_DEPENDENCIES)]
     cleanup = '\n'.join(' clear_variable_list = ' + name for name in lists)
     script = script.replace('sed_disable_country = {', 'sed_disable_country = {\n' + cleanup, 1)
@@ -1523,7 +1530,7 @@ sed_update_growth = {
     state_cleanup = '\n'.join('  remove_variable = ' + name for name in investment_outcomes.STATE_VARIABLES + post_build.STATE_VARIABLES + planning.state_variables(ACTION_NAMES) + labor.STATE_VARIABLES + input_forecast.STATE_VARIABLES + investment.STATE_VARIABLES + production_methods.state_variables(SUPPLY_TARGETS))
     script = script.replace(' # Schema and automatic attempt month',
                             ' every_scope_state = {\n' + state_cleanup + '\n }\n # Schema and automatic attempt month', 1)
-    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, INPUT_DEPENDENCIES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + input_forecast.effects() + input_priority_effect() + labor.effects() + construction_budget.effects(founding_projects()) + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + planning.military_wage_policy_effects() + investment.effects() + production_methods.effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants, recovery=True) + coordination.effects() + trade_capacity.effects() + admin_capacity.effects() + power_capacity.effects() + core_growth.effects() + ascension.effects() + construction_watch.effects() + post_build.effects() + investment_outcomes.effects() + assisted_notice_effect() + import_notice_effect()
+    return script + supply_effects() + preference_effects() + planning.effects(ACTION_NAMES, INPUT_DEPENDENCIES, {item['good']: [variant['building'] for variant in variants(item)] for item in SUPPLY_TARGETS}) + input_forecast.effects() + input_priority_effect() + labor.effects() + construction_budget.effects(founding_projects()) + planning.military_effects() + planning.tax_policy_effects() + planning.wage_policy_effects() + planning.military_wage_policy_effects() + investment.effects() + production_methods.effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants) + production_methods.upgrade_effects(SUPPLY_TARGETS, variants, recovery=True) + coordination.effects() + trade_capacity.effects() + admin_capacity.effects() + power_capacity.effects() + core_growth.effects() + ascension.effects() + construction_watch.effects() + post_build.effects() + investment_outcomes.effects() + public_upkeep.effects() + assisted_notice_effect() + import_notice_effect()
 
 
 def scripted_guis():
@@ -1783,6 +1790,12 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
     result += f'sed_auto_current_clear_visible_sgui = {{ scope = country is_shown = {{ {base} sed_auto_executor_safe = yes }} }}\n'
     result += f'sed_auto_current_queue_control_visible_sgui = {{ scope = country is_shown = {{ {base} construction_queue_num_queued_private_levels > 0 sed_private_control_configured = yes }} }}\n'
     result += 'sed_auto_status_delegated_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 18 } }\n'
+    for index, name in enumerate(investment_outcomes.TARGETS, 1):
+        result += f'sed_problem_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = {index} }} }}\n'
+    for index, good in enumerate(investment_outcomes.INPUT_GOODS, 1):
+        result += f'sed_problem_good_{good}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_problem_good var:sed_problem_good = {index} }} }}\n'
+    for name in public_upkeep.PROFILES:
+        result += f'sed_upkeep_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_upkeep_{name}_known var:sed_upkeep_{name}_known = 1 }} }}\n'
     for index, name in enumerate(list(ACTION_NAMES) + ['trade_center', 'admin', 'power', 'university', 'core_wood', 'core_iron', 'core_tools', 'core_construction'], 1):
         result += f'sed_last_build_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_last_build_state has_variable = sed_last_build_action var:sed_last_build_action = {index} }} }}\n'
     for executor in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14):
@@ -2350,6 +2363,7 @@ sed_university_ready = {
  construction_queue_num_queued_private_levels = 0
  net_total_income > 0
  country_innovation < max_innovation
+ sed_upkeep_university_safe = yes
  market = { mg:paper ?= {
   market_goods_sell_orders > 0
   market_goods_has_goods_shortage = no
@@ -2408,7 +2422,7 @@ sed_develop_core = {
     # flag is false, so this trigger is also the detection test.
     control = '\n'.join(f'  has_variable = {option}' for name, option, pt, en in PRIVATE_CONTROL_FLAGS)
     result.append('sed_private_control_configured = {\n OR = {\n' + control + '\n }\n}')
-    return '\n'.join(result).rstrip() + '\n' + planning.triggers() + construction_budget.triggers() + input_forecast.triggers() + coordination.triggers() + ascension.triggers() + construction_watch.triggers() + investment_outcomes.triggers() + trade_capacity.triggers([item['good'] for item in SUPPLY_TARGETS]) + admin_capacity.triggers() + power_capacity.triggers() + core_growth.triggers() + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants) + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants, recovery=True)
+    return '\n'.join(result).rstrip() + '\n' + planning.triggers() + construction_budget.triggers() + input_forecast.triggers() + coordination.triggers() + ascension.triggers() + construction_watch.triggers() + investment_outcomes.triggers() + public_upkeep.triggers() + trade_capacity.triggers([item['good'] for item in SUPPLY_TARGETS]) + admin_capacity.triggers() + power_capacity.triggers() + core_growth.triggers() + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants) + production_methods.upgrade_triggers(SUPPLY_TARGETS, variants, recovery=True)
 
 
 def value(name, fmt='1'):
@@ -2864,6 +2878,22 @@ def localization(language):
         pairs[f'sed_last_build_{name}'] = (
             f'Última obra confirmada do Director ({date}): {pt} em {location}. Local selecionado após filtros de contratação, insumos e infraestrutura.',
             f'Last confirmed Director project ({date}): {en} in {location}. Site selected after staffing, input and infrastructure checks.')
+    for name, (building, _) in investment_outcomes.TARGETS.items():
+        target = f"[GetBuildingType('{building}').GetNameNoFormatting]"
+        place = "[JournalEntry.GetCountry.MakeScope.Var('sed_problem_state').GetState.GetName]"
+        pairs[f'sed_problem_{name}'] = (
+            f'Acompanhar {target} em {place}. Confira contratação e insumos no painel do prédio. A contratação dispõe de três meses antes da trava persistente.',
+            f'Monitor {target} in {place}. Review staffing and inputs in the building panel. Staffing gets three months before persistent blocking.')
+    for good in investment_outcomes.INPUT_GOODS:
+        goods = f"[GetGoods('{good}').GetName]"
+        pairs[f'sed_problem_good_{good}'] = (
+            f'Insumo usado pelo método ativo e em escassez no mercado: {goods}.',
+            f'Input used by an active method and in market shortage: {goods}.')
+    for name in public_upkeep.PROFILES:
+        label = 'universidade' if name == 'university' else 'administração'
+        pairs[f'sed_upkeep_{name}'] = (
+            f'Manutenção estimada por nível de {label}: @money!' + v(f'upkeep_{name}_cost', 'K') + ' por semana. Referência conservadora de salários e insumos; custos reais dependem do método e das contratações.',
+            f'Estimated operating cost per {name} level: @money!' + v(f'upkeep_{name}_cost', 'K') + ' weekly. Conservative payroll and input reference; actual costs depend on methods and staffing.')
     pairs.update(ascension.localization(v))
     pairs.update(construction_watch.localization())
     pairs.update(investment_outcomes.localization(v))

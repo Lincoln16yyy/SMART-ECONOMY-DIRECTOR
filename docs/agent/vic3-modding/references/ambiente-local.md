@@ -755,3 +755,12 @@ A prontidão local usa sed_state_labor_available, infrastructure_delta
 e market_access já empregados nos executores. Insumos por método
 ativo vêm de data/input_profiles.json. A última obra do Director
 registra o estado via prev no escopo do país após confirmação da fila.
+
+## Referências de manutenção 0.7.56
+
+`python3 tools/build_public_upkeep.py --game "<game>"` gera
+`data/public_upkeep.json`. Preços vêm de common/goods, empregos de
+common/production_methods e pesos de common/pop_types (registrados em
+employment_profiles.json). outcome_inputs.json é gerado junto ao
+catálogo de saídas. O custo é conservador, sem prova de despesa futura
+exata. Teste em campanha permanece pendente.
