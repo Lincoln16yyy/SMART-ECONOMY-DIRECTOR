@@ -1,5 +1,10 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.51, o Director acompanha intervalos mensais delegados ao Economy
+Advisor com a fila pública vazia. Após dois intervalos, pode reservar uma
+tentativa direta de obra elegível sob as guardas fiscais e de materiais.
+O Diário mostra a trava observada ou a recuperação reservada.
+
 Na 0.7.50, o Diário acompanha a posição estimada por prestígio, indica
 uma prioridade para subir e sugere onde procurar proteção diplomática.
 O balanço compara a situação após 12 meses e conta ações do Director

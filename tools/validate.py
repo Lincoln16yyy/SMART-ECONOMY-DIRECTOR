@@ -205,7 +205,7 @@ def validate(root=ROOT, game=None):
         NOT = { has_variable = sed_coord_active }
         AND = { has_variable = sed_coord_active var:sed_coord_executor = 11
                 OR = { AND = { var:sed_plan_goal = 2 sed_direct_supply_priority_exists = yes }
-                       sed_university_ready = yes } }
+                       sed_university_ready = yes sed_watch_recovery_candidate = yes } }
     }""")[0].value
     if child(custom.get('sed_auto_executor_safe', []), 'OR') != direct_authority:
         errors.append('Direct execution requires the restricted coordination authority')

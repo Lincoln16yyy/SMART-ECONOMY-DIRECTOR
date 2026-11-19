@@ -599,6 +599,10 @@ sed_disable_country = {
  remove_variable = sed_asc_wage_annual
  remove_variable = sed_asc_military_wage_count
  remove_variable = sed_asc_military_wage_annual
+ remove_variable = sed_watch_month
+ remove_variable = sed_watch_idle
+ remove_variable = sed_watch_status
+ remove_variable = sed_watch_delegated
  remove_variable = sed_plan_count
  remove_variable = sed_plan_goal
  remove_variable = sed_fiscal_status
@@ -3999,6 +4003,7 @@ sed_auto_apply_monthly = {
  sed_apply_fiscal_policy = yes
  sed_apply_wage_policy = yes
  sed_apply_military_wage_policy = yes
+ sed_watch_review = yes
  set_variable = { name = sed_auto_action_status value = 2 }
  if = {
   limit = { has_variable = sed_coord_active }
@@ -13931,6 +13936,9 @@ sed_coord_sync = {
    if = { limit = { var:sed_plan_goal = 2 sed_direct_fiscal_safe = yes sed_direct_supply_priority_exists = yes }
     set_variable = { name = sed_coord_executor value = 11 }
    }
+   else_if = { limit = { sed_watch_recovery_candidate = yes }
+    set_variable = { name = sed_coord_executor value = 11 }
+   }
    else_if = { limit = { var:sed_plan_waiting = 1 }
     set_variable = { name = sed_coord_executor value = 10 }
    }
@@ -14502,6 +14510,55 @@ sed_asc_record_actions = {
   }
   if = { limit = { has_variable = sed_military_wage_last_change_month var:sed_military_wage_last_change_month = sed_live_month_key }
    change_variable = { name = sed_asc_military_wage_count add = 1 }
+  }
+ }
+}
+sed_watch_review = {
+ if = { limit = {
+  is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic
+  NOT = { has_variable = sed_mode_assisted }
+  NOT = { has_variable = sed_mode_manual }
+  NOT = { has_variable = sed_watch_month var:sed_watch_month = sed_live_month_key }
+ }
+  set_variable = { name = sed_watch_month value = sed_live_month_key }
+  if = { limit = { NOT = { has_variable = sed_watch_idle } }
+   set_variable = { name = sed_watch_idle value = 0 }
+  }
+  if = { limit = { construction_queue_num_queued_government_levels > 0 }
+   set_variable = { name = sed_watch_idle value = 0 }
+  }
+  else_if = { limit = { has_variable = sed_watch_delegated
+   has_variable = sed_coord_executor var:sed_coord_executor = 1
+   construction_queue_num_queued_private_levels = 0 is_construction_paused = no
+  }
+   change_variable = { name = sed_watch_idle add = 1 }
+  }
+  else = { set_variable = { name = sed_watch_idle value = 0 } }
+  remove_variable = sed_watch_delegated
+  if = { limit = { has_variable = sed_coord_active has_variable = sed_coord_executor
+   var:sed_coord_executor = 1 }
+   set_variable = { name = sed_watch_delegated value = yes }
+  }
+ }
+ sed_watch_diagnose = yes
+}
+sed_watch_diagnose = {
+ set_variable = { name = sed_watch_status value = 0 }
+ if = { limit = { has_variable = sed_watch_idle var:sed_watch_idle >= 2
+  has_variable = sed_mode_automatic NOT = { has_variable = sed_mode_assisted }
+ }
+  set_variable = { name = sed_watch_status value = 1 }
+  if = { limit = { NOT = { sed_direct_fiscal_safe = yes } }
+   set_variable = { name = sed_watch_status value = 2 }
+  }
+  else_if = { limit = { construction_queue_num_queued_private_levels > 0 is_construction_paused = no }
+   set_variable = { name = sed_watch_status value = 3 }
+  }
+  else_if = { limit = { is_construction_paused = yes }
+   set_variable = { name = sed_watch_status value = 4 }
+  }
+  else_if = { limit = { sed_watch_recovery_candidate = yes }
+   set_variable = { name = sed_watch_status value = 5 }
   }
  }
 }

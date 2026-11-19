@@ -723,3 +723,8 @@
  sed_asc_priority_7:0 "Prioridade: O ranking não avançou no último período e a projeção terrestre não aumentou. Confira no Conselheiro Militar se há um reforço sustentável."
  sed_asc_priority_8:0 "Prioridade: Recuperar a infraestrutura para sustentar a produção."
  sed_asc_priority_9:0 "Prioridade: Investir na produção e usar o Conselheiro de Governo para escolher reformas elegíveis."
+ sed_watch_1:0 "A fila ficou vazia após pelo menos duas delegações mensais. Nenhuma alternativa direta passou nos filtros atuais de prédio, trabalhadores e insumos."
+ sed_watch_2:0 "Fila vazia recorrente. A guarda fiscal bloqueia novas despesas. Confira saldo operacional, dívida e reservas no orçamento."
+ sed_watch_3:0 "Fila vazia recorrente. A fila privada ocupada impede a recuperação direta."
+ sed_watch_4:0 "Fila vazia recorrente. A construção está pausada."
+ sed_watch_5:0 "Fila vazia recorrente. O Director reservou uma tentativa direta de recuperação, sujeita ao orçamento de materiais e ao limite mensal. Confira o resultado da revisão."

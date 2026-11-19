@@ -723,3 +723,8 @@
  sed_asc_priority_7:0 "Priority: Rank and army projection did not improve in the last period. Check the Military Advisor for a sustainable reinforcement."
  sed_asc_priority_8:0 "Priority: Recover infrastructure to sustain production."
  sed_asc_priority_9:0 "Priority: Invest in production and use the Government Advisor to select eligible reforms."
+ sed_watch_1:0 "The queue was empty after at least two monthly delegations. No direct alternative passed current building, labor and input filters."
+ sed_watch_2:0 "Recurring empty queue. The fiscal guard blocks new spending. Check operating balance, debt and reserves."
+ sed_watch_3:0 "Recurring empty queue. Private construction blocks direct recovery."
+ sed_watch_4:0 "Recurring empty queue. Construction is paused."
+ sed_watch_5:0 "Recurring empty queue. The Director reserved a direct recovery attempt under material-budget and monthly limits. Check the review outcome."

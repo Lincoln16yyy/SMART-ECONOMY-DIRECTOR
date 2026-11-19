@@ -3066,6 +3066,41 @@ textbox = {
  text = "sed_asc_priority_9"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_watch_1_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_watch_1"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_watch_2_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_watch_2"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_watch_3_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_watch_3"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_watch_4_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_watch_4"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_watch_5_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_watch_5"
+}
+textbox = {
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_xxl
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }

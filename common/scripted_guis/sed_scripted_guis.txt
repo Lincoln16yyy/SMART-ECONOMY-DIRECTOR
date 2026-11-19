@@ -1594,3 +1594,8 @@ sed_asc_priority_6_visible_sgui = { scope = country is_shown = { has_variable = 
 sed_asc_priority_7_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_priority var:sed_asc_priority = 7 } }
 sed_asc_priority_8_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_priority var:sed_asc_priority = 8 } }
 sed_asc_priority_9_visible_sgui = { scope = country is_shown = { has_variable = sed_asc_priority var:sed_asc_priority = 9 } }
+sed_watch_1_visible_sgui = { scope = country is_shown = { has_variable = sed_watch_status var:sed_watch_status = 1 } }
+sed_watch_2_visible_sgui = { scope = country is_shown = { has_variable = sed_watch_status var:sed_watch_status = 2 } }
+sed_watch_3_visible_sgui = { scope = country is_shown = { has_variable = sed_watch_status var:sed_watch_status = 3 } }
+sed_watch_4_visible_sgui = { scope = country is_shown = { has_variable = sed_watch_status var:sed_watch_status = 4 } }
+sed_watch_5_visible_sgui = { scope = country is_shown = { has_variable = sed_watch_status var:sed_watch_status = 5 } }

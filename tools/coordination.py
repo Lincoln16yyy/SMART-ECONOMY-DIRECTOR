@@ -176,6 +176,9 @@ sed_coord_sync = {{
    if = {{ limit = {{ var:sed_plan_goal = 2 sed_direct_fiscal_safe = yes sed_direct_supply_priority_exists = yes }}
     set_variable = {{ name = sed_coord_executor value = 11 }}
    }}
+   else_if = {{ limit = {{ sed_watch_recovery_candidate = yes }}
+    set_variable = {{ name = sed_coord_executor value = 11 }}
+   }}
    else_if = {{ limit = {{ var:sed_plan_waiting = 1 }}
     set_variable = {{ name = sed_coord_executor value = 10 }}
    }}
