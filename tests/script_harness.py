@@ -242,6 +242,8 @@ class Country:
 
     def single_condition(self, entry, scope):
         key = entry.key
+        if key == 'always':
+            return entry.value == 'yes'
         if key == 'NOT':
             return not self.condition(entry.value, scope)
         if key == 'AND':

@@ -5,6 +5,12 @@ sed_fixed_expenses_value = { value = fixed_income subtract = net_fixed_income mi
 sed_live_build_budget_gold_gap = {
  value = var:sed_build_budget_required_gold subtract = gold_reserves min = 0
 }
+# Readiness adds bounded tie-breaking weight to eligible local projects.
+sed_site_readiness = {
+ value = sed_state_labor_available divide = 10000 max = 10
+ add = { value = infrastructure_delta min = 0 max = 10 }
+ add = { value = market_access min = 0 max = 1 multiply = 10 }
+}
 # State scope; demographic proxy rather than a worker count from the engine.
 sed_state_labor_pool = {
  value = state_population min = 0

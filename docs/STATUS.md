@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.51
+# Estado dos requisitos — 0.7.55
 
 ## Coordenação com Economy Advisor
 
@@ -195,3 +195,73 @@ contagem. Pausa e fila privada suspendem a observação.
 **Teste sintético:** quatro testes passaram, incluindo devolução ao
 Advisor após enfileiramento. **Estático:** validado. Campanha NÃO
 VERIFICADA. Obras podem terminar entre as leituras de fila.
+
+## Acompanhamento de obras e reação anual — 0.7.52
+
+**Código:** acompanha o nível concluído dos projetos próprios de madeira,
+ferro e ferramentas. Contratação abaixo de 80%, falhas de contratação ou
+escassez de insumos conservam a marca de acompanhamento e bloqueiam
+nova expansão direta da faixa de crescimento. Candidatos de escassez já
+exigem suas guardas de ocupação e insumos.
+
+Reserva reduzida de quatro para duas semanas apenas na construção direta
+com orçamento material conhecido, sem dívida, saldo fixo não negativo e
+superávit cobrindo o custo material semanal. Financiamento por reserva
+continua com o piso anterior. A comparação anual sem avanço de ranking
+nem de padrão de vida favorece Standard of Living na delegação ao Advisor.
+
+**Teste sintético:** conclusão/recuperação, fronteira fiscal e reação anual
+com restauração ao sair do Automático. **Estático:** validador aprovado.
+**Campanha:** NÃO VERIFICADA. Save de Toscana anterior não contém os
+marcadores de observação da 0.7.51. Para verificar, use cópia de save,
+observe obra própria concluída com ocupação baixa e confira o diagnóstico.
+
+## Resultados de investimento — 0.7.53
+
+**Código:** compara níveis mensais de madeira, ferro, ferramentas,
+papel, alimentos e roupas. Expansão observada fica acompanhada enquanto
+há contratação limitada, insumos ausentes ou excesso de oferta com
+preço abaixo da base. A diversificação delegada de objetivo 8 espera
+a recuperação. Outros objetivos continuam com as prioridades existentes.
+A primeira leitura cria a referência, sem atribuir autoria à obra.
+
+**Teste sintético:** primeira construção após referência, recuperação
+de insumos, mercado comprador, retorno da delegação, deduplicação mensal
+e limpeza. Dez testes focados passaram junto às rotinas 0.7.51/0.7.52.
+**Estático:** aprovado. Tiger mantém três campos de Diário conhecidos.
+**Campanha:** NÃO VERIFICADA. Saves locais disponíveis são anteriores
+às versões recentes. Em cópia de save, registre uma leitura, conclua
+uma expansão e avance um mês. Confira o diagnóstico no Diário e o
+objetivo aplicado na coordenação.
+
+## Ampliação dos setores — 0.7.54
+
+**Código:** acompanha os 84 tipos em outcome_goods.json, derivados do
+catálogo vanilla. A produção por método ativo filtra as leituras de
+oferta excedente. Contratação baixa com menos de 1.000 trabalhadores
+estimados habilita advisor_labor_auto_enabled durante a coordenação.
+Snapshot/restauração conservam o valor original, inclusive em saves
+anteriores à atualização. O Advisor executa as mudanças segundo suas
+próprias guardas. Save/reload desse adaptador em campanha pendente.
+
+**Campanha:** usuário relatou que obras automáticas, tomada de fila pelo
+Director e avisos funcionaram na 0.7.53. País/data não especificados.
+A retomada pós-recuperação e balanço anual permanecem pendentes.
+A edição 0.7.54 ainda NÃO VERIFICADA em campanha.
+
+## Escolha do local e fornecedores — 0.7.55
+
+**Código:** prontidão local combina trabalho disponível, infraestrutura
+positiva e acesso ao mercado, com contribuição limitada para preservar
+a prioridade estratégica. A faixa direta de crescimento usa esse valor
+na escolha do estado. Ferrovias conservam a urgência do déficit.
+Insumos em escassez consumidos por métodos ativos de fábricas operantes
+com falta de bens ganham prioridade, mesmo sem expansão planejada.
+
+O registro da última obra direta guarda tipo, estado e mês apenas após
+a fila confirmar a inclusão. Acompanhamento de expansões ruins segue
+ativo pelas regras existentes. **Teste sintético:** escolha entre dois
+estados, prioridade de insumo e rejeição de obra sem falso sucesso;
+24 testes de crescimento, acompanhamento e universidades aprovados.
+**Estático:** validado. Tiger mantém três apontamentos de Diário
+conhecidos. **Campanha:** NÃO VERIFICADA.

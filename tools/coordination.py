@@ -51,6 +51,7 @@ ADVISOR_POLICY_OPTIONS = (
     ('goal_treasury', 'advisor_setting_sc_goal_treasury'),
     ('treasury_off', 'advisor_setting_treasury_off'),
     ('borrow', 'advisor_setting_borrow'),
+    ('labor_auto', 'advisor_labor_auto_enabled'),
 )
 # Retained settings identify a previously configured Supply Chain even when
 # all construction switches are off. Avoid optional foreign journal IDs.
@@ -159,6 +160,17 @@ sed_coord_restore = {{
 sed_coord_sync = {{
  if = {{ limit = {{ is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic NOT = {{ has_variable = sed_mode_manual }} NOT = {{ has_variable = sed_mode_assisted }} has_variable = sed_coord_active }}
   sed_coord_capture_supply_policy = yes
+  if = {{ limit = {{ has_variable = sed_coord_advisor_known }}
+   sed_coord_capture_advisor_policy = yes
+   if = {{ limit = {{ has_variable = sed_outcome_workers var:sed_outcome_workers > 0 }}
+    set_variable = {{ name = advisor_labor_auto_enabled value = yes }}
+   }}
+   else_if = {{ limit = {{ has_variable = sed_coord_saved_labor_auto }}
+    set_variable = {{ name = advisor_labor_auto_enabled value = var:sed_coord_saved_labor_auto }}
+   }}
+   else = {{ remove_variable = advisor_labor_auto_enabled }}
+  }}
+
   if = {{ limit = {{ has_variable = sed_coord_supply_policy_saved }}
    set_variable = {{ name = zw_var_develop_incorporated_states value = yes }}
    set_variable = {{ name = zw_var_ip_incorporated value = yes }}
@@ -172,7 +184,7 @@ sed_coord_sync = {{
   else_if = {{ limit = {{ sed_pm_upgrade_month_limit_reached = yes }}
    set_variable = {{ name = sed_coord_executor value = 13 }}
   }}
-  else_if = {{ limit = {{ sed_coord_fiscal_safe = yes NOT = {{ in_default = yes }} is_construction_paused = no }}
+  else_if = {{ limit = {{ OR = {{ sed_coord_fiscal_safe = yes AND = {{ sed_watch_recovery_candidate = yes sed_direct_fiscal_safe = yes }} }} NOT = {{ in_default = yes }} is_construction_paused = no }}
    if = {{ limit = {{ var:sed_plan_goal = 2 sed_direct_fiscal_safe = yes sed_direct_supply_priority_exists = yes }}
     set_variable = {{ name = sed_coord_executor value = 11 }}
    }}
@@ -208,6 +220,9 @@ sed_coord_sync = {{
    else_if = {{ limit = {{ sed_university_ready = yes }}
     set_variable = {{ name = sed_coord_executor value = 11 }}
    }}
+   else_if = {{ limit = {{ sed_outcome_growth_wait = yes }}
+    set_variable = {{ name = sed_coord_executor value = 0 }}
+   }}
    else_if = {{ limit = {{ has_variable = sed_coord_advisor_known OR = {{ var:sed_plan_goal = 1 var:sed_plan_goal = 2 var:sed_plan_goal = 3 var:sed_plan_goal = 5 var:sed_plan_goal = 8 }} }}
     {enable_option('advisor')}
     set_variable = {{ name = sed_coord_executor value = 1 }}
@@ -224,6 +239,7 @@ sed_coord_sync = {{
     }}
     else_if = {{ limit = {{ OR = {{
      sed_coord_advisor_sol_pressure = yes
+     AND = {{ has_variable = sed_asc_rank_delta var:sed_asc_rank_delta >= 0 has_variable = sed_asc_sol_delta var:sed_asc_sol_delta <= 0 }}
      any_scope_state = {{ OR = {{ var:sed_plan_grain_rank = 1 var:sed_plan_groceries_rank = 1 var:sed_plan_clothes_rank = 1 }} }}
      AND = {{ var:sed_plan_goal = 5 OR = {{ var:sed_plan_missing_grain = 1 var:sed_plan_missing_groceries = 1 var:sed_plan_missing_clothes = 1 }} }}
     }} }}

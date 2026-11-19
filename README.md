@@ -1,5 +1,27 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.55, a escolha do estado considera trabalhadores disponíveis,
+acesso ao mercado e folga de infraestrutura. Fábricas operantes com
+escassez também priorizam fornecedores. O Diário mostra a última obra
+direta confirmada, seu estado e a data da inclusão na fila.
+
+Na 0.7.54, o acompanhamento cobre os 84 tipos de prédio catalogados.
+Excesso de oferta é avaliado pelos métodos ativos que produzem o bem.
+Quando faltam trabalhadores em expansões recentes, a coordenação pode
+habilitar a automação de mão de obra do Advisor e restaura sua opção
+anterior após a recuperação ou a saída do Automático.
+
+Na 0.7.53, o Director observa expansões de madeira, ferro, ferramentas,
+papel, alimentos e roupas entre revisões. O Diário identifica contratação,
+insumos e oferta excedente. A diversificação delegada pode aguardar a
+recuperação desses investimentos.
+
+Na 0.7.52, o Director acompanha contratação e insumos de obras próprias
+de madeira, ferro e ferramentas. A expansão direta desses produtores
+aguarda recuperação. Obras cobertas pelo saldo, sem dívida, admitem
+reserva de duas semanas. Ranking e padrão de vida estagnados no balanço
+anual passam a favorecer o objetivo Standard of Living do Advisor.
+
 Na 0.7.51, o Director acompanha intervalos mensais delegados ao Economy
 Advisor com a fila pública vazia. Após dois intervalos, pode reservar uma
 tentativa direta de obra elegível sob as guardas fiscais e de materiais.

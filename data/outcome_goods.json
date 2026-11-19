@@ -1,0 +1,515 @@
+{
+  "building_angkor_wat": {},
+  "building_arms_industry": {
+    "small_arms": [
+      "pm_bolt_action_rifles",
+      "pm_muskets",
+      "pm_repeaters",
+      "pm_rifles"
+    ]
+  },
+  "building_art_academy": {
+    "fine_art": [
+      "pm_film_art",
+      "pm_photographic_art",
+      "pm_realist_art",
+      "pm_traditional_art"
+    ]
+  },
+  "building_artillery_foundry": {
+    "artillery": [
+      "pm_breech_loaders",
+      "pm_bronze_cannons",
+      "pm_bronze_smoothbores",
+      "pm_cannons",
+      "pm_recoiled_barrels",
+      "pm_smoothbores"
+    ]
+  },
+  "building_automotive_industry": {
+    "aeroplanes": [
+      "pm_aeroplane_production"
+    ],
+    "automobiles": [
+      "pm_automobile_production",
+      "pm_mass_automobile_production"
+    ],
+    "tanks": [
+      "pm_tank_production"
+    ]
+  },
+  "building_banana_plantation": {
+    "fruit": [
+      "automatic_irrigation_building_banana_plantation",
+      "default_building_banana_plantation",
+      "slave_exploitation_banana",
+      "worker_exploitation_banana"
+    ]
+  },
+  "building_barrack": {},
+  "building_big_ben": {},
+  "building_chemical_plant": {
+    "fertilizer": [
+      "pm_artificial_fertilizers",
+      "pm_improved_fertilizer",
+      "pm_nitrogen_fixation"
+    ]
+  },
+  "building_coal_mine": {
+    "coal": [
+      "pm_atmospheric_engine_pump_building_coal_mine",
+      "pm_condensing_engine_pump_building_coal_mine",
+      "pm_diesel_pump_building_coal_mine",
+      "pm_dynamite_building_coal_mine",
+      "pm_nitroglycerin_building_coal_mine",
+      "pm_picks_and_shovels_building_coal_mine"
+    ]
+  },
+  "building_coffee_plantation": {
+    "coffee": [
+      "coffee_plantation_dry_process",
+      "coffee_plantation_mechanical_drying",
+      "coffee_plantation_patio_drying",
+      "coffee_plantation_wet_process_manual",
+      "coffee_plantation_wet_process_mechanical",
+      "slave_exploitation_coffee",
+      "worker_exploitation_coffee"
+    ]
+  },
+  "building_construction_sector": {},
+  "building_copper_mine": {
+    "copper": [
+      "pm_atmospheric_engine_pump_building_copper_mine",
+      "pm_condensing_engine_pump_building_copper_mine",
+      "pm_diesel_pump_building_copper_mine",
+      "pm_dynamite_building_copper_mine",
+      "pm_nitroglycerin_building_copper_mine",
+      "pm_picks_and_shovels_building_copper_mine"
+    ]
+  },
+  "building_cotton_plantation": {
+    "fabric": [
+      "automatic_irrigation_building_cotton_plantation",
+      "default_building_cotton_plantation",
+      "slave_exploitation_cotton",
+      "worker_exploitation_cotton"
+    ]
+  },
+  "building_cristo_redentor": {},
+  "building_dye_plantation": {
+    "dye": [
+      "automatic_irrigation_building_dye_plantation",
+      "default_building_dye_plantation",
+      "slave_exploitation_dye",
+      "worker_exploitation_dye"
+    ]
+  },
+  "building_eiffel_tower": {},
+  "building_electrics_industry": {
+    "radios": [
+      "pm_radios"
+    ],
+    "telephones": [
+      "pm_telephones"
+    ]
+  },
+  "building_estacion_de_madrid_atocha": {},
+  "building_explosives_factory": {
+    "explosives": [
+      "pm_ammonia-soda_process",
+      "pm_brine_electrolysis",
+      "pm_leblanc_process",
+      "pm_vacuum_evaporation"
+    ]
+  },
+  "building_fishing_wharf": {
+    "fish": [
+      "pm_fishing_trawlers",
+      "pm_simple_fishing",
+      "pm_steam_trawlers"
+    ]
+  },
+  "building_food_industry": {
+    "groceries": [
+      "pm_bakery",
+      "pm_baking_powder",
+      "pm_cannery",
+      "pm_cannery_fish",
+      "pm_sweeteners",
+      "pm_vacuum_canning",
+      "pm_vacuum_canning_principle_3"
+    ],
+    "liquor": [
+      "pm_patent_stills",
+      "pm_pot_stills"
+    ]
+  },
+  "building_forbidden_city": {},
+  "building_furniture_manufactory": {
+    "furniture": [
+      "pm_handcrafted_furniture",
+      "pm_lathe",
+      "pm_mechanized_workshops"
+    ],
+    "luxury_furniture": [
+      "pm_luxury_furniture",
+      "pm_precision_tools"
+    ]
+  },
+  "building_glassworks": {
+    "glass": [
+      "pm_crystal_glass",
+      "pm_forest_glass",
+      "pm_houseware_plastics",
+      "pm_leaded_glass"
+    ],
+    "porcelain": [
+      "pm_bone_china",
+      "pm_ceramics"
+    ]
+  },
+  "building_gold_mine": {
+    "gold": [
+      "pm_atmospheric_engine_pump_building_gold_mine",
+      "pm_condensing_engine_pump_building_gold_mine",
+      "pm_diesel_pump_building_gold_mine",
+      "pm_dynamite_building_gold_mine",
+      "pm_nitroglycerin_building_gold_mine",
+      "pm_picks_and_shovels_building_gold_mine"
+    ]
+  },
+  "building_government_administration": {},
+  "building_gran_teatro_de_la_habana": {
+    "fine_art": [
+      "pm_default_building_gran_teatro_de_la_habana"
+    ]
+  },
+  "building_hagia_sophia": {},
+  "building_iron_mine": {
+    "iron": [
+      "pm_atmospheric_engine_pump_building_iron_mine",
+      "pm_condensing_engine_pump_building_iron_mine",
+      "pm_diesel_pump_building_iron_mine",
+      "pm_dynamite_building_iron_mine",
+      "pm_nitroglycerin_building_iron_mine",
+      "pm_picks_and_shovels_building_iron_mine"
+    ]
+  },
+  "building_kaiserforum_1": {},
+  "building_kaiserforum_2": {},
+  "building_kaiserforum_3": {},
+  "building_kaiserforum_4": {},
+  "building_kiel_canal": {},
+  "building_lead_mine": {
+    "lead": [
+      "pm_atmospheric_engine_pump_building_lead_mine",
+      "pm_condensing_engine_pump_building_lead_mine",
+      "pm_diesel_pump_building_lead_mine",
+      "pm_dynamite_building_lead_mine",
+      "pm_nitroglycerin_building_lead_mine",
+      "pm_picks_and_shovels_building_lead_mine"
+    ]
+  },
+  "building_livestock_ranch": {
+    "fabric": [
+      "pm_intensive_grazing_ranch",
+      "pm_sheep_farms",
+      "pm_simple_ranch"
+    ],
+    "fertilizer": [
+      "pm_intensive_grazing_ranch",
+      "pm_sheep_farms"
+    ],
+    "meat": [
+      "pm_butchering_tools",
+      "pm_mechanized_slaughtering",
+      "pm_open_air_stockyards",
+      "pm_slaughterhouses"
+    ]
+  },
+  "building_logging_camp": {
+    "hardwood": [
+      "pm_hardwood",
+      "pm_increased_hardwood"
+    ],
+    "wood": [
+      "pm_electric_saw_mills",
+      "pm_saw_mills",
+      "pm_simple_forestry"
+    ]
+  },
+  "building_maize_farm": {
+    "fruit": [
+      "pm_citrus_orchards"
+    ],
+    "grain": [
+      "pm_chemical_fertilizer",
+      "pm_fertilization",
+      "pm_simple_farming",
+      "pm_soil_enriching_farming"
+    ],
+    "sugar": [
+      "pm_citrus_orchards"
+    ]
+  },
+  "building_manila_cathedral_monument": {},
+  "building_millet_farm": {
+    "fruit": [
+      "pm_fig_orchards"
+    ],
+    "grain": [
+      "pm_chemical_fertilizer",
+      "pm_fertilization",
+      "pm_simple_farming",
+      "pm_soil_enriching_farming"
+    ],
+    "sugar": [
+      "pm_fig_orchards"
+    ]
+  },
+  "building_mosque_of_djenne": {},
+  "building_motor_industry": {
+    "engines": [
+      "pm_diesel_engines",
+      "pm_electric_engines",
+      "pm_steam_engines"
+    ]
+  },
+  "building_munition_plant": {
+    "ammunition": [
+      "pm_explosive_shells",
+      "pm_percussion_caps"
+    ]
+  },
+  "building_naval_administration": {},
+  "building_naval_fortification": {},
+  "building_oil_rig": {
+    "oil": [
+      "pm_combustion_derricks",
+      "pm_steam_derricks"
+    ]
+  },
+  "building_opium_plantation": {
+    "opium": [
+      "automatic_irrigation_building_opium_plantation",
+      "default_building_opium_plantation"
+    ]
+  },
+  "building_panama_canal": {},
+  "building_paper_mill": {
+    "paper": [
+      "pm_bleached_paper",
+      "pm_pulp_pressing",
+      "pm_sulfite_pulping"
+    ]
+  },
+  "building_pena_palace": {},
+  "building_port": {
+    "merchant_marine": [
+      "pm_basic_port",
+      "pm_industrial_port",
+      "pm_modern_port"
+    ]
+  },
+  "building_power_bloc_statue": {},
+  "building_power_plant": {
+    "electricity": [
+      "pm_coal-fired_plant",
+      "pm_early_power_plant",
+      "pm_oil-fired_plant"
+    ]
+  },
+  "building_railway": {
+    "transportation": [
+      "pm_diesel_trains",
+      "pm_diesel_trains_principle_transport_3",
+      "pm_early_trains",
+      "pm_electric_trains",
+      "pm_electric_trains_principle_transport_3",
+      "pm_steam_trains",
+      "pm_steam_trains_principle_transport_3",
+      "pm_steel_passenger_carriages",
+      "pm_wooden_passenger_carriages"
+    ]
+  },
+  "building_rice_farm": {
+    "fruit": [
+      "pm_fig_orchards_building_rice_farm"
+    ],
+    "grain": [
+      "pm_chemical_fertilizer_building_rice_farm",
+      "pm_fertilization_building_rice_farm",
+      "pm_herring_meal_farming_building_rice_farm",
+      "pm_simple_farming_building_rice_farm",
+      "pm_soil_enriching_farming_building_rice_farm"
+    ],
+    "sugar": [
+      "pm_fig_orchards_building_rice_farm"
+    ]
+  },
+  "building_rubber_plantation": {
+    "rubber": [
+      "automatic_irrigation_building_rubber_plantation",
+      "default_building_rubber_plantation",
+      "slave_exploitation_rubber",
+      "worker_exploitation_rubber"
+    ]
+  },
+  "building_rye_farm": {
+    "fruit": [
+      "pm_apple_orchards"
+    ],
+    "grain": [
+      "pm_chemical_fertilizer",
+      "pm_fertilization",
+      "pm_simple_farming",
+      "pm_soil_enriching_farming"
+    ],
+    "liquor": [
+      "pm_potatoes"
+    ],
+    "sugar": [
+      "pm_apple_orchards",
+      "pm_sugar_beets"
+    ]
+  },
+  "building_sagrada_familia_cathedral_1": {},
+  "building_sagrada_familia_cathedral_2": {},
+  "building_sagrada_familia_cathedral_3": {},
+  "building_saint_basils_cathedral": {},
+  "building_shipyard": {
+    "clippers": [
+      "pm_basic_shipbuilding",
+      "pm_complex_shipbuilding"
+    ],
+    "steamers": [
+      "pm_arc_welding_shipbuilding",
+      "pm_metal_shipbuilding"
+    ]
+  },
+  "building_silk_plantation": {
+    "silk": [
+      "automatic_irrigation_building_silk_plantation",
+      "default_building_silk_plantation"
+    ]
+  },
+  "building_skyscraper": {},
+  "building_statue_of_liberty": {},
+  "building_steel_mill": {
+    "steel": [
+      "pm_bessemer_process",
+      "pm_blister_steel_process",
+      "pm_electric_arc_process",
+      "pm_open_hearth_process"
+    ]
+  },
+  "building_suez_canal": {},
+  "building_sugar_plantation": {
+    "sugar": [
+      "automatic_irrigation_building_sugar_plantation",
+      "centrifugal_machine_sugar",
+      "default_building_sugar_plantation",
+      "slave_exploitation_sugar",
+      "steam_powered_evaporation_sugar",
+      "vacuum_pan_sugar",
+      "worker_exploitation_sugar"
+    ]
+  },
+  "building_sulfur_mine": {
+    "sulfur": [
+      "pm_atmospheric_engine_pump_building_sulfur_mine",
+      "pm_condensing_engine_pump_building_sulfur_mine",
+      "pm_diesel_pump_building_sulfur_mine",
+      "pm_dynamite_building_sulfur_mine",
+      "pm_nitroglycerin_building_sulfur_mine",
+      "pm_picks_and_shovels_building_sulfur_mine"
+    ]
+  },
+  "building_synthetics_plant": {
+    "dye": [
+      "pm_dye_production"
+    ],
+    "silk": [
+      "pm_rayon"
+    ]
+  },
+  "building_taj_mahal": {},
+  "building_tea_plantation": {
+    "tea": [
+      "automatic_irrigation_building_tea_plantation",
+      "default_building_tea_plantation",
+      "slave_exploitation_tea",
+      "worker_exploitation_tea"
+    ]
+  },
+  "building_textile_mill": {
+    "clothes": [
+      "pm_dye_workshops",
+      "pm_electric_sewing_machines",
+      "pm_handsewn_clothes",
+      "pm_sewing_machines"
+    ],
+    "luxury_clothes": [
+      "pm_craftsman_sewing",
+      "pm_elastics"
+    ]
+  },
+  "building_tobacco_plantation": {
+    "tobacco": [
+      "automatic_irrigation_building_tobacco_plantation",
+      "default_building_tobacco_plantation",
+      "electric_rollers",
+      "lectors_tobacco",
+      "molds",
+      "radio_stations_tobacco",
+      "worker_exploitation_tobacco"
+    ]
+  },
+  "building_tooling_workshop": {
+    "tools": [
+      "pm_crude_tools",
+      "pm_pig_iron",
+      "pm_rubber_grips",
+      "pm_steel"
+    ]
+  },
+  "building_trade_center": {},
+  "building_university": {},
+  "building_vatican_city": {},
+  "building_victoria_terminus": {},
+  "building_vineyard": {
+    "wine": [
+      "automatic_irrigation_building_vineyard",
+      "default_building_vineyard"
+    ]
+  },
+  "building_whaling_station": {
+    "meat": [
+      "pm_simple_whaling",
+      "pm_steam_whaling_ships",
+      "pm_wooden_whaling_ships"
+    ],
+    "oil": [
+      "pm_simple_whaling",
+      "pm_steam_whaling_ships",
+      "pm_wooden_whaling_ships"
+    ]
+  },
+  "building_wheat_farm": {
+    "fruit": [
+      "pm_citrus_orchards"
+    ],
+    "grain": [
+      "pm_chemical_fertilizer",
+      "pm_fertilization",
+      "pm_herring_meal_farming",
+      "pm_simple_farming",
+      "pm_soil_enriching_farming"
+    ],
+    "sugar": [
+      "pm_citrus_orchards",
+      "pm_sugar_beets"
+    ]
+  },
+  "building_white_house": {}
+}

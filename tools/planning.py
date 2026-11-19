@@ -299,7 +299,15 @@ sed_auto_fiscal_safe = {
 }
 
 sed_direct_fiscal_safe = {
- sed_auto_fiscal_safe = yes
+ OR = {
+  sed_auto_fiscal_safe = yes
+  AND = {
+   principal <= 0 net_fixed_income >= 0 net_total_income > 0
+   has_variable = sed_build_budget_known var:sed_build_budget_known = 1
+   has_variable = sed_build_budget_weekly net_total_income >= var:sed_build_budget_weekly
+   gold_reserves >= { value = sed_fixed_expenses_value multiply = 2 }
+  }
+ }
 }
 
 sed_coord_fiscal_safe = {
@@ -452,6 +460,7 @@ def effects(actions, dependencies, buildings):
                 score += f'\n    if = {{ limit = {{ owner = {{ has_variable = sed_input_priority_{name} }} }} add = 75 }}'
             if name in MILITARY_INDUSTRY_GOODS:
                 score += '\n    if = { limit = { owner = { is_at_war = yes } } add = 20 }'
+        score += '\n    add = sed_site_readiness'
         result.append(f'''   if = {{ limit = {{ {eligibility} }}
     set_variable = {{ name = sed_plan_{name}_score value = {{ {score} }} }}
    }}''')

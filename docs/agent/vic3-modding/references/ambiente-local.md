@@ -723,3 +723,35 @@ verificada no painel diplomático. Campanha NÃO VERIFICADA.
 
 Instalada com backup `sed_backups/mod_before_0.7.51_20261118_212435_131111`.
 A observação usa fila e executor em meses distintos. Campanha pendente.
+
+## Acompanhamento 0.7.52
+
+Leitura do último autosave de Toscana não encontrou `sed_watch_month`
+nem `sed_watch_idle`. A conclusão de obra própria usa nível acima da
+intenção gravada antes de enfileirar. Qualificações permanecem estimadas.
+O acompanhamento individual cobre madeira, ferro e ferramentas.
+
+## Observação de investimento 0.7.53
+
+`tools/investment_outcomes.py` usa níveis concluídos entre revisões
+mensais e as leituras existentes de ocupação, falhas de contratação,
+escassez e ordens de compra/venda. Autoria não é exposta pela engine.
+Os saves locais de Toscana continuam anteriores à instalação da
+0.7.51. Validação em campanha permanece pendente.
+
+## Catálogo e automação de trabalhadores 0.7.54
+
+`python3 tools/build_outcome_catalog.py --game "<game>"` gera
+`data/outcome_goods.json` pelos grupos e métodos vanilla. Advisor usa
+`advisor_labor_auto_enabled`, com avaliação agendada em
+`common/on_actions/advisor_on_actions.txt` e
+`common/scripted_effects/advisor_pm_effects.txt`.
+Snapshot capturado antes da primeira escrita durante a coordenação.
+A leitura de trabalhadores é proxy demográfica do Director.
+
+## Local e última obra 0.7.55
+
+A prontidão local usa sed_state_labor_available, infrastructure_delta
+e market_access já empregados nos executores. Insumos por método
+ativo vêm de data/input_profiles.json. A última obra do Director
+registra o estado via prev no escopo do país após confirmação da fila.
