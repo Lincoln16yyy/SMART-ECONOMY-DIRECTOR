@@ -299,7 +299,15 @@ sed_auto_fiscal_safe = {
 }
 
 sed_direct_fiscal_safe = {
- sed_auto_fiscal_safe = yes
+ OR = {
+  sed_auto_fiscal_safe = yes
+  AND = {
+   principal <= 0 net_fixed_income >= 0 net_total_income > 0
+   has_variable = sed_build_budget_known var:sed_build_budget_known = 1
+   has_variable = sed_build_budget_weekly net_total_income >= var:sed_build_budget_weekly
+   gold_reserves >= { value = sed_fixed_expenses_value multiply = 2 }
+  }
+ }
 }
 
 sed_coord_fiscal_safe = {

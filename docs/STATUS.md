@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.51
+# Estado dos requisitos — 0.7.52
 
 ## Coordenação com Economy Advisor
 
@@ -195,3 +195,23 @@ contagem. Pausa e fila privada suspendem a observação.
 **Teste sintético:** quatro testes passaram, incluindo devolução ao
 Advisor após enfileiramento. **Estático:** validado. Campanha NÃO
 VERIFICADA. Obras podem terminar entre as leituras de fila.
+
+## Acompanhamento de obras e reação anual — 0.7.52
+
+**Código:** acompanha o nível concluído dos projetos próprios de madeira,
+ferro e ferramentas. Contratação abaixo de 80%, falhas de contratação ou
+escassez de insumos conservam a marca de acompanhamento e bloqueiam
+nova expansão direta da faixa de crescimento. Candidatos de escassez já
+exigem suas guardas de ocupação e insumos.
+
+Reserva reduzida de quatro para duas semanas apenas na construção direta
+com orçamento material conhecido, sem dívida, saldo fixo não negativo e
+superávit cobrindo o custo material semanal. Financiamento por reserva
+continua com o piso anterior. A comparação anual sem avanço de ranking
+nem de padrão de vida favorece Standard of Living na delegação ao Advisor.
+
+**Teste sintético:** conclusão/recuperação, fronteira fiscal e reação anual
+com restauração ao sair do Automático. **Estático:** validador aprovado.
+**Campanha:** NÃO VERIFICADA. Save de Toscana anterior não contém os
+marcadores de observação da 0.7.51. Para verificar, use cópia de save,
+observe obra própria concluída com ocupação baixa e confira o diagnóstico.

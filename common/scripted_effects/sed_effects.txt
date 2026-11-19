@@ -603,6 +603,8 @@ sed_disable_country = {
  remove_variable = sed_watch_idle
  remove_variable = sed_watch_status
  remove_variable = sed_watch_delegated
+ remove_variable = sed_follow_staff
+ remove_variable = sed_follow_inputs
  remove_variable = sed_plan_count
  remove_variable = sed_plan_goal
  remove_variable = sed_fiscal_status
@@ -946,6 +948,9 @@ sed_disable_country = {
   remove_variable = sed_paper_ignored
  }
  every_scope_state = {
+  remove_variable = sed_follow_wood
+  remove_variable = sed_follow_iron
+  remove_variable = sed_follow_tools
   remove_variable = sed_plan_score
   remove_variable = sed_plan_type
   remove_variable = sed_plan_railway_rank
@@ -1212,6 +1217,7 @@ sed_refresh_diagnostics = {
  if = {
   limit = { is_player = yes has_variable = sed_enabled }
   sed_ensure_mode_default = yes
+  sed_follow_projects = yes
  # Economy Advisor/advisor_economy_health_effects.txt
  set_variable = { name = sed_balance value = net_total_income }
  # Economy Advisor/advisor_core_values.txt
@@ -3994,6 +4000,7 @@ sed_auto_apply_monthly = {
  sed_refresh_trade_center = yes
  sed_refresh_admin = yes
  sed_refresh_power = yes
+ sed_follow_projects = yes
  sed_refresh_national_plan = yes
  sed_recover_existing_industry = yes
  sed_modernize_existing_industry = yes
@@ -8950,6 +8957,10 @@ var:sed_paper_intent_variant = 1
   } }
   set_variable = { name = sed_build_budget_required_gold value = {
    value = sed_fixed_expenses_value min = 0 multiply = 4
+   if = { limit = { principal <= 0 net_fixed_income >= 0 net_total_income > 0
+    net_total_income >= var:sed_build_budget_weekly }
+    value = { value = sed_fixed_expenses_value min = 0 multiply = 2 }
+   }
    add = { value = var:sed_build_budget_weekly subtract = net_total_income min = 0
     multiply = var:sed_build_budget_funding_weeks
    }
@@ -13932,7 +13943,7 @@ sed_coord_sync = {
   else_if = { limit = { sed_pm_upgrade_month_limit_reached = yes }
    set_variable = { name = sed_coord_executor value = 13 }
   }
-  else_if = { limit = { sed_coord_fiscal_safe = yes NOT = { in_default = yes } is_construction_paused = no }
+  else_if = { limit = { OR = { sed_coord_fiscal_safe = yes AND = { sed_watch_recovery_candidate = yes sed_direct_fiscal_safe = yes } } NOT = { in_default = yes } is_construction_paused = no }
    if = { limit = { var:sed_plan_goal = 2 sed_direct_fiscal_safe = yes sed_direct_supply_priority_exists = yes }
     set_variable = { name = sed_coord_executor value = 11 }
    }
@@ -13987,6 +13998,7 @@ else = { set_variable = { name = advisor_auto_construction_enabled value = 1 } }
     }
     else_if = { limit = { OR = {
      sed_coord_advisor_sol_pressure = yes
+     AND = { has_variable = sed_asc_rank_delta var:sed_asc_rank_delta >= 0 has_variable = sed_asc_sol_delta var:sed_asc_sol_delta <= 0 }
      any_scope_state = { OR = { var:sed_plan_grain_rank = 1 var:sed_plan_groceries_rank = 1 var:sed_plan_clothes_rank = 1 } }
      AND = { var:sed_plan_goal = 5 OR = { var:sed_plan_missing_grain = 1 var:sed_plan_missing_groceries = 1 var:sed_plan_missing_clothes = 1 } }
     } }
@@ -14559,6 +14571,84 @@ sed_watch_diagnose = {
   }
   else_if = { limit = { sed_watch_recovery_candidate = yes }
    set_variable = { name = sed_watch_status value = 5 }
+  }
+ }
+}
+sed_follow_projects = {
+ set_variable = { name = sed_follow_staff value = 0 }
+ set_variable = { name = sed_follow_inputs value = 0 }
+ every_scope_state = {
+  if = { limit = {
+   has_variable = sed_wood_intent_level has_building = building_logging_camp
+   b:building_logging_camp.level > var:sed_wood_intent_level
+  }
+   set_variable = { name = sed_follow_wood value = yes }
+  }
+  if = { limit = { has_variable = sed_follow_wood }
+   if = { limit = { NOT = { has_building = building_logging_camp } }
+    remove_variable = sed_follow_wood
+   }
+   else_if = { limit = { b:building_logging_camp = {
+    occupancy >= 0.8 has_failed_hires = no building_has_goods_shortage = no
+   } }
+    remove_variable = sed_follow_wood
+   }
+   else = {
+    if = { limit = { b:building_logging_camp = { OR = { occupancy < 0.8 has_failed_hires = yes } } }
+     root = { change_variable = { name = sed_follow_staff add = 1 } }
+    }
+    if = { limit = { b:building_logging_camp = { building_has_goods_shortage = yes } }
+     root = { change_variable = { name = sed_follow_inputs add = 1 } }
+    }
+   }
+  }
+  if = { limit = {
+   has_variable = sed_iron_intent_level has_building = building_iron_mine
+   b:building_iron_mine.level > var:sed_iron_intent_level
+  }
+   set_variable = { name = sed_follow_iron value = yes }
+  }
+  if = { limit = { has_variable = sed_follow_iron }
+   if = { limit = { NOT = { has_building = building_iron_mine } }
+    remove_variable = sed_follow_iron
+   }
+   else_if = { limit = { b:building_iron_mine = {
+    occupancy >= 0.8 has_failed_hires = no building_has_goods_shortage = no
+   } }
+    remove_variable = sed_follow_iron
+   }
+   else = {
+    if = { limit = { b:building_iron_mine = { OR = { occupancy < 0.8 has_failed_hires = yes } } }
+     root = { change_variable = { name = sed_follow_staff add = 1 } }
+    }
+    if = { limit = { b:building_iron_mine = { building_has_goods_shortage = yes } }
+     root = { change_variable = { name = sed_follow_inputs add = 1 } }
+    }
+   }
+  }
+  if = { limit = {
+   has_variable = sed_tools_intent_level has_building = building_tooling_workshop
+   b:building_tooling_workshop.level > var:sed_tools_intent_level
+  }
+   set_variable = { name = sed_follow_tools value = yes }
+  }
+  if = { limit = { has_variable = sed_follow_tools }
+   if = { limit = { NOT = { has_building = building_tooling_workshop } }
+    remove_variable = sed_follow_tools
+   }
+   else_if = { limit = { b:building_tooling_workshop = {
+    occupancy >= 0.8 has_failed_hires = no building_has_goods_shortage = no
+   } }
+    remove_variable = sed_follow_tools
+   }
+   else = {
+    if = { limit = { b:building_tooling_workshop = { OR = { occupancy < 0.8 has_failed_hires = yes } } }
+     root = { change_variable = { name = sed_follow_staff add = 1 } }
+    }
+    if = { limit = { b:building_tooling_workshop = { building_has_goods_shortage = yes } }
+     root = { change_variable = { name = sed_follow_inputs add = 1 } }
+    }
+   }
   }
  }
 }

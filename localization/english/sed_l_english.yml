@@ -728,3 +728,4 @@
  sed_watch_3:0 "Recurring empty queue. Private construction blocks direct recovery."
  sed_watch_4:0 "Recurring empty queue. Construction is paused."
  sed_watch_5:0 "Recurring empty queue. The Director reserved a direct recovery attempt under material-budget and monthly limits. Check the review outcome."
+ sed_follow_summary:0 "Recent wood, iron and tool projects: [JournalEntry.GetCountry.MakeScope.Var('sed_follow_staff').GetValue|0] with staffing problems; [JournalEntry.GetCountry.MakeScope.Var('sed_follow_inputs').GetValue|0] with input shortages. Direct expansion waits for recovery."

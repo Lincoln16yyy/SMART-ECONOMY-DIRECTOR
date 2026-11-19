@@ -1,5 +1,11 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.52, o Director acompanha contratação e insumos de obras próprias
+de madeira, ferro e ferramentas. A expansão direta desses produtores
+aguarda recuperação. Obras cobertas pelo saldo, sem dívida, admitem
+reserva de duas semanas. Ranking e padrão de vida estagnados no balanço
+anual passam a favorecer o objetivo Standard of Living do Advisor.
+
 Na 0.7.51, o Director acompanha intervalos mensais delegados ao Economy
 Advisor com a fila pública vazia. Após dois intervalos, pode reservar uma
 tentativa direta de obra elegível sob as guardas fiscais e de materiais.

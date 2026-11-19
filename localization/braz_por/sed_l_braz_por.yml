@@ -728,3 +728,4 @@
  sed_watch_3:0 "Fila vazia recorrente. A fila privada ocupada impede a recuperação direta."
  sed_watch_4:0 "Fila vazia recorrente. A construção está pausada."
  sed_watch_5:0 "Fila vazia recorrente. O Director reservou uma tentativa direta de recuperação, sujeita ao orçamento de materiais e ao limite mensal. Confira o resultado da revisão."
+ sed_follow_summary:0 "Obras recentes de madeira, ferro e ferramentas: [JournalEntry.GetCountry.MakeScope.Var('sed_follow_staff').GetValue|0] com contratação insuficiente; [JournalEntry.GetCountry.MakeScope.Var('sed_follow_inputs').GetValue|0] com falta de insumos. A expansão direta aguarda recuperação."

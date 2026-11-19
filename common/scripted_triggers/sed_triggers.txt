@@ -2854,7 +2854,15 @@ sed_auto_fiscal_safe = {
 }
 
 sed_direct_fiscal_safe = {
- sed_auto_fiscal_safe = yes
+ OR = {
+  sed_auto_fiscal_safe = yes
+  AND = {
+   principal <= 0 net_fixed_income >= 0 net_total_income > 0
+   has_variable = sed_build_budget_known var:sed_build_budget_known = 1
+   has_variable = sed_build_budget_weekly net_total_income >= var:sed_build_budget_weekly
+   gold_reserves >= { value = sed_fixed_expenses_value multiply = 2 }
+  }
+ }
 }
 
 sed_coord_fiscal_safe = {
@@ -4120,6 +4128,7 @@ sed_core_wood_eligible = {
  has_building = building_logging_camp
  NOT = { has_variable = sed_wood_ignored }
  NOT = { has_variable = sed_wood_request_pending }
+ NOT = { has_variable = sed_follow_wood }
  b:building_logging_camp = {
   level_after_queued_constructions <= level
   occupancy >= 0.5
@@ -4150,6 +4159,7 @@ sed_core_iron_eligible = {
  has_building = building_iron_mine
  NOT = { has_variable = sed_iron_ignored }
  NOT = { has_variable = sed_iron_request_pending }
+ NOT = { has_variable = sed_follow_iron }
  b:building_iron_mine = {
   level_after_queued_constructions <= level
   occupancy >= 0.5
@@ -4180,6 +4190,7 @@ sed_core_tools_eligible = {
  has_building = building_tooling_workshop
  NOT = { has_variable = sed_tools_ignored }
  NOT = { has_variable = sed_tools_request_pending }
+ NOT = { has_variable = sed_follow_tools }
  b:building_tooling_workshop = {
   level_after_queued_constructions <= level
   occupancy >= 0.5

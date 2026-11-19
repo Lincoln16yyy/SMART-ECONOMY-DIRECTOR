@@ -723,3 +723,10 @@ verificada no painel diplomático. Campanha NÃO VERIFICADA.
 
 Instalada com backup `sed_backups/mod_before_0.7.51_20261118_212435_131111`.
 A observação usa fila e executor em meses distintos. Campanha pendente.
+
+## Acompanhamento 0.7.52
+
+Leitura do último autosave de Toscana não encontrou `sed_watch_month`
+nem `sed_watch_idle`. A conclusão de obra própria usa nível acima da
+intenção gravada antes de enfileirar. Qualificações permanecem estimadas.
+O acompanhamento individual cobre madeira, ferro e ferramentas.

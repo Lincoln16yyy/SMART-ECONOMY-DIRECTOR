@@ -213,6 +213,10 @@ def effects(founding_projects=()):
   } }
   set_variable = { name = sed_build_budget_required_gold value = {
    value = sed_fixed_expenses_value min = 0 multiply = 4
+   if = { limit = { principal <= 0 net_fixed_income >= 0 net_total_income > 0
+    net_total_income >= var:sed_build_budget_weekly }
+    value = { value = sed_fixed_expenses_value min = 0 multiply = 2 }
+   }
    add = { value = var:sed_build_budget_weekly subtract = net_total_income min = 0
     multiply = var:sed_build_budget_funding_weeks
    }

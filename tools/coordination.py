@@ -172,7 +172,7 @@ sed_coord_sync = {{
   else_if = {{ limit = {{ sed_pm_upgrade_month_limit_reached = yes }}
    set_variable = {{ name = sed_coord_executor value = 13 }}
   }}
-  else_if = {{ limit = {{ sed_coord_fiscal_safe = yes NOT = {{ in_default = yes }} is_construction_paused = no }}
+  else_if = {{ limit = {{ OR = {{ sed_coord_fiscal_safe = yes AND = {{ sed_watch_recovery_candidate = yes sed_direct_fiscal_safe = yes }} }} NOT = {{ in_default = yes }} is_construction_paused = no }}
    if = {{ limit = {{ var:sed_plan_goal = 2 sed_direct_fiscal_safe = yes sed_direct_supply_priority_exists = yes }}
     set_variable = {{ name = sed_coord_executor value = 11 }}
    }}
@@ -224,6 +224,7 @@ sed_coord_sync = {{
     }}
     else_if = {{ limit = {{ OR = {{
      sed_coord_advisor_sol_pressure = yes
+     AND = {{ has_variable = sed_asc_rank_delta var:sed_asc_rank_delta >= 0 has_variable = sed_asc_sol_delta var:sed_asc_sol_delta <= 0 }}
      any_scope_state = {{ OR = {{ var:sed_plan_grain_rank = 1 var:sed_plan_groceries_rank = 1 var:sed_plan_clothes_rank = 1 }} }}
      AND = {{ var:sed_plan_goal = 5 OR = {{ var:sed_plan_missing_grain = 1 var:sed_plan_missing_groceries = 1 var:sed_plan_missing_clothes = 1 }} }}
     }} }}

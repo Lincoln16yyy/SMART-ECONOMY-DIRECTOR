@@ -87,6 +87,7 @@ sed_core_{good}_eligible = {{
  has_building = {building}
  NOT = {{ has_variable = sed_{good}_ignored }}
  NOT = {{ has_variable = sed_{good}_request_pending }}
+ NOT = {{ has_variable = sed_follow_{good} }}
  b:{building} = {{
   level_after_queued_constructions <= level
   occupancy >= 0.5
