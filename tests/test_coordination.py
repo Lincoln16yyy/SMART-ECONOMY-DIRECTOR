@@ -708,7 +708,7 @@ class CoordinationTests(unittest.TestCase):
             ('common/scripted_effects/sed_effects.txt',
              'sed_auto_run_direct = {\n sed_refresh_input_readings = yes\n sed_refresh_direct_budget = yes', 'sed_auto_run_direct = {\n sed_refresh_input_readings = yes'),
             ('common/scripted_triggers/sed_triggers.txt',
-             'var:sed_plan_wood_rank = 1 }', 'var:sed_plan_wood_rank >= 1 }'),
+             'var:sed_plan_wood_rank = 1 sed_growth_wood_candidate', 'var:sed_plan_wood_rank >= 1 sed_growth_wood_candidate'),
             ('common/scripted_effects/sed_effects.txt',
              'limit = { sed_auto_executor_safe = yes }', 'limit = { always = yes }'),
         ):

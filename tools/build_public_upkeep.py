@@ -22,8 +22,10 @@ def build(game):
     result = {}
     for name, key in [('university', 'building_university'), ('admin', 'building_government_administration')]:
         material = jobs = 0
+        profiles = []
         for group in next(e.value for e in buildings[key] if e.key == 'production_method_groups'):
             costs, employment = [], []
+            profile = {}
             for method in next((e.value for e in groups.get(group.key, []) if e.key == 'production_methods'), []):
                 cost = job = 0
                 for entry in walk(methods.get(method.key, [])):
@@ -37,11 +39,14 @@ def build(game):
                         cost += amount * prices[entry.key[len('goods_input_'):-4]] * 1.75
                     if entry.key.startswith('building_employment_') and entry.key.endswith('_add'):
                         job += amount * weights[entry.key[len('building_employment_'):-4]]
+                technologies = next((e.value for e in methods.get(method.key, []) if e.key == 'unlocking_technologies'), [])
+                profile[method.key] = dict(materials=cost, weighted_jobs=job, technologies=[e.key for e in technologies])
                 costs.append(cost)
                 employment.append(job)
+            profiles.append(profile)
             material += max(costs, default=0)
             jobs += max(employment, default=0)
-        result[name] = dict(building=key, materials=material, weighted_jobs=jobs)
+        result[name] = dict(building=key, materials=material, weighted_jobs=jobs, groups=profiles)
     return result
 
 

@@ -9080,3 +9080,131 @@ sed_investment_paper_return = {
  value = 0
  if = { limit = { sed_paper_paper_mill_investment_eligible = yes } add = sed_investment_paper_mill_return }
 }
+sed_growth_wood_demand = { value = 0
+ owner = { market = { mg:wood ?= { add = market_goods_buy_orders } } }
+}
+sed_growth_wood_score = { value = 0
+ if = { limit = { sed_growth_wood_candidate = yes }
+  add = { value = sed_investment_wood_return divide = 200 multiply = 100 }
+  # Diversifying into the first national producer breaks ties toward new industry.
+  if = { limit = { sed_wood_found_site = yes }
+   add = { value = sed_investment_wood_return divide = 200 multiply = 50 }
+  }
+  add = { value = sed_site_readiness multiply = 0.000001 }
+ }
+}
+sed_growth_iron_demand = { value = 0
+ owner = { market = { mg:iron ?= { add = market_goods_buy_orders } } }
+}
+sed_growth_iron_score = { value = 0
+ if = { limit = { sed_growth_iron_candidate = yes }
+  add = { value = sed_investment_iron_return divide = 400 multiply = 100 }
+  # Diversifying into the first national producer breaks ties toward new industry.
+  if = { limit = { sed_iron_found_site = yes }
+   add = { value = sed_investment_iron_return divide = 400 multiply = 50 }
+  }
+  add = { value = sed_site_readiness multiply = 0.000001 }
+ }
+}
+sed_growth_coal_demand = { value = 0
+ owner = { market = { mg:coal ?= { add = market_goods_buy_orders } } }
+}
+sed_growth_coal_score = { value = 0
+ if = { limit = { sed_growth_coal_candidate = yes }
+  add = { value = sed_investment_coal_return divide = 400 multiply = 100 }
+  # Diversifying into the first national producer breaks ties toward new industry.
+  if = { limit = { sed_coal_found_site = yes }
+   add = { value = sed_investment_coal_return divide = 400 multiply = 50 }
+  }
+  add = { value = sed_site_readiness multiply = 0.000001 }
+ }
+}
+sed_growth_grain_demand = { value = 0
+ owner = { market = { mg:grain ?= { add = market_goods_buy_orders } } }
+}
+sed_growth_grain_score = { value = 0
+ if = { limit = { sed_growth_grain_candidate = yes }
+  add = { value = sed_investment_grain_return divide = 200 multiply = 100 }
+  # Diversifying into the first national producer breaks ties toward new industry.
+  if = { limit = { sed_grain_found_site = yes }
+   add = { value = sed_investment_grain_return divide = 200 multiply = 50 }
+  }
+  add = { value = sed_site_readiness multiply = 0.000001 }
+ }
+}
+sed_growth_fabric_demand = { value = 0
+ owner = { market = { mg:fabric ?= { add = market_goods_buy_orders } } }
+}
+sed_growth_fabric_score = { value = 0
+ if = { limit = { sed_growth_fabric_candidate = yes }
+  add = { value = sed_investment_fabric_return divide = 200 multiply = 100 }
+  # Diversifying into the first national producer breaks ties toward new industry.
+  if = { limit = { sed_fabric_found_site = yes }
+   add = { value = sed_investment_fabric_return divide = 200 multiply = 50 }
+  }
+  add = { value = sed_site_readiness multiply = 0.000001 }
+ }
+}
+sed_growth_tools_demand = { value = 0
+ owner = { market = { mg:tools ?= { add = market_goods_buy_orders } } }
+}
+sed_growth_tools_score = { value = 0
+ if = { limit = { sed_growth_tools_candidate = yes }
+  add = { value = sed_investment_tools_return divide = 600 multiply = 100 }
+  # Diversifying into the first national producer breaks ties toward new industry.
+  if = { limit = { sed_tools_found_site = yes }
+   add = { value = sed_investment_tools_return divide = 600 multiply = 50 }
+  }
+  add = { value = sed_site_readiness multiply = 0.000001 }
+ }
+}
+sed_growth_groceries_demand = { value = 0
+ owner = { market = { mg:groceries ?= { add = market_goods_buy_orders } } }
+}
+sed_growth_groceries_score = { value = 0
+ if = { limit = { sed_growth_groceries_candidate = yes }
+  add = { value = sed_investment_groceries_return divide = 600 multiply = 100 }
+  # Diversifying into the first national producer breaks ties toward new industry.
+  if = { limit = { sed_groceries_found_site = yes }
+   add = { value = sed_investment_groceries_return divide = 600 multiply = 50 }
+  }
+  add = { value = sed_site_readiness multiply = 0.000001 }
+ }
+}
+sed_growth_clothes_demand = { value = 0
+ owner = { market = { mg:clothes ?= { add = market_goods_buy_orders } } }
+}
+sed_growth_clothes_score = { value = 0
+ if = { limit = { sed_growth_clothes_candidate = yes }
+  add = { value = sed_investment_clothes_return divide = 600 multiply = 100 }
+  # Diversifying into the first national producer breaks ties toward new industry.
+  if = { limit = { sed_clothes_found_site = yes }
+   add = { value = sed_investment_clothes_return divide = 600 multiply = 50 }
+  }
+  add = { value = sed_site_readiness multiply = 0.000001 }
+ }
+}
+sed_growth_paper_demand = { value = 0
+ owner = { market = { mg:paper ?= { add = market_goods_buy_orders } } }
+}
+sed_growth_paper_score = { value = 0
+ if = { limit = { sed_growth_paper_candidate = yes }
+  add = { value = sed_investment_paper_return divide = 600 multiply = 100 }
+  # Diversifying into the first national producer breaks ties toward new industry.
+  if = { limit = { sed_paper_found_site = yes }
+   add = { value = sed_investment_paper_return divide = 600 multiply = 50 }
+  }
+  add = { value = sed_site_readiness multiply = 0.000001 }
+ }
+}
+sed_growth_best_score = { value = 0
+ min = sed_growth_wood_score
+ min = sed_growth_iron_score
+ min = sed_growth_coal_score
+ min = sed_growth_grain_score
+ min = sed_growth_fabric_score
+ min = sed_growth_tools_score
+ min = sed_growth_groceries_score
+ min = sed_growth_clothes_score
+ min = sed_growth_paper_score
+}

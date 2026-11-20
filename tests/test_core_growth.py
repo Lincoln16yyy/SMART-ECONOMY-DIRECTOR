@@ -19,6 +19,9 @@ class CoreGrowthTests(unittest.TestCase):
         camp = building('building_logging_camp', level=level, queued_levels=queued_levels)
         camp['production_methods'] = ['pm_simple_forestry']
         self.c.states[0]['buildings'].append(camp)
+        # Isolate the legacy expansion lane from the broader founder selector.
+        self.c.states[0]['can_construct_building'] = ['building_logging_camp',
+            'building_government_administration', 'building_construction_sector']
         return camp
 
     def test_a_healthy_economy_keeps_expanding_a_core_input(self):
@@ -54,6 +57,7 @@ class CoreGrowthTests(unittest.TestCase):
     def test_a_missing_good_with_a_host_site_keeps_the_growth_lane_waiting(self):
         c = self.c
         self.add_logging_camp()
+        c.states[0]['can_construct_building'].append('building_wheat_farm')
         c.market_goods['grain'] = {'market_goods_has_goods_shortage': True,
                                     'market_goods_buy_orders': 100, 'market_goods_sell_orders': 0}
         c.run('sed_set_mode_automatic')
@@ -64,11 +68,11 @@ class CoreGrowthTests(unittest.TestCase):
         self.assertNotIn('building_logging_camp',
                          [item.get('building') for item in c.constructions])
 
-    def test_no_building_means_no_founding_from_the_growth_lane(self):
+    def test_empty_economy_can_use_the_new_founder_lane(self):
         c = self.c
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')
-        self.assertEqual(c.constructions, [])
+        self.assertEqual(len(c.constructions), 1)
 
     def test_a_good_cheaper_than_base_is_not_expanded(self):
         c = self.c

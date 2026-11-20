@@ -2,11 +2,127 @@
   "university": {
     "building": "building_university",
     "materials": 787.5,
-    "weighted_jobs": 2900.0
+    "weighted_jobs": 2900.0,
+    "groups": [
+      {
+        "pm_scholastic_education": {
+          "materials": 262.5,
+          "weighted_jobs": 625.0,
+          "technologies": []
+        },
+        "pm_philosophy_department": {
+          "materials": 525.0,
+          "weighted_jobs": 625.0,
+          "technologies": [
+            "dialectics"
+          ]
+        },
+        "pm_analytical_philosophy_department": {
+          "materials": 787.5,
+          "weighted_jobs": 900.0,
+          "technologies": [
+            "analytical_philosophy"
+          ]
+        }
+      },
+      {
+        "pm_religious_academia": {
+          "materials": 0,
+          "weighted_jobs": 1750.0,
+          "technologies": []
+        },
+        "pm_secular_academia": {
+          "materials": 0,
+          "weighted_jobs": 2000.0,
+          "technologies": []
+        }
+      },
+      {
+        "pm_principle_freedom_of_movement_3": {
+          "materials": 0,
+          "weighted_jobs": 0,
+          "technologies": []
+        },
+        "pm_freedom_of_movement_no_effect": {
+          "materials": 0,
+          "weighted_jobs": 0,
+          "technologies": []
+        }
+      }
+    ]
   },
   "admin": {
     "building": "building_government_administration",
     "materials": 1662.5,
-    "weighted_jobs": 5000.0
+    "weighted_jobs": 5000.0,
+    "groups": [
+      {
+        "pm_simple_organization": {
+          "materials": 0,
+          "weighted_jobs": 750.0,
+          "technologies": []
+        },
+        "pm_horizontal_drawer_cabinets": {
+          "materials": 525.0,
+          "weighted_jobs": 750.0,
+          "technologies": [
+            "centralization"
+          ]
+        },
+        "pm_vertical_filing_cabinets": {
+          "materials": 1050.0,
+          "weighted_jobs": 750.0,
+          "technologies": [
+            "central_archives"
+          ]
+        },
+        "pm_switch_boards": {
+          "materials": 1662.5,
+          "weighted_jobs": 750.0,
+          "technologies": [
+            "central_planning"
+          ]
+        }
+      },
+      {
+        "pm_hereditary_bureaucrats": {
+          "materials": 0,
+          "weighted_jobs": 2250.0,
+          "technologies": []
+        },
+        "pm_professional_bureaucrats": {
+          "materials": 0,
+          "weighted_jobs": 2000.0,
+          "technologies": []
+        },
+        "pm_military_bureaucrats": {
+          "materials": 0,
+          "weighted_jobs": 2250.0,
+          "technologies": []
+        },
+        "pm_communal_representatives": {
+          "materials": 0,
+          "weighted_jobs": 1750.0,
+          "technologies": []
+        }
+      },
+      {
+        "pm_religious_bureaucrats": {
+          "materials": 0,
+          "weighted_jobs": 1750.0,
+          "technologies": []
+        },
+        "pm_secular_bureaucrats": {
+          "materials": 0,
+          "weighted_jobs": 2000.0,
+          "technologies": []
+        },
+        "pm_communal_administration": {
+          "materials": 0,
+          "weighted_jobs": 1500.0,
+          "technologies": []
+        }
+      }
+    ]
   }
 }

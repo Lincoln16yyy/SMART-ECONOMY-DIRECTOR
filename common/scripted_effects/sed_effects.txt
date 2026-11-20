@@ -715,8 +715,12 @@ sed_disable_country = {
  remove_variable = sed_outcome_workers
  remove_variable = sed_upkeep_university_cost
  remove_variable = sed_upkeep_university_known
+ remove_variable = sed_upkeep_university_materials
+ remove_variable = sed_upkeep_university_jobs
  remove_variable = sed_upkeep_admin_cost
  remove_variable = sed_upkeep_admin_known
+ remove_variable = sed_upkeep_admin_materials
+ remove_variable = sed_upkeep_admin_jobs
  remove_variable = sed_plan_count
  remove_variable = sed_plan_goal
  remove_variable = sed_fiscal_status
@@ -894,6 +898,7 @@ sed_disable_country = {
  remove_variable = sed_coord_saved_supply_incorporated
  remove_variable = sed_coord_saved_supply_tax_incorporated
  remove_variable = sed_coord_saved_supply_institutions
+ remove_variable = sed_growth_score_cached
  remove_variable = sed_build_budget_known
  remove_variable = sed_build_budget_points
  remove_variable = sed_build_budget_point_cost
@@ -4707,6 +4712,39 @@ sed_auto_run_direct = {
     sed_run_trade_center_approval = yes
    }
   }
+  else_if = { limit = { any_scope_state = { sed_growth_site = yes } }
+   ordered_scope_state = {
+    limit = { sed_growth_site = yes }
+    order_by = sed_growth_best_score max = 1 check_range_bounds = no
+   if = { limit = {
+    sed_growth_wood_candidate = yes sed_growth_wood_score >= sed_growth_best_score
+   } sed_run_wood_approval = yes }
+   else_if = { limit = {
+    sed_growth_iron_candidate = yes sed_growth_iron_score >= sed_growth_best_score
+   } sed_run_iron_approval = yes }
+   else_if = { limit = {
+    sed_growth_coal_candidate = yes sed_growth_coal_score >= sed_growth_best_score
+   } sed_run_coal_approval = yes }
+   else_if = { limit = {
+    sed_growth_grain_candidate = yes sed_growth_grain_score >= sed_growth_best_score
+   } sed_run_grain_approval = yes }
+   else_if = { limit = {
+    sed_growth_fabric_candidate = yes sed_growth_fabric_score >= sed_growth_best_score
+   } sed_run_fabric_approval = yes }
+   else_if = { limit = {
+    sed_growth_tools_candidate = yes sed_growth_tools_score >= sed_growth_best_score
+   } sed_run_tools_approval = yes }
+   else_if = { limit = {
+    sed_growth_groceries_candidate = yes sed_growth_groceries_score >= sed_growth_best_score
+   } sed_run_groceries_approval = yes }
+   else_if = { limit = {
+    sed_growth_clothes_candidate = yes sed_growth_clothes_score >= sed_growth_best_score
+   } sed_run_clothes_approval = yes }
+   else_if = { limit = {
+    sed_growth_paper_candidate = yes sed_growth_paper_score >= sed_growth_best_score
+   } sed_run_paper_approval = yes }
+   }
+  }
   else_if = {
    limit = { any_scope_state = { sed_core_wood_eligible = yes } }
    ordered_scope_state = {
@@ -5925,7 +5963,7 @@ sed_refresh_national_plan = {
    }
    set_variable = { name = sed_plan_wood_rank value = 0 }
    set_variable = { name = sed_plan_wood_score value = 0 }
-   if = { limit = { sed_wood_candidate_eligible = yes }
+   if = { limit = { sed_wood_scarcity_candidate = yes }
     set_variable = { name = sed_plan_wood_score value = { value = owner.var:sed_plan_pressure_wood add = 90
     if = { limit = { owner = { has_variable = sed_wood_meta_year var:sed_wood_meta_year = year } } add = 25 }
     if = { limit = { owner = { has_variable = sed_wood_goal_streak var:sed_wood_goal_streak >= 2 } } add = 15 }
@@ -5940,7 +5978,7 @@ sed_refresh_national_plan = {
    }
    set_variable = { name = sed_plan_iron_rank value = 0 }
    set_variable = { name = sed_plan_iron_score value = 0 }
-   if = { limit = { sed_iron_candidate_eligible = yes }
+   if = { limit = { sed_iron_scarcity_candidate = yes }
     set_variable = { name = sed_plan_iron_score value = { value = owner.var:sed_plan_pressure_iron add = 90
     if = { limit = { owner = { has_variable = sed_iron_meta_year var:sed_iron_meta_year = year } } add = 25 }
     if = { limit = { owner = { has_variable = sed_iron_goal_streak var:sed_iron_goal_streak >= 2 } } add = 15 }
@@ -5955,7 +5993,7 @@ sed_refresh_national_plan = {
    }
    set_variable = { name = sed_plan_coal_rank value = 0 }
    set_variable = { name = sed_plan_coal_score value = 0 }
-   if = { limit = { sed_coal_candidate_eligible = yes }
+   if = { limit = { sed_coal_scarcity_candidate = yes }
     set_variable = { name = sed_plan_coal_score value = { value = owner.var:sed_plan_pressure_coal add = 90
     if = { limit = { owner = { has_variable = sed_coal_meta_year var:sed_coal_meta_year = year } } add = 25 }
     if = { limit = { owner = { has_variable = sed_coal_goal_streak var:sed_coal_goal_streak >= 2 } } add = 15 }
@@ -5970,7 +6008,7 @@ sed_refresh_national_plan = {
    }
    set_variable = { name = sed_plan_grain_rank value = 0 }
    set_variable = { name = sed_plan_grain_score value = 0 }
-   if = { limit = { sed_grain_candidate_eligible = yes }
+   if = { limit = { sed_grain_scarcity_candidate = yes }
     set_variable = { name = sed_plan_grain_score value = { value = owner.var:sed_plan_pressure_grain add = 100
     if = { limit = { owner = { has_variable = sed_grain_meta_year var:sed_grain_meta_year = year } } add = 25 }
     if = { limit = { owner = { has_variable = sed_grain_goal_streak var:sed_grain_goal_streak >= 2 } } add = 15 }
@@ -5985,7 +6023,7 @@ sed_refresh_national_plan = {
    }
    set_variable = { name = sed_plan_fabric_rank value = 0 }
    set_variable = { name = sed_plan_fabric_score value = 0 }
-   if = { limit = { sed_fabric_candidate_eligible = yes }
+   if = { limit = { sed_fabric_scarcity_candidate = yes }
     set_variable = { name = sed_plan_fabric_score value = { value = owner.var:sed_plan_pressure_fabric add = 90
     if = { limit = { owner = { has_variable = sed_fabric_meta_year var:sed_fabric_meta_year = year } } add = 25 }
     if = { limit = { owner = { has_variable = sed_fabric_goal_streak var:sed_fabric_goal_streak >= 2 } } add = 15 }
@@ -6000,7 +6038,7 @@ sed_refresh_national_plan = {
    }
    set_variable = { name = sed_plan_tools_rank value = 0 }
    set_variable = { name = sed_plan_tools_score value = 0 }
-   if = { limit = { sed_tools_candidate_eligible = yes }
+   if = { limit = { sed_tools_scarcity_candidate = yes }
     set_variable = { name = sed_plan_tools_score value = { value = owner.var:sed_plan_pressure_tools add = 90
     if = { limit = { owner = { has_variable = sed_tools_meta_year var:sed_tools_meta_year = year } } add = 25 }
     if = { limit = { owner = { has_variable = sed_tools_goal_streak var:sed_tools_goal_streak >= 2 } } add = 15 }
@@ -6015,7 +6053,7 @@ sed_refresh_national_plan = {
    }
    set_variable = { name = sed_plan_groceries_rank value = 0 }
    set_variable = { name = sed_plan_groceries_score value = 0 }
-   if = { limit = { sed_groceries_candidate_eligible = yes }
+   if = { limit = { sed_groceries_scarcity_candidate = yes }
     set_variable = { name = sed_plan_groceries_score value = { value = owner.var:sed_plan_pressure_groceries add = 100
     if = { limit = { owner = { has_variable = sed_groceries_meta_year var:sed_groceries_meta_year = year } } add = 25 }
     if = { limit = { owner = { has_variable = sed_groceries_goal_streak var:sed_groceries_goal_streak >= 2 } } add = 15 }
@@ -6029,7 +6067,7 @@ sed_refresh_national_plan = {
    }
    set_variable = { name = sed_plan_clothes_rank value = 0 }
    set_variable = { name = sed_plan_clothes_score value = 0 }
-   if = { limit = { sed_clothes_candidate_eligible = yes }
+   if = { limit = { sed_clothes_scarcity_candidate = yes }
     set_variable = { name = sed_plan_clothes_score value = { value = owner.var:sed_plan_pressure_clothes add = 100
     if = { limit = { owner = { has_variable = sed_clothes_meta_year var:sed_clothes_meta_year = year } } add = 25 }
     if = { limit = { owner = { has_variable = sed_clothes_goal_streak var:sed_clothes_goal_streak >= 2 } } add = 15 }
@@ -6043,7 +6081,7 @@ sed_refresh_national_plan = {
    }
    set_variable = { name = sed_plan_small_arms_rank value = 0 }
    set_variable = { name = sed_plan_small_arms_score value = 0 }
-   if = { limit = { sed_small_arms_candidate_eligible = yes }
+   if = { limit = { sed_small_arms_scarcity_candidate = yes }
     set_variable = { name = sed_plan_small_arms_score value = { value = owner.var:sed_plan_pressure_small_arms add = 90
     if = { limit = { owner = { has_variable = sed_small_arms_meta_year var:sed_small_arms_meta_year = year } } add = 25 }
     if = { limit = { owner = { has_variable = sed_small_arms_goal_streak var:sed_small_arms_goal_streak >= 2 } } add = 15 }
@@ -6058,7 +6096,7 @@ sed_refresh_national_plan = {
    }
    set_variable = { name = sed_plan_artillery_rank value = 0 }
    set_variable = { name = sed_plan_artillery_score value = 0 }
-   if = { limit = { sed_artillery_candidate_eligible = yes }
+   if = { limit = { sed_artillery_scarcity_candidate = yes }
     set_variable = { name = sed_plan_artillery_score value = { value = owner.var:sed_plan_pressure_artillery add = 90
     if = { limit = { owner = { has_variable = sed_artillery_meta_year var:sed_artillery_meta_year = year } } add = 25 }
     if = { limit = { owner = { has_variable = sed_artillery_goal_streak var:sed_artillery_goal_streak >= 2 } } add = 15 }
@@ -6073,7 +6111,7 @@ sed_refresh_national_plan = {
    }
    set_variable = { name = sed_plan_ammunition_rank value = 0 }
    set_variable = { name = sed_plan_ammunition_score value = 0 }
-   if = { limit = { sed_ammunition_candidate_eligible = yes }
+   if = { limit = { sed_ammunition_scarcity_candidate = yes }
     set_variable = { name = sed_plan_ammunition_score value = { value = owner.var:sed_plan_pressure_ammunition add = 90
     if = { limit = { owner = { has_variable = sed_ammunition_meta_year var:sed_ammunition_meta_year = year } } add = 25 }
     if = { limit = { owner = { has_variable = sed_ammunition_goal_streak var:sed_ammunition_goal_streak >= 2 } } add = 15 }
@@ -6088,7 +6126,7 @@ sed_refresh_national_plan = {
    }
    set_variable = { name = sed_plan_paper_rank value = 0 }
    set_variable = { name = sed_plan_paper_score value = 0 }
-   if = { limit = { sed_paper_candidate_eligible = yes }
+   if = { limit = { sed_paper_scarcity_candidate = yes }
     set_variable = { name = sed_plan_paper_score value = { value = owner.var:sed_plan_pressure_paper add = 90
     if = { limit = { owner = { has_variable = sed_paper_meta_year var:sed_paper_meta_year = year } } add = 25 }
     if = { limit = { owner = { has_variable = sed_paper_goal_streak var:sed_paper_goal_streak >= 2 } } add = 15 }
@@ -8674,6 +8712,49 @@ sed_refresh_direct_budget = {
   if = { limit = { var:sed_build_budget_project_points = 0
    any_scope_state = { sed_power_candidate_eligible = yes } }
    set_variable = { name = sed_build_budget_project_points value = 400 }
+  }
+  set_variable = { name = sed_growth_score_cached value = 0 }
+  every_scope_state = {
+   limit = { sed_growth_site = yes }
+   owner = { set_variable = { name = sed_growth_score_cached value = {
+    value = var:sed_growth_score_cached min = prev.sed_growth_best_score
+   } } }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { sed_growth_wood_candidate = yes sed_growth_wood_score >= owner.var:sed_growth_score_cached } }
+   set_variable = { name = sed_build_budget_project_points value = 200 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { sed_growth_iron_candidate = yes sed_growth_iron_score >= owner.var:sed_growth_score_cached } }
+   set_variable = { name = sed_build_budget_project_points value = 400 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { sed_growth_coal_candidate = yes sed_growth_coal_score >= owner.var:sed_growth_score_cached } }
+   set_variable = { name = sed_build_budget_project_points value = 400 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { sed_growth_grain_candidate = yes sed_growth_grain_score >= owner.var:sed_growth_score_cached } }
+   set_variable = { name = sed_build_budget_project_points value = 200 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { sed_growth_fabric_candidate = yes sed_growth_fabric_score >= owner.var:sed_growth_score_cached } }
+   set_variable = { name = sed_build_budget_project_points value = 200 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { sed_growth_tools_candidate = yes sed_growth_tools_score >= owner.var:sed_growth_score_cached } }
+   set_variable = { name = sed_build_budget_project_points value = 600 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { sed_growth_groceries_candidate = yes sed_growth_groceries_score >= owner.var:sed_growth_score_cached } }
+   set_variable = { name = sed_build_budget_project_points value = 600 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { sed_growth_clothes_candidate = yes sed_growth_clothes_score >= owner.var:sed_growth_score_cached } }
+   set_variable = { name = sed_build_budget_project_points value = 600 }
+  }
+  if = { limit = { var:sed_build_budget_project_points = 0
+   any_scope_state = { sed_growth_paper_candidate = yes sed_growth_paper_score >= owner.var:sed_growth_score_cached } }
+   set_variable = { name = sed_build_budget_project_points value = 600 }
   }
   if = { limit = { var:sed_build_budget_project_points = 0
    any_scope_state = { sed_core_wood_eligible = yes } }
@@ -14478,7 +14559,7 @@ sed_coord_sync = {
   else_if = { limit = { sed_pm_upgrade_month_limit_reached = yes }
    set_variable = { name = sed_coord_executor value = 13 }
   }
-  else_if = { limit = { OR = { sed_coord_fiscal_safe = yes AND = { sed_watch_recovery_candidate = yes sed_direct_fiscal_safe = yes } } NOT = { in_default = yes } is_construction_paused = no }
+  else_if = { limit = { OR = { sed_coord_fiscal_safe = yes AND = { sed_watch_recovery_candidate = yes sed_direct_fiscal_safe = yes } sed_growth_takeover = yes } NOT = { in_default = yes } is_construction_paused = no }
    if = { limit = { var:sed_plan_goal = 2 sed_direct_fiscal_safe = yes sed_direct_supply_priority_exists = yes }
     set_variable = { name = sed_coord_executor value = 11 }
    }
@@ -14515,6 +14596,9 @@ sed_coord_sync = {
     set_variable = { name = sed_coord_executor value = 9 }
    }
    else_if = { limit = { sed_university_ready = yes }
+    set_variable = { name = sed_coord_executor value = 11 }
+   }
+   else_if = { limit = { sed_growth_takeover = yes }
     set_variable = { name = sed_coord_executor value = 11 }
    }
    else_if = { limit = { sed_outcome_growth_wait = yes }
@@ -20460,11 +20544,41 @@ sed_outcome_review = {
  }
 }
 sed_refresh_public_upkeep = {
+ set_variable = { name = sed_upkeep_university_materials value = { value = 0
+  add = { value = 0
+   min = { value = 0 if = { limit = {  } add = 262.5 } }
+   min = { value = 0 if = { limit = { has_technology_researched = dialectics } add = 525 } }
+   min = { value = 0 if = { limit = { has_technology_researched = analytical_philosophy } add = 787.5 } }
+  }
+  add = { value = 0
+   min = { value = 0 if = { limit = {  } add = 0 } }
+   min = { value = 0 if = { limit = {  } add = 0 } }
+  }
+  add = { value = 0
+   min = { value = 0 if = { limit = {  } add = 0 } }
+   min = { value = 0 if = { limit = {  } add = 0 } }
+  }
+ } }
+ set_variable = { name = sed_upkeep_university_jobs value = { value = 0
+  add = { value = 0
+   min = { value = 0 if = { limit = {  } add = 625 } }
+   min = { value = 0 if = { limit = { has_technology_researched = dialectics } add = 625 } }
+   min = { value = 0 if = { limit = { has_technology_researched = analytical_philosophy } add = 900 } }
+  }
+  add = { value = 0
+   min = { value = 0 if = { limit = {  } add = 1750 } }
+   min = { value = 0 if = { limit = {  } add = 2000 } }
+  }
+  add = { value = 0
+   min = { value = 0 if = { limit = {  } add = 0 } }
+   min = { value = 0 if = { limit = {  } add = 0 } }
+  }
+ } }
  set_variable = { name = sed_upkeep_university_known value = 0 }
- set_variable = { name = sed_upkeep_university_cost value = 787.5 }
+ set_variable = { name = sed_upkeep_university_cost value = var:sed_upkeep_university_materials }
  if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
   change_variable = { name = sed_upkeep_university_cost add = {
-   value = var:sed_investment_wage_unit multiply = 2900.0 multiply = 1.25
+   value = var:sed_investment_wage_unit multiply = var:sed_upkeep_university_jobs multiply = 1.25
   } }
   set_variable = { name = sed_upkeep_university_known value = 1 }
  }
@@ -20475,17 +20589,55 @@ sed_refresh_public_upkeep = {
     value = var:sed_upkeep_university_cost
     min = { value = prev.b:building_university.earnings subtract = prev.b:building_university.weekly_profit
      divide = prev.b:building_university.level divide = prev.b:building_university.occupancy
-     multiply = 1.25 add = 787.5 }
+     multiply = 1.25 add = var:sed_upkeep_university_materials }
    } }
    set_variable = { name = sed_upkeep_university_known value = 1 }
   }
  }
 
+ set_variable = { name = sed_upkeep_admin_materials value = { value = 0
+  add = { value = 0
+   min = { value = 0 if = { limit = {  } add = 0 } }
+   min = { value = 0 if = { limit = { has_technology_researched = centralization } add = 525 } }
+   min = { value = 0 if = { limit = { has_technology_researched = central_archives } add = 1050 } }
+   min = { value = 0 if = { limit = { has_technology_researched = central_planning } add = 1662.5 } }
+  }
+  add = { value = 0
+   min = { value = 0 if = { limit = {  } add = 0 } }
+   min = { value = 0 if = { limit = {  } add = 0 } }
+   min = { value = 0 if = { limit = {  } add = 0 } }
+   min = { value = 0 if = { limit = {  } add = 0 } }
+  }
+  add = { value = 0
+   min = { value = 0 if = { limit = {  } add = 0 } }
+   min = { value = 0 if = { limit = {  } add = 0 } }
+   min = { value = 0 if = { limit = {  } add = 0 } }
+  }
+ } }
+ set_variable = { name = sed_upkeep_admin_jobs value = { value = 0
+  add = { value = 0
+   min = { value = 0 if = { limit = {  } add = 750 } }
+   min = { value = 0 if = { limit = { has_technology_researched = centralization } add = 750 } }
+   min = { value = 0 if = { limit = { has_technology_researched = central_archives } add = 750 } }
+   min = { value = 0 if = { limit = { has_technology_researched = central_planning } add = 750 } }
+  }
+  add = { value = 0
+   min = { value = 0 if = { limit = {  } add = 2250 } }
+   min = { value = 0 if = { limit = {  } add = 2000 } }
+   min = { value = 0 if = { limit = {  } add = 2250 } }
+   min = { value = 0 if = { limit = {  } add = 1750 } }
+  }
+  add = { value = 0
+   min = { value = 0 if = { limit = {  } add = 1750 } }
+   min = { value = 0 if = { limit = {  } add = 2000 } }
+   min = { value = 0 if = { limit = {  } add = 1500 } }
+  }
+ } }
  set_variable = { name = sed_upkeep_admin_known value = 0 }
- set_variable = { name = sed_upkeep_admin_cost value = 1662.5 }
+ set_variable = { name = sed_upkeep_admin_cost value = var:sed_upkeep_admin_materials }
  if = { limit = { has_variable = sed_investment_wage_known var:sed_investment_wage_known = 1 }
   change_variable = { name = sed_upkeep_admin_cost add = {
-   value = var:sed_investment_wage_unit multiply = 5000.0 multiply = 1.25
+   value = var:sed_investment_wage_unit multiply = var:sed_upkeep_admin_jobs multiply = 1.25
   } }
   set_variable = { name = sed_upkeep_admin_known value = 1 }
  }
@@ -20496,7 +20648,7 @@ sed_refresh_public_upkeep = {
     value = var:sed_upkeep_admin_cost
     min = { value = prev.b:building_government_administration.earnings subtract = prev.b:building_government_administration.weekly_profit
      divide = prev.b:building_government_administration.level divide = prev.b:building_government_administration.occupancy
-     multiply = 1.25 add = 1662.5 }
+     multiply = 1.25 add = var:sed_upkeep_admin_materials }
    } }
    set_variable = { name = sed_upkeep_admin_known value = 1 }
   }

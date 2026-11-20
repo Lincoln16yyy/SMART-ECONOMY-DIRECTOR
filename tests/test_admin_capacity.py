@@ -77,7 +77,7 @@ class AdminCapacityTests(unittest.TestCase):
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')
         self.assertEqual(c.variables['sed_plan_goal'], 8)
-        self.assertEqual(c.constructions, [])
+        self.assertNotIn('building_government_administration', [p['building'] for p in c.constructions])
 
     def test_monthly_review_infers_completion_from_the_level(self):
         c = self.c

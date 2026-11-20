@@ -328,7 +328,8 @@ class DiagnosisTests(unittest.TestCase):
                         producer = building(item['building'])
                         producer['production_methods'] = [item['methods'][0]]
                         c.market_goods[name] = {'market_goods_has_goods_shortage': True, 'market_goods_buy_orders': 100}
-                    target = state(-2 if name == 'railway' else 0, buildings=[producer])
+                    target = state(-2 if name == 'railway' else 0, buildings=[producer],
+                                   can_construct=[producer['building']])
                     c.states = [target]
                     c.run('sed_refresh_diagnostics')
                     gui = self.definitions['sed_ignore_' + name + '_sgui']

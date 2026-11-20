@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.59
+# Estado dos requisitos — 0.7.60
 
 ## Fila parada após administração — 0.7.59
 
@@ -359,3 +359,45 @@ do Advisor para selecionar a alternativa. São propostas, não implementações.
 Build sincronizado e árvore limpa antes desta análise; nenhuma alteração de
 script ou instalação nesta revisão. Resultado da 0.7.59 em campanha continua
 NÃO VERIFICADO.
+
+
+## Crescimento civil e dívida — 0.7.60
+
+**Código:** `tools/strategic_growth.py` cobre madeira, ferro, carvão,
+cereais, tecido, ferramentas, mantimentos, roupas e papel, com as 14
+variantes civis já catalogadas. Reutiliza os filtros de construção, mão de
+obra, infraestrutura, previsão de insumos, PM inicial e reconciliação de
+fila. Exige retorno estressado positivo e demanda mínima; não expande bem
+abaixo do preço-base. A pontuação compara retorno por ponto de obra e dá
+peso 1,5 à primeira base nacional. Prioridades ranqueadas e objetivos
+cívicos mantêm precedência; a fundação de crescimento não é escassez.
+A coordenação lê status 4 do Advisor como orçamento bloqueado e tenta
+alternativa própria apenas com filas vazias e orçamento direto seguro.
+
+**Código:** `sed_debt_growth_safe` permite dívida até 80% do crédito se o
+saldo já cobre os materiais com margem de 25%, o saldo fixo não é negativo
+e o crédito ainda livre cobre quatro semanas de despesas fixas. Não adiciona
+dinheiro, não elimina dívida e não autoriza inadimplentes. A política fiscal
+existente mantém snapshots e restauração; nenhum novo setter foi incluído.
+O catálogo de manutenção pública é extraído dos métodos vanilla e guarda
+tecnologias; a referência usa o maior custo disponível por grupo, em vez
+de supor que todos os métodos finais já estão desbloqueados. Salários
+continuam dependentes de amostra e da guarda conservadora quando ausentes.
+
+**Campanha e save/reload:** NÃO VERIFICADOS. Em cópia de país pequeno sem
+indústria, verificar primeira obra sem escassez; com dívida e superávit,
+comparar os limites de crédito/material; após conclusão, confirmar contratação
+e reconciliação da intenção. **Teste sintético:** 502 testes aprovados (107,3 s), incluindo fundação dos
+14 produtores, escolha de estado, orçamento da obra selecionada, dívida
+sem ouro, limites de caixa/crédito, modos, falta de trabalhadores, fila e
+restauração de opções. Cenários antigos que só exercitavam um prédio agora
+limitam a permissão de construção a esse prédio; não bloqueiam o fundador
+civil novo por expectativa de que toda a economia deva ficar parada.
+**Estático:** build/validate aprovados; Tiger mantém somente os três campos
+conhecidos do Diário 1.15 na ferramenta para 1.13.5, sem novos erros.
+**Instalação:** 0.7.60 com jogo fechado, backup e 14 arquivos conferidos;
+perfil e saves preservados. Pacote `dist/smart-economy-director-0.7.60.zip`.
+**Próximo:** campanha normal para contratação/lucro e estudo do primeiro
+setor de construção com orçamento de manutenção e insumos. A via direta
+civil cobre os produtores listados; os demais setores continuam dependendo
+das capacidades do Advisor e dos executores específicos existentes.

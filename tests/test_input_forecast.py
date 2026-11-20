@@ -180,7 +180,9 @@ class InputForecastTests(unittest.TestCase):
         c = self.c
         logging = building('building_logging_camp')
         logging['production_methods'] = ['pm_saw_mills']
-        c.states = [self.target, state(buildings=[logging])]
+        self.target['can_construct_building'] = ['building_tooling_workshop', 'building_logging_camp']
+        c.states = [self.target, state(buildings=[logging],
+            can_construct=['building_tooling_workshop', 'building_logging_camp'])]
         c.market_goods['tools'].update(market_goods_buy_orders=100,
                                        market_goods_sell_orders=50)
         self.wood(100, 50)
@@ -399,6 +401,7 @@ class InputForecastTests(unittest.TestCase):
 
     def test_automatic_waits_for_input_capacity_without_consuming_the_month(self):
         c = self.c
+        self.target['can_construct_building'] = ['building_tooling_workshop']
         # Keep this scenario focused on waiting when the upstream is unavailable.
         self.target['variables']['sed_wood_ignored'] = True
         self.wood(100, 68.74)

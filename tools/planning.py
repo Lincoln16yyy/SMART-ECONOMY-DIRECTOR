@@ -301,8 +301,22 @@ sed_auto_fiscal_safe = {
  }
 }
 
+# Debt is not equivalent to insolvency: fund new materials from recurring cash,
+# retain 25% cash-flow headroom and four weeks of unused credit. No new borrowing.
+sed_debt_growth_safe = {
+ principal > 0 credit > 0
+ principal <= { value = credit multiply = 0.8 }
+ NOT = { in_default = yes }
+ net_fixed_income >= 0 net_total_income > 0
+ has_variable = sed_build_budget_known var:sed_build_budget_known = 1
+ has_variable = sed_build_budget_weekly
+ net_total_income >= { value = var:sed_build_budget_weekly multiply = 1.25 }
+ credit >= { value = principal add = { value = sed_fixed_expenses_value multiply = 4 } }
+}
+
 sed_direct_fiscal_safe = {
  OR = {
+  sed_debt_growth_safe = yes
   sed_auto_fiscal_safe = yes
   AND = {
    principal <= 0 net_fixed_income >= 0 net_total_income > 0
@@ -314,7 +328,7 @@ sed_direct_fiscal_safe = {
 }
 
 sed_coord_fiscal_safe = {
- sed_auto_fiscal_safe = yes
+ OR = { sed_auto_fiscal_safe = yes sed_debt_growth_safe = yes }
 }
 '''
 
@@ -448,7 +462,7 @@ def effects(actions, dependencies, buildings):
     for name in actions:
         result.append(f'   set_variable = {{ name = sed_plan_{name}_rank value = 0 }}')
         result.append(f'   set_variable = {{ name = sed_plan_{name}_score value = 0 }}')
-        eligibility = f'sed_{name}_candidate_eligible = yes'
+        eligibility = f'sed_{name}_candidate_eligible = yes' if name in ('railway', 'construction') else f'sed_{name}_scarcity_candidate = yes'
         if name == 'construction':
             eligibility += ' owner = { num_queued_government_constructions >= 3 }'
         if name == 'railway':

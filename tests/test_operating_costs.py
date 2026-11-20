@@ -10,6 +10,9 @@ class OperatingCostTests(unittest.TestCase):
 
     def test_public_reference_needs_recurring_surplus(self):
         c = self.c
+        from tools.public_upkeep import PROFILES
+        c.readings['technologies'] = list({t for data in PROFILES.values() for group in data['groups']
+                                           for spec in group.values() for t in spec['technologies']})
         c.variables.update(sed_investment_wage_known=1, sed_investment_wage_unit=0.1)
         c.run('sed_refresh_public_upkeep')
         cost = c.variables['sed_upkeep_university_cost']

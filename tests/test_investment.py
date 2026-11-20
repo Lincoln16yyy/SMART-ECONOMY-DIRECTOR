@@ -13,7 +13,7 @@ class InvestmentTests(unittest.TestCase):
     def producer(self, kind, methods, population=200000):
         producer = building(kind)
         producer['production_methods'] = methods
-        target = state(buildings=[producer], population=population)
+        target = state(buildings=[producer], population=population, can_construct=[kind])
         self.c.states.append(target)
         return target
 
@@ -40,7 +40,7 @@ class InvestmentTests(unittest.TestCase):
         self.c.run('sed_refresh_diagnostics')
         self.assertNotIn('sed_wood_candidates', self.c.variable_lists)
 
-    def test_automatic_waits_when_price_pressure_is_below_threshold(self):
+    def test_profitable_civil_growth_can_invest_below_the_scarcity_threshold(self):
         # A non-core good: the core inputs have their own growth lane since
         # 0.7.33 and would build even below the 20% threshold.
         self.producer('building_food_industry', ['pm_bakery'])
@@ -49,7 +49,7 @@ class InvestmentTests(unittest.TestCase):
                                                market_goods_pricier=0.1)
         self.c.run('sed_set_mode_automatic')
         self.c.run('sed_auto_apply_monthly')
-        self.assertEqual(self.c.constructions, [])
+        self.assertEqual([p['building'] for p in self.c.constructions], ['building_food_industry'])
 
     def test_core_growth_does_not_wait_for_a_positive_material_reference(self):
         # Deliberate rule change in 0.7.33: the stressed reference (75% revenue,

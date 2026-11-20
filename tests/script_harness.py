@@ -297,7 +297,10 @@ class Country:
         if key == 'is_building_type':
             return scope.get('building') == entry.value
         if key == 'can_construct_building':
-            return bool(scope.get('can_construct_building'))
+            permission = scope.get('can_construct_building')
+            if isinstance(permission, (list, set, tuple)):
+                return entry.value in permission
+            return bool(permission)
         if key == 'can_activate_production_method':
             kind = child(entry.value, 'building_type')
             method = child(entry.value, 'production_method')

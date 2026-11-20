@@ -207,7 +207,7 @@ def validate(root=ROOT, game=None):
         NOT = { has_variable = sed_coord_active }
         AND = { has_variable = sed_coord_active var:sed_coord_executor = 11
                 OR = { AND = { var:sed_plan_goal = 2 sed_direct_supply_priority_exists = yes }
-                       sed_university_ready = yes sed_watch_recovery_candidate = yes sed_civic_direct_available = yes } }
+                       sed_university_ready = yes sed_watch_recovery_candidate = yes sed_civic_direct_available = yes sed_growth_takeover = yes } }
     }""")[0].value
     if child(custom.get('sed_auto_executor_safe', []), 'OR') != direct_authority:
         errors.append('Direct execution requires the restricted coordination authority')
@@ -262,9 +262,10 @@ def validate(root=ROOT, game=None):
                        for entry in custom.get(f'sed_{name}_approval_valid', [])):
                 errors.append('Fallback lacks its candidate guard: ' + name)
             continue
+        growth_guard = f'sed_growth_{name}_candidate = yes' if name not in ('railway', 'construction', 'small_arms', 'artillery', 'ammunition') else ''
         target_authority = parse(f"""guard = {{
             owner = {{ NOT = {{ has_variable = sed_coord_active }} }}
-            var:sed_plan_{name}_rank = 1
+            var:sed_plan_{name}_rank = 1 {growth_guard}
         }}""")[0].value
         if child(custom.get(f'sed_{name}_approval_valid', []), 'OR') != target_authority:
             errors.append('Coordinated approval must match the first-ranked target: ' + name)

@@ -37,7 +37,7 @@ ADMIN_POINTS = 100
 # Power plant: required_construction = construction_cost_medium (400 points),
 # common/buildings/06_urban_center.txt:111 and data/queued_building_costs.json.
 POWER_POINTS = QUEUED_COSTS['building_power_plant']
-VARIABLES = ['sed_build_budget_known', 'sed_build_budget_points',
+VARIABLES = ['sed_growth_score_cached', 'sed_build_budget_known', 'sed_build_budget_points',
              'sed_build_budget_point_cost', 'sed_build_budget_weekly',
              'sed_build_budget_required_gold', 'sed_build_budget_gold_gap',
              'sed_build_budget_material_capacity',
@@ -137,6 +137,20 @@ def effects(founding_projects=()):
     result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0
    any_scope_state = {{ sed_power_candidate_eligible = yes }} }}
    set_variable = {{ name = sed_build_budget_project_points value = {POWER_POINTS} }}
+  }}''')
+    result.append('''  set_variable = { name = sed_growth_score_cached value = 0 }
+  every_scope_state = {
+   limit = { sed_growth_site = yes }
+   owner = { set_variable = { name = sed_growth_score_cached value = {
+    value = var:sed_growth_score_cached min = prev.sed_growth_best_score
+   } } }
+  }''')
+    for good, points in PROJECT_POINTS.items():
+        if good in ('railway', 'construction', 'small_arms', 'artillery', 'ammunition'):
+            continue
+        result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0
+   any_scope_state = {{ sed_growth_{good}_candidate = yes sed_growth_{good}_score >= owner.var:sed_growth_score_cached }} }}
+   set_variable = {{ name = sed_build_budget_project_points value = {points} }}
   }}''')
     # Growth lane of the core inputs is the very last branch of the dispatcher.
     for good, points in (('wood', PROJECT_POINTS['wood']), ('iron', PROJECT_POINTS['iron']),

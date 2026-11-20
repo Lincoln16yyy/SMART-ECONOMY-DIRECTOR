@@ -810,3 +810,28 @@ Revisão somente de leitura do comportamento em 20/11: fontes úteis para a
 próxima etapa são `tools/core_growth.py`, `tools/construction_watch.py`,
 `tools/public_upkeep.py` e `tools/coordination.py`. Nenhum novo caminho ou
 comando necessário; nenhuma alteração da instalação.
+
+
+## Evidência de crescimento — 0.7.60
+
+`advisor_automation_effects.txt` instalado atribui status 3 quando adiciona
+obra, 4 quando `advisor_budget_blocked` existe e 2 quando não adiciona.
+`tools/build_public_upkeep.py --game "<game>"` agora extrai por grupo/método
+materiais, empregos ponderados e `unlocking_technologies` dos arquivos locais.
+A nova seleção civil usa exclusivamente os 14 produtores e métodos já
+catalogados, `can_construct_building`, filas, saldo/crédito e os efeitos de
+construção existentes. Nenhuma nova primitiva de engine. Relatórios em
+`/tmp/sed-0760-*`. Teste em campanha e save/reload permanecem pendentes.
+
+Instalação 0.7.60: jogo fechado, 14 arquivos conferidos, perfil preservado,
+backup `sed_backups/mod_before_0.7.60_20261120_191830_238742`.
+A escolha nacional de obra é armazenada uma vez em `sed_growth_score_cached`
+por orçamento; a varredura usa efeito e `prev`, sem recalcular o máximo
+nacional para cada candidato. Referências de custo por grupo usam `min`
+sobre valores condicionais independentes, evitando soma indevida no harness.
+
+Validação final da 0.7.60: 502 testes em 107,3 s, log
+`/tmp/sed-0760-confirmed-tests.log`; build/validate aprovados e Tiger em
+`/tmp/sed-0760-tiger-final.json` com os três erros conhecidos de Diário.
+Fixture `can_construct` do harness aceita lista de IDs para isolar
+permissão por tipo; é modelo sintético, não evidência de engine.

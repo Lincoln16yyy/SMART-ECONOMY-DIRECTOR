@@ -1,5 +1,20 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.60, o Automático procura investimento civil entre nove bens e 14
+produtores verificados, incluindo fundação sem escassez prévia. Ordena
+alternativas pelo retorno estimado por ponto de construção e favorece o
+primeiro produtor nacional. O custo da obra selecionada entra no orçamento.
+O Advisor pode ceder a execução quando registra bloqueio de orçamento ou
+após duas delegações sem obra, sempre com candidato viável e guardas ativas.
+
+Países endividados podem investir sem reserva de ouro se a dívida não passa
+de 80% do crédito, o saldo cobre os materiais com margem de 25% e o crédito
+livre cobre quatro semanas de despesas fixas. Inadimplência e déficit não
+recebem essa exceção. Administração e universidade passam a usar referências
+de manutenção limitadas às tecnologias disponíveis. São estimativas, não
+garantia de lucro ou de ascensão a grande potência. Campanha e save/reload
+com 0.7.60 ainda NÃO VERIFICADOS.
+
 Na 0.7.58, um objetivo de administração ou energia sem candidato direto
 e sem Supply Chain mantém o Economy Advisor disponível para avaliar
 outras obras. O Diário mostra por que a administração foi adiada.
