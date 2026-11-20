@@ -1,6 +1,7 @@
 # Contexto de continuidade
 
 ## Estado atual
+- **Revisão de prioridades (20/11):** recuperação direta de crescimento cobre apenas madeira/ferro/ferramentas já existentes; fundação depende de outra via de demanda. Priorizar início industrial em país pequeno, manutenção cívica por PM e coordenação orientada ao bloqueio real do Advisor. Somente análise; nenhuma nova mecânica implementada.
 - **Fila parada 0.7.59:** saves do Paraguai (1844) e Uruguai tinham observador mensal fixo em 22032 (jan/1836), sem contar meses ociosos. Calendário passa a variável atualizada por efeitos; observação, recuperação, orçamento mensal, métodos e políticas usam essa variável. 488 testes sintéticos aprovados; validação estática aprovada. Instalada com jogo fechado/backup e perfil preservado. Campanha e save/reload NÃO VERIFICADOS.
 - **Paraguai 0.7.58:** novo save manteve objetivo 6, executor 9, revisão 19, saldo ~424 e reserva ~142 mil. Correção anterior não cobria falta de candidato direto. Agora delega ao Advisor quando o objetivo cívico está adiado e não há Supply Chain. 12 testes passaram. Campanha pós-correção NÃO VERIFICADA.
 - Smart Government BPM 1.0.2 publicado também no repositório próprio, release v1.0.2-bpm, branch codex/research-monthly-bpm-1.0.2, commit 4f92fe5. ZIP idêntico ao instalado.

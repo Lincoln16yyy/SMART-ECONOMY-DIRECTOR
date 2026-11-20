@@ -805,3 +805,8 @@ Validação final: 488 testes sintéticos aprovados em 56,6 s; definições
 compartilhadas somente para leitura foram reutilizadas no runner, retornando
 cópia do dicionário por teste. Log `/tmp/sed-0759-confirmed-tests.log`.
 Build/validate aprovados; Tiger mantém os três erros conhecidos do Diário.
+
+Revisão somente de leitura do comportamento em 20/11: fontes úteis para a
+próxima etapa são `tools/core_growth.py`, `tools/construction_watch.py`,
+`tools/public_upkeep.py` e `tools/coordination.py`. Nenhum novo caminho ou
+comando necessário; nenhuma alteração da instalação.

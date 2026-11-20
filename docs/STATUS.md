@@ -343,3 +343,19 @@ O Diário distingue custo permanente de falta de estado elegível.
 A causa exata da inelegibilidade local não foi extraída do save.
 **Teste sintético:** 12 testes de administração e delegação passaram.
 **Estático:** validado. **Campanha pós-correção:** NÃO VERIFICADA.
+
+
+## Prioridades examinadas em 20/11/2026
+
+**Código:** `core_growth.TARGETS` inclui madeira, ferro e ferramentas, com
+`has_building` obrigatório. A recuperação de `construction_watch` usa esses
+candidatos e os cívicos; não é um fundador industrial geral. Fundação já
+existe por escassez em outra via, portanto a melhoria proposta é ampliar a
+partida industrial sem depender de escassez prévia, não duplicar fundação.
+`public_upkeep` combina referência conservadora de materiais e salários
+observados; estimativa específica por PM pode reduzir bloqueios excessivos.
+A coordenação escolhe objetivos, mas não considera os motivos de orçamento
+do Advisor para selecionar a alternativa. São propostas, não implementações.
+Build sincronizado e árvore limpa antes desta análise; nenhuma alteração de
+script ou instalação nesta revisão. Resultado da 0.7.59 em campanha continua
+NÃO VERIFICADO.
