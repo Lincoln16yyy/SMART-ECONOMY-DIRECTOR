@@ -4,7 +4,7 @@ from pathlib import Path
 
 DATA = Path(__file__).resolve().parents[1] / 'data'
 PROFILES = json.loads((DATA / 'public_upkeep.json').read_text())
-VARIABLES = [f'sed_upkeep_{name}_{field}' for name in ('university', 'admin')
+VARIABLES = [f'sed_upkeep_{name}_{field}' for name in PROFILES
              for field in ('cost', 'known', 'materials', 'jobs')]
 
 

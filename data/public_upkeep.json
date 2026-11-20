@@ -8,11 +8,17 @@
         "pm_scholastic_education": {
           "materials": 262.5,
           "weighted_jobs": 625.0,
+          "inputs": {
+            "paper": 5.0
+          },
           "technologies": []
         },
         "pm_philosophy_department": {
           "materials": 525.0,
           "weighted_jobs": 625.0,
+          "inputs": {
+            "paper": 10.0
+          },
           "technologies": [
             "dialectics"
           ]
@@ -20,6 +26,9 @@
         "pm_analytical_philosophy_department": {
           "materials": 787.5,
           "weighted_jobs": 900.0,
+          "inputs": {
+            "paper": 15.0
+          },
           "technologies": [
             "analytical_philosophy"
           ]
@@ -29,11 +38,13 @@
         "pm_religious_academia": {
           "materials": 0,
           "weighted_jobs": 1750.0,
+          "inputs": {},
           "technologies": []
         },
         "pm_secular_academia": {
           "materials": 0,
           "weighted_jobs": 2000.0,
+          "inputs": {},
           "technologies": []
         }
       },
@@ -41,11 +52,13 @@
         "pm_principle_freedom_of_movement_3": {
           "materials": 0,
           "weighted_jobs": 0,
+          "inputs": {},
           "technologies": []
         },
         "pm_freedom_of_movement_no_effect": {
           "materials": 0,
           "weighted_jobs": 0,
+          "inputs": {},
           "technologies": []
         }
       }
@@ -60,11 +73,15 @@
         "pm_simple_organization": {
           "materials": 0,
           "weighted_jobs": 750.0,
+          "inputs": {},
           "technologies": []
         },
         "pm_horizontal_drawer_cabinets": {
           "materials": 525.0,
           "weighted_jobs": 750.0,
+          "inputs": {
+            "paper": 10.0
+          },
           "technologies": [
             "centralization"
           ]
@@ -72,6 +89,9 @@
         "pm_vertical_filing_cabinets": {
           "materials": 1050.0,
           "weighted_jobs": 750.0,
+          "inputs": {
+            "paper": 20.0
+          },
           "technologies": [
             "central_archives"
           ]
@@ -79,6 +99,10 @@
         "pm_switch_boards": {
           "materials": 1662.5,
           "weighted_jobs": 750.0,
+          "inputs": {
+            "paper": 20.0,
+            "telephones": 5.0
+          },
           "technologies": [
             "central_planning"
           ]
@@ -88,21 +112,25 @@
         "pm_hereditary_bureaucrats": {
           "materials": 0,
           "weighted_jobs": 2250.0,
+          "inputs": {},
           "technologies": []
         },
         "pm_professional_bureaucrats": {
           "materials": 0,
           "weighted_jobs": 2000.0,
+          "inputs": {},
           "technologies": []
         },
         "pm_military_bureaucrats": {
           "materials": 0,
           "weighted_jobs": 2250.0,
+          "inputs": {},
           "technologies": []
         },
         "pm_communal_representatives": {
           "materials": 0,
           "weighted_jobs": 1750.0,
+          "inputs": {},
           "technologies": []
         }
       },
@@ -110,17 +138,79 @@
         "pm_religious_bureaucrats": {
           "materials": 0,
           "weighted_jobs": 1750.0,
+          "inputs": {},
           "technologies": []
         },
         "pm_secular_bureaucrats": {
           "materials": 0,
           "weighted_jobs": 2000.0,
+          "inputs": {},
           "technologies": []
         },
         "pm_communal_administration": {
           "materials": 0,
           "weighted_jobs": 1500.0,
+          "inputs": {},
           "technologies": []
+        }
+      }
+    ]
+  },
+  "construction": {
+    "building": "building_construction_sector",
+    "materials": 13825.0,
+    "weighted_jobs": 1525.0,
+    "groups": [
+      {
+        "pm_wooden_buildings": {
+          "materials": 3500.0,
+          "weighted_jobs": 1350.0,
+          "inputs": {
+            "fabric": 25.0,
+            "wood": 75.0
+          },
+          "technologies": []
+        },
+        "pm_iron_frame_buildings": {
+          "materials": 6300.0,
+          "weighted_jobs": 1375.0,
+          "inputs": {
+            "wood": 40.0,
+            "fabric": 20.0,
+            "iron": 50.0,
+            "tools": 10.0
+          },
+          "technologies": [
+            "urban_planning"
+          ]
+        },
+        "pm_steel_frame_buildings": {
+          "materials": 9450.0,
+          "weighted_jobs": 1425.0,
+          "inputs": {
+            "steel": 50.0,
+            "glass": 40.0,
+            "explosives": 10.0,
+            "tools": 20.0
+          },
+          "technologies": [
+            "steel_frame_buildings"
+          ]
+        },
+        "pm_arc_welded_buildings": {
+          "materials": 13825.0,
+          "weighted_jobs": 1525.0,
+          "inputs": {
+            "steel": 50.0,
+            "glass": 40.0,
+            "explosives": 20.0,
+            "tools": 30.0,
+            "electricity": 40.0,
+            "copper": 10.0
+          },
+          "technologies": [
+            "arc_welding"
+          ]
         }
       }
     ]

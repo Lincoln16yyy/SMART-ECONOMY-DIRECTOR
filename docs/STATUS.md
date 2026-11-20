@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.60
+# Estado dos requisitos — 0.7.61
 
 ## Fila parada após administração — 0.7.59
 
@@ -401,3 +401,57 @@ perfil e saves preservados. Pacote `dist/smart-economy-director-0.7.60.zip`.
 setor de construção com orçamento de manutenção e insumos. A via direta
 civil cobre os produtores listados; os demais setores continuam dependendo
 das capacidades do Advisor e dos executores específicos existentes.
+
+
+## Ciclo de desenvolvimento — 0.7.61
+
+**Código:** primeiro setor usa a aprovação de construção existente, com
+intenção zero e confirmação pela fila. Apenas sem setor nacional ou pendência,
+com salário observado, materiais previstos, trabalhadores, superávit com
+margem de 25% e quatro semanas de despesas futuras em ouro/crédito livre.
+Métodos disponíveis são a referência conservadora; o Director não força PM
+do setor. Fila estrangeira desconhecida impede fundação durante a fila.
+Crescimento viável com capacidade básica também pode justificar o primeiro
+setor sem esperar uma fila longa. Escassez e objetivos cívicos passam antes;
+quando elegível, vem antes da universidade. Fundação pendente reserva
+trabalhadores, insumos e pontos de obra até a reconciliação.
+
+**Código:** seis cadeias extraídas do vanilla (`advanced_sources.json`):
+`building_steel_mill`, `building_glassworks`, `building_motor_industry`,
+`building_chemical_plant`, `building_sulfur_mine`, `building_lead_mine`.
+Incluem PMs, preços, empregos, insumos, saídas, variantes e custos existentes
+da base. O preparo de fornecedores usa a propagação de gargalos já existente;
+uma fábrica não passa no filtro enquanto faltar capacidade para seus insumos.
+A adaptação respeita os interruptores observados do Auto-Apply PMs, incluindo
+mineração, e os gerenciadores globais do Advisor/OGAS.
+
+**Código:** lucro/salários observados por nível em prédio comercial próprio
+após conclusão e três meses. Retorno esperado é cotado no estado antes do
+start e só entra como projeto confirmado se a fila crescer. Margem inferior
+a metade da prevista reduz a pontuação em 50%; prejuízo impede repetição
+nos caminhos de crescimento estratégico e núcleo. Escassez crítica conserva
+sua própria política. Contratação incompleta, insumos em falta ou subsídio
+retiram o veredito financeiro. Amostras mensais posteriores podem recuperar
+a elegibilidade. A média do prédio não atribui causalidade à expansão.
+
+**Código:** fases 0 sem dívida, 1 estabilização, 2 investimento sob guardas,
+3 amortização prioritária, 4 inadimplência. Duas altas de principal superiores
+a 1% em meses consecutivos ou dívida >80% bloqueiam crescimento discricionário,
+primeiro setor e universidade; guardas de crédito/material continuam vigentes.
+A política fiscal existente e o caixa retido fazem o ajuste; não há efeito
+novo de pagamento, criação de dinheiro, imposto, salário ou lei.
+
+**Compatibilidade de save:** uma marca nova limpa o recibo antigo porque os
+IDs de ação mudaram; não apaga prédios, fila nem as intenções existentes.
+
+**Teste sintético:** 524 testes aprovados (183,2 s), incluindo 22 novos
+casos de fila mutável, contratação, retorno, dívida, migração e simulação
+de reload. Nenhum teste simulado é prova de reload da engine.
+**Instalação:** 0.7.61, jogo fechado, backup e perfil preservado; pacote
+`dist/smart-economy-director-0.7.61.zip` idêntico aos 14 arquivos instalados.
+**Estático:** geração/validate aprovados;
+Tiger com somente os três campos conhecidos do Diário 1.15.
+**Campanha e save/reload na engine:** NÃO VERIFICADOS. Em cópia de país pequeno,
+observar o primeiro setor, caixa após contratação e avaliação das obras novas;
+reabrir o save e conferir manutenção das intenções e restauração ao sair do
+Automático. Continuar a campanha normal é suficiente para reunir essa evidência.

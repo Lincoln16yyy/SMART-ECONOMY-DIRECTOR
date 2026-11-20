@@ -1,5 +1,29 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.61, o Automático pode fundar o primeiro setor de construção quando
+há investimento produtivo viável ou fila longa, insumos e mão de obra, além
+de superávit para materiais e salários. Usa uma referência conservadora dos
+métodos disponíveis e não assume uma folha salarial sem amostra. Escassez e
+necessidades cívicas mantêm precedência; o setor vem antes da universidade
+quando ambos forem investimentos discricionários elegíveis.
+
+A execução direta inclui aço, vidro, motores, fertilizante, chumbo e enxofre:
+são 15 bens e 20 produtores civis, com verificação das cadeias de insumos.
+Previsões de obras próprias são guardadas antes de alterar a fila. Após a
+conclusão e três meses para contratação, lucro e salários observados por
+nível ajudam a ajustar a seleção: retorno abaixo de metade do previsto
+reduz a pontuação; prejuízo bloqueia repetição discricionária no mesmo local
+até uma amostra posterior saudável. A média do prédio não prova o retorno
+causal da última expansão; prédios subsidiados ou sem contratação não recebem
+esse veredito de lucro.
+
+A dívida ganha acompanhamento mensal: estabilização do déficit, investimento
+com superávit, prioridade a amortizar e inadimplência. Dívida acima de 80%
+do crédito ou aumentos superiores a 1% em dois meses consecutivos suspendem
+expansão discricionária. O superávit retido é amortizado pelo próprio jogo;
+o mod não cria dinheiro nem perdoa dívida. Save/reload e resultados em
+campanha na 0.7.61 ainda NÃO VERIFICADOS.
+
 Na 0.7.60, o Automático procura investimento civil entre nove bens e 14
 produtores verificados, incluindo fundação sem escassez prévia. Ordena
 alternativas pelo retorno estimado por ponto de construção e favorece o

@@ -111,6 +111,7 @@ class StrategicGrowthTests(unittest.TestCase):
                     self.setUp()
                     c = self.c
                     c.states[0]['can_construct_building'] = [variant['building']]
+                    c.market_goods[item['good']]['market_goods_pricier'] = 0.75
                     c.run('sed_auto_apply_monthly')
                     self.assertEqual([p['building'] for p in c.constructions], [variant['building']])
                     self.assertEqual(c.states[0]['variables']['sed_' + item['good'] + '_intent_level'], 0)

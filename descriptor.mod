@@ -1,4 +1,4 @@
-version="0.7.60"
+version="0.7.61"
 name="Smart Economy Director"
 tags={ "Economy" "Utilities" "UI" }
 supported_version="1.15.*"

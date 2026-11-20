@@ -835,3 +835,32 @@ Validação final da 0.7.60: 502 testes em 107,3 s, log
 `/tmp/sed-0760-tiger-final.json` com os três erros conhecidos de Diário.
 Fixture `can_construct` do harness aceita lista de IDs para isolar
 permissão por tipo; é modelo sintético, não evidência de engine.
+
+
+## Fontes e ciclo 0.7.61 — 20/11/2026
+
+- `python3 tools/extend_industry_catalog.py --game "<game>"`: extração aditiva
+  de seis cadeias. IDs/métodos de common/buildings e common/production_methods,
+  preços de common/goods, custos de queued_building_costs. Fontes e hashes
+  relativos ao jogo em `data/advanced_sources.json`. Empregos integrais são
+  gravados como inteiros; automação negativa é preservada no perfil.
+- A base local usa `building_steel_mill` (singular) e
+  `building_chemical_plant` para fertilizantes. Não adivinhar IDs por tradução.
+- Economia de PM principal fica separada de explosivos de minas e produção
+  secundária de luxo; `all_outputs` conserva essas saídas na avaliação total.
+- `tools/build_public_upkeep.py` também extrai construção: 1.000 empregos
+  básicos, 75 madeira + 25 tecido em `pm_wooden_buildings`, e requisitos dos
+  quatro métodos. O setor novo não recebe setter de PM do Director.
+- Botões do Auto-Apply PMs instalado confirmam os seis interruptores por
+  prédio e `zw_var_auto_pm_building_group_mines`; apenas leituras no Director.
+- `tests/script_harness.py` tem variante opt-in `mutate_queue_levels` para
+  verificar a previsão antes da alteração da fila. Simulação não é engine.
+- Logs em `/tmp/sed-0761-*.log` e relatório `/tmp/sed-0761-tiger-final.json`.
+  Jogo sem processo `victoria3.exe` na verificação anterior à instalação.
+
+Instalação 0.7.61 conferida: 14 arquivos idênticos ao gerador e ao ZIP,
+perfil preservado; backup no user-data
+`sed_backups/mod_before_0.7.61_20261120_194832_145242`.
+Validação: 524 testes em 183,2 s (`/tmp/sed-0761-confirmed-tests.log`),
+`build_mod.py --check` e validate aprovados; Tiger somente com os três
+campos conhecidos do Diário 1.15. Campanha e reload real pendentes.

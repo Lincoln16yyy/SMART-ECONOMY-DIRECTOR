@@ -34,6 +34,13 @@ EXTERNAL_PM_VARIABLES = {
     'building_artillery_foundry': ('zw_var_auto_pm_building_artillery_foundry',),
     'building_munition_plant': ('zw_var_auto_pm_building_munition_plant',),
     'building_paper_mill': ('zw_var_auto_pm_building_paper_mill',),
+    # Confirmed in Auto-Apply PMs/common/scripted_buttons/zw_aap_buttons.txt.
+    'building_steel_mill': ('zw_var_auto_pm_building_steel_mill',),
+    'building_glassworks': ('zw_var_auto_pm_building_glassworks',),
+    'building_motor_industry': ('zw_var_auto_pm_building_motor_industry',),
+    'building_chemical_plant': ('zw_var_auto_pm_building_chemical_plant',),
+    'building_sulfur_mine': ('zw_var_auto_pm_building_sulfur_mine', 'zw_var_auto_pm_building_group_mines'),
+    'building_lead_mine': ('zw_var_auto_pm_building_lead_mine', 'zw_var_auto_pm_building_group_mines'),
 }
 
 

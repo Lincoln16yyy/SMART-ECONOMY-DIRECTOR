@@ -419,6 +419,13 @@ class Country:
                 if self.construction_accepted:
                     name = 'construction_queue_num_queued_government_levels'
                     self.readings[name] = self.readings.get(name, 0) + 1
+                    if getattr(self, 'mutate_queue_levels', False) and target is not None:
+                        queued = self.building(target, value)
+                        if queued is None:
+                            queued = building(value, level=0, queued_levels=1)
+                            target['buildings'].append(queued)
+                        else:
+                            queued['level_after_queued_constructions'] += 1
             elif key == 'add_journal_entry':
                 self.journals_added += 1
                 self.active_journal = True

@@ -10,6 +10,11 @@ from pathlib import Path
 PROFILES = json.loads((Path(__file__).resolve().parents[1] / 'data/input_profiles.json').read_text())
 FOUNDING_GROUPS = json.loads((Path(__file__).resolve().parents[1] / 'data/founding_method_groups.json').read_text())
 STARTUP_METHODS = json.loads((Path(__file__).resolve().parents[1] / 'data/founding_production_methods.json').read_text())
+# Constructor inputs are forecast conservatively; the Director does not set its PM.
+_CONSTRUCTION = json.loads((Path(__file__).resolve().parents[1] / 'data/public_upkeep.json').read_text())['construction']['groups']
+PROFILES['building_construction_sector'] = {method: spec['inputs'] for group in _CONSTRUCTION for method, spec in group.items()}
+FOUNDING_GROUPS['building_construction_sector'] = [{method: spec['technologies'] for method, spec in group.items()} for group in _CONSTRUCTION]
+
 LOCAL_GOODS = {'electricity', 'transportation', 'services'}
 GOODS = sorted({good for methods in PROFILES.values() for goods in methods.values() for good in goods})
 LABELS_PT = {

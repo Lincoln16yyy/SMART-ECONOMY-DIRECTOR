@@ -20,7 +20,7 @@ def build(game):
     root = Path(__file__).resolve().parents[1]
     weights = json.loads((root / 'data/employment_profiles.json').read_text())['wage_weights']
     result = {}
-    for name, key in [('university', 'building_university'), ('admin', 'building_government_administration')]:
+    for name, key in [('university', 'building_university'), ('admin', 'building_government_administration'), ('construction', 'building_construction_sector')]:
         material = jobs = 0
         profiles = []
         for group in next(e.value for e in buildings[key] if e.key == 'production_method_groups'):
@@ -28,6 +28,7 @@ def build(game):
             profile = {}
             for method in next((e.value for e in groups.get(group.key, []) if e.key == 'production_methods'), []):
                 cost = job = 0
+                inputs = {}
                 for entry in walk(methods.get(method.key, [])):
                     try:
                         amount = float(entry.value)
@@ -36,11 +37,13 @@ def build(game):
                     if amount <= 0:
                         continue
                     if entry.key.startswith('goods_input_') and entry.key.endswith('_add'):
-                        cost += amount * prices[entry.key[len('goods_input_'):-4]] * 1.75
+                        good = entry.key[len('goods_input_'):-4]
+                        inputs[good] = inputs.get(good, 0) + amount
+                        cost += amount * prices[good] * 1.75
                     if entry.key.startswith('building_employment_') and entry.key.endswith('_add'):
                         job += amount * weights[entry.key[len('building_employment_'):-4]]
                 technologies = next((e.value for e in methods.get(method.key, []) if e.key == 'unlocking_technologies'), [])
-                profile[method.key] = dict(materials=cost, weighted_jobs=job, technologies=[e.key for e in technologies])
+                profile[method.key] = dict(materials=cost, weighted_jobs=job, inputs=inputs, technologies=[e.key for e in technologies])
                 costs.append(cost)
                 employment.append(job)
             profiles.append(profile)

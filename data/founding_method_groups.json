@@ -477,5 +477,159 @@
         "rotary_valve_engine"
       ]
     }
+  ],
+  "building_steel_mill": [
+    {
+      "pm_blister_steel_process": [],
+      "pm_bessemer_process": [
+        "bessemer_process"
+      ],
+      "pm_open_hearth_process": [
+        "open_hearth_process"
+      ],
+      "pm_electric_arc_process": [
+        "electric_arc_process"
+      ]
+    },
+    {
+      "pm_automation_disabled": [],
+      "pm_watertube_boiler_building_steel_mill": [
+        "watertube_boiler"
+      ],
+      "pm_rotary_valve_engine_building_steel_mill": [
+        "rotary_valve_engine"
+      ]
+    }
+  ],
+  "building_glassworks": [
+    {
+      "pm_forest_glass": [],
+      "pm_leaded_glass": [
+        "lathe"
+      ],
+      "pm_crystal_glass": [
+        "crystal_glass"
+      ],
+      "pm_houseware_plastics": [
+        "plastics"
+      ]
+    },
+    {
+      "pm_disabled_ceramics": [],
+      "pm_ceramics": [],
+      "pm_bone_china": [
+        "chemical_bleaching"
+      ]
+    },
+    {
+      "pm_manual_glassblowing": [],
+      "pm_automatic_bottle_blowers": [
+        "automatic_bottle_blowers"
+      ]
+    }
+  ],
+  "building_motor_industry": [
+    {
+      "pm_steam_engines": [],
+      "pm_electric_engines": [
+        "electric_railway"
+      ],
+      "pm_diesel_engines": [
+        "compression_ignition"
+      ]
+    },
+    {
+      "pm_automation_disabled": [],
+      "pm_watertube_boiler_building_motor_industry": [
+        "watertube_boiler"
+      ],
+      "pm_rotary_valve_engine_building_motor_industry": [
+        "rotary_valve_engine"
+      ],
+      "pm_assembly_lines_building_motor_industry": [
+        "conveyors"
+      ]
+    }
+  ],
+  "building_chemical_plant": [
+    {
+      "pm_artificial_fertilizers": [],
+      "pm_improved_fertilizer": [
+        "improved_fertilizer"
+      ],
+      "pm_nitrogen_fixation": [
+        "nitrogen_fixation"
+      ]
+    }
+  ],
+  "building_sulfur_mine": [
+    {
+      "pm_picks_and_shovels_building_sulfur_mine": [],
+      "pm_atmospheric_engine_pump_building_sulfur_mine": [
+        "atmospheric_engine"
+      ],
+      "pm_condensing_engine_pump_building_sulfur_mine": [
+        "watertube_boiler"
+      ],
+      "pm_diesel_pump_building_sulfur_mine": [
+        "compression_ignition"
+      ]
+    },
+    {
+      "pm_no_explosives": [],
+      "pm_nitroglycerin_building_sulfur_mine": [
+        "nitroglycerin"
+      ],
+      "pm_dynamite_building_sulfur_mine": [
+        "dynamite"
+      ]
+    },
+    {
+      "pm_no_steam_automation": [],
+      "pm_steam_donkey_mine": [
+        "steam_donkey"
+      ]
+    },
+    {
+      "pm_road_carts": [],
+      "pm_rail_transport_mine": [
+        "railways"
+      ]
+    }
+  ],
+  "building_lead_mine": [
+    {
+      "pm_picks_and_shovels_building_lead_mine": [],
+      "pm_atmospheric_engine_pump_building_lead_mine": [
+        "atmospheric_engine"
+      ],
+      "pm_condensing_engine_pump_building_lead_mine": [
+        "watertube_boiler"
+      ],
+      "pm_diesel_pump_building_lead_mine": [
+        "compression_ignition"
+      ]
+    },
+    {
+      "pm_no_explosives": [],
+      "pm_nitroglycerin_building_lead_mine": [
+        "nitroglycerin"
+      ],
+      "pm_dynamite_building_lead_mine": [
+        "dynamite"
+      ]
+    },
+    {
+      "pm_no_steam_automation": [],
+      "pm_steam_donkey_mine": [
+        "steam_donkey"
+      ]
+    },
+    {
+      "pm_road_carts": [],
+      "pm_rail_transport_mine": [
+        "railways"
+      ]
+    }
   ]
 }

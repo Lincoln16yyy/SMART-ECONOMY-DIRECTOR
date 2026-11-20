@@ -27,6 +27,8 @@ PROJECT_POINTS = {
     'wood': 200, 'iron': 400, 'coal': 400, 'grain': 200, 'fabric': 200,
     'tools': 600, 'groceries': 600, 'clothes': 600, 'paper': 600,
     'small_arms': 600, 'artillery': 600, 'ammunition': 800,
+    **{item['good']: QUEUED_COSTS[item['building']] for item in json.loads(
+        (Path(__file__).resolve().parents[1] / 'data/advanced_targets.json').read_text())},
 }
 # Trade Center: required_construction = construction_cost_very_low (100 points),
 # common/script_values/building_values.txt:7 in the installed 1.15 game.
@@ -119,7 +121,8 @@ def effects(founding_projects=()):
   # Duration and full material reference for the plan's first priority.
   set_variable = { name = sed_build_budget_project_points value = 0 }
 ''')
-    result.append(f'''  if = {{ limit = {{ sed_university_ready = yes }}
+    result.append('  if = { limit = { var:sed_build_budget_project_points = 0 sed_first_sector_available = yes } set_variable = { name = sed_build_budget_project_points value = 25 } }')
+    result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0 sed_university_ready = yes }}
    set_variable = {{ name = sed_build_budget_project_points value = {QUEUED_COSTS['building_university']} }}
   }}''')
     for action, points in PROJECT_POINTS.items():

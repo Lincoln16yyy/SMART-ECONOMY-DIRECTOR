@@ -14,6 +14,7 @@ def triggers(items):
  is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic
  NOT = { has_variable = sed_mode_manual } NOT = { has_variable = sed_mode_assisted }
  NOT = { in_default = yes } sed_direct_fiscal_safe = yes
+ NOT = { sed_debt_discretionary_blocked = yes }
  construction_queue_num_queued_government_levels = 0
  construction_queue_government_duration <= 0
  has_variable = sed_plan_count var:sed_plan_count = 0
@@ -42,6 +43,7 @@ sed_growth_takeover = {
  sed_{good}_candidate_site = yes
  sed_{good}_supplier_available = yes
  NOT = {{ has_variable = sed_follow_{good} }}
+ NOT = {{ sed_perf_{good}_blocked = yes }}
  sed_investment_{good}_output > 0
  sed_investment_{good}_return > 0
  # Do not found an entire level for a negligible market.
@@ -66,6 +68,8 @@ sed_growth_{good}_score = {{ value = 0
   if = {{ limit = {{ sed_{good}_found_site = yes }}
    add = {{ value = sed_investment_{good}_return divide = {costs[good]} multiply = 50 }}
   }}
+  # The factor is based on a mature building average, not marginal causality.
+  multiply = sed_perf_{good}_factor
   add = {{ value = sed_site_readiness multiply = 0.000001 }}
  }}
 }}
