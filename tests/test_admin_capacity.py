@@ -8,7 +8,8 @@ from script_harness import Country, building, state
 
 class AdminCapacityTests(unittest.TestCase):
     def setUp(self):
-        self.c = Country(script_definitions(), construction_queue_num_queued_government_levels=0)
+        self.c = Country(script_definitions(), construction_queue_num_queued_government_levels=0,
+                         principal=0, net_total_income=2000, gold_reserves=100000)
         self.c.run('sed_enable_country')
         self.c.states = [state()]
         self.c.variables['sed_build_budget_known'] = 1
