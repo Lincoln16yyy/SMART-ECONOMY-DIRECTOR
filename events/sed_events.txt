@@ -14,7 +14,7 @@ sed_pulse.1 = {
     var:sed_auto_retry_month = var:sed_calendar_month_key
     NOT = { sed_auto_month_limit_reached = yes }
     NOT = { in_default = yes }
-    OR = { construction_queue_num_queued_private_levels > 0 is_construction_paused = yes }
+    OR = { AND = { construction_queue_num_queued_private_levels > 0 NOT = { AND = { sed_private_parallel_capacity_safe = yes has_variable = sed_plan_count var:sed_plan_count = 0 } } } is_construction_paused = yes }
    }
    # While the month and blocker persist, avoid rescanning every state.
    sed_schedule_auto_retry = yes

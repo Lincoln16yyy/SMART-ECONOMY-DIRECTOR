@@ -480,7 +480,7 @@ class CoordinationTests(unittest.TestCase):
         c.run('sed_set_mode_automatic')
         self.assertEqual(c.variables['sed_coord_executor'], 1)
 
-    def test_reserve_funded_private_queue_does_not_impose_public_queue_pause(self):
+    def test_reserve_funded_private_queue_retains_the_advisor_policy(self):
         c = self.c
         c.states.clear()
         c.readings.update(net_total_income=-10, fixed_expenses=50,

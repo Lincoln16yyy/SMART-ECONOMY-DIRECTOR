@@ -184,6 +184,10 @@ sed_coord_sync = {{
   else_if = {{ limit = {{ sed_pm_upgrade_month_limit_reached = yes }}
    set_variable = {{ name = sed_coord_executor value = 13 }}
   }}
+  else_if = {{ limit = {{ has_variable = sed_parallel_direct_pending }}
+   # Enquanto a tentativa compartilhada ocupa a fila pública, não enfileirar outra.
+   set_variable = {{ name = sed_coord_executor value = 0 }}
+  }}
   else_if = {{ limit = {{ OR = {{ sed_coord_fiscal_safe = yes AND = {{ sed_watch_recovery_candidate = yes sed_direct_fiscal_safe = yes }} sed_growth_takeover = yes sed_first_sector_available = yes }} NOT = {{ in_default = yes }} is_construction_paused = no }}
    if = {{ limit = {{ var:sed_plan_goal = 2 sed_direct_fiscal_safe = yes sed_direct_supply_priority_exists = yes }}
     set_variable = {{ name = sed_coord_executor value = 11 }}

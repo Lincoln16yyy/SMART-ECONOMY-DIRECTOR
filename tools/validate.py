@@ -211,6 +211,20 @@ def validate(root=ROOT, game=None):
     }""")[0].value
     if child(custom.get('sed_auto_executor_safe', []), 'OR') != direct_authority:
         errors.append('Direct execution requires the restricted coordination authority')
+    private_authority = parse("""guard = {
+        construction_queue_num_queued_private_levels = 0
+        AND = { sed_private_parallel_capacity_safe = yes any_scope_state = { sed_growth_site = yes } }
+    }""")[0].value
+    direct_ors = [e.value for e in custom.get('sed_auto_executor_safe', []) if e.key == 'OR']
+    if private_authority not in direct_ors:
+        errors.append('Private parallel execution lacks its restricted safety guard')
+    for item in SUPPLY_TARGETS:
+        good = item['good']
+        alternative = ('AND = { sed_growth_' + good + '_candidate = yes owner = { sed_private_parallel_capacity_safe = yes } }') if good not in ('small_arms', 'artillery', 'ammunition') else ''
+        expected_private = parse('guard = { owner = { construction_queue_num_queued_private_levels = 0 } ' + alternative + ' }')[0].value
+        action_ors = [e.value for e in custom.get(f'sed_{good}_approval_valid', []) if e.key == 'OR']
+        if expected_private not in action_ors:
+            errors.append('Supply approval lacks its private queue safety guard: ' + good)
     direct_effect = custom.get('sed_auto_run_direct', [])
     first_direct = next((entry for entry in direct_effect if entry.key == 'if'), None)
     direct_limit = child(first_direct.value, 'limit') if first_direct and first_direct.key == 'if' else []

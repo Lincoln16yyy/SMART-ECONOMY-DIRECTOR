@@ -1,5 +1,28 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.62, uma expansão problemática deixa de suspender toda a diversificação:
+o Director procura projetos saudáveis em outros setores/estados. Pode abrir
+uma base regional de uma família com falha acompanhada por três meses, sem
+produtor saudável nem outra expansão pendente nessa família, exigindo margem
+de trabalhadores para dois níveis do tipo escolhido e mantendo os filtros
+de insumos, retorno, orçamento e construção permitida.
+
+O crescimento civil pode compartilhar capacidade com a fila privada quando
+a fila pública está vazia. A autorização exige conciliar níveis observáveis
+com a fila privada, métodos conhecidos, previsão de trabalhadores/insumos,
+reserva nominal para cada nível privado e para um projeto público, além da
+parcela pública definida pela lei e de margem de caixa de 25%. Obras não
+identificadas mantêm a trava. O governo não muda a alocação legal nem cancela
+obras privadas; durante sua tentativa compartilhada, segura novas delegações
+até a fila pública esvaziar na revisão. As regras próprias do Advisor continuam
+vigentes nos demais casos. Autoria de cada projeto continua indisponível.
+
+Entre alternativas viáveis, a prioridade considera porte populacional,
+trabalhadores estimados, oferta de bens essenciais e fornecedores operantes
+no território. Pesos limitados a 1–1,75 não tornam um projeto deficitário
+aprovável. Déficit de oferta no mercado não é tratado como importação medida
+do país. Resultado em campanha e save/reload na engine NÃO VERIFICADOS.
+
 Na 0.7.61, o Automático pode fundar o primeiro setor de construção quando
 há investimento produtivo viável ou fila longa, insumos e mão de obra, além
 de superávit para materiais e salários. Usa uma referência conservadora dos

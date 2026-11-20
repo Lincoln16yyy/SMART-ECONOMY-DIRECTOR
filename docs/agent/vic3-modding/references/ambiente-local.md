@@ -864,3 +864,36 @@ perfil preservado; backup no user-data
 Validação: 524 testes em 183,2 s (`/tmp/sed-0761-confirmed-tests.log`),
 `build_mod.py --check` e validate aprovados; Tiger somente com os três
 campos conhecidos do Diário 1.15. Campanha e reload real pendentes.
+
+
+## Recuperação e capacidade compartilhada 0.7.62 — 20/11/2026
+
+Referências da nova leitura: `game/common/laws/01_economic_system.txt`
+atribui `country_private_construction_allocation_mult`; a descrição em
+`localization/english/modifiers_l_english.yml` (2203–2206) identifica a
+fração preferencial privada e o teto de progresso semanal por projeto.
+Leitura via `modifier:` confirmada no Tiger. Nenhum setter dessa alocação.
+
+`sed_parallel_visible_levels` usa somente prédios cujos grupos de métodos,
+insumos e empregos estão catalogados. `sed_parallel_all_visible_levels`
+varre os tipos de `queued_building_costs.json`; divergência entre somas e
+contagem privada impede a tentativa direta. Isso não revela autor/investidor
+de cada obra, nem prova comportamento de investimento no exterior.
+
+Fontes novas são módulos do gerador; não editar `common/` manualmente.
+Logs desta sessão em `/tmp/sed-0762-*.log`, Tiger final em
+`/tmp/sed-0762-tiger-final.json`. Privado desconhecido continua bloqueando
+a execução própria, sem desligar indiscriminadamente o Advisor nos demais
+casos. `sed_parallel_direct_pending` só nasce após inclusão confirmada;
+limpa na revisão seguinte que encontra fila pública vazia.
+
+Validação final 0.7.62: 548 testes em 205,5 s, log
+`/tmp/sed-0762-release-tests.log`. Build/validate aprovados; Tiger mantém
+os três campos conhecidos do Diário 1.15. Pacote em
+`dist/smart-economy-director-0.7.62.zip`.
+Instalação com jogo fechado, 14 arquivos conferidos e perfil preservado;
+backup no user-data: `sed_backups/mod_before_0.7.62_20261120_203234_741215`.
+Para testar retry, usar `sed_pulse.1.immediate`: chamar somente o efeito de
+revisão não consome o evento pendente e não representa o agendamento real.
+O retry libera reavaliação quando há capacidade nominal compartilhada e
+nenhuma prioridade ranqueada, mesmo que a fila privada ainda esteja ativa.

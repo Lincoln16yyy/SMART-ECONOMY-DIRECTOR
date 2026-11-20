@@ -18,13 +18,15 @@ def triggers(items):
  construction_queue_num_queued_government_levels = 0
  construction_queue_government_duration <= 0
  has_variable = sed_plan_count var:sed_plan_count = 0
- construction_queue_num_queued_private_levels = 0 is_construction_paused = no
- NOT = { sed_outcome_growth_wait = yes }
+ OR = { construction_queue_num_queued_private_levels = 0 sed_private_parallel_capacity_safe = yes }
+ is_construction_paused = no
  OR = { NOT = { has_variable = sed_plan_waiting } var:sed_plan_waiting = 0 }
 }
 sed_growth_takeover = {
  sed_growth_ready = yes
  OR = {
+  sed_private_parallel_capacity_safe = yes
+  sed_outcome_growth_wait = yes
   NOT = { has_variable = sed_coord_advisor_known }
   AND = { has_variable = sed_watch_idle var:sed_watch_idle >= 2 }
   AND = { has_variable = advisor_auto_construction_status var:advisor_auto_construction_status = 4 }
@@ -44,6 +46,7 @@ sed_growth_takeover = {
  sed_{good}_supplier_available = yes
  NOT = {{ has_variable = sed_follow_{good} }}
  NOT = {{ sed_perf_{good}_blocked = yes }}
+ owner = {{ OR = {{ construction_queue_num_queued_private_levels = 0 sed_parallel_{good}_not_duplicated = yes }} }}
  sed_investment_{good}_output > 0
  sed_investment_{good}_return > 0
  # Do not found an entire level for a negligible market.
@@ -70,6 +73,7 @@ sed_growth_{good}_score = {{ value = 0
   }}
   # The factor is based on a mature building average, not marginal causality.
   multiply = sed_perf_{good}_factor
+  multiply = sed_strategy_{good}_factor
   add = {{ value = sed_site_readiness multiply = 0.000001 }}
  }}
 }}

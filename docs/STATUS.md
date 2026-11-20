@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.61
+# Estado dos requisitos — 0.7.62
 
 ## Fila parada após administração — 0.7.59
 
@@ -455,3 +455,58 @@ Tiger com somente os três campos conhecidos do Diário 1.15.
 observar o primeiro setor, caixa após contratação e avaliação das obras novas;
 reabrir o save e conferir manutenção das intenções e restauração ao sair do
 Automático. Continuar a campanha normal é suficiente para reunir essa evidência.
+
+
+## Recuperação, fila privada e estratégia — 0.7.62
+
+**Código:** `regional_recovery.py` permite uma base em outro estado apenas
+quando há falha acompanhada por três meses na família, não há produtor
+saudável dessa família nem expansão em curso, e o destino tem trabalhadores
+estimados para dois níveis do tipo escolhido. O retorno/insumo permanece no
+filtro da variante. Manuais e assistidos mantêm o comportamento anterior.
+`growth_ready` não usa mais o veredito agregado de outra expansão como veto
+nacional; a coordenação tenta uma alternativa local antes de aguardar.
+
+**Código:** `parallel_construction.py` autoriza somente crescimento civil
+automático com fila pública vazia. Confere a soma de todos os níveis em
+construção visíveis nos tipos catalogados contra a contagem privada; a soma
+suportada com métodos conhecidos precisa ser igual à soma total visível.
+Reserva nominalmente um teto semanal por nível privado e pelo novo projeto,
+e exige que a alocação pública legal comporte esse teto. Saldo fixo não
+negativo, saldo recorrente com margem de 25%, dívida e orçamento anteriores
+continuam exigidos. Os filtros de trabalhadores e insumos descontam as obras
+pendentes; o mesmo bem já enfileirado em outro estado não ganha novo projeto.
+Não cancela, reprioriza ou escreve nas opções da fila privada. A marca própria
+compartilhada impede nova delegação até a fila pública esvaziar na revisão.
+Fora dessa tentativa, não substitui as regras do Advisor para suas decisões.
+
+**Limitação:** a conciliação de quantidades não identifica o investidor/autor
+de cada nível. Construção no exterior e interação com investidores estrangeiros
+exigem confirmação em campanha; não se declara consumo real livre como medido.
+A capacidade é uma reserva conservadora nominal e a previsão de trabalhadores
+continua demográfica. Não há créditos de saída futura das obras privadas.
+
+**Código:** `country_strategy.py` pesa porte até um milhão de habitantes em
+projetos de capital baixo, folga local de trabalhadores em manufaturas,
+necessidades essenciais quando padrão de vida é baixo e insumos produzidos
+por prédios operantes no território. Déficit de oferta dá bônus limitado,
+sem inventar volume de importações. Fator 1–1,75 sobre pontuação existente;
+a rentabilidade e a avaliação das obras próprias continuam prevalecendo.
+
+**Teste sintético:** casos focados de recuperação, mudança de estado, limite
+de emprego por variante, margem de capacidade/caixa/alocação, obras desconhecidas,
+PMs não conhecidos, duplicação, reservas de insumos/trabalhadores, persistência
+simulada da marca e verificação estática contra retirada da guarda privada.
+**Regressão:** 548 testes aprovados (205,5 s), incluindo 24 casos novos.
+A revisão de sete dias foi testada pela entrada real do evento: consome o
+marcador pendente antes de reavaliar a capacidade compartilhada. O painel
+não mostra falsa trava de fila quando há projeto paralelo elegível.
+**Estático:** geração/validate aprovados; Tiger mantém os três campos conhecidos
+do Diário 1.15 na ferramenta para 1.13.5, sem novos erros.
+**Instalação:** 0.7.62 com jogo fechado e backup, perfil preservado; ZIP e os
+14 arquivos instalados são idênticos ao gerador.
+**Campanha e reload da engine:** NÃO VERIFICADOS.
+Roteiro em cópia: deixar uma expansão contratar enquanto outro estado dispõe
+de trabalho; com fila privada ativa, conferir manutenção da fila original e
+apenas uma nova tentativa pública quando as reservas nominais permitem.
+Reabrir e confirmar que a marca é liberada após a fila pública esvaziar.

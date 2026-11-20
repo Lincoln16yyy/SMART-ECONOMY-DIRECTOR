@@ -1,14 +1,15 @@
 # Contexto de continuidade
 
 ## Estado atual
-- **0.7.61 instalada:** primeiro setor de construção com manutenção, insumos e salários; quatro fábricas avançadas e minas de chumbo/enxofre; avaliação de lucro/salário após obras próprias; fases de dívida por fluxo e tendência.
+- **0.7.62 instalada:** recuperação localizada e segunda base após falha madura; crescimento junto de fila privada apenas com capacidade, alocação, caixa e filas conciliadas; seleção ajustada por população, trabalhadores, bens essenciais e fornecedores no território. 548 testes aprovados, pacote/instalação idênticos; campanha/reload NÃO VERIFICADOS.
+- **Base 0.7.61 instalada:** primeiro setor de construção com manutenção, insumos e salários; quatro fábricas avançadas e minas de chumbo/enxofre; avaliação de lucro/salário após obras próprias; fases de dívida por fluxo e tendência.
 - **Base anterior:** 0.7.60 instalada/publicada, 502 testes sintéticos aprovados. Crescimento civil sem escassez, orçamento por projeto, dívida sustentável e custo público por tecnologia.
 - **Novos dados:** `tools/extend_industry_catalog.py` extrai seis cadeias da base 1.15; `advanced_sources.json` registra arquivos/hash. Melhorias de PM usam apenas o grupo principal, sem misturar produção e explosivos/luxo.
 - **Primeiro setor:** apenas sem outro setor/pendência, com amostra salarial, caixa recorrente e crédito/ouro de segurança; métodos futuros disponíveis entram na previsão conservadora. Respeita prioridades essenciais.
 - **Avaliação:** orçamento esperado é cotado antes de enfileirar e só registrado após confirmação. Após conclusão e três meses, média por nível de prédio não subsidiado/contratado ajusta crescimento. Não é causalidade marginal.
 - **Dívida:** saldo negativo com dívida estabiliza; saldo positivo pode investir sob guardas 0.7.60; >80% do crédito ou duas altas mensais >1% priorizam amortização. Sem novos setters de dinheiro, imposto ou salário.
 - **Migração:** novos IDs mudam a legenda de recibos antigos; `sed_development_schema` limpa somente o último recibo anterior uma vez. Prédios e intenções são preservados.
-- **Validação:** 524 testes sintéticos aprovados; geração e validate aprovados; Tiger mantém os três campos conhecidos do Diário. Instalada com jogo fechado, backup e 14 arquivos idênticos ao pacote. Próximo: observar contratação/caixa/retorno em campanha e confirmar reload real. Campanha e save/reload na engine NÃO VERIFICADOS.
+- **Base 0.7.61:** 524 testes sintéticos aprovados; geração e validate aprovados; Tiger mantém os três campos conhecidos do Diário. Instalada com jogo fechado, backup e 14 arquivos idênticos ao pacote. Próximo: observar contratação/caixa/retorno em campanha e confirmar reload real. Campanha e save/reload na engine NÃO VERIFICADOS.
 - **Perfil:** Better Politics 2.5.47 → Economy Advisor 1.0.0 → Director → Smart Government Advisor BPM 1.0.2 → Auto-Diplomacy → Auto-Recruit. OGAS fora do perfil ativo.
 - **Governo:** fonte própria em `~/Victoria3_mod` pertence a outro trabalho; não editar. BPM 1.0.2 instalado e publicado no repositório Smart Government (commit 4f92fe5, release v1.0.2-bpm).
 - **Ferramentas:** Tiger 1.19.0 suporta 1.13.5; conserva três campos de Diário 1.15 como erros conhecidos. Não confundir testes sintéticos/estáticos com campanha.
