@@ -214,6 +214,9 @@ sed_coord_sync = {{
     {enable_option('sectors')}
     set_variable = {{ name = sed_coord_executor value = 4 }}
    }}
+   else_if = {{ limit = {{ sed_civic_direct_available = yes }}
+    set_variable = {{ name = sed_coord_executor value = 11 }}
+   }}
    else_if = {{ limit = {{ OR = {{ var:sed_plan_goal = 6 var:sed_plan_goal = 7 var:sed_plan_goal = 9 }} }}
     set_variable = {{ name = sed_coord_executor value = 9 }}
    }}

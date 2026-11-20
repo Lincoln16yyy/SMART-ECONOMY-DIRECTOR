@@ -278,6 +278,8 @@ class Country:
             return any(self.condition(entry.value, formation) for formation in self.military_formations)
         if key == 'has_active_production_method':
             return entry.value in scope.get('production_methods', [])
+        if key == 'is_researching_technology':
+            return entry.value in self.readings.get('researching', [])
         if key == 'has_technology_researched':
             return entry.value in self.readings.get('technologies', [])
         if key == 'has_law':

@@ -764,3 +764,13 @@ common/production_methods e pesos de common/pop_types (registrados em
 employment_profiles.json). outcome_inputs.json é gerado junto ao
 catálogo de saídas. O custo é conservador, sem prova de despesa futura
 exata. Teste em campanha permanece pendente.
+
+## Reparo de pesquisa e construção no Paraguai
+
+Fonte instalada preservada em
+`sed_backups/government_before_research_fix_20261119_233947`.
+Director anterior em `sed_backups/mod_before_0.7.57_20261119_233947_542653`.
+`tools/repair_government_research.py` parte da edição BPM instalada,
+acrescenta despacho mensal e fallback por tecnologias vanilla sem alterar
+o gerador de outro agente em `~/Victoria3_mod`.
+Pacote `dist/smart-government-advisor-bpm-1.0.2.zip`.

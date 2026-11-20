@@ -30,6 +30,19 @@ class AdminCapacityTests(unittest.TestCase):
         self.assertEqual(c.states[0]['variables'].get('sed_admin_intent_level'), 0)
         self.assertIn('sed_admin_request_pending', c.states[0]['variables'])
 
+    def test_paraguay_with_advisor_takes_direct_admin_instead_of_waiting(self):
+        c = self.c
+        c.variables['advisor_enabled'] = True
+        c.readings.update(bureaucracy=-10, principal=0, gold_reserves=100000,
+                          net_total_income=2000)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_plan_goal'], 6)
+        self.assertEqual(c.variables['sed_coord_executor'], 11)
+        self.assertNotIn('advisor_auto_construction_enabled', c.variables)
+        self.assertEqual([project['building'] for project in c.constructions],
+                         ['building_government_administration'])
+
     def test_tax_capacity_goal_acts_only_where_the_state_exceeds_capacity(self):
         c = self.c
         c.states = [state(tax_capacity_usage=0, tax_capacity=100, population=50000),

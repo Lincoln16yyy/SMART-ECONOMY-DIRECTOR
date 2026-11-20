@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.56
+# Estado dos requisitos — 0.7.57
 
 ## Coordenação com Economy Advisor
 
@@ -285,3 +285,20 @@ mercado. Esse insumo é candidato a explicar a falta local.
 **Teste sintético:** fronteira do saldo de manutenção, prazo completo,
 migração de pendência e identificação de madeira para fábrica de papel.
 **Estático:** validador aprovado. **Campanha:** NÃO VERIFICADA.
+
+## Paraguai — correções 0.7.57 e Government BPM 1.0.2
+
+**Campanha anterior:** autosave do Paraguai com Automático e coordenação
+ativos, objetivo 6, executor 9, revisão 19. Sem Supply Chain no perfil,
+a coordenação suspendia o Advisor enquanto aguardava construtor externo.
+**Código:** administração ou energia elegível agora permite execução
+direta pelo Director, sob as guardas existentes. **Teste sintético:**
+reproduz a combinação Advisor + déficit burocrático e confirma inclusão.
+
+O módulo de pesquisa instalado não era chamado mensalmente. Também
+limitava recomendações a 18 tecnologias em contextos específicos.
+O reparador preserva esses contextos e, se nenhum produzir recomendação,
+classifica tecnologias gerais pelos pré-requisitos reais, era e categoria.
+**Estático:** parser e Tiger sem erros no módulo de pesquisa novo.
+**Campanha pós-correção:** NÃO VERIFICADA. A cópia local Victoria3_mod
+tem alterações de outro trabalho e foi preservada.

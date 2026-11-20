@@ -13,7 +13,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.56'
+VERSION = '0.7.57'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -2337,7 +2337,7 @@ sed_auto_executor_safe = {
  NOT = { has_variable = sed_mode_assisted }
  OR = {
   NOT = { has_variable = sed_coord_active }
-  AND = { has_variable = sed_coord_active var:sed_coord_executor = 11 OR = { AND = { var:sed_plan_goal = 2 sed_direct_supply_priority_exists = yes } sed_university_ready = yes sed_watch_recovery_candidate = yes } }
+  AND = { has_variable = sed_coord_active var:sed_coord_executor = 11 OR = { AND = { var:sed_plan_goal = 2 sed_direct_supply_priority_exists = yes } sed_university_ready = yes sed_watch_recovery_candidate = yes sed_civic_direct_available = yes } }
  }
  has_variable = sed_mode_automatic
  NOT = { sed_auto_month_limit_reached = yes }
@@ -2347,6 +2347,14 @@ sed_auto_executor_safe = {
  NOT = { sed_competing_builder_configured = yes }
  sed_direct_fiscal_safe = yes
  sed_direct_budget_safe = yes
+}''')
+    result.append('''sed_civic_direct_available = {
+ OR = {
+  AND = { has_variable = sed_plan_goal OR = { var:sed_plan_goal = 6 var:sed_plan_goal = 7 }
+   any_scope_state = { sed_admin_candidate_eligible = yes } }
+  AND = { has_variable = sed_plan_goal var:sed_plan_goal = 9
+   any_scope_state = { sed_power_candidate_eligible = yes } }
+ }
 }''')
     result.append('''# University employment is 500 base jobs plus 500 academia jobs per level.
 sed_university_candidate = {
