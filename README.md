@@ -1,5 +1,9 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.58, um objetivo de administração ou energia sem candidato direto
+e sem Supply Chain mantém o Economy Advisor disponível para avaliar
+outras obras. O Diário mostra por que a administração foi adiada.
+
 Na 0.7.56, universidades e administrações têm uma guarda de manutenção
 semanal baseada em insumos e salários observados. Expansões recebem três
 meses para contratar antes do bloqueio persistente por pessoal. O Diário

@@ -13,7 +13,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = json.loads((ROOT / 'data/metrics.json').read_text())
 SUPPLIER_OUTPUT_PROFILES = json.loads((ROOT / 'data/supplier_output_profiles.json').read_text())
-VERSION = '0.7.57'
+VERSION = '0.7.58'
 # Observed country options; this registry also drives the live explanation.
 COMPETING_BUILDERS = (
     ('advisor', 'advisor_auto_construction_enabled', 'Economy Advisor: construção automática', 'Economy Advisor: automatic construction'),
@@ -863,6 +863,8 @@ def widget():
     body += textbox('sed_follow_summary', 'sed_follow_visible_sgui')
     for name in list(ACTION_NAMES) + ['trade_center', 'admin', 'power', 'university', 'core_wood', 'core_iron', 'core_tools', 'core_construction']:
         body += textbox(f'sed_last_build_{name}', f'sed_last_build_{name}_visible_sgui')
+    for reason in ('upkeep', 'site'):
+        body += textbox(f'sed_admin_wait_{reason}', f'sed_admin_wait_{reason}_visible_sgui')
     body += textbox('sed_mode_title', heading=True)
     body += textbox('sed_coord_intro')
     body += button('sed_coord_enable', 'sed_coord_enable_sgui')
@@ -1790,6 +1792,8 @@ sed_auto_status_month_limit_visible_sgui = { scope = country is_shown = { has_va
     result += f'sed_auto_current_clear_visible_sgui = {{ scope = country is_shown = {{ {base} sed_auto_executor_safe = yes }} }}\n'
     result += f'sed_auto_current_queue_control_visible_sgui = {{ scope = country is_shown = {{ {base} construction_queue_num_queued_private_levels > 0 sed_private_control_configured = yes }} }}\n'
     result += 'sed_auto_status_delegated_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 18 } }\n'
+    result += 'sed_admin_wait_upkeep_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled sed_admin_needed = yes NOT = { sed_upkeep_admin_safe = yes } } }\n'
+    result += 'sed_admin_wait_site_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled sed_admin_needed = yes sed_upkeep_admin_safe = yes NOT = { any_scope_state = { sed_admin_candidate_eligible = yes } } } }\n'
     for index, name in enumerate(investment_outcomes.TARGETS, 1):
         result += f'sed_problem_{name}_visible_sgui = {{ scope = country is_shown = {{ has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = {index} }} }}\n'
     for index, good in enumerate(investment_outcomes.INPUT_GOODS, 1):
@@ -2902,6 +2906,12 @@ def localization(language):
         pairs[f'sed_upkeep_{name}'] = (
             f'Manutenção estimada por nível de {label}: @money!' + v(f'upkeep_{name}_cost', 'K') + ' por semana. Referência conservadora de salários e insumos; custos reais dependem do método e das contratações.',
             f'Estimated operating cost per {name} level: @money!' + v(f'upkeep_{name}_cost', 'K') + ' weekly. Conservative payroll and input reference; actual costs depend on methods and staffing.')
+    pairs['sed_admin_wait_upkeep'] = (
+        'Administração adiada pela referência de manutenção. O Advisor pode continuar avaliando outras obras enquanto a coordenação revê o orçamento.',
+        'Administration deferred by the operating-cost reference. The Advisor can evaluate other projects while coordination reviews the budget.')
+    pairs['sed_admin_wait_site'] = (
+        'Administração adiada. Nenhum estado passou nos filtros de incorporação, infraestrutura, permissão de construção, fila e ocupação mínima de 50% da administração existente. A delegação ao Advisor continua para outras obras.',
+        'Administration deferred. No state passed incorporation, infrastructure, build permission, queue and 50% staffing checks for existing administration. Advisor delegation continues for other projects.')
     pairs.update(ascension.localization(v))
     pairs.update(construction_watch.localization())
     pairs.update(investment_outcomes.localization(v))

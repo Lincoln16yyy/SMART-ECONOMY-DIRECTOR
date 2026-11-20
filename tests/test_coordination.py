@@ -398,7 +398,7 @@ class CoordinationTests(unittest.TestCase):
                 self.assertEqual(c.variables['sed_coord_executor'], executor)
                 self.assertEqual(self.external(), {option: 1})
 
-    def test_specific_goal_without_supply_waits_and_restores_original_options(self):
+    def test_specific_goal_without_supply_delegates_and_restores_original_options(self):
         for goal in (6, 7, 9):
             with self.subTest(goal=goal):
                 self.setUp()
@@ -407,21 +407,21 @@ class CoordinationTests(unittest.TestCase):
                 c.variables.pop('sed_coord_supply_known')
                 c.variables['sed_plan_goal'] = goal
                 c.run('sed_coord_sync')
-                self.assertEqual(c.variables['sed_coord_executor'], 9)
-                self.assertEqual(self.external(), {})
+                self.assertEqual(c.variables['sed_coord_executor'], 1)
+                self.assertEqual(self.external(), {'advisor_auto_construction_enabled': 1})
                 c.run('sed_set_mode_assisted')
                 self.assertEqual(self.external(), self.original)
 
-    def test_tax_shortfall_without_supply_records_unavailable_execution(self):
+    def test_tax_shortfall_without_direct_candidate_keeps_advisor_available(self):
         c = self.c
         c.states = [state(tax_capacity_usage=200, tax_capacity=100)]
         c.run('sed_set_mode_automatic')
         c.variables.pop('sed_coord_supply_known')
         c.run('sed_auto_apply_monthly')
         self.assertEqual(c.variables['sed_plan_goal'], 7)
-        self.assertEqual(c.variables['sed_coord_executor'], 9)
-        self.assertEqual(c.variables['sed_auto_review_status'], 19)
-        self.assertEqual(self.external(), {})
+        self.assertEqual(c.variables['sed_coord_executor'], 1)
+        self.assertEqual(c.variables['sed_auto_review_status'], 18)
+        self.assertEqual(self.external(), {'advisor_auto_construction_enabled': 1})
         c.variables['sed_coord_supply_known'] = True
         c.run('sed_auto_apply_monthly')
         self.assertEqual(c.variables['sed_coord_executor'], 7)

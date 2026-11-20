@@ -1298,6 +1298,8 @@ sed_auto_current_budget_gold_visible_sgui = { scope = country is_shown = { is_pl
 sed_auto_current_clear_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic sed_auto_executor_safe = yes } }
 sed_auto_current_queue_control_visible_sgui = { scope = country is_shown = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic construction_queue_num_queued_private_levels > 0 sed_private_control_configured = yes } }
 sed_auto_status_delegated_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled has_variable = sed_auto_review_status var:sed_auto_review_status = 18 } }
+sed_admin_wait_upkeep_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled sed_admin_needed = yes NOT = { sed_upkeep_admin_safe = yes } } }
+sed_admin_wait_site_visible_sgui = { scope = country is_shown = { has_variable = sed_enabled sed_admin_needed = yes sed_upkeep_admin_safe = yes NOT = { any_scope_state = { sed_admin_candidate_eligible = yes } } } }
 sed_problem_angkor_wat_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 1 } }
 sed_problem_arms_industry_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 2 } }
 sed_problem_art_academy_visible_sgui = { scope = country is_shown = { has_variable = sed_problem_state has_variable = sed_problem_type var:sed_problem_type = 3 } }

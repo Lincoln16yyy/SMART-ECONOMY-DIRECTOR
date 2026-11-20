@@ -776,3 +776,10 @@ o gerador de outro agente em `~/Victoria3_mod`.
 Pacote `dist/smart-government-advisor-bpm-1.0.2.zip`.
 
 Smart Government BPM 1.0.2 publicado também no repositório próprio, release v1.0.2-bpm, branch codex/research-monthly-bpm-1.0.2, commit 4f92fe5. ZIP idêntico ao instalado.
+
+## Paraguai 0.7.58
+
+O objetivo cívico não pode suspender o Advisor quando não existe candidato
+direto. Novas linhas do Diário identificam a guarda de manutenção ou
+ausência de estado elegível. O save de 18/09/1841 manteve a espera após
+a 0.7.57, motivando a correção de delegação da 0.7.58.

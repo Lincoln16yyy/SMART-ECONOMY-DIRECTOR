@@ -1,4 +1,4 @@
-# Estado dos requisitos — 0.7.57
+# Estado dos requisitos — 0.7.58
 
 ## Coordenação com Economy Advisor
 
@@ -304,3 +304,15 @@ classifica tecnologias gerais pelos pré-requisitos reais, era e categoria.
 tem alterações de outro trabalho e foi preservada.
 
 Smart Government BPM 1.0.2 publicado também no repositório próprio, release v1.0.2-bpm, branch codex/research-monthly-bpm-1.0.2, commit 4f92fe5. ZIP idêntico ao instalado.
+
+## Paraguai — saída da espera sem candidato direto
+
+**Campanha:** captura de 18/09/1841 e novo autosave ainda mostraram fila
+vazia. O save tinha objetivo 6, executor 9, revisão 19. A 0.7.57 só
+liberava execução direta se o candidato cívico estivesse elegível.
+**Código 0.7.58:** quando esse candidato não existe, e o Advisor está
+disponível, a coordenação delega em vez de suspender todos os executores.
+O Diário distingue custo permanente de falta de estado elegível.
+A causa exata da inelegibilidade local não foi extraída do save.
+**Teste sintético:** 12 testes de administração e delegação passaram.
+**Estático:** validado. **Campanha pós-correção:** NÃO VERIFICADA.

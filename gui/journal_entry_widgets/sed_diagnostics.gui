@@ -4102,6 +4102,20 @@ textbox = {
  text = "sed_last_build_core_construction"
 }
 textbox = {
+ visible = "[GetScriptedGui('sed_admin_wait_upkeep_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_admin_wait_upkeep"
+}
+textbox = {
+ visible = "[GetScriptedGui('sed_admin_wait_site_visible_sgui').IsShown(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+ autoresize = yes multiline = yes align = left|nobaseline
+ using = fontsize_large
+ minimumsize = { 500 -1 } maximumsize = { 500 -1 }
+ text = "sed_admin_wait_site"
+}
+textbox = {
  autoresize = yes multiline = yes align = left|nobaseline
  using = fontsize_xxl
  minimumsize = { 500 -1 } maximumsize = { 500 -1 }

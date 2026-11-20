@@ -111,6 +111,19 @@ class AdminCapacityTests(unittest.TestCase):
         self.assertIn('Government administration', en)
         self.assertIn('Supply Chain', en)
 
+    def test_no_eligible_admin_does_not_switch_off_economy_advisor(self):
+        c = self.c
+        c.variables['advisor_enabled'] = True
+        c.readings['bureaucracy'] = -23.8
+        c.states[0]['buildings'].append(
+            building('building_government_administration', occupancy=0.2))
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_plan_goal'], 6)
+        self.assertEqual(c.variables['sed_coord_executor'], 1)
+        self.assertIn('advisor_auto_construction_enabled', c.variables)
+        self.assertEqual(c.constructions, [])
+
 
 if __name__ == '__main__':
     unittest.main()
