@@ -1,6 +1,7 @@
 # Contexto de continuidade
 
 ## Estado atual
+- Smart Government BPM 1.0.2 publicado também no repositório próprio, release v1.0.2-bpm, branch codex/research-monthly-bpm-1.0.2, commit 4f92fe5. ZIP idêntico ao instalado.
 - **Correção Paraguai 0.7.57:** save tinha objetivo 6, executor 9 e revisão 19. Coordenação esperava construtor ausente e desligava Advisor. Agora permite execução direta de administração/energia elegível. Smart Government BPM 1.0.2 recebe revisão mensal e fallback de 178 tecnologias elegíveis. Ambos instalados. Campanha pós-correção NÃO VERIFICADA.
 - **Manutenção 0.7.56:** referência conservadora para universidade/administração, três meses para contratação e diagnóstico por prédio/estado/insumo. Sem salário observado, exige saldo positivo, ausência de dívida e reserva de 12 semanas. Campanha NÃO VERIFICADA.
 - **Locais 0.7.55:** capacidade local desempata candidatos, insumos de fábricas operantes ganham prioridade e obras diretas confirmadas mostram prédio/estado/data. 27 testes focados passaram. Campanha NÃO VERIFICADA.

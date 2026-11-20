@@ -774,3 +774,5 @@ Director anterior em `sed_backups/mod_before_0.7.57_20261119_233947_542653`.
 acrescenta despacho mensal e fallback por tecnologias vanilla sem alterar
 o gerador de outro agente em `~/Victoria3_mod`.
 Pacote `dist/smart-government-advisor-bpm-1.0.2.zip`.
+
+Smart Government BPM 1.0.2 publicado também no repositório próprio, release v1.0.2-bpm, branch codex/research-monthly-bpm-1.0.2, commit 4f92fe5. ZIP idêntico ao instalado.

@@ -302,3 +302,5 @@ classifica tecnologias gerais pelos pré-requisitos reais, era e categoria.
 **Estático:** parser e Tiger sem erros no módulo de pesquisa novo.
 **Campanha pós-correção:** NÃO VERIFICADA. A cópia local Victoria3_mod
 tem alterações de outro trabalho e foi preservada.
+
+Smart Government BPM 1.0.2 publicado também no repositório próprio, release v1.0.2-bpm, branch codex/research-monthly-bpm-1.0.2, commit 4f92fe5. ZIP idêntico ao instalado.
