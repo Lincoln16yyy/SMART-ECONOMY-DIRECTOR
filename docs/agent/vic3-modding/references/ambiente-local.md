@@ -783,3 +783,25 @@ O objetivo cívico não pode suspender o Advisor quando não existe candidato
 direto. Novas linhas do Diário identificam a guarda de manutenção ou
 ausência de estado elegível. O save de 18/09/1841 manteve a espera após
 a 0.7.57, motivando a correção de delegação da 0.7.58.
+
+
+## Calendário e fila parada — 0.7.59
+
+Saves examinados em `save games/autosave.v3` (Uruguai) e
+`save games/paraguai_1844_04_06.v3`. Ler ZIP/gamestate em modo somente leitura;
+marcadores numéricos são fixed-point de 100000. `sed_watch_month=22032`
+permaneceu em 1836 apesar da revisão de 1844. Captura inline do ano/mês em
+`set_variable` já existia em `sed_month_key` e nas datas da revisão.
+Agora `sed_calendar_month_key` é renovado pelos efeitos de entrada; os
+consumidores leem a variável e os marcadores de estado usam `owner.var:`.
+Logs desta revisão: `/tmp/sed-0759-*.log`, Tiger `/tmp/sed-0759-tiger.json`.
+Campanha e persistência após reload ainda precisam de confirmação.
+
+Instalação 0.7.59 confirmada com jogo fechado: 14 arquivos idênticos ao
+gerador, perfil preservado. Backup relativo ao user-data:
+`sed_backups/mod_before_0.7.59_20261120_003323_930255`.
+
+Validação final: 488 testes sintéticos aprovados em 56,6 s; definições
+compartilhadas somente para leitura foram reutilizadas no runner, retornando
+cópia do dicionário por teste. Log `/tmp/sed-0759-confirmed-tests.log`.
+Build/validate aprovados; Tiger mantém os três erros conhecidos do Diário.

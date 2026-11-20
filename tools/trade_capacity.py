@@ -135,7 +135,7 @@ sed_refresh_trade_center = {{
       }}
       else = {{ set_variable = {{ name = sed_trade_center_completed value = 1 }} }}
       set_variable = {{ name = sed_trade_center_result value = 1 }}
-      set_variable = {{ name = sed_trade_center_result_month value = sed_live_month_key }}
+      set_variable = {{ name = sed_trade_center_result_month value = var:sed_calendar_month_key }}
      }}
     }}
     else_if = {{ limit = {{ has_variable = sed_trade_center_intent_level }}
@@ -145,7 +145,7 @@ sed_refresh_trade_center = {{
       }}
       else = {{ set_variable = {{ name = sed_trade_center_abandoned value = 1 }} }}
       set_variable = {{ name = sed_trade_center_result value = 2 }}
-      set_variable = {{ name = sed_trade_center_result_month value = sed_live_month_key }}
+      set_variable = {{ name = sed_trade_center_result_month value = var:sed_calendar_month_key }}
      }}
     }}
     remove_variable = sed_trade_center_intent_level

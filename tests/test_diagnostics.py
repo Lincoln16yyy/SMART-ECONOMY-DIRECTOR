@@ -850,7 +850,7 @@ class DiagnosisTests(unittest.TestCase):
                 path.write_bytes(data)
             path = root / 'common/scripted_triggers/sed_triggers.txt'
             text = path.read_text(encoding='utf-8-sig').replace(
-                'var:sed_auto_last_attempt_month = sed_live_month_key',
+                'var:sed_auto_last_attempt_month = var:sed_calendar_month_key',
                 'var:sed_auto_last_attempt_month = { value = year multiply = 12 add = month }', 1)
             path.write_text(text, encoding='utf-8-sig')
             self.assertTrue(any('Inline arithmetic in variable equality' in error

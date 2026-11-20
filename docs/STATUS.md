@@ -1,4 +1,31 @@
-# Estado dos requisitos — 0.7.58
+# Estado dos requisitos — 0.7.59
+
+## Fila parada após administração — 0.7.59
+
+**Evidência de save:** Paraguai em abril/1844: revisão delegada ao Advisor,
+reserva ~162,8 mil, saldo ~409, bloqueio de orçamento no Advisor. O marcador
+`sed_watch_month` permaneceu 22032 (jan/1836), com zero meses ociosos.
+Uruguai também tinha marcador 22032; inicialmente a reserva fiscal era
+insuficiente e depois aumentou. Isso não autoriza ignorar a guarda de caixa.
+
+**Código:** o calendário é capturado por efeito em variável do país antes
+das revisões; comparações mensais não dependem mais do valor de calendário
+calculado em `script_values`. Marcadores de conclusão em estado consultam o
+país proprietário. Na migração de saves antigos, datas de contratação e a
+janela anual são reiniciadas, pois o marcador antigo não comprova duração.
+Mesma mudança para limite mensal, insumos, acompanhamento
+pós-obra e balanço anual. Nenhum novo efeito de imposto ou de salário.
+
+**Teste sintético:** 488 testes aprovados, incluindo regressão com marcador antigo e valor congelado, dois
+meses distintos, repetição no mesmo mês e migração dos registros antigos.
+**Estático:** build e validate aprovados; Tiger sem novos erros, conservando
+os três campos de Diário 1.15 desconhecidos pela ferramenta para 1.13.5.
+**Instalação:** 0.7.59, 14 arquivos conferidos, backup e perfil preservado.
+A suíte cívica antiga sem verba para manutenção também falhava no HEAD
+0.7.58; seu cenário agora fornece saldo e reserva compatíveis com a guarda. **Campanha e save/reload:** NÃO
+VERIFICADOS. Em cópia do save, avançar revisões mensais e observar mudança
+de `sed_watch_month`; com fila vazia, candidato elegível e guardas satisfeitas,
+a recuperação deve inserir só um nível e devolver a fila ao Advisor.
 
 ## Coordenação com Economy Advisor
 

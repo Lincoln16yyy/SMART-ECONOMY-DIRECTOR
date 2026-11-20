@@ -51,7 +51,7 @@ TAX_LEVELS = ('very_low', 'low', 'medium', 'high', 'very_high')
 
 def policy_step(effect, level, month_marker, previous_index):
     prefix = month_marker.removesuffix('_change_month')
-    return (f'set_variable = {{ name = {month_marker} value = sed_live_month_key }} '
+    return (f'set_variable = {{ name = {month_marker} value = var:sed_calendar_month_key }} '
             f'set_variable = {{ name = {prefix}_from value = {previous_index} }} '
             f'set_variable = {{ name = {prefix}_to value = {TAX_LEVELS.index(level) + 1} }} '
             f'set_variable = {{ name = {prefix}_year value = year }} '
@@ -89,6 +89,7 @@ sed_tax_policy_save = {
 }
 
 sed_apply_fiscal_policy = {
+ sed_refresh_calendar = yes
  if = {
   limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic
    has_variable = sed_fiscal_status
@@ -150,6 +151,7 @@ sed_wage_policy_save = {
 }
 
 sed_apply_wage_policy = {
+ sed_refresh_calendar = yes
  if = {
   limit = { is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic
    has_variable = sed_fiscal_status
@@ -214,6 +216,7 @@ def military_wage_policy_effects():
 }
 
 sed_apply_military_wage_policy = {
+ sed_refresh_calendar = yes
  if = { limit = {
   is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic
   has_variable = sed_fiscal_status
@@ -246,7 +249,7 @@ sed_restore_military_wage_policy = {
 def triggers():
     return '''sed_military_wage_month_limit_reached = {
  has_variable = sed_military_wage_last_change_month
- var:sed_military_wage_last_change_month = sed_live_month_key
+ var:sed_military_wage_last_change_month = var:sed_calendar_month_key
 }
 
 sed_military_readiness_required = {
@@ -265,12 +268,12 @@ sed_military_wage_recovery_affordable = {
 
 sed_tax_month_limit_reached = {
  has_variable = sed_tax_last_change_month
- var:sed_tax_last_change_month = sed_live_month_key
+ var:sed_tax_last_change_month = var:sed_calendar_month_key
 }
 
 sed_wage_month_limit_reached = {
  has_variable = sed_wage_last_change_month
- var:sed_wage_last_change_month = sed_live_month_key
+ var:sed_wage_last_change_month = var:sed_calendar_month_key
 }
 
 # Initial proportional policy; not an incremental cost estimate.
@@ -333,6 +336,7 @@ def fiscal_status_update():
 def effects(actions, dependencies, buildings):
     supply = [name for name in actions if name not in ('railway', 'construction')]
     result = ['''sed_refresh_national_plan = {
+ sed_refresh_calendar = yes
  if = {
   limit = { is_player = yes has_variable = sed_enabled }
   sed_refresh_investment_prices = yes
@@ -387,10 +391,10 @@ def effects(actions, dependencies, buildings):
    remove_variable = sed_{name}_meta_year
   }}
   if = {{ limit = {{ {military_demand} market = {{ mg:{name} ?= {{ market_goods_has_goods_shortage = yes }} }} }}
-   if = {{ limit = {{ NOT = {{ has_variable = sed_{name}_short_sample_month var:sed_{name}_short_sample_month = sed_live_month_key }} }}
+   if = {{ limit = {{ NOT = {{ has_variable = sed_{name}_short_sample_month var:sed_{name}_short_sample_month = var:sed_calendar_month_key }} }}
     set_variable = {{ name = sed_short_sample_gap value = 0 }}
     if = {{ limit = {{ has_variable = sed_{name}_short_sample_month }}
-     set_variable = {{ name = sed_short_sample_gap value = {{ value = sed_live_month_key subtract = var:sed_{name}_short_sample_month }} }}
+     set_variable = {{ name = sed_short_sample_gap value = {{ value = var:sed_calendar_month_key subtract = var:sed_{name}_short_sample_month }} }}
     }}
     if = {{ limit = {{ var:sed_short_sample_gap = 1 has_variable = sed_{name}_short_months }}
      change_variable = {{ name = sed_{name}_short_months add = 1 }}
@@ -439,7 +443,7 @@ def effects(actions, dependencies, buildings):
       subtract = var:sed_{name}_goal_price_start }} }} }}
    }}
   }}
-  set_variable = {{ name = sed_{name}_short_sample_month value = sed_live_month_key }}''')
+  set_variable = {{ name = sed_{name}_short_sample_month value = var:sed_calendar_month_key }}''')
     result.append('  every_scope_state = {')
     for name in actions:
         result.append(f'   set_variable = {{ name = sed_plan_{name}_rank value = 0 }}')

@@ -4,13 +4,14 @@ VARIABLES = ['sed_watch_month', 'sed_watch_idle', 'sed_watch_status', 'sed_watch
 
 def effects():
     return '''sed_watch_review = {
+ sed_refresh_calendar = yes
  if = { limit = {
   is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic
   NOT = { has_variable = sed_mode_assisted }
   NOT = { has_variable = sed_mode_manual }
-  NOT = { has_variable = sed_watch_month var:sed_watch_month = sed_live_month_key }
+  NOT = { has_variable = sed_watch_month var:sed_watch_month = var:sed_calendar_month_key }
  }
-  set_variable = { name = sed_watch_month value = sed_live_month_key }
+  set_variable = { name = sed_watch_month value = var:sed_calendar_month_key }
   if = { limit = { NOT = { has_variable = sed_watch_idle } }
    set_variable = { name = sed_watch_idle value = 0 }
   }

@@ -141,6 +141,8 @@ def validate(root=ROOT, game=None):
         ('sed_recover_existing_industry', 'sed_pm_upgrade_month_limit_reached'),
     ):
         body = custom.get(name, [])
+        # Updating the date cannot mutate policy; the guarded body remains mandatory.
+        body = [entry for entry in body if not (entry.key == 'sed_refresh_calendar' and entry.value == 'yes')]
         outer = body[0] if len(body) == 1 else None
         limit = child(outer.value, 'limit') if outer and outer.key == 'if' else []
         for key, value in [('is_player', 'yes'), ('has_variable', 'sed_enabled'),

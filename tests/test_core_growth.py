@@ -81,7 +81,9 @@ class CoreGrowthTests(unittest.TestCase):
     def test_civic_goals_keep_their_own_executor(self):
         c = self.c
         self.add_logging_camp()
-        c.readings['bureaucracy'] = -10
+        # Include the administration's continuing cost in the civic fixture.
+        c.readings.update(bureaucracy=-10, principal=0, net_total_income=2000,
+                          gold_reserves=100000)
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')
         self.assertEqual(c.variables['sed_plan_goal'], 6)

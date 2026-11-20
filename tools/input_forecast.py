@@ -94,7 +94,7 @@ def values(founding_projects=()):
  value = 0
  sg:{good} ?= {{ add = {{ value = state_goods_production min = 0 multiply = 2 subtract = {{ value = state_goods_consumption min = 0 }} }} }}
  subtract = sed_input_pending_{good}
- if = {{ limit = {{ owner = {{ has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key }}
+ if = {{ limit = {{ owner = {{ has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = var:sed_calendar_month_key }}
   has_variable = sed_pm_reserved_{good}
  }} subtract = var:sed_pm_reserved_{good} }}
 }}
@@ -108,7 +108,7 @@ sed_input_headroom_{good} = {{
  value = 0
  market ?= {{ mg:{good} ?= {{ add = {{ value = market_goods_sell_orders min = 0 multiply = 2 subtract = {{ value = market_goods_buy_orders min = 0 }} }} }} }}
  subtract = {{ value = 0 every_scope_state = {{ limit = {{ }} add = sed_input_pending_{good} }} }}
- if = {{ limit = {{ has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+ if = {{ limit = {{ has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = var:sed_calendar_month_key
   has_variable = sed_pm_reserved_{good}
  }} subtract = var:sed_pm_reserved_{good} }}
 }}
@@ -144,7 +144,7 @@ def triggers():
 
 
 def effects():
-    result = ['sed_refresh_input_readings = {\n if = { limit = { is_player = yes has_variable = sed_enabled }']
+    result = ['sed_refresh_input_readings = {\n sed_refresh_calendar = yes\n if = { limit = { is_player = yes has_variable = sed_enabled }']
     for good in MARKET_GOODS:
         result.append(f'  set_variable = {{ name = sed_input_market_margin_{good} value = sed_input_country_headroom_{good} }}')
     result.append('  every_scope_state = {')

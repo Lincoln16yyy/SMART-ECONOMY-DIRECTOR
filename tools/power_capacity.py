@@ -123,7 +123,7 @@ sed_refresh_power = {{
       }}
       else = {{ set_variable = {{ name = sed_power_completed value = 1 }} }}
       set_variable = {{ name = sed_power_result value = 1 }}
-      set_variable = {{ name = sed_power_result_month value = sed_live_month_key }}
+      set_variable = {{ name = sed_power_result_month value = var:sed_calendar_month_key }}
      }}
     }}
     else_if = {{ limit = {{ has_variable = sed_power_intent_level }}
@@ -133,7 +133,7 @@ sed_refresh_power = {{
       }}
       else = {{ set_variable = {{ name = sed_power_abandoned value = 1 }} }}
       set_variable = {{ name = sed_power_result value = 2 }}
-      set_variable = {{ name = sed_power_result_month value = sed_live_month_key }}
+      set_variable = {{ name = sed_power_result_month value = var:sed_calendar_month_key }}
      }}
     }}
     remove_variable = sed_power_intent_level

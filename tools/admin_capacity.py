@@ -128,7 +128,7 @@ sed_refresh_admin = {{
       }}
       else = {{ set_variable = {{ name = sed_admin_completed value = 1 }} }}
       set_variable = {{ name = sed_admin_result value = 1 }}
-      set_variable = {{ name = sed_admin_result_month value = sed_live_month_key }}
+      set_variable = {{ name = sed_admin_result_month value = var:sed_calendar_month_key }}
      }}
     }}
     else_if = {{ limit = {{ has_variable = sed_admin_intent_level }}
@@ -138,7 +138,7 @@ sed_refresh_admin = {{
       }}
       else = {{ set_variable = {{ name = sed_admin_abandoned value = 1 }} }}
       set_variable = {{ name = sed_admin_result value = 2 }}
-      set_variable = {{ name = sed_admin_result_month value = sed_live_month_key }}
+      set_variable = {{ name = sed_admin_result_month value = var:sed_calendar_month_key }}
      }}
     }}
     remove_variable = sed_admin_intent_level

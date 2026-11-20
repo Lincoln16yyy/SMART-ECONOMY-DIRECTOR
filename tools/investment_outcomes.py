@@ -21,10 +21,11 @@ STATE_VARIABLES = [f'sed_outcome_{name}_{field}' for name in TARGETS
 
 def effects():
     parts = ['''sed_outcome_review = {
+ sed_refresh_calendar = yes
  if = { limit = {
-  NOT = { has_variable = sed_outcome_month var:sed_outcome_month = sed_live_month_key }
+  NOT = { has_variable = sed_outcome_month var:sed_outcome_month = var:sed_calendar_month_key }
  }
-  set_variable = { name = sed_outcome_month value = sed_live_month_key }
+  set_variable = { name = sed_outcome_month value = var:sed_calendar_month_key }
   set_variable = { name = sed_outcome_staff value = 0 }
   set_variable = { name = sed_outcome_inputs value = 0 }
   set_variable = { name = sed_outcome_market value = 0 }
@@ -61,17 +62,17 @@ def effects():
         parts.append(f'''   if = {{ limit = {{ has_building = {building} }}
     if = {{ limit = {{ has_variable = {level} b:{building}.level > var:{level} }}
      set_variable = {{ name = {pending} value = yes }}
-     set_variable = {{ name = {since} value = sed_live_month_key }}
+     set_variable = {{ name = {since} value = owner.var:sed_calendar_month_key }}
     }}
     set_variable = {{ name = {level} value = b:{building}.level }}
     if = {{ limit = {{ has_variable = {pending} }}
      if = {{ limit = {{ NOT = {{ has_variable = {since} }} }}
-      set_variable = {{ name = {since} value = sed_live_month_key }}
+      set_variable = {{ name = {since} value = owner.var:sed_calendar_month_key }}
      }}
      root = {{ change_variable = {{ name = sed_outcome_observed add = 1 }} }}
      if = {{ limit = {{ b:{building} = {{ OR = {{ occupancy < 0.8 has_failed_hires = yes }} }} }}
       root = {{ change_variable = {{ name = sed_outcome_hiring add = 1 }} }}
-      if = {{ limit = {{ sed_live_month_key >= {{ value = var:{since} add = 3 }} }}
+      if = {{ limit = {{ owner.var:sed_calendar_month_key >= {{ value = var:{since} add = 3 }} }}
        root = {{ change_variable = {{ name = sed_outcome_staff add = 1 }} }}
        if = {{ limit = {{ sed_state_labor_available < 1000 }}
         root = {{ change_variable = {{ name = sed_outcome_workers add = 1 }} }}
