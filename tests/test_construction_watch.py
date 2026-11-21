@@ -2,6 +2,7 @@ import unittest
 
 from script_harness import Country, building, state
 from test_diagnostics import script_definitions
+from tools.pdx_script import parse
 
 
 class ConstructionWatchTests(unittest.TestCase):
@@ -65,3 +66,44 @@ class ConstructionWatchTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_watch_idle'], 0)
         self.assertEqual(c.variables['sed_coord_executor'], 1)
         self.assertIn('advisor_auto_construction_enabled', c.variables)
+
+    def test_old_save_frozen_value_does_not_freeze_monthly_recovery(self):
+        c = self.c
+        # Simulate the observed old-save marker and a cached January 1836 value.
+        c.definitions['sed_live_month_key'] = parse('value = 22032')
+        c.variables.update(sed_watch_month=22032, sed_watch_idle=0,
+                           sed_watch_delegated=True)
+        c.readings.update(year=1844, month=2)
+        c.run('sed_watch_review')
+        self.assertEqual(c.variables['sed_watch_month'], 1844 * 12 + 2)
+        self.assertEqual(c.variables['sed_watch_idle'], 1)
+        c.readings['month'] = 3
+        c.run('sed_watch_review')
+        self.assertEqual(c.variables['sed_watch_idle'], 2)
+        c.run('sed_watch_review')
+        self.assertEqual(c.variables['sed_watch_idle'], 2)
+
+    def test_calendar_refresh_does_not_change_policy_or_queues(self):
+        c = self.c
+        before = dict(c.variables)
+        c.readings.update(year=1844, month=3)
+        c.run('sed_refresh_calendar')
+        before['sed_calendar_month_key'] = 1844 * 12 + 3
+        self.assertEqual(c.variables, before)
+        self.assertEqual(c.constructions, [])
+
+    def test_calendar_migration_does_not_age_old_hiring_markers(self):
+        c = self.c
+        c.variables.pop('sed_calendar_month_key')
+        c.variables.update(sed_asc_window_start=22032, sed_outcome_month=22032)
+        site = state()
+        site['variables'].update(sed_outcome_wood_since=22032,
+                                 sed_outcome_wood_pending=True)
+        c.states = [site]
+        c.readings.update(year=1844, month=3)
+        c.run('sed_refresh_calendar')
+        self.assertNotIn('sed_outcome_wood_since', site['variables'])
+        self.assertTrue(site['variables']['sed_outcome_wood_pending'])
+        self.assertNotIn('sed_asc_window_start', c.variables)
+        self.assertNotIn('sed_outcome_month', c.variables)
+        self.assertEqual(c.variables['sed_calendar_month_key'], 1844 * 12 + 3)

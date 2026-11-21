@@ -367,7 +367,7 @@ class PlanningTests(unittest.TestCase):
         c = self.c
         c.run('sed_set_mode_automatic')
         for readings in ({'net_total_income': -1}, {'net_fixed_income': -1},
-                         {'gold_reserves': 199}, {'principal': 751}):
+                         {'gold_reserves': 199, 'principal': 0, 'net_total_income': 0}, {'principal': 801}):
             with self.subTest(readings=readings):
                 baseline = c.readings.copy()
                 c.readings.update(readings)

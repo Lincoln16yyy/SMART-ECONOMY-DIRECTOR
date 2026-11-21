@@ -66,7 +66,8 @@ class Country:
                              gold_reserves=1000, principal=100, credit=1000, gdp=10000,
                              total_population=1000, average_sol=10, literacy_rate=0.2,
                              **{'modifier:country_construction_add': 10,
-                                'modifier:country_max_weekly_construction_progress_add': 25},
+                                'modifier:country_max_weekly_construction_progress_add': 25,
+                                'modifier:country_private_construction_allocation_mult': 0.5},
                              num_queued_government_constructions=2, num_queued_private_constructions=1,
                              construction_queue_num_queued_government_levels=2,
                              construction_queue_government_duration=0,
@@ -278,6 +279,8 @@ class Country:
             return any(self.condition(entry.value, formation) for formation in self.military_formations)
         if key == 'has_active_production_method':
             return entry.value in scope.get('production_methods', [])
+        if key == 'is_researching_technology':
+            return entry.value in self.readings.get('researching', [])
         if key == 'has_technology_researched':
             return entry.value in self.readings.get('technologies', [])
         if key == 'has_law':
@@ -295,7 +298,10 @@ class Country:
         if key == 'is_building_type':
             return scope.get('building') == entry.value
         if key == 'can_construct_building':
-            return bool(scope.get('can_construct_building'))
+            permission = scope.get('can_construct_building')
+            if isinstance(permission, (list, set, tuple)):
+                return entry.value in permission
+            return bool(permission)
         if key == 'can_activate_production_method':
             kind = child(entry.value, 'building_type')
             method = child(entry.value, 'production_method')
@@ -414,6 +420,13 @@ class Country:
                 if self.construction_accepted:
                     name = 'construction_queue_num_queued_government_levels'
                     self.readings[name] = self.readings.get(name, 0) + 1
+                    if getattr(self, 'mutate_queue_levels', False) and target is not None:
+                        queued = self.building(target, value)
+                        if queued is None:
+                            queued = building(value, level=0, queued_levels=1)
+                            target['buildings'].append(queued)
+                        else:
+                            queued['level_after_queued_constructions'] += 1
             elif key == 'add_journal_entry':
                 self.journals_added += 1
                 self.active_journal = True

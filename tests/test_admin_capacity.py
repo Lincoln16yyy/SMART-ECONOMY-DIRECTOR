@@ -8,7 +8,8 @@ from script_harness import Country, building, state
 
 class AdminCapacityTests(unittest.TestCase):
     def setUp(self):
-        self.c = Country(script_definitions(), construction_queue_num_queued_government_levels=0)
+        self.c = Country(script_definitions(), construction_queue_num_queued_government_levels=0,
+                         principal=0, net_total_income=2000, gold_reserves=100000)
         self.c.run('sed_enable_country')
         self.c.states = [state()]
         self.c.variables['sed_build_budget_known'] = 1
@@ -29,6 +30,19 @@ class AdminCapacityTests(unittest.TestCase):
         self.assertEqual(c.variables['sed_admin_action_status'], 1)
         self.assertEqual(c.states[0]['variables'].get('sed_admin_intent_level'), 0)
         self.assertIn('sed_admin_request_pending', c.states[0]['variables'])
+
+    def test_paraguay_with_advisor_takes_direct_admin_instead_of_waiting(self):
+        c = self.c
+        c.variables['advisor_enabled'] = True
+        c.readings.update(bureaucracy=-10, principal=0, gold_reserves=100000,
+                          net_total_income=2000)
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_plan_goal'], 6)
+        self.assertEqual(c.variables['sed_coord_executor'], 11)
+        self.assertNotIn('advisor_auto_construction_enabled', c.variables)
+        self.assertEqual([project['building'] for project in c.constructions],
+                         ['building_government_administration'])
 
     def test_tax_capacity_goal_acts_only_where_the_state_exceeds_capacity(self):
         c = self.c
@@ -63,7 +77,7 @@ class AdminCapacityTests(unittest.TestCase):
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')
         self.assertEqual(c.variables['sed_plan_goal'], 8)
-        self.assertEqual(c.constructions, [])
+        self.assertNotIn('building_government_administration', [p['building'] for p in c.constructions])
 
     def test_monthly_review_infers_completion_from_the_level(self):
         c = self.c
@@ -96,6 +110,19 @@ class AdminCapacityTests(unittest.TestCase):
         self.assertIn('Administração pública', pt)
         self.assertIn('Government administration', en)
         self.assertIn('Supply Chain', en)
+
+    def test_no_eligible_admin_does_not_switch_off_economy_advisor(self):
+        c = self.c
+        c.variables['advisor_enabled'] = True
+        c.readings['bureaucracy'] = -23.8
+        c.states[0]['buildings'].append(
+            building('building_government_administration', occupancy=0.2))
+        c.run('sed_set_mode_automatic')
+        c.run('sed_auto_apply_monthly')
+        self.assertEqual(c.variables['sed_plan_goal'], 6)
+        self.assertEqual(c.variables['sed_coord_executor'], 1)
+        self.assertIn('advisor_auto_construction_enabled', c.variables)
+        self.assertEqual(c.constructions, [])
 
 
 if __name__ == '__main__':

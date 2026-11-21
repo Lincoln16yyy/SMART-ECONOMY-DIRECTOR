@@ -37,7 +37,7 @@ class PowerCapacityTests(unittest.TestCase):
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')
         self.assertEqual(c.variables['sed_plan_goal'], 8)
-        self.assertEqual(c.constructions, [])
+        self.assertNotIn('building_power_plant', [p['building'] for p in c.constructions])
 
     def test_electricity_must_be_dear_in_the_state_that_hosts_the_plant(self):
         c = self.c

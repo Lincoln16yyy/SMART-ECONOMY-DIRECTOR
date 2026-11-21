@@ -1,5 +1,76 @@
 # Smart Economy Director — Victoria 3 1.15
 
+Na 0.7.62, uma expansão problemática deixa de suspender toda a diversificação:
+o Director procura projetos saudáveis em outros setores/estados. Pode abrir
+uma base regional de uma família com falha acompanhada por três meses, sem
+produtor saudável nem outra expansão pendente nessa família, exigindo margem
+de trabalhadores para dois níveis do tipo escolhido e mantendo os filtros
+de insumos, retorno, orçamento e construção permitida.
+
+O crescimento civil pode compartilhar capacidade com a fila privada quando
+a fila pública está vazia. A autorização exige conciliar níveis observáveis
+com a fila privada, métodos conhecidos, previsão de trabalhadores/insumos,
+reserva nominal para cada nível privado e para um projeto público, além da
+parcela pública definida pela lei e de margem de caixa de 25%. Obras não
+identificadas mantêm a trava. O governo não muda a alocação legal nem cancela
+obras privadas; durante sua tentativa compartilhada, segura novas delegações
+até a fila pública esvaziar na revisão. As regras próprias do Advisor continuam
+vigentes nos demais casos. Autoria de cada projeto continua indisponível.
+
+Entre alternativas viáveis, a prioridade considera porte populacional,
+trabalhadores estimados, oferta de bens essenciais e fornecedores operantes
+no território. Pesos limitados a 1–1,75 não tornam um projeto deficitário
+aprovável. Déficit de oferta no mercado não é tratado como importação medida
+do país. Resultado em campanha e save/reload na engine NÃO VERIFICADOS.
+
+Na 0.7.61, o Automático pode fundar o primeiro setor de construção quando
+há investimento produtivo viável ou fila longa, insumos e mão de obra, além
+de superávit para materiais e salários. Usa uma referência conservadora dos
+métodos disponíveis e não assume uma folha salarial sem amostra. Escassez e
+necessidades cívicas mantêm precedência; o setor vem antes da universidade
+quando ambos forem investimentos discricionários elegíveis.
+
+A execução direta inclui aço, vidro, motores, fertilizante, chumbo e enxofre:
+são 15 bens e 20 produtores civis, com verificação das cadeias de insumos.
+Previsões de obras próprias são guardadas antes de alterar a fila. Após a
+conclusão e três meses para contratação, lucro e salários observados por
+nível ajudam a ajustar a seleção: retorno abaixo de metade do previsto
+reduz a pontuação; prejuízo bloqueia repetição discricionária no mesmo local
+até uma amostra posterior saudável. A média do prédio não prova o retorno
+causal da última expansão; prédios subsidiados ou sem contratação não recebem
+esse veredito de lucro.
+
+A dívida ganha acompanhamento mensal: estabilização do déficit, investimento
+com superávit, prioridade a amortizar e inadimplência. Dívida acima de 80%
+do crédito ou aumentos superiores a 1% em dois meses consecutivos suspendem
+expansão discricionária. O superávit retido é amortizado pelo próprio jogo;
+o mod não cria dinheiro nem perdoa dívida. Save/reload e resultados em
+campanha na 0.7.61 ainda NÃO VERIFICADOS.
+
+Na 0.7.60, o Automático procura investimento civil entre nove bens e 14
+produtores verificados, incluindo fundação sem escassez prévia. Ordena
+alternativas pelo retorno estimado por ponto de construção e favorece o
+primeiro produtor nacional. O custo da obra selecionada entra no orçamento.
+O Advisor pode ceder a execução quando registra bloqueio de orçamento ou
+após duas delegações sem obra, sempre com candidato viável e guardas ativas.
+
+Países endividados podem investir sem reserva de ouro se a dívida não passa
+de 80% do crédito, o saldo cobre os materiais com margem de 25% e o crédito
+livre cobre quatro semanas de despesas fixas. Inadimplência e déficit não
+recebem essa exceção. Administração e universidade passam a usar referências
+de manutenção limitadas às tecnologias disponíveis. São estimativas, não
+garantia de lucro ou de ascensão a grande potência. Campanha e save/reload
+com 0.7.60 ainda NÃO VERIFICADOS.
+
+Na 0.7.58, um objetivo de administração ou energia sem candidato direto
+e sem Supply Chain mantém o Economy Advisor disponível para avaliar
+outras obras. O Diário mostra por que a administração foi adiada.
+
+Na 0.7.56, universidades e administrações têm uma guarda de manutenção
+semanal baseada em insumos e salários observados. Expansões recebem três
+meses para contratar antes do bloqueio persistente por pessoal. O Diário
+identifica um prédio acompanhado, o estado e um insumo usado em escassez.
+
 Na 0.7.55, a escolha do estado considera trabalhadores disponíveis,
 acesso ao mercado e folga de infraestrutura. Fábricas operantes com
 escassez também priorizam fornecedores. O Diário mostra a última obra

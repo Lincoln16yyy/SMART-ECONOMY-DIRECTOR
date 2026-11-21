@@ -34,6 +34,13 @@ EXTERNAL_PM_VARIABLES = {
     'building_artillery_foundry': ('zw_var_auto_pm_building_artillery_foundry',),
     'building_munition_plant': ('zw_var_auto_pm_building_munition_plant',),
     'building_paper_mill': ('zw_var_auto_pm_building_paper_mill',),
+    # Confirmed in Auto-Apply PMs/common/scripted_buttons/zw_aap_buttons.txt.
+    'building_steel_mill': ('zw_var_auto_pm_building_steel_mill',),
+    'building_glassworks': ('zw_var_auto_pm_building_glassworks',),
+    'building_motor_industry': ('zw_var_auto_pm_building_motor_industry',),
+    'building_chemical_plant': ('zw_var_auto_pm_building_chemical_plant',),
+    'building_sulfur_mine': ('zw_var_auto_pm_building_sulfur_mine', 'zw_var_auto_pm_building_group_mines'),
+    'building_lead_mine': ('zw_var_auto_pm_building_lead_mine', 'zw_var_auto_pm_building_group_mines'),
 }
 
 
@@ -78,9 +85,10 @@ def reservation_effects():
  }
 }
 sed_begin_pm_input_reservations = {
- if = { limit = { NOT = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key } }
+ sed_refresh_calendar = yes
+ if = { limit = { NOT = { has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = var:sed_calendar_month_key } }
   sed_clear_pm_input_reservations = yes
-  set_variable = { name = sed_pm_inputs_month value = sed_live_month_key }
+  set_variable = { name = sed_pm_inputs_month value = var:sed_calendar_month_key }
  }
  sed_refresh_input_readings = yes
 }
@@ -257,7 +265,7 @@ def upgrade_inputs(building, current, target):
 def upgrade_triggers(targets, variants, recovery=False):
     result = ['''sed_pm_upgrade_month_limit_reached = {
  has_variable = sed_pm_upgrade_last_attempt_month
- var:sed_pm_upgrade_last_attempt_month = sed_live_month_key
+ var:sed_pm_upgrade_last_attempt_month = var:sed_calendar_month_key
 }''']
     pairs = recoveries(targets, variants) if recovery else upgrades(targets, variants)
     prefix = 'sed_pm_recovery' if recovery else 'sed_pm_upgrade'
@@ -270,7 +278,7 @@ def upgrade_triggers(targets, variants, recovery=False):
         inputs = '\n'.join(f''' sed_input_headroom_{input_good} >= {{
   value = {amount * 1.25:g} multiply = b:{building}.level
  }}''' for input_good, amount in upgrade_inputs(building, current, target).items())
-        cooldown_guard = '' if recovery else f' OR = {{ NOT = {{ has_variable = {cooldown} }} var:{cooldown} <= sed_live_month_key }}'
+        cooldown_guard = '' if recovery else f' OR = {{ NOT = {{ has_variable = {cooldown} }} var:{cooldown} <= owner.var:sed_calendar_month_key }}'
         demand_guard = '' if recovery else f'''  OR = {{ market = {{ mg:{good} ?= {{ market_goods_has_goods_shortage = yes }} }}
    has_variable = sed_input_priority_{good}
   }}'''
@@ -317,6 +325,7 @@ def upgrade_effects(targets, variants, recovery=False):
     prefix = 'sed_pm_recovery' if recovery else 'sed_pm_upgrade'
     effect_name = 'sed_recover_existing_industry' if recovery else 'sed_modernize_existing_industry'
     result = ['''__EFFECT_NAME__ = {
+ sed_refresh_calendar = yes
  if = { limit = {
   is_player = yes has_variable = sed_enabled has_variable = sed_mode_automatic
   NOT = { has_variable = sed_mode_manual }
@@ -362,7 +371,7 @@ def upgrade_effects(targets, variants, recovery=False):
         result.append(f'''   {branch} = {{ limit = {{ var:sed_pm_upgrade_choice = {index} {prefix}_{index}_eligible = yes }}
     set_variable = {{ name = sed_pm_upgrade_levels value = b:{building}.level }}
     owner = {{
-     set_variable = {{ name = sed_pm_upgrade_last_attempt_month value = sed_live_month_key }}
+     set_variable = {{ name = sed_pm_upgrade_last_attempt_month value = var:sed_calendar_month_key }}
      set_variable = {{ name = sed_pm_upgrade_status value = 2 }}
      sed_record_auto_attempt = yes
      if = {{ limit = {{ has_variable = sed_coord_active }} sed_coord_sync = yes }}
@@ -370,7 +379,7 @@ def upgrade_effects(targets, variants, recovery=False):
     activate_production_method = {{ building_type = {building} production_method = {target} }}
 {reserves}
     if = {{ limit = {{ b:{building} = {{ has_active_production_method = {target} }} }}
-     set_variable = {{ name = {cooldown} value = {{ value = sed_live_month_key add = 3 }} }}
+     set_variable = {{ name = {cooldown} value = {{ value = owner.var:sed_calendar_month_key add = 3 }} }}
      owner = {{ set_variable = {{ name = sed_pm_upgrade_status value = {3 if recovery else 1} }} }}
     }}
     remove_variable = sed_pm_upgrade_levels

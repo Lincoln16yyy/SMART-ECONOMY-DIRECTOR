@@ -11,10 +11,10 @@ sed_pulse.1 = {
    limit = {
     has_variable = sed_mode_automatic
     has_variable = sed_auto_retry_month
-    var:sed_auto_retry_month = sed_live_month_key
+    var:sed_auto_retry_month = var:sed_calendar_month_key
     NOT = { sed_auto_month_limit_reached = yes }
     NOT = { in_default = yes }
-    OR = { construction_queue_num_queued_private_levels > 0 is_construction_paused = yes }
+    OR = { AND = { construction_queue_num_queued_private_levels > 0 NOT = { AND = { sed_private_parallel_capacity_safe = yes has_variable = sed_plan_count var:sed_plan_count = 0 } } } is_construction_paused = yes }
    }
    # While the month and blocker persist, avoid rescanning every state.
    sed_schedule_auto_retry = yes
@@ -51,13 +51,13 @@ sed_pulse.21 = {
   name = sed_assist_notice_option_later
   custom_tooltip = sed_assist_notice_option_later_tt
   ai_chance = { base = 30 }
-  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 2 } }
+  set_variable = { name = sed_assist_notice_month value = { value = var:sed_calendar_month_key add = 2 } }
  }
  option = {
   name = sed_assist_notice_option_mute
   custom_tooltip = sed_assist_notice_option_mute_tt
   ai_chance = { base = 10 }
-  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_assist_notice_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
 }
 
@@ -82,13 +82,13 @@ sed_pulse.22 = {
   name = sed_assist_notice_option_later
   custom_tooltip = sed_assist_notice_option_later_tt
   ai_chance = { base = 30 }
-  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 2 } }
+  set_variable = { name = sed_assist_notice_month value = { value = var:sed_calendar_month_key add = 2 } }
  }
  option = {
   name = sed_assist_notice_option_mute
   custom_tooltip = sed_assist_notice_option_mute_tt
   ai_chance = { base = 10 }
-  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_assist_notice_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
 }
 
@@ -113,13 +113,13 @@ sed_pulse.23 = {
   name = sed_assist_notice_option_later
   custom_tooltip = sed_assist_notice_option_later_tt
   ai_chance = { base = 30 }
-  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 2 } }
+  set_variable = { name = sed_assist_notice_month value = { value = var:sed_calendar_month_key add = 2 } }
  }
  option = {
   name = sed_assist_notice_option_mute
   custom_tooltip = sed_assist_notice_option_mute_tt
   ai_chance = { base = 10 }
-  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_assist_notice_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
 }
 
@@ -144,13 +144,13 @@ sed_pulse.24 = {
   name = sed_assist_notice_option_later
   custom_tooltip = sed_assist_notice_option_later_tt
   ai_chance = { base = 30 }
-  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 2 } }
+  set_variable = { name = sed_assist_notice_month value = { value = var:sed_calendar_month_key add = 2 } }
  }
  option = {
   name = sed_assist_notice_option_mute
   custom_tooltip = sed_assist_notice_option_mute_tt
   ai_chance = { base = 10 }
-  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_assist_notice_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
 }
 
@@ -175,13 +175,13 @@ sed_pulse.25 = {
   name = sed_assist_notice_option_later
   custom_tooltip = sed_assist_notice_option_later_tt
   ai_chance = { base = 30 }
-  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 2 } }
+  set_variable = { name = sed_assist_notice_month value = { value = var:sed_calendar_month_key add = 2 } }
  }
  option = {
   name = sed_assist_notice_option_mute
   custom_tooltip = sed_assist_notice_option_mute_tt
   ai_chance = { base = 10 }
-  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_assist_notice_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
 }
 
@@ -206,13 +206,13 @@ sed_pulse.26 = {
   name = sed_assist_notice_option_later
   custom_tooltip = sed_assist_notice_option_later_tt
   ai_chance = { base = 30 }
-  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 2 } }
+  set_variable = { name = sed_assist_notice_month value = { value = var:sed_calendar_month_key add = 2 } }
  }
  option = {
   name = sed_assist_notice_option_mute
   custom_tooltip = sed_assist_notice_option_mute_tt
   ai_chance = { base = 10 }
-  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_assist_notice_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
 }
 
@@ -237,13 +237,13 @@ sed_pulse.27 = {
   name = sed_assist_notice_option_later
   custom_tooltip = sed_assist_notice_option_later_tt
   ai_chance = { base = 30 }
-  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 2 } }
+  set_variable = { name = sed_assist_notice_month value = { value = var:sed_calendar_month_key add = 2 } }
  }
  option = {
   name = sed_assist_notice_option_mute
   custom_tooltip = sed_assist_notice_option_mute_tt
   ai_chance = { base = 10 }
-  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_assist_notice_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
 }
 
@@ -268,13 +268,13 @@ sed_pulse.28 = {
   name = sed_assist_notice_option_later
   custom_tooltip = sed_assist_notice_option_later_tt
   ai_chance = { base = 30 }
-  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 2 } }
+  set_variable = { name = sed_assist_notice_month value = { value = var:sed_calendar_month_key add = 2 } }
  }
  option = {
   name = sed_assist_notice_option_mute
   custom_tooltip = sed_assist_notice_option_mute_tt
   ai_chance = { base = 10 }
-  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_assist_notice_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
 }
 
@@ -299,13 +299,13 @@ sed_pulse.29 = {
   name = sed_assist_notice_option_later
   custom_tooltip = sed_assist_notice_option_later_tt
   ai_chance = { base = 30 }
-  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 2 } }
+  set_variable = { name = sed_assist_notice_month value = { value = var:sed_calendar_month_key add = 2 } }
  }
  option = {
   name = sed_assist_notice_option_mute
   custom_tooltip = sed_assist_notice_option_mute_tt
   ai_chance = { base = 10 }
-  set_variable = { name = sed_assist_notice_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_assist_notice_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
 }
 
@@ -320,13 +320,13 @@ sed_pulse.2 = {
  on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
  trigger = { is_player = yes has_variable = sed_enabled }
  immediate = {
-  set_variable = { name = sed_import_notice_wood_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_import_notice_wood_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
  option = {
   name = sed_import_notice_wood_option_trade
   custom_tooltip = sed_import_notice_wood_option_trade_tt
   ai_chance = { base = 40 }
-  set_variable = { name = sed_import_notice_wood_month value = { value = sed_live_month_key add = 12 } }
+  set_variable = { name = sed_import_notice_wood_month value = { value = var:sed_calendar_month_key add = 12 } }
  }
  option = {
   name = sed_import_notice_wood_option_plan
@@ -339,7 +339,7 @@ sed_pulse.2 = {
   name = sed_import_notice_wood_option_mute
   custom_tooltip = sed_import_notice_wood_option_mute_tt
   ai_chance = { base = 20 }
-  set_variable = { name = sed_import_notice_wood_month value = { value = sed_live_month_key add = 24 } }
+  set_variable = { name = sed_import_notice_wood_month value = { value = var:sed_calendar_month_key add = 24 } }
  }
 }
 
@@ -354,13 +354,13 @@ sed_pulse.3 = {
  on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
  trigger = { is_player = yes has_variable = sed_enabled }
  immediate = {
-  set_variable = { name = sed_import_notice_iron_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_import_notice_iron_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
  option = {
   name = sed_import_notice_iron_option_trade
   custom_tooltip = sed_import_notice_iron_option_trade_tt
   ai_chance = { base = 40 }
-  set_variable = { name = sed_import_notice_iron_month value = { value = sed_live_month_key add = 12 } }
+  set_variable = { name = sed_import_notice_iron_month value = { value = var:sed_calendar_month_key add = 12 } }
  }
  option = {
   name = sed_import_notice_iron_option_plan
@@ -373,7 +373,7 @@ sed_pulse.3 = {
   name = sed_import_notice_iron_option_mute
   custom_tooltip = sed_import_notice_iron_option_mute_tt
   ai_chance = { base = 20 }
-  set_variable = { name = sed_import_notice_iron_month value = { value = sed_live_month_key add = 24 } }
+  set_variable = { name = sed_import_notice_iron_month value = { value = var:sed_calendar_month_key add = 24 } }
  }
 }
 
@@ -388,13 +388,13 @@ sed_pulse.4 = {
  on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
  trigger = { is_player = yes has_variable = sed_enabled }
  immediate = {
-  set_variable = { name = sed_import_notice_coal_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_import_notice_coal_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
  option = {
   name = sed_import_notice_coal_option_trade
   custom_tooltip = sed_import_notice_coal_option_trade_tt
   ai_chance = { base = 40 }
-  set_variable = { name = sed_import_notice_coal_month value = { value = sed_live_month_key add = 12 } }
+  set_variable = { name = sed_import_notice_coal_month value = { value = var:sed_calendar_month_key add = 12 } }
  }
  option = {
   name = sed_import_notice_coal_option_plan
@@ -407,7 +407,7 @@ sed_pulse.4 = {
   name = sed_import_notice_coal_option_mute
   custom_tooltip = sed_import_notice_coal_option_mute_tt
   ai_chance = { base = 20 }
-  set_variable = { name = sed_import_notice_coal_month value = { value = sed_live_month_key add = 24 } }
+  set_variable = { name = sed_import_notice_coal_month value = { value = var:sed_calendar_month_key add = 24 } }
  }
 }
 
@@ -422,13 +422,13 @@ sed_pulse.5 = {
  on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
  trigger = { is_player = yes has_variable = sed_enabled }
  immediate = {
-  set_variable = { name = sed_import_notice_grain_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_import_notice_grain_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
  option = {
   name = sed_import_notice_grain_option_trade
   custom_tooltip = sed_import_notice_grain_option_trade_tt
   ai_chance = { base = 40 }
-  set_variable = { name = sed_import_notice_grain_month value = { value = sed_live_month_key add = 12 } }
+  set_variable = { name = sed_import_notice_grain_month value = { value = var:sed_calendar_month_key add = 12 } }
  }
  option = {
   name = sed_import_notice_grain_option_plan
@@ -441,7 +441,7 @@ sed_pulse.5 = {
   name = sed_import_notice_grain_option_mute
   custom_tooltip = sed_import_notice_grain_option_mute_tt
   ai_chance = { base = 20 }
-  set_variable = { name = sed_import_notice_grain_month value = { value = sed_live_month_key add = 24 } }
+  set_variable = { name = sed_import_notice_grain_month value = { value = var:sed_calendar_month_key add = 24 } }
  }
 }
 
@@ -456,13 +456,13 @@ sed_pulse.6 = {
  on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
  trigger = { is_player = yes has_variable = sed_enabled }
  immediate = {
-  set_variable = { name = sed_import_notice_fabric_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_import_notice_fabric_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
  option = {
   name = sed_import_notice_fabric_option_trade
   custom_tooltip = sed_import_notice_fabric_option_trade_tt
   ai_chance = { base = 40 }
-  set_variable = { name = sed_import_notice_fabric_month value = { value = sed_live_month_key add = 12 } }
+  set_variable = { name = sed_import_notice_fabric_month value = { value = var:sed_calendar_month_key add = 12 } }
  }
  option = {
   name = sed_import_notice_fabric_option_plan
@@ -475,7 +475,7 @@ sed_pulse.6 = {
   name = sed_import_notice_fabric_option_mute
   custom_tooltip = sed_import_notice_fabric_option_mute_tt
   ai_chance = { base = 20 }
-  set_variable = { name = sed_import_notice_fabric_month value = { value = sed_live_month_key add = 24 } }
+  set_variable = { name = sed_import_notice_fabric_month value = { value = var:sed_calendar_month_key add = 24 } }
  }
 }
 
@@ -490,13 +490,13 @@ sed_pulse.7 = {
  on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
  trigger = { is_player = yes has_variable = sed_enabled }
  immediate = {
-  set_variable = { name = sed_import_notice_tools_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_import_notice_tools_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
  option = {
   name = sed_import_notice_tools_option_trade
   custom_tooltip = sed_import_notice_tools_option_trade_tt
   ai_chance = { base = 40 }
-  set_variable = { name = sed_import_notice_tools_month value = { value = sed_live_month_key add = 12 } }
+  set_variable = { name = sed_import_notice_tools_month value = { value = var:sed_calendar_month_key add = 12 } }
  }
  option = {
   name = sed_import_notice_tools_option_plan
@@ -509,7 +509,7 @@ sed_pulse.7 = {
   name = sed_import_notice_tools_option_mute
   custom_tooltip = sed_import_notice_tools_option_mute_tt
   ai_chance = { base = 20 }
-  set_variable = { name = sed_import_notice_tools_month value = { value = sed_live_month_key add = 24 } }
+  set_variable = { name = sed_import_notice_tools_month value = { value = var:sed_calendar_month_key add = 24 } }
  }
 }
 
@@ -524,13 +524,13 @@ sed_pulse.8 = {
  on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
  trigger = { is_player = yes has_variable = sed_enabled }
  immediate = {
-  set_variable = { name = sed_import_notice_groceries_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_import_notice_groceries_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
  option = {
   name = sed_import_notice_groceries_option_trade
   custom_tooltip = sed_import_notice_groceries_option_trade_tt
   ai_chance = { base = 40 }
-  set_variable = { name = sed_import_notice_groceries_month value = { value = sed_live_month_key add = 12 } }
+  set_variable = { name = sed_import_notice_groceries_month value = { value = var:sed_calendar_month_key add = 12 } }
  }
  option = {
   name = sed_import_notice_groceries_option_plan
@@ -543,7 +543,7 @@ sed_pulse.8 = {
   name = sed_import_notice_groceries_option_mute
   custom_tooltip = sed_import_notice_groceries_option_mute_tt
   ai_chance = { base = 20 }
-  set_variable = { name = sed_import_notice_groceries_month value = { value = sed_live_month_key add = 24 } }
+  set_variable = { name = sed_import_notice_groceries_month value = { value = var:sed_calendar_month_key add = 24 } }
  }
 }
 
@@ -558,13 +558,13 @@ sed_pulse.9 = {
  on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
  trigger = { is_player = yes has_variable = sed_enabled }
  immediate = {
-  set_variable = { name = sed_import_notice_clothes_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_import_notice_clothes_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
  option = {
   name = sed_import_notice_clothes_option_trade
   custom_tooltip = sed_import_notice_clothes_option_trade_tt
   ai_chance = { base = 40 }
-  set_variable = { name = sed_import_notice_clothes_month value = { value = sed_live_month_key add = 12 } }
+  set_variable = { name = sed_import_notice_clothes_month value = { value = var:sed_calendar_month_key add = 12 } }
  }
  option = {
   name = sed_import_notice_clothes_option_plan
@@ -577,7 +577,7 @@ sed_pulse.9 = {
   name = sed_import_notice_clothes_option_mute
   custom_tooltip = sed_import_notice_clothes_option_mute_tt
   ai_chance = { base = 20 }
-  set_variable = { name = sed_import_notice_clothes_month value = { value = sed_live_month_key add = 24 } }
+  set_variable = { name = sed_import_notice_clothes_month value = { value = var:sed_calendar_month_key add = 24 } }
  }
 }
 
@@ -592,13 +592,13 @@ sed_pulse.10 = {
  on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
  trigger = { is_player = yes has_variable = sed_enabled }
  immediate = {
-  set_variable = { name = sed_import_notice_small_arms_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_import_notice_small_arms_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
  option = {
   name = sed_import_notice_small_arms_option_trade
   custom_tooltip = sed_import_notice_small_arms_option_trade_tt
   ai_chance = { base = 40 }
-  set_variable = { name = sed_import_notice_small_arms_month value = { value = sed_live_month_key add = 12 } }
+  set_variable = { name = sed_import_notice_small_arms_month value = { value = var:sed_calendar_month_key add = 12 } }
  }
  option = {
   name = sed_import_notice_small_arms_option_plan
@@ -611,7 +611,7 @@ sed_pulse.10 = {
   name = sed_import_notice_small_arms_option_mute
   custom_tooltip = sed_import_notice_small_arms_option_mute_tt
   ai_chance = { base = 20 }
-  set_variable = { name = sed_import_notice_small_arms_month value = { value = sed_live_month_key add = 24 } }
+  set_variable = { name = sed_import_notice_small_arms_month value = { value = var:sed_calendar_month_key add = 24 } }
  }
 }
 
@@ -626,13 +626,13 @@ sed_pulse.11 = {
  on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
  trigger = { is_player = yes has_variable = sed_enabled }
  immediate = {
-  set_variable = { name = sed_import_notice_artillery_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_import_notice_artillery_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
  option = {
   name = sed_import_notice_artillery_option_trade
   custom_tooltip = sed_import_notice_artillery_option_trade_tt
   ai_chance = { base = 40 }
-  set_variable = { name = sed_import_notice_artillery_month value = { value = sed_live_month_key add = 12 } }
+  set_variable = { name = sed_import_notice_artillery_month value = { value = var:sed_calendar_month_key add = 12 } }
  }
  option = {
   name = sed_import_notice_artillery_option_plan
@@ -645,7 +645,7 @@ sed_pulse.11 = {
   name = sed_import_notice_artillery_option_mute
   custom_tooltip = sed_import_notice_artillery_option_mute_tt
   ai_chance = { base = 20 }
-  set_variable = { name = sed_import_notice_artillery_month value = { value = sed_live_month_key add = 24 } }
+  set_variable = { name = sed_import_notice_artillery_month value = { value = var:sed_calendar_month_key add = 24 } }
  }
 }
 
@@ -660,13 +660,13 @@ sed_pulse.12 = {
  on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
  trigger = { is_player = yes has_variable = sed_enabled }
  immediate = {
-  set_variable = { name = sed_import_notice_ammunition_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_import_notice_ammunition_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
  option = {
   name = sed_import_notice_ammunition_option_trade
   custom_tooltip = sed_import_notice_ammunition_option_trade_tt
   ai_chance = { base = 40 }
-  set_variable = { name = sed_import_notice_ammunition_month value = { value = sed_live_month_key add = 12 } }
+  set_variable = { name = sed_import_notice_ammunition_month value = { value = var:sed_calendar_month_key add = 12 } }
  }
  option = {
   name = sed_import_notice_ammunition_option_plan
@@ -679,7 +679,7 @@ sed_pulse.12 = {
   name = sed_import_notice_ammunition_option_mute
   custom_tooltip = sed_import_notice_ammunition_option_mute_tt
   ai_chance = { base = 20 }
-  set_variable = { name = sed_import_notice_ammunition_month value = { value = sed_live_month_key add = 24 } }
+  set_variable = { name = sed_import_notice_ammunition_month value = { value = var:sed_calendar_month_key add = 24 } }
  }
 }
 
@@ -694,13 +694,13 @@ sed_pulse.13 = {
  on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
  trigger = { is_player = yes has_variable = sed_enabled }
  immediate = {
-  set_variable = { name = sed_import_notice_paper_month value = { value = sed_live_month_key add = 6 } }
+  set_variable = { name = sed_import_notice_paper_month value = { value = var:sed_calendar_month_key add = 6 } }
  }
  option = {
   name = sed_import_notice_paper_option_trade
   custom_tooltip = sed_import_notice_paper_option_trade_tt
   ai_chance = { base = 40 }
-  set_variable = { name = sed_import_notice_paper_month value = { value = sed_live_month_key add = 12 } }
+  set_variable = { name = sed_import_notice_paper_month value = { value = var:sed_calendar_month_key add = 12 } }
  }
  option = {
   name = sed_import_notice_paper_option_plan
@@ -713,6 +713,210 @@ sed_pulse.13 = {
   name = sed_import_notice_paper_option_mute
   custom_tooltip = sed_import_notice_paper_option_mute_tt
   ai_chance = { base = 20 }
-  set_variable = { name = sed_import_notice_paper_month value = { value = sed_live_month_key add = 24 } }
+  set_variable = { name = sed_import_notice_paper_month value = { value = var:sed_calendar_month_key add = 24 } }
+ }
+}
+
+# Advisory: no local expansion is eligible, so importing is the remaining lever.
+sed_pulse.14 = {
+ type = country_event
+ placement = root
+ title = sed_import_notice_steel_title
+ desc = sed_import_notice_steel_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  set_variable = { name = sed_import_notice_steel_month value = { value = var:sed_calendar_month_key add = 6 } }
+ }
+ option = {
+  name = sed_import_notice_steel_option_trade
+  custom_tooltip = sed_import_notice_steel_option_trade_tt
+  ai_chance = { base = 40 }
+  set_variable = { name = sed_import_notice_steel_month value = { value = var:sed_calendar_month_key add = 12 } }
+ }
+ option = {
+  name = sed_import_notice_steel_option_plan
+  custom_tooltip = sed_import_notice_steel_option_plan_tt
+  default_option = yes
+  ai_chance = { base = 40 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_import_notice_steel_option_mute
+  custom_tooltip = sed_import_notice_steel_option_mute_tt
+  ai_chance = { base = 20 }
+  set_variable = { name = sed_import_notice_steel_month value = { value = var:sed_calendar_month_key add = 24 } }
+ }
+}
+
+# Advisory: no local expansion is eligible, so importing is the remaining lever.
+sed_pulse.15 = {
+ type = country_event
+ placement = root
+ title = sed_import_notice_glass_title
+ desc = sed_import_notice_glass_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  set_variable = { name = sed_import_notice_glass_month value = { value = var:sed_calendar_month_key add = 6 } }
+ }
+ option = {
+  name = sed_import_notice_glass_option_trade
+  custom_tooltip = sed_import_notice_glass_option_trade_tt
+  ai_chance = { base = 40 }
+  set_variable = { name = sed_import_notice_glass_month value = { value = var:sed_calendar_month_key add = 12 } }
+ }
+ option = {
+  name = sed_import_notice_glass_option_plan
+  custom_tooltip = sed_import_notice_glass_option_plan_tt
+  default_option = yes
+  ai_chance = { base = 40 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_import_notice_glass_option_mute
+  custom_tooltip = sed_import_notice_glass_option_mute_tt
+  ai_chance = { base = 20 }
+  set_variable = { name = sed_import_notice_glass_month value = { value = var:sed_calendar_month_key add = 24 } }
+ }
+}
+
+# Advisory: no local expansion is eligible, so importing is the remaining lever.
+sed_pulse.16 = {
+ type = country_event
+ placement = root
+ title = sed_import_notice_engines_title
+ desc = sed_import_notice_engines_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  set_variable = { name = sed_import_notice_engines_month value = { value = var:sed_calendar_month_key add = 6 } }
+ }
+ option = {
+  name = sed_import_notice_engines_option_trade
+  custom_tooltip = sed_import_notice_engines_option_trade_tt
+  ai_chance = { base = 40 }
+  set_variable = { name = sed_import_notice_engines_month value = { value = var:sed_calendar_month_key add = 12 } }
+ }
+ option = {
+  name = sed_import_notice_engines_option_plan
+  custom_tooltip = sed_import_notice_engines_option_plan_tt
+  default_option = yes
+  ai_chance = { base = 40 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_import_notice_engines_option_mute
+  custom_tooltip = sed_import_notice_engines_option_mute_tt
+  ai_chance = { base = 20 }
+  set_variable = { name = sed_import_notice_engines_month value = { value = var:sed_calendar_month_key add = 24 } }
+ }
+}
+
+# Advisory: no local expansion is eligible, so importing is the remaining lever.
+sed_pulse.17 = {
+ type = country_event
+ placement = root
+ title = sed_import_notice_fertilizer_title
+ desc = sed_import_notice_fertilizer_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  set_variable = { name = sed_import_notice_fertilizer_month value = { value = var:sed_calendar_month_key add = 6 } }
+ }
+ option = {
+  name = sed_import_notice_fertilizer_option_trade
+  custom_tooltip = sed_import_notice_fertilizer_option_trade_tt
+  ai_chance = { base = 40 }
+  set_variable = { name = sed_import_notice_fertilizer_month value = { value = var:sed_calendar_month_key add = 12 } }
+ }
+ option = {
+  name = sed_import_notice_fertilizer_option_plan
+  custom_tooltip = sed_import_notice_fertilizer_option_plan_tt
+  default_option = yes
+  ai_chance = { base = 40 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_import_notice_fertilizer_option_mute
+  custom_tooltip = sed_import_notice_fertilizer_option_mute_tt
+  ai_chance = { base = 20 }
+  set_variable = { name = sed_import_notice_fertilizer_month value = { value = var:sed_calendar_month_key add = 24 } }
+ }
+}
+
+# Advisory: no local expansion is eligible, so importing is the remaining lever.
+sed_pulse.18 = {
+ type = country_event
+ placement = root
+ title = sed_import_notice_sulfur_title
+ desc = sed_import_notice_sulfur_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  set_variable = { name = sed_import_notice_sulfur_month value = { value = var:sed_calendar_month_key add = 6 } }
+ }
+ option = {
+  name = sed_import_notice_sulfur_option_trade
+  custom_tooltip = sed_import_notice_sulfur_option_trade_tt
+  ai_chance = { base = 40 }
+  set_variable = { name = sed_import_notice_sulfur_month value = { value = var:sed_calendar_month_key add = 12 } }
+ }
+ option = {
+  name = sed_import_notice_sulfur_option_plan
+  custom_tooltip = sed_import_notice_sulfur_option_plan_tt
+  default_option = yes
+  ai_chance = { base = 40 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_import_notice_sulfur_option_mute
+  custom_tooltip = sed_import_notice_sulfur_option_mute_tt
+  ai_chance = { base = 20 }
+  set_variable = { name = sed_import_notice_sulfur_month value = { value = var:sed_calendar_month_key add = 24 } }
+ }
+}
+
+# Advisory: no local expansion is eligible, so importing is the remaining lever.
+sed_pulse.19 = {
+ type = country_event
+ placement = root
+ title = sed_import_notice_lead_title
+ desc = sed_import_notice_lead_desc
+ duration = 3
+ icon = "gfx/interface/icons/event_icons/event_industry.dds"
+ on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+ trigger = { is_player = yes has_variable = sed_enabled }
+ immediate = {
+  set_variable = { name = sed_import_notice_lead_month value = { value = var:sed_calendar_month_key add = 6 } }
+ }
+ option = {
+  name = sed_import_notice_lead_option_trade
+  custom_tooltip = sed_import_notice_lead_option_trade_tt
+  ai_chance = { base = 40 }
+  set_variable = { name = sed_import_notice_lead_month value = { value = var:sed_calendar_month_key add = 12 } }
+ }
+ option = {
+  name = sed_import_notice_lead_option_plan
+  custom_tooltip = sed_import_notice_lead_option_plan_tt
+  default_option = yes
+  ai_chance = { base = 40 }
+  sed_refresh_diagnostics = yes
+ }
+ option = {
+  name = sed_import_notice_lead_option_mute
+  custom_tooltip = sed_import_notice_lead_option_mute_tt
+  ai_chance = { base = 20 }
+  set_variable = { name = sed_import_notice_lead_month value = { value = var:sed_calendar_month_key add = 24 } }
  }
 }

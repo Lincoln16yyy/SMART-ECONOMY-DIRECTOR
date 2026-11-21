@@ -10,6 +10,11 @@ from pathlib import Path
 PROFILES = json.loads((Path(__file__).resolve().parents[1] / 'data/input_profiles.json').read_text())
 FOUNDING_GROUPS = json.loads((Path(__file__).resolve().parents[1] / 'data/founding_method_groups.json').read_text())
 STARTUP_METHODS = json.loads((Path(__file__).resolve().parents[1] / 'data/founding_production_methods.json').read_text())
+# Constructor inputs are forecast conservatively; the Director does not set its PM.
+_CONSTRUCTION = json.loads((Path(__file__).resolve().parents[1] / 'data/public_upkeep.json').read_text())['construction']['groups']
+PROFILES['building_construction_sector'] = {method: spec['inputs'] for group in _CONSTRUCTION for method, spec in group.items()}
+FOUNDING_GROUPS['building_construction_sector'] = [{method: spec['technologies'] for method, spec in group.items()} for group in _CONSTRUCTION]
+
 LOCAL_GOODS = {'electricity', 'transportation', 'services'}
 GOODS = sorted({good for methods in PROFILES.values() for goods in methods.values() for good in goods})
 LABELS_PT = {
@@ -94,7 +99,7 @@ def values(founding_projects=()):
  value = 0
  sg:{good} ?= {{ add = {{ value = state_goods_production min = 0 multiply = 2 subtract = {{ value = state_goods_consumption min = 0 }} }} }}
  subtract = sed_input_pending_{good}
- if = {{ limit = {{ owner = {{ has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key }}
+ if = {{ limit = {{ owner = {{ has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = var:sed_calendar_month_key }}
   has_variable = sed_pm_reserved_{good}
  }} subtract = var:sed_pm_reserved_{good} }}
 }}
@@ -108,7 +113,7 @@ sed_input_headroom_{good} = {{
  value = 0
  market ?= {{ mg:{good} ?= {{ add = {{ value = market_goods_sell_orders min = 0 multiply = 2 subtract = {{ value = market_goods_buy_orders min = 0 }} }} }} }}
  subtract = {{ value = 0 every_scope_state = {{ limit = {{ }} add = sed_input_pending_{good} }} }}
- if = {{ limit = {{ has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = sed_live_month_key
+ if = {{ limit = {{ has_variable = sed_pm_inputs_month var:sed_pm_inputs_month = var:sed_calendar_month_key
   has_variable = sed_pm_reserved_{good}
  }} subtract = var:sed_pm_reserved_{good} }}
 }}
@@ -144,7 +149,7 @@ def triggers():
 
 
 def effects():
-    result = ['sed_refresh_input_readings = {\n if = { limit = { is_player = yes has_variable = sed_enabled }']
+    result = ['sed_refresh_input_readings = {\n sed_refresh_calendar = yes\n if = { limit = { is_player = yes has_variable = sed_enabled }']
     for good in MARKET_GOODS:
         result.append(f'  set_variable = {{ name = sed_input_market_margin_{good} value = sed_input_country_headroom_{good} }}')
     result.append('  every_scope_state = {')

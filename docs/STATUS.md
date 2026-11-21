@@ -1,4 +1,31 @@
-# Estado dos requisitos — 0.7.55
+# Estado dos requisitos — 0.7.62
+
+## Fila parada após administração — 0.7.59
+
+**Evidência de save:** Paraguai em abril/1844: revisão delegada ao Advisor,
+reserva ~162,8 mil, saldo ~409, bloqueio de orçamento no Advisor. O marcador
+`sed_watch_month` permaneceu 22032 (jan/1836), com zero meses ociosos.
+Uruguai também tinha marcador 22032; inicialmente a reserva fiscal era
+insuficiente e depois aumentou. Isso não autoriza ignorar a guarda de caixa.
+
+**Código:** o calendário é capturado por efeito em variável do país antes
+das revisões; comparações mensais não dependem mais do valor de calendário
+calculado em `script_values`. Marcadores de conclusão em estado consultam o
+país proprietário. Na migração de saves antigos, datas de contratação e a
+janela anual são reiniciadas, pois o marcador antigo não comprova duração.
+Mesma mudança para limite mensal, insumos, acompanhamento
+pós-obra e balanço anual. Nenhum novo efeito de imposto ou de salário.
+
+**Teste sintético:** 488 testes aprovados, incluindo regressão com marcador antigo e valor congelado, dois
+meses distintos, repetição no mesmo mês e migração dos registros antigos.
+**Estático:** build e validate aprovados; Tiger sem novos erros, conservando
+os três campos de Diário 1.15 desconhecidos pela ferramenta para 1.13.5.
+**Instalação:** 0.7.59, 14 arquivos conferidos, backup e perfil preservado.
+A suíte cívica antiga sem verba para manutenção também falhava no HEAD
+0.7.58; seu cenário agora fornece saldo e reserva compatíveis com a guarda. **Campanha e save/reload:** NÃO
+VERIFICADOS. Em cópia do save, avançar revisões mensais e observar mudança
+de `sed_watch_month`; com fila vazia, candidato elegível e guardas satisfeitas,
+a recuperação deve inserir só um nível e devolver a fila ao Advisor.
 
 ## Coordenação com Economy Advisor
 
@@ -265,3 +292,221 @@ estados, prioridade de insumo e rejeição de obra sem falso sucesso;
 24 testes de crescimento, acompanhamento e universidades aprovados.
 **Estático:** validado. Tiger mantém três apontamentos de Diário
 conhecidos. **Campanha:** NÃO VERIFICADA.
+
+## Manutenção e contratação — 0.7.56
+
+**Código:** construção direta de universidades e administrações verifica
+referência de manutenção. Insumos usam o maior custo por grupo de métodos
+vanilla com preços de referência acrescidos de 75%. Empregos ponderados
+pelos salários relativos usam observação nacional ou salário observado
+do prédio, acrescido de 25%. Métodos futuros podem tornar o limite alto.
+A leitura é aproximação conservadora. Sem referência salarial, mantém
+uma via com saldo positivo, ausência de dívida e 12 semanas de reserva.
+
+A observação de contratação concede três meses desde o nível concluído.
+A falta de insumos continua imediata. Pendências antigas recebem o prazo
+na primeira revisão desta versão. O Diário identifica um prédio
+acompanhado com o estado e um insumo de método ativo em escassez de
+mercado. Esse insumo é candidato a explicar a falta local.
+
+**Teste sintético:** fronteira do saldo de manutenção, prazo completo,
+migração de pendência e identificação de madeira para fábrica de papel.
+**Estático:** validador aprovado. **Campanha:** NÃO VERIFICADA.
+
+## Paraguai — correções 0.7.57 e Government BPM 1.0.2
+
+**Campanha anterior:** autosave do Paraguai com Automático e coordenação
+ativos, objetivo 6, executor 9, revisão 19. Sem Supply Chain no perfil,
+a coordenação suspendia o Advisor enquanto aguardava construtor externo.
+**Código:** administração ou energia elegível agora permite execução
+direta pelo Director, sob as guardas existentes. **Teste sintético:**
+reproduz a combinação Advisor + déficit burocrático e confirma inclusão.
+
+O módulo de pesquisa instalado não era chamado mensalmente. Também
+limitava recomendações a 18 tecnologias em contextos específicos.
+O reparador preserva esses contextos e, se nenhum produzir recomendação,
+classifica tecnologias gerais pelos pré-requisitos reais, era e categoria.
+**Estático:** parser e Tiger sem erros no módulo de pesquisa novo.
+**Campanha pós-correção:** NÃO VERIFICADA. A cópia local Victoria3_mod
+tem alterações de outro trabalho e foi preservada.
+
+Smart Government BPM 1.0.2 publicado também no repositório próprio, release v1.0.2-bpm, branch codex/research-monthly-bpm-1.0.2, commit 4f92fe5. ZIP idêntico ao instalado.
+
+## Paraguai — saída da espera sem candidato direto
+
+**Campanha:** captura de 18/09/1841 e novo autosave ainda mostraram fila
+vazia. O save tinha objetivo 6, executor 9, revisão 19. A 0.7.57 só
+liberava execução direta se o candidato cívico estivesse elegível.
+**Código 0.7.58:** quando esse candidato não existe, e o Advisor está
+disponível, a coordenação delega em vez de suspender todos os executores.
+O Diário distingue custo permanente de falta de estado elegível.
+A causa exata da inelegibilidade local não foi extraída do save.
+**Teste sintético:** 12 testes de administração e delegação passaram.
+**Estático:** validado. **Campanha pós-correção:** NÃO VERIFICADA.
+
+
+## Prioridades examinadas em 20/11/2026
+
+**Código:** `core_growth.TARGETS` inclui madeira, ferro e ferramentas, com
+`has_building` obrigatório. A recuperação de `construction_watch` usa esses
+candidatos e os cívicos; não é um fundador industrial geral. Fundação já
+existe por escassez em outra via, portanto a melhoria proposta é ampliar a
+partida industrial sem depender de escassez prévia, não duplicar fundação.
+`public_upkeep` combina referência conservadora de materiais e salários
+observados; estimativa específica por PM pode reduzir bloqueios excessivos.
+A coordenação escolhe objetivos, mas não considera os motivos de orçamento
+do Advisor para selecionar a alternativa. São propostas, não implementações.
+Build sincronizado e árvore limpa antes desta análise; nenhuma alteração de
+script ou instalação nesta revisão. Resultado da 0.7.59 em campanha continua
+NÃO VERIFICADO.
+
+
+## Crescimento civil e dívida — 0.7.60
+
+**Código:** `tools/strategic_growth.py` cobre madeira, ferro, carvão,
+cereais, tecido, ferramentas, mantimentos, roupas e papel, com as 14
+variantes civis já catalogadas. Reutiliza os filtros de construção, mão de
+obra, infraestrutura, previsão de insumos, PM inicial e reconciliação de
+fila. Exige retorno estressado positivo e demanda mínima; não expande bem
+abaixo do preço-base. A pontuação compara retorno por ponto de obra e dá
+peso 1,5 à primeira base nacional. Prioridades ranqueadas e objetivos
+cívicos mantêm precedência; a fundação de crescimento não é escassez.
+A coordenação lê status 4 do Advisor como orçamento bloqueado e tenta
+alternativa própria apenas com filas vazias e orçamento direto seguro.
+
+**Código:** `sed_debt_growth_safe` permite dívida até 80% do crédito se o
+saldo já cobre os materiais com margem de 25%, o saldo fixo não é negativo
+e o crédito ainda livre cobre quatro semanas de despesas fixas. Não adiciona
+dinheiro, não elimina dívida e não autoriza inadimplentes. A política fiscal
+existente mantém snapshots e restauração; nenhum novo setter foi incluído.
+O catálogo de manutenção pública é extraído dos métodos vanilla e guarda
+tecnologias; a referência usa o maior custo disponível por grupo, em vez
+de supor que todos os métodos finais já estão desbloqueados. Salários
+continuam dependentes de amostra e da guarda conservadora quando ausentes.
+
+**Campanha e save/reload:** NÃO VERIFICADOS. Em cópia de país pequeno sem
+indústria, verificar primeira obra sem escassez; com dívida e superávit,
+comparar os limites de crédito/material; após conclusão, confirmar contratação
+e reconciliação da intenção. **Teste sintético:** 502 testes aprovados (107,3 s), incluindo fundação dos
+14 produtores, escolha de estado, orçamento da obra selecionada, dívida
+sem ouro, limites de caixa/crédito, modos, falta de trabalhadores, fila e
+restauração de opções. Cenários antigos que só exercitavam um prédio agora
+limitam a permissão de construção a esse prédio; não bloqueiam o fundador
+civil novo por expectativa de que toda a economia deva ficar parada.
+**Estático:** build/validate aprovados; Tiger mantém somente os três campos
+conhecidos do Diário 1.15 na ferramenta para 1.13.5, sem novos erros.
+**Instalação:** 0.7.60 com jogo fechado, backup e 14 arquivos conferidos;
+perfil e saves preservados. Pacote `dist/smart-economy-director-0.7.60.zip`.
+**Próximo:** campanha normal para contratação/lucro e estudo do primeiro
+setor de construção com orçamento de manutenção e insumos. A via direta
+civil cobre os produtores listados; os demais setores continuam dependendo
+das capacidades do Advisor e dos executores específicos existentes.
+
+
+## Ciclo de desenvolvimento — 0.7.61
+
+**Código:** primeiro setor usa a aprovação de construção existente, com
+intenção zero e confirmação pela fila. Apenas sem setor nacional ou pendência,
+com salário observado, materiais previstos, trabalhadores, superávit com
+margem de 25% e quatro semanas de despesas futuras em ouro/crédito livre.
+Métodos disponíveis são a referência conservadora; o Director não força PM
+do setor. Fila estrangeira desconhecida impede fundação durante a fila.
+Crescimento viável com capacidade básica também pode justificar o primeiro
+setor sem esperar uma fila longa. Escassez e objetivos cívicos passam antes;
+quando elegível, vem antes da universidade. Fundação pendente reserva
+trabalhadores, insumos e pontos de obra até a reconciliação.
+
+**Código:** seis cadeias extraídas do vanilla (`advanced_sources.json`):
+`building_steel_mill`, `building_glassworks`, `building_motor_industry`,
+`building_chemical_plant`, `building_sulfur_mine`, `building_lead_mine`.
+Incluem PMs, preços, empregos, insumos, saídas, variantes e custos existentes
+da base. O preparo de fornecedores usa a propagação de gargalos já existente;
+uma fábrica não passa no filtro enquanto faltar capacidade para seus insumos.
+A adaptação respeita os interruptores observados do Auto-Apply PMs, incluindo
+mineração, e os gerenciadores globais do Advisor/OGAS.
+
+**Código:** lucro/salários observados por nível em prédio comercial próprio
+após conclusão e três meses. Retorno esperado é cotado no estado antes do
+start e só entra como projeto confirmado se a fila crescer. Margem inferior
+a metade da prevista reduz a pontuação em 50%; prejuízo impede repetição
+nos caminhos de crescimento estratégico e núcleo. Escassez crítica conserva
+sua própria política. Contratação incompleta, insumos em falta ou subsídio
+retiram o veredito financeiro. Amostras mensais posteriores podem recuperar
+a elegibilidade. A média do prédio não atribui causalidade à expansão.
+
+**Código:** fases 0 sem dívida, 1 estabilização, 2 investimento sob guardas,
+3 amortização prioritária, 4 inadimplência. Duas altas de principal superiores
+a 1% em meses consecutivos ou dívida >80% bloqueiam crescimento discricionário,
+primeiro setor e universidade; guardas de crédito/material continuam vigentes.
+A política fiscal existente e o caixa retido fazem o ajuste; não há efeito
+novo de pagamento, criação de dinheiro, imposto, salário ou lei.
+
+**Compatibilidade de save:** uma marca nova limpa o recibo antigo porque os
+IDs de ação mudaram; não apaga prédios, fila nem as intenções existentes.
+
+**Teste sintético:** 524 testes aprovados (183,2 s), incluindo 22 novos
+casos de fila mutável, contratação, retorno, dívida, migração e simulação
+de reload. Nenhum teste simulado é prova de reload da engine.
+**Instalação:** 0.7.61, jogo fechado, backup e perfil preservado; pacote
+`dist/smart-economy-director-0.7.61.zip` idêntico aos 14 arquivos instalados.
+**Estático:** geração/validate aprovados;
+Tiger com somente os três campos conhecidos do Diário 1.15.
+**Campanha e save/reload na engine:** NÃO VERIFICADOS. Em cópia de país pequeno,
+observar o primeiro setor, caixa após contratação e avaliação das obras novas;
+reabrir o save e conferir manutenção das intenções e restauração ao sair do
+Automático. Continuar a campanha normal é suficiente para reunir essa evidência.
+
+
+## Recuperação, fila privada e estratégia — 0.7.62
+
+**Código:** `regional_recovery.py` permite uma base em outro estado apenas
+quando há falha acompanhada por três meses na família, não há produtor
+saudável dessa família nem expansão em curso, e o destino tem trabalhadores
+estimados para dois níveis do tipo escolhido. O retorno/insumo permanece no
+filtro da variante. Manuais e assistidos mantêm o comportamento anterior.
+`growth_ready` não usa mais o veredito agregado de outra expansão como veto
+nacional; a coordenação tenta uma alternativa local antes de aguardar.
+
+**Código:** `parallel_construction.py` autoriza somente crescimento civil
+automático com fila pública vazia. Confere a soma de todos os níveis em
+construção visíveis nos tipos catalogados contra a contagem privada; a soma
+suportada com métodos conhecidos precisa ser igual à soma total visível.
+Reserva nominalmente um teto semanal por nível privado e pelo novo projeto,
+e exige que a alocação pública legal comporte esse teto. Saldo fixo não
+negativo, saldo recorrente com margem de 25%, dívida e orçamento anteriores
+continuam exigidos. Os filtros de trabalhadores e insumos descontam as obras
+pendentes; o mesmo bem já enfileirado em outro estado não ganha novo projeto.
+Não cancela, reprioriza ou escreve nas opções da fila privada. A marca própria
+compartilhada impede nova delegação até a fila pública esvaziar na revisão.
+Fora dessa tentativa, não substitui as regras do Advisor para suas decisões.
+
+**Limitação:** a conciliação de quantidades não identifica o investidor/autor
+de cada nível. Construção no exterior e interação com investidores estrangeiros
+exigem confirmação em campanha; não se declara consumo real livre como medido.
+A capacidade é uma reserva conservadora nominal e a previsão de trabalhadores
+continua demográfica. Não há créditos de saída futura das obras privadas.
+
+**Código:** `country_strategy.py` pesa porte até um milhão de habitantes em
+projetos de capital baixo, folga local de trabalhadores em manufaturas,
+necessidades essenciais quando padrão de vida é baixo e insumos produzidos
+por prédios operantes no território. Déficit de oferta dá bônus limitado,
+sem inventar volume de importações. Fator 1–1,75 sobre pontuação existente;
+a rentabilidade e a avaliação das obras próprias continuam prevalecendo.
+
+**Teste sintético:** casos focados de recuperação, mudança de estado, limite
+de emprego por variante, margem de capacidade/caixa/alocação, obras desconhecidas,
+PMs não conhecidos, duplicação, reservas de insumos/trabalhadores, persistência
+simulada da marca e verificação estática contra retirada da guarda privada.
+**Regressão:** 548 testes aprovados (205,5 s), incluindo 24 casos novos.
+A revisão de sete dias foi testada pela entrada real do evento: consome o
+marcador pendente antes de reavaliar a capacidade compartilhada. O painel
+não mostra falsa trava de fila quando há projeto paralelo elegível.
+**Estático:** geração/validate aprovados; Tiger mantém os três campos conhecidos
+do Diário 1.15 na ferramenta para 1.13.5, sem novos erros.
+**Instalação:** 0.7.62 com jogo fechado e backup, perfil preservado; ZIP e os
+14 arquivos instalados são idênticos ao gerador.
+**Campanha e reload da engine:** NÃO VERIFICADOS.
+Roteiro em cópia: deixar uma expansão contratar enquanto outro estado dispõe
+de trabalho; com fila privada ativa, conferir manutenção da fila original e
+apenas uma nova tentativa pública quando as reservas nominais permitem.
+Reabrir e confirmar que a marca é liberada após a fila pública esvaziar.

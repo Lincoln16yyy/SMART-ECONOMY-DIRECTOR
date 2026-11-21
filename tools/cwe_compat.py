@@ -222,7 +222,12 @@ sed_cwe_automatic_review = {
 
 def fiscal_scripts():
     """Reuse the reviewed policy and give the conversion its own save state."""
-    effects = '\n'.join((planning.tax_policy_effects(), planning.wage_policy_effects(),
+    effects = '''sed_refresh_calendar = {
+ if = { limit = { is_player = yes has_variable = sed_enabled }
+  set_variable = { name = sed_calendar_month_key value = { value = year multiply = 12 add = month } }
+ }
+}
+''' + '\n'.join((planning.tax_policy_effects(), planning.wage_policy_effects(),
                          planning.military_wage_policy_effects()))
     effects = effects.replace(' has_variable = sed_mode_automatic', '')
     effects = re.sub(r'^ +NOT = \{ has_variable = sed_mode_(?:manual|assisted) \}\n',
@@ -240,6 +245,7 @@ sed_cwe_disable_country = {{
  sed_restore_fiscal_policy = yes
  sed_restore_wage_policy = yes
  sed_restore_military_wage_policy = yes
+ remove_variable = sed_calendar_month_key
  remove_variable = sed_enabled
 }}
 '''

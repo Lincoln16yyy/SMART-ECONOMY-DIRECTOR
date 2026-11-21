@@ -141,6 +141,8 @@ def validate(root=ROOT, game=None):
         ('sed_recover_existing_industry', 'sed_pm_upgrade_month_limit_reached'),
     ):
         body = custom.get(name, [])
+        # Updating the date cannot mutate policy; the guarded body remains mandatory.
+        body = [entry for entry in body if not (entry.key == 'sed_refresh_calendar' and entry.value == 'yes')]
         outer = body[0] if len(body) == 1 else None
         limit = child(outer.value, 'limit') if outer and outer.key == 'if' else []
         for key, value in [('is_player', 'yes'), ('has_variable', 'sed_enabled'),
@@ -205,10 +207,24 @@ def validate(root=ROOT, game=None):
         NOT = { has_variable = sed_coord_active }
         AND = { has_variable = sed_coord_active var:sed_coord_executor = 11
                 OR = { AND = { var:sed_plan_goal = 2 sed_direct_supply_priority_exists = yes }
-                       sed_university_ready = yes sed_watch_recovery_candidate = yes } }
+                       sed_university_ready = yes sed_watch_recovery_candidate = yes sed_civic_direct_available = yes sed_growth_takeover = yes sed_first_sector_available = yes } }
     }""")[0].value
     if child(custom.get('sed_auto_executor_safe', []), 'OR') != direct_authority:
         errors.append('Direct execution requires the restricted coordination authority')
+    private_authority = parse("""guard = {
+        construction_queue_num_queued_private_levels = 0
+        AND = { sed_private_parallel_capacity_safe = yes any_scope_state = { sed_growth_site = yes } }
+    }""")[0].value
+    direct_ors = [e.value for e in custom.get('sed_auto_executor_safe', []) if e.key == 'OR']
+    if private_authority not in direct_ors:
+        errors.append('Private parallel execution lacks its restricted safety guard')
+    for item in SUPPLY_TARGETS:
+        good = item['good']
+        alternative = ('AND = { sed_growth_' + good + '_candidate = yes owner = { sed_private_parallel_capacity_safe = yes } }') if good not in ('small_arms', 'artillery', 'ammunition') else ''
+        expected_private = parse('guard = { owner = { construction_queue_num_queued_private_levels = 0 } ' + alternative + ' }')[0].value
+        action_ors = [e.value for e in custom.get(f'sed_{good}_approval_valid', []) if e.key == 'OR']
+        if expected_private not in action_ors:
+            errors.append('Supply approval lacks its private queue safety guard: ' + good)
     direct_effect = custom.get('sed_auto_run_direct', [])
     first_direct = next((entry for entry in direct_effect if entry.key == 'if'), None)
     direct_limit = child(first_direct.value, 'limit') if first_direct and first_direct.key == 'if' else []
@@ -260,9 +276,10 @@ def validate(root=ROOT, game=None):
                        for entry in custom.get(f'sed_{name}_approval_valid', [])):
                 errors.append('Fallback lacks its candidate guard: ' + name)
             continue
+        growth_guard = f'sed_growth_{name}_candidate = yes' if name not in ('railway', 'construction', 'small_arms', 'artillery', 'ammunition') else ''
         target_authority = parse(f"""guard = {{
             owner = {{ NOT = {{ has_variable = sed_coord_active }} }}
-            var:sed_plan_{name}_rank = 1
+            var:sed_plan_{name}_rank = 1 {growth_guard}
         }}""")[0].value
         if child(custom.get(f'sed_{name}_approval_valid', []), 'OR') != target_authority:
             errors.append('Coordinated approval must match the first-ranked target: ' + name)

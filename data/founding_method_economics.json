@@ -32,7 +32,8 @@
     "luxury_clothes": 60.0,
     "silk": 40.0,
     "paper": 30.0,
-    "sulfur": 50.0
+    "sulfur": 50.0,
+    "porcelain": 70.0
   },
   "buildings": {
     "building_logging_camp": {
@@ -835,6 +836,290 @@
           "chemical_bleaching"
         ]
       }
+    },
+    "building_steel_mill": {
+      "pm_blister_steel_process": {
+        "inputs": {
+          "iron": 40.0,
+          "coal": 30.0
+        },
+        "outputs": {
+          "steel": 65.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_bessemer_process": {
+        "inputs": {
+          "iron": 60.0,
+          "coal": 30.0
+        },
+        "outputs": {
+          "steel": 90.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "bessemer_process"
+        ]
+      },
+      "pm_open_hearth_process": {
+        "inputs": {
+          "iron": 90.0,
+          "coal": 30.0
+        },
+        "outputs": {
+          "steel": 120.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "open_hearth_process"
+        ]
+      },
+      "pm_electric_arc_process": {
+        "inputs": {
+          "iron": 100.0,
+          "coal": 30.0,
+          "electricity": 30.0
+        },
+        "outputs": {
+          "steel": 150.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "electric_arc_process"
+        ]
+      }
+    },
+    "building_glassworks": {
+      "pm_forest_glass": {
+        "inputs": {
+          "wood": 30.0
+        },
+        "outputs": {
+          "glass": 30.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_leaded_glass": {
+        "inputs": {
+          "wood": 20.0,
+          "lead": 10.0
+        },
+        "outputs": {
+          "glass": 40.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "lathe"
+        ]
+      },
+      "pm_crystal_glass": {
+        "inputs": {
+          "lead": 35.0
+        },
+        "outputs": {
+          "glass": 60.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "crystal_glass"
+        ]
+      },
+      "pm_houseware_plastics": {
+        "inputs": {
+          "oil": 20.0,
+          "lead": 30.0
+        },
+        "outputs": {
+          "glass": 100.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "plastics"
+        ]
+      }
+    },
+    "building_motor_industry": {
+      "pm_steam_engines": {
+        "inputs": {
+          "steel": 30.0
+        },
+        "outputs": {
+          "engines": 40.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_electric_engines": {
+        "inputs": {
+          "steel": 40.0,
+          "electricity": 20.0,
+          "copper": 10.0
+        },
+        "outputs": {
+          "engines": 80.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "electric_railway"
+        ]
+      },
+      "pm_diesel_engines": {
+        "inputs": {
+          "steel": 50.0,
+          "oil": 50.0
+        },
+        "outputs": {
+          "engines": 120.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "compression_ignition"
+        ]
+      }
+    },
+    "building_chemical_plant": {
+      "pm_artificial_fertilizers": {
+        "inputs": {
+          "sulfur": 30.0,
+          "iron": 10.0
+        },
+        "outputs": {
+          "fertilizer": 90.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_improved_fertilizer": {
+        "inputs": {
+          "sulfur": 30.0,
+          "iron": 30.0
+        },
+        "outputs": {
+          "fertilizer": 140.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "improved_fertilizer"
+        ]
+      },
+      "pm_nitrogen_fixation": {
+        "inputs": {
+          "sulfur": 40.0,
+          "oil": 20.0,
+          "iron": 30.0
+        },
+        "outputs": {
+          "fertilizer": 200.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "nitrogen_fixation"
+        ]
+      }
+    },
+    "building_sulfur_mine": {
+      "pm_picks_and_shovels_building_sulfur_mine": {
+        "inputs": {
+          "tools": 5.0
+        },
+        "outputs": {
+          "sulfur": 20.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_atmospheric_engine_pump_building_sulfur_mine": {
+        "inputs": {
+          "tools": 10.0,
+          "coal": 10.0
+        },
+        "outputs": {
+          "sulfur": 40.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "atmospheric_engine"
+        ]
+      },
+      "pm_condensing_engine_pump_building_sulfur_mine": {
+        "inputs": {
+          "tools": 15.0,
+          "coal": 15.0
+        },
+        "outputs": {
+          "sulfur": 60.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "watertube_boiler"
+        ]
+      },
+      "pm_diesel_pump_building_sulfur_mine": {
+        "inputs": {
+          "tools": 15.0,
+          "oil": 5.0
+        },
+        "outputs": {
+          "sulfur": 80.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "compression_ignition"
+        ]
+      }
+    },
+    "building_lead_mine": {
+      "pm_picks_and_shovels_building_lead_mine": {
+        "inputs": {
+          "tools": 5.0
+        },
+        "outputs": {
+          "lead": 20.0
+        },
+        "workers": 5000.0,
+        "technologies": []
+      },
+      "pm_atmospheric_engine_pump_building_lead_mine": {
+        "inputs": {
+          "tools": 10.0,
+          "coal": 10.0
+        },
+        "outputs": {
+          "lead": 40.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "atmospheric_engine"
+        ]
+      },
+      "pm_condensing_engine_pump_building_lead_mine": {
+        "inputs": {
+          "tools": 15.0,
+          "coal": 15.0
+        },
+        "outputs": {
+          "lead": 60.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "watertube_boiler"
+        ]
+      },
+      "pm_diesel_pump_building_lead_mine": {
+        "inputs": {
+          "tools": 15.0,
+          "oil": 5.0
+        },
+        "outputs": {
+          "lead": 70.0
+        },
+        "workers": 5000.0,
+        "technologies": [
+          "compression_ignition"
+        ]
+      }
     }
   },
   "all_outputs": {
@@ -1170,6 +1455,104 @@
       },
       "pm_bleached_paper": {
         "paper": 100.0
+      }
+    },
+    "building_steel_mill": {
+      "pm_blister_steel_process": {
+        "steel": 65.0
+      },
+      "pm_bessemer_process": {
+        "steel": 90.0
+      },
+      "pm_open_hearth_process": {
+        "steel": 120.0
+      },
+      "pm_electric_arc_process": {
+        "steel": 150.0
+      }
+    },
+    "building_glassworks": {
+      "pm_forest_glass": {
+        "glass": 30.0
+      },
+      "pm_leaded_glass": {
+        "glass": 40.0
+      },
+      "pm_crystal_glass": {
+        "glass": 60.0
+      },
+      "pm_houseware_plastics": {
+        "glass": 100.0
+      },
+      "pm_ceramics": {
+        "glass": -10.0,
+        "porcelain": 10.0
+      },
+      "pm_bone_china": {
+        "glass": -20.0,
+        "porcelain": 30.0
+      }
+    },
+    "building_motor_industry": {
+      "pm_steam_engines": {
+        "engines": 40.0
+      },
+      "pm_electric_engines": {
+        "engines": 80.0
+      },
+      "pm_diesel_engines": {
+        "engines": 120.0
+      }
+    },
+    "building_chemical_plant": {
+      "pm_artificial_fertilizers": {
+        "fertilizer": 90.0
+      },
+      "pm_improved_fertilizer": {
+        "fertilizer": 140.0
+      },
+      "pm_nitrogen_fixation": {
+        "fertilizer": 200.0
+      }
+    },
+    "building_sulfur_mine": {
+      "pm_picks_and_shovels_building_sulfur_mine": {
+        "sulfur": 20.0
+      },
+      "pm_atmospheric_engine_pump_building_sulfur_mine": {
+        "sulfur": 40.0
+      },
+      "pm_condensing_engine_pump_building_sulfur_mine": {
+        "sulfur": 60.0
+      },
+      "pm_diesel_pump_building_sulfur_mine": {
+        "sulfur": 80.0
+      },
+      "pm_nitroglycerin_building_sulfur_mine": {
+        "sulfur": 10.0
+      },
+      "pm_dynamite_building_sulfur_mine": {
+        "sulfur": 20.0
+      }
+    },
+    "building_lead_mine": {
+      "pm_picks_and_shovels_building_lead_mine": {
+        "lead": 20.0
+      },
+      "pm_atmospheric_engine_pump_building_lead_mine": {
+        "lead": 40.0
+      },
+      "pm_condensing_engine_pump_building_lead_mine": {
+        "lead": 60.0
+      },
+      "pm_diesel_pump_building_lead_mine": {
+        "lead": 70.0
+      },
+      "pm_nitroglycerin_building_lead_mine": {
+        "lead": 12.0
+      },
+      "pm_dynamite_building_lead_mine": {
+        "lead": 20.0
       }
     }
   }

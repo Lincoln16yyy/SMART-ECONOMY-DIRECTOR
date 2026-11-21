@@ -755,3 +755,145 @@ A prontidão local usa sed_state_labor_available, infrastructure_delta
 e market_access já empregados nos executores. Insumos por método
 ativo vêm de data/input_profiles.json. A última obra do Director
 registra o estado via prev no escopo do país após confirmação da fila.
+
+## Referências de manutenção 0.7.56
+
+`python3 tools/build_public_upkeep.py --game "<game>"` gera
+`data/public_upkeep.json`. Preços vêm de common/goods, empregos de
+common/production_methods e pesos de common/pop_types (registrados em
+employment_profiles.json). outcome_inputs.json é gerado junto ao
+catálogo de saídas. O custo é conservador, sem prova de despesa futura
+exata. Teste em campanha permanece pendente.
+
+## Reparo de pesquisa e construção no Paraguai
+
+Fonte instalada preservada em
+`sed_backups/government_before_research_fix_20261119_233947`.
+Director anterior em `sed_backups/mod_before_0.7.57_20261119_233947_542653`.
+`tools/repair_government_research.py` parte da edição BPM instalada,
+acrescenta despacho mensal e fallback por tecnologias vanilla sem alterar
+o gerador de outro agente em `~/Victoria3_mod`.
+Pacote `dist/smart-government-advisor-bpm-1.0.2.zip`.
+
+Smart Government BPM 1.0.2 publicado também no repositório próprio, release v1.0.2-bpm, branch codex/research-monthly-bpm-1.0.2, commit 4f92fe5. ZIP idêntico ao instalado.
+
+## Paraguai 0.7.58
+
+O objetivo cívico não pode suspender o Advisor quando não existe candidato
+direto. Novas linhas do Diário identificam a guarda de manutenção ou
+ausência de estado elegível. O save de 18/09/1841 manteve a espera após
+a 0.7.57, motivando a correção de delegação da 0.7.58.
+
+
+## Calendário e fila parada — 0.7.59
+
+Saves examinados em `save games/autosave.v3` (Uruguai) e
+`save games/paraguai_1844_04_06.v3`. Ler ZIP/gamestate em modo somente leitura;
+marcadores numéricos são fixed-point de 100000. `sed_watch_month=22032`
+permaneceu em 1836 apesar da revisão de 1844. Captura inline do ano/mês em
+`set_variable` já existia em `sed_month_key` e nas datas da revisão.
+Agora `sed_calendar_month_key` é renovado pelos efeitos de entrada; os
+consumidores leem a variável e os marcadores de estado usam `owner.var:`.
+Logs desta revisão: `/tmp/sed-0759-*.log`, Tiger `/tmp/sed-0759-tiger.json`.
+Campanha e persistência após reload ainda precisam de confirmação.
+
+Instalação 0.7.59 confirmada com jogo fechado: 14 arquivos idênticos ao
+gerador, perfil preservado. Backup relativo ao user-data:
+`sed_backups/mod_before_0.7.59_20261120_003323_930255`.
+
+Validação final: 488 testes sintéticos aprovados em 56,6 s; definições
+compartilhadas somente para leitura foram reutilizadas no runner, retornando
+cópia do dicionário por teste. Log `/tmp/sed-0759-confirmed-tests.log`.
+Build/validate aprovados; Tiger mantém os três erros conhecidos do Diário.
+
+Revisão somente de leitura do comportamento em 20/11: fontes úteis para a
+próxima etapa são `tools/core_growth.py`, `tools/construction_watch.py`,
+`tools/public_upkeep.py` e `tools/coordination.py`. Nenhum novo caminho ou
+comando necessário; nenhuma alteração da instalação.
+
+
+## Evidência de crescimento — 0.7.60
+
+`advisor_automation_effects.txt` instalado atribui status 3 quando adiciona
+obra, 4 quando `advisor_budget_blocked` existe e 2 quando não adiciona.
+`tools/build_public_upkeep.py --game "<game>"` agora extrai por grupo/método
+materiais, empregos ponderados e `unlocking_technologies` dos arquivos locais.
+A nova seleção civil usa exclusivamente os 14 produtores e métodos já
+catalogados, `can_construct_building`, filas, saldo/crédito e os efeitos de
+construção existentes. Nenhuma nova primitiva de engine. Relatórios em
+`/tmp/sed-0760-*`. Teste em campanha e save/reload permanecem pendentes.
+
+Instalação 0.7.60: jogo fechado, 14 arquivos conferidos, perfil preservado,
+backup `sed_backups/mod_before_0.7.60_20261120_191830_238742`.
+A escolha nacional de obra é armazenada uma vez em `sed_growth_score_cached`
+por orçamento; a varredura usa efeito e `prev`, sem recalcular o máximo
+nacional para cada candidato. Referências de custo por grupo usam `min`
+sobre valores condicionais independentes, evitando soma indevida no harness.
+
+Validação final da 0.7.60: 502 testes em 107,3 s, log
+`/tmp/sed-0760-confirmed-tests.log`; build/validate aprovados e Tiger em
+`/tmp/sed-0760-tiger-final.json` com os três erros conhecidos de Diário.
+Fixture `can_construct` do harness aceita lista de IDs para isolar
+permissão por tipo; é modelo sintético, não evidência de engine.
+
+
+## Fontes e ciclo 0.7.61 — 20/11/2026
+
+- `python3 tools/extend_industry_catalog.py --game "<game>"`: extração aditiva
+  de seis cadeias. IDs/métodos de common/buildings e common/production_methods,
+  preços de common/goods, custos de queued_building_costs. Fontes e hashes
+  relativos ao jogo em `data/advanced_sources.json`. Empregos integrais são
+  gravados como inteiros; automação negativa é preservada no perfil.
+- A base local usa `building_steel_mill` (singular) e
+  `building_chemical_plant` para fertilizantes. Não adivinhar IDs por tradução.
+- Economia de PM principal fica separada de explosivos de minas e produção
+  secundária de luxo; `all_outputs` conserva essas saídas na avaliação total.
+- `tools/build_public_upkeep.py` também extrai construção: 1.000 empregos
+  básicos, 75 madeira + 25 tecido em `pm_wooden_buildings`, e requisitos dos
+  quatro métodos. O setor novo não recebe setter de PM do Director.
+- Botões do Auto-Apply PMs instalado confirmam os seis interruptores por
+  prédio e `zw_var_auto_pm_building_group_mines`; apenas leituras no Director.
+- `tests/script_harness.py` tem variante opt-in `mutate_queue_levels` para
+  verificar a previsão antes da alteração da fila. Simulação não é engine.
+- Logs em `/tmp/sed-0761-*.log` e relatório `/tmp/sed-0761-tiger-final.json`.
+  Jogo sem processo `victoria3.exe` na verificação anterior à instalação.
+
+Instalação 0.7.61 conferida: 14 arquivos idênticos ao gerador e ao ZIP,
+perfil preservado; backup no user-data
+`sed_backups/mod_before_0.7.61_20261120_194832_145242`.
+Validação: 524 testes em 183,2 s (`/tmp/sed-0761-confirmed-tests.log`),
+`build_mod.py --check` e validate aprovados; Tiger somente com os três
+campos conhecidos do Diário 1.15. Campanha e reload real pendentes.
+
+
+## Recuperação e capacidade compartilhada 0.7.62 — 20/11/2026
+
+Referências da nova leitura: `game/common/laws/01_economic_system.txt`
+atribui `country_private_construction_allocation_mult`; a descrição em
+`localization/english/modifiers_l_english.yml` (2203–2206) identifica a
+fração preferencial privada e o teto de progresso semanal por projeto.
+Leitura via `modifier:` confirmada no Tiger. Nenhum setter dessa alocação.
+
+`sed_parallel_visible_levels` usa somente prédios cujos grupos de métodos,
+insumos e empregos estão catalogados. `sed_parallel_all_visible_levels`
+varre os tipos de `queued_building_costs.json`; divergência entre somas e
+contagem privada impede a tentativa direta. Isso não revela autor/investidor
+de cada obra, nem prova comportamento de investimento no exterior.
+
+Fontes novas são módulos do gerador; não editar `common/` manualmente.
+Logs desta sessão em `/tmp/sed-0762-*.log`, Tiger final em
+`/tmp/sed-0762-tiger-final.json`. Privado desconhecido continua bloqueando
+a execução própria, sem desligar indiscriminadamente o Advisor nos demais
+casos. `sed_parallel_direct_pending` só nasce após inclusão confirmada;
+limpa na revisão seguinte que encontra fila pública vazia.
+
+Validação final 0.7.62: 548 testes em 205,5 s, log
+`/tmp/sed-0762-release-tests.log`. Build/validate aprovados; Tiger mantém
+os três campos conhecidos do Diário 1.15. Pacote em
+`dist/smart-economy-director-0.7.62.zip`.
+Instalação com jogo fechado, 14 arquivos conferidos e perfil preservado;
+backup no user-data: `sed_backups/mod_before_0.7.62_20261120_203234_741215`.
+Para testar retry, usar `sed_pulse.1.immediate`: chamar somente o efeito de
+revisão não consome o evento pendente e não representa o agendamento real.
+O retry libera reavaliação quando há capacidade nominal compartilhada e
+nenhuma prioridade ranqueada, mesmo que a fila privada ainda esteja ativa.

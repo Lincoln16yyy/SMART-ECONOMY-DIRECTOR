@@ -1,0 +1,258 @@
+{
+  "building_chemical_plant": {
+    "path": "common/buildings/01_industry.txt",
+    "sha256": "a8513a22f17b76d119adc1c56de6fe4d4aa0c09ecaaa0c76b6ccf9841f9c7a3b"
+  },
+  "building_glassworks": {
+    "path": "common/buildings/01_industry.txt",
+    "sha256": "a8513a22f17b76d119adc1c56de6fe4d4aa0c09ecaaa0c76b6ccf9841f9c7a3b"
+  },
+  "building_lead_mine": {
+    "path": "common/buildings/03_mines.txt",
+    "sha256": "bb376cf600fec571a2002a8c8267f5b70a6f94a311de97b4421a42fcc530c5f1"
+  },
+  "building_motor_industry": {
+    "path": "common/buildings/01_industry.txt",
+    "sha256": "a8513a22f17b76d119adc1c56de6fe4d4aa0c09ecaaa0c76b6ccf9841f9c7a3b"
+  },
+  "building_steel_mill": {
+    "path": "common/buildings/01_industry.txt",
+    "sha256": "a8513a22f17b76d119adc1c56de6fe4d4aa0c09ecaaa0c76b6ccf9841f9c7a3b"
+  },
+  "building_sulfur_mine": {
+    "path": "common/buildings/03_mines.txt",
+    "sha256": "bb376cf600fec571a2002a8c8267f5b70a6f94a311de97b4421a42fcc530c5f1"
+  },
+  "pm_artificial_fertilizers": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_assembly_lines_building_motor_industry": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_atmospheric_engine_pump_building_lead_mine": {
+    "path": "common/production_methods/03_mines.txt",
+    "sha256": "a3c9dd85bc834a43c0c409899900e9ed362ab200367d9c3aeb3276f34ca5a4c6"
+  },
+  "pm_atmospheric_engine_pump_building_sulfur_mine": {
+    "path": "common/production_methods/03_mines.txt",
+    "sha256": "a3c9dd85bc834a43c0c409899900e9ed362ab200367d9c3aeb3276f34ca5a4c6"
+  },
+  "pm_automatic_bottle_blowers": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_automation_disabled": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_bessemer_process": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_blister_steel_process": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_bone_china": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_ceramics": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_condensing_engine_pump_building_lead_mine": {
+    "path": "common/production_methods/03_mines.txt",
+    "sha256": "a3c9dd85bc834a43c0c409899900e9ed362ab200367d9c3aeb3276f34ca5a4c6"
+  },
+  "pm_condensing_engine_pump_building_sulfur_mine": {
+    "path": "common/production_methods/03_mines.txt",
+    "sha256": "a3c9dd85bc834a43c0c409899900e9ed362ab200367d9c3aeb3276f34ca5a4c6"
+  },
+  "pm_crystal_glass": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_diesel_engines": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_diesel_pump_building_lead_mine": {
+    "path": "common/production_methods/03_mines.txt",
+    "sha256": "a3c9dd85bc834a43c0c409899900e9ed362ab200367d9c3aeb3276f34ca5a4c6"
+  },
+  "pm_diesel_pump_building_sulfur_mine": {
+    "path": "common/production_methods/03_mines.txt",
+    "sha256": "a3c9dd85bc834a43c0c409899900e9ed362ab200367d9c3aeb3276f34ca5a4c6"
+  },
+  "pm_disabled_ceramics": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_dynamite_building_lead_mine": {
+    "path": "common/production_methods/03_mines.txt",
+    "sha256": "a3c9dd85bc834a43c0c409899900e9ed362ab200367d9c3aeb3276f34ca5a4c6"
+  },
+  "pm_dynamite_building_sulfur_mine": {
+    "path": "common/production_methods/03_mines.txt",
+    "sha256": "a3c9dd85bc834a43c0c409899900e9ed362ab200367d9c3aeb3276f34ca5a4c6"
+  },
+  "pm_electric_arc_process": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_electric_engines": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_forest_glass": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_houseware_plastics": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_improved_fertilizer": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_leaded_glass": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_manual_glassblowing": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_nitrogen_fixation": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_nitroglycerin_building_lead_mine": {
+    "path": "common/production_methods/03_mines.txt",
+    "sha256": "a3c9dd85bc834a43c0c409899900e9ed362ab200367d9c3aeb3276f34ca5a4c6"
+  },
+  "pm_nitroglycerin_building_sulfur_mine": {
+    "path": "common/production_methods/03_mines.txt",
+    "sha256": "a3c9dd85bc834a43c0c409899900e9ed362ab200367d9c3aeb3276f34ca5a4c6"
+  },
+  "pm_no_explosives": {
+    "path": "common/production_methods/03_mines.txt",
+    "sha256": "a3c9dd85bc834a43c0c409899900e9ed362ab200367d9c3aeb3276f34ca5a4c6"
+  },
+  "pm_no_steam_automation": {
+    "path": "common/production_methods/03_mines.txt",
+    "sha256": "a3c9dd85bc834a43c0c409899900e9ed362ab200367d9c3aeb3276f34ca5a4c6"
+  },
+  "pm_open_hearth_process": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_picks_and_shovels_building_lead_mine": {
+    "path": "common/production_methods/03_mines.txt",
+    "sha256": "a3c9dd85bc834a43c0c409899900e9ed362ab200367d9c3aeb3276f34ca5a4c6"
+  },
+  "pm_picks_and_shovels_building_sulfur_mine": {
+    "path": "common/production_methods/03_mines.txt",
+    "sha256": "a3c9dd85bc834a43c0c409899900e9ed362ab200367d9c3aeb3276f34ca5a4c6"
+  },
+  "pm_rail_transport_mine": {
+    "path": "common/production_methods/03_mines.txt",
+    "sha256": "a3c9dd85bc834a43c0c409899900e9ed362ab200367d9c3aeb3276f34ca5a4c6"
+  },
+  "pm_road_carts": {
+    "path": "common/production_methods/03_mines.txt",
+    "sha256": "a3c9dd85bc834a43c0c409899900e9ed362ab200367d9c3aeb3276f34ca5a4c6"
+  },
+  "pm_rotary_valve_engine_building_motor_industry": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_rotary_valve_engine_building_steel_mill": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_steam_donkey_mine": {
+    "path": "common/production_methods/03_mines.txt",
+    "sha256": "a3c9dd85bc834a43c0c409899900e9ed362ab200367d9c3aeb3276f34ca5a4c6"
+  },
+  "pm_steam_engines": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_watertube_boiler_building_motor_industry": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pm_watertube_boiler_building_steel_mill": {
+    "path": "common/production_methods/01_industry.txt",
+    "sha256": "4221a985326cbb7d705d7eaa38919978e181c3d22b65da23b69c123f6cd88972"
+  },
+  "pmg_automation_building_motor_industry": {
+    "path": "common/production_method_groups/01_industry.txt",
+    "sha256": "69869e0501487eae2f9a259ea97f881f7b5d15d2a4f263620358ce2ed4b21aa7"
+  },
+  "pmg_automation_building_steel_mill": {
+    "path": "common/production_method_groups/01_industry.txt",
+    "sha256": "69869e0501487eae2f9a259ea97f881f7b5d15d2a4f263620358ce2ed4b21aa7"
+  },
+  "pmg_base_building_glassworks": {
+    "path": "common/production_method_groups/01_industry.txt",
+    "sha256": "69869e0501487eae2f9a259ea97f881f7b5d15d2a4f263620358ce2ed4b21aa7"
+  },
+  "pmg_base_building_motor_industry": {
+    "path": "common/production_method_groups/01_industry.txt",
+    "sha256": "69869e0501487eae2f9a259ea97f881f7b5d15d2a4f263620358ce2ed4b21aa7"
+  },
+  "pmg_explosives_building_lead_mine": {
+    "path": "common/production_method_groups/03_mines.txt",
+    "sha256": "9d58acd3cbee0ecc4e06b85e912616df0906159abaad8c6809361a1219519d91"
+  },
+  "pmg_explosives_building_sulfur_mine": {
+    "path": "common/production_method_groups/03_mines.txt",
+    "sha256": "9d58acd3cbee0ecc4e06b85e912616df0906159abaad8c6809361a1219519d91"
+  },
+  "pmg_fertilizer_production": {
+    "path": "common/production_method_groups/01_industry.txt",
+    "sha256": "69869e0501487eae2f9a259ea97f881f7b5d15d2a4f263620358ce2ed4b21aa7"
+  },
+  "pmg_glassblowing": {
+    "path": "common/production_method_groups/01_industry.txt",
+    "sha256": "69869e0501487eae2f9a259ea97f881f7b5d15d2a4f263620358ce2ed4b21aa7"
+  },
+  "pmg_luxury_building_glassworks": {
+    "path": "common/production_method_groups/01_industry.txt",
+    "sha256": "69869e0501487eae2f9a259ea97f881f7b5d15d2a4f263620358ce2ed4b21aa7"
+  },
+  "pmg_mining_equipment_building_lead_mine": {
+    "path": "common/production_method_groups/03_mines.txt",
+    "sha256": "9d58acd3cbee0ecc4e06b85e912616df0906159abaad8c6809361a1219519d91"
+  },
+  "pmg_mining_equipment_building_sulfur_mine": {
+    "path": "common/production_method_groups/03_mines.txt",
+    "sha256": "9d58acd3cbee0ecc4e06b85e912616df0906159abaad8c6809361a1219519d91"
+  },
+  "pmg_steam_automation_building_lead_mine": {
+    "path": "common/production_method_groups/03_mines.txt",
+    "sha256": "9d58acd3cbee0ecc4e06b85e912616df0906159abaad8c6809361a1219519d91"
+  },
+  "pmg_steam_automation_building_sulfur_mine": {
+    "path": "common/production_method_groups/03_mines.txt",
+    "sha256": "9d58acd3cbee0ecc4e06b85e912616df0906159abaad8c6809361a1219519d91"
+  },
+  "pmg_steelmaking_process": {
+    "path": "common/production_method_groups/01_industry.txt",
+    "sha256": "69869e0501487eae2f9a259ea97f881f7b5d15d2a4f263620358ce2ed4b21aa7"
+  },
+  "pmg_train_automation_building_lead_mine": {
+    "path": "common/production_method_groups/03_mines.txt",
+    "sha256": "9d58acd3cbee0ecc4e06b85e912616df0906159abaad8c6809361a1219519d91"
+  },
+  "pmg_train_automation_building_sulfur_mine": {
+    "path": "common/production_method_groups/03_mines.txt",
+    "sha256": "9d58acd3cbee0ecc4e06b85e912616df0906159abaad8c6809361a1219519d91"
+  }
+}

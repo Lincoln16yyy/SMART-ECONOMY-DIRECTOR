@@ -45,7 +45,7 @@ def track_actions():
     record = []
     for kind in ('tax', 'wage', 'military_wage'):
         marker = f'sed_{kind}_last_change_month'
-        record.append(f'''  if = {{ limit = {{ has_variable = {marker} var:{marker} = sed_live_month_key }}
+        record.append(f'''  if = {{ limit = {{ has_variable = {marker} var:{marker} = var:sed_calendar_month_key }}
    change_variable = {{ name = sed_asc_{kind}_count add = 1 }}
   }}''')
     return '''sed_asc_record_actions = {
@@ -56,8 +56,8 @@ def track_actions():
   } }
  }
  remove_variable = sed_asc_queue_before
- if = { limit = { NOT = { has_variable = sed_asc_policy_month var:sed_asc_policy_month = sed_live_month_key } }
-  set_variable = { name = sed_asc_policy_month value = sed_live_month_key }
+ if = { limit = { NOT = { has_variable = sed_asc_policy_month var:sed_asc_policy_month = var:sed_calendar_month_key } }
+  set_variable = { name = sed_asc_policy_month value = var:sed_calendar_month_key }
 ''' + '\n'.join(record) + '''
  }
 }
@@ -85,6 +85,7 @@ def effects():
  }}""")
     return '''# All entry points use the player country as root.
 sed_asc_refresh = {
+ sed_refresh_calendar = yes
  set_variable = { name = sed_asc_rank value = 1 }
  remove_variable = sed_asc_next
  remove_variable = sed_asc_gap
@@ -105,14 +106,14 @@ sed_asc_refresh = {
  sed_asc_diplomacy = yes
 ''' + live + '''
  if = { limit = { NOT = { has_variable = sed_asc_window_start } }
-  set_variable = { name = sed_asc_window_start value = sed_live_month_key }
+  set_variable = { name = sed_asc_window_start value = var:sed_calendar_month_key }
 ''' + snapshots + '\n' + init_counts + '''
  }
  else_if = { limit = {
-  sed_live_month_key >= { value = var:sed_asc_window_start add = 12 }
+  var:sed_calendar_month_key >= { value = var:sed_asc_window_start add = 12 }
  }
 ''' + deltas + '\n' + snapshots + '\n' + annual_counts + '''
-  set_variable = { name = sed_asc_window_start value = sed_live_month_key }
+  set_variable = { name = sed_asc_window_start value = var:sed_calendar_month_key }
  }
 ''' + '\n'.join(choices) + '''
 }

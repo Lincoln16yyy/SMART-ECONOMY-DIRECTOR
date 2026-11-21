@@ -27,9 +27,10 @@ Scope of the lane:
 """
 
 try:
-    from . import labor
+    from . import labor, project_performance
 except ImportError:
     import labor
+    import project_performance
 
 TARGETS = (
     {'good': 'wood', 'building': 'building_logging_camp', 'variant': 'logging_camp'},
@@ -52,6 +53,12 @@ def triggers():
     parts = [f'''# State scope. Growth expansion of the construction sector while the public
 # queue is long; a level already queued waits for the queue.
 sed_core_construction_eligible = {{
+ OR = {{
+  AND = {{ owner = {{ sed_first_sector_available = yes }} sed_first_sector_site = yes }}
+  sed_core_existing_construction_eligible = yes
+ }}
+}}
+sed_core_existing_construction_eligible = {{
  is_incorporated = yes
  infrastructure_delta >= 0
  can_construct_building = {CONSTRUCTION_BUILDING}
@@ -88,6 +95,7 @@ sed_core_{good}_eligible = {{
  NOT = {{ has_variable = sed_{good}_ignored }}
  NOT = {{ has_variable = sed_{good}_request_pending }}
  NOT = {{ has_variable = sed_follow_{good} }}
+ NOT = {{ sed_perf_{good}_blocked = yes }}
  b:{building} = {{
   level_after_queued_constructions <= level
   occupancy >= 0.5
@@ -123,7 +131,10 @@ sed_run_core_construction_approval = {{
    set_variable = {{ name = sed_queue_levels_before value = construction_queue_num_queued_government_levels }}
   }}
   owner = {{ sed_record_auto_attempt = yes }}
-  set_variable = {{ name = sed_construction_intent_level value = b:{CONSTRUCTION_BUILDING}.level }}
+  set_variable = {{ name = sed_construction_intent_level value = 0 }}
+  if = {{ limit = {{ has_building = {CONSTRUCTION_BUILDING} }}
+   set_variable = {{ name = sed_construction_intent_level value = b:{CONSTRUCTION_BUILDING}.level }}
+  }}
   start_building_construction = {CONSTRUCTION_BUILDING}
   owner = {{
    if = {{
@@ -132,7 +143,9 @@ sed_run_core_construction_approval = {{
     if = {{ limit = {{ has_variable = sed_mode_automatic }}
      set_variable = {{ name = sed_auto_action_status value = 1 }}
     }}
-    prev = {{ set_variable = {{ name = sed_construction_request_pending value = yes }} }}
+    prev = {{ set_variable = {{ name = sed_construction_request_pending value = yes }}
+     if = {{ limit = {{ var:sed_construction_intent_level = 0 }} set_variable = {{ name = sed_first_sector_pending value = yes }} }}
+    }}
    }}
    else = {{
     set_variable = {{ name = sed_construction_action_status value = 2 }}
@@ -144,6 +157,7 @@ sed_run_core_construction_approval = {{
 }}''']
     for item in TARGETS:
         good, building = item['good'], item['building']
+        variant = item['variant']
         parts.append(f'''# State scope. Queue one public level under the growth lane. Reuses the ledger
 # variables of the good, so the monthly reconciliation already covers it.
 sed_run_core_{good}_approval = {{
@@ -156,6 +170,7 @@ sed_run_core_{good}_approval = {{
   owner = {{ sed_record_auto_attempt = yes }}
   set_variable = {{ name = sed_{good}_intent_level value = b:{building}.level }}
   set_variable = {{ name = sed_{good}_intent_variant value = 1 }}
+  set_variable = {{ name = sed_perf_{good}_quote value = sed_investment_{variant}_return }}
   start_building_construction = {building}
   owner = {{
    if = {{
@@ -168,13 +183,16 @@ sed_run_core_{good}_approval = {{
      change_variable = {{ name = sed_{good}_intents add = 1 }}
     }}
     else = {{ set_variable = {{ name = sed_{good}_intents value = 1 }} }}
-    prev = {{ set_variable = {{ name = sed_{good}_request_pending value = yes }} }}
+    prev = {{ set_variable = {{ name = sed_{good}_request_pending value = yes }}
+{project_performance.capture(good)}
+    }}
    }}
    else = {{
     set_variable = {{ name = sed_{good}_action_status value = 2 }}
     prev = {{
      remove_variable = sed_{good}_intent_level
      remove_variable = sed_{good}_intent_variant
+     remove_variable = sed_perf_{good}_quote
     }}
    }}
    remove_variable = sed_queue_levels_before

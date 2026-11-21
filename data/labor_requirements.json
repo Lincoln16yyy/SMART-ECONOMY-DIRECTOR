@@ -17,5 +17,11 @@
   "building_arms_industry": 5000,
   "building_artillery_foundry": 5250,
   "building_munition_plant": 5000,
-  "building_paper_mill": 5000
+  "building_paper_mill": 5000,
+  "building_steel_mill": 5000,
+  "building_glassworks": 5500,
+  "building_motor_industry": 5000,
+  "building_chemical_plant": 5000,
+  "building_sulfur_mine": 5250,
+  "building_lead_mine": 5250
 }

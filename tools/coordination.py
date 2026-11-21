@@ -184,7 +184,11 @@ sed_coord_sync = {{
   else_if = {{ limit = {{ sed_pm_upgrade_month_limit_reached = yes }}
    set_variable = {{ name = sed_coord_executor value = 13 }}
   }}
-  else_if = {{ limit = {{ OR = {{ sed_coord_fiscal_safe = yes AND = {{ sed_watch_recovery_candidate = yes sed_direct_fiscal_safe = yes }} }} NOT = {{ in_default = yes }} is_construction_paused = no }}
+  else_if = {{ limit = {{ has_variable = sed_parallel_direct_pending }}
+   # Enquanto a tentativa compartilhada ocupa a fila pública, não enfileirar outra.
+   set_variable = {{ name = sed_coord_executor value = 0 }}
+  }}
+  else_if = {{ limit = {{ OR = {{ sed_coord_fiscal_safe = yes AND = {{ sed_watch_recovery_candidate = yes sed_direct_fiscal_safe = yes }} sed_growth_takeover = yes sed_first_sector_available = yes }} NOT = {{ in_default = yes }} is_construction_paused = no }}
    if = {{ limit = {{ var:sed_plan_goal = 2 sed_direct_fiscal_safe = yes sed_direct_supply_priority_exists = yes }}
     set_variable = {{ name = sed_coord_executor value = 11 }}
    }}
@@ -214,16 +218,25 @@ sed_coord_sync = {{
     {enable_option('sectors')}
     set_variable = {{ name = sed_coord_executor value = 4 }}
    }}
-   else_if = {{ limit = {{ OR = {{ var:sed_plan_goal = 6 var:sed_plan_goal = 7 var:sed_plan_goal = 9 }} }}
+   else_if = {{ limit = {{ sed_civic_direct_available = yes }}
+    set_variable = {{ name = sed_coord_executor value = 11 }}
+   }}
+   else_if = {{ limit = {{ NOT = {{ has_variable = sed_coord_advisor_known }} OR = {{ var:sed_plan_goal = 6 var:sed_plan_goal = 7 var:sed_plan_goal = 9 }} }}
     set_variable = {{ name = sed_coord_executor value = 9 }}
    }}
+   else_if = {{ limit = {{ sed_first_sector_available = yes }}
+    set_variable = {{ name = sed_coord_executor value = 11 }}
+   }}
    else_if = {{ limit = {{ sed_university_ready = yes }}
+    set_variable = {{ name = sed_coord_executor value = 11 }}
+   }}
+   else_if = {{ limit = {{ sed_growth_takeover = yes }}
     set_variable = {{ name = sed_coord_executor value = 11 }}
    }}
    else_if = {{ limit = {{ sed_outcome_growth_wait = yes }}
     set_variable = {{ name = sed_coord_executor value = 0 }}
    }}
-   else_if = {{ limit = {{ has_variable = sed_coord_advisor_known OR = {{ var:sed_plan_goal = 1 var:sed_plan_goal = 2 var:sed_plan_goal = 3 var:sed_plan_goal = 5 var:sed_plan_goal = 8 }} }}
+   else_if = {{ limit = {{ has_variable = sed_coord_advisor_known OR = {{ var:sed_plan_goal = 1 var:sed_plan_goal = 2 var:sed_plan_goal = 3 var:sed_plan_goal = 5 var:sed_plan_goal = 8 var:sed_plan_goal = 6 var:sed_plan_goal = 7 var:sed_plan_goal = 9 }} }}
     {enable_option('advisor')}
     set_variable = {{ name = sed_coord_executor value = 1 }}
     sed_coord_capture_advisor_policy = yes

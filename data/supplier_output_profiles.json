@@ -121,5 +121,39 @@
     "pm_pulp_pressing": 40.0,
     "pm_sulfite_pulping": 70.0,
     "pm_bleached_paper": 100.0
+  },
+  "building_steel_mill": {
+    "pm_blister_steel_process": 65.0,
+    "pm_bessemer_process": 90.0,
+    "pm_open_hearth_process": 120.0,
+    "pm_electric_arc_process": 150.0
+  },
+  "building_glassworks": {
+    "pm_forest_glass": 30.0,
+    "pm_leaded_glass": 40.0,
+    "pm_crystal_glass": 60.0,
+    "pm_houseware_plastics": 100.0
+  },
+  "building_motor_industry": {
+    "pm_steam_engines": 40.0,
+    "pm_electric_engines": 80.0,
+    "pm_diesel_engines": 120.0
+  },
+  "building_chemical_plant": {
+    "pm_artificial_fertilizers": 90.0,
+    "pm_improved_fertilizer": 140.0,
+    "pm_nitrogen_fixation": 200.0
+  },
+  "building_sulfur_mine": {
+    "pm_picks_and_shovels_building_sulfur_mine": 20.0,
+    "pm_atmospheric_engine_pump_building_sulfur_mine": 40.0,
+    "pm_condensing_engine_pump_building_sulfur_mine": 60.0,
+    "pm_diesel_pump_building_sulfur_mine": 80.0
+  },
+  "building_lead_mine": {
+    "pm_picks_and_shovels_building_lead_mine": 20.0,
+    "pm_atmospheric_engine_pump_building_lead_mine": 40.0,
+    "pm_condensing_engine_pump_building_lead_mine": 60.0,
+    "pm_diesel_pump_building_lead_mine": 70.0
   }
 }

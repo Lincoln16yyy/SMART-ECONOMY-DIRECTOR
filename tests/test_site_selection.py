@@ -19,6 +19,8 @@ class SiteSelectionTests(unittest.TestCase):
         cramped = state(population=60000, infrastructure_delta=0, buildings=[self.camp()])
         ready = state(population=100000, infrastructure_delta=20, buildings=[self.camp()])
         c.states = [cramped, ready]
+        for location in c.states:
+            location['can_construct_building'] = ['building_logging_camp']
         c.run('sed_set_mode_automatic')
         c.run('sed_auto_apply_monthly')
         self.assertEqual(c.constructions[0]['building'], 'building_logging_camp')

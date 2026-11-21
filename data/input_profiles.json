@@ -540,5 +540,172 @@
       "tools": 5.0,
       "coal": 10.0
     }
+  },
+  "building_steel_mill": {
+    "pm_blister_steel_process": {
+      "iron": 40.0,
+      "coal": 30.0
+    },
+    "pm_bessemer_process": {
+      "iron": 60.0,
+      "coal": 30.0
+    },
+    "pm_open_hearth_process": {
+      "iron": 90.0,
+      "coal": 30.0
+    },
+    "pm_electric_arc_process": {
+      "iron": 100.0,
+      "coal": 30.0,
+      "electricity": 30.0
+    },
+    "pm_automation_disabled": {},
+    "pm_watertube_boiler_building_steel_mill": {
+      "tools": 5.0,
+      "coal": 5.0
+    },
+    "pm_rotary_valve_engine_building_steel_mill": {
+      "tools": 5.0,
+      "coal": 10.0
+    }
+  },
+  "building_glassworks": {
+    "pm_forest_glass": {
+      "wood": 30.0
+    },
+    "pm_leaded_glass": {
+      "wood": 20.0,
+      "lead": 10.0
+    },
+    "pm_crystal_glass": {
+      "lead": 35.0
+    },
+    "pm_houseware_plastics": {
+      "oil": 20.0,
+      "lead": 30.0
+    },
+    "pm_disabled_ceramics": {},
+    "pm_ceramics": {
+      "dye": 5.0
+    },
+    "pm_bone_china": {
+      "dye": 10.0
+    },
+    "pm_manual_glassblowing": {},
+    "pm_automatic_bottle_blowers": {
+      "tools": 2.0,
+      "engines": 2.0,
+      "oil": 5.0
+    }
+  },
+  "building_motor_industry": {
+    "pm_steam_engines": {
+      "steel": 30.0
+    },
+    "pm_electric_engines": {
+      "steel": 40.0,
+      "electricity": 20.0,
+      "copper": 10.0
+    },
+    "pm_diesel_engines": {
+      "steel": 50.0,
+      "oil": 50.0
+    },
+    "pm_automation_disabled": {},
+    "pm_watertube_boiler_building_motor_industry": {
+      "tools": 5.0,
+      "coal": 5.0
+    },
+    "pm_rotary_valve_engine_building_motor_industry": {
+      "tools": 5.0,
+      "coal": 10.0
+    },
+    "pm_assembly_lines_building_motor_industry": {
+      "tools": 4.0,
+      "copper": 1.0,
+      "oil": 5.0,
+      "electricity": 5.0
+    }
+  },
+  "building_chemical_plant": {
+    "pm_artificial_fertilizers": {
+      "sulfur": 30.0,
+      "iron": 10.0
+    },
+    "pm_improved_fertilizer": {
+      "sulfur": 30.0,
+      "iron": 30.0
+    },
+    "pm_nitrogen_fixation": {
+      "sulfur": 40.0,
+      "oil": 20.0,
+      "iron": 30.0
+    }
+  },
+  "building_sulfur_mine": {
+    "pm_picks_and_shovels_building_sulfur_mine": {
+      "tools": 5.0
+    },
+    "pm_atmospheric_engine_pump_building_sulfur_mine": {
+      "tools": 10.0,
+      "coal": 10.0
+    },
+    "pm_condensing_engine_pump_building_sulfur_mine": {
+      "tools": 15.0,
+      "coal": 15.0
+    },
+    "pm_diesel_pump_building_sulfur_mine": {
+      "tools": 15.0,
+      "oil": 5.0
+    },
+    "pm_no_explosives": {},
+    "pm_nitroglycerin_building_sulfur_mine": {
+      "explosives": 5.0
+    },
+    "pm_dynamite_building_sulfur_mine": {
+      "explosives": 10.0
+    },
+    "pm_no_steam_automation": {},
+    "pm_steam_donkey_mine": {
+      "engines": 1.0,
+      "coal": 4.0
+    },
+    "pm_road_carts": {},
+    "pm_rail_transport_mine": {
+      "transportation": 5.0
+    }
+  },
+  "building_lead_mine": {
+    "pm_picks_and_shovels_building_lead_mine": {
+      "tools": 5.0
+    },
+    "pm_atmospheric_engine_pump_building_lead_mine": {
+      "tools": 10.0,
+      "coal": 10.0
+    },
+    "pm_condensing_engine_pump_building_lead_mine": {
+      "tools": 15.0,
+      "coal": 15.0
+    },
+    "pm_diesel_pump_building_lead_mine": {
+      "tools": 15.0,
+      "oil": 5.0
+    },
+    "pm_no_explosives": {},
+    "pm_nitroglycerin_building_lead_mine": {
+      "explosives": 5.0
+    },
+    "pm_dynamite_building_lead_mine": {
+      "explosives": 10.0
+    },
+    "pm_no_steam_automation": {},
+    "pm_steam_donkey_mine": {
+      "engines": 1.0,
+      "coal": 4.0
+    },
+    "pm_road_carts": {},
+    "pm_rail_transport_mine": {
+      "transportation": 5.0
+    }
   }
 }

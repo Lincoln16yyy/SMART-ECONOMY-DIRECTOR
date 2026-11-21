@@ -27,6 +27,8 @@ PROJECT_POINTS = {
     'wood': 200, 'iron': 400, 'coal': 400, 'grain': 200, 'fabric': 200,
     'tools': 600, 'groceries': 600, 'clothes': 600, 'paper': 600,
     'small_arms': 600, 'artillery': 600, 'ammunition': 800,
+    **{item['good']: QUEUED_COSTS[item['building']] for item in json.loads(
+        (Path(__file__).resolve().parents[1] / 'data/advanced_targets.json').read_text())},
 }
 # Trade Center: required_construction = construction_cost_very_low (100 points),
 # common/script_values/building_values.txt:7 in the installed 1.15 game.
@@ -37,7 +39,7 @@ ADMIN_POINTS = 100
 # Power plant: required_construction = construction_cost_medium (400 points),
 # common/buildings/06_urban_center.txt:111 and data/queued_building_costs.json.
 POWER_POINTS = QUEUED_COSTS['building_power_plant']
-VARIABLES = ['sed_build_budget_known', 'sed_build_budget_points',
+VARIABLES = ['sed_growth_score_cached', 'sed_build_budget_known', 'sed_build_budget_points',
              'sed_build_budget_point_cost', 'sed_build_budget_weekly',
              'sed_build_budget_required_gold', 'sed_build_budget_gold_gap',
              'sed_build_budget_material_capacity',
@@ -70,6 +72,7 @@ def queue_bands():
 def effects(founding_projects=()):
     methods = ' '.join(f'has_active_production_method = {method}' for method, _, _ in PROFILES)
     result = ['''sed_refresh_direct_budget = {
+ sed_refresh_public_upkeep = yes
  if = { limit = { is_player = yes has_variable = sed_enabled }
   set_variable = { name = sed_build_budget_known value = 1 }
   set_variable = { name = sed_build_budget_point_cost value = 0 }
@@ -118,7 +121,8 @@ def effects(founding_projects=()):
   # Duration and full material reference for the plan's first priority.
   set_variable = { name = sed_build_budget_project_points value = 0 }
 ''')
-    result.append(f'''  if = {{ limit = {{ sed_university_ready = yes }}
+    result.append('  if = { limit = { var:sed_build_budget_project_points = 0 sed_first_sector_available = yes } set_variable = { name = sed_build_budget_project_points value = 25 } }')
+    result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0 sed_university_ready = yes }}
    set_variable = {{ name = sed_build_budget_project_points value = {QUEUED_COSTS['building_university']} }}
   }}''')
     for action, points in PROJECT_POINTS.items():
@@ -136,6 +140,20 @@ def effects(founding_projects=()):
     result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0
    any_scope_state = {{ sed_power_candidate_eligible = yes }} }}
    set_variable = {{ name = sed_build_budget_project_points value = {POWER_POINTS} }}
+  }}''')
+    result.append('''  set_variable = { name = sed_growth_score_cached value = 0 }
+  every_scope_state = {
+   limit = { sed_growth_site = yes }
+   owner = { set_variable = { name = sed_growth_score_cached value = {
+    value = var:sed_growth_score_cached min = prev.sed_growth_best_score
+   } } }
+  }''')
+    for good, points in PROJECT_POINTS.items():
+        if good in ('railway', 'construction', 'small_arms', 'artillery', 'ammunition'):
+            continue
+        result.append(f'''  if = {{ limit = {{ var:sed_build_budget_project_points = 0
+   any_scope_state = {{ sed_growth_{good}_candidate = yes sed_growth_{good}_score >= owner.var:sed_growth_score_cached }} }}
+   set_variable = {{ name = sed_build_budget_project_points value = {points} }}
   }}''')
     # Growth lane of the core inputs is the very last branch of the dispatcher.
     for good, points in (('wood', PROJECT_POINTS['wood']), ('iron', PROJECT_POINTS['iron']),
